@@ -1,11 +1,6 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
-lui-dropdown-menu {
-  display: inline-flex;
-  position: relative;
-}
-
 lui-menu-item,
 lui-menu-divider {
   display: none;

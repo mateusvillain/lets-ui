@@ -1,11 +1,6 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
-lui-shortcut {
-  display: inline-flex;
-  align-items: center;
-}
-
 .shortcut {
   display: inline-flex;
   align-items: center;

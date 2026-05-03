@@ -4,10 +4,6 @@
 @use '../utilities/mixins' as *;
 @use 'field';
 
-lui-textarea {
-  display: block;
-}
-
 .textarea-field {
   @include field.wrapper;
 

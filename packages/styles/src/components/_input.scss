@@ -4,11 +4,6 @@
 @use '../utilities/mixins' as *;
 @use 'field';
 
-lui-input,
-lui-text-field {
-  display: block;
-}
-
 .input-field {
   @include field.wrapper;
 
