@@ -41,11 +41,11 @@ const Template = ({
 }) => {
   const classes = [
     `body--${variant}`,
-    `lui-body--color-${color}`,
-    align && `typography--align-${align}`,
-    transform && transform !== '' && `typography--transform-${transform}`,
-    italic && 'lui-body--italic',
-    underline && 'lui-body--underline',
+    `text--color-${color}`,
+    align && `text--align-${align}`,
+    transform && transform !== '' && `text--transform-${transform}`,
+    italic && 'text--style-italic',
+    underline && 'text--decoration-underline',
   ]
     .filter(Boolean)
     .join(' ');
@@ -67,55 +67,55 @@ Body.args = {
 };
 
 export const SizeLg = () =>
-  `<p class="body--lg lui-body--color-body">Large — Texto de destaque ou introdução</p>`;
+  `<p class="body--lg text--color-body">Large — Texto de destaque ou introdução</p>`;
 
 export const SizeMd = () =>
-  `<p class="body--md lui-body--color-body">Medium — Texto padrão para conteúdo geral</p>`;
+  `<p class="body--md text--color-body">Medium — Texto padrão para conteúdo geral</p>`;
 
 export const SizeSm = () =>
-  `<p class="body--sm lui-body--color-body">Small — Texto auxiliar, legendas e notas</p>`;
+  `<p class="body--sm text--color-body">Small — Texto auxiliar, legendas e notas</p>`;
 
 export const AllSizes = () => `
   <div style="display: flex; flex-direction: column; gap: 12px;">
-    <p class="body--lg lui-body--color-body">Large — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    <p class="body--md lui-body--color-body">Medium — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    <p class="body--sm lui-body--color-body">Small — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <p class="body--lg text--color-body">Large — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <p class="body--md text--color-body">Medium — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <p class="body--sm text--color-body">Small — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
   </div>
 `;
 
 export const ColorVariants = () => `
   <div style="display: flex; flex-direction: column; gap: 8px;">
-    <p class="body--md lui-body--color-body">Color: body (default)</p>
-    <p class="body--md lui-body--color-heading">Color: heading</p>
-    <p class="body--md lui-body--color-caption">Color: caption</p>
-    <p class="body--md lui-body--color-error">Color: error</p>
+    <p class="body--md text--color-body">Color: body (default)</p>
+    <p class="body--md text--color-heading">Color: heading</p>
+    <p class="body--md text--color-caption">Color: caption</p>
+    <p class="body--md text--color-error">Color: error</p>
     <div style="background: var(--lui-color-neutral-bg-surface-neutral); padding: 8px; border-radius: 4px;">
-      <p class="body--md lui-body--color-inverse">Color: inverse</p>
+      <p class="body--md text--color-inverse">Color: inverse</p>
     </div>
   </div>
 `;
 
 export const Italic = () =>
-  `<p class="body--md lui-body--color-body lui-body--italic">Texto em estilo itálico para ênfase suave.</p>`;
+  `<p class="body--md text--color-body text--style-italic">Texto em estilo itálico para ênfase suave.</p>`;
 
 export const Underline = () =>
-  `<p class="body--md lui-body--color-body lui-body--underline">Texto sublinhado para destaque especial.</p>`;
+  `<p class="body--md text--color-body text--decoration-underline">Texto sublinhado para destaque especial.</p>`;
 
 export const ItalicUnderline = () =>
-  `<p class="body--md lui-body--color-body lui-body--italic lui-body--underline">Texto em itálico e sublinhado simultaneamente.</p>`;
+  `<p class="body--md text--color-body text--style-italic text--decoration-underline">Texto em itálico e sublinhado simultaneamente.</p>`;
 
 export const Aligned = () => `
   <div style="display: flex; flex-direction: column; gap: 8px;">
-    <p class="body--md lui-body--color-body typography--align-left">Alinhamento à esquerda</p>
-    <p class="body--md lui-body--color-body typography--align-center">Alinhamento centralizado</p>
-    <p class="body--md lui-body--color-body typography--align-right">Alinhamento à direita</p>
-    <p class="body--md lui-body--color-body typography--align-justify" style="max-width: 400px;">Texto justificado — o espaçamento entre palavras é ajustado para preencher a largura disponível da linha de forma uniforme.</p>
+    <p class="body--md text--color-body text--align-left">Alinhamento à esquerda</p>
+    <p class="body--md text--color-body text--align-center">Alinhamento centralizado</p>
+    <p class="body--md text--color-body text--align-right">Alinhamento à direita</p>
+    <p class="body--md text--color-body text--align-justify" style="max-width: 400px;">Texto justificado — o espaçamento entre palavras é ajustado para preencher a largura disponível da linha de forma uniforme.</p>
   </div>
 `;
 
 export const WithLineClamp = () => `
   <p
-    class="body--md lui-body--color-body"
+    class="body--md text--color-body"
     style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; max-width: 400px;"
   >
     Este parágrafo tem conteúdo suficiente para demonstrar o comportamento de
@@ -125,9 +125,9 @@ export const WithLineClamp = () => `
 `;
 
 export const AsSpan = () => `
-  <p class="body--md lui-body--color-body">
+  <p class="body--md text--color-body">
     Texto normal com um
-    <span class="body--md lui-body--color-error lui-body--underline">trecho destacado em vermelho</span>
+    <span class="body--md text--color-error text--decoration-underline">trecho destacado em vermelho</span>
     no meio do parágrafo.
   </p>
 `;
