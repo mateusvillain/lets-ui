@@ -57,9 +57,15 @@ const Template = ({
 
   const classes = [
     variant,
+<<<<<<< HEAD
     `text--color-${color}`,
     align && `text--align-${align}`,
     transform && transform !== '' && `text--transform-${transform}`,
+=======
+    `lui-heading--color-${color}`,
+    align && `typography--align-${align}`,
+    transform && transform !== '' && `typography--transform-${transform}`,
+>>>>>>> 190150c (refactor(typography): rename lui-headline to lui-heading)
   ]
     .filter(Boolean)
     .join(' ');
@@ -79,6 +85,7 @@ Heading.args = {
 };
 
 export const Display = () =>
+<<<<<<< HEAD
   `<div class="display text--color-heading">Display — O maior nível tipográfico</div>`;
 
 export const Title = () =>
@@ -108,32 +115,82 @@ export const AllVariants = () => `
     <h4 class="subheadline text--color-heading">Subheadline</h4>
     <h5 class="block-title text--color-heading">Block Title</h5>
     <h6 class="overtitle text--color-heading">Overtitle</h6>
+=======
+  `<div class="display lui-heading--color-heading">Display — O maior nível tipográfico</div>`;
+
+export const Title = () =>
+  `<h1 class="title lui-heading--color-heading">Title — Título principal da página</h1>`;
+
+export const Subtitle = () =>
+  `<h2 class="subtitle lui-heading--color-heading">Subtitle — Seção secundária</h2>`;
+
+export const HeadlineVariant = () =>
+  `<h3 class="headline lui-heading--color-heading">Headline — Destaque de conteúdo</h3>`;
+
+export const Subheadline = () =>
+  `<h4 class="subheadline lui-heading--color-heading">Subheadline — Sub-seção de conteúdo</h4>`;
+
+export const BlockTitle = () =>
+  `<h5 class="block-title lui-heading--color-heading">Block Title — Título de bloco</h5>`;
+
+export const Overtitle = () =>
+  `<h6 class="overtitle lui-heading--color-heading">Overtitle — Rótulo acima do título</h6>`;
+
+export const AllVariants = () => `
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div class="display lui-heading--color-heading">Display</div>
+    <h1 class="title lui-heading--color-heading">Title</h1>
+    <h2 class="subtitle lui-heading--color-heading">Subtitle</h2>
+    <h3 class="headline lui-heading--color-heading">Headline</h3>
+    <h4 class="subheadline lui-heading--color-heading">Subheadline</h4>
+    <h5 class="block-title lui-heading--color-heading">Block Title</h5>
+    <h6 class="overtitle lui-heading--color-heading">Overtitle</h6>
+>>>>>>> 190150c (refactor(typography): rename lui-headline to lui-heading)
   </div>
 `;
 
 export const ColorVariants = () => `
   <div style="display: flex; flex-direction: column; gap: 8px;">
+<<<<<<< HEAD
     <h2 class="subtitle text--color-heading">Color: heading (default)</h2>
     <h2 class="subtitle text--color-body">Color: body</h2>
     <h2 class="subtitle text--color-caption">Color: caption</h2>
     <h2 class="subtitle text--color-error">Color: error</h2>
     <div style="background: var(--lui-color-neutral-bg-surface-neutral); padding: 8px; border-radius: 4px;">
       <h2 class="subtitle text--color-inverse">Color: inverse</h2>
+=======
+    <h2 class="subtitle lui-heading--color-heading">Color: heading (default)</h2>
+    <h2 class="subtitle lui-heading--color-body">Color: body</h2>
+    <h2 class="subtitle lui-heading--color-caption">Color: caption</h2>
+    <h2 class="subtitle lui-heading--color-error">Color: error</h2>
+    <div style="background: var(--lui-color-neutral-bg-surface-neutral); padding: 8px; border-radius: 4px;">
+      <h2 class="subtitle lui-heading--color-inverse">Color: inverse</h2>
+>>>>>>> 190150c (refactor(typography): rename lui-headline to lui-heading)
     </div>
   </div>
 `;
 
 export const Aligned = () => `
   <div style="display: flex; flex-direction: column; gap: 8px;">
+<<<<<<< HEAD
     <h2 class="subtitle text--color-heading text--align-left">Alinhamento à esquerda</h2>
     <h2 class="subtitle text--color-heading text--align-center">Alinhamento centralizado</h2>
     <h2 class="subtitle text--color-heading text--align-right">Alinhamento à direita</h2>
+=======
+    <h2 class="subtitle lui-heading--color-heading typography--align-left">Alinhamento à esquerda</h2>
+    <h2 class="subtitle lui-heading--color-heading typography--align-center">Alinhamento centralizado</h2>
+    <h2 class="subtitle lui-heading--color-heading typography--align-right">Alinhamento à direita</h2>
+>>>>>>> 190150c (refactor(typography): rename lui-headline to lui-heading)
   </div>
 `;
 
 export const WithLineClamp = () => `
   <h2
+<<<<<<< HEAD
     class="subtitle text--color-heading"
+=======
+    class="subtitle lui-heading--color-heading"
+>>>>>>> 190150c (refactor(typography): rename lui-headline to lui-heading)
     style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; max-width: 400px;"
   >
     Este texto é longo o suficiente para ser cortado em duas linhas. Quanto mais
