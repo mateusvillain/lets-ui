@@ -3,7 +3,6 @@ import '../../../packages/styles/dist/letsui.css';
 
 export default {
   title: 'Components/Body',
-  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: { type: 'select' },
