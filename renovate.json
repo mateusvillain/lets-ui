@@ -1,0 +1,61 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "baseBranches": ["main"],
+  "labels": ["dependencies"],
+  "assignees": ["mateusvillain"],
+  "packageRules": [
+    {
+      "description": "Storybook — group all addons and core into one PR",
+      "groupName": "Storybook",
+      "matchPackageNames": [
+        "storybook",
+        "@storybook/**",
+        "@chromatic-com/storybook"
+      ]
+    },
+    {
+      "description": "Terrazzo — manual review required (beta packages)",
+      "matchPackageNames": ["@terrazzo/**"],
+      "groupName": "Terrazzo",
+      "stabilityDays": 7,
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "ESLint — group core and plugins together",
+      "groupName": "ESLint",
+      "matchPackageNames": ["eslint", "@eslint/**"]
+    },
+    {
+      "description": "Vitest — group runner and plugins together",
+      "groupName": "Vitest",
+      "matchPackageNames": ["vitest", "@vitest/**"]
+    },
+    {
+      "description": "Build tooling — PostCSS, Sass, cssnano",
+      "groupName": "Build tooling",
+      "matchPackageNames": ["postcss", "postcss-cli", "sass", "cssnano"]
+    },
+    {
+      "description": "Linting — Stylelint, Markdownlint, Prettier",
+      "groupName": "Linting",
+      "matchPackageNames": [
+        "prettier",
+        "stylelint",
+        "stylelint-config-standard-scss",
+        "stylelint-scss",
+        "markdownlint-cli2"
+      ]
+    },
+    {
+      "description": "GitHub Actions — update all workflow actions together",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "Skip workspace packages — managed internally via Changesets",
+      "matchPackageNames": ["@lets-ui/**"],
+      "enabled": false
+    }
+  ]
+}
