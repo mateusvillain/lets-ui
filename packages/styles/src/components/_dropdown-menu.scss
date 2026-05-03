@@ -15,10 +15,6 @@ lui-menu-divider {
   display: inline-flex;
   position: relative;
 
-  &__trigger {
-    display: contents;
-  }
-
   &__panel {
     position: absolute;
     top: calc(100% + fluid(4));
