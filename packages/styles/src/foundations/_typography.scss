@@ -5,16 +5,52 @@
 @use '../utilities/tokens.map' as *;
 @use '../utilities/mixins' as *;
 
+$colors: (heading, body, caption, inverse, primary, error);
+$align: (left, center, right, justify);
+$transforms: (none, uppercase, lowercase, capitalize);
+$decoration: (none, underline, overline, line-through, blink);
+$style: (normal, italic, oblique);
+
 @each $name, $values in map.get($typography, scales) {
   .#{$name} {
     @include font-scale($name);
   }
 }
 
-.text- {
+.text {
+  @each $color in $colors {
+    &--color-#{$color} {
+      color: text(#{$color});
+    }
+  }
+
   @each $weights, $value in map.get($typography, weight) {
-    &#{$weights} {
+    &--weight-#{$weights} {
       font-weight: weight($weights);
+    }
+  }
+
+  @each $align in $align {
+    &--align-#{$align} {
+      text-align: $align;
+    }
+  }
+
+  @each $transform in $transforms {
+    &--transform-#{$transform} {
+      text-transform: $transform;
+    }
+  }
+
+  @each $decoration in $decoration {
+    &--decoration-#{$decoration} {
+      text-decoration: $decoration;
+    }
+  }
+
+  @each $style in $style {
+    &--style-#{$style} {
+      font-style: $style;
     }
   }
 }
