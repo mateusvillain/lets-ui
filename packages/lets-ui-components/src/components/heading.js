@@ -59,10 +59,9 @@ export class LuiHeading extends HTMLElement {
 
     const classes = [
       variant,
-      `lui-heading--color-${color}`,
-      VALID_ALIGNS.includes(align) && `typography--align-${align}`,
-      VALID_TRANSFORMS.includes(transform) &&
-        `typography--transform-${transform}`,
+      `text--color-${color}`,
+      VALID_ALIGNS.includes(align) && `text--align-${align}`,
+      VALID_TRANSFORMS.includes(transform) && `text--transform-${transform}`,
     ]
       .filter(Boolean)
       .join(' ');

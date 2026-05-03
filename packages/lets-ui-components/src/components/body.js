@@ -53,12 +53,11 @@ export class LuiBody extends HTMLElement {
 
     const classes = [
       `body--${variant}`,
-      `lui-body--color-${color}`,
-      VALID_ALIGNS.includes(align) && `typography--align-${align}`,
-      VALID_TRANSFORMS.includes(transform) &&
-        `typography--transform-${transform}`,
-      italic && 'lui-body--italic',
-      underline && 'lui-body--underline',
+      `text--color-${color}`,
+      VALID_ALIGNS.includes(align) && `text--align-${align}`,
+      VALID_TRANSFORMS.includes(transform) && `text--transform-${transform}`,
+      italic && 'text--style-italic',
+      underline && 'text--decoration-underline',
     ]
       .filter(Boolean)
       .join(' ');
