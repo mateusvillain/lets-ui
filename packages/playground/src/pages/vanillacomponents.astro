@@ -43,6 +43,37 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
   </head>
   <body>
     <section class="section-container">
+      <!-- Typography — Headline -->
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="display lui-headline--color-heading">Display — Escala máxima</div>
+        <h1 class="title lui-headline--color-heading">Title — h1</h1>
+        <h2 class="subtitle lui-headline--color-heading">Subtitle — h2</h2>
+        <h3 class="headline lui-headline--color-heading">Headline — h3</h3>
+        <h4 class="subheadline lui-headline--color-heading">Subheadline — h4</h4>
+        <h5 class="block-title lui-headline--color-heading">Block Title — h5</h5>
+        <h6 class="overtitle lui-headline--color-heading">Overtitle — h6</h6>
+        <h2 class="subtitle lui-headline--color-caption typography--align-center">Subtitle centralizado + color caption</h2>
+        <h2 class="subtitle lui-headline--color-error typography--transform-uppercase">Subtitle uppercase + color error</h2>
+      </div>
+
+      <!-- Typography — Body -->
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <p class="body--lg lui-body--color-body">Large — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p class="body--md lui-body--color-body">Medium — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p class="body--sm lui-body--color-body">Small — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p class="body--md lui-body--color-caption">Color caption</p>
+        <p class="body--md lui-body--color-body lui-body--italic">Itálico</p>
+        <p class="body--md lui-body--color-body lui-body--underline">Sublinhado</p>
+        <p class="body--md lui-body--color-body lui-body--italic lui-body--underline">Itálico + sublinhado</p>
+        <p
+          class="body--md lui-body--color-body"
+          style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; max-width: 400px;"
+        >
+          Line clamp em 2 linhas — texto longo para demonstrar o corte: Lorem ipsum dolor sit amet
+          consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+      </div>
+
       <br />
       <br />
 

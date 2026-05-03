@@ -1,0 +1,35 @@
+@use '../utilities/functions' as *;
+
+lui-body {
+  display: contents;
+}
+
+// Color variants
+.lui-body--color-body {
+  color: text(body);
+}
+
+.lui-body--color-heading {
+  color: text(heading);
+}
+
+.lui-body--color-caption {
+  color: text(caption);
+}
+
+.lui-body--color-inverse {
+  color: text(inverse);
+}
+
+.lui-body--color-error {
+  color: text(error);
+}
+
+// Modifiers
+.lui-body--italic {
+  font-style: italic;
+}
+
+.lui-body--underline {
+  text-decoration: underline;
+}
