@@ -72,3 +72,4 @@ Each interactive component in `packages/lets-ui-components/src/components/` is a
 - **`documentation`** — Generating Storybook stories (`.stories.js`) and MDX docs (`.docs.mdx`)
 - **`changelog-generator`** — Release workflow: SemVer bump, CHANGELOG.md, Git tags, GitHub release
 - **`conventional-commit`** — Guided commit message formatting
+- **`issue-creator`** — Creating GitHub issues with automatic label inference, assignee, and addition to the Let's UI Roadmap project with status Todo

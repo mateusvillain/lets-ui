@@ -1,0 +1,4 @@
+interface:
+  display_name: "Let's UI Issue Creator"
+  short_description: "Cria issues com labels, assignee e adiciona ao Roadmap"
+  default_prompt: "Criar issue no repositório Let's UI com labels derivadas do pedido, assignee automático e status Todo no projeto Let's UI Roadmap."
