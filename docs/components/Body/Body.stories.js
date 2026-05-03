@@ -2,7 +2,7 @@ import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
 
 export default {
-  title: 'Components/Body',
+  title: 'Typography/Body',
   argTypes: {
     variant: {
       control: { type: 'select' },
@@ -20,7 +20,7 @@ export default {
     },
     color: {
       control: { type: 'select' },
-      options: ['body', 'heading', 'caption', 'inverse', 'error'],
+      options: ['body', 'heading', 'caption', 'primary', 'inverse', 'error'],
     },
     italic: { control: 'boolean' },
     underline: { control: 'boolean' },

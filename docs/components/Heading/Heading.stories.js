@@ -2,7 +2,7 @@ import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
 
 export default {
-  title: 'Components/Heading',
+  title: 'Typography/Heading',
   argTypes: {
     variant: {
       control: { type: 'select' },
@@ -28,7 +28,7 @@ export default {
     },
     color: {
       control: { type: 'select' },
-      options: ['heading', 'body', 'caption', 'inverse', 'error'],
+      options: ['heading', 'body', 'caption', 'primary', 'inverse', 'error'],
     },
     text: { control: 'text' },
   },
