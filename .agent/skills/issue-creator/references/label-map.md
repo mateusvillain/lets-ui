@@ -57,6 +57,7 @@ Formato: `component: <nome-em-kebab-case>`. Cor padrão: `#f5be58`.
 | `component: dropdown-menu`   | Dropdown Menu   |
 | `component: empty-state`     | Empty State     |
 | `component: field`           | Field           |
+| `component: heading`         | Heading         |
 | `component: file-upload`     | File Upload     |
 | `component: icon-button`     | Icon Button     |
 | `component: image`           | Image           |
@@ -79,6 +80,7 @@ Formato: `component: <nome-em-kebab-case>`. Cor padrão: `#f5be58`.
 | `component: table`           | Table           |
 | `component: tabs`            | Tabs            |
 | `component: tag`             | Tag             |
+| `component: text`            | Text            |
 | `component: textarea`        | Textarea        |
 | `component: toast`           | Toast           |
 | `component: tooltip`         | Tooltip         |

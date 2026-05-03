@@ -51,6 +51,30 @@ Se não existir, criar com cor `#f5be58`:
 gh label create "component: <nome>" --color "f5be58" --repo mateusvillain/lets-ui-css
 ```
 
+Após criar a label, executar obrigatoriamente o fluxo de **Atualização de Referências**.
+
+## Atualização de Referências ao Criar Nova Label
+
+Sempre que uma nova label `component: <nome>` for criada, atualizar `references/label-map.md` e persistir a mudança no repositório.
+
+### 1. Atualizar `label-map.md`
+
+Adicionar a nova entrada na tabela "Componentes existentes", em ordem alfabética:
+
+```markdown
+| `component: <nome>` | <NomeDisplay> |
+```
+
+### 2. Commitar e fazer push
+
+```bash
+git add .agent/skills/issue-creator/references/label-map.md
+git commit -m "chore(issue-creator): add component: <nome> to label-map"
+git push
+```
+
+Executar isso **antes** de criar a issue, para que o repositório fique sempre sincronizado com as labels reais do GitHub.
+
 ## Obter Assignee
 
 Sempre usar o username do GitHub do usuário autenticado localmente:
