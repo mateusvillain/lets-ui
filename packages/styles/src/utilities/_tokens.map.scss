@@ -170,6 +170,7 @@ $color: (
     ),
 
     text: (
+      primary: token('lui.color.primary.text.body'),
       heading: token('lui.color.neutral.text.heading'),
       body: token('lui.color.neutral.text.body'),
       caption: token('lui.color.neutral.text.caption'),
