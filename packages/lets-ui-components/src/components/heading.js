@@ -14,7 +14,7 @@ const VALID_VARIANTS = Object.keys(DEFAULT_TAGS);
 const VALID_ALIGNS = ['left', 'center', 'right', 'justify'];
 const VALID_TRANSFORMS = ['none', 'uppercase', 'lowercase', 'capitalize'];
 
-export class LuiHeadline extends HTMLElement {
+export class LuiHeading extends HTMLElement {
   static observedAttributes = [
     'variant',
     'as',
@@ -59,7 +59,7 @@ export class LuiHeadline extends HTMLElement {
 
     const classes = [
       variant,
-      `lui-headline--color-${color}`,
+      `lui-heading--color-${color}`,
       VALID_ALIGNS.includes(align) && `typography--align-${align}`,
       VALID_TRANSFORMS.includes(transform) &&
         `typography--transform-${transform}`,

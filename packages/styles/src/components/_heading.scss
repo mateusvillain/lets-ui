@@ -1,27 +1,27 @@
 @use '../utilities/functions' as *;
 
-lui-headline {
+lui-heading {
   display: contents;
 }
 
 // Color variants
-.lui-headline--color-heading {
+.lui-heading--color-heading {
   color: text(heading);
 }
 
-.lui-headline--color-body {
+.lui-heading--color-body {
   color: text(body);
 }
 
-.lui-headline--color-caption {
+.lui-heading--color-caption {
   color: text(caption);
 }
 
-.lui-headline--color-inverse {
+.lui-heading--color-inverse {
   color: text(inverse);
 }
 
-.lui-headline--color-error {
+.lui-heading--color-error {
   color: text(error);
 }
 
