@@ -14,8 +14,16 @@ const VALID_VARIANTS = Object.keys(DEFAULT_TAGS);
 const VALID_ALIGNS = ['left', 'center', 'right', 'justify'];
 const VALID_TRANSFORMS = ['none', 'uppercase', 'lowercase', 'capitalize'];
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+}
+
 export class LuiHeading extends HTMLElement {
   static observedAttributes = [
+    'label',
     'variant',
     'as',
     'align',
@@ -25,27 +33,11 @@ export class LuiHeading extends HTMLElement {
   ];
 
   connectedCallback() {
-    if (this._initialized) return;
-    this._initialized = true;
-
-    queueMicrotask(() => {
-      this._captureContent();
-      this.render();
-    });
+    this.render();
   }
 
   attributeChangedCallback() {
-    if (this._initialized) this.render();
-  }
-
-  _captureContent() {
-    if (this._contentCaptured) return;
-    this._contentHtml = Array.from(this.childNodes)
-      .map((node) =>
-        node.nodeType === Node.TEXT_NODE ? node.textContent : node.outerHTML
-      )
-      .join('');
-    this._contentCaptured = true;
+    this.render();
   }
 
   render() {
@@ -56,6 +48,7 @@ export class LuiHeading extends HTMLElement {
     const lineClamp = parseInt(this.getAttribute('line-clamp'), 10) || null;
     const transform = this.getAttribute('transform');
     const color = this.getAttribute('color') ?? 'heading';
+    const label = escapeHtml(this.getAttribute('label') ?? '');
 
     const classes = [
       variant,
@@ -70,9 +63,6 @@ export class LuiHeading extends HTMLElement {
       ? ` style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: ${lineClamp}; -webkit-box-orient: vertical;"`
       : '';
 
-    mountMarkup(
-      this,
-      `<${as} class="${classes}"${styleAttr}>${this._contentHtml ?? ''}</${as}>`
-    );
+    mountMarkup(this, `<${as} class="${classes}"${styleAttr}>${label}</${as}>`);
   }
 }
