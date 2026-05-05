@@ -62,7 +62,7 @@ Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<sou
 | `alt`            | `string` (required)                              | —         | Alternative text; use `""` for decorative images           |
 | `width`          | `string`                                         | —         | CSS value applied to the wrapper (e.g. `400px`, `100%`)   |
 | `height`         | `string`                                         | —         | CSS value applied to the wrapper                           |
-| `aspect-ratio`   | `square` \| `video` \| `portrait` \| `landscape` \| `wide` | — | Locks layout space before load |
+| `aspect-ratio`   | `string` (any CSS value, e.g. `"16 / 9"`, `"1 / 1"`) | — | Applied as `aspect-ratio` CSS property on the wrapper |
 | `radius`         | `none` \| `xs` \| `sm` \| `md` \| `lg` \| `circle` | —      | Border radius using design tokens                          |
 | `fit`            | `cover` \| `contain` \| `none`                   | `cover`   | CSS `object-fit` value                                     |
 | `loading`        | `lazy` \| `eager`                                | `lazy`    | Native `loading` attribute                                 |

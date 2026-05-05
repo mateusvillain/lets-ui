@@ -1,7 +1,6 @@
 import { hasBooleanAttribute, mountMarkup } from '../internal.js';
 
 const VALID_FITS = ['cover', 'contain', 'none'];
-const VALID_RATIOS = ['square', 'video', 'portrait', 'landscape', 'wide'];
 const VALID_RADII = ['none', 'xs', 'sm', 'md', 'lg', 'circle'];
 
 export class LuiImage extends HTMLElement {
@@ -31,14 +30,11 @@ export class LuiImage extends HTMLElement {
 
   #buildClasses() {
     const fit = this.getAttribute('fit') ?? 'cover';
-    const ratio = this.getAttribute('aspect-ratio');
     const radius = this.getAttribute('radius');
 
     const classes = ['img'];
 
     if (VALID_FITS.includes(fit)) classes.push(`img--fit-${fit}`);
-    if (ratio && VALID_RATIOS.includes(ratio))
-      classes.push(`img--ratio-${ratio}`);
     if (radius && VALID_RADII.includes(radius))
       classes.push(`img--radius-${radius}`);
     if (this.getAttribute('as') === 'picture') classes.push('img--picture');
@@ -49,11 +45,13 @@ export class LuiImage extends HTMLElement {
   #buildStyles() {
     const width = this.getAttribute('width');
     const height = this.getAttribute('height');
+    const ratio = this.getAttribute('aspect-ratio');
     const fallbackColor = this.getAttribute('fallback-color');
     const styles = [];
 
     if (width) styles.push(`width:${width}`);
     if (height) styles.push(`height:${height}`);
+    if (ratio) styles.push(`aspect-ratio:${ratio}`);
     if (fallbackColor) styles.push(`background-color:${fallbackColor}`);
 
     return styles.length ? ` style="${styles.join(';')}"` : '';

@@ -14,10 +14,7 @@ export default {
     alt: { control: 'text' },
     width: { control: 'text' },
     height: { control: 'text' },
-    'aspect-ratio': {
-      control: { type: 'select' },
-      options: ['', 'square', 'video', 'portrait', 'landscape', 'wide'],
-    },
+    'aspect-ratio': { control: 'text' },
     radius: {
       control: { type: 'select' },
       options: ['none', 'xs', 'sm', 'md', 'lg', 'circle'],
@@ -49,7 +46,7 @@ Image.args = {
   src: SAMPLE_SRC,
   alt: 'Mountain landscape at sunset',
   width: '400px',
-  'aspect-ratio': 'video',
+  'aspect-ratio': '16 / 9',
   radius: 'md',
   fit: 'cover',
   loading: 'eager',
@@ -63,7 +60,7 @@ export const Square = () => `
     src="${PORTRAIT_SRC}"
     alt="Portrait photo"
     width="200px"
-    aspect-ratio="square"
+    aspect-ratio="1 / 1"
     radius="circle"
     fit="cover"
     loading="eager"
@@ -76,7 +73,7 @@ export const WithCaption = () => `
       src="${SAMPLE_SRC}"
       alt="Mountain landscape at sunset"
       width="400px"
-      aspect-ratio="video"
+      aspect-ratio="16 / 9"
       radius="md"
       fit="cover"
       loading="eager"
@@ -88,24 +85,24 @@ export const WithCaption = () => `
 export const AspectRatios = () => `
   <div style="display:flex;flex-direction:column;gap:24px;max-width:500px;">
     <div>
-      <p style="font-size:12px;opacity:.6;margin-bottom:8px">Square (1/1)</p>
-      <lui-image src="${SAMPLE_SRC}" alt="Square" width="200px" aspect-ratio="square" fit="cover" loading="eager"></lui-image>
+      <p style="font-size:12px;opacity:.6;margin-bottom:8px">1 / 1</p>
+      <lui-image src="${SAMPLE_SRC}" alt="Square" width="200px" aspect-ratio="1 / 1" fit="cover" loading="eager"></lui-image>
     </div>
     <div>
-      <p style="font-size:12px;opacity:.6;margin-bottom:8px">Video (16/9)</p>
-      <lui-image src="${SAMPLE_SRC}" alt="Video" width="100%" aspect-ratio="video" fit="cover" loading="eager"></lui-image>
+      <p style="font-size:12px;opacity:.6;margin-bottom:8px">16 / 9</p>
+      <lui-image src="${SAMPLE_SRC}" alt="16/9" width="100%" aspect-ratio="16 / 9" fit="cover" loading="eager"></lui-image>
     </div>
     <div>
-      <p style="font-size:12px;opacity:.6;margin-bottom:8px">Landscape (4/3)</p>
-      <lui-image src="${SAMPLE_SRC}" alt="Landscape" width="100%" aspect-ratio="landscape" fit="cover" loading="eager"></lui-image>
+      <p style="font-size:12px;opacity:.6;margin-bottom:8px">4 / 3</p>
+      <lui-image src="${SAMPLE_SRC}" alt="4/3" width="100%" aspect-ratio="4 / 3" fit="cover" loading="eager"></lui-image>
     </div>
     <div>
-      <p style="font-size:12px;opacity:.6;margin-bottom:8px">Portrait (3/4)</p>
-      <lui-image src="${PORTRAIT_SRC}" alt="Portrait" width="200px" aspect-ratio="portrait" fit="cover" loading="eager"></lui-image>
+      <p style="font-size:12px;opacity:.6;margin-bottom:8px">3 / 4</p>
+      <lui-image src="${PORTRAIT_SRC}" alt="3/4" width="200px" aspect-ratio="3 / 4" fit="cover" loading="eager"></lui-image>
     </div>
     <div>
-      <p style="font-size:12px;opacity:.6;margin-bottom:8px">Wide (21/9)</p>
-      <lui-image src="${SAMPLE_SRC}" alt="Wide" width="100%" aspect-ratio="wide" fit="cover" loading="eager"></lui-image>
+      <p style="font-size:12px;opacity:.6;margin-bottom:8px">21 / 9</p>
+      <lui-image src="${SAMPLE_SRC}" alt="21/9" width="100%" aspect-ratio="21 / 9" fit="cover" loading="eager"></lui-image>
     </div>
   </div>
 `;
@@ -117,7 +114,7 @@ export const BorderRadii = () => `
         (r) => `
       <div>
         <p style="font-size:12px;opacity:.6;margin-bottom:8px">${r}</p>
-        <lui-image src="${PORTRAIT_SRC}" alt="Radius ${r}" width="120px" aspect-ratio="square" radius="${r}" fit="cover" loading="eager"></lui-image>
+        <lui-image src="${PORTRAIT_SRC}" alt="Radius ${r}" width="120px" aspect-ratio="1 / 1" radius="${r}" fit="cover" loading="eager"></lui-image>
       </div>
     `
       )
@@ -145,7 +142,7 @@ export const FallbackColor = () => `
     src="https://invalid.example.com/broken.jpg"
     alt="Broken image with fallback color"
     width="300px"
-    aspect-ratio="video"
+    aspect-ratio="16 / 9"
     radius="md"
     fallback-color="#e8f4fd"
     loading="eager"
@@ -157,7 +154,7 @@ export const FallbackSrc = () => `
     src="https://invalid.example.com/broken.jpg"
     alt="Image with fallback source"
     width="300px"
-    aspect-ratio="video"
+    aspect-ratio="16 / 9"
     radius="md"
     fallback-src="${SAMPLE_SRC}"
     loading="eager"
@@ -170,7 +167,7 @@ export const AsPicture = () => `
     src="${SAMPLE_SRC}"
     alt="Mountain landscape"
     width="400px"
-    aspect-ratio="video"
+    aspect-ratio="16 / 9"
     radius="md"
     fit="cover"
     loading="eager"

@@ -19,27 +19,6 @@
     color: text(body);
   }
 
-  // aspect ratio
-  &--ratio-square {
-    aspect-ratio: 1 / 1;
-  }
-
-  &--ratio-video {
-    aspect-ratio: 16 / 9;
-  }
-
-  &--ratio-portrait {
-    aspect-ratio: 3 / 4;
-  }
-
-  &--ratio-landscape {
-    aspect-ratio: 4 / 3;
-  }
-
-  &--ratio-wide {
-    aspect-ratio: 21 / 9;
-  }
-
   // object-fit
   &--fit-cover .img__element {
     object-fit: cover;
