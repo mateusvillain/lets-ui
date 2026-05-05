@@ -1,0 +1,71 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ImageStories from './Image.stories';
+
+<Meta of={ImageStories} />
+
+# Image
+
+The `<lui-image>` component wraps a native `<img>` (or `<picture>`) with lazy loading, a skeleton shimmer while loading, an error fallback, and optional aspect-ratio / object-fit controls — preventing layout shift and improving perceived performance.
+
+<Canvas of={ImageStories.Image} />
+<Controls of={ImageStories.Image} />
+
+## Aspect Ratios
+
+Use the `aspect-ratio` attribute to lock the space before the image loads and prevent CLS.
+
+<Canvas of={ImageStories.AspectRatios} />
+
+## Border Radii
+
+<Canvas of={ImageStories.BorderRadii} />
+
+## Object Fit
+
+<Canvas of={ImageStories.ObjectFit} />
+
+## Square / Circle
+
+<Canvas of={ImageStories.Square} />
+
+## With Caption
+
+When `caption` is provided, the component wraps everything in a semantic `<figure>` / `<figcaption>` pair.
+
+<Canvas of={ImageStories.WithCaption} />
+
+## Fallback Color
+
+Show a branded background while the image loads or when it fails.
+
+<Canvas of={ImageStories.FallbackColor} />
+
+## Fallback Source
+
+Provide an alternative image to display when the primary `src` fails to load.
+
+<Canvas of={ImageStories.FallbackSrc} />
+
+## As Picture
+
+Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<source>` elements).
+
+<Canvas of={ImageStories.AsPicture} />
+
+## Props
+
+| Attribute        | Type                                             | Default   | Description                                                |
+| ---------------- | ------------------------------------------------ | --------- | ---------------------------------------------------------- |
+| `as`             | `image` \| `picture`                             | `image`   | Renders `<img>` directly or wrapped in `<picture>`         |
+| `src`            | `string` (required)                              | —         | Image source URL                                           |
+| `src-set`        | `string`                                         | —         | Forwarded to the inner `<img srcset>`                      |
+| `alt`            | `string` (required)                              | —         | Alternative text; use `""` for decorative images           |
+| `width`          | `string`                                         | —         | CSS value applied to the wrapper (e.g. `400px`, `100%`)   |
+| `height`         | `string`                                         | —         | CSS value applied to the wrapper                           |
+| `aspect-ratio`   | `square` \| `video` \| `portrait` \| `landscape` \| `wide` | — | Locks layout space before load |
+| `radius`         | `none` \| `xs` \| `sm` \| `md` \| `lg` \| `circle` | —      | Border radius using design tokens                          |
+| `fit`            | `cover` \| `contain` \| `none`                   | `cover`   | CSS `object-fit` value                                     |
+| `loading`        | `lazy` \| `eager`                                | `lazy`    | Native `loading` attribute                                 |
+| `fallback-color` | `string`                                         | —         | Background color shown while loading / on error            |
+| `fallback-src`   | `string`                                         | —         | Alternative image URL shown when `src` fails               |
+| `caption`        | `string`                                         | —         | Wraps in `<figure>` and adds `<figcaption>`                |

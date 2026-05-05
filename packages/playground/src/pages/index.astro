@@ -247,6 +247,73 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
           </lui-drawer>
         </div>
       </section>
+
+      <!-- ── Image ─────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Image</h2>
+        <div class="pg-row" style="align-items:flex-start;flex-wrap:wrap;gap:24px;">
+          <div>
+            <p style="font-size:12px;opacity:.5;margin-bottom:8px">Video 16/9 · radius md</p>
+            <lui-image
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
+              alt="Mountain landscape at sunset"
+              width="320px"
+              aspect-ratio="video"
+              radius="md"
+              fit="cover"
+              loading="eager"
+            ></lui-image>
+          </div>
+          <div>
+            <p style="font-size:12px;opacity:.5;margin-bottom:8px">Square · radius circle</p>
+            <lui-image
+              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80"
+              alt="Portrait photo"
+              width="120px"
+              aspect-ratio="square"
+              radius="circle"
+              fit="cover"
+              loading="eager"
+            ></lui-image>
+          </div>
+          <div>
+            <p style="font-size:12px;opacity:.5;margin-bottom:8px">Fit contain · radius sm</p>
+            <lui-image
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
+              alt="Contain fit"
+              width="200px"
+              height="150px"
+              fit="contain"
+              radius="sm"
+              loading="eager"
+            ></lui-image>
+          </div>
+          <div>
+            <p style="font-size:12px;opacity:.5;margin-bottom:8px">Broken src · error state</p>
+            <lui-image
+              src="https://invalid.example.com/broken.jpg"
+              alt="Broken image"
+              width="200px"
+              aspect-ratio="video"
+              radius="md"
+              loading="eager"
+            ></lui-image>
+          </div>
+          <div>
+            <p style="font-size:12px;opacity:.5;margin-bottom:8px">Com caption (figure)</p>
+            <lui-image
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
+              alt="Mountain landscape"
+              width="280px"
+              aspect-ratio="landscape"
+              radius="md"
+              fit="cover"
+              loading="eager"
+              caption="Foto: Unsplash — montanhas ao pôr do sol"
+            ></lui-image>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script>
