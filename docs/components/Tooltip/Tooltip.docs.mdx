@@ -21,12 +21,3 @@ Use the `position` attribute to control where the tooltip appears relative to it
 Slot any focusable element inside `<lui-tooltip>` to use it as the trigger. The component automatically wires up `aria-describedby` on focusable children.
 
 <Canvas of={TooltipStories.WithCustomTrigger} />
-
-## Props
-
-| Attribute    | Type                                    | Default          | Description                                              |
-| ------------ | --------------------------------------- | ---------------- | -------------------------------------------------------- |
-| `text`       | `string`                                | `"Tooltip"`      | Text content displayed inside the tooltip bubble         |
-| `position`   | `top` / `right` / `bottom` / `left`    | `top`            | Placement of the tooltip relative to the trigger         |
-| `label`      | `string`                                | `"Mostrar tooltip"` | Label for the default trigger button (no slot)        |
-| `aria-label` | `string`                                | —                | Overrides the computed `aria-label` on the trigger       |
