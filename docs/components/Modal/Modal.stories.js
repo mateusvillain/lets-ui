@@ -13,6 +13,11 @@ export default {
     },
     'trigger-label': { control: 'text' },
   },
+  parameters: {
+    docs: {
+      story: { height: '500px' },
+    },
+  },
 };
 
 const Template = ({ title, size, 'trigger-label': triggerLabel }) => {
