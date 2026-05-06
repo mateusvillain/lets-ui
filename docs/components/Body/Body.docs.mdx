@@ -1,0 +1,47 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BodyStories from './Body.stories';
+
+<Meta of={BodyStories} />
+
+# Body
+
+Componente para texto de conteúdo. Cobre textos de parágrafo, legendas e notas com variações de tamanho, cor, estilo e decoração.
+
+<Canvas of={BodyStories.Body} />
+<Controls of={BodyStories.Body} />
+
+## Tamanhos
+
+| Variant | Tag padrão | Uso sugerido                     |
+| ------- | ---------- | -------------------------------- |
+| `lg`    | `p`        | Introdução e texto de destaque   |
+| `md`    | `p`        | Conteúdo geral (padrão)          |
+| `sm`    | `p`        | Legendas, notas e texto auxiliar |
+
+<Canvas of={BodyStories.AllSizes} />
+
+## Cores
+
+<Canvas of={BodyStories.ColorVariants} />
+
+## Estilos de texto
+
+<Canvas of={BodyStories.Italic} />
+<Canvas of={BodyStories.Underline} />
+<Canvas of={BodyStories.ItalicUnderline} />
+
+## Alinhamento
+
+Use `align` com `left`, `center`, `right` ou `justify`.
+
+<Canvas of={BodyStories.Aligned} />
+
+## Line Clamp
+
+<Canvas of={BodyStories.WithLineClamp} />
+
+## Uso inline com `as`
+
+O atributo `as` permite renderizar o texto como `span`, `label` ou qualquer outro elemento inline.
+
+<Canvas of={BodyStories.AsSpan} />

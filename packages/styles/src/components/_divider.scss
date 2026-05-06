@@ -1,15 +1,6 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
-lui-divider {
-  display: block;
-
-  &[orientation='vertical'] {
-    display: inline-flex;
-    align-self: stretch;
-  }
-}
-
 .divider {
   display: block;
   height: width(1);

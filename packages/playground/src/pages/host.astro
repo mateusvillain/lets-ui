@@ -1,0 +1,379 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+import 'lets-ui-icons/dist/lets-ui-icons.css';
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Host display:contents — Let's UI</title>
+  </head>
+  <body>
+    <header class="pg-header">
+      <span class="pg-header__logo">Let's UI</span>
+      <span class="pg-header__label">host display:contents</span>
+    </header>
+
+    <main class="pg-main">
+
+      <!-- ── Contexto: Flex row ─────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Flex row — lui-button como filho direto</h2>
+        <p class="pg-hint">Os botões devem aparecer lado a lado como itens do flex, sem caixas extras.</p>
+        <div class="pg-row ctx-flex-row">
+          <lui-button label="Primário"></lui-button>
+          <lui-button label="Secundário" variant="secondary"></lui-button>
+          <lui-button label="Ghost" variant="ghost"></lui-button>
+          <lui-button label="Danger" variant="danger"></lui-button>
+          <lui-button label="Desabilitado" disabled></lui-button>
+        </div>
+      </section>
+
+      <!-- ── Contexto: Grid ─────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Grid — lui-card como filho direto</h2>
+        <p class="pg-hint">Cada card deve preencher sua célula do grid normalmente.</p>
+        <div class="ctx-grid">
+          <lui-card aria-label="Card 1">
+            <p>Conteúdo do card 1</p>
+            <lui-button slot="actions" label="Ação" variant="secondary"></lui-button>
+          </lui-card>
+          <lui-card aria-label="Card 2">
+            <p>Conteúdo do card 2</p>
+            <lui-button slot="actions" label="Ação" variant="secondary"></lui-button>
+          </lui-card>
+          <lui-card aria-label="Card 3">
+            <p>Conteúdo do card 3</p>
+            <lui-button slot="actions" label="Ação" variant="secondary"></lui-button>
+          </lui-card>
+        </div>
+      </section>
+
+      <!-- ── Contexto: Flex column / form ──────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Flex column — campos de formulário</h2>
+        <p class="pg-hint">Cada campo deve ocupar 100% da largura da coluna sem gap extra.</p>
+        <div class="ctx-form">
+          <lui-input label="Nome" placeholder="Seu nome" size="lg"></lui-input>
+          <lui-input label="E-mail" placeholder="email@exemplo.com" type="email" size="lg"></lui-input>
+          <lui-textarea label="Mensagem" placeholder="Digite sua mensagem..." size="lg"></lui-textarea>
+          <lui-native-select label="Assunto" options="Suporte,Vendas,Outros" size="lg"></lui-native-select>
+          <div class="pg-row">
+            <lui-button label="Cancelar" variant="secondary"></lui-button>
+            <lui-button label="Enviar"></lui-button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Checkbox / Radio / Switch ─────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Checkbox</h2>
+        <div class="pg-col">
+          <lui-checkbox label="Aceito os termos" size="lg"></lui-checkbox>
+          <lui-checkbox label="Opção marcada" checked size="lg"></lui-checkbox>
+          <lui-checkbox label="Desabilitado" disabled size="lg"></lui-checkbox>
+          <lui-checkbox label="Marcado e desabilitado" checked disabled size="lg"></lui-checkbox>
+        </div>
+      </section>
+
+      <section class="pg-section">
+        <h2 class="pg-section__title">Radio</h2>
+        <div class="pg-col">
+          <lui-radio label="Opção 1" name="demo" value="1" checked size="lg"></lui-radio>
+          <lui-radio label="Opção 2" name="demo" value="2" size="lg"></lui-radio>
+          <lui-radio label="Opção 3 (desabilitada)" name="demo" value="3" disabled size="lg"></lui-radio>
+        </div>
+      </section>
+
+      <section class="pg-section">
+        <h2 class="pg-section__title">Switch</h2>
+        <div class="pg-col">
+          <lui-switch label="Receber notificações" size="lg"></lui-switch>
+          <lui-switch label="Modo escuro" checked size="lg"></lui-switch>
+          <lui-switch label="Desabilitado" disabled size="lg"></lui-switch>
+          <lui-switch label="Ativado e desabilitado" checked disabled size="lg"></lui-switch>
+        </div>
+      </section>
+
+      <!-- ── Select ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Select</h2>
+        <div class="pg-col" style="max-width: 400px;">
+          <lui-select label="País" options="Brasil,Argentina,Chile,Colômbia" size="lg"></lui-select>
+          <lui-native-select label="Tamanho" options="Pequeno,Médio,Grande" size="lg"></lui-native-select>
+        </div>
+      </section>
+
+      <!-- ── Tabs ───────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Tabs — line</h2>
+        <lui-tabs variant="line">
+          <lui-tab label="Visão geral" active>
+            <p>Conteúdo da aba Visão geral.</p>
+          </lui-tab>
+          <lui-tab label="Configurações">
+            <p>Conteúdo da aba Configurações.</p>
+          </lui-tab>
+          <lui-tab label="Histórico" disabled>
+            <p>Conteúdo da aba Histórico.</p>
+          </lui-tab>
+        </lui-tabs>
+      </section>
+
+      <section class="pg-section">
+        <h2 class="pg-section__title">Tabs — card</h2>
+        <lui-tabs variant="card">
+          <lui-tab label="Dia" active>
+            <p>Conteúdo do dia.</p>
+          </lui-tab>
+          <lui-tab label="Semana">
+            <p>Conteúdo da semana.</p>
+          </lui-tab>
+          <lui-tab label="Mês">
+            <p>Conteúdo do mês.</p>
+          </lui-tab>
+        </lui-tabs>
+      </section>
+
+      <!-- ── Divider ────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Divider</h2>
+        <div class="pg-col">
+          <lui-divider></lui-divider>
+          <lui-divider label="ou"></lui-divider>
+          <div style="display: flex; align-items: stretch; height: 48px; gap: 16px;">
+            <span>Esquerda</span>
+            <lui-divider orientation="vertical"></lui-divider>
+            <span>Centro</span>
+            <lui-divider orientation="vertical" label="ou"></lui-divider>
+            <span>Direita</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Tooltip ────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Tooltip</h2>
+        <div class="pg-row">
+          <lui-tooltip text="Tooltip acima" position="top">
+            <lui-button label="Top"></lui-button>
+          </lui-tooltip>
+          <lui-tooltip text="Tooltip abaixo" position="bottom">
+            <lui-button label="Bottom" variant="secondary"></lui-button>
+          </lui-tooltip>
+          <lui-tooltip text="Tooltip à esquerda" position="left">
+            <lui-button label="Left" variant="ghost"></lui-button>
+          </lui-tooltip>
+          <lui-tooltip text="Tooltip à direita" position="right">
+            <lui-icon-button icon="info-circle" label="Info" size="lg"></lui-icon-button>
+          </lui-tooltip>
+        </div>
+      </section>
+
+      <!-- ── Dropdown Menu ──────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Dropdown Menu</h2>
+        <div class="pg-row">
+          <lui-dropdown-menu>
+            <lui-button label="Opções" slot="trigger" variant="secondary"></lui-button>
+            <lui-menu-item label="Editar" keys="⌘+E"></lui-menu-item>
+            <lui-menu-item label="Duplicar" keys="⌘+D"></lui-menu-item>
+            <lui-menu-divider></lui-menu-divider>
+            <lui-menu-item label="Excluir" variant="danger"></lui-menu-item>
+          </lui-dropdown-menu>
+        </div>
+      </section>
+
+      <!-- ── Breadcrumb ─────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Breadcrumb</h2>
+        <lui-breadcrumb>
+          <lui-breadcrumb-item href="/">Home</lui-breadcrumb-item>
+          <lui-breadcrumb-item href="/produtos">Produtos</lui-breadcrumb-item>
+          <lui-breadcrumb-item active>Notebook</lui-breadcrumb-item>
+        </lui-breadcrumb>
+      </section>
+
+      <!-- ── Link ──────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Link</h2>
+        <div class="pg-row">
+          <lui-link label="Abrir detalhe" href="#"></lui-link>
+          <lui-link label="Link externo" href="#"></lui-link>
+        </div>
+      </section>
+
+      <!-- ── Shortcut ───────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Shortcut</h2>
+        <div class="pg-row">
+          <lui-shortcut keys="⌘+S"></lui-shortcut>
+          <lui-shortcut keys="⌘+Shift+P"></lui-shortcut>
+          <lui-shortcut keys="⌘+K"></lui-shortcut>
+        </div>
+      </section>
+
+      <!-- ── Alert ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Alert</h2>
+        <div class="pg-col">
+          <lui-alert variant="info" content="Informação importante."></lui-alert>
+          <lui-alert variant="success" content="Operação concluída com sucesso."></lui-alert>
+          <lui-alert variant="caution" content="Atenção antes de continuar."></lui-alert>
+          <lui-alert variant="danger" content="Ocorreu um erro."></lui-alert>
+        </div>
+      </section>
+
+      <!-- ── Tag ───────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Tag</h2>
+        <div class="pg-row">
+          <lui-tag label="Default"></lui-tag>
+          <lui-tag label="Primary" variant="primary"></lui-tag>
+          <lui-tag label="Success" variant="success"></lui-tag>
+          <lui-tag label="Danger" variant="danger"></lui-tag>
+          <lui-tag label="Caution" variant="caution"></lui-tag>
+          <lui-tag label="Neutral" variant="neutral"></lui-tag>
+        </div>
+      </section>
+
+      <!-- ── Modal ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Modal</h2>
+        <div class="pg-row">
+          <lui-modal title="Modal padrão" trigger-label="Abrir modal">
+            <p>Conteúdo do modal.</p>
+            <lui-button slot="actions" data-modal-close label="Cancelar" variant="secondary"></lui-button>
+            <lui-button slot="actions" label="Confirmar"></lui-button>
+          </lui-modal>
+        </div>
+      </section>
+
+      <!-- ── Drawer ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Drawer</h2>
+        <div class="pg-row">
+          <lui-drawer title="Configurações" trigger-label="Abrir drawer" close-on-backdrop>
+            <p>Conteúdo do drawer.</p>
+            <lui-button slot="actions" data-drawer-close label="Cancelar" variant="secondary"></lui-button>
+            <lui-button slot="actions" label="Salvar"></lui-button>
+          </lui-drawer>
+        </div>
+      </section>
+
+    </main>
+
+    <script>
+      import '@lets-ui/components';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background: var(--color-bg-surface-neutral, #f5f5f5);
+    color: var(--color-text-body, #1a1a1a);
+  }
+
+  .pg-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--color-border-neutral, #e0e0e0);
+    background: var(--color-bg-surface-primary, #fff);
+  }
+
+  .pg-header__logo {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .pg-header__label {
+    font-size: 0.75rem;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .pg-main {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    padding: 48px 32px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .pg-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pg-section__title {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.5;
+  }
+
+  .pg-hint {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  .pg-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .pg-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Layout context test wrappers */
+  .ctx-flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding: 16px;
+    border: 1px dashed var(--color-border-neutral, #ccc);
+    border-radius: 8px;
+  }
+
+  .ctx-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .ctx-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 480px;
+    padding: 24px;
+    border: 1px dashed var(--color-border-neutral, #ccc);
+    border-radius: 8px;
+  }
+</style>

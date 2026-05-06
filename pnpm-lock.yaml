@@ -96,6 +96,9 @@ importers:
       prettier:
         specifier: ^3.7.4
         version: 3.8.1
+      remark-gfm:
+        specifier: ^4.0.1
+        version: 4.0.1
       sass:
         specifier: ^1.87.0
         version: 1.99.0

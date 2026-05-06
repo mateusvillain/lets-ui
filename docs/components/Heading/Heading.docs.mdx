@@ -1,0 +1,43 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as HeadingStories from './Heading.stories';
+
+<Meta of={HeadingStories} />
+
+# Heading
+
+Componente para títulos e hierarquia textual. Encapsula o par semântico elemento/classe de tipografia, garantindo que o elemento HTML correto seja sempre renderizado para acessibilidade e SEO.
+
+<Canvas of={HeadingStories.Heading} />
+<Controls of={HeadingStories.Heading} />
+
+## Variantes
+
+Cada variante mapeia para uma escala tipográfica e um elemento HTML semântico padrão.
+
+| Variant       | Tag padrão | Escala        |
+| ------------- | ---------- | ------------- |
+| `display`     | `div`      | `display`     |
+| `title`       | `h1`       | `title`       |
+| `subtitle`    | `h2`       | `subtitle`    |
+| `headline`    | `h3`       | `headline`    |
+| `subheadline` | `h4`       | `subheadline` |
+| `block-title` | `h5`       | `block-title` |
+| `overtitle`   | `h6`       | `overtitle`   |
+
+<Canvas of={HeadingStories.AllVariants} />
+
+## Cores
+
+<Canvas of={HeadingStories.ColorVariants} />
+
+## Alinhamento
+
+Use `align` com `left`, `center`, `right` ou `justify`.
+
+<Canvas of={HeadingStories.Aligned} />
+
+## Line Clamp
+
+O atributo `line-clamp` recebe um número inteiro e limita a exibição do texto.
+
+<Canvas of={HeadingStories.WithLineClamp} />

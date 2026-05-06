@@ -4,11 +4,6 @@
 @use '../utilities/mixins' as *;
 @use 'field';
 
-lui-select,
-lui-native-select {
-  display: block;
-}
-
 .native-select {
   @include field.wrapper;
 

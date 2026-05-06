@@ -18,6 +18,67 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
     </header>
 
     <main class="pg-main">
+      <!-- ── Heading ─────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Heading</h2>
+        <div class="pg-col">
+          <lui-heading variant="display">Display — Escala máxima</lui-heading>
+          <lui-heading variant="title">Title — h1</lui-heading>
+          <lui-heading variant="subtitle">Subtitle — h2</lui-heading>
+          <lui-heading variant="headline">Heading — h3</lui-heading>
+          <lui-heading variant="subheadline">Subheadline — h4</lui-heading>
+          <lui-heading variant="block-title">Block Title — h5</lui-heading>
+          <lui-heading variant="overtitle">Overtitle — h6</lui-heading>
+        </div>
+        <div class="pg-col">
+          <lui-heading variant="subtitle" color="caption" align="center"
+            >Subtitle · color caption · align center</lui-heading
+          >
+          <lui-heading variant="subtitle" color="error" transform="uppercase"
+            >Subtitle · color error · transform uppercase</lui-heading
+          >
+          <lui-heading
+            variant="title"
+            line-clamp="1"
+            as="p"
+            style="max-width: 400px;"
+            >Line-clamp 1 · as p · Lorem ipsum dolor sit amet consectetur
+            adipiscing elit</lui-heading
+          >
+        </div>
+      </section>
+
+      <!-- ── Body ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Body</h2>
+        <div class="pg-col">
+          <lui-body variant="lg"
+            >Large — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</lui-body
+          >
+          <lui-body variant="md"
+            >Medium — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</lui-body
+          >
+          <lui-body variant="sm"
+            >Small — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</lui-body
+          >
+        </div>
+        <div class="pg-col">
+          <lui-body variant="md" color="caption">Color caption</lui-body>
+          <lui-body variant="md" italic>Itálico</lui-body>
+          <lui-body variant="md" underline>Sublinhado</lui-body>
+          <lui-body variant="md" italic underline>Itálico + sublinhado</lui-body
+          >
+          <lui-body variant="md" line-clamp="1" style="max-width: 400px;"
+            >Line-clamp 2 — texto longo para demonstrar o corte: Lorem ipsum
+            dolor sit amet consectetur adipiscing elit sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.</lui-body
+          >
+          <lui-body variant="md" align="center"
+            >Alinhamento centralizado</lui-body
+          >
+        </div>
+      </section>
+
       <!-- ── Buttons ─────────────────────────────────────────── -->
       <section class="pg-section">
         <h2 class="pg-section__title">Button</h2>
