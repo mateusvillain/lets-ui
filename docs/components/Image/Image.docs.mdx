@@ -16,7 +16,7 @@ Use the `aspect-ratio` attribute to lock the space before the image loads and pr
 
 <Canvas of={ImageStories.AspectRatios} />
 
-## Border Radii
+## Border Radius
 
 <Canvas of={ImageStories.BorderRadii} />
 
@@ -51,21 +51,3 @@ Provide an alternative image to display when the primary `src` fails to load.
 Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<source>` elements).
 
 <Canvas of={ImageStories.AsPicture} />
-
-## Props
-
-| Attribute        | Type                                             | Default   | Description                                                |
-| ---------------- | ------------------------------------------------ | --------- | ---------------------------------------------------------- |
-| `as`             | `image` \| `picture`                             | `image`   | Renders `<img>` directly or wrapped in `<picture>`         |
-| `src`            | `string` (required)                              | —         | Image source URL                                           |
-| `src-set`        | `string`                                         | —         | Forwarded to the inner `<img srcset>`                      |
-| `alt`            | `string` (required)                              | —         | Alternative text; use `""` for decorative images           |
-| `width`          | `string`                                         | —         | CSS value applied to the wrapper (e.g. `400px`, `100%`)   |
-| `height`         | `string`                                         | —         | CSS value applied to the wrapper                           |
-| `aspect-ratio`   | `string` (any CSS value, e.g. `"16 / 9"`, `"1 / 1"`) | — | Applied as `aspect-ratio` CSS property on the wrapper |
-| `radius`         | `none` \| `xs` \| `sm` \| `md` \| `lg` \| `circle` | —      | Border radius using design tokens                          |
-| `fit`            | `cover` \| `contain` \| `none`                   | `cover`   | CSS `object-fit` value                                     |
-| `loading`        | `lazy` \| `eager`                                | `lazy`    | Native `loading` attribute                                 |
-| `fallback-color` | `string`                                         | —         | Background color shown while loading / on error            |
-| `fallback-src`   | `string`                                         | —         | Alternative image URL shown when `src` fails               |
-| `caption`        | `string`                                         | —         | Wraps in `<figure>` and adds `<figcaption>`                |

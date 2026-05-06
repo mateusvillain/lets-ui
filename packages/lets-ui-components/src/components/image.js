@@ -14,6 +14,7 @@ export class LuiImage extends HTMLElement {
     'aspect-ratio',
     'radius',
     'fit',
+    'fill',
     'loading',
     'fallback-color',
     'fallback-src',
@@ -36,8 +37,9 @@ export class LuiImage extends HTMLElement {
 
     if (VALID_FITS.includes(fit)) classes.push(`img--fit-${fit}`);
     if (radius && VALID_RADII.includes(radius))
-      classes.push(`img--radius-${radius}`);
+      classes.push(`radius-${radius}`);
     if (this.getAttribute('as') === 'picture') classes.push('img--picture');
+    if (hasBooleanAttribute(this, 'fill')) classes.push('img--fill');
 
     return classes.join(' ');
   }
@@ -45,12 +47,14 @@ export class LuiImage extends HTMLElement {
   #buildStyles() {
     const width = this.getAttribute('width');
     const height = this.getAttribute('height');
+    const fillValue = this.getAttribute('fill');
     const ratio = this.getAttribute('aspect-ratio');
     const fallbackColor = this.getAttribute('fallback-color');
     const styles = [];
 
     if (width) styles.push(`width:${width}`);
-    if (height) styles.push(`height:${height}`);
+    if (fillValue) styles.push(`height:${fillValue}`);
+    else if (height) styles.push(`height:${height}`);
     if (ratio) styles.push(`aspect-ratio:${ratio}`);
     if (fallbackColor) styles.push(`background-color:${fallbackColor}`);
 
@@ -79,8 +83,12 @@ export class LuiImage extends HTMLElement {
 
     const imageEl = `<div class="${wrapperClass} img--loading"${wrapperStyle}>${inner}</div>`;
 
+    const figureClass = hasBooleanAttribute(this, 'fill')
+      ? 'img-figure img-figure--fill'
+      : 'img-figure';
+
     const markup = caption
-      ? `<figure class="img-figure">${imageEl}<figcaption>${caption}</figcaption></figure>`
+      ? `<figure class="${figureClass}">${imageEl}<figcaption>${caption}</figcaption></figure>`
       : imageEl;
 
     mountMarkup(this, markup);

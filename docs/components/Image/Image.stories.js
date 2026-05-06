@@ -137,6 +137,34 @@ export const ObjectFit = () => `
   </div>
 `;
 
+export const ErrorState = () => `
+  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+    <div>
+      <p style="font-size:12px;opacity:.6;margin-bottom:8px">CSS fallback (padrão)</p>
+      <lui-image
+        src="https://invalid.example.com/broken.jpg"
+        alt="Broken image — CSS error state"
+        width="280px"
+        aspect-ratio="16 / 9"
+        radius="md"
+        loading="eager"
+      ></lui-image>
+    </div>
+    <div>
+      <p style="font-size:12px;opacity:.6;margin-bottom:8px">fallback-src manual</p>
+      <lui-image
+        src="https://invalid.example.com/broken.jpg"
+        alt="Broken image — custom fallback"
+        width="280px"
+        aspect-ratio="16 / 9"
+        radius="md"
+        fallback-src="${SAMPLE_SRC}"
+        loading="eager"
+      ></lui-image>
+    </div>
+  </div>
+`;
+
 export const FallbackColor = () => `
   <lui-image
     src="https://invalid.example.com/broken.jpg"
@@ -150,15 +178,20 @@ export const FallbackColor = () => `
 `;
 
 export const FallbackSrc = () => `
-  <lui-image
-    src="https://invalid.example.com/broken.jpg"
-    alt="Image with fallback source"
-    width="300px"
-    aspect-ratio="16 / 9"
-    radius="md"
-    fallback-src="${SAMPLE_SRC}"
-    loading="eager"
-  ></lui-image>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <p style="font-size:12px;opacity:.6;margin:0">
+      Quando o src falha, carrega a imagem em fallback-src. Se o fallback também falhar, exibe o estado de erro CSS.
+    </p>
+    <lui-image
+      src="https://invalid.example.com/broken.jpg"
+      alt="Image with fallback source"
+      width="300px"
+      aspect-ratio="16 / 9"
+      radius="md"
+      fallback-src="${SAMPLE_SRC}"
+      loading="eager"
+    ></lui-image>
+  </div>
 `;
 
 export const AsPicture = () => `
