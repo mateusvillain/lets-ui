@@ -16,10 +16,18 @@ Modals focus the user's attention exclusively on one task or piece of informatio
 
 <Canvas of={ModalStories.Large} />
 
-### Medium
-
-<Canvas of={ModalStories.Medium} />
-
 ### Small
 
 <Canvas of={ModalStories.Small} />
+
+## Without Actions
+
+Omit the `actions` slot to render a modal with no footer.
+
+<Canvas of={ModalStories.WithoutActions} />
+
+## Custom Trigger
+
+Slot any element with `slot="trigger"` to replace the default trigger button.
+
+<Canvas of={ModalStories.CustomTrigger} />
