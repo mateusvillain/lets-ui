@@ -1,9 +1,32 @@
-import { Meta, Canvas, Controls, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as TooltipStories from './Tooltip.stories';
 
 <Meta of={TooltipStories} />
 
 # Tooltip
 
+`<lui-tooltip>` wraps any trigger element and attaches an accessible tooltip to it. When no trigger is slotted in, a default button is rendered using the `label` attribute.
+
 <Canvas of={TooltipStories.Tooltip} />
 <Controls of={TooltipStories.Tooltip} />
+
+## Positions
+
+Use the `position` attribute to control where the tooltip appears relative to its trigger.
+
+<Canvas of={TooltipStories.Positions} />
+
+## Custom Trigger
+
+Slot any focusable element inside `<lui-tooltip>` to use it as the trigger. The component automatically wires up `aria-describedby` on focusable children.
+
+<Canvas of={TooltipStories.WithCustomTrigger} />
+
+## Props
+
+| Attribute    | Type                                    | Default          | Description                                              |
+| ------------ | --------------------------------------- | ---------------- | -------------------------------------------------------- |
+| `text`       | `string`                                | `"Tooltip"`      | Text content displayed inside the tooltip bubble         |
+| `position`   | `top` / `right` / `bottom` / `left`    | `top`            | Placement of the tooltip relative to the trigger         |
+| `label`      | `string`                                | `"Mostrar tooltip"` | Label for the default trigger button (no slot)        |
+| `aria-label` | `string`                                | —                | Overrides the computed `aria-label` on the trigger       |
