@@ -29,6 +29,7 @@ Thumbs.db
 .cache/
 .nyc_output/
 coverage/
+.claude
 
 *storybook.log
 storybook-static

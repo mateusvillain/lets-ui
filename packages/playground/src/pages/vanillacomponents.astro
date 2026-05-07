@@ -43,885 +43,947 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
   </head>
   <body>
     <section class="section-container">
-      <!-- Typography — Heading -->
       <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div class="display lui-heading--color-heading">Display — Escala máxima</div>
+        <div class="display lui-heading--color-heading">
+          Display — Escala máxima
+        </div>
         <h1 class="title lui-heading--color-heading">Title — h1</h1>
         <h2 class="subtitle lui-heading--color-heading">Subtitle — h2</h2>
         <h3 class="headline lui-heading--color-heading">Headline — h3</h3>
         <h4 class="subheadline lui-heading--color-heading">Subheadline — h4</h4>
         <h5 class="block-title lui-heading--color-heading">Block Title — h5</h5>
         <h6 class="overtitle lui-heading--color-heading">Overtitle — h6</h6>
-        <h2 class="subtitle lui-heading--color-caption typography--align-center">Subtitle centralizado + color caption</h2>
-        <h2 class="subtitle lui-heading--color-error typography--transform-uppercase">Subtitle uppercase + color error</h2>
+        <h2
+          class="subtitle lui-heading--color-caption typography--align-center"
+        >
+          Subtitle centralizado + color caption
+        </h2>
+        <h2
+          class="subtitle lui-heading--color-error typography--transform-uppercase"
+        >
+          Subtitle uppercase + color error
+        </h2>
       </div>
 
       <!-- Typography — Body -->
       <div style="display: flex; flex-direction: column; gap: 12px;">
-        <p class="body--lg lui-body--color-body">Large — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p class="body--md lui-body--color-body">Medium — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p class="body--sm lui-body--color-body">Small — Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p class="body--lg lui-body--color-body">
+          Large — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+        <p class="body--md lui-body--color-body">
+          Medium — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+        <p class="body--sm lui-body--color-body">
+          Small — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
         <p class="body--md lui-body--color-caption">Color caption</p>
         <p class="body--md lui-body--color-body lui-body--italic">Itálico</p>
-        <p class="body--md lui-body--color-body lui-body--underline">Sublinhado</p>
-        <p class="body--md lui-body--color-body lui-body--italic lui-body--underline">Itálico + sublinhado</p>
+        <p class="body--md lui-body--color-body lui-body--underline">
+          Sublinhado
+        </p>
+        <p
+          class="body--md lui-body--color-body lui-body--italic lui-body--underline"
+        >
+          Itálico + sublinhado
+        </p>
         <p
           class="body--md lui-body--color-body"
           style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; max-width: 400px;"
         >
-          Line clamp em 2 linhas — texto longo para demonstrar o corte: Lorem ipsum dolor sit amet
-          consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Subtitle centralizado + color caption
         </p>
-      </div>
+        <h2
+          class="subtitle lui-heading--color-error typography--transform-uppercase"
+        >
+          Subtitle uppercase + color error
+        </h2>
 
-      <br />
-      <br />
-
-      <a href="playground.html" class="link">Link</a>
-
-      <button id="btnPrimary" class="btn btn--primary btn--lg">
-        Botão primário
-      </button>
-
-      <button id="btnDanger" class="btn btn--danger btn--lg">
-        Botão primário
-      </button>
-
-      <div class="alert alert--success" role="alert">
-        <div class="alert__content">
-          <div class="alert__text">
-            <p class="body--lg">Alert title</p>
-            <p class="body--lg">Descriptions</p>
-          </div>
-        </div>
-
-        <div class="alert__actions">
-          <button class="btn btn--secondary btn--lg">Cancelar</button>
-          <button class="btn btn--primary btn--lg">Confirmar</button>
-        </div>
-      </div>
-
-      <label class="checkbox checkbox--lg">
-        <input id="check" type="checkbox" />
-        <span>Aceito os termos</span>
-      </label>
-
-      <label class="radio radio--lg">
-        <input type="radio" name="demo-html" value="opt1" checked />
-        <span>Opção 1</span>
-      </label>
-      <label class="radio radio--lg">
-        <input type="radio" name="demo-html" value="opt2" />
-        <span>Opção 2</span>
-      </label>
-      <label class="radio radio--lg">
-        <input type="radio" name="demo-html" value="opt3" disabled />
-        <span>Opção 3 (desabilitado)</span>
-      </label>
-
-      <label class="switch switch--lg">
-        <input type="checkbox" role="switch" checked />
-        <span>Receber notificações</span>
-      </label>
-      <label class="switch switch--lg">
-        <input type="checkbox" role="switch" />
-        <span>Modo escuro</span>
-      </label>
-      <label class="switch switch--lg">
-        <input type="checkbox" role="switch" checked disabled />
-        <span>Ativado e desabilitado</span>
-      </label>
-      <label class="switch switch--md">
-        <input type="checkbox" role="switch" checked />
-        <span>Tamanho médio</span>
-      </label>
-
-      <div class="form__group form__lg">
-        <label for="select">Escolha uma opção</label>
-        <select id="select">
-          <option selected>Option 1</option>
-          <option>Option 2</option>
-          <option>Option 3</option>
-        </select>
-      </div>
-
-      <div class="native-select native-select--lg">
-        <div class="native-select__head">
-          <div class="native-select__label-wrap">
-            <label for="lui-select-14-input">Select</label>
-            <span class="native-select__optional">(opcional)</span>
-          </div>
-        </div>
-        <div class="native-select__control">
-          <select
-            class="native-select__input"
-            id="lui-select-14-input"
-            aria-label="Label"
-            aria-describedby="lui-select-14-message"
+        <!-- Typography — Body -->
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <p class="body--lg lui-body--color-body">
+            Large — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          <p class="body--md lui-body--color-body">
+            Medium — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          <p class="body--sm lui-body--color-body">
+            Small — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          <p class="body--md lui-body--color-caption">Color caption</p>
+          <p class="body--md lui-body--color-body lui-body--italic">Itálico</p>
+          <p class="body--md lui-body--color-body lui-body--underline">
+            Sublinhado
+          </p>
+          <p
+            class="body--md lui-body--color-body lui-body--italic lui-body--underline"
           >
-            <option value="" disabled="" hidden="">Select an option</option>
-            <option value="Option 1" selected="">Option 1</option>
-            <option value="Option 2">Option 2</option>
-            <option value="Option 3">Option 3</option>
+            Itálico + sublinhado
+          </p>
+          <p
+            class="body--md lui-body--color-body"
+            style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; max-width: 400px;"
+          >
+            Line clamp em 2 linhas — texto longo para demonstrar o corte: Lorem
+            ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+        </div>
+
+        <br />
+        <br />
+
+        <a href="playground.html" class="link">Link</a>
+
+        <button id="btnPrimary" class="btn btn--primary btn--lg">
+          Botão primário
+        </button>
+
+        <button id="btnDanger" class="btn btn--danger btn--lg">
+          Botão primário
+        </button>
+
+        <div class="alert alert--success" role="alert">
+          <div class="alert__content">
+            <div class="alert__text">
+              <p class="body--lg">Alert title</p>
+              <p class="body--lg">Descriptions</p>
+            </div>
+          </div>
+
+          <div class="alert__actions">
+            <button class="btn btn--secondary btn--lg">Cancelar</button>
+            <button class="btn btn--primary btn--lg">Confirmar</button>
+          </div>
+        </div>
+
+        <label class="checkbox checkbox--lg">
+          <input id="check" type="checkbox" />
+          <span>Aceito os termos</span>
+        </label>
+
+        <label class="radio radio--lg">
+          <input type="radio" name="demo-html" value="opt1" checked />
+          <span>Opção 1</span>
+        </label>
+        <label class="radio radio--lg">
+          <input type="radio" name="demo-html" value="opt2" />
+          <span>Opção 2</span>
+        </label>
+        <label class="radio radio--lg">
+          <input type="radio" name="demo-html" value="opt3" disabled />
+          <span>Opção 3 (desabilitado)</span>
+        </label>
+
+        <label class="switch switch--lg">
+          <input type="checkbox" role="switch" checked />
+          <span>Receber notificações</span>
+        </label>
+        <label class="switch switch--lg">
+          <input type="checkbox" role="switch" />
+          <span>Modo escuro</span>
+        </label>
+        <label class="switch switch--lg">
+          <input type="checkbox" role="switch" checked disabled />
+          <span>Ativado e desabilitado</span>
+        </label>
+        <label class="switch switch--md">
+          <input type="checkbox" role="switch" checked />
+          <span>Tamanho médio</span>
+        </label>
+
+        <div class="form__group form__lg">
+          <label for="select">Escolha uma opção</label>
+          <select id="select">
+            <option selected>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
           </select>
-          <span class="native-select__arrow" aria-hidden="true">
-            <svg viewBox="0 0 14 7" focusable="false">
-              <path d="M1 1L7 6L13 1"></path>
-            </svg>
-          </span>
         </div>
-        <p id="lui-select-14-message" class="native-select__message">
-          Hint text
-        </p>
-      </div>
 
-      <div class="input-field input-field--lg">
-        <div class="input-field__head">
-          <div class="input-field__label-wrap">
-            <label for="field">Nome</label>
+        <div class="native-select native-select--lg">
+          <div class="native-select__head">
+            <div class="native-select__label-wrap">
+              <label for="lui-select-14-input">Select</label>
+              <span class="native-select__optional">(opcional)</span>
+            </div>
+          </div>
+          <div class="native-select__control">
+            <select
+              class="native-select__input"
+              id="lui-select-14-input"
+              aria-label="Label"
+              aria-describedby="lui-select-14-message"
+            >
+              <option value="" disabled="" hidden="">Select an option</option>
+              <option value="Option 1" selected="">Option 1</option>
+              <option value="Option 2">Option 2</option>
+              <option value="Option 3">Option 3</option>
+            </select>
+            <span class="native-select__arrow" aria-hidden="true">
+              <svg viewBox="0 0 14 7" focusable="false">
+                <path d="M1 1L7 6L13 1"></path>
+              </svg>
+            </span>
+          </div>
+          <p id="lui-select-14-message" class="native-select__message">
+            Hint text
+          </p>
+        </div>
+
+        <div class="input-field input-field--lg">
+          <div class="input-field__head">
+            <div class="input-field__label-wrap">
+              <label for="field">Nome</label>
+            </div>
+          </div>
+          <div class="input-field__control">
+            <input
+              id="field"
+              class="input-field__input"
+              type="text"
+              maxlength="100"
+              placeholder="Placeholder"
+              aria-describedby="fieldHint"
+            />
           </div>
         </div>
-        <div class="input-field__control">
-          <input
-            id="field"
-            class="input-field__input"
-            type="text"
-            maxlength="100"
-            placeholder="Placeholder"
-            aria-describedby="fieldHint"
-          />
-        </div>
-      </div>
 
-      <div
-        class="input-field input-field--lg input-field--error input-field--with-icon input-field--with-prefix input-field--with-suffix"
-      >
-        <div class="input-field__head">
-          <div class="input-field__label-wrap">
-            <label for="fieldError">Label</label>
+        <div
+          class="input-field input-field--lg input-field--error input-field--with-icon input-field--with-prefix input-field--with-suffix"
+        >
+          <div class="input-field__head">
+            <div class="input-field__label-wrap">
+              <label for="fieldError">Label</label>
+            </div>
+            <span class="input-field__counter">0/100</span>
           </div>
-          <span class="input-field__counter">0/100</span>
-        </div>
 
-        <div class="input-field__control">
-          <span class="input-field__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <path
-                d="M12 2.25L14.78 7.88L21 8.79L16.5 13.18L17.56 19.38L12 16.46L6.44 19.38L7.5 13.18L3 8.79L9.22 7.88L12 2.25Z"
-              ></path>
-            </svg>
-          </span>
-          <span class="input-field__prefix">www.</span>
-          <input
-            id="fieldError"
-            class="input-field__input"
-            type="text"
-            maxlength="100"
-            placeholder="Placeholder"
-            aria-describedby="fieldErrorText"
-          />
-          <span class="input-field__suffix">.com</span>
-        </div>
-
-        <p id="fieldErrorText" class="input-field__message">
-          Campo obrigatório.
-        </p>
-      </div>
-
-      <div class="textarea-field textarea-field--lg">
-        <div class="textarea-field__head">
-          <div class="textarea-field__label-wrap">
-            <label for="textarea-1">Descrição</label>
-            <span class="textarea-field__optional">(opcional)</span>
+          <div class="input-field__control">
+            <span class="input-field__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path
+                  d="M12 2.25L14.78 7.88L21 8.79L16.5 13.18L17.56 19.38L12 16.46L6.44 19.38L7.5 13.18L3 8.79L9.22 7.88L12 2.25Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="input-field__prefix">www.</span>
+            <input
+              id="fieldError"
+              class="input-field__input"
+              type="text"
+              maxlength="100"
+              placeholder="Placeholder"
+              aria-describedby="fieldErrorText"
+            />
+            <span class="input-field__suffix">.com</span>
           </div>
-          <span class="textarea-field__counter">0/200</span>
-        </div>
-        <label class="textarea-field__control" for="textarea-1">
-          <textarea
-            class="textarea-field__input"
-            id="textarea-1"
-            placeholder="Escreva uma descrição..."
-            rows="4"
-            maxlength="200"></textarea>
-        </label>
-        <p class="textarea-field__message">Hint text</p>
-      </div>
 
-      <div class="textarea-field textarea-field--lg textarea-field--error">
-        <div class="textarea-field__head">
-          <div class="textarea-field__label-wrap">
-            <label for="textarea-2">Observações</label>
+          <p id="fieldErrorText" class="input-field__message">
+            Campo obrigatório.
+          </p>
+        </div>
+
+        <div class="textarea-field textarea-field--lg">
+          <div class="textarea-field__head">
+            <div class="textarea-field__label-wrap">
+              <label for="textarea-1">Descrição</label>
+              <span class="textarea-field__optional">(opcional)</span>
+            </div>
+            <span class="textarea-field__counter">0/200</span>
           </div>
+          <label class="textarea-field__control" for="textarea-1">
+            <textarea
+              class="textarea-field__input"
+              id="textarea-1"
+              placeholder="Escreva uma descrição..."
+              rows="4"
+              maxlength="200"></textarea>
+          </label>
+          <p class="textarea-field__message">Hint text</p>
         </div>
-        <label class="textarea-field__control" for="textarea-2">
-          <textarea
-            class="textarea-field__input"
-            id="textarea-2"
-            placeholder="Escreva suas observações..."
-            rows="4"
-            aria-describedby="textarea-2-msg"></textarea>
-        </label>
-        <p id="textarea-2-msg" class="textarea-field__message">
-          Campo obrigatório.
-        </p>
-      </div>
 
-      <div class="textarea-field textarea-field--lg textarea-field--disabled">
-        <div class="textarea-field__head">
-          <div class="textarea-field__label-wrap">
-            <label for="textarea-3">Comentário</label>
+        <div class="textarea-field textarea-field--lg textarea-field--error">
+          <div class="textarea-field__head">
+            <div class="textarea-field__label-wrap">
+              <label for="textarea-2">Observações</label>
+            </div>
           </div>
+          <label class="textarea-field__control" for="textarea-2">
+            <textarea
+              class="textarea-field__input"
+              id="textarea-2"
+              placeholder="Escreva suas observações..."
+              rows="4"
+              aria-describedby="textarea-2-msg"></textarea>
+          </label>
+          <p id="textarea-2-msg" class="textarea-field__message">
+            Campo obrigatório.
+          </p>
         </div>
-        <label class="textarea-field__control" for="textarea-3">
-          <textarea
-            class="textarea-field__input"
-            id="textarea-3"
-            rows="4"
-            disabled
-            aria-disabled="true">Conteúdo somente leitura.</textarea
-          >
-        </label>
-      </div>
 
-      <span class="tag-md tag--md tag--surface-primary">Tag</span>
+        <div class="textarea-field textarea-field--lg textarea-field--disabled">
+          <div class="textarea-field__head">
+            <div class="textarea-field__label-wrap">
+              <label for="textarea-3">Comentário</label>
+            </div>
+          </div>
+          <label class="textarea-field__control" for="textarea-3">
+            <textarea
+              class="textarea-field__input"
+              id="textarea-3"
+              rows="4"
+              disabled
+              aria-disabled="true">Conteúdo somente leitura.</textarea
+            >
+          </label>
+        </div>
 
-      <a class="link" href="#">Abrir detalhe</a>
+        <span class="tag-md tag--md tag--surface-primary">Tag</span>
 
-      <nav aria-label="Breadcrumb">
-        <ul class="breadcrumb" role="list">
-          <li><a class="link" href="/">Home</a></li>
-          <li><a class="link" href="/produtos">Produtos</a></li>
-          <li aria-current="page">Notebook</li>
-        </ul>
-      </nav>
+        <a class="link" href="#">Abrir detalhe</a>
 
-      <div
-        style="
+        <nav aria-label="Breadcrumb">
+          <ul class="breadcrumb" role="list">
+            <li><a class="link" href="/">Home</a></li>
+            <li><a class="link" href="/produtos">Produtos</a></li>
+            <li aria-current="page">Notebook</li>
+          </ul>
+        </nav>
+
+        <div
+          style="
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 16px;
           width: fit-content;
           align-items: center;
         "
-      >
-        <span class="tooltip tooltip--top">
-          <button
-            type="button"
-            class="tooltip__trigger btn btn--primary btn--lg"
-          >
-            Hover/Focus top
-          </button>
-          <span class="tooltip__content" role="tooltip">
-            Tooltip no botão nativo
+        >
+          <span class="tooltip tooltip--top">
+            <button
+              type="button"
+              class="tooltip__trigger btn btn--primary btn--lg"
+            >
+              Hover/Focus top
+            </button>
+            <span class="tooltip__content" role="tooltip">
+              Tooltip no botão nativo
+            </span>
           </span>
-        </span>
 
-        <span class="tooltip tooltip--right">
-          <button
-            type="button"
-            class="tooltip__trigger btn btn--secondary btn--md"
-          >
-            Hover/Focus right
-          </button>
-          <span class="tooltip__content" role="tooltip">
-            Tooltip right com texto maior para validar que o conteúdo aparece
-            completo sem corte.
+          <span class="tooltip tooltip--right">
+            <button
+              type="button"
+              class="tooltip__trigger btn btn--secondary btn--md"
+            >
+              Hover/Focus right
+            </button>
+            <span class="tooltip__content" role="tooltip">
+              Tooltip right com texto maior para validar que o conteúdo aparece
+              completo sem corte.
+            </span>
           </span>
-        </span>
 
-        <span class="tooltip tooltip--left">
+          <span class="tooltip tooltip--left">
+            <button
+              class="tooltip__trigger icon-button icon-button--md"
+              aria-label="Informações"
+            >
+              <i class="lui lui-info-circle" aria-hidden="true"></i>
+            </button>
+            <span class="tooltip__content" role="tooltip">
+              Tooltip no icon-button
+            </span>
+          </span>
+
+          <span class="tooltip tooltip--bottom">
+            <a class="tooltip__trigger link" href="#">Hover/Focus bottom</a>
+            <span class="tooltip__content" role="tooltip">
+              Tooltip bottom com texto longo para conferir animação de cima para
+              baixo e leitura completa.
+            </span>
+          </span>
+        </div>
+
+        <!-- Icon Button — exemplos -->
+        <div
+          style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;"
+        >
+          <button class="icon-button icon-button--lg" aria-label="Confirmar">
+            <i class="lui lui-check" aria-hidden="true"></i>
+          </button>
+          <button class="icon-button icon-button--lg" aria-label="Excluir">
+            <i class="lui lui-trash" aria-hidden="true"></i>
+          </button>
+          <button class="icon-button icon-button--lg" aria-label="Fechar">
+            <i class="lui lui-x" aria-hidden="true"></i>
+          </button>
+          <button class="icon-button icon-button--lg" aria-label="Informações">
+            <i class="lui lui-info-circle" aria-hidden="true"></i>
+          </button>
+          <button class="icon-button icon-button--lg" aria-label="Avançar">
+            <i class="lui lui-caret-right" aria-hidden="true"></i>
+          </button>
+          <button class="icon-button icon-button--lg" aria-label="Mais opções">
+            <i class="lui lui-dots-three" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div
+          style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;"
+        >
           <button
-            class="tooltip__trigger icon-button icon-button--md"
-            aria-label="Informações"
+            class="icon-button icon-button--lg"
+            aria-label="Confirmar (solid)"
+          >
+            <i class="lui-solid lui-check" aria-hidden="true"></i>
+          </button>
+          <button
+            class="icon-button icon-button--lg"
+            aria-label="Excluir (solid)"
+          >
+            <i class="lui-solid lui-trash" aria-hidden="true"></i>
+          </button>
+          <button
+            class="icon-button icon-button--lg"
+            aria-label="Fechar (solid)"
+          >
+            <i class="lui-solid lui-x" aria-hidden="true"></i>
+          </button>
+          <button
+            class="icon-button icon-button--md"
+            aria-label="Informações (md)"
           >
             <i class="lui lui-info-circle" aria-hidden="true"></i>
           </button>
-          <span class="tooltip__content" role="tooltip">
-            Tooltip no icon-button
-          </span>
-        </span>
-
-        <span class="tooltip tooltip--bottom">
-          <a class="tooltip__trigger link" href="#">Hover/Focus bottom</a>
-          <span class="tooltip__content" role="tooltip">
-            Tooltip bottom com texto longo para conferir animação de cima para
-            baixo e leitura completa.
-          </span>
-        </span>
-      </div>
-
-      <!-- Icon Button — exemplos -->
-      <div
-        style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;"
-      >
-        <button class="icon-button icon-button--lg" aria-label="Confirmar">
-          <i class="lui lui-check" aria-hidden="true"></i>
-        </button>
-        <button class="icon-button icon-button--lg" aria-label="Excluir">
-          <i class="lui lui-trash" aria-hidden="true"></i>
-        </button>
-        <button class="icon-button icon-button--lg" aria-label="Fechar">
-          <i class="lui lui-x" aria-hidden="true"></i>
-        </button>
-        <button class="icon-button icon-button--lg" aria-label="Informações">
-          <i class="lui lui-info-circle" aria-hidden="true"></i>
-        </button>
-        <button class="icon-button icon-button--lg" aria-label="Avançar">
-          <i class="lui lui-caret-right" aria-hidden="true"></i>
-        </button>
-        <button class="icon-button icon-button--lg" aria-label="Mais opções">
-          <i class="lui lui-dots-three" aria-hidden="true"></i>
-        </button>
-      </div>
-      <div
-        style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;"
-      >
-        <button
-          class="icon-button icon-button--lg"
-          aria-label="Confirmar (solid)"
-        >
-          <i class="lui-solid lui-check" aria-hidden="true"></i>
-        </button>
-        <button
-          class="icon-button icon-button--lg"
-          aria-label="Excluir (solid)"
-        >
-          <i class="lui-solid lui-trash" aria-hidden="true"></i>
-        </button>
-        <button class="icon-button icon-button--lg" aria-label="Fechar (solid)">
-          <i class="lui-solid lui-x" aria-hidden="true"></i>
-        </button>
-        <button
-          class="icon-button icon-button--md"
-          aria-label="Informações (md)"
-        >
-          <i class="lui lui-info-circle" aria-hidden="true"></i>
-        </button>
-        <button class="icon-button icon-button--md" aria-label="Fechar (md)">
-          <i class="lui lui-x" aria-hidden="true"></i>
-        </button>
-        <button
-          class="icon-button icon-button--md"
-          disabled
-          aria-disabled="true"
-          aria-label="Excluir (desabilitado)"
-        >
-          <i class="lui lui-trash" aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <article class="card card__border" aria-label="Card exemplo">
-        <div class="card__cover">
-          <img src="https://picsum.photos/640/360" alt="Cover image" />
-        </div>
-        <div class="card__body">
-          <p class="body--lg text-bold">Card title</p>
-          <p class="body--lg">Card description</p>
-          <div class="card-actions" role="group" aria-label="Card actions">
-            <button class="btn btn--secondary btn--lg">Cancel</button>
-            <button class="btn btn--primary btn--lg">Action</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Divider standalone -->
-      <div class="divider" role="separator"></div>
-      <div class="divider divider--labeled" role="separator" aria-label="ou">
-        <span class="divider__label">ou</span>
-      </div>
-
-      <div
-        style="display: flex; align-items: stretch; height: 48px; gap: 16px;"
-      >
-        <span>Esquerda</span>
-        <div class="divider divider--vertical" role="separator"></div>
-        <span>Direita</span>
-        <div
-          class="divider divider--labeled divider--vertical"
-          role="separator"
-          aria-label="ou"
-        >
-          <span class="divider__label">ou</span>
-        </div>
-        <span>Mais</span>
-      </div>
-
-      <!-- Dropdown Menu -->
-      <div class="dropdown-menu" id="dropdown">
-        <button
-          class="btn btn--secondary btn--md"
-          type="button"
-          id="dropdown-trigger"
-          aria-haspopup="menu"
-          aria-expanded="false"
-          aria-controls="dropdown-panel"
-        >
-          Opções
-        </button>
-        <ul
-          id="dropdown-panel"
-          class="dropdown-menu__panel"
-          role="menu"
-          aria-labelledby="dropdown-trigger"
-        >
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">Editar</span>
-              <span
-                class="menu-item__shortcut shortcut"
-                role="group"
-                aria-label="⌘ + E"
-              >
-                <kbd class="shortcut__key">⌘</kbd>
-                <span class="shortcut__sep" aria-hidden="true">+</span>
-                <kbd class="shortcut__key">E</kbd>
-              </span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">Duplicar</span>
-              <span
-                class="menu-item__shortcut shortcut"
-                role="group"
-                aria-label="⌘ + D"
-              >
-                <kbd class="shortcut__key">⌘</kbd>
-                <span class="shortcut__sep" aria-hidden="true">+</span>
-                <kbd class="shortcut__key">D</kbd>
-              </span>
-            </button>
-          </li>
-          <li role="separator" class="divider"></li>
-          <li role="presentation" class="menu-item--has-submenu">
-            <button
-              class="menu-item"
-              role="menuitem"
-              type="button"
-              aria-haspopup="menu"
-              aria-expanded="false"
-            >
-              <span class="menu-item__label">Compartilhar</span>
-              <span class="menu-item__chevron" aria-hidden="true">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                >
-                  <path
-                    d="M6 4L10 8L6 12"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path>
-                </svg>
-              </span>
-            </button>
-            <ul class="dropdown-menu__panel" role="menu">
-              <li role="presentation">
-                <button class="menu-item" role="menuitem" type="button">
-                  <span class="menu-item__label">Por e-mail</span>
-                </button>
-              </li>
-              <li role="presentation">
-                <button class="menu-item" role="menuitem" type="button">
-                  <span class="menu-item__label">Copiar link</span>
-                  <span
-                    class="menu-item__shortcut shortcut"
-                    role="group"
-                    aria-label="⌘ + Shift + C"
-                  >
-                    <kbd class="shortcut__key">⌘</kbd>
-                    <span class="shortcut__sep" aria-hidden="true">+</span>
-                    <kbd class="shortcut__key">Shift</kbd>
-                    <span class="shortcut__sep" aria-hidden="true">+</span>
-                    <kbd class="shortcut__key">C</kbd>
-                  </span>
-                </button>
-              </li>
-            </ul>
-          </li>
-          <li role="separator" class="divider"></li>
-          <li role="presentation">
-            <button
-              class="menu-item menu-item--danger"
-              role="menuitem"
-              type="button"
-            >
-              <span class="menu-item__label">Excluir</span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button
-              class="menu-item"
-              role="menuitem"
-              type="button"
-              disabled
-              aria-disabled="true"
-            >
-              <span class="menu-item__label">Desabilitado</span>
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <button id="openInternalModal" class="btn btn--primary btn--lg">
-        Abrir modal (interno)
-      </button>
-
-      <div
-        id="modalInternal"
-        class="modal modal--md is-hidden"
-        tabindex="-1"
-        role="dialog"
-      >
-        <div class="modal__header">Modal title</div>
-        <div class="modal__body">
-          <p>Modal com trigger interno</p>
-        </div>
-        <div class="modal__footer">
-          <button class="btn btn--secondary btn--lg" data-modal-close>
-            Cancelar
-          </button>
-          <button class="btn btn--primary btn--lg" data-modal-close>
-            Continuar
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <button id="openExternalModal">Abrir modal externo</button>
-        <button id="closeAllModals">Fechar modais</button>
-      </div>
-
-      <div
-        id="modalExternal"
-        class="modal modal--sm is-hidden"
-        tabindex="-1"
-        role="dialog"
-      >
-        <div class="modal__header">Modal externo</div>
-        <div class="modal__body">
-          <p>Este modal abre via botão externo</p>
-        </div>
-        <div class="modal__footer">
-          <button class="btn btn--secondary btn--lg" data-modal-close>
-            Fechar
-          </button>
-          <button class="btn btn--primary btn--lg" data-modal-close>Ok</button>
-        </div>
-      </div>
-
-      <!-- Drawer -->
-      <button
-        id="drawer-trigger"
-        type="button"
-        class="btn btn--primary btn--lg"
-        aria-haspopup="dialog"
-        aria-controls="drawer-panel"
-        aria-expanded="false"
-      >
-        Abrir drawer
-      </button>
-
-      <div id="drawer-backdrop" class="drawer-backdrop" aria-hidden="true">
-      </div>
-
-      <div
-        id="drawer-panel"
-        class="drawer drawer--md"
-        tabindex="-1"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="drawer-title"
-        aria-hidden="true"
-        inert
-      >
-        <div class="drawer__header">
-          <span id="drawer-title" class="drawer__title">Configurações</span>
-          <button
-            id="drawer-close-btn"
-            type="button"
-            class="icon-button icon-button--md"
-            aria-label="Fechar drawer"
-          >
+          <button class="icon-button icon-button--md" aria-label="Fechar (md)">
             <i class="lui lui-x" aria-hidden="true"></i>
           </button>
-        </div>
-        <div class="drawer__body">
-          <p>
-            Conteúdo do drawer. Pode ser qualquer elemento HTML ou componente.
-          </p>
-          <p style="margin-top: 12px;">
-            Use o drawer para exibir detalhes, configurações ou ações
-            secundárias sem sair do contexto da página principal.
-          </p>
-        </div>
-        <div class="drawer__footer">
           <button
-            id="drawer-cancel"
-            type="button"
-            class="btn btn--secondary btn--lg">Cancelar</button
-          >
-          <button type="button" class="btn btn--primary btn--lg">Salvar</button>
-        </div>
-      </div>
-
-      <!-- Tabs — Line -->
-      <div class="tabs tabs--line">
-        <div class="tabs__list" role="tablist" aria-label="Seções">
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="true"
-            aria-controls="pg-line-panel-0"
-            id="pg-line-tab-0"
-            tabindex="0">Visão geral</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-line-panel-1"
-            id="pg-line-tab-1"
-            tabindex="-1">Configurações</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-line-panel-2"
-            id="pg-line-tab-2"
-            tabindex="-1"
+            class="icon-button icon-button--md"
             disabled
-            aria-disabled="true">Histórico</button
+            aria-disabled="true"
+            aria-label="Excluir (desabilitado)"
           >
+            <i class="lui lui-trash" aria-hidden="true"></i>
+          </button>
         </div>
+
+        <article class="card card__border" aria-label="Card exemplo">
+          <div class="card__cover">
+            <img src="https://picsum.photos/640/360" alt="Cover image" />
+          </div>
+          <div class="card__body">
+            <p class="body--lg text-bold">Card title</p>
+            <p class="body--lg">Card description</p>
+            <div class="card-actions" role="group" aria-label="Card actions">
+              <button class="btn btn--secondary btn--lg">Cancel</button>
+              <button class="btn btn--primary btn--lg">Action</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Divider standalone -->
+        <div class="divider" role="separator"></div>
+        <div class="divider divider--labeled" role="separator" aria-label="ou">
+          <span class="divider__label">ou</span>
+        </div>
+
         <div
-          id="pg-line-panel-0"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-line-tab-0"
+          style="display: flex; align-items: stretch; height: 48px; gap: 16px;"
         >
-          <p>Conteúdo da aba Visão geral.</p>
+          <span>Esquerda</span>
+          <div class="divider divider--vertical" role="separator"></div>
+          <span>Direita</span>
+          <div
+            class="divider divider--labeled divider--vertical"
+            role="separator"
+            aria-label="ou"
+          >
+            <span class="divider__label">ou</span>
+          </div>
+          <span>Mais</span>
         </div>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdown">
+          <button
+            class="btn btn--secondary btn--md"
+            type="button"
+            id="dropdown-trigger"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="dropdown-panel"
+          >
+            Opções
+          </button>
+          <ul
+            id="dropdown-panel"
+            class="dropdown-menu__panel"
+            role="menu"
+            aria-labelledby="dropdown-trigger"
+          >
+            <li role="presentation">
+              <button class="menu-item" role="menuitem" type="button">
+                <span class="menu-item__label">Editar</span>
+                <span
+                  class="menu-item__shortcut shortcut"
+                  role="group"
+                  aria-label="⌘ + E"
+                >
+                  <kbd class="shortcut__key">⌘</kbd>
+                  <span class="shortcut__sep" aria-hidden="true">+</span>
+                  <kbd class="shortcut__key">E</kbd>
+                </span>
+              </button>
+            </li>
+            <li role="presentation">
+              <button class="menu-item" role="menuitem" type="button">
+                <span class="menu-item__label">Duplicar</span>
+                <span
+                  class="menu-item__shortcut shortcut"
+                  role="group"
+                  aria-label="⌘ + D"
+                >
+                  <kbd class="shortcut__key">⌘</kbd>
+                  <span class="shortcut__sep" aria-hidden="true">+</span>
+                  <kbd class="shortcut__key">D</kbd>
+                </span>
+              </button>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li role="presentation" class="menu-item--has-submenu">
+              <button
+                class="menu-item"
+                role="menuitem"
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <span class="menu-item__label">Compartilhar</span>
+                <span class="menu-item__chevron" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                  >
+                    <path
+                      d="M6 4L10 8L6 12"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </span>
+              </button>
+              <ul class="dropdown-menu__panel" role="menu">
+                <li role="presentation">
+                  <button class="menu-item" role="menuitem" type="button">
+                    <span class="menu-item__label">Por e-mail</span>
+                  </button>
+                </li>
+                <li role="presentation">
+                  <button class="menu-item" role="menuitem" type="button">
+                    <span class="menu-item__label">Copiar link</span>
+                    <span
+                      class="menu-item__shortcut shortcut"
+                      role="group"
+                      aria-label="⌘ + Shift + C"
+                    >
+                      <kbd class="shortcut__key">⌘</kbd>
+                      <span class="shortcut__sep" aria-hidden="true">+</span>
+                      <kbd class="shortcut__key">Shift</kbd>
+                      <span class="shortcut__sep" aria-hidden="true">+</span>
+                      <kbd class="shortcut__key">C</kbd>
+                    </span>
+                  </button>
+                </li>
+              </ul>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li role="presentation">
+              <button
+                class="menu-item menu-item--danger"
+                role="menuitem"
+                type="button"
+              >
+                <span class="menu-item__label">Excluir</span>
+              </button>
+            </li>
+            <li role="presentation">
+              <button
+                class="menu-item"
+                role="menuitem"
+                type="button"
+                disabled
+                aria-disabled="true"
+              >
+                <span class="menu-item__label">Desabilitado</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <button id="openInternalModal" class="btn btn--primary btn--lg">
+          Abrir modal (interno)
+        </button>
+
         <div
-          id="pg-line-panel-1"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-line-tab-1"
-          hidden
+          id="modalInternal"
+          class="modal modal--md is-hidden"
+          tabindex="-1"
+          role="dialog"
         >
-          <p>Conteúdo da aba Configurações.</p>
+          <div class="modal__header">Modal title</div>
+          <div class="modal__body">
+            <p>Modal com trigger interno</p>
+          </div>
+          <div class="modal__footer">
+            <button class="btn btn--secondary btn--lg" data-modal-close>
+              Cancelar
+            </button>
+            <button class="btn btn--primary btn--lg" data-modal-close>
+              Continuar
+            </button>
+          </div>
         </div>
+
+        <div>
+          <button id="openExternalModal">Abrir modal externo</button>
+          <button id="closeAllModals">Fechar modais</button>
+        </div>
+
         <div
-          id="pg-line-panel-2"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-line-tab-2"
-          hidden
+          id="modalExternal"
+          class="modal modal--sm is-hidden"
+          tabindex="-1"
+          role="dialog"
         >
-          <p>Conteúdo da aba Histórico.</p>
+          <div class="modal__header">Modal externo</div>
+          <div class="modal__body">
+            <p>Este modal abre via botão externo</p>
+          </div>
+          <div class="modal__footer">
+            <button class="btn btn--secondary btn--lg" data-modal-close>
+              Fechar
+            </button>
+            <button class="btn btn--primary btn--lg" data-modal-close>Ok</button
+            >
+          </div>
         </div>
+
+        <!-- Drawer -->
+        <button
+          id="drawer-trigger"
+          type="button"
+          class="btn btn--primary btn--lg"
+          aria-haspopup="dialog"
+          aria-controls="drawer-panel"
+          aria-expanded="false"
+        >
+          Abrir drawer
+        </button>
+
+        <div id="drawer-backdrop" class="drawer-backdrop" aria-hidden="true">
+        </div>
+
+        <div
+          id="drawer-panel"
+          class="drawer drawer--md"
+          tabindex="-1"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="drawer-title"
+          aria-hidden="true"
+          inert
+        >
+          <div class="drawer__header">
+            <span id="drawer-title" class="drawer__title">Configurações</span>
+            <button
+              id="drawer-close-btn"
+              type="button"
+              class="icon-button icon-button--md"
+              aria-label="Fechar drawer"
+            >
+              <i class="lui lui-x" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="drawer__body">
+            <p>
+              Conteúdo do drawer. Pode ser qualquer elemento HTML ou componente.
+            </p>
+            <p style="margin-top: 12px;">
+              Use o drawer para exibir detalhes, configurações ou ações
+              secundárias sem sair do contexto da página principal.
+            </p>
+          </div>
+          <div class="drawer__footer">
+            <button
+              id="drawer-cancel"
+              type="button"
+              class="btn btn--secondary btn--lg">Cancelar</button
+            >
+            <button type="button" class="btn btn--primary btn--lg"
+              >Salvar</button
+            >
+          </div>
+        </div>
+
+        <!-- Tabs — Line -->
+        <div class="tabs tabs--line">
+          <div class="tabs__list" role="tablist" aria-label="Seções">
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="true"
+              aria-controls="pg-line-panel-0"
+              id="pg-line-tab-0"
+              tabindex="0">Visão geral</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-line-panel-1"
+              id="pg-line-tab-1"
+              tabindex="-1">Configurações</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-line-panel-2"
+              id="pg-line-tab-2"
+              tabindex="-1"
+              disabled
+              aria-disabled="true">Histórico</button
+            >
+          </div>
+          <div
+            id="pg-line-panel-0"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-line-tab-0"
+          >
+            <p>Conteúdo da aba Visão geral.</p>
+          </div>
+          <div
+            id="pg-line-panel-1"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-line-tab-1"
+            hidden
+          >
+            <p>Conteúdo da aba Configurações.</p>
+          </div>
+          <div
+            id="pg-line-panel-2"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-line-tab-2"
+            hidden
+          >
+            <p>Conteúdo da aba Histórico.</p>
+          </div>
+        </div>
+
+        <!-- Tabs — Card -->
+        <div class="tabs tabs--card">
+          <div class="tabs__list" role="tablist" aria-label="Período">
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="true"
+              aria-controls="pg-card-panel-0"
+              id="pg-card-tab-0"
+              tabindex="0">Dia</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-card-panel-1"
+              id="pg-card-tab-1"
+              tabindex="-1">Semana</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-card-panel-2"
+              id="pg-card-tab-2"
+              tabindex="-1">Mês</button
+            >
+          </div>
+          <div
+            id="pg-card-panel-0"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-card-tab-0"
+          >
+            <p>Conteúdo da aba Dia.</p>
+          </div>
+          <div
+            id="pg-card-panel-1"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-card-tab-1"
+            hidden
+          >
+            <p>Conteúdo da aba Semana.</p>
+          </div>
+          <div
+            id="pg-card-panel-2"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-card-tab-2"
+            hidden
+          >
+            <p>Conteúdo da aba Mês.</p>
+          </div>
+        </div>
+
+        <!-- Tabs — Line expand -->
+        <div class="tabs tabs--line">
+          <div
+            class="tabs__list tabs__list--expand"
+            role="tablist"
+            aria-label="Seções expandidas"
+          >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="true"
+              aria-controls="pg-line-exp-panel-0"
+              id="pg-line-exp-tab-0"
+              tabindex="0">Visão geral</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-line-exp-panel-1"
+              id="pg-line-exp-tab-1"
+              tabindex="-1">Configurações</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-line-exp-panel-2"
+              id="pg-line-exp-tab-2"
+              tabindex="-1">Histórico</button
+            >
+          </div>
+          <div
+            id="pg-line-exp-panel-0"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-line-exp-tab-0"
+          >
+            <p>Conteúdo da aba Visão geral.</p>
+          </div>
+          <div
+            id="pg-line-exp-panel-1"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-line-exp-tab-1"
+            hidden
+          >
+            <p>Conteúdo da aba Configurações.</p>
+          </div>
+          <div
+            id="pg-line-exp-panel-2"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-line-exp-tab-2"
+            hidden
+          >
+            <p>Conteúdo da aba Histórico.</p>
+          </div>
+        </div>
+
+        <!-- Tabs — Card expand -->
+        <div class="tabs tabs--card">
+          <div
+            class="tabs__list tabs__list--expand"
+            role="tablist"
+            aria-label="Período expandido"
+          >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="true"
+              aria-controls="pg-card-exp-panel-0"
+              id="pg-card-exp-tab-0"
+              tabindex="0">Dia</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-card-exp-panel-1"
+              id="pg-card-exp-tab-1"
+              tabindex="-1">Semana</button
+            >
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="pg-card-exp-panel-2"
+              id="pg-card-exp-tab-2"
+              tabindex="-1">Mês</button
+            >
+          </div>
+          <div
+            id="pg-card-exp-panel-0"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-card-exp-tab-0"
+          >
+            <p>Conteúdo da aba Dia.</p>
+          </div>
+          <div
+            id="pg-card-exp-panel-1"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-card-exp-tab-1"
+            hidden
+          >
+            <p>Conteúdo da aba Semana.</p>
+          </div>
+          <div
+            id="pg-card-exp-panel-2"
+            class="tabs__panel"
+            role="tabpanel"
+            aria-labelledby="pg-card-exp-tab-2"
+            hidden
+          >
+            <p>Conteúdo da aba Mês.</p>
+          </div>
+        </div>
+
+        <div id="events">[event log]</div>
       </div>
 
-      <!-- Tabs — Card -->
-      <div class="tabs tabs--card">
-        <div class="tabs__list" role="tablist" aria-label="Período">
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="true"
-            aria-controls="pg-card-panel-0"
-            id="pg-card-tab-0"
-            tabindex="0">Dia</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-card-panel-1"
-            id="pg-card-tab-1"
-            tabindex="-1">Semana</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-card-panel-2"
-            id="pg-card-tab-2"
-            tabindex="-1">Mês</button
-          >
-        </div>
-        <div
-          id="pg-card-panel-0"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-card-tab-0"
-        >
-          <p>Conteúdo da aba Dia.</p>
-        </div>
-        <div
-          id="pg-card-panel-1"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-card-tab-1"
-          hidden
-        >
-          <p>Conteúdo da aba Semana.</p>
-        </div>
-        <div
-          id="pg-card-panel-2"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-card-tab-2"
-          hidden
-        >
-          <p>Conteúdo da aba Mês.</p>
-        </div>
-      </div>
+      <script type="module">
+        import { initUI } from '/scripts/ui.js';
 
-      <!-- Tabs — Line expand -->
-      <div class="tabs tabs--line">
-        <div
-          class="tabs__list tabs__list--expand"
-          role="tablist"
-          aria-label="Seções expandidas"
-        >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="true"
-            aria-controls="pg-line-exp-panel-0"
-            id="pg-line-exp-tab-0"
-            tabindex="0">Visão geral</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-line-exp-panel-1"
-            id="pg-line-exp-tab-1"
-            tabindex="-1">Configurações</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-line-exp-panel-2"
-            id="pg-line-exp-tab-2"
-            tabindex="-1">Histórico</button
-          >
-        </div>
-        <div
-          id="pg-line-exp-panel-0"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-line-exp-tab-0"
-        >
-          <p>Conteúdo da aba Visão geral.</p>
-        </div>
-        <div
-          id="pg-line-exp-panel-1"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-line-exp-tab-1"
-          hidden
-        >
-          <p>Conteúdo da aba Configurações.</p>
-        </div>
-        <div
-          id="pg-line-exp-panel-2"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-line-exp-tab-2"
-          hidden
-        >
-          <p>Conteúdo da aba Histórico.</p>
-        </div>
-      </div>
-
-      <!-- Tabs — Card expand -->
-      <div class="tabs tabs--card">
-        <div
-          class="tabs__list tabs__list--expand"
-          role="tablist"
-          aria-label="Período expandido"
-        >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="true"
-            aria-controls="pg-card-exp-panel-0"
-            id="pg-card-exp-tab-0"
-            tabindex="0">Dia</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-card-exp-panel-1"
-            id="pg-card-exp-tab-1"
-            tabindex="-1">Semana</button
-          >
-          <button
-            class="tab"
-            role="tab"
-            type="button"
-            aria-selected="false"
-            aria-controls="pg-card-exp-panel-2"
-            id="pg-card-exp-tab-2"
-            tabindex="-1">Mês</button
-          >
-        </div>
-        <div
-          id="pg-card-exp-panel-0"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-card-exp-tab-0"
-        >
-          <p>Conteúdo da aba Dia.</p>
-        </div>
-        <div
-          id="pg-card-exp-panel-1"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-card-exp-tab-1"
-          hidden
-        >
-          <p>Conteúdo da aba Semana.</p>
-        </div>
-        <div
-          id="pg-card-exp-panel-2"
-          class="tabs__panel"
-          role="tabpanel"
-          aria-labelledby="pg-card-exp-tab-2"
-          hidden
-        >
-          <p>Conteúdo da aba Mês.</p>
-        </div>
-      </div>
-
-      <div id="events">[event log]</div>
+        initUI();
+      </script>
     </section>
-
-    <script type="module">
-      import { initUI } from '/scripts/ui.js';
-
-      initUI();
-    </script>
   </body>
 </html>

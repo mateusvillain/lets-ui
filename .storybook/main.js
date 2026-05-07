@@ -7,15 +7,17 @@ const config = {
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',
     '@storybook/addon-a11y',
-    '@storybook/addon-docs',
-  ],
-  framework: '@storybook/html-vite',
-  docs: {
-    mdxPluginOptions: {
-      mdxCompileOptions: {
-        remarkPlugins: [remarkGfm],
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
       },
     },
-  },
+  ],
+  framework: '@storybook/html-vite',
 };
 export default config;
