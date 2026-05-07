@@ -1,5 +1,6 @@
 import { LuiAlert } from './components/alert.js';
 import { LuiBody } from './components/body.js';
+import { LuiImage } from './components/image.js';
 import { LuiDrawer } from './components/drawer.js';
 import { LuiHeading } from './components/heading.js';
 import { LuiTabs, LuiTab } from './components/tabs.js';
@@ -35,6 +36,7 @@ function define(name, elementClass) {
 define('lui-alert', LuiAlert);
 define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
+define('lui-image', LuiImage);
 define('lui-drawer', LuiDrawer);
 define('lui-tabs', LuiTabs);
 define('lui-tab', LuiTab);
@@ -64,6 +66,7 @@ export {
   LuiAlert,
   LuiBody,
   LuiHeading,
+  LuiImage,
   LuiDrawer,
   LuiTabs,
   LuiTab,
