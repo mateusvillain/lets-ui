@@ -1,6 +1,24 @@
 # Changelog
 
-## [v1.0.0] - 02-05-2026
+## v1.1.0
+
+### Added
+
+- Add `lui-image` web component by @mateusvillain in [PR #33](https://github.com/mateusvillain/lets-ui/pull/33)
+- Add `lui-heading` and `lui-body` web components by @mateusvillain in [PR #30](https://github.com/mateusvillain/lets-ui/pull/30)
+
+### Changed
+
+- Add Renovate configuration by @mateusvillain in [PR #10](https://github.com/mateusvillain/lets-ui/pull/10)
+- Centralize `display: contents;` utility into `_host.scss` by @mateusvillain in [PR #32](https://github.com/mateusvillain/lets-ui/pull/32)
+
+### Fixed
+
+- Fix Tooltip Storybook stories by @mateusvillain in [PR #34](https://github.com/mateusvillain/lets-ui/pull/34)
+- Fix Modal Storybook stories and docs page by @mateusvillain in [PR #36](https://github.com/mateusvillain/lets-ui/pull/36)
+- Remove merge conflict markers by @mateusvillain in [PR #38](https://github.com/mateusvillain/lets-ui/pull/38)
+
+## v1.0.0
 
 ### Added
 
