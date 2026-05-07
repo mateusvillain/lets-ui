@@ -11,19 +11,16 @@ export default {
       control: { type: 'select' },
       options: ['sm', 'md', 'lg'],
     },
-    triggerLabel: { control: 'text' },
+    'trigger-label': { control: 'text' },
   },
   parameters: {
     docs: {
-      description: {
-        component:
-          'Modals are used to display content in a layer above the app.',
-      },
+      story: { height: '500px' },
     },
   },
 };
 
-const Template = ({ title, size, triggerLabel }) => {
+const Template = ({ title, size, 'trigger-label': triggerLabel }) => {
   const attrs = [
     `title="${title ?? 'Modal title'}"`,
     `size="${size ?? 'md'}"`,
@@ -33,8 +30,8 @@ const Template = ({ title, size, triggerLabel }) => {
   return `
     <lui-modal ${attrs}>
       <p>This is the modal body text. It defines the main content of the modal.</p>
-      <button slot="actions" data-modal-close class="btn btn--secondary btn--lg">Cancel</button>
-      <button slot="actions" class="btn btn--primary btn--lg">Confirm</button>
+      <lui-button slot="actions" variant="secondary" label="Cancel" data-modal-close></lui-button>
+      <lui-button slot="actions" label="Confirm"></lui-button>
     </lui-modal>
   `;
 };
@@ -43,21 +40,21 @@ export const Default = Template.bind({});
 Default.args = {
   title: 'Modal title',
   size: 'md',
-  triggerLabel: 'Open modal',
+  'trigger-label': 'Open modal',
 };
 
 export const Small = Template.bind({});
 Small.args = {
-  ...Default.args,
   title: 'Small Modal',
   size: 'sm',
+  'trigger-label': 'Open modal',
 };
 
 export const Large = Template.bind({});
 Large.args = {
-  ...Default.args,
   title: 'Large Modal',
   size: 'lg',
+  'trigger-label': 'Open modal',
 };
 
 export const WithoutActions = () => `
@@ -69,13 +66,10 @@ WithoutActions.storyName = 'Without actions';
 
 export const CustomTrigger = () => `
   <lui-modal title="Modal with custom trigger">
-    <button slot="trigger" class="btn btn--secondary btn--lg">
-      <i class="lui lui-settings" aria-hidden="true"></i>
-      Settings
-    </button>
+    <lui-button slot="trigger" variant="secondary" label="Settings" icon-left="settings"></lui-button>
     <p>This modal uses a fully custom trigger via <code>slot="trigger"</code>.</p>
-    <button slot="actions" data-modal-close class="btn btn--secondary btn--lg">Cancel</button>
-    <button slot="actions" class="btn btn--primary btn--lg">Confirm</button>
+    <lui-button slot="actions" variant="secondary" label="Cancel" data-modal-close></lui-button>
+    <lui-button slot="actions" label="Confirm"></lui-button>
   </lui-modal>
 `;
 CustomTrigger.storyName = 'Custom trigger (slot)';
