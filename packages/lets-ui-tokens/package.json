@@ -1,6 +1,6 @@
 {
   "name": "@lets-ui/tokens",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Let's UI design tokens package",
   "license": "MIT",
   "type": "module",
