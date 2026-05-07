@@ -36,10 +36,7 @@ function define(name, elementClass) {
 define('lui-alert', LuiAlert);
 define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
-<<<<<<< HEAD
 define('lui-image', LuiImage);
-=======
->>>>>>> 190150c (refactor(typography): rename lui-headline to lui-heading)
 define('lui-drawer', LuiDrawer);
 define('lui-tabs', LuiTabs);
 define('lui-tab', LuiTab);
