@@ -1,0 +1,310 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Utilities/Flex" />
+
+export const Box = ({ children, style = {} }) => (
+  <div style={{
+    padding: '8px 12px',
+    background: 'var(--lui-color-primary-background-container)',
+    borderRadius: '4px',
+    fontSize: '12px',
+    fontWeight: '600',
+    color: 'var(--lui-color-neutral-text-inverse)',
+    flexShrink: 0,
+    ...style,
+  }}>
+    {children}
+  </div>
+);
+
+export const Demo = ({ label, css, children }) => (
+  <div style={{
+    border: '1px solid var(--lui-color-neutral-border-subtle)',
+    borderRadius: '8px',
+    overflow: 'hidden',
+  }}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '8px 14px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      borderBottom: '1px solid var(--lui-color-neutral-border-subtle)',
+    }}>
+      <code style={{ fontSize: '13px', fontWeight: '700' }}>.{label}</code>
+      <code style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>{css}</code>
+    </div>
+    <div style={{
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-container)',
+      minHeight: '60px',
+    }}>
+      {children}
+    </div>
+  </div>
+);
+
+export const Section = ({ title, children }) => (
+  <div style={{ marginBottom: '32px' }}>
+    <h3 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: 'var(--lui-color-neutral-text-heading)' }}>{title}</h3>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>{children}</div>
+  </div>
+);
+
+# Flex Utilities
+
+Classes utilitárias de flexbox geradas em `packages/styles/src/utilities/_flex.scss` e incluídas no bundle `letsui.css`. Cobrem display, direção, wrap, alinhamento e grow/shrink.
+
+```html
+<!-- Exemplo de uso direto no HTML -->
+<div class="flex flex-col items-center justify-between" style="gap: 16px">
+  <div>Item A</div>
+  <div>Item B</div>
+</div>
+```
+
+---
+
+<Section title="Display">
+  <Demo label="flex" css="display: flex">
+    <div style={{ display: 'flex', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="inline-flex" css="display: inline-flex">
+    <div style={{ display: 'inline-flex', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Flex Direction">
+  <Demo label="flex-row" css="flex-direction: row">
+    <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="flex-row-reverse" css="flex-direction: row-reverse">
+    <div style={{ display: 'flex', flexDirection: 'row-reverse', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="flex-col" css="flex-direction: column">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="flex-col-reverse" css="flex-direction: column-reverse">
+    <div style={{ display: 'flex', flexDirection: 'column-reverse', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Flex Wrap">
+  <Demo label="flex-wrap" css="flex-wrap: wrap">
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', width: '200px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+  <Demo label="flex-nowrap" css="flex-wrap: nowrap">
+    <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+  <Demo label="flex-wrap-reverse" css="flex-wrap: wrap-reverse">
+    <div style={{ display: 'flex', flexWrap: 'wrap-reverse', gap: '8px', width: '200px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Justify Content">
+  <Demo label="justify-start" css="justify-content: flex-start">
+    <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="justify-center" css="justify-content: center">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="justify-end" css="justify-content: flex-end">
+    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="justify-between" css="justify-content: space-between">
+    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="justify-around" css="justify-content: space-around">
+    <div style={{ display: 'flex', justifyContent: 'space-around', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="justify-evenly" css="justify-content: space-evenly">
+    <div style={{ display: 'flex', justifyContent: 'space-evenly', gap: '8px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Align Items">
+  <Demo label="items-start" css="align-items: flex-start">
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', height: '64px' }}>
+      <Box>1</Box><Box style={{ height: '40px' }}>2</Box><Box style={{ height: '24px' }}>3</Box>
+    </div>
+  </Demo>
+  <Demo label="items-center" css="align-items: center">
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '64px' }}>
+      <Box>1</Box><Box style={{ height: '40px' }}>2</Box><Box style={{ height: '24px' }}>3</Box>
+    </div>
+  </Demo>
+  <Demo label="items-end" css="align-items: flex-end">
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', height: '64px' }}>
+      <Box>1</Box><Box style={{ height: '40px' }}>2</Box><Box style={{ height: '24px' }}>3</Box>
+    </div>
+  </Demo>
+  <Demo label="items-stretch" css="align-items: stretch">
+    <div style={{ display: 'flex', alignItems: 'stretch', gap: '8px', height: '64px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box>
+    </div>
+  </Demo>
+  <Demo label="items-baseline" css="align-items: baseline">
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+      <Box style={{ fontSize: '20px' }}>A</Box><Box style={{ fontSize: '12px' }}>B</Box><Box style={{ fontSize: '16px' }}>C</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Align Content">
+  <Demo label="content-start" css="align-content: flex-start">
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', gap: '8px', height: '100px', width: '180px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+  <Demo label="content-center" css="align-content: center">
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'center', gap: '8px', height: '100px', width: '180px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+  <Demo label="content-end" css="align-content: flex-end">
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'flex-end', gap: '8px', height: '100px', width: '180px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+  <Demo label="content-between" css="align-content: space-between">
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'space-between', gap: '8px', height: '100px', width: '180px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+  <Demo label="content-around" css="align-content: space-around">
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'space-around', gap: '8px', height: '100px', width: '180px' }}>
+      <Box>1</Box><Box>2</Box><Box>3</Box><Box>4</Box><Box>5</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Align Self">
+  <Demo label="self-start" css="align-self: flex-start">
+    <div style={{ display: 'flex', gap: '8px', height: '64px', alignItems: 'stretch' }}>
+      <Box>A</Box>
+      <Box style={{ alignSelf: 'flex-start' }}>self-start</Box>
+      <Box>C</Box>
+    </div>
+  </Demo>
+  <Demo label="self-center" css="align-self: center">
+    <div style={{ display: 'flex', gap: '8px', height: '64px', alignItems: 'stretch' }}>
+      <Box>A</Box>
+      <Box style={{ alignSelf: 'center' }}>self-center</Box>
+      <Box>C</Box>
+    </div>
+  </Demo>
+  <Demo label="self-end" css="align-self: flex-end">
+    <div style={{ display: 'flex', gap: '8px', height: '64px', alignItems: 'stretch' }}>
+      <Box>A</Box>
+      <Box style={{ alignSelf: 'flex-end' }}>self-end</Box>
+      <Box>C</Box>
+    </div>
+  </Demo>
+  <Demo label="self-stretch" css="align-self: stretch">
+    <div style={{ display: 'flex', gap: '8px', height: '64px', alignItems: 'flex-start' }}>
+      <Box>A</Box>
+      <Box style={{ alignSelf: 'stretch' }}>self-stretch</Box>
+      <Box>C</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Flex Grow">
+  <Demo label="flex-grow-0" css="flex-grow: 0">
+    <div style={{ display: 'flex', gap: '8px' }}>
+      <Box style={{ flexGrow: 0 }}>grow-0</Box>
+      <Box style={{ flexGrow: 1, background: 'var(--lui-color-neutral-background-container)', color: 'var(--lui-color-neutral-text-body)', border: '1px dashed var(--lui-color-neutral-border-subtle)' }}>outro</Box>
+    </div>
+  </Demo>
+  <Demo label="flex-grow-1" css="flex-grow: 1">
+    <div style={{ display: 'flex', gap: '8px' }}>
+      <Box style={{ flexGrow: 1 }}>grow-1</Box>
+      <Box>fixo</Box>
+    </div>
+  </Demo>
+</Section>
+
+<Section title="Flex Shrink">
+  <Demo label="flex-shrink-0" css="flex-shrink: 0">
+    <div style={{ display: 'flex', gap: '8px', width: '200px', overflow: 'hidden' }}>
+      <Box style={{ flexShrink: 0, width: '120px' }}>shrink-0</Box>
+      <Box style={{ minWidth: '120px', flexShrink: 1 }}>shrinks</Box>
+    </div>
+  </Demo>
+  <Demo label="flex-shrink-1" css="flex-shrink: 1">
+    <div style={{ display: 'flex', gap: '8px', width: '200px', overflow: 'hidden' }}>
+      <Box style={{ flexShrink: 1, minWidth: '80px' }}>shrink-1</Box>
+      <Box style={{ flexShrink: 1, minWidth: '80px' }}>shrink-1</Box>
+    </div>
+  </Demo>
+</Section>
+
+---
+
+## Referência rápida
+
+| Classe              | Propriedade CSS                     |
+|---------------------|-------------------------------------|
+| `.flex`             | `display: flex`                     |
+| `.inline-flex`      | `display: inline-flex`              |
+| `.flex-row`         | `flex-direction: row`               |
+| `.flex-row-reverse` | `flex-direction: row-reverse`       |
+| `.flex-col`         | `flex-direction: column`            |
+| `.flex-col-reverse` | `flex-direction: column-reverse`    |
+| `.flex-wrap`        | `flex-wrap: wrap`                   |
+| `.flex-nowrap`      | `flex-wrap: nowrap`                 |
+| `.flex-wrap-reverse`| `flex-wrap: wrap-reverse`           |
+| `.justify-start`    | `justify-content: flex-start`       |
+| `.justify-center`   | `justify-content: center`           |
+| `.justify-end`      | `justify-content: flex-end`         |
+| `.justify-between`  | `justify-content: space-between`    |
+| `.justify-around`   | `justify-content: space-around`     |
+| `.justify-evenly`   | `justify-content: space-evenly`     |
+| `.items-start`      | `align-items: flex-start`           |
+| `.items-center`     | `align-items: center`               |
+| `.items-end`        | `align-items: flex-end`             |
+| `.items-stretch`    | `align-items: stretch`              |
+| `.items-baseline`   | `align-items: baseline`             |
+| `.content-start`    | `align-content: flex-start`         |
+| `.content-center`   | `align-content: center`             |
+| `.content-end`      | `align-content: flex-end`           |
+| `.content-between`  | `align-content: space-between`      |
+| `.content-around`   | `align-content: space-around`       |
+| `.self-start`       | `align-self: flex-start`            |
+| `.self-center`      | `align-self: center`                |
+| `.self-end`         | `align-self: flex-end`              |
+| `.self-stretch`     | `align-self: stretch`               |
+| `.flex-grow-0`      | `flex-grow: 0`                      |
+| `.flex-grow-1`      | `flex-grow: 1`                      |
+| `.flex-shrink-0`    | `flex-shrink: 0`                    |
+| `.flex-shrink-1`    | `flex-shrink: 1`                    |
