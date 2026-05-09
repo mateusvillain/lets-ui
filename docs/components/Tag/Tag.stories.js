@@ -2,7 +2,7 @@ import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
 
 export default {
-  title: 'Components/Tag',
+  title: 'Content/Tag',
   tags: ['autodocs'],
   argTypes: {
     label: {

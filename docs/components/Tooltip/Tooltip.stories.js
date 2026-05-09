@@ -3,7 +3,7 @@ import '../../../packages/styles/dist/letsui.css';
 import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
-  title: 'Components/Tooltip',
+  title: 'Content/Tooltip',
   argTypes: {
     text: { control: 'text' },
     position: {

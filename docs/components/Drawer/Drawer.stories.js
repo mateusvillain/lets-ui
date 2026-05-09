@@ -4,7 +4,7 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
-  title: 'Components/Drawer',
+  title: 'Content/Drawer',
   argTypes: {
     title: { control: 'text' },
     size: {

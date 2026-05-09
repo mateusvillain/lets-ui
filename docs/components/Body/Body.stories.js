@@ -2,7 +2,7 @@ import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
 
 export default {
-  title: 'Typography/Body',
+  title: 'Content/Typography/Body',
   argTypes: {
     variant: {
       control: { type: 'select' },

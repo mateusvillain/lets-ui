@@ -4,7 +4,7 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
-  title: 'Components/Modal',
+  title: 'Content/Modal',
   argTypes: {
     title: { control: 'text' },
     size: {

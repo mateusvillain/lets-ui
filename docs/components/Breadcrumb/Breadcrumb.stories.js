@@ -2,17 +2,16 @@ import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
 
 export default {
-  title: 'Components/Breadcrumb',
+  title: 'Navigation/Breadcrumb',
   // tags: ['autodocs'],
   argTypes: {
-    label: { 
-      control: 'text'
-    }
+    label: {
+      control: 'text',
+    },
   },
 };
 
 const Template = ({ label }) => {
-
   return `
     <ul class="breadcrumb">
       <li><a class="link">Item 1</a></li>

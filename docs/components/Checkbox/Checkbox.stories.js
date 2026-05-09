@@ -2,7 +2,7 @@ import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
 
 export default {
-  title: 'Components/Checkbox',
+  title: 'Form and options/Checkbox',
   argTypes: {
     label: { control: 'text' },
     checked: { control: 'boolean' },

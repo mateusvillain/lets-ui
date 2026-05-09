@@ -3,7 +3,7 @@ import '../../../packages/styles/dist/letsui.css';
 import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
-  title: 'Components/Native Select',
+  title: 'Form and options/Native Select',
   argTypes: {
     label: { control: 'text' },
     placeholder: { control: 'text' },

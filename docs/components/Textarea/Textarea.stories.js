@@ -3,7 +3,7 @@ import '../../../packages/styles/dist/letsui.css';
 import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
-  title: 'Components/Textarea',
+  title: 'Form and options/Textarea',
   argTypes: {
     label: { control: 'text' },
     placeholder: { control: 'text' },
