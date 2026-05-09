@@ -1,0 +1,62 @@
+import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as LinkStories from './Link.stories';
+
+<Meta of={LinkStories} />
+
+# Link
+
+Componente de link navegável. Aplica a cor semântica `text(link)`, remove o sublinhado padrão, e restaura o sublinhado no hover. No estado `:visited` usa `text(link-visited)`. Foco gerenciado via `@include focus-ring(primary)`.
+
+<Canvas of={LinkStories.Default} />
+<Controls of={LinkStories.Default} />
+
+---
+
+## Em parágrafo
+
+Links geralmente aparecem inline dentro de blocos de texto. Use a tag `<a class="link">` diretamente para embutir um link em conteúdo corrido.
+
+<Canvas of={LinkStories.InParagraph} />
+
+---
+
+## Com aria-label
+
+Quando o texto do link não descreve o destino com clareza (ex.: "saiba mais", "clique aqui"), forneça um `aria-label` descritivo para leitores de tela.
+
+<Canvas of={LinkStories.WithAriaLabel} />
+
+---
+
+## Classe CSS (sem Web Component)
+
+A estilização de link está disponível diretamente via classe CSS `.link` em qualquer tag `<a>`, sem necessidade de usar o web component `<lui-link>`.
+
+<Canvas of={LinkStories.CSSClass} />
+
+---
+
+## Uso
+
+### Web Component
+
+```html
+<lui-link label="Saiba mais" href="/sobre"></lui-link>
+
+<!-- Com aria-label personalizado -->
+<lui-link
+  label="Leia mais"
+  href="/acessibilidade"
+  aria-label="Leia mais sobre acessibilidade"
+></lui-link>
+```
+
+### Classe CSS
+
+```html
+<!-- Link inline em texto -->
+<p>
+  Acesse a
+  <a class="link" href="/termos">política de privacidade</a>.
+</p>
+```
