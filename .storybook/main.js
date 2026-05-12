@@ -19,5 +19,6 @@ const config = {
     },
   ],
   framework: '@storybook/html-vite',
+  staticDirs: ['../docs/public'],
 };
 export default config;

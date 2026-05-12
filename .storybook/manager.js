@@ -8,7 +8,7 @@ addons.setConfig({
     // Brand
     brandTitle: "Let's UI",
     brandUrl: '/',
-    brandImage: '/docs/public/logo.svg',
+    brandImage: '/logo.svg',
     brandTarget: '_self',
 
     // Accent — brand.color.primary.{4,5}
