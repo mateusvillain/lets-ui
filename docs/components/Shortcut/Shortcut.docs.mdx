@@ -1,0 +1,29 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ShortcutStories from './Shortcut.stories';
+
+<Meta of={ShortcutStories} />
+
+# Shortcut
+
+Exibe combinações de teclas de teclado de forma semântica e acessível. Use para comunicar atalhos disponíveis em tooltips, menus de contexto, listas de comandos e interfaces de ajuda. Cada tecla é renderizada com `<kbd>` e separada visualmente por `+`.
+
+<Canvas of={ShortcutStories.Shortcut} />
+<Controls of={ShortcutStories.Shortcut} />
+
+## Tecla única
+
+Use quando o atalho corresponde a uma única tecla — como teclas de ação (`Enter`, `Esc`, `Tab`). Ideal para indicar confirmação ou cancelamento em formulários e modais.
+
+<Canvas of={ShortcutStories.SingleKey} />
+
+## Múltiplas teclas
+
+Use quando o atalho exige uma combinação de teclas simultâneas. Passe as teclas separadas por vírgula no atributo `keys` (ex.: `keys="Ctrl,K"`). A ordem deve seguir a convenção da plataforma: modificadores primeiro (`Ctrl`, `Shift`, `Cmd`, `Alt`), depois a tecla principal.
+
+<Canvas of={ShortcutStories.MultipleKeys} />
+
+## Em contexto
+
+Combine com listas de ações ou menus para documentar atalhos disponíveis na interface. O componente se alinha naturalmente em layouts `flex` com `justify-content: space-between`.
+
+<Canvas of={ShortcutStories.InContext} />

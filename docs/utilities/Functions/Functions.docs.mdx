@@ -1,0 +1,342 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Utilities/Functions" />
+
+export const colorFns = [
+  {
+    fn: 'bg($category, $variant)',
+    desc: 'Cor de fundo semântica',
+    params: [
+      { label: '$category', values: ['surface', 'container'] },
+      { label: '$variant', values: ['primary', 'secondary', 'info', 'danger', 'success', 'caution', 'neutral', 'overlay*'] },
+    ],
+    note: '* overlay disponível apenas em container',
+  },
+  {
+    fn: 'text($variant)',
+    desc: 'Cor de texto semântica',
+    params: [
+      { label: '$variant', values: ['heading', 'body', 'caption', 'primary', 'inverse', 'error', 'link', 'link-visited'] },
+    ],
+  },
+  {
+    fn: 'stroke($variant, $category?)',
+    desc: 'Cor de borda semântica',
+    params: [
+      { label: '$variant', values: ['primary', 'secondary', 'caution', 'danger', 'info', 'success', 'neutral'] },
+      { label: '$category', values: ['default (padrão)', 'subtle', 'hover', 'pressed'] },
+    ],
+  },
+  {
+    fn: 'icon($variant)',
+    desc: 'Cor de ícone semântica',
+    params: [
+      { label: '$variant', values: ['primary', 'secondary', 'info', 'danger', 'success', 'caution', 'neutral', 'inverse'] },
+    ],
+  },
+  {
+    fn: 'color($category, $scale)',
+    desc: 'Cor primitiva da paleta',
+    params: [
+      { label: '$category', values: ['primary', 'secondary', 'blue', 'gray', 'green', 'orange', 'red', 'violet'] },
+      { label: '$scale', values: ['1', '2', '3', '4', '5', '6', '7', '8'] },
+    ],
+  },
+  {
+    fn: 'hover($variant)',
+    desc: 'Fundo de estado hover',
+    params: [
+      { label: '$variant', values: ['primary', 'secondary', 'danger', 'success', 'neutral'] },
+    ],
+  },
+  {
+    fn: 'pressed($variant)',
+    desc: 'Fundo de estado pressed/active',
+    params: [
+      { label: '$variant', values: ['primary', 'secondary', 'danger', 'success', 'neutral'] },
+    ],
+  },
+];
+
+export const borderFns = [
+  {
+    fn: 'radius($size)',
+    desc: 'Border radius',
+    rows: [
+      { val: 'none',   desc: 'Sem arredondamento' },
+      { val: 'xs',     desc: 'Tags, badges, chips' },
+      { val: 'sm',     desc: 'Botões, inputs' },
+      { val: 'md',     desc: 'Cards, modais' },
+      { val: 'lg',     desc: 'Drawers, superfícies grandes' },
+      { val: 'xl',     desc: 'Contêineres de destaque' },
+      { val: 'circle', desc: 'Avatares, ícones circulares' },
+    ],
+  },
+  {
+    fn: 'width($size)',
+    desc: 'Border width',
+    rows: [
+      { val: '0', desc: 'Sem borda — 0' },
+      { val: '1', desc: 'Borda padrão — 1px' },
+      { val: '2', desc: 'Ênfase/foco — 2px' },
+    ],
+  },
+];
+
+export const spacingFns = [
+  { fn: 'fixed($size)', desc: 'Espaçamento fixo em px', values: ['0', '8', '16', '24', '32', '40'] },
+  { fn: 'fluid($size)', desc: 'Espaçamento fluido com clamp()', values: ['2', '4', '8', '12', '16', '20', '24', '32', '40', '48', '56', '64', '72', '80'] },
+];
+
+export const typographyFns = [
+  { fn: 'font($font)',             prop: 'font-family',    values: ['heading', 'body'] },
+  { fn: 'size($size)',             prop: 'font-size',      values: ['3xl', '2xl', '1xl', 'lg', 'md', 'sm', '1xs', '2xs', '3xs'] },
+  { fn: 'weight($weight)',         prop: 'font-weight',    values: ['regular', 'medium', 'semibold', 'bold'] },
+  { fn: 'line-height($lh)',        prop: 'line-height',    values: ['heading', 'body'] },
+  { fn: 'case($case)',             prop: 'text-transform', values: ['none', 'lowercase', 'uppercase'] },
+  { fn: 'decoration($decoration)', prop: 'text-decoration',values: ['none', 'underline', 'line-through'] },
+];
+
+export const stateFns = [
+  { fn: 'focus-ring($variant)', desc: 'Box-shadow de foco', values: ['primary', 'secondary', 'danger', 'success', 'neutral'] },
+  { fn: 'elevation($layer)',    desc: 'Box-shadow de elevação', values: ['base', 'hovered', 'floating', 'overlay'] },
+  { fn: 'opacity($category)',   desc: 'Opacidade semântica', values: ['disabled', 'hidden', 'visible'] },
+  { fn: 'breakpoint($name)',    desc: 'Valor de breakpoint responsivo', values: ['1xs (320px)', 'sm (768px)', 'md (1024px)', 'lg (1280px)', '1xl (1440px)'] },
+];
+
+# Functions
+
+Funções SCSS definidas em `packages/styles/src/utilities/_functions.scss`. Use-as nos componentes para acessar tokens de design de forma segura — cada função valida o argumento e lança um erro de compilação se o valor não existir no mapa de tokens.
+
+```scss
+// No arquivo de componente
+@use '../utilities/functions' as *;
+
+.my-component {
+  background-color: bg(surface, primary);
+  color: text(body);
+  border-radius: radius(sm);
+  padding: fluid(16);
+}
+```
+
+---
+
+## Cores
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px' }}>
+  {colorFns.map(({ fn, desc, params, note }) => (
+    <div key={fn} style={{
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '8px',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '10px' }}>
+        <code style={{ fontSize: '13px', fontWeight: '600' }}>{fn}</code>
+        <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-caption)' }}>{desc}</span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {params.map(({ label, values }) => (
+          <div key={label} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+            <code style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)', flexShrink: 0, minWidth: '80px' }}>{label}</code>
+            <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+              {values.map(v => (
+                <code key={v} style={{
+                  fontSize: '11px',
+                  padding: '1px 6px',
+                  background: 'var(--lui-color-neutral-background-container)',
+                  borderRadius: '4px',
+                }}>{v}</code>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      {note && <p style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)', margin: '8px 0 0' }}>{note}</p>}
+    </div>
+  ))}
+</div>
+
+### Exemplo de uso — cores
+
+```scss
+.alert--danger {
+  background-color: bg(container, danger);
+  border-color: stroke(danger);
+  color: text(body);
+
+  .alert__icon { color: icon(danger); }
+}
+
+.btn--primary {
+  background-color: bg(container, primary);
+  color: text(inverse);
+
+  &:hover  { background-color: hover(primary); }
+  &:active { background-color: pressed(primary); }
+}
+```
+
+---
+
+## Borda
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px' }}>
+  {borderFns.map(({ fn, desc, rows }) => (
+    <div key={fn} style={{
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '8px',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '10px' }}>
+        <code style={{ fontSize: '13px', fontWeight: '600' }}>{fn}</code>
+        <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-caption)' }}>{desc}</span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {rows.map(({ val, desc: d }) => (
+          <div key={val} style={{
+            display: 'grid',
+            gridTemplateColumns: '80px 1fr',
+            gap: '8px',
+            alignItems: 'center',
+          }}>
+            <code style={{ fontSize: '11px', padding: '1px 6px', background: 'var(--lui-color-neutral-background-container)', borderRadius: '4px' }}>{val}</code>
+            <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-caption)' }}>{d}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+```scss
+.card    { border-radius: radius(md); border-width: width(1); }
+.avatar  { border-radius: radius(circle); }
+.focused { border-width: width(2); }
+```
+
+---
+
+## Espaçamento
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px' }}>
+  {spacingFns.map(({ fn, desc, values }) => (
+    <div key={fn} style={{
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '8px',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '10px' }}>
+        <code style={{ fontSize: '13px', fontWeight: '600' }}>{fn}</code>
+        <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-caption)' }}>{desc}</span>
+      </div>
+      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+        {values.map(v => (
+          <code key={v} style={{
+            fontSize: '11px',
+            padding: '1px 6px',
+            background: 'var(--lui-color-neutral-background-container)',
+            borderRadius: '4px',
+          }}>{v}</code>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+```scss
+.section { padding: fluid(40); }
+.card    { padding: fluid(24); gap: fixed(16); }
+```
+
+> Use `fluid()` para espaçamentos de layout (margens, gaps entre blocos) e `fixed()` para espaçamentos internos de componentes que não devem mudar com o viewport.
+
+---
+
+## Tipografia
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
+  {typographyFns.map(({ fn, prop, values }) => (
+    <div key={fn} style={{
+      display: 'grid',
+      gridTemplateColumns: '220px 160px 1fr',
+      alignItems: 'center',
+      gap: '16px',
+      padding: '10px 16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <code style={{ fontSize: '12px', fontWeight: '600' }}>{fn}</code>
+      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>{prop}</span>
+      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+        {values.map(v => (
+          <code key={v} style={{
+            fontSize: '11px',
+            padding: '1px 6px',
+            background: 'var(--lui-color-neutral-background-container)',
+            borderRadius: '4px',
+          }}>{v}</code>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+```scss
+.heading--title {
+  font-family: font(heading);
+  font-size: size(2xl);
+  font-weight: weight(bold);
+  line-height: line-height(heading);
+}
+```
+
+> Para aplicar escalas tipográficas completas, prefira o mixin `font-scale($scale-name)`.
+
+---
+
+## Estados e elevação
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
+  {stateFns.map(({ fn, desc, values }) => (
+    <div key={fn} style={{
+      padding: '12px 16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '6px' }}>
+        <code style={{ fontSize: '13px', fontWeight: '600' }}>{fn}</code>
+        <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-caption)' }}>{desc}</span>
+      </div>
+      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+        {values.map(v => (
+          <code key={v} style={{
+            fontSize: '11px',
+            padding: '1px 6px',
+            background: 'var(--lui-color-neutral-background-container)',
+            borderRadius: '4px',
+          }}>{v}</code>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+```scss
+.modal   { box-shadow: elevation(overlay); }
+.tooltip { box-shadow: elevation(floating); }
+
+.btn:focus-visible { box-shadow: focus-ring(primary); }
+.btn:disabled      { opacity: opacity(disabled); }
+
+@media (min-width: breakpoint(md)) {
+  .sidebar { display: block; }
+}
+```
+
+> Para responsividade, prefira os mixins `media-up()` e `media-down()` em vez de chamar `breakpoint()` diretamente.

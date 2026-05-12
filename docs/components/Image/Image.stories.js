@@ -8,7 +8,7 @@ const PORTRAIT_SRC =
   'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80';
 
 export default {
-  title: 'Components/Image',
+  title: 'Content/Image',
   argTypes: {
     src: { control: 'text' },
     alt: { control: 'text' },

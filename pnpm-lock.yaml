@@ -119,6 +119,10 @@ importers:
         version: 4.1.4(@types/node@25.5.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.0-beta.16(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(sass@1.99.0)(yaml@2.8.3))
 
   packages/lets-ui-components:
+    dependencies:
+      lets-ui-icons:
+        specifier: '>=0.1.0'
+        version: 0.1.0
     devDependencies:
       '@lets-ui/styles':
         specifier: workspace:*

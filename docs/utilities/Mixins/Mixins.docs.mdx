@@ -1,0 +1,241 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Utilities/Mixins" />
+
+export const mixins = [
+  {
+    name: 'flex',
+    signature: '@include flex($direction, $align, $justify, $gap, $wrap)',
+    desc: 'Shorthand para configurar um container flexbox em uma única linha.',
+    params: [
+      { name: '$direction', default: 'row',      values: 'row | row-reverse | column | column-reverse' },
+      { name: '$align',     default: 'center',   values: 'flex-start | center | flex-end | stretch | baseline' },
+      { name: '$justify',   default: 'flex-start', values: 'flex-start | center | flex-end | space-between | space-around' },
+      { name: '$gap',       default: '0',        values: 'qualquer valor de espaçamento' },
+      { name: '$wrap',      default: 'nowrap',   values: 'nowrap | wrap | wrap-reverse' },
+    ],
+    example: `@include flex(row, center, space-between, fluid(16));`,
+  },
+  {
+    name: 'center',
+    signature: '@include center($axis)',
+    desc: 'Centraliza o conteúdo via flexbox no eixo indicado.',
+    params: [
+      { name: '$axis', default: 'both', values: 'both | x | y' },
+    ],
+    example: `// Centralizar em ambos os eixos
+@include center;
+
+// Apenas horizontalmente
+@include center(x);
+
+// Apenas verticalmente
+@include center(y);`,
+  },
+  {
+    name: 'center-absolute',
+    signature: '@include center-absolute',
+    desc: 'Centraliza absolutamente um elemento em relação ao seu pai com position: absolute.',
+    params: [],
+    example: `.overlay__spinner {
+  position: relative; // no pai
+
+  .spinner {
+    @include center-absolute;
+  }
+}`,
+  },
+  {
+    name: 'media-up',
+    signature: '@include media-up($breakpoint)',
+    desc: 'Aplica estilos a partir de um breakpoint mínimo (mobile-first).',
+    params: [
+      { name: '$breakpoint', default: '—', values: '1xs | sm | md | lg | 1xl' },
+    ],
+    example: `.sidebar {
+  display: none;
+
+  @include media-up(md) {
+    display: block;
+  }
+}`,
+  },
+  {
+    name: 'media-down',
+    signature: '@include media-down($breakpoint)',
+    desc: 'Aplica estilos abaixo de um breakpoint máximo.',
+    params: [
+      { name: '$breakpoint', default: '—', values: '1xs | sm | md | lg | 1xl' },
+    ],
+    example: `.nav__menu {
+  @include media-down(sm) {
+    display: none;
+  }
+}`,
+  },
+  {
+    name: 'states',
+    signature: '@include states($variant, $focus-visible, $focus?)',
+    desc: 'Aplica estados interativos completos: disabled, hover, active e focus-visible. Ideal para botões e controles interativos.',
+    params: [
+      { name: '$variant',       default: '—', values: 'primary | secondary | danger | success | neutral' },
+      { name: '$focus-visible', default: '—', values: 'primary | secondary | danger | success | neutral' },
+      { name: '$focus',         default: 'null', values: 'primary | secondary | danger | success | neutral' },
+    ],
+    example: `.btn--primary {
+  @include states(primary, primary);
+}
+
+.btn--danger {
+  @include states(danger, danger);
+}`,
+  },
+  {
+    name: 'disabled',
+    signature: '@include disabled',
+    desc: 'Aplica apenas os estilos de estado desabilitado (cursor, opacidade, text-decoration). Use quando não precisar dos outros estados do mixin states().',
+    params: [],
+    example: `.link {
+  @include disabled;
+}`,
+  },
+  {
+    name: 'focus-ring',
+    signature: '@include focus-ring($variant)',
+    desc: 'Aplica o box-shadow de foco visível ao :focus-visible do elemento.',
+    params: [
+      { name: '$variant', default: '—', values: 'primary | secondary | danger | success | neutral' },
+    ],
+    example: `.input {
+  @include focus-ring(primary);
+}`,
+  },
+  {
+    name: 'sr-only',
+    signature: '@include sr-only',
+    desc: 'Esconde visualmente o elemento mas mantém acessível para leitores de tela. Equivalente ao utilitário sr-only do Tailwind.',
+    params: [],
+    example: `.label--hidden {
+  @include sr-only;
+}`,
+  },
+  {
+    name: 'no-select',
+    signature: '@include no-select',
+    desc: 'Desabilita a seleção de texto com user-select: none.',
+    params: [],
+    example: `.btn {
+  @include no-select;
+}`,
+  },
+  {
+    name: 'font-scale',
+    signature: '@include font-scale($scale-name)',
+    desc: 'Aplica uma escala tipográfica completa (font, size, weight, line-height, case) em uma única chamada.',
+    params: [
+      { name: '$scale-name', default: '—', values: 'display | title | headline | subtitle | block-title | subheadline | overtitle | body--lg | body--md | body--sm' },
+    ],
+    example: `.page-title {
+  @include font-scale(title);
+}
+
+.section-header {
+  @include font-scale(headline);
+}
+
+.caption {
+  @include font-scale(body--sm);
+}`,
+  },
+];
+
+# Mixins
+
+Mixins SCSS definidos em `packages/styles/src/utilities/_mixins.scss`. Encapsulam padrões recorrentes de CSS para reduzir repetição e garantir consistência entre componentes.
+
+```scss
+// No arquivo de componente
+@use '../utilities/mixins' as *;
+// ou junto com functions:
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+```
+
+---
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+  {mixins.map(({ name, signature, desc, params, example }) => (
+    <div key={name} style={{
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '8px',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        padding: '14px 16px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        borderBottom: params.length > 0 || example ? '1px solid var(--lui-color-neutral-border-subtle)' : 'none',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '4px' }}>
+          <code style={{ fontSize: '13px', fontWeight: '700' }}>@include {name}</code>
+        </div>
+        <p style={{ margin: '0', fontSize: '13px', color: 'var(--lui-color-neutral-text-body)' }}>{desc}</p>
+        {params.length > 0 && (
+          <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            {params.map(p => (
+              <div key={p.name} style={{ display: 'grid', gridTemplateColumns: '140px 80px 1fr', gap: '8px', fontSize: '12px', alignItems: 'start' }}>
+                <code style={{ color: 'var(--lui-color-neutral-text-body)' }}>{p.name}</code>
+                <span style={{ color: 'var(--lui-color-neutral-text-caption)', fontVariantNumeric: 'tabular-nums' }}>
+                  {p.default !== '—' ? `default: ${p.default}` : '(obrigatório)'}
+                </span>
+                <span style={{ color: 'var(--lui-color-neutral-text-caption)' }}>{p.values}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      {example && (
+        <pre style={{
+          margin: 0,
+          padding: '14px 16px',
+          background: 'var(--lui-color-neutral-background-container)',
+          fontSize: '12px',
+          lineHeight: '1.6',
+          overflowX: 'auto',
+          color: 'var(--lui-color-neutral-text-body)',
+          fontFamily: 'monospace',
+        }}>{example}</pre>
+      )}
+    </div>
+  ))}
+</div>
+
+---
+
+## Breakpoints de referência
+
+Os mixins `media-up()` e `media-down()` usam internamente a função `breakpoint()`:
+
+| Nome  | Largura |
+|-------|---------|
+| `1xs` | 320px   |
+| `sm`  | 768px   |
+| `md`  | 1024px  |
+| `lg`  | 1280px  |
+| `1xl` | 1440px  |
+
+---
+
+## Escalas tipográficas para `font-scale()`
+
+| Nome          | Família  | Tamanho | Peso      | Case      |
+|---------------|----------|---------|-----------|-----------|
+| `display`     | heading  | 3xl     | regular   | none      |
+| `title`       | heading  | 2xl     | bold      | none      |
+| `headline`    | heading  | 1xl     | semibold  | none      |
+| `subtitle`    | heading  | lg      | regular   | none      |
+| `block-title` | heading  | md      | medium    | none      |
+| `subheadline` | heading  | sm      | regular   | none      |
+| `overtitle`   | heading  | 3xs     | medium    | uppercase |
+| `body--lg`    | body     | 1xs     | regular   | none      |
+| `body--md`    | body     | 2xs     | regular   | none      |
+| `body--sm`    | body     | 3xs     | regular   | none      |

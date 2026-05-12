@@ -11,15 +11,17 @@ const preview = {
     options: {
       storySort: {
         order: [
-          'Get started', [
-            'Welcome',
-            'Designers',
-            'Developers',
-            'Changelog'
-          ],
+          'Get started',
+          ['Welcome', 'Designers', 'Developers', 'Changelog'],
           'Foundations',
-          'Components'
-        ]
+          'Actionable',
+          'Navigation',
+          'Form and options',
+          'Content',
+          'Miscellaneous',
+          'Utilities',
+          ['Functions', 'Mixins', 'Flex'],
+        ],
       },
     },
 
@@ -47,9 +49,7 @@ const preview = {
       defaultValue: 'lets-ui',
       toolbar: {
         icon: 'circlehollow',
-        items: [
-          { value: 'lets-ui', title: "Let's UI" },
-        ],
+        items: [{ value: 'lets-ui', title: "Let's UI" }],
       },
     },
   },

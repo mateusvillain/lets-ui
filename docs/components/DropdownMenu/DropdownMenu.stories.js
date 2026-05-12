@@ -1,9 +1,9 @@
+import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
-import 'lets-ui-icons/dist/lets-ui-icons.css';
 
 export default {
-  title: 'Components/Dropdown Menu',
+  title: 'Actionable/Dropdown Menu',
   parameters: {
     docs: {
       description: {

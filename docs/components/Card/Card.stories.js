@@ -3,7 +3,7 @@ import '../../../packages/styles/dist/letsui.css';
 import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
-  title: 'Components/Card',
+  title: 'Content/Card',
   argTypes: {
     title: { control: 'text' },
     content: { control: 'text' },

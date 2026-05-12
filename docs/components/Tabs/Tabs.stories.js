@@ -2,7 +2,7 @@ import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
 
 export default {
-  title: 'Components/Tabs',
+  title: 'Navigation/Tabs',
   parameters: {
     docs: {
       description: {

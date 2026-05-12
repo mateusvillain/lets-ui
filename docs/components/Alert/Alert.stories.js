@@ -1,10 +1,10 @@
+import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
-import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
-  title: 'Components/Alert',
+  title: 'Content/Alert',
   argTypes: {
     variant: {
       control: { type: 'select' },
