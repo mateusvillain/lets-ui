@@ -4,7 +4,7 @@ import '@lets-ui/styles';
 import 'lets-ui-icons/dist/lets-ui-icons.css';
 ---
 
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,7 +12,56 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
     <style>
       body {
         padding: 24px;
-        background: #f3f4f6;
+        padding-top: 80px;
+        background: var(--lui-color-neutral-background-surface);
+      }
+
+      .theme-toolbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 12px 24px;
+        background: var(--lui-color-neutral-background-surface);
+        border-bottom: 1px solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .theme-segment {
+        display: flex;
+        border: 1px solid var(--lui-color-neutral-border-default);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .theme-segment__btn {
+        padding: 6px 14px;
+        font-size: 13px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-weight: 500;
+        background: transparent;
+        color: var(--lui-color-neutral-text-body);
+        border: none;
+        border-right: 1px solid var(--lui-color-neutral-border-default);
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .theme-segment__btn:last-child {
+        border-right: none;
+      }
+
+      .theme-segment__btn:hover {
+        background: var(--lui-color-neutral-background-container);
+      }
+
+      .theme-segment__btn[aria-pressed='true'] {
+        background: var(--lui-color-neutral-background-overlay);
+        color: var(--lui-color-neutral-text-inverse);
       }
 
       .section-container {
@@ -42,6 +91,14 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
     </style>
   </head>
   <body>
+    <header class="theme-toolbar">
+      <div class="theme-segment" role="group" aria-label="Tema">
+        <button class="theme-segment__btn" data-theme-value="light" aria-pressed="true">Light</button>
+        <button class="theme-segment__btn" data-theme-value="dark" aria-pressed="false">Dark</button>
+        <button class="theme-segment__btn" data-theme-value="system" aria-pressed="false">System</button>
+      </div>
+    </header>
+
     <section class="section-container">
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <div class="display lui-heading--color-heading">
@@ -985,5 +1042,34 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
         initUI();
       </script>
     </section>
+
+    <script>
+      const html = document.documentElement;
+      const buttons = document.querySelectorAll('[data-theme-value]');
+      const systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      let systemListener = null;
+
+      function applyTheme(value) {
+        if (value === 'system') {
+          html.setAttribute('data-theme', systemQuery.matches ? 'dark' : 'light');
+          systemListener = (e) => html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+          systemQuery.addEventListener('change', systemListener);
+        } else {
+          if (systemListener) {
+            systemQuery.removeEventListener('change', systemListener);
+            systemListener = null;
+          }
+          html.setAttribute('data-theme', value);
+        }
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+          btn.setAttribute('aria-pressed', 'true');
+          applyTheme(btn.dataset.themeValue);
+        });
+      });
+    </script>
   </body>
 </html>
