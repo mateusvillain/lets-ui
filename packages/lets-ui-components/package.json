@@ -45,6 +45,14 @@
     "./tooltip": "./src/components/tooltip.js",
     "./textarea": "./src/components/textarea.js"
   },
+  "peerDependencies": {
+    "lets-ui-icons": ">=0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "lets-ui-icons": {
+      "optional": false
+    }
+  },
   "publishConfig": {
     "access": "public"
   },

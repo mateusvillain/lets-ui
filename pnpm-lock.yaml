@@ -48,9 +48,6 @@ importers:
       '@storybook/html-vite':
         specifier: ^10.1.11
         version: 10.3.5(esbuild@0.27.7)(rollup@4.60.1)(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(vite@8.0.0-beta.16(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(sass@1.99.0)(yaml@2.8.3))
-      '@storybook/theming':
-        specifier: ^8.6.14
-        version: 8.6.14(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
       '@terrazzo/cli':
         specifier: ^2.0.0-beta.4
         version: 2.0.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(hono@4.12.12)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.99.0)
@@ -122,6 +119,10 @@ importers:
         version: 4.1.4(@types/node@25.5.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.0-beta.16(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(sass@1.99.0)(yaml@2.8.3))
 
   packages/lets-ui-components:
+    dependencies:
+      lets-ui-icons:
+        specifier: '>=0.1.0'
+        version: 0.1.0
     devDependencies:
       '@lets-ui/styles':
         specifier: workspace:*
@@ -1433,11 +1434,6 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       storybook: ^10.3.5
-
-  '@storybook/theming@8.6.14':
-    resolution: {integrity: sha512-r4y+LsiB37V5hzpQo+BM10PaCsp7YlZ0YcZzQP1OCkPlYXmUAFy2VvDKaFRpD8IeNPKug2u4iFm/laDEbs03dg==}
-    peerDependencies:
-      storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
 
   '@terrazzo/cli@2.0.0':
     resolution: {integrity: sha512-0MYaj8CMmKeWxzYcbb8iCh63aFdQ4uYMNYgeiqyKmxkpeDFGox9lzZITgSc1hBO4VTnape7PrMcRE3QUy3u7bA==}
@@ -5682,10 +5678,6 @@ snapshots:
     dependencies:
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
-      storybook: 10.3.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-
-  '@storybook/theming@8.6.14(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))':
-    dependencies:
       storybook: 10.3.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
 
   '@terrazzo/cli@2.0.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(hono@4.12.12)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.99.0)':
