@@ -1,0 +1,5 @@
+@use 'packages/styles/src/components/textarea' as *;
+
+:host {
+  display: block;
+}

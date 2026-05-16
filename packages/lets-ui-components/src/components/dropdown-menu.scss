@@ -1,0 +1,5 @@
+@use 'packages/styles/src/components/dropdown-menu' as *;
+
+:host {
+  display: inline-block;
+}
