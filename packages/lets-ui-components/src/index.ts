@@ -1,31 +1,31 @@
-import { LuiAlert } from './components/alert.js';
-import { LuiBody } from './components/body.js';
-import { LuiImage } from './components/image.js';
-import { LuiDrawer } from './components/drawer.js';
-import { LuiHeading } from './components/heading.js';
-import { LuiTabs, LuiTab } from './components/tabs.js';
-import { LuiDivider } from './components/divider.js';
+import { LuiAlert } from './components/alert/alert.js';
+import { LuiBody } from './components/body/body.js';
+import { LuiImage } from './components/image/image.js';
+import { LuiDrawer } from './components/drawer/drawer.js';
+import { LuiHeading } from './components/heading/heading.js';
+import { LuiTabs, LuiTab } from './components/tabs/tabs.js';
+import { LuiDivider } from './components/divider/divider.js';
 import {
   LuiDropdownMenu,
   LuiMenuItem,
   LuiMenuDivider,
-} from './components/dropdown-menu.js';
-import { LuiBreadcrumb } from './components/breadcrumb.js';
-import { LuiBreadcrumbItem } from './components/breadcrumb-item.js';
-import { LuiButton } from './components/button.js';
-import { LuiCard } from './components/card.js';
-import { LuiCheckbox } from './components/checkbox.js';
-import { LuiRadio } from './components/radio.js';
-import { LuiSwitch } from './components/switch.js';
-import { LuiIconButton } from './components/icon-button.js';
-import { LuiInput } from './components/input.js';
-import { LuiLink } from './components/link.js';
-import { LuiModal } from './components/modal.js';
-import { LuiNativeSelect, LuiSelect } from './components/select.js';
-import { LuiShortcut } from './components/shortcut.js';
-import { LuiTag } from './components/tag.js';
-import { LuiTextarea } from './components/textarea.js';
-import { LuiTooltip } from './components/tooltip.js';
+} from './components/dropdown-menu/dropdown-menu.js';
+import { LuiBreadcrumb } from './components/breadcrumb/breadcrumb.js';
+import { LuiBreadcrumbItem } from './components/breadcrumb-item/breadcrumb-item.js';
+import { LuiButton } from './components/button/button.js';
+import { LuiCard } from './components/card/card.js';
+import { LuiCheckbox } from './components/checkbox/checkbox.js';
+import { LuiRadio } from './components/radio/radio.js';
+import { LuiSwitch } from './components/switch/switch.js';
+import { LuiIconButton } from './components/icon-button/icon-button.js';
+import { LuiInput } from './components/input/input.js';
+import { LuiLink } from './components/link/link.js';
+import { LuiModal } from './components/modal/modal.js';
+import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
+import { LuiShortcut } from './components/shortcut/shortcut.js';
+import { LuiTag } from './components/tag/tag.js';
+import { LuiTextarea } from './components/textarea/textarea.js';
+import { LuiTooltip } from './components/tooltip/tooltip.js';
 
 function define(name: string, elementClass: CustomElementConstructor) {
   if (!customElements.get(name)) {
