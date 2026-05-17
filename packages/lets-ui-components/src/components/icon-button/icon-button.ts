@@ -1,10 +1,10 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import styles from './icon-button.scss?inline';
-import iconStyles from 'lets-ui-icons/dist/lets-ui-icons.css?inline';
+import { iconCss } from '../../styles/icon-styles.js';
 
 export class LuiIconButton extends LitElement {
-  static styles = [unsafeCSS(styles), unsafeCSS(iconStyles)];
+  static styles = [unsafeCSS(styles), iconCss];
 
   @property() size = 'md';
   @property() icon = 'x';

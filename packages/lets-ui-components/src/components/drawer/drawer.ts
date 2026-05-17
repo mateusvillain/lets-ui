@@ -2,10 +2,10 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './drawer.scss?inline';
-import iconStyles from 'lets-ui-icons/dist/lets-ui-icons.css?inline';
+import { iconCss } from '../../styles/icon-styles.js';
 
 export class LuiDrawer extends LitElement {
-  static styles = [unsafeCSS(styles), unsafeCSS(iconStyles)];
+  static styles = [unsafeCSS(styles), iconCss];
 
   @property() title = 'Drawer title';
   @property() size = 'md';
