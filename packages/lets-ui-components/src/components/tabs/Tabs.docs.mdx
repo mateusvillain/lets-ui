@@ -1,0 +1,33 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TabsStories from './Tabs.stories';
+
+<Meta of={TabsStories} />
+
+# Tabs
+
+Componente de navegação por abas. Suporta dois estilos visuais — **Line** (indicador de linha) e **Card** (segmento fechado) — e a prop `expand` para ocupar a largura total do contêiner. Acessível com navegação por teclado (← → Home End).
+
+<Canvas of={TabsStories.Default} />
+<Controls of={TabsStories.Default} />
+
+## Variantes
+
+### Line
+
+<Canvas of={TabsStories.Line} />
+
+### Card
+
+<Canvas of={TabsStories.Card} />
+
+### Line — expand
+
+<Canvas of={TabsStories.LineExpand} />
+
+### Card — expand
+
+<Canvas of={TabsStories.CardExpand} />
+
+## Com aba desabilitada
+
+<Canvas of={TabsStories.WithDisabledTab} />
