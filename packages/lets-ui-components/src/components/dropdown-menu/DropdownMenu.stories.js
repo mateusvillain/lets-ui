@@ -91,15 +91,3 @@ export const WithDisabledItem = () => `
     </lui-dropdown-menu>
   </div>
 `;
-
-export const TriggerWithIconButton = () => `
-  <div style="margin-bottom: 160px;">
-    <lui-dropdown-menu open>
-      <lui-icon-button slot="trigger" icon="dots-three" size="md" aria-label="Mais opções"></lui-icon-button>
-      <lui-menu-item slot="items" label="Renomear"></lui-menu-item>
-      <lui-menu-item slot="items" label="Mover"></lui-menu-item>
-      <lui-menu-divider slot="items"></lui-menu-divider>
-      <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
-    </lui-dropdown-menu>
-  </div>
-`;
