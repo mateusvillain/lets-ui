@@ -1,0 +1,41 @@
+import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as DropdownMenuStories from './DropdownMenu.stories';
+
+<Meta of={DropdownMenuStories} />
+
+# Dropdown Menu
+
+Menu contextual flutuante que agrupa ações relacionadas a um elemento ou contexto. O trigger é livre — qualquer botão, icon-button ou link pode abrir o menu, sem acoplamento ao componente.
+
+<Canvas of={DropdownMenuStories.Default} />
+<Controls of={DropdownMenuStories.Default} />
+
+## Shortcut
+
+Use quando as ações possuem atalhos de teclado conhecidos pelos usuários. O shortcut é renderizado com as teclas alinhadas à direita do item.
+
+<Canvas of={DropdownMenuStories.WithShortcuts} />
+
+## Submenu
+
+Use para agrupar ações relacionadas em um segundo nível de navegação. O submenu abre ao passar o mouse ou focar no item pai — evite mais de um nível de aninhamento.
+
+<Canvas of={DropdownMenuStories.WithSubmenu} />
+
+## Divisor
+
+Use divisores para separar visualmente grupos de ações com propósitos distintos dentro do mesmo menu.
+
+<Canvas of={DropdownMenuStories.WithDivider} />
+
+## Item desabilitado
+
+Use para indicar ações temporariamente indisponíveis sem remover a opção da interface.
+
+<Canvas of={DropdownMenuStories.WithDisabledItem} />
+
+## Trigger com icon-button
+
+O trigger pode ser qualquer elemento interativo. Use icon-button quando o contexto for compacto ou inline (ex.: linhas de tabela, cards).
+
+<Canvas of={DropdownMenuStories.TriggerWithIconButton} />

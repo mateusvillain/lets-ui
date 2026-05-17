@@ -1,0 +1,5 @@
+@use 'packages/styles/src/components/tag' as *;
+
+:host {
+  display: inline-flex;
+}

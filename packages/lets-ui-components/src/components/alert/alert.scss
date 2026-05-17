@@ -1,0 +1,6 @@
+@use 'packages/styles/src/components/alert' as *;
+@use 'packages/styles/src/foundations/typography' as *;
+
+:host {
+  display: block;
+}

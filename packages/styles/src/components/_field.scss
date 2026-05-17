@@ -145,6 +145,9 @@ $size: (
 
   .#{$block}__optional,
   .#{$block}__message {
+    margin: 0;
+    padding: 0;
+
     @include font-scale(map.get($props, helper));
   }
 }

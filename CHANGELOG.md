@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.2.0
+
+### Added
+
+- Migrate all Web Components from Vanilla JS to Lit + TypeScript with per-component shadow DOM styles in [PR #43](https://github.com/mateusvillain/lets-ui/pull/43)
+
+### Changed
+
+- Add Renovate configuration by @mateusvillain in [PR #10](https://github.com/mateusvillain/lets-ui/pull/10)
+- Centralize `display: contents;` utility into `_host.scss` by @mateusvillain in [PR #32](https://github.com/mateusvillain/lets-ui/pull/32)
+
+### Fixed
+
+- Fix Tooltip Storybook stories by @mateusvillain in [PR #34](https://github.com/mateusvillain/lets-ui/pull/34)
+- Fix Modal Storybook stories and docs page by @mateusvillain in [PR #36](https://github.com/mateusvillain/lets-ui/pull/36)
+- Remove merge conflict markers by @mateusvillain in [PR #38](https://github.com/mateusvillain/lets-ui/pull/38)
+
+## v1.1.1
+
+### Fixed
+
+- Fix color mode switching in [PR #40](https://github.com/mateusvillain/lets-ui/pull/40)
+- Fix color contrast in light and dark mode in [PR #40](https://github.com/mateusvillain/lets-ui/pull/40)
+
 ## v1.1.0
 
 ### Added

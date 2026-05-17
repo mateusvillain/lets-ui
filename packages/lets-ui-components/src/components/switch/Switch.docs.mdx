@@ -1,0 +1,33 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SwitchStories from './Switch.stories';
+
+<Meta of={SwitchStories} />
+
+# Switch
+
+Controle de alternância binária (ligado/desligado). Suporta quatro tamanhos, estado desabilitado e label associada via atributo `label`.
+
+<Canvas of={SwitchStories.Default} />
+<Controls of={SwitchStories.Default} />
+
+## Estados
+
+### Ativado
+
+<Canvas of={SwitchStories.Checked} />
+
+### Tamanho médio
+
+<Canvas of={SwitchStories.Small} />
+
+### Desabilitado
+
+<Canvas of={SwitchStories.Disabled} />
+
+### Desabilitado e ativado
+
+<Canvas of={SwitchStories.DisabledChecked} />
+
+## Grupo
+
+<Canvas of={SwitchStories.Group} />

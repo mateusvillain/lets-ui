@@ -87,6 +87,7 @@ lui-image[fill]:not([fill='false']) {
 // figure wrapper
 .img-figure {
   display: inline-block;
+  margin: 0;
 
   &--fill {
     display: block;
