@@ -19,8 +19,8 @@
 
   &__icon {
     flex-shrink: 0;
-    font-size: fluid(24);
-    font-style: normal;
+    width: fluid(24);
+    height: fluid(24);
   }
 
   &__text {
@@ -52,7 +52,7 @@
     &.alert--#{$key} {
       border: width(2) stroke(#{$key}) solid;
 
-      & i.alert__icon {
+      & .alert__icon {
         color: icon(#{$key});
       }
     }

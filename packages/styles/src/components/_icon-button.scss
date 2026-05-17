@@ -33,7 +33,7 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
   z-index: 0;
   background-color: bg(surface, neutral);
 
-  i {
+  ::slotted(*) {
     color: icon(neutral);
   }
 
@@ -52,8 +52,9 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
       max-height: $size-lg !important;
       padding: $gap-lg !important;
 
-      > i {
-        font-size: 1.5rem;
+      ::slotted(svg) {
+        width: 1.5rem;
+        height: 1.5rem;
       }
     }
 
@@ -62,8 +63,9 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
       max-height: $size-md !important;
       padding: $gap-md !important;
 
-      > i {
-        font-size: 1rem;
+      ::slotted(svg) {
+        width: 1rem;
+        height: 1rem;
       }
     }
   }

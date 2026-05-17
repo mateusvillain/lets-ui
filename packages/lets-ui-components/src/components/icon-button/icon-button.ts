@@ -1,14 +1,11 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import styles from './icon-button.scss?inline';
-import { iconCss } from '../../styles/icon-styles.js';
 
 export class LuiIconButton extends LitElement {
-  static styles = [unsafeCSS(styles), iconCss];
+  static styles = unsafeCSS(styles);
 
   @property() size = 'md';
-  @property() icon = 'x';
-  @property() weight = 'outline';
   @property({ type: Boolean }) disabled = false;
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
@@ -22,16 +19,14 @@ export class LuiIconButton extends LitElement {
   }
 
   render() {
-    const ariaLabel = this.ariaLabel || this.icon;
-    const weightClass = this.weight === 'solid' ? 'lui-solid' : 'lui';
     return html`
       <button
         class="icon-button icon-button--${this._size}"
-        aria-label="${ariaLabel}"
+        aria-label="${this.ariaLabel}"
         ?disabled="${this.disabled}"
         ?aria-disabled="${this.disabled}"
       >
-        <i class="${weightClass} lui-${this.icon}" aria-hidden="true"></i>
+        <slot></slot>
       </button>
     `;
   }
