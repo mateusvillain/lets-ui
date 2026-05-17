@@ -2,10 +2,9 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './modal.scss?inline';
-import { iconCss } from '../../styles/icon-styles.js';
 
 export class LuiModal extends LitElement {
-  static styles = [unsafeCSS(styles), iconCss];
+  static styles = unsafeCSS(styles);
 
   @property() title = 'Modal title';
   @property() size = 'md';
@@ -184,14 +183,12 @@ export class LuiModal extends LitElement {
             <span id="${this._baseId}-title" class="modal__title"
               >${this.title}</span
             >
-            <button
-              type="button"
-              class="icon-button icon-button--lg"
+            <lui-icon-button
+              icon="x"
+              size="lg"
               aria-label="Fechar modal"
               @click="${this.closeModal}"
-            >
-              <i class="lui lui-x" aria-hidden="true"></i>
-            </button>
+            ></lui-icon-button>
           </div>
           <div id="${this._baseId}-body" class="modal__body">
             <slot></slot>

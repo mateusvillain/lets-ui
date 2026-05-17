@@ -2,10 +2,9 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './drawer.scss?inline';
-import { iconCss } from '../../styles/icon-styles.js';
 
 export class LuiDrawer extends LitElement {
-  static styles = [unsafeCSS(styles), iconCss];
+  static styles = unsafeCSS(styles);
 
   @property() title = 'Drawer title';
   @property() size = 'md';
@@ -208,14 +207,12 @@ export class LuiDrawer extends LitElement {
           <span id="${this._baseId}-title" class="drawer__title"
             >${this.title}</span
           >
-          <button
-            type="button"
-            class="icon-button icon-button--lg"
+          <lui-icon-button
+            icon="x"
+            size="lg"
             aria-label="Fechar drawer"
             @click="${this.closeDrawer}"
-          >
-            <i class="lui lui-x" aria-hidden="true"></i>
-          </button>
+          ></lui-icon-button>
         </div>
 
         <div class="drawer__body">
