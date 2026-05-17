@@ -11,22 +11,34 @@ const tokensScssPath = resolve(
 // Intercept lets-ui-icons CSS imports and serve them as virtual modules so
 // Rollup's preserveModules does not output them under dist/node_modules.
 function inlineIconsCssPlugin(): Plugin {
-  const VIRTUAL_ID = '\0virtual:lets-ui-icons-css';
+  const RESOLVED_ID = resolve(__dirname, 'src/styles/icon-css.js');
+  const cssPath = resolve(
+    __dirname,
+    'node_modules/lets-ui-icons/dist/lets-ui-icons.css'
+  );
+  const iconsDir = resolve(__dirname, 'node_modules/lets-ui-icons/dist/icons');
   return {
     name: 'inline-icons-css',
     enforce: 'pre',
     resolveId(source) {
       if (source.startsWith('lets-ui-icons/dist/lets-ui-icons.css')) {
-        return VIRTUAL_ID;
+        return RESOLVED_ID;
       }
     },
     load(id) {
-      if (id === VIRTUAL_ID) {
-        const cssPath = resolve(
-          __dirname,
-          'node_modules/lets-ui-icons/dist/lets-ui-icons.css'
+      if (id === RESOLVED_ID) {
+        // Replace relative url('icons/x.svg') with base64 data URIs so the
+        // icons resolve correctly when the CSS is injected into shadow DOM.
+        const css = readFileSync(cssPath, 'utf-8').replace(
+          /url\('icons\/([^']+)'\)/g,
+          (_, filename) => {
+            const b64 = Buffer.from(
+              readFileSync(resolve(iconsDir, filename), 'utf-8')
+            ).toString('base64');
+            return `url('data:image/svg+xml;base64,${b64}')`;
+          }
         );
-        return `export default ${JSON.stringify(readFileSync(cssPath, 'utf-8'))}`;
+        return `export default ${JSON.stringify(css)}`;
       }
     },
   };
