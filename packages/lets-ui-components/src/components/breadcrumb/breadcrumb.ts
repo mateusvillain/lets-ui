@@ -5,8 +5,6 @@ import styles from './breadcrumb.scss?inline';
 export class LuiBreadcrumb extends LitElement {
   static styles = unsafeCSS(styles);
 
-  @property() items = 'Item 1,Item 2,Item 3';
-  @property() label = 'Page';
   @property({ attribute: 'aria-label' }) ariaLabel = 'Breadcrumb';
 
   @state() private _slottedItems: Array<{
@@ -29,50 +27,28 @@ export class LuiBreadcrumb extends LitElement {
   }
 
   render() {
-    if (this._slottedItems.length > 0) {
-      return html`
-        <nav aria-label="${this.ariaLabel}">
-          <ul class="breadcrumb" role="list">
-            ${this._slottedItems.map((item) => {
-              if (!item.active && item.href) {
-                return html`<li>
-                  <a
-                    class="link"
-                    href="${item.href}"
-                    .innerHTML="${item.label}"
-                  ></a>
-                </li>`;
-              }
-              if (item.active) {
-                return html`<li
-                  aria-current="page"
-                  .innerHTML="${item.label}"
-                ></li>`;
-              }
-              return html`<li .innerHTML="${item.label}"></li>`;
-            })}
-          </ul>
-        </nav>
-        <slot
-          style="display:none"
-          @slotchange="${this._handleSlotChange}"
-        ></slot>
-      `;
-    }
-
-    const parsedItems = this.items
-      .split(',')
-      .map((i) => i.trim())
-      .filter(Boolean);
-
     return html`
       <nav aria-label="${this.ariaLabel}">
-        <ul class="breadcrumb" role="list">
-          ${parsedItems.map(
-            (item) => html`<li><a class="link">${item}</a></li>`
-          )}
-          <li aria-current="page">${this.label}</li>
-        </ul>
+        <ol class="breadcrumb">
+          ${this._slottedItems.map((item) => {
+            if (!item.active && item.href) {
+              return html`<li>
+                <a
+                  class="link"
+                  href="${item.href}"
+                  .innerHTML="${item.label}"
+                ></a>
+              </li>`;
+            }
+            if (item.active) {
+              return html`<li
+                aria-current="page"
+                .innerHTML="${item.label}"
+              ></li>`;
+            }
+            return html`<li .innerHTML="${item.label}"></li>`;
+          })}
+        </ol>
       </nav>
       <slot style="display:none" @slotchange="${this._handleSlotChange}"></slot>
     `;

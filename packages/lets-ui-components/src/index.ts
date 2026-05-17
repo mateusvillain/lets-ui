@@ -11,7 +11,7 @@ import {
   LuiMenuDivider,
 } from './components/dropdown-menu/dropdown-menu.js';
 import { LuiBreadcrumb } from './components/breadcrumb/breadcrumb.js';
-import { LuiBreadcrumbItem } from './components/breadcrumb-item/breadcrumb-item.js';
+import { LuiBreadcrumbItem } from './components/breadcrumb/breadcrumb-item.js';
 import { LuiButton } from './components/button/button.js';
 import { LuiCard } from './components/card/card.js';
 import { LuiCheckbox } from './components/checkbox/checkbox.js';
