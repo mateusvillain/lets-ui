@@ -20,12 +20,16 @@
   &__icon {
     flex-shrink: 0;
     font-size: fluid(24);
+    font-style: normal;
   }
 
   &__text {
     width: 100%;
 
     p {
+      margin: 0;
+      padding: 0;
+
       &:first-child {
         margin-bottom: fluid(2);
       }
