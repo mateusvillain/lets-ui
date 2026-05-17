@@ -2,9 +2,10 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './modal.scss?inline';
+import iconStyles from 'lets-ui-icons/dist/lets-ui-icons.css?inline';
 
 export class LuiModal extends LitElement {
-  static styles = unsafeCSS(styles);
+  static styles = [unsafeCSS(styles), unsafeCSS(iconStyles)];
 
   @property() title = 'Modal title';
   @property() size = 'md';

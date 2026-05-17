@@ -6,7 +6,12 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type { import('@storybook/html-vite').StorybookConfig } */
 const config = {
-  stories: ['../docs/**/*.mdx', '../docs/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: [
+    '../docs/**/*.mdx',
+    '../docs/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../packages/lets-ui-components/src/components/**/*.mdx',
+    '../packages/lets-ui-components/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+  ],
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',

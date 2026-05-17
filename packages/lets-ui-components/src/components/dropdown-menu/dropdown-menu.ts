@@ -18,30 +18,12 @@ interface MenuItemData {
   children: Element[];
 }
 
-function buildShortcutHtml(shortcut: string): string {
-  const keys = shortcut
-    .split(',')
-    .map((k) => k.trim())
-    .filter(Boolean);
-  if (keys.length === 0) return '';
-  const keysHtml = keys
-    .map((key, i) => {
-      const sep =
-        i < keys.length - 1
-          ? `<span class="shortcut__sep" aria-hidden="true">+</span>`
-          : '';
-      return `<kbd class="shortcut__key">${key}</kbd>${sep}`;
-    })
-    .join('');
-  return `<span class="menu-item__shortcut shortcut" aria-label="${keys.join(' + ')}" role="group">${keysHtml}</span>`;
-}
-
 function buildItemsHtml(items: Element[]): string {
   return Array.from(items)
     .filter((child) => ITEM_TAGS.has(child.tagName?.toLowerCase()))
     .map((child) => {
       if (DIVIDER_TAGS.has(child.tagName.toLowerCase())) {
-        return `<li role="separator" class="divider"></li>`;
+        return `<li role="separator"><lui-divider></lui-divider></li>`;
       }
       const label = child.getAttribute('label') ?? '';
       const shortcut = child.getAttribute('shortcut') ?? '';
@@ -59,7 +41,9 @@ function buildItemsHtml(items: Element[]): string {
       ]
         .filter(Boolean)
         .join(' ');
-      const shortcutHtml = shortcut ? buildShortcutHtml(shortcut) : '';
+      const shortcutHtml = shortcut
+        ? `<lui-shortcut keys="${shortcut}" class="menu-item__shortcut"></lui-shortcut>`
+        : '';
       const chevronHtml = hasSubmenu
         ? `<span class="menu-item__chevron" aria-hidden="true">${CHEVRON_RIGHT}</span>`
         : '';

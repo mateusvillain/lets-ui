@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import styles from './alert.scss?inline';
+import iconStyles from 'lets-ui-icons/dist/lets-ui-icons.css?inline';
 
 const VARIANT_ICONS: Record<string, string> = {
   success: 'check-circle',
@@ -10,7 +11,7 @@ const VARIANT_ICONS: Record<string, string> = {
 };
 
 export class LuiAlert extends LitElement {
-  static styles = unsafeCSS(styles);
+  static styles = [unsafeCSS(styles), unsafeCSS(iconStyles)];
 
   @property() variant = 'success';
   @property() title = '';
