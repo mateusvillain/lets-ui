@@ -23,8 +23,8 @@ const Template = ({ label, checked, disabled, size }) =>
     ${disabled ? 'disabled' : ''}
   ></lui-switch>`;
 
-export const Switch = Template.bind({});
-Switch.args = {
+export const Default = Template.bind({});
+Default.args = {
   label: 'Switch label',
   checked: false,
   disabled: false,
