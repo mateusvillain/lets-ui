@@ -1,6 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
-import { lockBodyScroll, unlockBodyScroll } from '../../internal.js';
+import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './drawer.scss?inline';
 
 export class LuiDrawer extends LitElement {
