@@ -1,4 +1,4 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as DropdownMenuStories from './DropdownMenu.stories';
 
 <Meta of={DropdownMenuStories} />
@@ -8,6 +8,7 @@ import * as DropdownMenuStories from './DropdownMenu.stories';
 Menu contextual flutuante que agrupa ações relacionadas a um elemento ou contexto. O trigger é livre — qualquer botão, icon-button ou link pode abrir o menu, sem acoplamento ao componente.
 
 <Canvas of={DropdownMenuStories.Default} />
+<Controls of={DropdownMenuStories.Default} />
 
 ## Shortcut
 

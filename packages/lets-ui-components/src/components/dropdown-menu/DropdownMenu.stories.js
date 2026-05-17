@@ -5,21 +5,17 @@ import '../../index.js';
 
 export default {
   title: 'Actionable/Dropdown Menu',
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'Menu contextual flutuante que agrupa ações relacionadas. O trigger é fornecido pelo próprio consumidor — qualquer elemento pode abrir o menu. Suporta atalhos de teclado, submenus aninhados e divisores de grupo.',
-      },
-    },
+  argTypes: {
+    label: { control: 'text' },
+    shortcut: { control: 'text' },
   },
 };
 
-export const Default = () => `
+const Template = ({ label, shortcut }) => `
   <div style="margin-bottom: 220px;">
     <lui-dropdown-menu open>
-      <lui-button slot="trigger" variant="secondary" size="md" label="Opções"></lui-button>
-      <lui-menu-item slot="items" label="Editar" shortcut="⌘,E"></lui-menu-item>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Abrir"></lui-button>
+      <lui-menu-item slot="items" label="${label}" shortcut="${shortcut}"></lui-menu-item>
       <lui-menu-item slot="items" label="Duplicar" shortcut="⌘,D"></lui-menu-item>
       <lui-menu-divider slot="items"></lui-menu-divider>
       <lui-menu-item slot="items" label="Compartilhar">
@@ -31,6 +27,13 @@ export const Default = () => `
     </lui-dropdown-menu>
   </div>
 `;
+
+export const Default = Template.bind({});
+Default.parameters = { controls: { disable: true } };
+Default.args = {
+  label: 'Editar',
+  shortcut: '⌘,E',
+};
 
 export const WithShortcuts = () => `
   <div style="margin-bottom: 180px;">
