@@ -1,6 +1,7 @@
 import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
+import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
   title: 'Actionable/Dropdown Menu',
@@ -14,315 +15,89 @@ export default {
   },
 };
 
-const CHEVRON_RIGHT = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
 export const Default = () => `
-  <div class="dropdown-menu" style="margin-bottom: 220px;">
-    <button
-      class="btn btn--secondary btn--md"
-      type="button"
-      aria-haspopup="menu"
-      aria-expanded="true"
-      aria-controls="story-default-panel"
-    >
-      Opções
-    </button>
-    <ul id="story-default-panel" class="dropdown-menu__panel is-open" role="menu">
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Editar</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + E">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">E</kbd>
-          </span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Duplicar</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + D">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">D</kbd>
-          </span>
-        </button>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li role="presentation" class="menu-item--has-submenu">
-        <button class="menu-item" role="menuitem" type="button" aria-haspopup="menu">
-          <span class="menu-item__label">Compartilhar</span>
-          <span class="menu-item__chevron" aria-hidden="true">${CHEVRON_RIGHT}</span>
-        </button>
-        <ul class="dropdown-menu__panel" role="menu">
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">Por e-mail</span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">Copiar link</span>
-              <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + Shift + C">
-                <kbd class="shortcut__key">⌘</kbd>
-                <span class="shortcut__sep" aria-hidden="true">+</span>
-                <kbd class="shortcut__key">Shift</kbd>
-                <span class="shortcut__sep" aria-hidden="true">+</span>
-                <kbd class="shortcut__key">C</kbd>
-              </span>
-            </button>
-          </li>
-        </ul>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li role="presentation">
-        <button class="menu-item menu-item--danger" role="menuitem" type="button">
-          <span class="menu-item__label">Excluir</span>
-        </button>
-      </li>
-    </ul>
+  <div style="margin-bottom: 220px;">
+    <lui-dropdown-menu open>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Opções"></lui-button>
+      <lui-menu-item slot="items" label="Editar" shortcut="⌘,E"></lui-menu-item>
+      <lui-menu-item slot="items" label="Duplicar" shortcut="⌘,D"></lui-menu-item>
+      <lui-menu-divider slot="items"></lui-menu-divider>
+      <lui-menu-item slot="items" label="Compartilhar">
+        <lui-menu-item label="Por e-mail"></lui-menu-item>
+        <lui-menu-item label="Copiar link" shortcut="⌘,Shift,C"></lui-menu-item>
+      </lui-menu-item>
+      <lui-menu-divider slot="items"></lui-menu-divider>
+      <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
+    </lui-dropdown-menu>
   </div>
 `;
 
 export const WithShortcuts = () => `
-  <div class="dropdown-menu" style="margin-bottom: 180px;">
-    <button
-      class="btn btn--secondary btn--md"
-      type="button"
-      aria-haspopup="menu"
-      aria-expanded="true"
-    >
-      Arquivo
-    </button>
-    <ul class="dropdown-menu__panel is-open" role="menu">
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Novo arquivo</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + N">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">N</kbd>
-          </span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Abrir</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + O">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">O</kbd>
-          </span>
-        </button>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Salvar</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + S">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">S</kbd>
-          </span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Salvar como</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + Shift + S">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">Shift</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">S</kbd>
-          </span>
-        </button>
-      </li>
-    </ul>
+  <div style="margin-bottom: 180px;">
+    <lui-dropdown-menu open>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Arquivo"></lui-button>
+      <lui-menu-item slot="items" label="Novo arquivo" shortcut="⌘,N"></lui-menu-item>
+      <lui-menu-item slot="items" label="Abrir" shortcut="⌘,O"></lui-menu-item>
+      <lui-menu-divider slot="items"></lui-menu-divider>
+      <lui-menu-item slot="items" label="Salvar" shortcut="⌘,S"></lui-menu-item>
+      <lui-menu-item slot="items" label="Salvar como" shortcut="⌘,Shift,S"></lui-menu-item>
+    </lui-dropdown-menu>
   </div>
 `;
 
 export const WithSubmenu = () => `
-  <div class="dropdown-menu" style="margin-bottom: 160px;">
-    <button
-      class="btn btn--secondary btn--md"
-      type="button"
-      aria-haspopup="menu"
-      aria-expanded="true"
-    >
-      Mais opções
-    </button>
-    <ul class="dropdown-menu__panel is-open" role="menu">
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Renomear</span>
-        </button>
-      </li>
-      <li role="presentation" class="menu-item--has-submenu">
-        <button class="menu-item" role="menuitem" type="button" aria-haspopup="menu">
-          <span class="menu-item__label">Mover para</span>
-          <span class="menu-item__chevron" aria-hidden="true">${CHEVRON_RIGHT}</span>
-        </button>
-        <ul class="dropdown-menu__panel" role="menu">
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">Pasta raiz</span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">Arquivos</span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">Projetos</span>
-            </button>
-          </li>
-        </ul>
-      </li>
-      <li role="presentation" class="menu-item--has-submenu">
-        <button class="menu-item" role="menuitem" type="button" aria-haspopup="menu">
-          <span class="menu-item__label">Exportar como</span>
-          <span class="menu-item__chevron" aria-hidden="true">${CHEVRON_RIGHT}</span>
-        </button>
-        <ul class="dropdown-menu__panel" role="menu">
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">PDF</span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">PNG</span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button class="menu-item" role="menuitem" type="button">
-              <span class="menu-item__label">SVG</span>
-            </button>
-          </li>
-        </ul>
-      </li>
-    </ul>
+  <div style="margin-bottom: 160px;">
+    <lui-dropdown-menu open>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Mais opções"></lui-button>
+      <lui-menu-item slot="items" label="Renomear"></lui-menu-item>
+      <lui-menu-item slot="items" label="Mover para">
+        <lui-menu-item label="Pasta raiz"></lui-menu-item>
+        <lui-menu-item label="Arquivos"></lui-menu-item>
+        <lui-menu-item label="Projetos"></lui-menu-item>
+      </lui-menu-item>
+      <lui-menu-item slot="items" label="Exportar como">
+        <lui-menu-item label="PDF"></lui-menu-item>
+        <lui-menu-item label="PNG"></lui-menu-item>
+        <lui-menu-item label="SVG"></lui-menu-item>
+      </lui-menu-item>
+    </lui-dropdown-menu>
   </div>
 `;
 
 export const WithDivider = () => `
-  <div class="dropdown-menu" style="margin-bottom: 200px;">
-    <button
-      class="btn btn--secondary btn--md"
-      type="button"
-      aria-haspopup="menu"
-      aria-expanded="true"
-    >
-      Conta
-    </button>
-    <ul class="dropdown-menu__panel is-open" role="menu">
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Perfil</span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Configurações</span>
-        </button>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Ajuda</span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Novidades</span>
-        </button>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li role="presentation">
-        <button class="menu-item menu-item--danger" role="menuitem" type="button">
-          <span class="menu-item__label">Sair</span>
-        </button>
-      </li>
-    </ul>
+  <div style="margin-bottom: 200px;">
+    <lui-dropdown-menu open>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Conta"></lui-button>
+      <lui-menu-item slot="items" label="Perfil"></lui-menu-item>
+      <lui-menu-item slot="items" label="Configurações"></lui-menu-item>
+      <lui-menu-divider slot="items"></lui-menu-divider>
+      <lui-menu-item slot="items" label="Ajuda"></lui-menu-item>
+      <lui-menu-item slot="items" label="Novidades"></lui-menu-item>
+      <lui-menu-divider slot="items"></lui-menu-divider>
+      <lui-menu-item slot="items" label="Sair" variant="danger"></lui-menu-item>
+    </lui-dropdown-menu>
   </div>
 `;
 
 export const WithDisabledItem = () => `
-  <div class="dropdown-menu" style="margin-bottom: 140px;">
-    <button
-      class="btn btn--secondary btn--md"
-      type="button"
-      aria-haspopup="menu"
-      aria-expanded="true"
-    >
-      Editar
-    </button>
-    <ul class="dropdown-menu__panel is-open" role="menu">
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Copiar</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + C">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">C</kbd>
-          </span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button" disabled aria-disabled="true">
-          <span class="menu-item__label">Colar</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + V">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">V</kbd>
-          </span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button" disabled aria-disabled="true">
-          <span class="menu-item__label">Desfazer</span>
-          <span class="menu-item__shortcut shortcut" role="group" aria-label="⌘ + Z">
-            <kbd class="shortcut__key">⌘</kbd>
-            <span class="shortcut__sep" aria-hidden="true">+</span>
-            <kbd class="shortcut__key">Z</kbd>
-          </span>
-        </button>
-      </li>
-    </ul>
+  <div style="margin-bottom: 140px;">
+    <lui-dropdown-menu open>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Editar"></lui-button>
+      <lui-menu-item slot="items" label="Copiar" shortcut="⌘,C"></lui-menu-item>
+      <lui-menu-item slot="items" label="Colar" shortcut="⌘,V" disabled></lui-menu-item>
+      <lui-menu-item slot="items" label="Desfazer" shortcut="⌘,Z" disabled></lui-menu-item>
+    </lui-dropdown-menu>
   </div>
 `;
 
 export const TriggerWithIconButton = () => `
-  <div class="dropdown-menu" style="margin-bottom: 160px;">
-    <button
-      class="icon-button icon-button--md"
-      type="button"
-      aria-label="Mais opções"
-      aria-haspopup="menu"
-      aria-expanded="true"
-    >
-      <i class="lui lui-dots-three" aria-hidden="true"></i>
-    </button>
-    <ul class="dropdown-menu__panel is-open" role="menu">
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Renomear</span>
-        </button>
-      </li>
-      <li role="presentation">
-        <button class="menu-item" role="menuitem" type="button">
-          <span class="menu-item__label">Mover</span>
-        </button>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li role="presentation">
-        <button class="menu-item menu-item--danger" role="menuitem" type="button">
-          <span class="menu-item__label">Excluir</span>
-        </button>
-      </li>
-    </ul>
+  <div style="margin-bottom: 160px;">
+    <lui-dropdown-menu open>
+      <lui-icon-button slot="trigger" icon="dots-three" size="md" aria-label="Mais opções"></lui-icon-button>
+      <lui-menu-item slot="items" label="Renomear"></lui-menu-item>
+      <lui-menu-item slot="items" label="Mover"></lui-menu-item>
+      <lui-menu-divider slot="items"></lui-menu-divider>
+      <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
+    </lui-dropdown-menu>
   </div>
 `;

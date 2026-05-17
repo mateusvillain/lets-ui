@@ -6,7 +6,7 @@ export class LuiTag extends LitElement {
   static styles = unsafeCSS(styles);
 
   @property() label = 'Tag';
-  @property({ attribute: 'style' }) tagStyle = 'surface';
+  @property({ attribute: 'tag-style' }) tagStyle = 'surface';
   @property() variant = 'primary';
   @property() size = 'md';
   @property({ type: Boolean }) circle = false;

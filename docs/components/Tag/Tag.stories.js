@@ -1,48 +1,39 @@
 import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
+import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
   title: 'Content/Tag',
   tags: ['autodocs'],
   argTypes: {
-    label: {
-      control: 'text',
-    },
-    style: {
-      control: {
-        type: 'select',
-      },
+    label: { control: 'text' },
+    tagStyle: {
+      control: { type: 'select' },
       options: ['surface', 'container'],
     },
     variant: {
-      control: {
-        type: 'select',
-      },
+      control: { type: 'select' },
       options: ['primary', 'caution', 'danger', 'success', 'neutral'],
     },
     size: {
-      control: {
-        type: 'select',
-      },
+      control: { type: 'select' },
       options: ['lg', 'md', 'sm'],
     },
   },
 };
 
-const Template = ({ label, style, variant, size }) => {
-  const classes = [style && `tag--${style}-${variant}`, size && `tag--${size}`]
-    .filter(Boolean)
-    .join(' ');
-
-  return `
-    <div class="${classes}">${label}</div>
-  `;
-};
+const Template = ({ label, tagStyle, variant, size }) =>
+  `<lui-tag
+    label="${label}"
+    tag-style="${tagStyle}"
+    variant="${variant}"
+    size="${size}"
+  ></lui-tag>`;
 
 export const Primary = Template.bind({});
 Primary.args = {
   label: 'Tag',
-  style: 'surface',
+  tagStyle: 'surface',
   variant: 'primary',
   size: 'md',
 };
@@ -50,7 +41,7 @@ Primary.args = {
 export const Caution = Template.bind({});
 Caution.args = {
   label: 'Tag',
-  style: 'surface',
+  tagStyle: 'surface',
   variant: 'caution',
   size: 'md',
 };
@@ -58,7 +49,7 @@ Caution.args = {
 export const Danger = Template.bind({});
 Danger.args = {
   label: 'Tag',
-  style: 'surface',
+  tagStyle: 'surface',
   variant: 'danger',
   size: 'md',
 };
@@ -66,7 +57,7 @@ Danger.args = {
 export const Success = Template.bind({});
 Success.args = {
   label: 'Tag',
-  style: 'surface',
+  tagStyle: 'surface',
   variant: 'success',
   size: 'md',
 };
@@ -74,7 +65,7 @@ Success.args = {
 export const Neutral = Template.bind({});
 Neutral.args = {
   label: 'Tag',
-  style: 'surface',
+  tagStyle: 'surface',
   variant: 'neutral',
   size: 'md',
 };
@@ -82,7 +73,7 @@ Neutral.args = {
 export const SizeLg = Template.bind({});
 SizeLg.args = {
   label: 'Tag',
-  style: 'surface',
+  tagStyle: 'surface',
   variant: 'primary',
   size: 'lg',
 };
@@ -90,7 +81,7 @@ SizeLg.args = {
 export const SizeMd = Template.bind({});
 SizeMd.args = {
   label: 'Tag',
-  style: 'surface',
+  tagStyle: 'surface',
   variant: 'primary',
   size: 'md',
 };

@@ -1,42 +1,30 @@
 import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
+import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
   title: 'Actionable/Button',
-  // tags: ['autodocs'],
   argTypes: {
-    label: {
-      control: 'text',
-    },
+    label: { control: 'text' },
     variant: {
-      control: {
-        type: 'select',
-      },
+      control: { type: 'select' },
       options: ['primary', 'secondary', 'danger', 'success'],
     },
     size: {
-      control: {
-        type: 'select',
-      },
+      control: { type: 'select' },
       options: ['lg', 'md'],
     },
-    disabled: {
-      control: 'boolean',
-    },
+    disabled: { control: 'boolean' },
   },
 };
 
-const Template = ({ label, variant, size, disabled }) => {
-  const classes = ['btn', variant && `btn--${variant}`, size && `btn--${size}`]
-    .filter(Boolean)
-    .join(' ');
-
-  return `
-    <button class="${classes}" ${disabled ? 'disabled' : ''}>
-      ${label}
-    </button>
-  `;
-};
+const Template = ({ label, variant, size, disabled }) =>
+  `<lui-button
+    label="${label}"
+    variant="${variant}"
+    size="${size}"
+    ${disabled ? 'disabled' : ''}
+  ></lui-button>`;
 
 export const Button = Template.bind({});
 Button.args = {
@@ -46,18 +34,17 @@ Button.args = {
   disabled: false,
 };
 
-export const Primary = () => `
-  <button class="btn btn--primary btn--lg">Secondary Button</button>
-`;
+export const Primary = () =>
+  `<lui-button variant="primary" size="lg" label="Primary Button"></lui-button>`;
 
-export const Secondary = () => `
-  <button class="btn btn--secondary btn--lg">Secondary Button</button>
-`;
+export const Secondary = () =>
+  `<lui-button variant="secondary" size="lg" label="Secondary Button"></lui-button>`;
 
-export const Danger = () => `
-  <button class="btn btn--danger btn--lg">Danger Button</button>
-`;
+export const Danger = () =>
+  `<lui-button variant="danger" size="lg" label="Danger Button"></lui-button>`;
 
-export const Success = () => `
-  <button class="btn btn--success btn--lg">Success Button</button>
-`;
+export const Success = () =>
+  `<lui-button variant="success" size="lg" label="Success Button"></lui-button>`;
+
+export const Disabled = () =>
+  `<lui-button variant="primary" size="lg" label="Disabled Button" disabled></lui-button>`;

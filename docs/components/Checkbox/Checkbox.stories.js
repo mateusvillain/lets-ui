@@ -1,5 +1,6 @@
 import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
+import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
   title: 'Form and options/Checkbox',
@@ -14,16 +15,13 @@ export default {
   },
 };
 
-const Template = ({ label, checked, disabled, size }) => {
-  const sizeClass = size ? `checkbox--${size}` : '';
-
-  return `
-    <label class="checkbox ${sizeClass}">
-      <input type="checkbox" ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}>
-      <span>${label || ''}</span>
-    </label>
-  `;
-};
+const Template = ({ label, checked, disabled, size }) =>
+  `<lui-checkbox
+    label="${label ?? ''}"
+    size="${size}"
+    ${checked ? 'checked' : ''}
+    ${disabled ? 'disabled' : ''}
+  ></lui-checkbox>`;
 
 export const Checkbox = Template.bind({});
 Checkbox.args = {

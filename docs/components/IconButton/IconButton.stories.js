@@ -1,6 +1,7 @@
 import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../packages/styles/dist/letsui.css';
+import '../../../packages/lets-ui-components/src/index.js';
 
 export default {
   title: 'Actionable/Icon Button',
@@ -41,24 +42,17 @@ export default {
       control: { type: 'select' },
       options: ['outline', 'solid'],
     },
-    disabled: {
-      control: 'boolean',
-    },
+    disabled: { control: 'boolean' },
   },
 };
 
-const Template = ({ icon, size, weight, disabled }) => {
-  const weightClass = weight === 'solid' ? 'lui-solid' : 'lui';
-  return `
-    <button
-      class="icon-button icon-button--${size}"
-      aria-label="${icon}"
-      ${disabled ? 'disabled aria-disabled="true"' : ''}
-    >
-      <i class="${weightClass} lui-${icon}" aria-hidden="true"></i>
-    </button>
-  `;
-};
+const Template = ({ icon, size, weight, disabled }) =>
+  `<lui-icon-button
+    icon="${icon}"
+    size="${size}"
+    weight="${weight}"
+    ${disabled ? 'disabled' : ''}
+  ></lui-icon-button>`;
 
 export const IconButton = Template.bind({});
 IconButton.args = {
@@ -102,52 +96,44 @@ Disabled.args = {
   disabled: true,
 };
 
-const AllIconsTemplate = () => {
-  const icons = [
-    'alert',
-    'arrow-down',
-    'arrow-left',
-    'arrow-right',
-    'arrow-top',
-    'caret-down',
-    'caret-down-circle',
-    'caret-left',
-    'caret-left-circle',
-    'caret-right',
-    'caret-right-circle',
-    'caret-top',
-    'caret-top-circle',
-    'check',
-    'check-circle',
-    'dots-nine',
-    'dots-three',
-    'exclamation-circle',
-    'info-circle',
-    'link-external',
-    'trash',
-    'x',
-    'x-circle',
-  ];
+const icons = [
+  'alert',
+  'arrow-down',
+  'arrow-left',
+  'arrow-right',
+  'arrow-top',
+  'caret-down',
+  'caret-down-circle',
+  'caret-left',
+  'caret-left-circle',
+  'caret-right',
+  'caret-right-circle',
+  'caret-top',
+  'caret-top-circle',
+  'check',
+  'check-circle',
+  'dots-nine',
+  'dots-three',
+  'exclamation-circle',
+  'info-circle',
+  'link-external',
+  'trash',
+  'x',
+  'x-circle',
+];
 
-  const buttons = icons
-    .map(
-      (icon) => `
+export const AllIcons = () => `
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;">
+    ${icons
+      .map(
+        (icon) => `
       <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-        <button class="icon-button icon-button--lg" aria-label="${icon}">
-          <i class="lui lui-${icon}" aria-hidden="true"></i>
-        </button>
+        <lui-icon-button icon="${icon}" size="lg" weight="outline"></lui-icon-button>
         <span style="font-size: 11px; color: #64748b;">${icon}</span>
       </div>
     `
-    )
-    .join('');
-
-  return `
-    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;">
-      ${buttons}
-    </div>
-  `;
-};
-
-export const AllIcons = AllIconsTemplate.bind({});
+      )
+      .join('')}
+  </div>
+`;
 AllIcons.parameters = { controls: { disable: true } };
