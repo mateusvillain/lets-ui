@@ -14,6 +14,9 @@ export default {
     triggerLabel: { control: 'text' },
     closeOnBackdrop: { control: 'boolean' },
   },
+  parameters: {
+    docs: { story: { height: '500px' } },
+  },
 };
 
 const Template = ({ title, size, triggerLabel, closeOnBackdrop }) => {
