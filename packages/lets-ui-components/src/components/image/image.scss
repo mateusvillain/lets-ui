@@ -1,4 +1,5 @@
 @use 'packages/styles/src/components/image' as *;
+@use 'packages/styles/src/foundations/border' as *;
 
 :host {
   display: block;
