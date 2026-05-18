@@ -15,5 +15,9 @@ export async function generateMetadata({ params }: Props) {
 export default async function Page({ params }: Props) {
   const { mdxPath } = await params
   const { default: MDXContent } = await importPage(mdxPath)
-  return <MDXContent />
+  return (
+    <section className="docs-content">
+      <MDXContent />
+    </section>
+  )
 }

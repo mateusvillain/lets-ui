@@ -115,6 +115,12 @@ body {
   color: var(--lui-color-link-visited);
 }
 
+/* ── Content area ────────────────────────────────── */
+
+.docs-content {
+  padding: 1rem;
+}
+
 /* ── Desktop sidebar (force aside.nextra-mobile-nav visible) ── */
 
 @media (width >= 768px) {
@@ -131,19 +137,11 @@ body {
     border-right: 1px solid var(--lui-color-neutral-border-subtle);
   }
 
-  /*
-   * The MDX content is rendered as direct children of <body> with no wrapper.
-   * Use the sibling combinator to push every element after the aside to the right,
-   * leaving the <header> (which precedes the aside) at full width.
-   */
-  aside.nextra-mobile-nav ~ *:not(script) {
-    margin-left: 280px !important;
-    padding-inline: 2rem !important;
-  }
-
-  /* Top breathing room on the first content element */
-  aside.nextra-mobile-nav + *:not(script) {
-    padding-block-start: 2rem !important;
+  .docs-content {
+    margin-left: 280px;
+    padding-inline: 6rem;
+    padding-bottom: 2rem;
+    padding-block-start: 2rem;
   }
 }
 
