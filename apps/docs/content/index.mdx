@@ -1,0 +1,31 @@
+# Let's UI
+
+An open-source, framework-agnostic design system built on CSS custom properties and vanilla Web Components.
+
+## Features
+
+- **Design tokens** compiled with [Terrazzo](https://terrazzo.app/) into CSS custom properties
+- **Component styles** built with SCSS and semantic utility functions
+- **Vanilla Web Components** — works with any framework or none at all
+- **Theming** via `data-theme` (light/dark) and `data-brand` attributes
+
+## Installation
+
+```bash
+npm install @lets-ui/styles @lets-ui/components
+```
+
+## Usage
+
+```html
+<!doctype html>
+<html data-theme="light">
+  <head>
+    <link rel="stylesheet" href="node_modules/@lets-ui/styles/dist/letsui.min.css" />
+    <script type="module" src="node_modules/@lets-ui/components/dist/index.js"></script>
+  </head>
+  <body>
+    <lui-button>Click me</lui-button>
+  </body>
+</html>
+```

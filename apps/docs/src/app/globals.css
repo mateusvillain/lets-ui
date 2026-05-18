@@ -1,0 +1,35 @@
+:root {
+  --nextra-primary-hue: 207;
+  --nextra-primary-saturation: 86%;
+  --nextra-primary-lightness: 57%;
+  --nextra-navbar-height: 72px;
+}
+
+body {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Active sidebar item background */
+.nextra-sidebar .x\:bg-primary-100 {
+  background-color: #339bf0 !important;
+}
+
+/* Active sidebar item text */
+.nextra-sidebar .x\:text-primary-800 {
+  color: white !important;
+}
+
+/* Sidebar width (expanded) */
+.nextra-sidebar.x\:w-64 {
+  width: 280px;
+}
+
+/* TOC width */
+.nextra-toc {
+  width: 280px;
+}
+
+/* Navbar bottom border */
+.nextra-navbar .nextra-border {
+  border-color: #eeecf1;
+}
