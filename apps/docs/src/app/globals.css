@@ -138,6 +138,12 @@ body {
    */
   aside.nextra-mobile-nav ~ *:not(script) {
     margin-left: 280px !important;
+    padding-inline: 2rem !important;
+  }
+
+  /* Top breathing room on the first content element */
+  aside.nextra-mobile-nav + *:not(script) {
+    padding-block-start: 2rem !important;
   }
 }
 
