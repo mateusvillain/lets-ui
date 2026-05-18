@@ -5,6 +5,7 @@ node_modules/
 dist/
 build/
 .astro/
+.next/
 
 # Logs
 npm-debug.log*
