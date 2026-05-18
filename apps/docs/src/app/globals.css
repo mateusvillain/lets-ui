@@ -75,6 +75,10 @@ body {
   border-color: var(--lui-color-neutral-border-subtle);
 }
 
+.nextra-navbar nav {
+  max-width: none;
+}
+
 /* ── Inline code ─────────────────────────────────────── */
 
 .nextra-content code:not(pre code) {
@@ -138,10 +142,13 @@ body {
   }
 
   .docs-content {
-    margin-left: 280px;
+    max-width: 1024px;
+
+    /* Center within the space to the right of the fixed 280px sidebar.
+       When viewport > (280 + 1024)px, distribute the leftover space equally. */
+    margin-left: calc(280px + max(0px, (100vw - 280px - 1024px) / 2));
     padding-inline: 6rem;
-    padding-bottom: 2rem;
-    padding-block-start: 2rem;
+    padding-block: 2rem;
   }
 }
 
