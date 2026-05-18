@@ -127,6 +127,7 @@ body {
     transform: none !important;
     z-index: 10 !important;
     overflow-y: auto !important;
+    padding-top: 0 !important;
     border-right: 1px solid var(--lui-color-neutral-border-subtle);
   }
 
