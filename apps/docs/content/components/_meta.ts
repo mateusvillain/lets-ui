@@ -1,5 +1,8 @@
 export default {
-  overview: 'Overview',
+  index: {
+    title: 'Components',
+    display: 'hidden',
+  },
   actions: 'Actions',
   forms: 'Forms',
   navigation: 'Navigation',

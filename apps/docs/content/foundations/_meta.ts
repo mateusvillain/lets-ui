@@ -1,5 +1,8 @@
 export default {
-  overview: 'Overview',
+  index: {
+    title: 'Foundations',
+    display: 'hidden',
+  },
   color: 'Color',
   typography: 'Typography',
   spacing: 'Spacing',

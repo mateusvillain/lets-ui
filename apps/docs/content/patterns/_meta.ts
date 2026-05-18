@@ -1,5 +1,8 @@
 export default {
-  overview: 'Overview',
+  index: {
+    title: 'Patterns',
+    display: 'hidden',
+  },
   forms: 'Forms',
   navigation: 'Navigation',
   feedback: 'Feedback',

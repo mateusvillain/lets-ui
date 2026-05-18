@@ -114,3 +114,62 @@ body {
 .nextra-content a:visited {
   color: var(--lui-color-link-visited);
 }
+
+/* ── NavGrid ─────────────────────────────────────── */
+
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 24px 0 32px;
+}
+
+.nav-grid__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border-radius: var(--lui-border-radius-md);
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  text-decoration: none !important;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+  cursor: pointer;
+}
+
+a.nav-grid__item:hover {
+  background-color: var(--lui-color-primary-background-container);
+  border-color: var(--lui-color-primary-background-container);
+}
+
+.nav-grid__item[data-status='coming-soon'] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.nav-grid__title {
+  font-family: var(--lui-brand-typography-font-family-heading);
+  font-weight: 600;
+  font-size: 0.9375em;
+  color: var(--lui-color-neutral-text-heading);
+}
+
+.nav-grid__description {
+  font-size: 0.8125em;
+  color: var(--lui-color-neutral-text-caption);
+  line-height: var(--lui-brand-typography-line-height-body);
+}
+
+.nav-grid__badge {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 6px;
+  font-size: 0.6875em;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--lui-border-radius-xs);
+  background-color: var(--lui-color-neutral-background-container);
+  color: var(--lui-color-neutral-text-caption);
+}

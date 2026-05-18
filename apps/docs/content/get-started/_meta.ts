@@ -1,5 +1,8 @@
 export default {
-  overview: 'Overview',
+  index: {
+    title: 'Get Started',
+    display: 'hidden',
+  },
   installation: 'Installation',
   theming: 'Theming',
   accessibility: 'Accessibility',
