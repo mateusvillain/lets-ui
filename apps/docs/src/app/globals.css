@@ -1,35 +1,116 @@
+/* =============================================
+   Let's UI × Nextra — Design System Integration
+   ============================================= */
+
+/* 1 · Nextra primary color
+      source: --lui-brand-color-primary-4 = rgb(20% 60.784% 94.118%)
+      converted to hsl: hsl(207, 86%, 57%)                          */
 :root {
   --nextra-primary-hue: 207;
   --nextra-primary-saturation: 86%;
   --nextra-primary-lightness: 57%;
   --nextra-navbar-height: 72px;
+
+  /* Background RGB channels used as rgb(var(--nextra-bg))
+     Light: --lui-color-gray-1 light = rgb(100% 100% 100%) = 255 255 255 */
+  --nextra-bg: 255 255 255;
+}
+
+/* Dark mode background
+   --lui-color-gray-1 dark = rgb(9.4118% 10.196% 12.549%) ≈ rgb(24 26 32) */
+.dark {
+  --nextra-bg: 24 26 32;
+}
+
+/* ── Typography ──────────────────────────────────────── */
+
+html {
+  font-family: var(--lui-brand-typography-font-family-body);
 }
 
 body {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  color: var(--lui-color-neutral-text-body);
+  line-height: var(--lui-brand-typography-line-height-body);
 }
 
-/* Active sidebar item background */
+/* ── Article headings ────────────────────────────────── */
+
+.nextra-content h1,
+.nextra-content h2,
+.nextra-content h3,
+.nextra-content h4,
+.nextra-content h5,
+.nextra-content h6 {
+  font-family: var(--lui-brand-typography-font-family-heading);
+  color: var(--lui-color-neutral-text-heading);
+  line-height: var(--lui-brand-typography-line-height-heading);
+}
+
+/* ── Sidebar ─────────────────────────────────────────── */
+
+/* Active item background */
 .nextra-sidebar .x\:bg-primary-100 {
-  background-color: #339bf0 !important;
+  background-color: var(--lui-color-primary-background-container) !important;
 }
 
-/* Active sidebar item text */
+/* Active item text */
 .nextra-sidebar .x\:text-primary-800 {
-  color: white !important;
+  color: var(--lui-color-neutral-text-inverse) !important;
 }
 
-/* Sidebar width (expanded) */
+/* Expanded width */
 .nextra-sidebar.x\:w-64 {
   width: 280px;
 }
 
-/* TOC width */
+/* ── Table of Contents ───────────────────────────────── */
+
 .nextra-toc {
   width: 280px;
 }
 
-/* Navbar bottom border */
+/* ── Navbar ──────────────────────────────────────────── */
+
 .nextra-navbar .nextra-border {
-  border-color: #eeecf1;
+  border-color: var(--lui-color-neutral-border-subtle);
+}
+
+/* ── Inline code ─────────────────────────────────────── */
+
+.nextra-content code:not(pre code) {
+  border-radius: var(--lui-border-radius-xs);
+  background-color: var(--lui-color-neutral-background-container);
+  color: var(--lui-color-neutral-text-body);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+}
+
+/* ── Code block ──────────────────────────────────────── */
+
+.nextra-content pre {
+  border-radius: var(--lui-border-radius-md);
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+}
+
+/* ── Blockquote / callout ────────────────────────────── */
+
+.nextra-content blockquote {
+  border-left-color: var(--lui-color-primary-background-container);
+  color: var(--lui-color-neutral-text-caption);
+}
+
+/* ── Horizontal rule ─────────────────────────────────── */
+
+.nextra-content hr {
+  border-color: var(--lui-color-neutral-border-subtle);
+}
+
+/* ── Links ───────────────────────────────────────────── */
+
+.nextra-content a {
+  color: var(--lui-color-link-default);
+}
+
+.nextra-content a:visited {
+  color: var(--lui-color-link-visited);
 }

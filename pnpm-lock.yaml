@@ -120,6 +120,9 @@ importers:
 
   apps/docs:
     dependencies:
+      '@lets-ui/tokens':
+        specifier: workspace:*
+        version: link:../../packages/lets-ui-tokens
       next:
         specifier: ^15.3.0
         version: 15.5.18(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass@1.99.0)

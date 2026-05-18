@@ -2,14 +2,11 @@ import type { ReactNode } from 'react'
 import { Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
-import { Inter } from 'next/font/google'
+import '@lets-ui/tokens/css'
 import 'nextra-theme-docs/style.css'
 import './globals.css'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-})
+import { Logo } from '../components/logo'
+import { ThemeSync } from '../components/theme-sync'
 
 export const metadata = {
   title: {
@@ -22,20 +19,18 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const pageMap = await getPageMap()
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <Head />
       <body>
+        <ThemeSync />
         <Layout
-          navbar={
-            <Navbar
-              logo={<span style={{ fontWeight: 700 }}>Let&apos;s UI</span>}
-            />
-          }
+          navbar={<Navbar logo={<Logo />} />}
           pageMap={pageMap}
           docsRepositoryBase="https://github.com/mateusvillain/lets-ui/tree/main/apps/docs/content"
           editLink="Edit this page on GitHub"
           feedback={{ content: 'Question? Give us feedback →' }}
           sidebar={{ defaultMenuCollapseLevel: 1 }}
+          nextThemes={{ defaultTheme: 'system' }}
         >
           {children}
         </Layout>
