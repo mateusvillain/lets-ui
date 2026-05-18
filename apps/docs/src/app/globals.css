@@ -115,6 +115,31 @@ body {
   color: var(--lui-color-link-visited);
 }
 
+/* ── Desktop sidebar (force aside.nextra-mobile-nav visible) ── */
+
+@media (width >= 768px) {
+  aside.nextra-mobile-nav {
+    display: flex !important;
+    position: fixed !important;
+    inset: var(--nextra-navbar-height) auto 0 0 !important;
+    width: 280px !important;
+    height: calc(100dvh - var(--nextra-navbar-height)) !important;
+    transform: none !important;
+    z-index: 10 !important;
+    overflow-y: auto !important;
+    border-right: 1px solid var(--lui-color-neutral-border-subtle);
+  }
+
+  /*
+   * The MDX content is rendered as direct children of <body> with no wrapper.
+   * Use the sibling combinator to push every element after the aside to the right,
+   * leaving the <header> (which precedes the aside) at full width.
+   */
+  aside.nextra-mobile-nav ~ *:not(script) {
+    margin-left: 280px !important;
+  }
+}
+
 /* ── NavGrid ─────────────────────────────────────── */
 
 .nav-grid {

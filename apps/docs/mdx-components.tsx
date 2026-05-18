@@ -1,5 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
-import { useMDXComponents as getNextraComponents } from 'nextra/mdx-components'
+import { useMDXComponents as getNextraComponents } from 'nextra-theme-docs'
 import { NavGrid } from './src/components/mdx/nav-grid'
 import { StatusBadge } from './src/components/ui/status-badge'
 
