@@ -120,9 +120,6 @@ importers:
 
   packages/lets-ui-components:
     dependencies:
-      lets-ui-icons:
-        specifier: '>=0.1.0'
-        version: 0.1.0
       lit:
         specifier: ^3.0.0
         version: 3.3.3
