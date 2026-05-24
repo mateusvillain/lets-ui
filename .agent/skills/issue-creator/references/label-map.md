@@ -43,6 +43,7 @@ Formato: `component: <nome-em-kebab-case>`. Cor padrão: `#f5be58`.
 | `component: accordion`       | Accordion       |
 | `component: alert`           | Alert           |
 | `component: avatar`          | Avatar          |
+| `component: body`            | Body            |
 | `component: breadcrumb`      | Breadcrumb      |
 | `component: breadcrumb-item` | Breadcrumb Item |
 | `component: button`          | Button          |
