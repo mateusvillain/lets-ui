@@ -1,0 +1,32 @@
+name: npm token expiry reminder
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-token-expiry:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if NPM_TOKEN expires within 7 days
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN_EXPIRY: ${{ vars.NPM_TOKEN_EXPIRY }}
+        run: |
+          TODAY=$(date -u +%Y-%m-%d)
+          DAYS_LEFT=$(( ($(date -d "$NPM_TOKEN_EXPIRY" +%s) - $(date -d "$TODAY" +%s)) / 86400 ))
+
+          if [ "$DAYS_LEFT" -le 7 ] && [ "$DAYS_LEFT" -ge 0 ]; then
+            EXISTING=$(gh issue list --label "maintenance" --state open --search "NPM_TOKEN" --json number --jq length)
+            if [ "$EXISTING" -eq 0 ]; then
+              gh issue create \
+                --title "NPM_TOKEN expira em ${DAYS_LEFT} dia(s)" \
+                --body "O secret **NPM_TOKEN** expira em **${NPM_TOKEN_EXPIRY}** (em ${DAYS_LEFT} dia(s)).
+
+          1. Acesse npmjs.com e gere um novo token
+          2. Atualize o secret em **Settings → Secrets and variables → Actions → NPM_TOKEN**
+          3. Atualize a variável **NPM_TOKEN_EXPIRY** com a nova data de vencimento (formato: \`YYYY-MM-DD\`)" \
+                --label "maintenance"
+            fi
+          fi
