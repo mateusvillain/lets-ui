@@ -27,6 +27,7 @@ export class LuiBody extends LitElement {
   @property() color = 'body';
   @property({ type: Boolean }) italic = false;
   @property({ type: Boolean }) underline = false;
+  @property({ type: Boolean }) bold = false;
 
   get _variant(): Variant {
     return (VALID_VARIANTS as readonly string[]).includes(this.variant)
@@ -47,6 +48,7 @@ export class LuiBody extends LitElement {
         `text--transform-${this.transform}`,
       this.italic && 'text--style-italic',
       this.underline && 'text--decoration-underline',
+      this.bold && 'text--weight-bold',
     ]
       .filter(Boolean)
       .join(' ');
