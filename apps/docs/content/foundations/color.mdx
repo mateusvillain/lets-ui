@@ -1,8 +1,264 @@
 ---
 title: Color
-description: Color tokens for backgrounds, text, borders, and interactive states.
+description: The color system behind Let's UI — palettes, semantic roles, theming, and usage guidelines.
 ---
 
 # Color
 
-Color tokens are defined in `packages/lets-ui-tokens/tokens/` and compiled by Terrazzo into CSS custom properties.
+The Let's UI color system is built on a two-layer architecture that separates raw palette values from their intended meaning. This structure makes theming predictable, dark mode automatic, and brand customization possible without touching component code.
+
+## Princípios
+
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '24px',
+  }}
+>
+  <div>
+    <div
+      style={{
+        marginBottom: '8px',
+      }}
+    >
+      ### Acessibilidade
+    </div>
+
+    <p>
+      Todas as cores do sistema atendem aos padrões de contraste seguindo as
+      diretrizes de acessibilidade WCAG 2.2, garantindo legibilidade.
+    </p>
+
+  </div>
+
+  <div>
+    <div
+      style={{
+        marginBottom: '8px',
+      }}
+    >
+      ### Adaptação
+    </div>
+
+    <p>
+      Interfaces podem ser adaptadas para inúmeros temas e marcas com o sistema
+      de tokens de cor, ampliando a customização e adesão a identidades
+      visuais.
+    </p>
+
+  </div>
+
+  <div>
+    <div
+      style={{
+        marginBottom: '8px',
+      }}
+    >
+      ### Compreensão
+    </div>
+
+    <p>
+      O sistema possui cores que atendem a diferentes cenários e estados para
+      facilitar a comunicação com os usuários, além de nomenclaturas que
+      auxiliam no caso de uso.
+    </p>
+
+  </div>
+</div>
+
+## Color system
+
+Foram projetadas ao todo 6 paletas no sistema de cores, seguindo o mesmo princípio de construção, contando com 8 níveis de tonalidade, utilizando o modelo LCH (Lightness, Chroma, Hue) na construção das escalas para ter maior fidelidade com a maneira como os seres humanos percebem as diferenças de cor.
+
+![Color system](/images/color-scale.png)
+
+## Properties
+
+### Background
+
+Os tokens de background definem as superfícies visuais que estruturam a interface. Eles são responsáveis por criar separação hierárquica, estabelecer contraste entre camadas e apoiar a legibilidade dos elementos de conteúdo e interação. Devem ser aplicados considerando contexto, profundidade visual e consistência entre diferentes estados e temas da interface.
+
+![Background](/images/color-background.png)
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Surface**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa a superfície base da interface, utilizada como plano principal de
+    composição visual. Normalmente aplicada em páginas, áreas amplas de conteúdo e
+    regiões estruturais do layout. Deve manter equilíbrio entre neutralidade e
+    contraste, permitindo que elementos interativos, tipografia e componentes
+    sejam percebidos com clareza sem competir visualmente com o conteúdo.
+  </div>
+</div>
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Container**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa superfícies secundárias posicionadas sobre a superfície base. Utilizada para destacar agrupamentos de conteúdo, componentes modulares ou regiões com maior densidade informacional, como cards, modais, painéis e seções destacadas. Deve criar distinção visual suficiente em relação ao background principal sem gerar excesso de profundidade ou ruído visual.
+  </div>
+</div>
+
+### Border
+
+Os tokens de border definem limites visuais, separações estruturais e contornos de componentes. Seu papel principal é reforçar organização, delimitar áreas funcionais e auxiliar na percepção de agrupamento e hierarquia da interface. O uso deve priorizar clareza visual sem tornar a experiência excessivamente carregada.
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Default**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa a borda principal utilizada na maior parte dos componentes e divisões estruturais da interface. Deve fornecer contraste suficiente para evidenciar limites, estados e agrupamentos, mantendo equilíbrio visual com as superfícies ao redor.
+  </div>
+</div>
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Subtle**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa uma variação de baixa ênfase visual para separações mais discretas. Indicada para divisórias internas, agrupamentos secundários e contextos onde a separação visual precisa existir sem competir com o conteúdo principal. Deve preservar a percepção estrutural de forma leve e não intrusiva.
+  </div>
+</div>
+
+### Text
+
+Os tokens de texto definem os níveis de legibilidade, hierarquia e comunicação visual da interface. Sua aplicação deve considerar contraste, densidade de informação, acessibilidade e contexto de uso, garantindo leitura consistente em diferentes superfícies e estados visuais.
+
+![Text](/images/color-text.png)
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Heading**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa textos de maior destaque hierárquico, utilizados em títulos, seções e pontos principais de atenção. Deve possuir contraste elevado em relação ao background para garantir rápida identificação e fortalecer a estrutura informacional da interface.
+  </div>
+</div>
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Body**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa o estilo textual padrão utilizado para conteúdos principais, descrições e informações contínuas. Deve priorizar conforto de leitura, equilíbrio de contraste e consistência visual em fluxos extensos de conteúdo.
+  </div>
+</div>
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Caption**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa textos de suporte e baixa hierarquia informacional, como legendas, informações auxiliares, metadados e descrições complementares. Deve manter legibilidade adequada sem competir visualmente com conteúdos principais.
+  </div>
+</div>
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Inverse**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa textos aplicados sobre superfícies de alto contraste ou backgrounds invertidos. Deve garantir legibilidade consistente em contextos escuros, superfícies coloridas ou componentes com destaque visual elevado.
+  </div>
+</div>
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '24px',
+  }}
+>
+  **Error**
+
+  <div
+    style={{
+      marginTop: '0',
+    }}
+  >
+    Representa textos relacionados a mensagens de erro, validação ou estados críticos. Deve comunicar feedback de forma clara e imediata, mantendo contraste adequado e alinhamento semântico com os demais tokens de status do sistema.
+  </div>
+</div>
+
+## Theming
+
+### Light and dark mode
+
+### Multi-brand
