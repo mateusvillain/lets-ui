@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build && pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start"
   },
   "dependencies": {
@@ -16,9 +16,11 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/mdx": "^2.0.13",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "pagefind": "^1.5.2",
     "typescript": "^5.8.0"
   }
 }
