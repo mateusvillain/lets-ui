@@ -76,6 +76,29 @@ $size: (
     flex: 1;
   }
 
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    border-radius: radius(md);
+    cursor: pointer;
+    padding: fixed(8);
+    width: fixed(40);
+    height: fixed(40);
+    color: icon(neutral);
+    transition: background-color 0.2s ease-in-out;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    @include states(neutral, primary, primary);
+  }
+
   &__body {
     @include font-scale(body--lg);
 

@@ -1,4 +1,3 @@
-import 'lets-ui-icons/dist/lets-ui-icons.css';
 import '../../../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../../../packages/styles/dist/letsui.css';
 import '../../index.js';
@@ -89,18 +88,6 @@ export const WithDisabledItem = () => `
       <lui-menu-item slot="items" label="Copiar" shortcut="⌘,C"></lui-menu-item>
       <lui-menu-item slot="items" label="Colar" shortcut="⌘,V" disabled></lui-menu-item>
       <lui-menu-item slot="items" label="Desfazer" shortcut="⌘,Z" disabled></lui-menu-item>
-    </lui-dropdown-menu>
-  </div>
-`;
-
-export const TriggerWithIconButton = () => `
-  <div style="margin-bottom: 160px;">
-    <lui-dropdown-menu open>
-      <lui-icon-button slot="trigger" icon="dots-three" size="md" aria-label="Mais opções"></lui-icon-button>
-      <lui-menu-item slot="items" label="Renomear"></lui-menu-item>
-      <lui-menu-item slot="items" label="Mover"></lui-menu-item>
-      <lui-menu-divider slot="items"></lui-menu-divider>
-      <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
     </lui-dropdown-menu>
   </div>
 `;

@@ -10,6 +10,14 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Playground — Let's UI</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/@phosphor-icons/webcomponents@2.1"></script>
   </head>
   <body>
     <header class="pg-header">
@@ -191,13 +199,21 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
             <lui-button slot="actions" label="Salvar"></lui-button>
           </lui-modal>
 
+          <lui-icon-button
+            slot="trigger"
+            aria-label="Ver informações"
+            size="lg"
+          >
+            <ph-horse></ph-horse>
+          </lui-icon-button>
+
           <lui-modal title="Informações">
             <lui-icon-button
               slot="trigger"
-              label="Ver informações"
-              icon="info-circle"
+              aria-label="Ver informações"
               size="lg"
             >
+              <i class="lui lui-info-circle"></i>
             </lui-icon-button>
             <p>Acesse os detalhes do item selecionado.</p>
           </lui-modal>
@@ -242,10 +258,10 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
           <lui-drawer title="Editar perfil" close-on-backdrop size="xl">
             <lui-icon-button
               slot="trigger"
-              label="Editar perfil"
-              icon="check"
+              aria-label="Editar perfil"
               size="lg"
             >
+              <ph-horse></ph-horse>
             </lui-icon-button>
             <p>Edite as informações do seu perfil.</p>
             <lui-button
