@@ -49,6 +49,8 @@ export class LuiHeading extends LitElement {
       : '';
 
     // Render as a div with the correct class - heading semantics come from variant class
-    return html`<div class="${classes}" style="${style}">${this.label}</div>`;
+    return html`<div class="${classes}" style="${style}">
+      <slot>${this.label}</slot>
+    </div>`;
   }
 }

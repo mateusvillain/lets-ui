@@ -56,6 +56,8 @@ export class LuiBody extends LitElement {
       : '';
 
     // Use dynamic tag name via template
-    return html`<div class="${classes}" style="${style}">${this.label}</div>`;
+    return html`<div class="${classes}" style="${style}">
+      <slot>${this.label}</slot>
+    </div>`;
   }
 }
