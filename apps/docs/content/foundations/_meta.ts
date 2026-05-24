@@ -9,5 +9,5 @@ export default {
   border: 'Border',
   elevation: 'Elevation',
   opacity: 'Opacity',
-  grid: 'Grid',
+  tokens: 'Design Tokens',
 };
