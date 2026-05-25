@@ -69,12 +69,10 @@ jobs:
 
       - name: Generate release notes
         if: steps.changesets.outputs.published == 'true'
-        uses: orhun/git-cliff-action@v3
-        with:
-          config: cliff.toml
-          args: --latest --strip all
-        env:
-          OUTPUT: /tmp/release_notes.md
+        run: |
+          curl -fsSL "https://github.com/orhun/git-cliff/releases/download/v2.4.0/git-cliff-2.4.0-x86_64-unknown-linux-musl.tar.gz" \
+            | tar -xzf - --strip-components=1 -C /usr/local/bin --wildcards '*/git-cliff'
+          git-cliff --latest --strip all --output /tmp/release_notes.md
 
       - name: Create GitHub Release
         if: steps.changesets.outputs.published == 'true'
