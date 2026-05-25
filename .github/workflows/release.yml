@@ -61,6 +61,12 @@ jobs:
             git push origin --delete "${PKG}@${VERSION}" 2>/dev/null || true
             git tag -d "${PKG}@${VERSION}" 2>/dev/null || true
           done
-          gh release create "v$VERSION" --title "v$VERSION" --generate-notes
+          gh api repos/${{ github.repository }}/releases/generate-notes \
+            -X POST -f tag_name="v$VERSION" \
+            --jq '.body' > /tmp/release_notes.md
+          ANCHOR="v$(echo $VERSION | tr -d '.')"
+          CHANGELOG_URL="https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#$ANCHOR"
+          sed -i "s|\*\*Full Changelog\*\*:.*|**Full Changelog**: $CHANGELOG_URL|" /tmp/release_notes.md
+          gh release create "v$VERSION" --title "v$VERSION" --notes-file /tmp/release_notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
