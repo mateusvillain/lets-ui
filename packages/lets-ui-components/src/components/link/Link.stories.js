@@ -37,6 +37,11 @@ export const InParagraph = () => `
 `;
 InParagraph.storyName = 'Em parágrafo';
 
+export const WithSlot = () => `
+  <lui-link href="#">Via slot: <strong>Saiba mais</strong></lui-link>
+`;
+WithSlot.storyName = 'Via slot';
+
 export const WithAriaLabel = () => `
   <lui-link label="Leia mais" href="#" aria-label="Leia mais sobre acessibilidade"></lui-link>
 `;
