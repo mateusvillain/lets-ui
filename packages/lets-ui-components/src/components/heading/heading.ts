@@ -1,4 +1,5 @@
-import { LitElement, html, unsafeCSS } from 'lit';
+import { LitElement, unsafeCSS } from 'lit';
+import { staticHtml, unsafeStatic } from 'lit/static-html.js';
 import { property } from 'lit/decorators.js';
 import styles from './heading.scss?inline';
 
@@ -48,9 +49,8 @@ export class LuiHeading extends LitElement {
       ? `overflow: hidden; display: -webkit-box; -webkit-line-clamp: ${lineClamp}; -webkit-box-orient: vertical;`
       : '';
 
-    // Render as a div with the correct class - heading semantics come from variant class
-    return html`<div class="${classes}" style="${style}">
+    return staticHtml`<${unsafeStatic(tag)} class="${classes}" style="${style}">
       <slot>${this.label}</slot>
-    </div>`;
+    </${unsafeStatic(tag)}>`;
   }
 }
