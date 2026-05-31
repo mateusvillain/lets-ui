@@ -1,5 +1,5 @@
 import { LitElement, unsafeCSS } from 'lit';
-import { staticHtml, unsafeStatic } from 'lit/static-html.js';
+import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 import { property } from 'lit/decorators.js';
 import styles from './body.scss?inline';
 
