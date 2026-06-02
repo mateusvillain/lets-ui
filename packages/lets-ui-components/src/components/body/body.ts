@@ -1,4 +1,5 @@
-import { LitElement, html, unsafeCSS } from 'lit';
+import { LitElement, unsafeCSS } from 'lit';
+import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 import { property } from 'lit/decorators.js';
 import styles from './body.scss?inline';
 
@@ -57,9 +58,9 @@ export class LuiBody extends LitElement {
       ? `overflow: hidden; display: -webkit-box; -webkit-line-clamp: ${lineClamp}; -webkit-box-orient: vertical;`
       : '';
 
-    // Use dynamic tag name via template
-    return html`<div class="${classes}" style="${style}">
+    const tag = this.as || 'p';
+    return staticHtml`<${unsafeStatic(tag)} class="${classes}" style="${style}">
       <slot>${this.label}</slot>
-    </div>`;
+    </${unsafeStatic(tag)}>`;
   }
 }
