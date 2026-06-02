@@ -28,7 +28,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish",
-    "playground": "pnpm --filter @lets-ui/playground dev"
+    "playground": "pnpm --prefix playground dev"
   },
   "lint-staged": {
     "*.{js,ts,css,scss,json,md}": [

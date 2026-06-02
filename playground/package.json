@@ -1,7 +1,7 @@
 {
-  "name": "@lets-ui/playground",
+  "name": "playground",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
@@ -9,9 +9,6 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@lets-ui/components": "workspace:*",
-    "@lets-ui/styles": "workspace:*",
-    "@lets-ui/tokens": "workspace:*",
     "lets-ui-icons": "^0.1.0"
   },
   "devDependencies": {
