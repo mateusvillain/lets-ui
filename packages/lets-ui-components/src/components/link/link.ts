@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './link.scss?inline';
 
 export class LuiLink extends LitElement {
@@ -10,9 +11,11 @@ export class LuiLink extends LitElement {
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
   render() {
-    const ariaLabel = this.ariaLabel || this.label || 'Link';
-    return html`<a class="link" href="${this.href}" aria-label="${ariaLabel}"
-      >${this.label}</a
+    return html`<a
+      class="link"
+      href="${this.href}"
+      aria-label="${ifDefined(this.ariaLabel || undefined)}"
+      ><slot>${this.label}</slot></a
     >`;
   }
 }

@@ -13,29 +13,45 @@ export default {
 
 const Template = ({ label, href, ariaLabel }) => `
   <lui-link
-    label="${label}"
     href="${href}"
     ${ariaLabel ? `aria-label="${ariaLabel}"` : ''}
-  ></lui-link>
+  >
+    ${label}
+  </lui-link>
 `;
 
 export const Default = Template.bind({});
 Default.args = {
   label: 'Saiba mais',
   href: '#',
-  ariaLabel: '',
+  ariaLabel: 'Saiba mais informações sobre o design system',
 };
 Default.storyName = 'Default';
 
 export const InParagraph = () => `
-  <p class="body--lg">
-    Ao continuar você concorda com os
-    <a class="link" href="#">termos de uso</a>
-    e com a
-    <a class="link" href="#">política de privacidade</a>.
-  </p>
+  <lui-body variant="lg">
+    Para entender mais sobre design systems, leia <lui-link href="https://www.casadocodigo.com.br/products/livro-design-system">Design System além do layout</lui-link> de Mateus Villain.
+  </lui-body>
 `;
 InParagraph.storyName = 'Em parágrafo';
+
+export const WithSlot = () => `
+  <lui-link
+    href="#"
+  >
+    Acesse sua <strong>conta</strong>
+  </lui-link>
+`;
+
+WithSlot.storyName = 'Via slot';
+
+export const WithLabel = () => `
+  <lui-link
+    label="Esqueci minha senha"
+    href="#"
+  ></lui-link>
+`;
+WithLabel.storyName = 'Via label';
 
 export const WithAriaLabel = () => `
   <lui-link label="Leia mais" href="#" aria-label="Leia mais sobre acessibilidade"></lui-link>
