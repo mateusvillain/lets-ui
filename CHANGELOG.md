@@ -1,10 +1,25 @@
 # Changelog
 
+## v1.3.0
+
+### Added
+
+- Add slot support to `lui-link`, keeping the `label` attribute as fallback by @mateusvillain in [PR #51](https://github.com/mateusvillain/lets-ui/pull/51)
+- Extract `_typography-reset.scss` partial targeting only `h1`–`h6`, `p`, and `div` — replaces the global `_reset.scss` inside Shadow DOM components, reducing unnecessary reset rules by @mateusvillain in [PR #49](https://github.com/mateusvillain/lets-ui/pull/49)
+
+### Fixed
+
+- Fix `lui-heading` to render the correct semantic HTML tag based on the selected variant (`title` → `<h1>`, `subtitle` → `<h2>`, `headline` → `<h3>`, `subheadline` → `<h4>`, `block-title` → `<h5>`, `overtitle` → `<h6>`); the `as` prop remains available for manual overrides by @mateusvillain in [PR #48](https://github.com/mateusvillain/lets-ui/pull/48)
+- Fix `lui-body` to default to `<p>` instead of `<div>`, while still respecting the `as` prop by @mateusvillain in [PR #48](https://github.com/mateusvillain/lets-ui/pull/48)
+- Fix CSS reset import order inside the Shadow DOM for `lui-heading` and `lui-body`, ensuring typography styles are not unintentionally overridden by the reset by @mateusvillain in [PR #48](https://github.com/mateusvillain/lets-ui/pull/48)
+
 ## v1.2.0
 
 ### Added
 
-- Migrate all Web Components from Vanilla JS to Lit + TypeScript with per-component shadow DOM styles in [PR #43](https://github.com/mateusvillain/lets-ui/pull/43)
+- Migrate all Web Components from Vanilla JS to Lit + TypeScript with per-component shadow DOM styles by @mateusvillain in [PR #43](https://github.com/mateusvillain/lets-ui/pull/43)
+- Add slot support and `bold` prop to `lui-heading` and `lui-body` for flexible text rendering by @mateusvillain in [PR #47](https://github.com/mateusvillain/lets-ui/pull/47)
+- Add slot support to `lui-icon-button`, allowing custom content inside the component by @mateusvillain in [PR #45](https://github.com/mateusvillain/lets-ui/pull/45)
 
 ### Changed
 
