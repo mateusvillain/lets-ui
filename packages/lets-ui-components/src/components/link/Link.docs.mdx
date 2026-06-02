@@ -10,15 +10,19 @@ Componente de link navegável. Aplica a cor semântica `text(link)`, remove o su
 <Canvas of={LinkStories.Default} />
 <Controls of={LinkStories.Default} />
 
----
-
 ## Em parágrafo
 
 Links geralmente aparecem inline dentro de blocos de texto. Use a tag `<a class="link">` diretamente para embutir um link em conteúdo corrido.
 
 <Canvas of={LinkStories.InParagraph} />
 
----
+## Em slot
+
+<Canvas of={LinkStories.WithSlot} />
+
+## Em label
+
+<Canvas of={LinkStories.WithLabel} />
 
 ## Com aria-label
 
@@ -26,15 +30,11 @@ Quando o texto do link não descreve o destino com clareza (ex.: "saiba mais", "
 
 <Canvas of={LinkStories.WithAriaLabel} />
 
----
-
 ## Classe CSS (sem Web Component)
 
 A estilização de link está disponível diretamente via classe CSS `.link` em qualquer tag `<a>`, sem necessidade de usar o web component `<lui-link>`.
 
 <Canvas of={LinkStories.CSSClass} />
-
----
 
 ## Uso
 
