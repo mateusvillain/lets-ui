@@ -5,13 +5,38 @@ a.link {
   color: text(link);
   text-decoration: none;
 
-  &:hover {
+  &:not([aria-disabled='true']):hover {
     text-decoration: underline;
   }
 
-  &:visited {
+  &.link--visited:visited {
     color: text(link-visited);
   }
 
   @include focus-ring(primary);
+
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: opacity(disabled);
+  }
+
+  &.link--lg {
+    @include font-scale(body--lg);
+  }
+
+  &.link--md {
+    @include font-scale(body--md);
+  }
+
+  &.link--sm {
+    @include font-scale(body--sm);
+  }
+
+  .link__external-icon {
+    display: inline-block;
+    height: 1em;
+    width: auto;
+    margin-inline-start: 0.25em;
+    vertical-align: -0.125em;
+  }
 }
