@@ -5,28 +5,74 @@ import * as LinkStories from './Link.stories';
 
 # Link
 
-Componente de link navegável. Aplica a cor semântica `text(link)`, remove o sublinhado padrão, e restaura o sublinhado no hover. No estado `:visited` usa `text(link-visited)`. Foco gerenciado via `@include focus-ring(primary)`.
+Use `lui-link` para navegação entre páginas, seções ou recursos externos. É adequado para links inline em texto corrido, CTAs textuais e qualquer situação onde a ação principal é navegar — diferente do `lui-button`, que representa ações que modificam estado ou disparam operações.
+
+Aplica a cor semântica `text(link)`, remove o sublinhado padrão e o restaura no hover. No estado `:visited` usa `text(link-visited)`. O foco é gerenciado via `@include focus-ring(primary)`, garantindo conformidade com WCAG 2.1 AA.
 
 <Canvas of={LinkStories.Default} />
 <Controls of={LinkStories.Default} />
 
-## Em parágrafo
+## Tamanhos
 
-Links geralmente aparecem inline dentro de blocos de texto. Use a tag `<a class="link">` diretamente para embutir um link em conteúdo corrido.
+Use `size` para controlar o tamanho do link. Os valores seguem a mesma escala do `lui-body`: `lg`, `md` e `sm`. Sem `size`, o link herda o `font-size` do contexto.
+
+<Canvas of={LinkStories.Sizes} />
+
+## Nova aba
+
+Use `target="_blank"` para abrir o link em uma nova aba. O atributo `rel` é automaticamente definido como `noopener noreferrer` neste caso, por segurança.
+
+<Canvas of={LinkStories.OpenInNewTab} />
+
+## Link externo
+
+Use o atributo booleano `external` para exibir um ícone indicativo de link externo ao lado do texto. Ao aplicá-lo, `target="_blank"` e `rel="noopener noreferrer"` são definidos automaticamente — não é necessário declará-los.
+
+<Canvas of={LinkStories.ExternalLink} />
+
+<Canvas of={LinkStories.ExternalInParagraph} />
+
+## Download
+
+Use `download` para que o navegador baixe o arquivo ao invés de navegar para ele. O valor do atributo define o nome sugerido para o arquivo baixado.
+
+<Canvas of={LinkStories.Download} />
+
+## Desabilitado
+
+Use `disabled` para impedir a navegação. O `href` é removido, `aria-disabled="true"` é adicionado e o elemento permanece focável via teclado (`tabindex="0"`).
+
+<Canvas of={LinkStories.Disabled} />
+
+## Rastreamento de visita
+
+Por padrão, o estilo `:visited` não é aplicado — evitando que o histórico de navegação do usuário altere a aparência do link sem intenção explícita. Use `track-visited` para habilitar a mudança de cor após o link ter sido visitado.
+
+Isso é útil em contextos como listas de artigos, resultados de busca ou menus de navegação, onde sinalizar visualmente o que já foi acessado melhora a orientação do usuário.
+
+<Canvas of={LinkStories.TrackVisited} />
+
+## Em parágrafo
 
 <Canvas of={LinkStories.InParagraph} />
 
-## Em slot
+## Via slot
 
 <Canvas of={LinkStories.WithSlot} />
 
-## Em label
+## Via label
 
 <Canvas of={LinkStories.WithLabel} />
 
 ## Com aria-label
 
-Quando o texto do link não descreve o destino com clareza (ex.: "saiba mais", "clique aqui"), forneça um `aria-label` descritivo para leitores de tela.
+Use `aria-label` quando o texto visível do link não descreve o destino com clareza para tecnologias assistivas. Casos comuns:
+
+- Textos genéricos como "saiba mais", "clique aqui" ou "leia mais" que só fazem sentido com o contexto visual ao redor
+- Links com apenas ícone ou imagem como conteúdo, sem texto legível
+- Múltiplos links com o mesmo texto em uma mesma página, mas com destinos diferentes
+
+O valor deve descrever o destino ou a ação, não repetir o texto visível. Prefira "Leia mais sobre acessibilidade" a "Leia mais".
 
 <Canvas of={LinkStories.WithAriaLabel} />
 
@@ -41,7 +87,23 @@ A estilização de link está disponível diretamente via classe CSS `.link` em 
 ### Web Component
 
 ```html
+<!-- Link padrão -->
 <lui-link label="Saiba mais" href="/sobre"></lui-link>
+
+<!-- Abrir em nova aba (rel adicionado automaticamente) -->
+<lui-link href="https://example.com" target="_blank">
+  Documentação
+</lui-link>
+
+<!-- Link externo com ícone -->
+<lui-link href="https://example.com" target="_blank" external>
+  Documentação externa
+</lui-link>
+
+<!-- Download -->
+<lui-link href="/assets/guia.pdf" download="guia-design-system.pdf">
+  Baixar guia
+</lui-link>
 
 <!-- Com aria-label personalizado -->
 <lui-link
@@ -49,6 +111,9 @@ A estilização de link está disponível diretamente via classe CSS `.link` em 
   href="/acessibilidade"
   aria-label="Leia mais sobre acessibilidade"
 ></lui-link>
+
+<!-- Desabilitado -->
+<lui-link href="/sobre" disabled>Link desabilitado</lui-link>
 ```
 
 ### Classe CSS
@@ -60,3 +125,20 @@ A estilização de link está disponível diretamente via classe CSS `.link` em 
   <a class="link" href="/termos">política de privacidade</a>.
 </p>
 ```
+
+## Atributos
+
+| Atributo         | Tipo      | Default  | Descrição |
+|------------------|-----------|----------|-----------|
+| `href`           | `string`  | `#`      | URL de destino |
+| `label`          | `string`  | —        | Texto do link (alternativa ao slot) |
+| `size`           | `string`  | —        | Tamanho do texto: `lg`, `md`, `sm`. Herda o `font-size` do contexto quando omitido |
+| `target`         | `string`  | `_self`  | Contexto de abertura (`_self`, `_blank`, `_parent`, `_top`) |
+| `rel`            | `string`  | —        | Relação do link. Quando `target="_blank"`, assume `noopener noreferrer` automaticamente |
+| `download`       | `string`  | —        | Nome sugerido do arquivo ao baixar |
+| `hreflang`       | `string`  | —        | Idioma do documento de destino |
+| `referrerpolicy` | `string`  | —        | Política de referrer enviada na requisição |
+| `external`       | `boolean` | `false`  | Exibe ícone de link externo ao lado do texto. Implica `target="_blank"` e `rel="noopener noreferrer"` automaticamente |
+| `visited`        | `boolean` | `false`  | Habilita o estilo `:visited` após o link ser clicado |
+| `disabled`       | `boolean` | `false`  | Desabilita a navegação: remove `href`, adiciona `aria-disabled="true"` e mantém o elemento focável |
+| `aria-label`     | `string`  | —        | Label acessível para leitores de tela |
