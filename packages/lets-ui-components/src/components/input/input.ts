@@ -153,8 +153,7 @@ export class LuiInput extends LitElement {
     this._charCount = 0;
     this.error = false;
     if (this._inputEl) this._inputEl.value = '';
-    this._internals.setFormValue(null);
-    this._internals.setValidity({});
+    this._syncFormValue();
   }
 
   private _syncFormValue() {

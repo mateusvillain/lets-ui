@@ -66,8 +66,7 @@ export class LuiTextarea extends LitElement {
     this._charCount = 0;
     this.error = false;
     if (this._textareaEl) this._textareaEl.value = '';
-    this._internals.setFormValue(null);
-    this._internals.setValidity({});
+    this._syncFormValue();
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {

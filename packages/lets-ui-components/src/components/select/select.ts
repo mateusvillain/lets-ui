@@ -64,7 +64,7 @@ export class LuiSelect extends LitElement {
   formResetCallback() {
     this.selected = 0;
     this.error = false;
-    this._internals.setValidity({});
+    this._syncFormValue();
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
