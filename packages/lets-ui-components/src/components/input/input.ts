@@ -52,7 +52,6 @@ export class LuiInput extends LitElement {
   @property() type = 'text';
   @property() name = '';
   @property() value = '';
-  @property() form = '';
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;

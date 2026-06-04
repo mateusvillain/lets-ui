@@ -23,7 +23,6 @@ export class LuiButton extends LitElement {
   @property() type: 'button' | 'submit' | 'reset' = 'button';
   @property() name = '';
   @property() value = '';
-  @property() form = '';
   @property({ type: Boolean }) autofocus = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) block = false;

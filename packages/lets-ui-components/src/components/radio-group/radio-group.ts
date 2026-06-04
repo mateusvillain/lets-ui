@@ -13,7 +13,6 @@ export class LuiRadioGroup extends LitElement {
   @property() name = '';
   @property() label = '';
   @property() size = 'lg';
-  @property() form = '';
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) disabled = false;
   @property() hint = '';

@@ -12,7 +12,6 @@ export class LuiCheckbox extends LitElement {
   @property() label = '';
   @property() name = '';
   @property() value = 'on';
-  @property() form = '';
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;

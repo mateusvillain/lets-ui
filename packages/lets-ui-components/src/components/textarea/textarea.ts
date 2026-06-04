@@ -14,7 +14,6 @@ export class LuiTextarea extends LitElement {
   @property() size = 'lg';
   @property() name = '';
   @property() value = '';
-  @property() form = '';
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;

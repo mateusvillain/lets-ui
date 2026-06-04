@@ -11,7 +11,6 @@ export class LuiSelect extends LitElement {
 
   @property() label = '';
   @property() name = '';
-  @property() form = '';
   @property() options = 'Option 1,Option 2,Option 3';
   @property({ type: Number }) selected = 0;
   @property({ type: Boolean }) disabled = false;
