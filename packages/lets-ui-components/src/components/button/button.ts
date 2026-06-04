@@ -1,35 +1,60 @@
-import { LitElement, html, unsafeCSS } from 'lit';
+import { LitElement, html, svg, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './button.scss?inline';
+
+const spinnerIcon = svg`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true" class="btn__spinner">
+  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="56.549" stroke-dashoffset="42.412"/>
+</svg>`;
 
 export class LuiButton extends LitElement {
   static styles = unsafeCSS(styles);
 
   @property() variant = 'primary';
-  @property() size = 'lg';
-  @property({ type: Boolean }) disabled = false;
+  @property({ reflect: true }) size = 'lg';
+  @property() type: 'button' | 'submit' | 'reset' = 'button';
+  @property({ type: Boolean }) autofocus = false;
+  @property({ type: Boolean, reflect: true }) disabled = false;
+  @property({ type: Boolean, reflect: true }) block = false;
+  @property({ type: Boolean }) loading = false;
+  @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
-  get _size(): 'xl' | 'lg' | 'md' | 'sm' {
-    const s = this.size;
-    return (['xl', 'lg', 'md', 'sm'] as const).includes(
-      s as 'xl' | 'lg' | 'md' | 'sm'
-    )
-      ? (s as 'xl' | 'lg' | 'md' | 'sm')
-      : 'lg';
+  get _size(): 'lg' | 'md' {
+    return this.size === 'md' ? 'md' : 'lg';
+  }
+
+  private get _classes(): string {
+    return [
+      'btn',
+      `btn--${this.variant}`,
+      `btn--${this._size}`,
+      this.loading && 'btn--loading',
+    ]
+      .filter(Boolean)
+      .join(' ');
   }
 
   render() {
-    const ariaLabel = this.ariaLabel || this.label || 'Button';
+    const displayLabel =
+      this.loading && this.loadingText ? this.loadingText : this.label;
+    const isDisabled = this.disabled || this.loading;
+
     return html`
       <button
-        class="btn btn--${this.variant} btn--${this._size}"
-        aria-label="${ariaLabel}"
+        class="${this._classes}"
+        type="${this.type}"
+        ?autofocus="${this.autofocus}"
+        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
         ?disabled="${this.disabled}"
-        ?aria-disabled="${this.disabled}"
+        aria-disabled="${isDisabled ? 'true' : 'false'}"
+        aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
       >
-        ${this.label}
+        ${this.loading
+          ? html`${spinnerIcon}${displayLabel}`
+          : html`<slot name="prefix"></slot><slot>${this.label}</slot
+              ><slot name="suffix"></slot>`}
       </button>
     `;
   }

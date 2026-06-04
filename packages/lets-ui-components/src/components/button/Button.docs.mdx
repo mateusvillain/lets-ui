@@ -10,8 +10,99 @@ Elemento interativo utilizado para executar ações na interface.
 <Canvas of={ButtonStories.Button} />
 <Controls of={ButtonStories.Button} />
 
-## Primary
+## Variantes
+
+### Primary
+
+Ação principal da tela. Use para o CTA mais importante — deve existir apenas um por contexto.
+
 <Canvas of={ButtonStories.Primary} />
 
-## Secondary
+### Secondary
+
+Ação secundária ou complementar. Use ao lado do Primary para oferecer uma alternativa de menor peso visual.
+
 <Canvas of={ButtonStories.Secondary} />
+
+### Neutral
+
+Ação genérica sem conotação semântica. Use para ações utilitárias que não se encaixam em nenhum outro contexto.
+
+<Canvas of={ButtonStories.Neutral} />
+
+### Danger
+
+Ação destrutiva ou irreversível. Use para confirmar exclusões, remoções ou operações de alto risco.
+
+<Canvas of={ButtonStories.Danger} />
+
+### Success
+
+Ação de confirmação positiva. Use para finalizar fluxos como salvar, enviar ou concluir.
+
+<Canvas of={ButtonStories.Success} />
+
+## Icon
+
+<Canvas of={ButtonStories.WithIcon} />
+
+## Block
+
+O atributo `block` faz o botão ocupar toda a largura disponível do container pai.
+
+<Canvas of={ButtonStories.Block} />
+
+## Disabled
+
+O atributo `disabled` desabilita o botão e previne interações.
+
+<Canvas of={ButtonStories.Disabled} />
+
+## Label
+
+<Canvas of={ButtonStories.Label} />
+
+## Loading
+
+O atributo `loading` exibe um spinner e bloqueia interações enquanto uma operação está em andamento.
+O botão não fica opaco: permanece visualmente ativo, indicando progresso.
+
+<Canvas of={ButtonStories.Loading} />
+
+### Loading com texto alternativo
+
+O atributo `loading-text` substitui o label exibido enquanto `loading` estiver ativo.
+Útil para comunicar o estado ao usuário sem alterar o label original.
+
+<Canvas of={ButtonStories.LoadingWithText} />
+
+### Loading em todas as variantes
+
+<Canvas of={ButtonStories.AllVariantsLoading} />
+
+## Autofocus
+
+Use `autofocus` para mover o foco do teclado automaticamente para o botão quando o contexto é renderizado.
+O caso de uso mais comum é a ação primária de um diálogo ou modal: ao abrir, o foco já está no botão correto,
+permitindo que o usuário confirme a ação com Enter sem precisar navegar.
+
+**Evite usar em páginas inteiras.** Receber foco automaticamente no meio do conteúdo desorientaletores de tela e
+usuários de teclado, que esperam começar a navegação pelo topo. Reserve para contextos isolados e transitórios,
+como modais, drawers e alertas de confirmação.
+
+<Canvas of={ButtonStories.Autofocus} />
+
+## Atributos
+
+| Atributo       | Tipo      | Padrão      | Descrição                                                             |
+| -------------- | --------- | ----------- | --------------------------------------------------------------------- |
+| `label`        | `string`  | `''`        | Texto exibido no botão                                                |
+| `variant`      | `string`  | `'primary'` | Estilo visual: `primary`, `secondary`, `neutral`, `danger`, `success` |
+| `size`         | `string`  | `'lg'`      | Tamanho: `lg`, `md`                                                   |
+| `type`         | `string`  | `'button'`  | Tipo HTML: `button`, `submit`, `reset`                                |
+| `disabled`     | `boolean` | `false`     | Desabilita o botão e previne interações                               |
+| `autofocus`    | `boolean` | `false`     | Move o foco para o botão automaticamente ao renderizar o contexto     |
+| `block`        | `boolean` | `false`     | Torna o botão full-width dentro do seu container                      |
+| `loading`      | `boolean` | `false`     | Exibe spinner e bloqueia interações; não aplica opacidade de disabled |
+| `loading-text` | `string`  | `''`        | Texto alternativo exibido enquanto `loading` estiver ativo            |
+| `aria-label`   | `string`  | `''`        | Label acessível sobrescrevendo o derivado do `label`                  |

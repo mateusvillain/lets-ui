@@ -2,4 +2,27 @@
 
 :host {
   display: inline-flex;
+
+  --lui-btn-icon-size: calc(var(--lui-brand-typography-font-size-1xs) * 1.5);
+}
+
+:host([size='md']) {
+  --lui-btn-icon-size: calc(var(--lui-brand-typography-font-size-2xs) * 1.5);
+}
+
+:host([block]) {
+  display: block;
+
+  button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+::slotted([slot='prefix']),
+::slotted([slot='suffix']) {
+  display: flex;
+  width: var(--lui-btn-icon-size);
+  height: var(--lui-btn-icon-size);
+  flex-shrink: 0;
 }
