@@ -1,15 +1,22 @@
-import { LitElement, html, unsafeCSS } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
+import { property, query, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './textarea.scss?inline';
 
 export class LuiTextarea extends LitElement {
   static styles = unsafeCSS(styles);
+  static formAssociated = true;
+
+  private _internals: ElementInternals;
 
   @property() label = '';
   @property() placeholder = '';
   @property() size = 'lg';
+  @property() name = '';
   @property() value = '';
+  @property() form = '';
   @property({ type: Boolean }) disabled = false;
+  @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;
   @property({ attribute: 'optional-text' }) optionalText = '(opcional)';
   @property() hint = '';
@@ -23,11 +30,45 @@ export class LuiTextarea extends LitElement {
 
   @state() private _charCount = 0;
 
+  @query('.textarea-field__input') private _textareaEl!: HTMLTextAreaElement;
+
   private _baseId: string;
 
   constructor() {
     super();
     this._baseId = `lui-textarea-${Math.random().toString(36).slice(2, 9)}`;
+    this._internals = this.attachInternals();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._internals.setFormValue(this.value || null);
+    this.addEventListener('invalid', () => {
+      this.error = true;
+    });
+  }
+
+  protected firstUpdated() {
+    this._syncFormValue();
+  }
+
+  protected updated(changed: PropertyValues) {
+    if (changed.has('value')) {
+      this._syncFormValue();
+    }
+  }
+
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  formResetCallback() {
+    this.value = '';
+    this._charCount = 0;
+    this.error = false;
+    if (this._textareaEl) this._textareaEl.value = '';
+    this._internals.setFormValue(null);
+    this._internals.setValidity({});
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
@@ -53,15 +94,33 @@ export class LuiTextarea extends LitElement {
         : 'vertical';
   }
 
-  private _handleInput(e: Event) {
-    const textarea = e.target as HTMLTextAreaElement;
-    this._charCount = textarea.value.length;
-    this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+  private _syncFormValue() {
+    const val = this._textareaEl?.value ?? '';
+    this._internals.setFormValue(val || null);
+    if (this.required && !val.trim()) {
+      this._internals.setValidity(
+        { valueMissing: true },
+        this.errorText,
+        this._textareaEl
+      );
+    } else {
+      this._internals.setValidity({});
+    }
   }
 
-  private _handleChange() {
+  private _handleInput = (e: Event) => {
+    const textarea = e.target as HTMLTextAreaElement;
+    this._charCount = textarea.value.length;
+    this.error = false;
+    this._syncFormValue();
+    this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+  };
+
+  private _handleChange = () => {
+    this.error = false;
+    this._syncFormValue();
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-  }
+  };
 
   render() {
     const ariaLabel = this.ariaLabel || this.label || 'Textarea';
@@ -103,6 +162,7 @@ export class LuiTextarea extends LitElement {
           <textarea
             class="textarea-field__input"
             id="${this._baseId}-input"
+            name="${ifDefined(this.name || undefined)}"
             aria-label="${ariaLabel}"
             aria-describedby="${describedBy}"
             placeholder="${this.placeholder}"
@@ -110,6 +170,7 @@ export class LuiTextarea extends LitElement {
             style="resize: ${this._resizeValue};"
             maxlength="${maxLen !== null ? maxLen : ''}"
             ?disabled="${this.disabled}"
+            ?required="${this.required}"
             ?aria-disabled="${this.disabled}"
             @input="${this._handleInput}"
             @change="${this._handleChange}"

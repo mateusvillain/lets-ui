@@ -1,5 +1,5 @@
 @use 'packages/styles/src/components/checkbox' as *;
 
 :host {
-  display: inline-flex;
+  display: block;
 }

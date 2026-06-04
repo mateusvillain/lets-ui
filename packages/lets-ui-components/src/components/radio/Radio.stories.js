@@ -6,62 +6,63 @@ export default {
   title: 'Form and options/Radio',
   argTypes: {
     label: { control: 'text' },
-    checked: { control: 'boolean' },
-    disabled: { control: 'boolean' },
+    value: { control: 'text' },
+    checked: {
+      control: 'boolean',
+      table: { defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      control: 'boolean',
+      table: { defaultValue: { summary: 'false' } },
+    },
     size: {
       control: { type: 'select' },
       options: ['lg', 'md'],
+      table: { defaultValue: { summary: 'lg' } },
     },
   },
 };
 
-const Template = ({ label, checked, disabled, size }) =>
-  `<lui-radio
-    label="${label ?? ''}"
-    size="${size}"
-    name="story-radio"
-    value="${label ?? ''}"
-    ${checked ? 'checked' : ''}
-    ${disabled ? 'disabled' : ''}
-  ></lui-radio>`;
+const Template = ({ label, value, checked, disabled, size }) => {
+  const attrs = [
+    `size="${size ?? 'lg'}"`,
+    value ? `value="${value}"` : '',
+    checked ? 'checked' : '',
+    disabled ? 'disabled' : '',
+  ]
+    .filter(Boolean)
+    .join('\n  ');
+
+  return `<lui-radio\n  ${attrs}\n>\n  ${label ?? ''}\n</lui-radio>`;
+};
 
 export const Radio = Template.bind({});
 Radio.args = {
   label: 'Radio label',
+  value: 'option',
   checked: false,
   disabled: false,
   size: 'lg',
 };
 
-export const Checked = Template.bind({});
-Checked.args = {
-  label: 'Selected option',
-  checked: true,
-  disabled: false,
-  size: 'lg',
+export const LabelAttribute = () =>
+  `<lui-radio label="Opção via atributo" value="option" size="lg"></lui-radio>`;
+LabelAttribute.storyName = 'Label (atributo)';
+LabelAttribute.parameters = {
+  controls: { disable: true },
+  docs: {
+    description: {
+      story:
+        'Fallback para texto simples: o atributo `label` é renderizado como conteúdo padrão do slot quando nenhum conteúdo é projetado.',
+    },
+  },
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  label: 'Label',
-  checked: false,
-  disabled: false,
-  size: 'md',
-};
+export const Checked = () =>
+  `<lui-radio value="selected" checked size="lg">Opção selecionada</lui-radio>`;
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  label: 'Label',
-  checked: true,
-  disabled: true,
-  size: 'lg',
-};
+export const Small = () =>
+  `<lui-radio value="option" size="md">Label</lui-radio>`;
 
-export const Group = () => `
-  <div style="display: flex; flex-direction: column; gap: 8px;">
-    <lui-radio label="Opção 1" name="story-group" value="opt1" checked size="lg"></lui-radio>
-    <lui-radio label="Opção 2" name="story-group" value="opt2" size="lg"></lui-radio>
-    <lui-radio label="Opção 3 (desabilitado)" name="story-group" value="opt3" disabled size="lg"></lui-radio>
-  </div>
-`;
-Group.parameters = { controls: { disable: true } };
+export const Disabled = () =>
+  `<lui-radio value="option" checked disabled size="lg">Desabilitado</lui-radio>`;

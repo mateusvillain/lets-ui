@@ -1,21 +1,39 @@
-import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as RadioStories from './Radio.stories';
 
 <Meta of={RadioStories} />
 
 # Radio
 
+Elemento de seleção única dentro de um grupo. O conteúdo da label é projetado via slot — o atributo `label` serve como fallback para texto simples.
+
 <Canvas of={RadioStories.Radio} />
 <Controls of={RadioStories.Radio} />
 
+## Label (atributo)
+
+O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
+
+<Canvas of={RadioStories.LabelAttribute} />
+
 ## Checked
+
 <Canvas of={RadioStories.Checked} />
 
 ## Small
+
 <Canvas of={RadioStories.Small} />
 
 ## Disabled
+
 <Canvas of={RadioStories.Disabled} />
 
-## Group
-<Canvas of={RadioStories.Group} />
+## Atributos
+
+| Atributo     | Tipo            | Padrão | Descrição                                                   |
+| ------------ | --------------- | ------ | ----------------------------------------------------------- |
+| `label`      | `string`        | `''`   | Conteúdo padrão do slot; ignorado quando o slot é projetado |
+| `value`      | `string`        | `''`   | Valor submetido pelo grupo quando este radio estiver marcado |
+| `checked`    | `boolean`       | `false`| Estado marcado                                              |
+| `disabled`   | `boolean`       | `false`| Desabilita o radio                                          |
+| `size`       | `'lg' \| 'md'` | `'lg'` | Controlado pelo `lui-radio-group`; raramente definido direto|

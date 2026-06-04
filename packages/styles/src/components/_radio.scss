@@ -8,10 +8,12 @@ $sizes: (
   lg: (
     outer: 24,
     dot: 10,
+    label: body--lg,
   ),
   md: (
     outer: 16,
     dot: 6,
+    label: body--md,
   ),
 );
 
@@ -24,14 +26,21 @@ input[type='radio'] {
   @each $key, $values in $sizes {
     $outer: map.get($values, outer);
     $dot: map.get($values, dot);
+    $label: map.get($values, label);
 
-    &--#{$key} input[type='radio'] {
-      width: fixed($outer);
-      height: fixed($outer);
+    &--#{$key} {
+      input[type='radio'] {
+        width: fixed($outer);
+        height: fixed($outer);
 
-      &:checked::after {
-        width: #{$dot}px;
-        height: #{$dot}px;
+        &:checked::after {
+          width: #{$dot}px;
+          height: #{$dot}px;
+        }
+      }
+
+      slot {
+        @include font-scale($label);
       }
     }
   }

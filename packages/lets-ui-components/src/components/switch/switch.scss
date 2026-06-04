@@ -1,5 +1,5 @@
 @use 'packages/styles/src/components/switch' as *;
 
 :host {
-  display: inline-flex;
+  display: block;
 }

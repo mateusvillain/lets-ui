@@ -9,10 +9,21 @@ const spinnerIcon = svg`<svg xmlns="http://www.w3.org/2000/svg" fill="none" view
 
 export class LuiButton extends LitElement {
   static styles = unsafeCSS(styles);
+  static formAssociated = true;
+
+  private _internals: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   @property() variant = 'primary';
   @property({ reflect: true }) size = 'lg';
   @property() type: 'button' | 'submit' | 'reset' = 'button';
+  @property() name = '';
+  @property() value = '';
+  @property() form = '';
   @property({ type: Boolean }) autofocus = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) block = false;
@@ -20,6 +31,10 @@ export class LuiButton extends LitElement {
   @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
+
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
 
   get _size(): 'lg' | 'md' {
     return this.size === 'md' ? 'md' : 'lg';
@@ -36,6 +51,18 @@ export class LuiButton extends LitElement {
       .join(' ');
   }
 
+  private _handleClick = () => {
+    if (this.loading) return;
+    const form = this._internals.form ?? this.closest('form');
+    if (this.type === 'submit') {
+      if (this.name) this._internals.setFormValue(this.value);
+      form?.requestSubmit();
+      if (this.name) this._internals.setFormValue(null);
+    } else if (this.type === 'reset') {
+      form?.reset();
+    }
+  };
+
   render() {
     const displayLabel =
       this.loading && this.loadingText ? this.loadingText : this.label;
@@ -44,12 +71,13 @@ export class LuiButton extends LitElement {
     return html`
       <button
         class="${this._classes}"
-        type="${this.type}"
+        type="button"
         ?autofocus="${this.autofocus}"
         aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
         ?disabled="${this.disabled}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        @click="${this._handleClick}"
       >
         ${this.loading
           ? html`${spinnerIcon}${displayLabel}`

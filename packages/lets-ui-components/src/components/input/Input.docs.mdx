@@ -23,3 +23,30 @@ import * as InputStories from './Input.stories';
 ## Disabled
 
 <Canvas of={InputStories.Disabled} />
+
+## Integração com formulários
+
+O `lui-input` é um form-associated custom element — seus valores são capturados automaticamente
+pelo `FormData` do form pai através do atributo `name`.
+
+Use `form` para associar o input a um form por ID, mesmo que esteja fora do elemento `<form>` no DOM.
+
+### Required
+
+O atributo `required` bloqueia a submissão do form quando o campo está vazio.
+A validação é implementada via `ElementInternals.setValidity()`, mantendo o comportamento
+consistente com elementos nativos. A mensagem reportada é controlada pelo atributo `error-text`.
+
+<Canvas of={InputStories.Required} />
+
+### Form Integration
+
+<Canvas of={InputStories.FormIntegration} />
+
+## Atributos de formulário
+
+| Atributo   | Tipo      | Padrão | Descrição                                                                    |
+| ---------- | --------- | ------ | ---------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`   |
+| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o input fora do elemento form         |
+| `required` | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals`|

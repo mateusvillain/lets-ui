@@ -1,14 +1,21 @@
-import { LitElement, html, unsafeCSS } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
+import { property, query, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './select.scss?inline';
 
 export class LuiSelect extends LitElement {
   static styles = unsafeCSS(styles);
+  static formAssociated = true;
+
+  private _internals: ElementInternals;
 
   @property() label = '';
+  @property() name = '';
+  @property() form = '';
   @property() options = 'Option 1,Option 2,Option 3';
   @property({ type: Number }) selected = 0;
   @property({ type: Boolean }) disabled = false;
+  @property({ type: Boolean }) required = false;
   @property() size = 'lg';
   @property({ type: Boolean }) optional = false;
   @property({ attribute: 'optional-text' }) optionalText = '(opcional)';
@@ -21,11 +28,44 @@ export class LuiSelect extends LitElement {
 
   @state() private _selectedIndex = 0;
 
+  @query('.native-select__input') private _selectEl!: HTMLSelectElement;
+
   private _baseId: string;
 
   constructor() {
     super();
     this._baseId = `lui-select-${Math.random().toString(36).slice(2, 9)}`;
+    this._internals = this.attachInternals();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    const idx = Number.isFinite(this.selected) ? Math.max(this.selected, 0) : 0;
+    const val = idx > 0 ? this._parsedOptions[idx - 1] : null;
+    this._internals.setFormValue(val || null);
+    this.addEventListener('invalid', () => {
+      this.error = true;
+    });
+  }
+
+  protected firstUpdated() {
+    this._syncFormValue();
+  }
+
+  protected updated(changed: PropertyValues) {
+    if (changed.has('selected')) {
+      this._syncFormValue();
+    }
+  }
+
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  formResetCallback() {
+    this.selected = 0;
+    this.error = false;
+    this._internals.setValidity({});
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
@@ -44,12 +84,28 @@ export class LuiSelect extends LitElement {
       .filter(Boolean);
   }
 
-  private _handleChange(e: Event) {
+  private _syncFormValue() {
+    const idx = Number.isFinite(this.selected) ? Math.max(this.selected, 0) : 0;
+    const selectedValue = idx > 0 ? this._parsedOptions[idx - 1] : null;
+    this._internals.setFormValue(selectedValue || null);
+    if (this.required && !selectedValue) {
+      this._internals.setValidity(
+        { valueMissing: true },
+        this.errorText,
+        this._selectEl
+      );
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  private _handleChange = (e: Event) => {
     const select = e.target as HTMLSelectElement;
     this._selectedIndex = select.selectedIndex;
     this.selected = select.selectedIndex;
+    this.error = false;
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-  }
+  };
 
   render() {
     const ariaLabel = this.ariaLabel || this.label || 'Native select';
@@ -90,9 +146,11 @@ export class LuiSelect extends LitElement {
           <select
             class="native-select__input"
             id="${this._baseId}-input"
+            name="${ifDefined(this.name || undefined)}"
             aria-label="${ariaLabel}"
             aria-describedby="${describedBy}"
             ?disabled="${this.disabled}"
+            ?required="${this.required}"
             ?aria-disabled="${this.disabled}"
             @change="${this._handleChange}"
           >

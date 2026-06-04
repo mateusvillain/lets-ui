@@ -5,10 +5,16 @@ import * as SwitchStories from './Switch.stories';
 
 # Switch
 
-Controle de alternância binária (ligado/desligado). Suporta quatro tamanhos, estado desabilitado e label associada via atributo `label`.
+Controle de alternância binária (ligado/desligado). O conteúdo da label é projetado via slot — o atributo `label` serve como fallback para texto simples.
 
 <Canvas of={SwitchStories.Default} />
 <Controls of={SwitchStories.Default} />
+
+## Label (atributo)
+
+O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
+
+<Canvas of={SwitchStories.LabelAttribute} />
 
 ## Estados
 
@@ -31,3 +37,19 @@ Controle de alternância binária (ligado/desligado). Suporta quatro tamanhos, e
 ## Grupo
 
 <Canvas of={SwitchStories.Group} />
+
+## Integração com formulários
+
+O `lui-switch` é form-associated. Use `name` para identificar o campo no `FormData` e `value` para definir o que é submetido quando ativado (padrão `"on"`).
+
+<Canvas of={SwitchStories.FormIntegration} />
+
+## Atributos de formulário
+
+| Atributo   | Tipo      | Padrão | Descrição                                                                       |
+| ---------- | --------- | ------ | ------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`   | Conteúdo padrão do slot; ignorado quando o slot é projetado                     |
+| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos                                              |
+| `value`    | `string`  | `'on'` | Valor submetido quando ativado; omitido quando desativado                       |
+| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o switch fora do elemento form           |
+| `required` | `boolean` | `false`| Bloqueia a submissão quando o switch não está ativado                           |
