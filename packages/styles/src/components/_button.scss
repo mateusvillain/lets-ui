@@ -45,10 +45,19 @@ $size: (
   ),
 );
 
+@keyframes lui-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 button {
   &.btn {
     position: relative;
     overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: fluid(8);
     font-weight: weight(regular);
     border: fixed(0);
     outline: fixed(0);
@@ -69,6 +78,18 @@ button {
       cursor: not-allowed;
       opacity: opacity(disabled);
     }
+  }
+
+  &.btn--loading {
+    cursor: wait;
+    pointer-events: none;
+  }
+
+  .btn__spinner {
+    flex-shrink: 0;
+    width: fluid(16);
+    height: fluid(16);
+    animation: lui-btn-spin 0.7s linear infinite;
   }
 
   @each $key, $props in $size {
