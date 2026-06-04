@@ -9,6 +9,18 @@ $size: (
   md: 16,
 );
 
+.checkbox-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: fluid(4);
+
+  &__message {
+    @include font-scale(body--md);
+
+    color: text(error);
+  }
+}
+
 .checkbox,
 input[type='checkbox'] {
   @include selection.wrapper;

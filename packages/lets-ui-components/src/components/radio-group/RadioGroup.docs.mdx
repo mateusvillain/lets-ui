@@ -1,0 +1,63 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as RadioGroupStories from './RadioGroup.stories';
+
+<Meta of={RadioGroupStories} />
+
+# Radio Group
+
+Agrupa múltiplos `lui-radio` em uma seleção exclusiva. Centraliza `name`, `required` e `error-text` no elemento pai — os filhos declaram apenas `value` e `label`.
+
+<Canvas of={RadioGroupStories.RadioGroup} />
+<Controls of={RadioGroupStories.RadioGroup} />
+
+## Hint
+
+Texto auxiliar exibido abaixo das opções. Substituído pela mensagem de `error-text` quando `error` é `true`.
+
+<Canvas of={RadioGroupStories.WithHint} />
+
+## Small
+
+`size="md"` aplica `body--md` na label do grupo, seguindo o mesmo padrão do `lui-input`.
+
+<Canvas of={RadioGroupStories.Small} />
+
+## Pré-selecionado
+
+Adicione `checked` ao `lui-radio` desejado para definir um valor inicial. O grupo sincroniza o `FormData` automaticamente ao conectar.
+
+<Canvas of={RadioGroupStories.PreSelected} />
+
+## Disabled
+
+`disabled` no grupo propaga o estado para todos os filhos e exclui o campo da submissão.
+
+<Canvas of={RadioGroupStories.Disabled} />
+
+## Integração com formulários
+
+### Required
+
+`required` no grupo bloqueia a submissão enquanto nenhuma opção estiver selecionada. O evento `invalid` dispara no grupo e a mensagem de `error-text` é exibida abaixo das opções, representando o grupo como um todo.
+
+<Canvas of={RadioGroupStories.Required} />
+
+### Form Integration
+
+O valor selecionado é submetido no `FormData` com a chave `name` do grupo. Múltiplos grupos independentes coexistem no mesmo form sem interferência.
+
+<Canvas of={RadioGroupStories.FormIntegration} />
+
+## Atributos
+
+| Atributo     | Tipo      | Padrão                  | Descrição                                                         |
+| ------------ | --------- | ----------------------- | ----------------------------------------------------------------- |
+| `name`       | `string`  | `''`                    | Chave do campo no `FormData`                                      |
+| `label`      | `string`  | `''`                    | Texto exibido como `<legend>` do grupo                            |
+| `size`       | `'lg' \| 'md'` | `'lg'`            | Tamanho da label: `lg` → `body--lg`, `md` → `body--md`           |
+| `hint`       | `string`  | `''`                    | Texto auxiliar abaixo das opções; substituído por `error-text` quando há erro |
+| `required`   | `boolean` | `false`                 | Bloqueia a submissão quando nenhuma opção está selecionada        |
+| `disabled`   | `boolean` | `false`                 | Desabilita todos os radios filhos e exclui o campo da submissão   |
+| `error`      | `boolean` | `false`                 | Ativa o estado de erro manualmente                                |
+| `error-text` | `string`  | `'Selecione uma opção.'`| Mensagem exibida abaixo do grupo quando `error` é verdadeiro      |
+| `form`       | `string`  | `''`                    | ID do `<form>` associado; permite usar o grupo fora do `<form>`   |

@@ -1,0 +1,590 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Integration — Let's UI Playground</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--lui-brand-typography-font-family-body);
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+        margin: 0;
+        padding: 40px 24px 80px;
+      }
+
+      .page-header {
+        margin-bottom: 48px;
+      }
+
+      .page-header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+
+      .page-header p {
+        font-size: 0.875rem;
+        color: var(--lui-color-neutral-text-subtle);
+        margin: 0;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        max-width: 1100px;
+      }
+
+      @media (max-width: 768px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: var(--lui-color-neutral-background-default);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 4px;
+      }
+
+      .card p.description {
+        font-size: 0.8125rem;
+        color: var(--lui-color-neutral-text-subtle);
+        margin: 0 0 4px;
+      }
+
+      .form-body {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+
+      .radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .radio-group legend {
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      .switch-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .output {
+        background: var(--lui-color-neutral-background-subtle);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.8125rem;
+        font-family: monospace;
+        min-height: 48px;
+        white-space: pre-wrap;
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      .output.success {
+        border-color: var(--lui-color-success-border-default);
+        color: var(--lui-color-success-text-body);
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid var(--lui-color-neutral-border-subtle);
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>Form Integration</h1>
+      <p>
+        Testa a integração de todos os componentes de formulário com <code
+          >FormData</code
+        >, reset e validação nativa.
+      </p>
+    </div>
+
+    <div class="layout">
+      <!-- ── Input + Textarea ───────────────────────────────── -->
+      <div class="card">
+        <div>
+          <h2>Input &amp; Textarea</h2>
+          <p class="description">
+            Campos de texto com <code>name</code>, <code>required</code> e reset.
+          </p>
+        </div>
+        <form class="form-body" id="form-text">
+          <lui-input
+            name="name"
+            label="Nome"
+            placeholder="Digite seu nome"
+            size="lg"
+            required
+            error-text="Nome é obrigatório."></lui-input>
+          <lui-input
+            name="email"
+            label="E-mail"
+            placeholder="seu@email.com"
+            size="lg"
+            required
+            error-text="E-mail é obrigatório."></lui-input>
+          <lui-textarea
+            name="message"
+            label="Mensagem"
+            placeholder="Escreva sua mensagem..."
+            size="lg"
+            maxlength="300"
+            required
+            error-text="Mensagem é obrigatória."></lui-textarea>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Enviar</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-text">Aguardando submissão...</div>
+      </div>
+
+      <!-- ── Select ─────────────────────────────────────────── -->
+      <div class="card">
+        <div>
+          <h2>Select</h2>
+          <p class="description">
+            Select com <code>name</code>, <code>required</code> e múltiplas opções.
+          </p>
+        </div>
+        <form class="form-body" id="form-select">
+          <lui-native-select
+            name="role"
+            label="Função"
+            placeholder="Selecione sua função"
+            options="Design,Engenharia,Produto,Marketing,Dados"
+            size="lg"
+            required
+            error-text="Selecione uma função."></lui-native-select>
+          <lui-native-select
+            name="seniority"
+            label="Senioridade"
+            placeholder="Selecione a senioridade"
+            options="Júnior,Pleno,Sênior,Staff,Principal"
+            size="lg"
+            required
+            error-text="Selecione a senioridade."></lui-native-select>
+          <lui-native-select
+            name="team"
+            label="Time (opcional)"
+            placeholder="Selecione o time"
+            options="Plataforma,Growth,Core,Infra"
+            size="lg"
+            optional></lui-native-select>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Salvar</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-select">Aguardando submissão...</div>
+      </div>
+
+      <!-- ── Checkbox ───────────────────────────────────────── -->
+      <div class="card">
+        <div>
+          <h2>Checkbox</h2>
+          <p class="description">
+            Múltiplos checkboxes com <code>name</code>/<code>value</code> distintos
+            e <code>required</code>.
+          </p>
+        </div>
+        <form class="form-body" id="form-checkbox">
+          <lui-checkbox
+            name="newsletter"
+            value="subscribed"
+            label="Quero receber novidades por e-mail"
+            size="lg"></lui-checkbox>
+          <lui-checkbox
+            name="updates"
+            value="enabled"
+            label="Notificar sobre atualizações do produto"
+            size="lg"></lui-checkbox>
+          <lui-checkbox
+            name="terms"
+            value="accepted"
+            label="Li e aceito os termos de uso"
+            required
+            error-text="Você precisa aceitar os termos para continuar."
+            size="lg"></lui-checkbox>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Cadastrar</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-checkbox">Aguardando submissão...</div>
+      </div>
+
+      <!-- ── Radio ──────────────────────────────────────────── -->
+      <div class="card">
+        <div>
+          <h2>Radio Group</h2>
+          <p class="description">
+            Grupos de radio com <code>lui-radio-group</code>: <code>name</code>,
+            <code>required</code> e <code>error-text</code> definidos uma vez no grupo.
+          </p>
+        </div>
+        <form class="form-body" id="form-radio">
+          <lui-radio-group
+            name="plan"
+            label="Plano"
+            required
+            error-text="Selecione um plano.">
+            <lui-radio value="free" label="Free — até 3 projetos" size="lg"></lui-radio>
+            <lui-radio value="pro" label="Pro — projetos ilimitados" size="lg"></lui-radio>
+            <lui-radio value="enterprise" label="Enterprise — sob consulta" size="lg"></lui-radio>
+          </lui-radio-group>
+          <lui-radio-group
+            name="billing"
+            label="Ciclo de cobrança"
+            required
+            error-text="Selecione o ciclo de cobrança.">
+            <lui-radio value="monthly" label="Mensal" size="lg"></lui-radio>
+            <lui-radio value="yearly" label="Anual (2 meses grátis)" size="lg"></lui-radio>
+          </lui-radio-group>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Continuar</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-radio">Aguardando submissão...</div>
+      </div>
+
+      <!-- ── Switch ─────────────────────────────────────────── -->
+      <div class="card">
+        <div>
+          <h2>Switch</h2>
+          <p class="description">
+            Switches com <code>name</code>/<code>value</code>; campos omitidos
+            quando desativados.
+          </p>
+        </div>
+        <form class="form-body" id="form-switch">
+          <div class="switch-group">
+            <lui-switch
+              name="notifications"
+              value="enabled"
+              label="Receber notificações"
+              checked
+              size="lg"></lui-switch>
+            <lui-switch
+              name="darkmode"
+              value="enabled"
+              label="Modo escuro"
+              size="lg"></lui-switch>
+            <lui-switch
+              name="analytics"
+              value="enabled"
+              label="Compartilhar dados de uso"
+              checked
+              size="lg"></lui-switch>
+            <lui-switch
+              name="marketing"
+              value="enabled"
+              label="Comunicações de marketing"
+              size="lg"></lui-switch>
+          </div>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Restaurar padrões</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Salvar preferências</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-switch">Aguardando submissão...</div>
+      </div>
+
+      <!-- ── Validação visual (invalid event) ─────────────── -->
+      <div class="card">
+        <div>
+          <h2>Validação visual</h2>
+          <p class="description">
+            Testa que o evento <code>invalid</code> ativa o estado de erro com <code
+              >error-text</code
+            > em todos os campos.
+          </p>
+        </div>
+        <form class="form-body" id="form-validation">
+          <lui-input
+            name="val-name"
+            label="Nome"
+            placeholder="Deixe em branco e tente enviar"
+            required
+            error-text="Nome é obrigatório."
+            size="lg"></lui-input>
+          <lui-native-select
+            name="val-role"
+            label="Função"
+            placeholder="Não selecione nada"
+            options="Design,Engenharia,Produto"
+            required
+            error-text="Selecione uma função."
+            size="lg"></lui-native-select>
+          <lui-textarea
+            name="val-bio"
+            label="Bio"
+            placeholder="Deixe em branco e tente enviar"
+            required
+            error-text="Bio é obrigatória."
+            size="lg"></lui-textarea>
+          <lui-checkbox
+            name="val-terms"
+            value="accepted"
+            label="Aceito os termos"
+            required
+            error-text="Aceite os termos para continuar."
+            size="lg"></lui-checkbox>
+          <lui-radio-group
+            name="val-profile"
+            label="Perfil (obrigatório)"
+            required
+            error-text="Selecione um perfil.">
+            <lui-radio value="designer" label="Designer" size="lg"></lui-radio>
+            <lui-radio value="developer" label="Desenvolvedor" size="lg"></lui-radio>
+          </lui-radio-group>
+          <lui-switch
+            name="val-agree"
+            value="yes"
+            label="Concordo com a política de privacidade"
+            required
+            error-text="É necessário concordar para continuar."
+            size="lg"></lui-switch>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar erros</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Validar</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-validation">
+          Clique em "Validar" sem preencher os campos para ver os erros.
+        </div>
+      </div>
+
+      <!-- ── Prefill programático ──────────────────────────── -->
+      <div class="card">
+        <div>
+          <h2>Prefill programático</h2>
+          <p class="description">
+            Verifica que valores definidos via JavaScript sincronizam
+            corretamente com o <code>FormData</code>. Os campos são preenchidos
+            600ms após o carregamento.
+          </p>
+        </div>
+        <form class="form-body" id="form-prefill">
+          <lui-input
+            name="prefill-name"
+            label="Nome"
+            placeholder="Será preenchido via JS..."
+            size="lg"></lui-input>
+          <lui-native-select
+            name="prefill-role"
+            label="Função"
+            placeholder="Será selecionado via JS..."
+            options="Design,Engenharia,Produto,Marketing"
+            size="lg"></lui-native-select>
+          <lui-checkbox
+            name="prefill-newsletter"
+            value="yes"
+            label="Quero receber novidades"
+            size="lg"></lui-checkbox>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Verificar FormData</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-prefill">
+          Aguardando prefill via JS...
+        </div>
+      </div>
+
+      <!-- ── Mixed Form ─────────────────────────────────────── -->
+      <div class="card">
+        <div>
+          <h2>Formulário completo</h2>
+          <p class="description">
+            Todos os componentes juntos em um único form.
+          </p>
+        </div>
+        <form class="form-body" id="form-mixed">
+          <lui-input
+            name="fullname"
+            label="Nome completo"
+            placeholder="Seu nome"
+            size="lg"
+            required
+            error-text="Nome é obrigatório."></lui-input>
+          <lui-native-select
+            name="country"
+            label="País"
+            placeholder="Selecione o país"
+            options="Brasil,Portugal,Espanha,Estados Unidos"
+            size="lg"
+            required
+            error-text="Selecione um país."></lui-native-select>
+          <lui-radio-group
+            name="profile"
+            label="Perfil"
+            required
+            error-text="Selecione um perfil.">
+            <lui-radio value="designer" label="Designer" size="lg"></lui-radio>
+            <lui-radio value="developer" label="Desenvolvedor" size="lg"></lui-radio>
+            <lui-radio value="pm" label="Product Manager" size="lg"></lui-radio>
+          </lui-radio-group>
+          <lui-textarea
+            name="bio"
+            label="Bio"
+            placeholder="Conte um pouco sobre você..."
+            size="lg"
+            maxlength="200"></lui-textarea>
+          <lui-switch
+            name="public"
+            value="yes"
+            label="Perfil público"
+            checked
+            size="lg"></lui-switch>
+          <lui-checkbox
+            name="terms"
+            value="accepted"
+            label="Li e aceito os termos de uso"
+            required
+            size="lg"></lui-checkbox>
+          <div class="form-row">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Criar perfil</lui-button
+            >
+          </div>
+        </form>
+        <hr class="divider" />
+        <div class="output" id="output-mixed">Aguardando submissão...</div>
+      </div>
+    </div>
+
+    <script>
+      import '@lets-ui/components';
+    </script>
+
+    <script type="module">
+      function formatFormData(data) {
+        const entries = [...data.entries()];
+        if (entries.length === 0) return '(nenhum campo submetido)';
+        return entries.map(([k, v]) => `${k}: "${v}"`).join('\n');
+      }
+
+      function bindForm(formId, outputId) {
+        const form = document.getElementById(formId);
+        const output = document.getElementById(outputId);
+
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const data = new FormData(e.target);
+          output.className = 'output success';
+          output.textContent = '✓ Submetido:\n' + formatFormData(data);
+        });
+
+        form.addEventListener('reset', () => {
+          output.className = 'output';
+          output.textContent = 'Aguardando submissão...';
+        });
+      }
+
+      bindForm('form-text', 'output-text');
+      bindForm('form-select', 'output-select');
+      bindForm('form-checkbox', 'output-checkbox');
+      bindForm('form-radio', 'output-radio');
+      bindForm('form-switch', 'output-switch');
+      bindForm('form-validation', 'output-validation');
+      bindForm('form-prefill', 'output-prefill');
+      bindForm('form-mixed', 'output-mixed');
+
+      // Prefill via JS após 600ms — testa sincronização programática (Gap 1)
+      setTimeout(() => {
+        document.querySelector('lui-input[name="prefill-name"]').value =
+          'Maria Silva';
+        document.querySelector(
+          'lui-native-select[name="prefill-role"]'
+        ).selected = 2;
+        document.querySelector(
+          'lui-checkbox[name="prefill-newsletter"]'
+        ).checked = true;
+        document.getElementById('output-prefill').textContent =
+          'Campos preenchidos via JS. Submeta para verificar o FormData.';
+      }, 600);
+    </script>
+  </body>
+</html>

@@ -1,21 +1,41 @@
-import { Meta, Canvas, Controls, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as SelectStories from './Select.stories';
 
 <Meta of={SelectStories} />
 
 # Native Select
 
+Select nativo com estilização customizada. O valor da opção selecionada é submetido no `FormData` com a chave `name`.
+
 <Canvas of={SelectStories.NativeSelect} />
 <Controls of={SelectStories.NativeSelect} />
 
-## Hover
-<Canvas of={SelectStories.Hover} />
-
-## Focus
-<Canvas of={SelectStories.Focus} />
-
 ## Error
+
 <Canvas of={SelectStories.Error} />
 
 ## Disabled
+
 <Canvas of={SelectStories.Disabled} />
+
+## Integração com formulários
+
+O `lui-native-select` é form-associated. O valor da opção selecionada é submetido via `FormData` com a chave `name`. Use `form` para associá-lo a um form por ID mesmo estando fora do `<form>`.
+
+### Required
+
+Com `required`, o form não submete enquanto o placeholder estiver ativo (nenhuma opção real selecionada).
+
+<Canvas of={SelectStories.Required} />
+
+### Form Integration
+
+<Canvas of={SelectStories.FormIntegration} />
+
+## Atributos de formulário
+
+| Atributo   | Tipo      | Padrão | Descrição                                                                        |
+| ---------- | --------- | ------ | -------------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`       |
+| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o select fora do elemento form            |
+| `required` | `boolean` | `false`| Bloqueia a submissão enquanto o placeholder estiver selecionado                  |

@@ -16,6 +16,7 @@ import { LuiButton } from './components/button/button.js';
 import { LuiCard } from './components/card/card.js';
 import { LuiCheckbox } from './components/checkbox/checkbox.js';
 import { LuiRadio } from './components/radio/radio.js';
+import { LuiRadioGroup } from './components/radio-group/radio-group.js';
 import { LuiSwitch } from './components/switch/switch.js';
 import { LuiIconButton } from './components/icon-button/icon-button.js';
 import { LuiInput } from './components/input/input.js';
@@ -50,6 +51,7 @@ define('lui-button', LuiButton);
 define('lui-card', LuiCard);
 define('lui-checkbox', LuiCheckbox);
 define('lui-radio', LuiRadio);
+define('lui-radio-group', LuiRadioGroup);
 define('lui-switch', LuiSwitch);
 define('lui-icon-button', LuiIconButton);
 define('lui-input', LuiInput);
@@ -80,6 +82,7 @@ export {
   LuiCard,
   LuiCheckbox,
   LuiRadio,
+  LuiRadioGroup,
   LuiSwitch,
   LuiIconButton,
   LuiInput,

@@ -20,6 +20,18 @@ $sizes: (
   ),
 );
 
+.switch-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: fluid(4);
+
+  &__message {
+    @include font-scale(body--md);
+
+    color: text(error);
+  }
+}
+
 .switch {
   @include selection.wrapper;
 

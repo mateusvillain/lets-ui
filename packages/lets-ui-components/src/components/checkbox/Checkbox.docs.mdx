@@ -1,15 +1,53 @@
-import { Meta, Canvas, Controls, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as CheckboxStories from './Checkbox.stories';
 
 <Meta of={CheckboxStories} />
 
 # Checkbox
 
+Elemento de seleção binária. O conteúdo da label é projetado via slot — o atributo `label` serve como fallback para texto simples.
+
 <Canvas of={CheckboxStories.Checkbox} />
 <Controls of={CheckboxStories.Checkbox} />
 
+## Label (atributo)
+
+O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
+
+<Canvas of={CheckboxStories.LabelAttribute} />
+
+## Checked
+
+<Canvas of={CheckboxStories.Checked} />
+
 ## Small
+
 <Canvas of={CheckboxStories.Small} />
 
 ## Disabled
+
 <Canvas of={CheckboxStories.Disabled} />
+
+## Integração com formulários
+
+O `lui-checkbox` é form-associated. Use `name` para identificar o campo no `FormData` e `value` para definir o que é submetido quando marcado (padrão `"on"`, igual ao nativo).
+
+### Required
+
+Com `required`, o form não submete enquanto o checkbox não estiver marcado.
+
+<Canvas of={CheckboxStories.Required} />
+
+### Form Integration
+
+<Canvas of={CheckboxStories.FormIntegration} />
+
+## Atributos de formulário
+
+| Atributo   | Tipo      | Padrão | Descrição                                                                       |
+| ---------- | --------- | ------ | ------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`   | Conteúdo padrão do slot; ignorado quando o slot é projetado                     |
+| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos                                              |
+| `value`    | `string`  | `'on'` | Valor submetido quando marcado; omitido quando desmarcado                       |
+| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o checkbox fora do elemento form         |
+| `required` | `boolean` | `false`| Bloqueia a submissão quando o checkbox não está marcado                         |

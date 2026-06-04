@@ -80,6 +80,15 @@ O atributo `loading-text` substitui o label exibido enquanto `loading` estiver a
 
 <Canvas of={ButtonStories.AllVariantsLoading} />
 
+## Integração com formulários
+
+`type="submit"` e `type="reset"` funcionam nativamente com qualquer `<form>` pai.
+Dois botões de submit com `name` e `value` distintos permitem identificar qual ação foi escolhida
+nos dados submetidos. O atributo `form` permite associar o botão a um form pelo ID,
+mesmo que esteja fora do elemento `<form>` no DOM.
+
+<Canvas of={ButtonStories.FormIntegration} />
+
 ## Autofocus
 
 Use `autofocus` para mover o foco do teclado automaticamente para o botão quando o contexto é renderizado.
@@ -100,6 +109,9 @@ como modais, drawers e alertas de confirmação.
 | `variant`      | `string`  | `'primary'` | Estilo visual: `primary`, `secondary`, `neutral`, `danger`, `success` |
 | `size`         | `string`  | `'lg'`      | Tamanho: `lg`, `md`                                                   |
 | `type`         | `string`  | `'button'`  | Tipo HTML: `button`, `submit`, `reset`                                |
+| `name`         | `string`  | `''`        | Nome submetido com o form ao usar `type="submit"`                     |
+| `value`        | `string`  | `''`        | Valor submetido junto ao `name`; incluído apenas quando este botão dispara o submit |
+| `form`         | `string`  | `''`        | ID do `<form>` associado; permite usar o botão fora do elemento form  |
 | `disabled`     | `boolean` | `false`     | Desabilita o botão e previne interações                               |
 | `autofocus`    | `boolean` | `false`     | Move o foco para o botão automaticamente ao renderizar o contexto     |
 | `block`        | `boolean` | `false`     | Torna o botão full-width dentro do seu container                      |

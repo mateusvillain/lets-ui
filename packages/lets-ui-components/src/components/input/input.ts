@@ -1,5 +1,6 @@
-import { LitElement, html, unsafeCSS } from 'lit';
+import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './input.scss?inline';
 
 const EYE_CLOSED = html`
@@ -41,13 +42,18 @@ const ICON_PLUS = html`
 
 export class LuiInput extends LitElement {
   static styles = unsafeCSS(styles);
+  static formAssociated = true;
+
+  private _internals: ElementInternals;
 
   @property() label = '';
   @property() placeholder = '';
   @property() size = 'lg';
   @property() type = 'text';
+  @property() name = '';
   @property() value = '';
   @property({ type: Boolean }) disabled = false;
+  @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;
   @property({ attribute: 'optional-text' }) optionalText = '(opcional)';
   @property() hint = '';
@@ -72,6 +78,25 @@ export class LuiInput extends LitElement {
   constructor() {
     super();
     this._baseId = `lui-input-${Math.random().toString(36).slice(2, 9)}`;
+    this._internals = this.attachInternals();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._internals.setFormValue(this.value);
+    this.addEventListener('invalid', () => {
+      this.error = true;
+    });
+  }
+
+  protected firstUpdated() {
+    this._syncFormValue();
+  }
+
+  protected updated(changed: PropertyValues) {
+    if (changed.has('value')) {
+      this._syncFormValue();
+    }
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
@@ -119,11 +144,39 @@ export class LuiInput extends LitElement {
     return next;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  formResetCallback() {
+    this.value = '';
+    this._charCount = 0;
+    this.error = false;
+    if (this._inputEl) this._inputEl.value = '';
+    this._syncFormValue();
+  }
+
+  private _syncFormValue() {
+    const val = this._inputEl?.value ?? '';
+    this._internals.setFormValue(val || null);
+    if (this.required && !val.trim()) {
+      this._internals.setValidity(
+        { valueMissing: true },
+        this.errorText,
+        this._inputEl
+      );
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
   private _handleInput() {
     if (this._inputType === 'number') {
       this._inputEl.value = String(this._clampNumber(this._inputEl.value));
     }
     this._charCount = this._inputEl.value.length;
+    this.error = false;
+    this._syncFormValue();
     this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
   }
 
@@ -131,6 +184,8 @@ export class LuiInput extends LitElement {
     if (this._inputType === 'number') {
       this._inputEl.value = String(this._clampNumber(this._inputEl.value));
     }
+    this.error = false;
+    this._syncFormValue();
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   }
 
@@ -164,12 +219,14 @@ export class LuiInput extends LitElement {
           class="input-field__input"
           id="${this._baseId}-input"
           type="${inputRealType}"
+          name="${ifDefined(this.name || undefined)}"
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
           placeholder="${this.placeholder}"
           .value="${this.value}"
           maxlength="${maxLen !== null ? maxLen : ''}"
           ?disabled="${this.disabled}"
+          ?required="${this.required}"
           ?aria-disabled="${this.disabled}"
           @input="${this._handleInput}"
           @change="${this._handleChange}"
@@ -218,6 +275,7 @@ export class LuiInput extends LitElement {
           class="input-field__input input-field__input--number"
           id="${this._baseId}-input"
           type="number"
+          name="${ifDefined(this.name || undefined)}"
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
           .value="${this.value || '1'}"
@@ -225,6 +283,7 @@ export class LuiInput extends LitElement {
           min="${minVal !== null ? minVal : ''}"
           max="${maxVal !== null ? maxVal : ''}"
           ?disabled="${this.disabled}"
+          ?required="${this.required}"
           ?aria-disabled="${this.disabled}"
           @input="${this._handleInput}"
           @change="${this._handleChange}"

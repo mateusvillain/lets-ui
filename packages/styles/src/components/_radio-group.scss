@@ -1,0 +1,59 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+$size: (
+  lg: body--lg,
+  md: body--md,
+);
+
+.radio-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+
+  &__legend {
+    color: text(body);
+    font-weight: 500;
+    padding: 0;
+  }
+
+  @each $key, $scale in $size {
+    &--#{$key} .radio-group__legend {
+      @include font-scale($scale);
+    }
+  }
+
+  &__hint {
+    @include font-scale(body--md);
+
+    color: text(caption);
+    margin: fluid(4) 0 0;
+    padding: 0;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: fluid(8);
+  }
+
+  &__legend ~ &__options,
+  &__hint ~ &__options {
+    margin-top: fluid(8);
+  }
+
+  &__message {
+    @include font-scale(body--md);
+
+    color: text(caption);
+    margin: fluid(8) 0 0;
+    padding: 0;
+  }
+
+  &--error &__message {
+    color: text(error);
+  }
+}
