@@ -1,0 +1,439 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+---
+
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Switcher — Let's UI Playground</title>
+    <script type="module">
+      import '/node_modules/lets-ui-components/src/index.ts';
+    </script>
+  </head>
+  <body>
+
+    <header class="pg-header">
+      <a href="/" class="pg-header__back">← Playground</a>
+      <span class="pg-header__title">lui-switcher</span>
+      <span class="pg-header__tag">Responsividade intrínseca</span>
+    </header>
+
+    <main class="pg-main">
+
+      <!--
+        A demonstração central deste playground é mostrar que o mesmo
+        lui-switcher se comporta diferente dependendo do espaço disponível
+        no seu container — não da viewport. Redimensione a janela ou veja
+        as duas colunas abaixo para perceber isso.
+      -->
+
+      <!-- ── Intro ──────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <div class="pg-callout">
+          <strong>Como funciona:</strong> cada filho recebe
+          <code>flex-basis: calc((threshold - 100%) * 999)</code>.
+          Quando o container é mais largo que o threshold, o basis resulta em negativo
+          (tratado como 0) e os filhos ficam em linha. Quando é mais estreito, o basis
+          explode para um valor enorme e cada filho ocupa 100% da linha — empilham
+          naturalmente, sem nenhum breakpoint de viewport.
+        </div>
+      </section>
+
+      <!-- ── Caso 1: Planos de preço ───────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Planos de preço — threshold 260px</h2>
+        <p class="pg-section__desc">
+          Três cards em linha enquanto há espaço. Cada um ocupa pelo menos 260px.
+          Redimensione a janela para ver o colapso.
+        </p>
+
+        <lui-switcher threshold="260px" gap="md">
+          <div class="plan-card">
+            <div class="plan-card__header plan-card__header--free">
+              <span class="plan-card__name">Free</span>
+              <span class="plan-card__price">R$ 0<small>/mês</small></span>
+            </div>
+            <ul class="plan-card__features">
+              <li>3 projetos</li>
+              <li>1 GB de armazenamento</li>
+              <li>Suporte via comunidade</li>
+            </ul>
+            <button class="btn btn--secondary btn--lg" style="width:100%">Começar grátis</button>
+          </div>
+
+          <div class="plan-card plan-card--featured">
+            <div class="plan-card__badge">Mais popular</div>
+            <div class="plan-card__header plan-card__header--pro">
+              <span class="plan-card__name">Pro</span>
+              <span class="plan-card__price">R$ 49<small>/mês</small></span>
+            </div>
+            <ul class="plan-card__features">
+              <li>Projetos ilimitados</li>
+              <li>50 GB de armazenamento</li>
+              <li>Suporte prioritário</li>
+              <li>Integrações avançadas</li>
+            </ul>
+            <button class="btn btn--primary btn--lg" style="width:100%">Assinar Pro</button>
+          </div>
+
+          <div class="plan-card">
+            <div class="plan-card__header plan-card__header--enterprise">
+              <span class="plan-card__name">Enterprise</span>
+              <span class="plan-card__price">Sob consulta</span>
+            </div>
+            <ul class="plan-card__features">
+              <li>Tudo do Pro</li>
+              <li>SSO / SAML</li>
+              <li>SLA garantido</li>
+              <li>Gerente de conta dedicado</li>
+            </ul>
+            <button class="btn btn--secondary btn--lg" style="width:100%">Falar com vendas</button>
+          </div>
+        </lui-switcher>
+      </section>
+
+      <!-- ── Caso 2: O mesmo componente em containers diferentes ── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">O ponto central — mesmo threshold, containers diferentes</h2>
+        <p class="pg-section__desc">
+          O <strong>mesmo</strong> <code>lui-switcher threshold="220px"</code> é usado
+          nas duas colunas abaixo. Na coluna larga (direita), os cards ficam em linha.
+          Na coluna estreita (esquerda), eles já estão empilhados — sem nenhum breakpoint
+          de viewport, só pela largura disponível do container.
+        </p>
+
+        <div class="demo-columns">
+          <!-- coluna estreita: ~280px -->
+          <div class="demo-col demo-col--narrow">
+            <p class="demo-col__label">Container estreito (~280px)</p>
+            <lui-switcher threshold="220px" gap="sm">
+              <div class="metric-card">
+                <span class="metric-card__value">1.240</span>
+                <span class="metric-card__label">Usuários ativos</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-card__value">98,4%</span>
+                <span class="metric-card__label">Uptime</span>
+              </div>
+            </lui-switcher>
+          </div>
+
+          <!-- coluna larga: flex-grow -->
+          <div class="demo-col demo-col--wide">
+            <p class="demo-col__label">Container largo (restante)</p>
+            <lui-switcher threshold="220px" gap="sm">
+              <div class="metric-card">
+                <span class="metric-card__value">1.240</span>
+                <span class="metric-card__label">Usuários ativos</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-card__value">98,4%</span>
+                <span class="metric-card__label">Uptime</span>
+              </div>
+            </lui-switcher>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Caso 3: Dashboard de métricas ─────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Dashboard de métricas — threshold 180px</h2>
+        <p class="pg-section__desc">
+          Quatro KPIs em linha em telas largas, empilhando à medida que o espaço
+          diminui. Threshold menor porque cards de métrica são mais compactos.
+        </p>
+
+        <lui-switcher threshold="180px" gap="md">
+          <div class="kpi-card">
+            <span class="kpi-card__icon">📦</span>
+            <span class="kpi-card__value">3.847</span>
+            <span class="kpi-card__label">Pedidos este mês</span>
+            <span class="kpi-card__delta kpi-card__delta--up">+12% vs mês anterior</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-card__icon">💰</span>
+            <span class="kpi-card__value">R$ 284k</span>
+            <span class="kpi-card__label">Receita</span>
+            <span class="kpi-card__delta kpi-card__delta--up">+8% vs mês anterior</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-card__icon">👤</span>
+            <span class="kpi-card__value">642</span>
+            <span class="kpi-card__label">Novos clientes</span>
+            <span class="kpi-card__delta kpi-card__delta--down">−3% vs mês anterior</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-card__icon">⭐</span>
+            <span class="kpi-card__value">4,8</span>
+            <span class="kpi-card__label">NPS médio</span>
+            <span class="kpi-card__delta kpi-card__delta--up">+0,2 vs mês anterior</span>
+          </div>
+        </lui-switcher>
+      </section>
+
+      <!-- ── Caso 4: Dentro de um layout de sidebar ─────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Dentro de um lui-sidebar</h2>
+        <p class="pg-section__desc">
+          O switcher no painel principal permanece em linha (tem espaço).
+          O mesmo switcher no sidebar já empilha — automaticamente, pelo espaço
+          do container, sem nenhuma media query extra.
+        </p>
+
+        <lui-sidebar side-width="220px" gap="lg" style="min-height: 280px;">
+          <nav slot="sidebar" class="demo-sidebar">
+            <p class="demo-col__label" style="margin:0 0 12px">Sidebar (~220px)</p>
+            <lui-switcher threshold="180px" gap="sm">
+              <div class="mini-stat">
+                <span class="mini-stat__value">47</span>
+                <span class="mini-stat__label">Tarefas</span>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-stat__value">12</span>
+                <span class="mini-stat__label">Pendentes</span>
+              </div>
+            </lui-switcher>
+          </nav>
+
+          <div slot="content" class="demo-content">
+            <p class="demo-col__label" style="margin:0 0 12px">Conteúdo principal</p>
+            <lui-switcher threshold="180px" gap="sm">
+              <div class="mini-stat">
+                <span class="mini-stat__value">47</span>
+                <span class="mini-stat__label">Tarefas abertas</span>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-stat__value">12</span>
+                <span class="mini-stat__label">Em andamento</span>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-stat__value">189</span>
+                <span class="mini-stat__label">Concluídas</span>
+              </div>
+            </lui-switcher>
+          </div>
+        </lui-sidebar>
+      </section>
+
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--lui-color-neutral-background-surface, #f5f5f5);
+    color: var(--lui-color-neutral-text-body, #1a1a1a);
+  }
+
+  /* ── Header ───────────────────────────── */
+  .pg-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: var(--lui-color-neutral-background-surface-primary, #fff);
+    border-bottom: 1px solid var(--lui-color-neutral-border-subtle, #e5e7eb);
+    font-size: 14px;
+  }
+  .pg-header__back { color: inherit; text-decoration: none; opacity: 0.5; }
+  .pg-header__back:hover { opacity: 1; }
+  .pg-header__title { font-weight: 600; font-family: monospace; }
+  .pg-header__tag {
+    font-size: 11px;
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  /* ── Layout ───────────────────────────── */
+  .pg-main {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    padding: 40px 24px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .pg-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pg-section__title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--lui-color-neutral-text-caption, #6b7280);
+  }
+
+  .pg-section__desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--lui-color-neutral-text-caption, #6b7280);
+    max-width: 620px;
+  }
+
+  .pg-callout {
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: #f0fdf4;
+    border-left: 3px solid #16a34a;
+    border-radius: 4px;
+  }
+  .pg-callout code {
+    font-family: monospace;
+    font-size: 12px;
+    background: rgba(0,0,0,.06);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  /* ── Plan cards ───────────────────────── */
+  .plan-card {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--lui-color-neutral-border-subtle, #e5e7eb);
+    border-radius: 12px;
+    background: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .plan-card--featured {
+    border-color: var(--lui-color-primary-border-default, #3b82f6);
+    box-shadow: 0 0 0 1px var(--lui-color-primary-border-default, #3b82f6);
+  }
+  .plan-card__badge {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--lui-color-primary-background-container, #3b82f6);
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .plan-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .plan-card__name { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; opacity: .6; }
+  .plan-card__price { font-size: 28px; font-weight: 700; }
+  .plan-card__price small { font-size: 14px; font-weight: 400; opacity: .6; }
+  .plan-card__header--pro .plan-card__name { color: var(--lui-color-primary-text-body, #3b82f6); opacity: 1; }
+  .plan-card__features {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    flex: 1;
+  }
+  .plan-card__features li::before { content: "✓ "; color: #16a34a; font-weight: 700; }
+
+  /* ── Demo columns ──────────────────────── */
+  .demo-columns {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .demo-col {
+    border: 1px dashed var(--lui-color-neutral-border-subtle, #d1d5db);
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+  }
+  .demo-col--narrow { width: 280px; flex-shrink: 0; }
+  .demo-col--wide { flex: 1; min-width: 0; }
+  .demo-col__label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--lui-color-neutral-text-caption, #9ca3af);
+    margin: 0 0 12px;
+  }
+
+  /* ── Metric card ──────────────────────── */
+  .metric-card {
+    flex: 1;
+    min-width: 0;
+    background: var(--lui-color-neutral-background-surface, #f9fafb);
+    border: 1px solid var(--lui-color-neutral-border-subtle, #e5e7eb);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .metric-card__value { font-size: 22px; font-weight: 700; }
+  .metric-card__label { font-size: 12px; color: var(--lui-color-neutral-text-caption, #6b7280); }
+
+  /* ── KPI card ─────────────────────────── */
+  .kpi-card {
+    flex: 1;
+    min-width: 0;
+    background: #fff;
+    border: 1px solid var(--lui-color-neutral-border-subtle, #e5e7eb);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .kpi-card__icon { font-size: 20px; margin-bottom: 4px; }
+  .kpi-card__value { font-size: 24px; font-weight: 700; }
+  .kpi-card__label { font-size: 13px; color: var(--lui-color-neutral-text-caption, #6b7280); }
+  .kpi-card__delta { font-size: 12px; margin-top: 4px; }
+  .kpi-card__delta--up { color: #16a34a; }
+  .kpi-card__delta--down { color: #dc2626; }
+
+  /* ── Sidebar demo ─────────────────────── */
+  .demo-sidebar {
+    background: #fff;
+    border: 1px dashed var(--lui-color-neutral-border-subtle, #d1d5db);
+    border-radius: 8px;
+    padding: 16px;
+    height: 100%;
+  }
+  .demo-content {
+    background: #fff;
+    border: 1px dashed var(--lui-color-neutral-border-subtle, #d1d5db);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .mini-stat {
+    flex: 1;
+    min-width: 0;
+    background: var(--lui-color-neutral-background-surface, #f9fafb);
+    border: 1px solid var(--lui-color-neutral-border-subtle, #e5e7eb);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .mini-stat__value { font-size: 20px; font-weight: 700; }
+  .mini-stat__label { font-size: 11px; color: var(--lui-color-neutral-text-caption, #6b7280); }
+</style>

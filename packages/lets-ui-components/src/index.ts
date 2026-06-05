@@ -1,5 +1,4 @@
 import { LuiAlert } from './components/alert/alert.js';
-import { LuiBleed } from './components/bleed/bleed.js';
 import { LuiBox } from './components/box/box.js';
 import { LuiCenter } from './components/center/center.js';
 import { LuiColumns, LuiColumn } from './components/columns/columns.js';
@@ -45,7 +44,6 @@ function define(name: string, elementClass: CustomElementConstructor) {
   }
 }
 
-define('lui-bleed', LuiBleed);
 define('lui-box', LuiBox);
 define('lui-center', LuiCenter);
 define('lui-columns', LuiColumns);
@@ -90,7 +88,6 @@ define('lui-textarea', LuiTextarea);
 define('lui-tooltip', LuiTooltip);
 
 export {
-  LuiBleed,
   LuiBox,
   LuiCenter,
   LuiColumns,
