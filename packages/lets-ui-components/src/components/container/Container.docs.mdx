@@ -1,0 +1,19 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ContainerStories from './Container.stories';
+
+<Meta of={ContainerStories} />
+
+# Container
+
+Max-width centering wrapper. Controls the readable width of page content.
+
+<Canvas of={ContainerStories.Default} />
+<Controls of={ContainerStories.Default} />
+
+## Small Container
+
+<Canvas of={ContainerStories.Small} />
+
+## Full Width
+
+<Canvas of={ContainerStories.Full} />

@@ -1,0 +1,12 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--lui-container-max-width, 1280px);
+  padding-left: var(--lui-container-padding, #{fn.fluid(32)});
+  padding-right: var(--lui-container-padding, #{fn.fluid(32)});
+  margin-left: var(--lui-container-margin-auto, auto);
+  margin-right: var(--lui-container-margin-auto, auto);
+}

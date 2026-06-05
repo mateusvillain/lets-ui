@@ -1,0 +1,42 @@
+@use '../utilities/functions' as fn;
+
+.box {
+  box-sizing: border-box;
+  display: block;
+
+  &--padding-xs {
+    padding: fn.fluid(4);
+  }
+
+  &--padding-sm {
+    padding: fn.fluid(8);
+  }
+
+  &--padding-md {
+    padding: fn.fluid(16);
+  }
+
+  &--padding-lg {
+    padding: fn.fluid(24);
+  }
+
+  &--padding-xl {
+    padding: fn.fluid(32);
+  }
+
+  &--padding-2xl {
+    padding: fn.fluid(48);
+  }
+
+  &--overflow-hidden {
+    overflow: hidden;
+  }
+
+  &--overflow-scroll {
+    overflow: scroll;
+  }
+
+  &--overflow-auto {
+    overflow: auto;
+  }
+}

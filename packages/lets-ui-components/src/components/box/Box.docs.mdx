@@ -1,0 +1,15 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BoxStories from './Box.stories';
+
+<Meta of={BoxStories} />
+
+# Box
+
+Generic container with visual token support. Supports padding, background, border, and overflow.
+
+<Canvas of={BoxStories.Default} />
+<Controls of={BoxStories.Default} />
+
+## Card-like Box
+
+<Canvas of={BoxStories.Card} />

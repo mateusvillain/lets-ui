@@ -1,0 +1,369 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+---
+
+<html lang="en" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Layout Primitives — Let's UI Playground</title>
+    <script type="module">
+      import '/node_modules/lets-ui-components/src/index.ts';
+    </script>
+    <style>
+      * { box-sizing: border-box; }
+
+      body {
+        padding: 32px;
+        padding-top: 72px;
+        background: var(--lui-color-neutral-background-surface);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      .toolbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 24px;
+        background: var(--lui-color-neutral-background-surface);
+        border-bottom: 1px solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .toolbar__title {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .toolbar__badge {
+        font-size: 12px;
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 2px 8px;
+        border-radius: 999px;
+      }
+
+      .pg-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      .pg-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .pg-section__title {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .pg-section__subtitle {
+        font-size: 13px;
+        color: #64748b;
+        margin: 0;
+      }
+
+      .demo-box {
+        padding: 16px;
+        background: #dbeafe;
+        border-radius: 6px;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .demo-box--green { background: #dcfce7; }
+      .demo-box--yellow { background: #fef9c3; }
+      .demo-box--pink { background: #fce7f3; }
+      .demo-box--purple { background: #ede9fe; }
+      .demo-box--orange { background: #fed7aa; }
+
+      .demo-outline {
+        outline: 1px dashed #94a3b8;
+        padding: 8px;
+        border-radius: 4px;
+      }
+
+      .demo-label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        margin: 0 0 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="toolbar">
+      <span class="toolbar__title">Let's UI — Layout Primitives</span>
+      <span class="toolbar__badge">Playground</span>
+    </header>
+
+    <div class="pg-sections">
+
+      <!-- ── Stack ──────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Stack</h2>
+        <p class="pg-section__subtitle">Vertical flex container with consistent gap control.</p>
+
+        <p class="demo-label">gap="md" (default)</p>
+        <div class="demo-outline">
+          <lui-stack gap="md">
+            <div class="demo-box">Item 1</div>
+            <div class="demo-box demo-box--green">Item 2</div>
+            <div class="demo-box demo-box--yellow">Item 3</div>
+          </lui-stack>
+        </div>
+
+        <p class="demo-label">gap="xl" + align="center"</p>
+        <div class="demo-outline">
+          <lui-stack gap="xl" align="center">
+            <div class="demo-box" style="width: 80px;">A</div>
+            <div class="demo-box demo-box--green" style="width: 120px;">B</div>
+            <div class="demo-box demo-box--yellow" style="width: 60px;">C</div>
+          </lui-stack>
+        </div>
+      </section>
+
+      <!-- ── Inline ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Inline</h2>
+        <p class="pg-section__subtitle">Horizontal wrapping flex layout for tags, chips, buttons.</p>
+
+        <p class="demo-label">gap="sm" wrap="wrap" (default)</p>
+        <div class="demo-outline">
+          <lui-inline gap="sm">
+            <span class="demo-box" style="padding: 6px 12px; border-radius: 999px;">Design</span>
+            <span class="demo-box demo-box--green" style="padding: 6px 12px; border-radius: 999px;">Engineering</span>
+            <span class="demo-box demo-box--yellow" style="padding: 6px 12px; border-radius: 999px;">Product</span>
+            <span class="demo-box demo-box--pink" style="padding: 6px 12px; border-radius: 999px;">Research</span>
+            <span class="demo-box demo-box--purple" style="padding: 6px 12px; border-radius: 999px;">Analytics</span>
+          </lui-inline>
+        </div>
+
+        <p class="demo-label">justify="space-between"</p>
+        <div class="demo-outline">
+          <lui-inline justify="space-between">
+            <span class="demo-box" style="padding: 6px 12px;">Left</span>
+            <span class="demo-box demo-box--green" style="padding: 6px 12px;">Center</span>
+            <span class="demo-box demo-box--yellow" style="padding: 6px 12px;">Right</span>
+          </lui-inline>
+        </div>
+      </section>
+
+      <!-- ── Box ───────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Box</h2>
+        <p class="pg-section__subtitle">Generic container with padding, background, border, and overflow.</p>
+
+        <p class="demo-label">padding="lg" + border</p>
+        <lui-box
+          padding="lg"
+          background="var(--lui-color-neutral-background-surface)"
+          border-radius="12px"
+          border-width="1px"
+          border-color="var(--lui-color-neutral-border-subtle)"
+        >
+          <p style="margin: 0; font-size: 14px;">Box content with <code>padding="lg"</code> and a subtle border.</p>
+        </lui-box>
+
+        <p class="demo-label">padding-x="xl" padding-y="sm" + colored background</p>
+        <lui-box
+          padding-x="xl"
+          padding-y="sm"
+          background="#dbeafe"
+          border-radius="8px"
+        >
+          <p style="margin: 0; font-size: 14px;">Asymmetric padding: <code>padding-x="xl"</code>, <code>padding-y="sm"</code></p>
+        </lui-box>
+      </section>
+
+      <!-- ── Container ─────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Container</h2>
+        <p class="pg-section__subtitle">Max-width centering wrapper.</p>
+
+        <p class="demo-label">size="md" padding="md" (centered)</p>
+        <div style="background: #f1f5f9; border-radius: 8px;">
+          <lui-container size="md" padding="md">
+            <div class="demo-box">Container content — max-width: 1024px</div>
+          </lui-container>
+        </div>
+
+        <p class="demo-label">size="sm" padding="lg"</p>
+        <div style="background: #f1f5f9; border-radius: 8px;">
+          <lui-container size="sm" padding="lg">
+            <div class="demo-box demo-box--green">Container content — max-width: 768px</div>
+          </lui-container>
+        </div>
+      </section>
+
+      <!-- ── Center ────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Center</h2>
+        <p class="pg-section__subtitle">Centering layout with axis control.</p>
+
+        <p class="demo-label">axis="both" (default)</p>
+        <lui-center style="height: 160px; background: #f1f5f9; border-radius: 8px;">
+          <div class="demo-box">Centered both axes</div>
+        </lui-center>
+
+        <p class="demo-label">axis="horizontal"</p>
+        <lui-center axis="horizontal" style="height: 120px; background: #f1f5f9; border-radius: 8px;">
+          <div class="demo-box demo-box--green">Centered horizontally</div>
+        </lui-center>
+
+        <p class="demo-label">axis="both" max-width="320px"</p>
+        <lui-center max-width="320px" style="height: 120px; background: #f1f5f9; border-radius: 8px;">
+          <div class="demo-box demo-box--yellow">Max-width constrained content</div>
+        </lui-center>
+      </section>
+
+      <!-- ── Columns ───────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Columns</h2>
+        <p class="pg-section__subtitle">CSS Grid multi-column layout with collapse support.</p>
+
+        <p class="demo-label">columns="3" gap="md"</p>
+        <lui-columns columns="3" gap="md">
+          <lui-column><div class="demo-box">Col 1</div></lui-column>
+          <lui-column><div class="demo-box demo-box--green">Col 2</div></lui-column>
+          <lui-column><div class="demo-box demo-box--yellow">Col 3</div></lui-column>
+        </lui-columns>
+
+        <p class="demo-label">Custom template: ["2fr","1fr"] gap="lg"</p>
+        <lui-columns columns='["2fr","1fr"]' gap="lg">
+          <lui-column><div class="demo-box demo-box--purple">Main (2fr)</div></lui-column>
+          <lui-column><div class="demo-box demo-box--pink">Aside (1fr)</div></lui-column>
+        </lui-columns>
+
+        <p class="demo-label">span="2" + auto column</p>
+        <lui-columns columns="3" gap="md">
+          <lui-column span="2"><div class="demo-box">Spans 2 cols</div></lui-column>
+          <lui-column><div class="demo-box demo-box--orange">1 col</div></lui-column>
+        </lui-columns>
+      </section>
+
+      <!-- ── Grid ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Grid</h2>
+        <p class="pg-section__subtitle">Full CSS Grid with item placement and span control.</p>
+
+        <p class="demo-label">columns="repeat(3, 1fr)" gap="md"</p>
+        <lui-grid columns="repeat(3, 1fr)" gap="md">
+          <lui-grid-item><div class="demo-box">1</div></lui-grid-item>
+          <lui-grid-item><div class="demo-box demo-box--green">2</div></lui-grid-item>
+          <lui-grid-item><div class="demo-box demo-box--yellow">3</div></lui-grid-item>
+          <lui-grid-item col-span="2"><div class="demo-box demo-box--pink">Span 2</div></lui-grid-item>
+          <lui-grid-item><div class="demo-box demo-box--purple">5</div></lui-grid-item>
+        </lui-grid>
+      </section>
+
+      <!-- ── Flex ──────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Flex</h2>
+        <p class="pg-section__subtitle">Raw flexbox primitive with per-item control.</p>
+
+        <p class="demo-label">direction="row" gap="md" justify="space-between"</p>
+        <div class="demo-outline">
+          <lui-flex direction="row" gap="md" justify="space-between">
+            <lui-flex-item><div class="demo-box">Left</div></lui-flex-item>
+            <lui-flex-item><div class="demo-box demo-box--green">Center</div></lui-flex-item>
+            <lui-flex-item><div class="demo-box demo-box--yellow">Right</div></lui-flex-item>
+          </lui-flex>
+        </div>
+
+        <p class="demo-label">grow item</p>
+        <div class="demo-outline">
+          <lui-flex gap="md">
+            <lui-flex-item grow="1"><div class="demo-box">Grows (flex-grow: 1)</div></lui-flex-item>
+            <lui-flex-item><div class="demo-box demo-box--green" style="white-space: nowrap;">Fixed</div></lui-flex-item>
+          </lui-flex>
+        </div>
+      </section>
+
+      <!-- ── Sidebar ───────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Sidebar</h2>
+        <p class="pg-section__subtitle">Two-panel layout with named slots.</p>
+
+        <p class="demo-label">side="start" side-width="200px"</p>
+        <lui-sidebar side="start" side-width="200px" gap="lg">
+          <div slot="sidebar" class="demo-box" style="min-height: 120px;">
+            <strong>Sidebar</strong><br />Navigation
+          </div>
+          <div slot="content" class="demo-box demo-box--green" style="min-height: 120px;">
+            <strong>Content</strong><br />Main area
+          </div>
+        </lui-sidebar>
+
+        <p class="demo-label">side="end" side-width="160px"</p>
+        <lui-sidebar side="end" side-width="160px" gap="lg">
+          <div slot="sidebar" class="demo-box demo-box--yellow" style="min-height: 80px;">
+            <strong>Right Sidebar</strong>
+          </div>
+          <div slot="content" class="demo-box demo-box--pink" style="min-height: 80px;">
+            <strong>Content</strong>
+          </div>
+        </lui-sidebar>
+      </section>
+
+      <!-- ── Switcher ──────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Switcher</h2>
+        <p class="pg-section__subtitle">Intrinsic responsive layout (Every Layout pattern). Resize the block below.</p>
+
+        <p class="demo-label">threshold="240px" — resize to see switch</p>
+        <div style="resize: horizontal; overflow: auto; min-width: 160px; border: 1px dashed #94a3b8; padding: 8px; border-radius: 4px;">
+          <lui-switcher threshold="240px" gap="md">
+            <div class="demo-box">Panel A</div>
+            <div class="demo-box demo-box--green">Panel B</div>
+            <div class="demo-box demo-box--yellow">Panel C</div>
+          </lui-switcher>
+        </div>
+      </section>
+
+      <!-- ── Bleed ─────────────────────────────────────────────── -->
+      <section class="pg-section">
+        <h2 class="pg-section__title">Bleed</h2>
+        <p class="pg-section__subtitle">Container escape with negative margins.</p>
+
+        <p class="demo-label">horizontal bleed — escapes container padding</p>
+        <div style="background: #f1f5f9; padding: 32px; border-radius: 8px; overflow: hidden;">
+          <p style="font-size: 13px; color: #64748b; margin: 0 0 12px;">Normal content inside padded container</p>
+          <lui-bleed horizontal>
+            <div class="demo-box">Full-bleed horizontal element</div>
+          </lui-bleed>
+          <p style="font-size: 13px; color: #64748b; margin: 12px 0 0;">Normal content continues</p>
+        </div>
+
+        <p class="demo-label">left-only bleed</p>
+        <div style="background: #f1f5f9; padding: 32px; border-radius: 8px; overflow: hidden;">
+          <lui-bleed left>
+            <div class="demo-box demo-box--green">Left-only bleed</div>
+          </lui-bleed>
+        </div>
+      </section>
+
+    </div>
+
+    <script type="module">
+      // Dynamic import of components
+      import('../../../packages/lets-ui-components/src/index.ts').catch(() => {
+        // fallback: components may already be registered via Astro
+      });
+    </script>
+  </body>
+</html>

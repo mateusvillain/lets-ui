@@ -1,0 +1,19 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as StackStories from './Stack.stories';
+
+<Meta of={StackStories} />
+
+# Stack
+
+Vertical flex layout that stacks children with consistent spacing.
+
+<Canvas of={StackStories.Default} />
+<Controls of={StackStories.Default} />
+
+## Small Gap
+
+<Canvas of={StackStories.SmallGap} />
+
+## Centered Items
+
+<Canvas of={StackStories.Centered} />

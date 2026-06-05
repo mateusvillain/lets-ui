@@ -1,0 +1,19 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SidebarStories from './Sidebar.stories';
+
+<Meta of={SidebarStories} />
+
+# Sidebar
+
+Two-panel layout with a fixed-width sidebar and flexible content area. Uses named slots: `sidebar` and `content`.
+
+<Canvas of={SidebarStories.Default} />
+<Controls of={SidebarStories.Default} />
+
+## Sidebar on End
+
+<Canvas of={SidebarStories.End} />
+
+## Narrow Sidebar
+
+<Canvas of={SidebarStories.NarrowSidebar} />

@@ -1,4 +1,15 @@
 import { LuiAlert } from './components/alert/alert.js';
+import { LuiBleed } from './components/bleed/bleed.js';
+import { LuiBox } from './components/box/box.js';
+import { LuiCenter } from './components/center/center.js';
+import { LuiColumns, LuiColumn } from './components/columns/columns.js';
+import { LuiContainer } from './components/container/container.js';
+import { LuiFlex, LuiFlexItem } from './components/flex/flex.js';
+import { LuiGrid, LuiGridItem } from './components/grid/grid.js';
+import { LuiInline } from './components/inline/inline.js';
+import { LuiSidebar } from './components/sidebar/sidebar.js';
+import { LuiStack } from './components/stack/stack.js';
+import { LuiSwitcher } from './components/switcher/switcher.js';
 import { LuiBody } from './components/body/body.js';
 import { LuiImage } from './components/image/image.js';
 import { LuiDrawer } from './components/drawer/drawer.js';
@@ -34,6 +45,20 @@ function define(name: string, elementClass: CustomElementConstructor) {
   }
 }
 
+define('lui-bleed', LuiBleed);
+define('lui-box', LuiBox);
+define('lui-center', LuiCenter);
+define('lui-columns', LuiColumns);
+define('lui-column', LuiColumn);
+define('lui-container', LuiContainer);
+define('lui-flex', LuiFlex);
+define('lui-flex-item', LuiFlexItem);
+define('lui-grid', LuiGrid);
+define('lui-grid-item', LuiGridItem);
+define('lui-inline', LuiInline);
+define('lui-sidebar', LuiSidebar);
+define('lui-stack', LuiStack);
+define('lui-switcher', LuiSwitcher);
 define('lui-alert', LuiAlert);
 define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
@@ -65,6 +90,20 @@ define('lui-textarea', LuiTextarea);
 define('lui-tooltip', LuiTooltip);
 
 export {
+  LuiBleed,
+  LuiBox,
+  LuiCenter,
+  LuiColumns,
+  LuiColumn,
+  LuiContainer,
+  LuiFlex,
+  LuiFlexItem,
+  LuiGrid,
+  LuiGridItem,
+  LuiInline,
+  LuiSidebar,
+  LuiStack,
+  LuiSwitcher,
   LuiAlert,
   LuiBody,
   LuiHeading,

@@ -1,0 +1,75 @@
+@use '../utilities/functions' as fn;
+
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1280px;
+  padding-left: fn.fluid(32);
+  padding-right: fn.fluid(32);
+  margin-left: auto;
+  margin-right: auto;
+
+  &--xs {
+    max-width: 480px;
+  }
+
+  &--sm {
+    max-width: 768px;
+  }
+
+  &--md {
+    max-width: 1024px;
+  }
+
+  &--lg {
+    max-width: 1280px;
+  }
+
+  &--xl {
+    max-width: 1440px;
+  }
+
+  &--full {
+    max-width: none;
+  }
+
+  &--no-center {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  &--padding-none {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &--padding-xs {
+    padding-left: fn.fluid(4);
+    padding-right: fn.fluid(4);
+  }
+
+  &--padding-sm {
+    padding-left: fn.fluid(8);
+    padding-right: fn.fluid(8);
+  }
+
+  &--padding-md {
+    padding-left: fn.fluid(16);
+    padding-right: fn.fluid(16);
+  }
+
+  &--padding-lg {
+    padding-left: fn.fluid(24);
+    padding-right: fn.fluid(24);
+  }
+
+  &--padding-xl {
+    padding-left: fn.fluid(32);
+    padding-right: fn.fluid(32);
+  }
+
+  &--padding-2xl {
+    padding-left: fn.fluid(48);
+    padding-right: fn.fluid(48);
+  }
+}

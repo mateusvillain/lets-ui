@@ -1,0 +1,5 @@
+:host {
+  display: block;
+  grid-column: var(--lui-grid-item-col, auto);
+  grid-row: var(--lui-grid-item-row, auto);
+}

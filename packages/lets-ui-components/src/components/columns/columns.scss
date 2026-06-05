@@ -1,0 +1,26 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: grid;
+  grid-template-columns: var(--lui-columns-template, repeat(2, 1fr));
+  gap: var(--lui-columns-gap, #{fn.fluid(16)});
+  align-items: var(--lui-columns-align, stretch);
+}
+
+:host([collapse-below='sm']) {
+  @media (width < 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+:host([collapse-below='md']) {
+  @media (width < 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+:host([collapse-below='lg']) {
+  @media (width < 1280px) {
+    grid-template-columns: 1fr;
+  }
+}

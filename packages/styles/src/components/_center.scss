@@ -1,0 +1,21 @@
+@use '../utilities/functions' as fn;
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__inner {
+    width: 100%;
+  }
+
+  &--horizontal {
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  &--vertical {
+    align-items: center;
+    justify-content: flex-start;
+  }
+}

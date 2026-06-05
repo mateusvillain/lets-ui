@@ -1,0 +1,9 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: flex;
+  flex-wrap: var(--lui-inline-wrap, wrap);
+  gap: var(--lui-inline-gap, #{fn.fluid(8)});
+  align-items: var(--lui-inline-align, center);
+  justify-content: var(--lui-inline-justify, flex-start);
+}

@@ -1,0 +1,29 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ColumnsStories from './Columns.stories';
+
+<Meta of={ColumnsStories} />
+
+# Columns
+
+CSS Grid-based multi-column layout. Use `lui-column` for individual columns.
+
+<Canvas of={ColumnsStories.Default} />
+<Controls of={ColumnsStories.Default} />
+
+## Two Columns
+
+<Canvas of={ColumnsStories.TwoColumns} />
+
+## Custom Template
+
+Pass a JSON array to define column widths: `columns='["2fr","1fr"]'`.
+
+<Canvas of={ColumnsStories.CustomTemplate} />
+
+## Column Span
+
+<Canvas of={ColumnsStories.WithSpan} />
+
+## Collapse on Mobile
+
+<Canvas of={ColumnsStories.CollapseOnMobile} />

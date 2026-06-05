@@ -1,0 +1,40 @@
+@use '../utilities/functions' as fn;
+
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: fn.fluid(16);
+
+  > * {
+    flex-basis: calc((320px - 100%) * 999);
+    flex-grow: 1;
+  }
+
+  &--gap-none {
+    gap: 0;
+  }
+
+  &--gap-xs {
+    gap: fn.fluid(4);
+  }
+
+  &--gap-sm {
+    gap: fn.fluid(8);
+  }
+
+  &--gap-md {
+    gap: fn.fluid(16);
+  }
+
+  &--gap-lg {
+    gap: fn.fluid(24);
+  }
+
+  &--gap-xl {
+    gap: fn.fluid(32);
+  }
+
+  &--gap-2xl {
+    gap: fn.fluid(48);
+  }
+}

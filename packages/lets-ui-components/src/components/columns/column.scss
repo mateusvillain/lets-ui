@@ -1,0 +1,5 @@
+:host {
+  display: block;
+  grid-column: var(--lui-column-span, auto);
+  width: var(--lui-column-width, auto);
+}

@@ -1,0 +1,13 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: flex;
+  align-items: var(--lui-center-align, center);
+  justify-content: var(--lui-center-justify, center);
+  min-height: var(--lui-center-min-height, auto);
+}
+
+.center__inner {
+  width: 100%;
+  max-width: var(--lui-center-max-width, none);
+}

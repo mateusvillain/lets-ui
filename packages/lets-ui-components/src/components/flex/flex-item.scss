@@ -1,0 +1,7 @@
+:host {
+  display: block;
+  flex: var(--lui-flex-item-grow, 0) var(--lui-flex-item-shrink, 1)
+    var(--lui-flex-item-basis, auto);
+  align-self: var(--lui-flex-item-align, auto);
+  order: var(--lui-flex-item-order, 0);
+}

@@ -1,0 +1,31 @@
+@use '../utilities/functions' as fn;
+
+.bleed {
+  display: block;
+
+  &--horizontal {
+    margin-left: calc(-1 * fn.fluid(32));
+    margin-right: calc(-1 * fn.fluid(32));
+  }
+
+  &--vertical {
+    margin-top: calc(-1 * fn.fluid(32));
+    margin-bottom: calc(-1 * fn.fluid(32));
+  }
+
+  &--left {
+    margin-left: calc(-1 * fn.fluid(32));
+  }
+
+  &--right {
+    margin-right: calc(-1 * fn.fluid(32));
+  }
+
+  &--top {
+    margin-top: calc(-1 * fn.fluid(32));
+  }
+
+  &--bottom {
+    margin-bottom: calc(-1 * fn.fluid(32));
+  }
+}

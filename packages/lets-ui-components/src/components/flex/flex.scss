@@ -1,0 +1,9 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: var(--lui-flex-display, flex);
+  flex-flow: var(--lui-flex-direction, row) var(--lui-flex-wrap, nowrap);
+  gap: var(--lui-flex-gap, 0);
+  align-items: var(--lui-flex-align, stretch);
+  justify-content: var(--lui-flex-justify, flex-start);
+}

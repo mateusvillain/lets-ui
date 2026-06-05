@@ -1,0 +1,10 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: block;
+}
+
+.bleed {
+  margin: var(--lui-bleed-top, 0) var(--lui-bleed-right, 0)
+    var(--lui-bleed-bottom, 0) var(--lui-bleed-left, 0);
+}
