@@ -5,8 +5,3 @@
   flex-wrap: wrap;
   gap: var(--lui-switcher-gap, #{fn.fluid(16)});
 }
-
-::slotted(*) {
-  flex-basis: calc((var(--lui-switcher-threshold, 320px) - 100%) * 999);
-  flex-grow: 1;
-}
