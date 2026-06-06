@@ -10,7 +10,7 @@ export class LuiSwitcher extends LitElement {
   @property() gap = 'md';
   @property() limit = '';
 
-  private _applyToSlotted() {
+  private _applyToSlotted = () => {
     const slot = this.shadowRoot?.querySelector(
       'slot'
     ) as HTMLSlotElement | null;
@@ -29,15 +29,7 @@ export class LuiSwitcher extends LitElement {
       el.style.setProperty('flex-grow', '1');
       el.style.setProperty('min-width', '0');
     });
-  }
-
-  override firstUpdated() {
-    const slot = this.shadowRoot?.querySelector(
-      'slot'
-    ) as HTMLSlotElement | null;
-    slot?.addEventListener('slotchange', () => this._applyToSlotted());
-    this._applyToSlotted();
-  }
+  };
 
   override updated(changed: Map<string, unknown>) {
     if (changed.has('threshold') || changed.has('limit')) {
@@ -50,6 +42,6 @@ export class LuiSwitcher extends LitElement {
   }
 
   render() {
-    return html`<slot></slot>`;
+    return html`<slot @slotchange=${this._applyToSlotted}></slot>`;
   }
 }
