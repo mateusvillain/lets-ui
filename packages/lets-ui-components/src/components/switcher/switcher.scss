@@ -1,7 +1,15 @@
 @use 'packages/styles/src/utilities/functions' as fn;
 
 :host {
+  display: block;
+}
+
+.switcher-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: var(--lui-switcher-gap, #{fn.fluid(16)});
+}
+
+.switcher-item {
+  min-width: 0;
 }
