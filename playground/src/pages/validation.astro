@@ -38,7 +38,6 @@ import '@lets-ui/styles';
       </nav>
 
       <main class="pg-main">
-
         <!-- ═══════════════════════════════════════════════════════ -->
         <!-- LUI-STACK                                              -->
         <!-- ═══════════════════════════════════════════════════════ -->
@@ -47,51 +46,75 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — gap variants (xs → xl)</p>
-            <p class="case__expected">Espaço entre filhos deve crescer progressivamente.</p>
+            <p class="case__expected">
+              Espaço entre filhos deve crescer progressivamente.
+            </p>
             <div class="case__row">
-              {['xs','sm','md','lg','xl'].map(g => (
-                <div>
-                  <span class="tag">{g}</span>
-                  <lui-stack gap={g}>
-                    <div class="box"></div>
-                    <div class="box"></div>
-                    <div class="box"></div>
-                  </lui-stack>
-                </div>
-              ))}
+              {
+                ['xs', 'sm', 'md', 'lg', 'xl'].map((g) => (
+                  <div>
+                    <span class="tag">{g}</span>
+                    <lui-stack gap={g}>
+                      <div class="box" />
+                      <div class="box" />
+                      <div class="box" />
+                    </lui-stack>
+                  </div>
+                ))
+              }
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">2 — align variants</p>
-            <p class="case__expected">Filhos com larguras diferentes devem se alinhar conforme o valor. <em>start</em>: esquerda; <em>center</em>: centro; <em>end</em>: direita; <em>stretch</em>: largura total.</p>
+            <p class="case__expected">
+              Filhos com larguras diferentes devem se alinhar conforme o valor. <em
+                >start</em
+              >: esquerda; <em>center</em>: centro; <em>end</em>: direita; <em
+                >stretch</em
+              >: largura total.
+            </p>
             <div class="case__row">
-              {['stretch','start','center','end'].map(a => (
-                <div>
-                  <span class="tag">{a}</span>
-                  <lui-stack align={a} style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:120px;">
-                    <div class="box" style="width:60px"></div>
-                    <div class="box" style="width:40px"></div>
-                    <div class="box" style="width:80px"></div>
-                  </lui-stack>
-                </div>
-              ))}
+              {
+                ['stretch', 'start', 'center', 'end'].map((a) => (
+                  <div>
+                    <span class="tag">{a}</span>
+                    <lui-stack
+                      align={a}
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:120px;"
+                    >
+                      <div class="box" style="width:60px" />
+                      <div class="box" style="width:40px" />
+                      <div class="box" style="width:80px" />
+                    </lui-stack>
+                  </div>
+                ))
+              }
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">3 — justify variants</p>
-            <p class="case__expected">Com altura fixa, os filhos devem ser distribuídos verticalmente. <em>between</em>: extremos + espaço igual no meio.</p>
+            <p class="case__expected">
+              Com altura fixa, os filhos devem ser distribuídos verticalmente. <em
+                >between</em
+              >: extremos + espaço igual no meio.
+            </p>
             <div class="case__row">
-              {['start','center','end','between'].map(j => (
-                <div>
-                  <span class="tag">{j}</span>
-                  <lui-stack justify={j} style="height:140px; background:#f8fafc; border:1px dashed #e2e8f0; padding:4px;">
-                    <div class="box box--sm"></div>
-                    <div class="box box--sm"></div>
-                  </lui-stack>
-                </div>
-              ))}
+              {
+                ['start', 'center', 'end', 'between'].map((j) => (
+                  <div>
+                    <span class="tag">{j}</span>
+                    <lui-stack
+                      justify={j}
+                      style="height:140px; background:#f8fafc; border:1px dashed #e2e8f0; padding:4px;"
+                    >
+                      <div class="box box--sm" />
+                      <div class="box box--sm" />
+                    </lui-stack>
+                  </div>
+                ))
+              }
             </div>
           </div>
         </section>
@@ -104,41 +127,80 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — wrap vs nowrap</p>
-            <p class="case__expected"><em>wrap</em>: itens quebram linha. <em>nowrap</em>: itens ficam em uma linha (overflow horizontal).</p>
+            <p class="case__expected">
+              <em>wrap</em>: itens quebram linha. <em>nowrap</em>: itens ficam
+              em uma linha (overflow horizontal).
+            </p>
             <div class="case__col" style="max-width:280px;">
               <span class="tag">wrap (default)</span>
-              <lui-inline wrap="wrap" style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;">
-                {Array.from({length:8}, (_, i) => <div class="chip">Tag {i+1}</div>)}
+              <lui-inline
+                wrap="wrap"
+                style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;"
+              >
+                {
+                  Array.from({ length: 8 }, (_, i) => (
+                    <div class="chip">Tag {i + 1}</div>
+                  ))
+                }
               </lui-inline>
               <span class="tag" style="margin-top:12px">nowrap</span>
-              <lui-inline wrap="nowrap" style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; overflow:hidden;">
-                {Array.from({length:8}, (_, i) => <div class="chip">Tag {i+1}</div>)}
+              <lui-inline
+                wrap="nowrap"
+                style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; overflow:hidden;"
+              >
+                {
+                  Array.from({ length: 8 }, (_, i) => (
+                    <div class="chip">Tag {i + 1}</div>
+                  ))
+                }
               </lui-inline>
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">2 — gap-x / gap-y independentes</p>
-            <p class="case__expected">Espaço horizontal (gap-x=xl) maior que o vertical (gap-y=xs).</p>
-            <lui-inline gap-x="xl" gap-y="xs" wrap="wrap" style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; max-width:320px;">
-              {Array.from({length:10}, (_, i) => <div class="chip">Item {i+1}</div>)}
+            <p class="case__expected">
+              Espaço horizontal (gap-x=xl) maior que o vertical (gap-y=xs).
+            </p>
+            <lui-inline
+              gap-x="xl"
+              gap-y="xs"
+              wrap="wrap"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; max-width:320px;"
+            >
+              {
+                Array.from({ length: 10 }, (_, i) => (
+                  <div class="chip">Item {i + 1}</div>
+                ))
+              }
             </lui-inline>
           </div>
 
           <div class="case">
-            <p class="case__label">3 — align variants com itens de alturas diferentes</p>
-            <p class="case__expected"><em>start</em>: topo; <em>center</em>: meio; <em>end</em>: base; <em>baseline</em>: linha de texto alinhada.</p>
+            <p class="case__label">
+              3 — align variants com itens de alturas diferentes
+            </p>
+            <p class="case__expected">
+              <em>start</em>: topo; <em>center</em>: meio; <em>end</em>: base; <em
+                >baseline</em
+              >: linha de texto alinhada.
+            </p>
             <div class="case__row">
-              {['start','center','end','baseline'].map(a => (
-                <div>
-                  <span class="tag">{a}</span>
-                  <lui-inline align={a} style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:100px;">
-                    <div class="box" style="height:20px; width:20px"></div>
-                    <div class="box" style="height:48px; width:20px"></div>
-                    <div class="box" style="height:32px; width:20px"></div>
-                  </lui-inline>
-                </div>
-              ))}
+              {
+                ['start', 'center', 'end', 'baseline'].map((a) => (
+                  <div>
+                    <span class="tag">{a}</span>
+                    <lui-inline
+                      align={a}
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:100px;"
+                    >
+                      <div class="box" style="height:20px; width:20px" />
+                      <div class="box" style="height:48px; width:20px" />
+                      <div class="box" style="height:32px; width:20px" />
+                    </lui-inline>
+                  </div>
+                ))
+              }
             </div>
           </div>
         </section>
@@ -151,28 +213,59 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — axis variants</p>
-            <p class="case__expected"><em>both</em>: ponto central. <em>x</em>: centralizado horizontalmente, topo verticalmente. <em>y</em>: centralizado verticalmente, início horizontal.</p>
-            <div class="case__row">
-              {[
-                {axis:'both', label:'both'},
-                {axis:'x', label:'x'},
-                {axis:'y', label:'y'},
-              ].map(({axis, label}) => (
-                <div>
-                  <span class="tag">{label}</span>
-                  <lui-center axis={axis} min-height="120" style="width:140px; background:#f8fafc; border:1px dashed #e2e8f0;">
-                    <div class="box" style="width:40px; height:40px;"></div>
-                  </lui-center>
-                </div>
-              ))}
+            <p class="case__expected">
+              A centralização horizontal exige <em>max-width</em> (o inner div é sempre 100% largo — sem max-width não há espaço para centralizar). <em>both</em>: bloco no centro. <em>horizontal</em>: bloco centralizado apenas na horizontal. <em>vertical</em>: conteúdo centralizado apenas verticalmente.
+            </p>
+            <div class="case__row" style="align-items:flex-start;">
+              <div>
+                <span class="tag">both</span>
+                <lui-center
+                  axis="both"
+                  min-height="120px"
+                  max-width="100px"
+                  style="width:200px; background:#f8fafc; border:1px dashed #e2e8f0;"
+                >
+                  <div style="background:#dbeafe; border-radius:4px; padding:8px; font-size:11px; text-align:center; font-family:monospace;">center</div>
+                </lui-center>
+              </div>
+              <div>
+                <span class="tag">horizontal</span>
+                <lui-center
+                  axis="horizontal"
+                  max-width="100px"
+                  style="width:200px; background:#f8fafc; border:1px dashed #e2e8f0;"
+                >
+                  <div style="background:#dcfce7; border-radius:4px; padding:8px; font-size:11px; text-align:center; font-family:monospace;">horizontal</div>
+                </lui-center>
+              </div>
+              <div>
+                <span class="tag">vertical</span>
+                <lui-center
+                  axis="vertical"
+                  min-height="120px"
+                  style="width:200px; background:#f8fafc; border:1px dashed #e2e8f0;"
+                >
+                  <div style="background:#fef9c3; border-radius:4px; padding:8px; font-size:11px; text-align:center; font-family:monospace;">vertical</div>
+                </lui-center>
+              </div>
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">2 — max-width</p>
-            <p class="case__expected">Conteúdo não ultrapassa max-width="200", permanece centralizado dentro do container maior.</p>
-            <lui-center max-width="200" style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:100%;">
-              <div style="background:#dbeafe; border-radius:4px; padding:8px; font-size:12px; text-align:center;">max-width 200px</div>
+            <p class="case__expected">
+              Conteúdo não ultrapassa max-width="200", permanece centralizado
+              dentro do container maior.
+            </p>
+            <lui-center
+              max-width="200px"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:100%;"
+            >
+              <div
+                style="background:#dbeafe; border-radius:4px; padding:8px; font-size:12px; text-align:center;"
+              >
+                max-width 200px
+              </div>
             </lui-center>
           </div>
         </section>
@@ -186,21 +279,32 @@ import '@lets-ui/styles';
           <div class="case">
             <p class="case__label">1 — columns="2" / "3" / "4"</p>
             <p class="case__expected">Filhos distribuídos em colunas iguais.</p>
-            {[2,3,4].map(n => (
-              <div style="margin-bottom:12px;">
-                <span class="tag">columns="{n}"</span>
-                <lui-columns columns={String(n)} gap="sm">
-                  {Array.from({length:n}, (_, i) => <div class="box-col">Col {i+1}</div>)}
-                </lui-columns>
-              </div>
-            ))}
+            {
+              [2, 3, 4].map((n) => (
+                <div style="margin-bottom:12px;">
+                  <span class="tag">columns="{n}"</span>
+                  <lui-columns columns={String(n)} gap="sm">
+                    {Array.from({ length: n }, (_, i) => (
+                      <div class="box-col">Col {i + 1}</div>
+                    ))}
+                  </lui-columns>
+                </div>
+              ))
+            }
           </div>
 
           <div class="case">
             <p class="case__label">2 — lui-column span="2"</p>
-            <p class="case__expected">Em um grid de 3 colunas, o primeiro item com span="2" deve ocupar 2/3 da largura.</p>
+            <p class="case__expected">
+              Em um grid de 3 colunas, o primeiro item com span="2" deve ocupar
+              2/3 da largura.
+            </p>
             <lui-columns columns="3" gap="sm">
-              <lui-column span="2"><div class="box-col" style="background:#dbeafe;">span=2</div></lui-column>
+              <lui-column span="2"
+                ><div class="box-col" style="background:#dbeafe;">
+                  span=2
+                </div></lui-column
+              >
               <lui-column><div class="box-col">col</div></lui-column>
               <lui-column><div class="box-col">col</div></lui-column>
               <lui-column><div class="box-col">col</div></lui-column>
@@ -209,10 +313,17 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">3 — collapse-below (container resize)</p>
-            <p class="case__expected">Arraste a borda direita para estreitar. Abaixo de 400px o layout deve colapsar para coluna única.</p>
+            <p class="case__expected">
+              Arraste a borda direita para estreitar. Abaixo de 400px o layout
+              deve colapsar para coluna única.
+            </p>
             <div class="resizable">
               <lui-columns columns="3" gap="sm" collapse-below="400px">
-                {Array.from({length:3}, (_, i) => <div class="box-col">Col {i+1}</div>)}
+                {
+                  Array.from({ length: 3 }, (_, i) => (
+                    <div class="box-col">Col {i + 1}</div>
+                  ))
+                }
               </lui-columns>
             </div>
           </div>
@@ -226,18 +337,39 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — columns e gap</p>
-            <p class="case__expected">Grid com 4 colunas de largura igual e gap-x maior que gap-y.</p>
+            <p class="case__expected">
+              Grid com 4 colunas de largura igual e gap-x maior que gap-y.
+            </p>
             <lui-grid columns="4" gap-x="lg" gap-y="sm">
-              {Array.from({length:8}, (_, i) => <div class="box-col">#{i+1}</div>)}
+              {
+                Array.from({ length: 8 }, (_, i) => (
+                  <div class="box-col">#{i + 1}</div>
+                ))
+              }
             </lui-grid>
           </div>
 
           <div class="case">
             <p class="case__label">2 — col-span e row-span</p>
-            <p class="case__expected">Item A: col-span=2. Item B: row-span=2. Restante preenche normalmente.</p>
-            <lui-grid columns="3" gap="sm" style="grid-template-rows: auto auto;">
-              <lui-grid-item col-span="2"><div class="box-col" style="background:#dbeafe;">A — col-span=2</div></lui-grid-item>
-              <lui-grid-item row-span="2"><div class="box-col" style="background:#dcfce7; height:100%;">B — row-span=2</div></lui-grid-item>
+            <p class="case__expected">
+              Item A: col-span=2. Item B: row-span=2. Restante preenche
+              normalmente.
+            </p>
+            <lui-grid
+              columns="3"
+              gap="sm"
+              style="grid-template-rows: auto auto;"
+            >
+              <lui-grid-item col-span="2"
+                ><div class="box-col" style="background:#dbeafe;">
+                  A — col-span=2
+                </div></lui-grid-item
+              >
+              <lui-grid-item row-span="2"
+                ><div class="box-col" style="background:#dcfce7; height:100%;">
+                  B — row-span=2
+                </div></lui-grid-item
+              >
               <div class="box-col">C</div>
               <div class="box-col">D</div>
             </lui-grid>
@@ -252,36 +384,71 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — direction</p>
-            <p class="case__expected"><em>row</em>: horizontal. <em>column</em>: vertical. <em>row-reverse</em>: horizontal invertido.</p>
+            <p class="case__expected">
+              <em>row</em>: horizontal. <em>column</em>: vertical. <em
+                >row-reverse</em
+              >: horizontal invertido.
+            </p>
             <div class="case__col">
-              {['row','column','row-reverse'].map(d => (
-                <div style="margin-bottom:8px;">
-                  <span class="tag">{d}</span>
-                  <lui-flex direction={d} gap="sm" style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;">
-                    <div class="box box--sm">A</div>
-                    <div class="box box--sm">B</div>
-                    <div class="box box--sm">C</div>
-                  </lui-flex>
-                </div>
-              ))}
+              {
+                ['row', 'column', 'row-reverse'].map((d) => (
+                  <div style="margin-bottom:8px;">
+                    <span class="tag">{d}</span>
+                    <lui-flex
+                      direction={d}
+                      gap="sm"
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;"
+                    >
+                      <div class="box box--sm">A</div>
+                      <div class="box box--sm">B</div>
+                      <div class="box box--sm">C</div>
+                    </lui-flex>
+                  </div>
+                ))
+              }
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">2 — lui-flex-item grow / shrink / basis</p>
-            <p class="case__expected">Item A: grow=2 (dobro do espaço). Item B: basis=120px (começa em 120px). Item C: sem modificadores.</p>
-            <lui-flex gap="sm" style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;">
-              <lui-flex-item grow="2"><div class="box-col" style="background:#dbeafe;">grow=2</div></lui-flex-item>
-              <lui-flex-item basis="120px"><div class="box-col" style="background:#dcfce7;">basis=120px</div></lui-flex-item>
+            <p class="case__expected">
+              Item A: grow=2 (dobro do espaço). Item B: basis=120px (começa em
+              120px). Item C: sem modificadores.
+            </p>
+            <lui-flex
+              gap="sm"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;"
+            >
+              <lui-flex-item grow="2"
+                ><div class="box-col" style="background:#dbeafe;">
+                  grow=2
+                </div></lui-flex-item
+              >
+              <lui-flex-item basis="120px"
+                ><div class="box-col" style="background:#dcfce7;">
+                  basis=120px
+                </div></lui-flex-item
+              >
               <lui-flex-item><div class="box-col">normal</div></lui-flex-item>
             </lui-flex>
           </div>
 
           <div class="case">
             <p class="case__label">3 — wrap</p>
-            <p class="case__expected">Itens estreitos com wrap="wrap" devem quebrar linha quando o container não comporta todos.</p>
-            <lui-flex wrap="wrap" gap="sm" style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; max-width:320px;">
-              {Array.from({length:6}, (_, i) => <div class="chip">Item {i+1}</div>)}
+            <p class="case__expected">
+              Itens estreitos com wrap="wrap" devem quebrar linha quando o
+              container não comporta todos.
+            </p>
+            <lui-flex
+              wrap="wrap"
+              gap="sm"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; max-width:320px;"
+            >
+              {
+                Array.from({ length: 6 }, (_, i) => (
+                  <div class="chip">Item {i + 1}</div>
+                ))
+              }
             </lui-flex>
           </div>
         </section>
@@ -293,29 +460,51 @@ import '@lets-ui/styles';
           <h2 class="pg-section__title">lui-container</h2>
 
           <div class="case">
-            <p class="case__label">1 — size variants</p>
-            <p class="case__expected">Cada container deve ter largura máxima crescente: xs &lt; sm &lt; md &lt; lg &lt; xl. Centralizados na tela.</p>
-            <div style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;">
-              {['xs','sm','md','lg','xl'].map(s => (
-                <lui-container size={s} style="background:hsl({['220','200','180','160','140'].indexOf(s)*30 || 200},70%,88%); margin-bottom:4px;">
-                  <div style="font-size:11px; font-family:monospace; padding:4px;">size="{s}"</div>
-                </lui-container>
-              ))}
+            <p class="case__label">1 — size variants (max-width progressivo)</p>
+            <p class="case__expected">
+              xs=480px · sm=768px · md=1024px · lg=1280px · xl=1440px. Cada barra deve ser mais larga que a anterior e centralizada horizontalmente.
+            </p>
+            <div style="background:#f1f5f9; border:1px dashed #e2e8f0; padding:8px; overflow:hidden;">
+              {
+                [
+                  { size: 'xs', color: '#dbeafe', label: 'xs — 480px' },
+                  { size: 'sm', color: '#bfdbfe', label: 'sm — 768px' },
+                  { size: 'md', color: '#dcfce7', label: 'md — 1024px' },
+                  { size: 'lg', color: '#fef9c3', label: 'lg — 1280px' },
+                  { size: 'xl', color: '#fce7f3', label: 'xl — 1440px' },
+                ].map(({ size, color, label }) => (
+                  <lui-container
+                    size={size}
+                    padding="xs"
+                    style={`background:${color}; margin-bottom:4px;`}
+                  >
+                    <div style="font-size:11px; font-family:monospace; color:#374151;">{label}</div>
+                  </lui-container>
+                ))
+              }
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">2 — padding variants</p>
-            <p class="case__expected">Padding interno cresce de xs para 2xl. Mesmo conteúdo, mais espaço interno.</p>
-            <div class="case__row" style="flex-wrap:wrap;">
-              {['xs','sm','md','lg','xl','2xl'].map(p => (
-                <div style="flex:1; min-width:100px; border:1px dashed #e2e8f0;">
-                  <span class="tag">{p}</span>
-                  <lui-container size="sm" padding={p} style="background:#f8fafc;">
-                    <div style="background:#dbeafe; border-radius:4px; font-size:11px; font-family:monospace;">conteúdo</div>
-                  </lui-container>
-                </div>
-              ))}
+            <p class="case__expected">
+              Espaço interno lateral cresce de xs para 2xl. A barra azul representa o conteúdo — o espaço branco ao redor é o padding do container.
+            </p>
+            <div class="case__col">
+              {
+                ['xs', 'sm', 'md', 'lg', 'xl', '2xl'].map((p) => (
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="tag" style="min-width:28px; text-align:center;">{p}</span>
+                    <lui-container
+                      size="lg"
+                      padding={p}
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; width:100%;"
+                    >
+                      <div style="background:#dbeafe; border-radius:4px; font-size:11px; font-family:monospace; padding:2px 4px; text-align:center;">conteúdo</div>
+                    </lui-container>
+                  </div>
+                ))
+              }
             </div>
           </div>
         </section>
@@ -328,29 +517,45 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — side="start" (padrão)</p>
-            <p class="case__expected">Coluna lateral à esquerda (240px), conteúdo ocupa o restante.</p>
+            <p class="case__expected">
+              Coluna lateral à esquerda (240px), conteúdo ocupa o restante.
+            </p>
             <lui-sidebar style="background:#f8fafc; border:1px dashed #e2e8f0;">
-              <div slot="side" class="sidebar-side">Sidebar</div>
-              <div class="sidebar-content">Content</div>
+              <div slot="sidebar" class="sidebar-side">Sidebar</div>
+              <div slot="content" class="sidebar-content">Content</div>
             </lui-sidebar>
           </div>
 
           <div class="case">
             <p class="case__label">2 — side="end"</p>
-            <p class="case__expected">Coluna lateral à direita. Ordem visual invertida, conteúdo principal vem primeiro no DOM.</p>
-            <lui-sidebar side="end" style="background:#f8fafc; border:1px dashed #e2e8f0;">
-              <div slot="side" class="sidebar-side">Sidebar</div>
-              <div class="sidebar-content">Content</div>
+            <p class="case__expected">
+              Coluna lateral à direita. Ordem visual invertida, conteúdo
+              principal vem primeiro no DOM.
+            </p>
+            <lui-sidebar
+              side="end"
+              style="background:#f8fafc; border:1px dashed #e2e8f0;"
+            >
+              <div slot="sidebar" class="sidebar-side">Sidebar</div>
+              <div slot="content" class="sidebar-content">Content</div>
             </lui-sidebar>
           </div>
 
           <div class="case">
             <p class="case__label">3 — collapse (container estreito)</p>
-            <p class="case__expected">Arraste para estreitar abaixo de 400px. O sidebar deve colapsar para coluna única (sidebar em cima do conteúdo).</p>
+            <p class="case__expected">
+              Arraste para estreitar abaixo de 400px. O sidebar deve colapsar
+              para coluna única (sidebar em cima do conteúdo).
+            </p>
             <div class="resizable">
-              <lui-sidebar side-width="160px" content-min-width="40%" gap="md" style="background:#f8fafc; border:1px dashed #e2e8f0;">
-                <div slot="side" class="sidebar-side">Sidebar</div>
-                <div class="sidebar-content">Content area</div>
+              <lui-sidebar
+                side-width="160px"
+                content-min-width="40%"
+                gap="md"
+                style="background:#f8fafc; border:1px dashed #e2e8f0;"
+              >
+                <div slot="sidebar" class="sidebar-side">Sidebar</div>
+                <div slot="content" class="sidebar-content">Content area</div>
               </lui-sidebar>
             </div>
           </div>
@@ -364,7 +569,10 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — threshold container-based</p>
-            <p class="case__expected">O threshold é do <em>container</em>, não da viewport. Arraste a borda do container. Abaixo de 480px os 3 cards empilham.</p>
+            <p class="case__expected">
+              O threshold é do <em>container</em>, não da viewport. Arraste a
+              borda do container. Abaixo de 480px os 3 cards empilham.
+            </p>
             <div class="resizable">
               <lui-switcher threshold="480px" gap="md">
                 <div class="sw-card" style="background:#dbeafe;">Card A</div>
@@ -376,30 +584,54 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">2 — limit</p>
-            <p class="case__expected">Com limit="2" e container estreito, somente os 2 primeiros ficam inline; o terceiro ocupa linha inteira.</p>
+            <p class="case__expected">
+              Com limit="2" e container estreito, somente os 2 primeiros ficam
+              inline; o terceiro ocupa linha inteira.
+            </p>
             <div class="resizable" style="width:300px;">
               <lui-switcher threshold="600px" gap="sm" limit="2">
                 <div class="sw-card" style="background:#dbeafe;">A</div>
                 <div class="sw-card" style="background:#dcfce7;">B</div>
-                <div class="sw-card" style="background:#fef9c3;">C (além do limit)</div>
+                <div class="sw-card" style="background:#fef9c3;">
+                  C (além do limit)
+                </div>
               </lui-switcher>
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">3 — gap variants</p>
-            <p class="case__expected">Espaço entre os cards cresce de none para xl.</p>
+            <p class="case__expected">
+              Espaço entre os cards cresce de none para xl.
+            </p>
             <div class="case__col">
-              {['none','xs','sm','md','lg','xl'].map(g => (
-                <div style="margin-bottom:4px;">
-                  <span class="tag">{g}</span>
-                  <lui-switcher threshold="9999px" gap={g}>
-                    <div class="sw-card sw-card--sm" style="background:#dbeafe;">A</div>
-                    <div class="sw-card sw-card--sm" style="background:#dcfce7;">B</div>
-                    <div class="sw-card sw-card--sm" style="background:#fef9c3;">C</div>
-                  </lui-switcher>
-                </div>
-              ))}
+              {
+                ['none', 'xs', 'sm', 'md', 'lg', 'xl'].map((g) => (
+                  <div style="margin-bottom:4px;">
+                    <span class="tag">{g}</span>
+                    <lui-switcher threshold="9999px" gap={g}>
+                      <div
+                        class="sw-card sw-card--sm"
+                        style="background:#dbeafe;"
+                      >
+                        A
+                      </div>
+                      <div
+                        class="sw-card sw-card--sm"
+                        style="background:#dcfce7;"
+                      >
+                        B
+                      </div>
+                      <div
+                        class="sw-card sw-card--sm"
+                        style="background:#fef9c3;"
+                      >
+                        C
+                      </div>
+                    </lui-switcher>
+                  </div>
+                ))
+              }
             </div>
           </div>
         </section>
@@ -412,58 +644,99 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">1 — todos os placements</p>
-            <p class="case__expected">Badge vermelho posicionado exatamente no canto/borda indicado em cada box.</p>
+            <p class="case__expected">
+              Badge vermelho posicionado exatamente no canto/borda indicado em
+              cada box.
+            </p>
             <div class="placements-grid">
-              {[
-                'top-start','top-center','top-end',
-                'middle-start','middle-center','middle-end',
-                'bottom-start','bottom-center','bottom-end',
-              ].map(p => (
-                <div class="placement-item">
-                  <lui-float placement={p}>
-                    <div class="float-anchor"></div>
-                    <span slot="float" class="float-badge">●</span>
-                  </lui-float>
-                  <span class="placement-label">{p}</span>
-                </div>
-              ))}
+              {
+                [
+                  'top-start',
+                  'top-center',
+                  'top-end',
+                  'middle-start',
+                  'middle-center',
+                  'middle-end',
+                  'bottom-start',
+                  'bottom-center',
+                  'bottom-end',
+                ].map((p) => (
+                  <div class="placement-item">
+                    <lui-float placement={p}>
+                      <div class="float-anchor" />
+                      <span slot="float" class="float-badge">
+                        ●
+                      </span>
+                    </lui-float>
+                    <span class="placement-label">{p}</span>
+                  </div>
+                ))
+              }
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">2 — offset-x / offset-y</p>
-            <p class="case__expected">O badge deve se deslocar 8px para fora do canto em cada caso.</p>
+            <p class="case__expected">
+              O badge deve se deslocar 8px para fora do canto em cada caso.
+            </p>
             <div class="case__row">
-              {[
-                {p:'top-end', ox:'-8', oy:'8', label:'offset-x="-8" offset-y="8"'},
-                {p:'bottom-end', ox:'8', oy:'-8', label:'offset-x="8" offset-y="-8"'},
-                {p:'top-end', ox:'0', oy:'0', label:'sem offset (referência)'},
-              ].map(({p, ox, oy, label}) => (
-                <div class="placement-item">
-                  <lui-float placement={p} offset-x={ox} offset-y={oy}>
-                    <div class="float-anchor"></div>
-                    <span slot="float" class="float-badge">●</span>
-                  </lui-float>
-                  <span class="placement-label">{label}</span>
-                </div>
-              ))}
+              {
+                [
+                  {
+                    p: 'top-end',
+                    ox: '-8',
+                    oy: '8',
+                    label: 'offset-x="-8" offset-y="8"',
+                  },
+                  {
+                    p: 'bottom-end',
+                    ox: '8',
+                    oy: '-8',
+                    label: 'offset-x="8" offset-y="-8"',
+                  },
+                  {
+                    p: 'top-end',
+                    ox: '0',
+                    oy: '0',
+                    label: 'sem offset (referência)',
+                  },
+                ].map(({ p, ox, oy, label }) => (
+                  <div class="placement-item">
+                    <lui-float placement={p} offset-x={ox} offset-y={oy}>
+                      <div class="float-anchor" />
+                      <span slot="float" class="float-badge">
+                        ●
+                      </span>
+                    </lui-float>
+                    <span class="placement-label">{label}</span>
+                  </div>
+                ))
+              }
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">3 — sem layout shift no pai</p>
-            <p class="case__expected">O texto abaixo do lui-float deve estar exatamente onde estaria sem o componente. A badge não empurra nada.</p>
+            <p class="case__expected">
+              O texto abaixo do lui-float deve estar exatamente onde estaria sem
+              o componente. A badge não empurra nada.
+            </p>
             <div style="display:flex; gap:24px; align-items:flex-start;">
               <div>
                 <lui-float placement="top-end">
                   <div class="float-anchor"></div>
                   <span slot="float" class="float-badge">9</span>
                 </lui-float>
-                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">com badge</p>
+                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">
+                  com badge
+                </p>
               </div>
               <div>
                 <div class="float-anchor"></div>
-                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">sem badge</p>
+                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">
+                  sem badge
+                </p>
               </div>
             </div>
           </div>
@@ -476,25 +749,51 @@ import '@lets-ui/styles';
           <h2 class="pg-section__title">lui-scroll-area</h2>
 
           <div class="case">
-            <p class="case__label">1 — orientation vertical / horizontal / both</p>
-            <p class="case__expected">Cada área rola apenas na direção indicada. "both": rola em X e Y.</p>
+            <p class="case__label">
+              1 — orientation vertical / horizontal / both
+            </p>
+            <p class="case__expected">
+              Cada área rola apenas na direção indicada. "both": rola em X e Y.
+            </p>
             <div class="case__row" style="align-items:flex-start;">
               <div>
                 <span class="tag">vertical</span>
                 <lui-scroll-area height="120" style="width:160px;">
-                  <div class="sa-list">{Array.from({length:10}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 10 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
                 </lui-scroll-area>
               </div>
               <div>
                 <span class="tag">horizontal</span>
                 <lui-scroll-area orientation="horizontal" style="width:160px;">
-                  <div class="sa-row">{Array.from({length:10}, (_, i) => <div class="sa-card">Card {i+1}</div>)}</div>
+                  <div class="sa-row">
+                    {
+                      Array.from({ length: 10 }, (_, i) => (
+                        <div class="sa-card">Card {i + 1}</div>
+                      ))
+                    }
+                  </div>
                 </lui-scroll-area>
               </div>
               <div>
                 <span class="tag">both</span>
-                <lui-scroll-area orientation="both" height="120" style="width:160px;">
-                  <div class="sa-grid">{Array.from({length:20}, (_, i) => <div class="sa-cell">#{i+1}</div>)}</div>
+                <lui-scroll-area
+                  orientation="both"
+                  height="120"
+                  style="width:160px;"
+                >
+                  <div class="sa-grid">
+                    {
+                      Array.from({ length: 20 }, (_, i) => (
+                        <div class="sa-cell">#{i + 1}</div>
+                      ))
+                    }
+                  </div>
                 </lui-scroll-area>
               </div>
             </div>
@@ -502,43 +801,83 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">2 — scrollbar-visibility</p>
-            <p class="case__expected"><em>auto</em>: scrollbar ao transbordar. <em>always</em>: scrollbar sempre visível. <em>hover</em>: scrollbar aparece ao passar o mouse. <em>hidden</em>: sem scrollbar, mas rola.</p>
+            <p class="case__expected">
+              <em>auto</em>: scrollbar ao transbordar. <em>always</em>:
+              scrollbar sempre visível. <em>hover</em>: scrollbar aparece ao
+              passar o mouse. <em>hidden</em>: sem scrollbar, mas rola.
+            </p>
             <div class="case__row" style="align-items:flex-start;">
-              {['auto','always','hover','hidden'].map(v => (
-                <div>
-                  <span class="tag">{v}</span>
-                  <lui-scroll-area height="100" scrollbar-visibility={v} style="width:140px;">
-                    <div class="sa-list">{Array.from({length:8}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
-                  </lui-scroll-area>
-                </div>
-              ))}
+              {
+                ['auto', 'always', 'hover', 'hidden'].map((v) => (
+                  <div>
+                    <span class="tag">{v}</span>
+                    <lui-scroll-area
+                      height="100"
+                      scrollbar-visibility={v}
+                      style="width:140px;"
+                    >
+                      <div class="sa-list">
+                        {Array.from({ length: 8 }, (_, i) => (
+                          <div class="sa-item">Item {i + 1}</div>
+                        ))}
+                      </div>
+                    </lui-scroll-area>
+                  </div>
+                ))
+              }
             </div>
           </div>
 
           <div class="case">
             <p class="case__label">3 — fade e scroll-shadow</p>
-            <p class="case__expected"><em>fade</em>: gradiente da cor de fundo desaparece ao chegar no limite. <em>scroll-shadow</em>: sombra escura independente do fundo.</p>
+            <p class="case__expected">
+              <em>fade</em>: gradiente da cor de fundo desaparece ao chegar no
+              limite. <em>scroll-shadow</em>: sombra escura independente do
+              fundo.
+            </p>
             <div class="case__row" style="align-items:flex-start;">
               <div>
                 <span class="tag">fade</span>
-                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:8px;">
+                <div
+                  style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:8px;"
+                >
                   <lui-scroll-area height="120" fade>
-                    <div class="sa-list">{Array.from({length:12}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+                    <div class="sa-list">
+                      {
+                        Array.from({ length: 12 }, (_, i) => (
+                          <div class="sa-item">Item {i + 1}</div>
+                        ))
+                      }
+                    </div>
                   </lui-scroll-area>
                 </div>
               </div>
               <div>
                 <span class="tag">fade="bottom"</span>
-                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:8px;">
+                <div
+                  style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:8px;"
+                >
                   <lui-scroll-area height="120" fade="bottom">
-                    <div class="sa-list">{Array.from({length:12}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+                    <div class="sa-list">
+                      {
+                        Array.from({ length: 12 }, (_, i) => (
+                          <div class="sa-item">Item {i + 1}</div>
+                        ))
+                      }
+                    </div>
                   </lui-scroll-area>
                 </div>
               </div>
               <div>
                 <span class="tag">scroll-shadow</span>
                 <lui-scroll-area height="120" scroll-shadow>
-                  <div class="sa-list">{Array.from({length:12}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 12 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
                 </lui-scroll-area>
               </div>
             </div>
@@ -546,33 +885,73 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">4 — snap</p>
-            <p class="case__expected">Ao soltar o scroll, a posição deve "encaixar" no slide mais próximo. snap-align="start": borda esquerda do slide alinha com a borda do container.</p>
-            <lui-scroll-area orientation="horizontal" snap snap-align="start" scrollbar-visibility="hidden" style="max-width:360px;">
+            <p class="case__expected">
+              Ao soltar o scroll, a posição deve "encaixar" no slide mais
+              próximo. snap-align="start": borda esquerda do slide alinha com a
+              borda do container.
+            </p>
+            <lui-scroll-area
+              orientation="horizontal"
+              snap
+              snap-align="start"
+              scrollbar-visibility="hidden"
+              style="max-width:360px;"
+            >
               <div class="sa-row" style="gap:0;">
-                {Array.from({length:5}, (_, i) => (
-                  <div class="snap-slide" style={`background:hsl(${i*60},60%,82%); margin-right:8px;`}>Slide {i+1}</div>
-                ))}
+                {
+                  Array.from({ length: 5 }, (_, i) => (
+                    <div
+                      class="snap-slide"
+                      style={`background:hsl(${i * 60},60%,82%); margin-right:8px;`}
+                    >
+                      Slide {i + 1}
+                    </div>
+                  ))
+                }
               </div>
             </lui-scroll-area>
           </div>
 
           <div class="case">
             <p class="case__label">5 — disabled</p>
-            <p class="case__expected">Área não deve rolar com mouse, touch ou teclado. Cursor "not-allowed".</p>
+            <p class="case__expected">
+              Área não deve rolar com mouse, touch ou teclado. Cursor
+              "not-allowed".
+            </p>
             <lui-scroll-area height="120" disabled style="max-width:280px;">
-              <div class="sa-list">{Array.from({length:10}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+              <div class="sa-list">
+                {
+                  Array.from({ length: 10 }, (_, i) => (
+                    <div class="sa-item">Item {i + 1}</div>
+                  ))
+                }
+              </div>
             </lui-scroll-area>
           </div>
 
           <div class="case">
             <p class="case__label">6 — eventos</p>
-            <p class="case__expected">Role a área e confirme que cada evento aparece no log com o momento certo. <em>reach-bottom</em> só deve disparar ao chegar no final (não repetido).</p>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:480px;">
+            <p class="case__expected">
+              Role a área e confirme que cada evento aparece no log com o
+              momento certo. <em>reach-bottom</em> só deve disparar ao chegar no final
+              (não repetido).
+            </p>
+            <div
+              style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:480px;"
+            >
               <lui-scroll-area id="sa-events" height="180" fade>
-                <div class="sa-list">{Array.from({length:16}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+                <div class="sa-list">
+                  {
+                    Array.from({ length: 16 }, (_, i) => (
+                      <div class="sa-item">Item {i + 1}</div>
+                    ))
+                  }
+                </div>
               </lui-scroll-area>
               <div id="sa-log" class="event-log">
-                <span class="event-log__empty" data-empty>Role para ver eventos…</span>
+                <span class="event-log__empty" data-empty
+                  >Role para ver eventos…</span
+                >
               </div>
             </div>
             <script>
@@ -589,26 +968,47 @@ import '@lets-ui/styles';
               };
               sa.addEventListener('scroll-start', () => add('scroll-start'));
               sa.addEventListener('scroll-end', () => add('scroll-end'));
-              sa.addEventListener('reach-top', () => add('reach-top', '↑ topo'));
-              sa.addEventListener('reach-bottom', () => add('reach-bottom', '↓ fim'));
-              sa.addEventListener('scroll', e => add('scroll', `top:${Math.round(e.detail.scrollTop)}`));
+              sa.addEventListener('reach-top', () =>
+                add('reach-top', '↑ topo')
+              );
+              sa.addEventListener('reach-bottom', () =>
+                add('reach-bottom', '↓ fim')
+              );
+              sa.addEventListener('scroll', (e) =>
+                add('scroll', `top:${Math.round(e.detail.scrollTop)}`)
+              );
             </script>
           </div>
 
           <div class="case">
             <p class="case__label">7 — max-height (cresce com conteúdo)</p>
-            <p class="case__expected">Com poucos itens: sem scroll (altura natural). Com muitos itens: scroll ativado ao atingir max-height.</p>
+            <p class="case__expected">
+              Com poucos itens: sem scroll (altura natural). Com muitos itens:
+              scroll ativado ao atingir max-height.
+            </p>
             <div class="case__row" style="align-items:flex-start;">
               <div>
                 <span class="tag">3 itens — sem scroll</span>
                 <lui-scroll-area max-height="160" fade>
-                  <div class="sa-list">{Array.from({length:3}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 3 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
                 </lui-scroll-area>
               </div>
               <div>
                 <span class="tag">12 itens — com scroll</span>
                 <lui-scroll-area max-height="160" fade>
-                  <div class="sa-list">{Array.from({length:12}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 12 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
                 </lui-scroll-area>
               </div>
             </div>
@@ -616,20 +1016,32 @@ import '@lets-ui/styles';
 
           <div class="case">
             <p class="case__label">8 — acessibilidade por teclado</p>
-            <p class="case__expected">Clique na área abaixo e use ↑ ↓ para rolar. A área deve ter foco visível (outline) e responder às teclas.</p>
+            <p class="case__expected">
+              Clique na área abaixo e use ↑ ↓ para rolar. A área deve ter foco
+              visível (outline) e responder às teclas.
+            </p>
             <lui-scroll-area height="120" style="max-width:280px;" fade>
-              <div class="sa-list">{Array.from({length:12}, (_, i) => <div class="sa-item">Item {i+1}</div>)}</div>
+              <div class="sa-list">
+                {
+                  Array.from({ length: 12 }, (_, i) => (
+                    <div class="sa-item">Item {i + 1}</div>
+                  ))
+                }
+              </div>
             </lui-scroll-area>
           </div>
         </section>
-
       </main>
     </div>
   </body>
 </html>
 
 <style is:global>
-  *, *::before, *::after { box-sizing: border-box; }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
   body {
     margin: 0;
@@ -640,148 +1052,355 @@ import '@lets-ui/styles';
 
   /* ── Header ───────────────────────────── */
   .pg-header {
-    display: flex; align-items: center; gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 12px 24px;
     background: #fff;
     border-bottom: 1px solid #e5e7eb;
     font-size: 14px;
-    position: sticky; top: 0; z-index: 100;
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
-  .pg-header__back { color: inherit; text-decoration: none; opacity: 0.5; }
-  .pg-header__back:hover { opacity: 1; }
-  .pg-header__title { font-weight: 600; font-family: monospace; }
-  .pg-header__tag { font-size: 11px; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 999px; }
+  .pg-header__back {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.5;
+  }
+  .pg-header__back:hover {
+    opacity: 1;
+  }
+  .pg-header__title {
+    font-weight: 600;
+    font-family: monospace;
+  }
+  .pg-header__tag {
+    font-size: 11px;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
 
   /* ── Layout ───────────────────────────── */
-  .layout { display: grid; grid-template-columns: 180px 1fr; min-height: calc(100vh - 45px); }
+  .layout {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    min-height: calc(100vh - 45px);
+  }
 
   .sidenav {
-    position: sticky; top: 45px; align-self: start;
-    padding: 24px 16px; border-right: 1px solid #e5e7eb;
-    background: #fff; height: calc(100vh - 45px); overflow-y: auto;
+    position: sticky;
+    top: 45px;
+    align-self: start;
+    padding: 24px 16px;
+    border-right: 1px solid #e5e7eb;
+    background: #fff;
+    height: calc(100vh - 45px);
+    overflow-y: auto;
   }
-  .sidenav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .sidenav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
   .sidenav a {
-    display: block; padding: 6px 10px; border-radius: 6px;
-    text-decoration: none; font-size: 13px; font-family: monospace;
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: monospace;
     color: #374151;
   }
-  .sidenav a:hover { background: #f3f4f6; }
+  .sidenav a:hover {
+    background: #f3f4f6;
+  }
 
-  .pg-main { display: flex; flex-direction: column; gap: 48px; padding: 32px 32px 80px; max-width: 860px; }
+  .pg-main {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    padding: 32px 32px 80px;
+    max-width: 860px;
+  }
 
   /* ── Sections ─────────────────────────── */
-  .pg-section { display: flex; flex-direction: column; gap: 24px; }
+  .pg-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
   .pg-section__title {
-    margin: 0; font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .08em; color: #6b7280; font-family: monospace;
-    padding-bottom: 8px; border-bottom: 1px solid #e5e7eb;
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+    font-family: monospace;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
   }
 
   /* ── Cases ────────────────────────────── */
-  .case { display: flex; flex-direction: column; gap: 10px; }
-  .case__label { margin: 0; font-size: 13px; font-weight: 600; color: #111827; }
-  .case__expected { margin: 0; font-size: 12px; color: #6b7280; line-height: 1.5; }
-  .case__expected em { font-style: normal; font-family: monospace; background: rgba(0,0,0,.06); padding: 0 3px; border-radius: 3px; }
-  .case__row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
-  .case__col { display: flex; flex-direction: column; gap: 4px; }
+  .case {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .case__label {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+  }
+  .case__expected {
+    margin: 0;
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+  .case__expected em {
+    font-style: normal;
+    font-family: monospace;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0 3px;
+    border-radius: 3px;
+  }
+  .case__row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .case__col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
   .tag {
-    display: inline-block; font-family: monospace; font-size: 11px;
-    color: #6b7280; background: #f3f4f6; padding: 2px 6px;
-    border-radius: 4px; margin-bottom: 4px;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 11px;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
   }
 
   /* ── Generic boxes ────────────────────── */
   .box {
-    width: 100%; height: 32px; background: #dbeafe; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600; color: #1d4ed8;
+    width: 100%;
+    height: 32px;
+    background: #dbeafe;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #1d4ed8;
   }
-  .box--sm { width: 32px; height: 32px; }
+  .box--sm {
+    width: 32px;
+    height: 32px;
+  }
   .box-col {
-    background: #e5e7eb; border-radius: 4px; padding: 8px;
-    font-size: 12px; text-align: center; color: #374151;
+    background: #e5e7eb;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 12px;
+    text-align: center;
+    color: #374151;
   }
   .chip {
-    background: #e5e7eb; border-radius: 999px; padding: 4px 10px;
-    font-size: 12px; color: #374151; white-space: nowrap;
+    background: #e5e7eb;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: #374151;
+    white-space: nowrap;
   }
 
   /* ── Resizable container ──────────────── */
   .resizable {
-    resize: horizontal; overflow: auto;
-    min-width: 200px; max-width: 100%;
-    border: 1px dashed #94a3b8; padding: 8px; border-radius: 4px;
+    resize: horizontal;
+    overflow: auto;
+    min-width: 200px;
+    max-width: 100%;
+    border: 1px dashed #94a3b8;
+    padding: 8px;
+    border-radius: 4px;
   }
 
   /* ── Sidebar ──────────────────────────── */
   .sidebar-side {
-    background: #dbeafe; border-radius: 4px; padding: 12px;
-    font-size: 12px; color: #1d4ed8; font-weight: 600; text-align: center;
+    background: #dbeafe;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 12px;
+    color: #1d4ed8;
+    font-weight: 600;
+    text-align: center;
   }
   .sidebar-content {
-    background: #dcfce7; border-radius: 4px; padding: 12px;
-    font-size: 12px; color: #15803d;
+    background: #dcfce7;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 12px;
+    color: #15803d;
   }
 
   /* ── Switcher ─────────────────────────── */
   .sw-card {
-    border-radius: 6px; padding: 16px; text-align: center;
-    font-size: 13px; font-weight: 600; color: rgba(0,0,0,.5);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.5);
   }
-  .sw-card--sm { padding: 8px; }
+  .sw-card--sm {
+    padding: 8px;
+  }
 
   /* ── Float ────────────────────────────── */
   .placements-grid {
-    display: grid; grid-template-columns: repeat(3, auto);
-    gap: 40px 48px; justify-content: start; padding: 24px;
-    background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 40px 48px;
+    justify-content: start;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
   }
-  .placement-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-  .placement-label { font-family: monospace; font-size: 10px; color: #9ca3af; }
-  .float-anchor { width: 64px; height: 64px; background: #e5e7eb; border-radius: 6px; }
+  .placement-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .placement-label {
+    font-family: monospace;
+    font-size: 10px;
+    color: #9ca3af;
+  }
+  .float-anchor {
+    width: 64px;
+    height: 64px;
+    background: #e5e7eb;
+    border-radius: 6px;
+  }
   .float-badge {
-    display: flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #ef4444; color: #fff; font-size: 11px; font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ef4444;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
     border: 2px solid #fff;
   }
 
   /* ── Scroll Area ──────────────────────── */
-  .sa-list { display: flex; flex-direction: column; }
+  .sa-list {
+    display: flex;
+    flex-direction: column;
+  }
   .sa-item {
-    padding: 7px 12px; font-size: 12px; color: #374151;
+    padding: 7px 12px;
+    font-size: 12px;
+    color: #374151;
     border-bottom: 1px solid #f3f4f6;
   }
-  .sa-item:last-child { border-bottom: none; }
-  .sa-row { display: flex; gap: 8px; padding: 4px 0; }
-  .sa-card {
-    flex-shrink: 0; width: 80px; height: 56px; border-radius: 6px;
-    background: #e5e7eb; display: flex; align-items: center; justify-content: center;
-    font-size: 11px; color: #6b7280; font-weight: 600;
+  .sa-item:last-child {
+    border-bottom: none;
   }
-  .sa-grid { display: grid; grid-template-columns: repeat(5, 48px); gap: 4px; min-width: 280px; }
+  .sa-row {
+    display: flex;
+    gap: 8px;
+    padding: 4px 0;
+  }
+  .sa-card {
+    flex-shrink: 0;
+    width: 80px;
+    height: 56px;
+    border-radius: 6px;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+  }
+  .sa-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 48px);
+    gap: 4px;
+    min-width: 280px;
+  }
   .sa-cell {
-    height: 36px; background: #f3f4f6; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; color: #9ca3af;
+    height: 36px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #9ca3af;
   }
   .snap-slide {
-    flex-shrink: 0; width: 80%; min-width: 240px; height: 100px;
-    border-radius: 8px; display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 700; color: rgba(0,0,0,.4);
+    flex-shrink: 0;
+    width: 80%;
+    min-width: 240px;
+    height: 100px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.4);
   }
 
   /* ── Event log ────────────────────────── */
   .event-log {
-    background: #0f172a; border-radius: 8px; padding: 10px;
-    font-family: monospace; font-size: 11px; color: #94a3b8;
-    display: flex; flex-direction: column; gap: 3px; min-height: 180px;
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #94a3b8;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-height: 180px;
     overflow: hidden;
   }
-  .event-log__empty { color: #475569; font-style: italic; }
-  .event-entry { color: #e2e8f0; line-height: 1.5; }
-  .event-entry strong { color: #38bdf8; }
-  .event-detail { color: #64748b; }
+  .event-log__empty {
+    color: #475569;
+    font-style: italic;
+  }
+  .event-entry {
+    color: #e2e8f0;
+    line-height: 1.5;
+  }
+  .event-entry strong {
+    color: #38bdf8;
+  }
+  .event-detail {
+    color: #64748b;
+  }
 </style>
