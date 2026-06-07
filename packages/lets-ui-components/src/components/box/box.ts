@@ -2,7 +2,13 @@ import { LitElement, unsafeCSS } from 'lit';
 import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 import { property } from 'lit/decorators.js';
 import styles from './box.scss?inline';
-import { resolveSpace } from '../../utils/layout.js';
+import {
+  resolveSpace,
+  resolveRadius,
+  resolveBorderWidth,
+  resolveBackground,
+  resolveBorderColor,
+} from '../../utils/layout.js';
 
 export class LuiBox extends LitElement {
   static styles = unsafeCSS(styles);
@@ -35,20 +41,22 @@ export class LuiBox extends LitElement {
     if (pr) this.style.setProperty('--lui-box-pr', pr);
     else this.style.removeProperty('--lui-box-pr');
 
-    if (this.background)
-      this.style.setProperty('--lui-box-background', this.background);
+    const bg = resolveBackground(this.background);
+    if (bg) this.style.setProperty('--lui-box-background', bg);
     else this.style.removeProperty('--lui-box-background');
 
-    if (this.borderRadius)
-      this.style.setProperty('--lui-box-border-radius', this.borderRadius);
+    const radius = resolveRadius(this.borderRadius);
+    if (radius) this.style.setProperty('--lui-box-border-radius', radius);
     else this.style.removeProperty('--lui-box-border-radius');
 
-    if (this.borderWidth)
-      this.style.setProperty('--lui-box-border-width', this.borderWidth);
+    const borderWidth = resolveBorderWidth(this.borderWidth);
+    if (borderWidth)
+      this.style.setProperty('--lui-box-border-width', borderWidth);
     else this.style.removeProperty('--lui-box-border-width');
 
-    if (this.borderColor)
-      this.style.setProperty('--lui-box-border-color', this.borderColor);
+    const borderColor = resolveBorderColor(this.borderColor);
+    if (borderColor)
+      this.style.setProperty('--lui-box-border-color', borderColor);
     else this.style.removeProperty('--lui-box-border-color');
 
     if (this.overflow)

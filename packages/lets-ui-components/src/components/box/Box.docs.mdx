@@ -5,11 +5,127 @@ import * as BoxStories from './Box.stories';
 
 # Box
 
-Generic container with visual token support. Supports padding, background, border, and overflow.
+Generic container with padding, background, border, and overflow control. Props that accept design tokens resolve to CSS custom properties automatically — including theme (`data-theme`) and brand (`data-brand`) switching.
 
 <Canvas of={BoxStories.Default} />
 <Controls of={BoxStories.Default} />
 
-## Card-like Box
+## background
+
+Accepts a semantic alias in the form `{category}/{variant}` or any raw CSS value.
+
+| Alias | Token |
+|---|---|
+| `neutral/surface` | `--lui-color-neutral-background-surface` |
+| `neutral/container` | `--lui-color-neutral-background-container` |
+| `neutral/overlay` | `--lui-color-neutral-background-overlay` |
+| `primary/surface` | `--lui-color-primary-background-surface` |
+| `primary/container` | `--lui-color-primary-background-container` |
+| `secondary/surface` | `--lui-color-secondary-background-surface` |
+| `secondary/container` | `--lui-color-secondary-background-container` |
+| `caution/surface` | `--lui-color-caution-background-surface` |
+| `caution/container` | `--lui-color-caution-background-container` |
+| `info/surface` | `--lui-color-info-background-surface` |
+| `info/container` | `--lui-color-info-background-container` |
+| `danger/surface` | `--lui-color-danger-background-surface` |
+| `danger/container` | `--lui-color-danger-background-container` |
+| `success/surface` | `--lui-color-success-background-surface` |
+| `success/container` | `--lui-color-success-background-container` |
+
+```html
+<lui-box background="neutral/surface">…</lui-box>
+<lui-box background="danger/surface">…</lui-box>
+```
+
+<Canvas of={BoxStories.BackgroundVariants} />
+
+## border-radius
+
+Accepts a token scale name or any raw CSS value.
+
+| Value | Token | Resolved |
+|---|---|---|
+| `none` | `--lui-border-radius-none` | `0` |
+| `xs` | `--lui-border-radius-xs` | brand-defined |
+| `sm` | `--lui-border-radius-sm` | brand-defined |
+| `md` | `--lui-border-radius-md` | brand-defined |
+| `lg` | `--lui-border-radius-lg` | brand-defined |
+| `xl` | `--lui-border-radius-xl` | brand-defined |
+| `circle` | `--lui-border-radius-circle` | `1000000px` |
+
+```html
+<lui-box border-radius="md">…</lui-box>
+<lui-box border-radius="circle">…</lui-box>
+```
+
+<Canvas of={BoxStories.BorderRadiusVariants} />
+
+## border-width
+
+Accepts a token scale (`0`, `1`, `2`, `4`) or any raw CSS value.
+
+| Value | Token | Resolved |
+|---|---|---|
+| `0` | `--lui-border-width-0` | `0` |
+| `1` | `--lui-border-width-1` | `1px` |
+| `2` | `--lui-border-width-2` | `2px` |
+| `4` | `--lui-border-width-4` | `4px` |
+
+```html
+<lui-box border-width="1" border-color="neutral/default">…</lui-box>
+```
+
+## border-color
+
+Accepts a semantic alias in the form `{category}/{variant}` or any raw CSS value.
+
+| Alias | Token |
+|---|---|
+| `neutral/subtle` | `--lui-color-neutral-border-subtle` |
+| `neutral/default` | `--lui-color-neutral-border-default` |
+| `primary/default` | `--lui-color-primary-border-default` |
+| `secondary/default` | `--lui-color-secondary-border-default` |
+| `caution/default` | `--lui-color-caution-border-default` |
+| `info/default` | `--lui-color-info-border-default` |
+| `danger/default` | `--lui-color-danger-border-default` |
+| `success/default` | `--lui-color-success-border-default` |
+
+```html
+<lui-box border-width="1" border-color="neutral/subtle">…</lui-box>
+<lui-box border-width="2" border-color="danger/default">…</lui-box>
+```
+
+<Canvas of={BoxStories.BorderColorVariants} />
+
+## padding
+
+Accepts a token scale name. `padding-x` and `padding-y` override horizontal and vertical independently.
+
+| Value | Token |
+|---|---|
+| `xs` | `--lui-spacing-fluid-4` |
+| `sm` | `--lui-spacing-fluid-8` |
+| `md` | `--lui-spacing-fluid-16` |
+| `lg` | `--lui-spacing-fluid-24` |
+| `xl` | `--lui-spacing-fluid-32` |
+| `2xl` | `--lui-spacing-fluid-48` |
+
+```html
+<lui-box padding="md">…</lui-box>
+<lui-box padding-x="xl" padding-y="sm">…</lui-box>
+```
+
+## Raw CSS fallback
+
+Unknown values are passed through as-is, so raw CSS values and `var()` references continue to work.
+
+```html
+<lui-box background="#fef9c3" border-radius="12px" border-width="2px">…</lui-box>
+<lui-box background="var(--lui-color-neutral-background-surface)">…</lui-box>
+```
+
+<Canvas of={BoxStories.RawCSSFallback} />
+
+## Card
 
 <Canvas of={BoxStories.Card} />
