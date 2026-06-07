@@ -1,0 +1,160 @@
+@use 'packages/styles/src/utilities/functions' as *;
+
+:host {
+  display: block;
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
+}
+
+.scroll-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-area__viewport {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  outline: none;
+
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+}
+
+// Snap align applied to direct slotted children
+::slotted(*) {
+  scroll-snap-align: var(--lui-scroll-snap-align, none);
+}
+
+// Scrollbar visibility: always hidden (content still scrollable)
+// Must come before hover block — lower specificity (0,2,0) before (0,3,0)
+.scroll-area--scrollbar-hidden .scroll-area__viewport {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Scrollbar visibility: hide by default, reveal on container hover
+.scroll-area--scrollbar-hover {
+  .scroll-area__viewport {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &:hover .scroll-area__viewport {
+    scrollbar-width: auto;
+
+    &::-webkit-scrollbar {
+      display: revert;
+    }
+  }
+}
+
+// Fade / shadow overlay base
+.scroll-area__fade {
+  --lui-scroll-area-fade-size: 80px;
+
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  display: none;
+
+  &.is-visible {
+    display: block;
+  }
+
+  &--top,
+  &--bottom {
+    left: 0;
+    right: 0;
+    height: var(--lui-scroll-area-fade-size);
+  }
+
+  &--left,
+  &--right {
+    top: 0;
+    bottom: 0;
+    width: var(--lui-scroll-area-fade-size);
+  }
+
+  &--top {
+    top: 0;
+  }
+
+  &--bottom {
+    bottom: 0;
+  }
+
+  &--left {
+    left: 0;
+  }
+
+  &--right {
+    right: 0;
+  }
+}
+
+// Fade mode: gradient blending into the surface background
+.scroll-area--fade {
+  --lui-scroll-area-fade-color: #{bg(surface, neutral)};
+
+  .scroll-area__fade--top {
+    background: linear-gradient(
+      to bottom,
+      var(--lui-scroll-area-fade-color),
+      transparent
+    );
+  }
+
+  .scroll-area__fade--bottom {
+    background: linear-gradient(
+      to top,
+      var(--lui-scroll-area-fade-color),
+      transparent
+    );
+  }
+
+  .scroll-area__fade--left {
+    background: linear-gradient(
+      to right,
+      var(--lui-scroll-area-fade-color),
+      transparent
+    );
+  }
+
+  .scroll-area__fade--right {
+    background: linear-gradient(
+      to left,
+      var(--lui-scroll-area-fade-color),
+      transparent
+    );
+  }
+}
+
+// Shadow mode: subtle dark gradient to hint at hidden content
+.scroll-area--shadow {
+  .scroll-area__fade--top {
+    background: linear-gradient(to bottom, rgb(0 0 0 / 8%), transparent);
+  }
+
+  .scroll-area__fade--bottom {
+    background: linear-gradient(to top, rgb(0 0 0 / 8%), transparent);
+  }
+
+  .scroll-area__fade--left {
+    background: linear-gradient(to right, rgb(0 0 0 / 8%), transparent);
+  }
+
+  .scroll-area__fade--right {
+    background: linear-gradient(to left, rgb(0 0 0 / 8%), transparent);
+  }
+}

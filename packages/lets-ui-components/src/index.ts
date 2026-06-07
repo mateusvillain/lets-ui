@@ -38,6 +38,7 @@ import { LuiShortcut } from './components/shortcut/shortcut.js';
 import { LuiTag } from './components/tag/tag.js';
 import { LuiTextarea } from './components/textarea/textarea.js';
 import { LuiTooltip } from './components/tooltip/tooltip.js';
+import { LuiScrollArea } from './components/scroll-area/scroll-area.js';
 
 function define(name: string, elementClass: CustomElementConstructor) {
   if (!customElements.get(name)) {
@@ -88,6 +89,7 @@ define('lui-shortcut', LuiShortcut);
 define('lui-tag', LuiTag);
 define('lui-textarea', LuiTextarea);
 define('lui-tooltip', LuiTooltip);
+define('lui-scroll-area', LuiScrollArea);
 
 export {
   LuiBox,
@@ -133,4 +135,5 @@ export {
   LuiTag,
   LuiTextarea,
   LuiTooltip,
+  LuiScrollArea,
 };
