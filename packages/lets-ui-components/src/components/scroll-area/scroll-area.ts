@@ -45,7 +45,7 @@ export class LuiScrollArea extends LitElement {
   private get _parsedFadeSides(): Set<FadeSide> {
     const attr = this.getAttribute('fade');
     if (attr === null) return new Set();
-    if (attr === '') {
+    if (attr === '' || attr === 'true') {
       const sides = new Set<FadeSide>();
       if (this.orientation !== 'horizontal') {
         sides.add('top');
