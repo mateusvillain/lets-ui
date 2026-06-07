@@ -1,0 +1,16 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  position: relative;
+  display: inline-block;
+}
+
+.float__anchor {
+  position: absolute;
+  inset: var(--lui-float-top, auto) var(--lui-float-right, auto) var(--lui-float-bottom, auto) var(--lui-float-left, auto);
+  transform: translate(
+    calc(var(--lui-float-tx, 0%) + var(--lui-float-offset-x, 0px)),
+    calc(var(--lui-float-ty, 0%) + var(--lui-float-offset-y, 0px))
+  );
+  z-index: var(--lui-float-z-index, 1);
+}

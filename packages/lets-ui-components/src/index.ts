@@ -9,6 +9,7 @@ import { LuiInline } from './components/inline/inline.js';
 import { LuiSidebar } from './components/sidebar/sidebar.js';
 import { LuiStack } from './components/stack/stack.js';
 import { LuiSwitcher } from './components/switcher/switcher.js';
+import { LuiFloat } from './components/float/float.js';
 import { LuiBody } from './components/body/body.js';
 import { LuiImage } from './components/image/image.js';
 import { LuiDrawer } from './components/drawer/drawer.js';
@@ -57,6 +58,7 @@ define('lui-inline', LuiInline);
 define('lui-sidebar', LuiSidebar);
 define('lui-stack', LuiStack);
 define('lui-switcher', LuiSwitcher);
+define('lui-float', LuiFloat);
 define('lui-alert', LuiAlert);
 define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
@@ -101,6 +103,7 @@ export {
   LuiSidebar,
   LuiStack,
   LuiSwitcher,
+  LuiFloat,
   LuiAlert,
   LuiBody,
   LuiHeading,

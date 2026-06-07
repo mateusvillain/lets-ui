@@ -1,0 +1,61 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FloatStories from './Float.stories';
+
+<Meta of={FloatStories} />
+
+# Float
+
+Absolutely positions a child element relative to its anchor. Use it to overlay badges, status dots, or any decorative element on top of another component — avatars, cards, icons.
+
+The host element becomes an `inline-block` relative container, so no wrapper is needed.
+
+<Canvas of={FloatStories.Default} />
+<Controls of={FloatStories.Default} />
+
+## All Placements
+
+Nine positions from the `placement` attribute: combinations of `top / middle / bottom` × `start / center / end`.
+
+<Canvas of={FloatStories.AllPlacements} />
+
+## top-end
+
+<Canvas of={FloatStories.TopEnd} />
+
+## top-start
+
+<Canvas of={FloatStories.TopStart} />
+
+## top-center
+
+<Canvas of={FloatStories.TopCenter} />
+
+## middle-center
+
+<Canvas of={FloatStories.MiddleCenter} />
+
+## middle-start
+
+<Canvas of={FloatStories.MiddleStart} />
+
+## middle-end
+
+<Canvas of={FloatStories.MiddleEnd} />
+
+## bottom-start
+
+<Canvas of={FloatStories.BottomStart} />
+
+## bottom-center
+
+<Canvas of={FloatStories.BottomCenter} />
+
+## With Offset
+
+`offset-x` and `offset-y` shift the floating element from its anchor point. Accepts px values with or without the `px` unit (`"8"` or `"8px"`).
+
+<Canvas of={FloatStories.WithOffset} />
+
+## Avatar with Status / Badge
+
+<Canvas of={FloatStories.AvatarWithStatus} />
