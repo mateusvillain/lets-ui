@@ -34,6 +34,15 @@ This is a **pnpm monorepo** (`pnpm-workspace.yaml`) for an open-source, framewor
 - **`packages/styles`** — Component SCSS files using utility functions. Built with Sass → PostCSS/cssnano → `/dist/letsui.min.css`.
 - **`packages/lets-ui-components`** — Vanilla JS Web Components (custom elements, no framework). Built via a Node.js script.
 
+### SCSS split rule
+
+Components whose core behavior is **pure CSS** (layout primitives like `stack`, `switcher`, `sidebar`, `inline`, `center`) get two SCSS files:
+
+1. `packages/styles/src/components/_name.scss` — CSS-only implementation, registered in `_components.scss`. Works without the Web Component.
+2. `packages/lets-ui-components/src/components/name/name.scss` — shadow-DOM-specific rules (`:host`, `::slotted()`). Imports from utilities directly; does **not** re-import the global file.
+
+Components whose core behavior is **JS-driven** (`float`, `scroll-area`) live only in the component package. Their overflow settings, positioning coordinates, and visual indicators are applied by JavaScript — a global CSS stub would be non-functional without the Web Component and adds no value. Do not add these to `packages/styles/src/components/_components.scss`.
+
 Documentation and interactive testing live in `docs/` (Storybook stories + MDX) and `playground/` (raw HTML files).
 
 ## Token & Styling System
