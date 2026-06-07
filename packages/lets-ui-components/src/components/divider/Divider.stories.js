@@ -3,7 +3,7 @@ import '../../../../../packages/styles/dist/letsui.css';
 import '../../index.js';
 
 export default {
-  title: 'Miscellaneous/Divider',
+  title: 'Layout/Divider',
   argTypes: {
     orientation: {
       control: { type: 'select' },

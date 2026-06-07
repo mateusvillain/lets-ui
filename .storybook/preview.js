@@ -18,6 +18,7 @@ const preview = {
           'Navigation',
           'Form and options',
           'Content',
+          'Layout',
           'Miscellaneous',
           'Utilities',
           ['Functions', 'Mixins', 'Flex'],

@@ -34,6 +34,7 @@ import '@lets-ui/styles';
           <li><a href="#switcher">lui-switcher</a></li>
           <li><a href="#float">lui-float</a></li>
           <li><a href="#scroll-area">lui-scroll-area</a></li>
+          <li><a href="#a11y">Acessibilidade</a></li>
         </ul>
       </nav>
 
@@ -1031,6 +1032,212 @@ import '@lets-ui/styles';
             </lui-scroll-area>
           </div>
         </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- ACCESSIBILITY — PR #58 CHECKLIST                       -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="a11y" class="pg-section">
+          <h2 class="pg-section__title">Accessibility — PR #58 Checklist</h2>
+
+          <!-- ── Item 1 + 3 combinados: traversability & sem focus trap ── -->
+          <div class="case">
+            <p class="case__label">
+              1 + 3 — Keyboard traversability e sem focus trap (todos os componentes)
+            </p>
+            <p class="case__expected">
+              Use <kbd>Tab</kbd> a partir de cada botão <em>Antes</em>. O foco deve entrar nos
+              botões internos do componente em ordem e avançar para <em>Depois</em> — sem
+              pular, sem prender. Cada botão deve exibir outline visível ao receber foco.
+            </p>
+
+            <div class="a11y-seq-list">
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-stack</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-stack gap="sm">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-stack>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-inline</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-inline gap="sm">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-inline>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-center</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-center>
+                    <button class="a11y-btn">Btn 1</button>
+                  </lui-center>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-columns</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-columns columns="2" gap="sm" style="flex:1; min-width:160px;">
+                    <button class="a11y-btn" style="width:100%">Btn 1</button>
+                    <button class="a11y-btn" style="width:100%">Btn 2</button>
+                  </lui-columns>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-grid</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-grid columns="2" gap="sm" style="flex:1; min-width:160px;">
+                    <button class="a11y-btn" style="width:100%">Btn 1</button>
+                    <button class="a11y-btn" style="width:100%">Btn 2</button>
+                  </lui-grid>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-flex</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-flex gap="sm">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-flex>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-container</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-container size="sm" padding="xs" style="flex:1;">
+                    <button class="a11y-btn">Btn 1</button>
+                  </lui-container>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-sidebar</span>
+                <div class="a11y-seq__flow" style="flex-wrap:wrap;">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-sidebar style="flex:1; min-width:240px; background:#f8fafc; border:1px dashed #e2e8f0;">
+                    <button slot="sidebar" class="a11y-btn" style="width:100%">Sidebar Btn</button>
+                    <button slot="content" class="a11y-btn" style="width:100%">Content Btn</button>
+                  </lui-sidebar>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-switcher</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-switcher threshold="9999px" gap="sm" style="flex:1;">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-switcher>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-float</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <div style="position:relative; min-height:56px; min-width:80px; padding:4px; background:#f8fafc; border:1px dashed #e2e8f0; border-radius:4px;">
+                    <lui-float placement="top-end">
+                      <button class="a11y-btn">Âncora</button>
+                      <button slot="float" class="a11y-btn" style="font-size:10px; padding:2px 8px;">Float</button>
+                    </lui-float>
+                  </div>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-scroll-area</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-scroll-area height="80" style="width:180px; border:1px dashed #e2e8f0;">
+                    <div class="sa-list">
+                      {Array.from({ length: 6 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))}
+                    </div>
+                  </lui-scroll-area>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Item 2: lui-scroll-area via Tab + setas ── -->
+          <div class="case">
+            <p class="case__label">
+              2 — lui-scroll-area: viewport alcançável via Tab e rolável via setas
+            </p>
+            <p class="case__expected">
+              Clique em <em>Tab para cá</em> e pressione <kbd>Tab</kbd> uma vez. A área de scroll deve
+              receber foco (outline visível). Use <kbd>↑</kbd> <kbd>↓</kbd> para rolar sem o mouse —
+              o conteúdo deve se mover. Um novo <kbd>Tab</kbd> deve avançar para <em>Tab sai aqui</em>.
+            </p>
+            <div style="display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;">
+              <button class="a11y-btn a11y-btn--anchor">Tab para cá →</button>
+              <lui-scroll-area
+                id="a11y-sa"
+                height="160"
+                fade
+                style="width:220px;"
+              >
+                <div class="sa-list">
+                  {Array.from({ length: 14 }, (_, i) => (
+                    <div class="sa-item">Item {i + 1}</div>
+                  ))}
+                </div>
+              </lui-scroll-area>
+              <button class="a11y-btn a11y-btn--anchor">→ Tab sai aqui</button>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   </body>
@@ -1402,5 +1609,88 @@ import '@lets-ui/styles';
   }
   .event-detail {
     color: #64748b;
+  }
+
+  /* ── Accessibility ────────────────────── */
+  kbd {
+    font-family: monospace;
+    font-size: 11px;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #374151;
+  }
+
+  .a11y-seq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .a11y-seq {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .a11y-seq__label {
+    font-family: monospace;
+    font-size: 10px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .a11y-seq__flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px;
+    background: #f8fafc;
+    border: 1px dashed #e2e8f0;
+    border-radius: 6px;
+  }
+
+  .a11y-arrow {
+    color: #cbd5e1;
+    font-size: 18px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .a11y-btn {
+    background: #fff;
+    border: 1.5px solid #d1d5db;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-family: monospace;
+    cursor: pointer;
+    color: #374151;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .a11y-btn:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+  }
+
+  .a11y-btn:focus-visible {
+    outline: 2.5px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  .a11y-btn--anchor {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+  }
+
+  .a11y-btn--anchor:focus-visible {
+    outline-color: #1d4ed8;
   }
 </style>
