@@ -1,0 +1,49 @@
+@use '../utilities/functions' as fn;
+
+.sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: fn.fluid(24);
+  align-items: stretch;
+
+  &--end {
+    flex-direction: row-reverse;
+  }
+
+  &__side {
+    flex: 0 0 240px;
+  }
+
+  &__content {
+    flex: 1 1 50%;
+    min-width: 50%;
+  }
+
+  &--gap-none {
+    gap: 0;
+  }
+
+  &--gap-xs {
+    gap: fn.fluid(4);
+  }
+
+  &--gap-sm {
+    gap: fn.fluid(8);
+  }
+
+  &--gap-md {
+    gap: fn.fluid(16);
+  }
+
+  &--gap-lg {
+    gap: fn.fluid(24);
+  }
+
+  &--gap-xl {
+    gap: fn.fluid(32);
+  }
+
+  &--gap-2xl {
+    gap: fn.fluid(48);
+  }
+}

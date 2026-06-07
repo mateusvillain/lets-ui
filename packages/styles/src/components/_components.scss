@@ -1,6 +1,15 @@
+// JS-driven components (float, scroll-area, …) are intentionally absent.
+// See CLAUDE.md § "SCSS split rule" for the rationale.
 @use 'host';
 @use 'alert';
+@use 'box';
+@use 'center';
+@use 'columns';
+@use 'container';
+@use 'flex';
+@use 'grid';
 @use 'image';
+@use 'inline';
 @use 'body';
 @use 'breadcrumb';
 @use 'button';
@@ -23,3 +32,6 @@
 @use 'tag';
 @use 'textarea';
 @use 'tooltip';
+@use 'sidebar';
+@use 'stack';
+@use 'switcher';

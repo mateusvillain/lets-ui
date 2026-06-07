@@ -1,0 +1,9 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: grid;
+  grid-template-columns: var(--lui-grid-columns, none);
+  grid-template-rows: var(--lui-grid-rows, none);
+  gap: var(--lui-grid-gap, #{fn.fluid(16)});
+  place-items: var(--lui-grid-align, stretch) var(--lui-grid-justify, stretch);
+}

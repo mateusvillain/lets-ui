@@ -1,0 +1,15 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SwitcherStories from './Switcher.stories';
+
+<Meta of={SwitcherStories} />
+
+# Switcher
+
+Intrinsic responsive layout using the Every Layout switcher pattern. Children switch from horizontal to vertical layout when the container drops below the `threshold` width.
+
+<Canvas of={SwitcherStories.Default} />
+<Controls of={SwitcherStories.Default} />
+
+## Wide Threshold
+
+<Canvas of={SwitcherStories.WideThreshold} />

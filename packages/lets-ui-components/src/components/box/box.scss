@@ -1,0 +1,17 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: block;
+}
+
+.box {
+  box-sizing: border-box;
+  padding: var(--lui-box-pt, 0) var(--lui-box-pr, 0) var(--lui-box-pb, 0)
+    var(--lui-box-pl, 0);
+  background-color: var(--lui-box-background, transparent);
+  border-radius: var(--lui-box-border-radius, 0);
+  border-width: var(--lui-box-border-width, 0);
+  border-color: var(--lui-box-border-color, transparent);
+  border-style: solid;
+  overflow: var(--lui-box-overflow, visible);
+}

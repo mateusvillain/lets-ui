@@ -1,0 +1,155 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ScrollAreaStories from './ScrollArea.stories';
+
+<Meta of={ScrollAreaStories} />
+
+# ScrollArea
+
+A keyboard-accessible scrollable region that abstracts overflow behavior, visual overflow indicators, scroll snap, and scroll events into a consistent, framework-agnostic API.
+
+The component wraps content in a Shadow DOM viewport div. Overflow, snap, and dimensions are applied as inline styles by JavaScript; visual indicators update automatically as the user scrolls.
+
+<Canvas of={ScrollAreaStories.Default} />
+<Controls of={ScrollAreaStories.Default} />
+
+## orientation
+
+Controls which axis scrolls. Defaults to `vertical`.
+
+```html
+<lui-scroll-area orientation="vertical">…</lui-scroll-area>
+<lui-scroll-area orientation="horizontal">…</lui-scroll-area>
+<lui-scroll-area orientation="both">…</lui-scroll-area>
+```
+
+<Canvas of={ScrollAreaStories.Horizontal} />
+<Canvas of={ScrollAreaStories.Both} />
+
+## scrollbar-visibility
+
+Controls when the scrollbar is visible.
+
+| Value | Behavior |
+|---|---|
+| `auto` | Browser default — appears when content overflows |
+| `always` | Scrollbar always rendered (`overflow: scroll`) |
+| `hover` | Hidden at rest, visible when the area is hovered |
+| `hidden` | Never shown, but content is still scrollable |
+
+<Canvas of={ScrollAreaStories.ScrollbarVisibilityVariants} />
+
+## fade
+
+Renders gradient overlays to indicate hidden content. Activates and deactivates automatically as the user scrolls.
+
+Use as a boolean to enable fade on all sides relevant to the `orientation`:
+
+```html
+<lui-scroll-area fade>…</lui-scroll-area>
+```
+
+Or specify which sides should fade:
+
+```html
+<lui-scroll-area fade="top bottom">…</lui-scroll-area>
+<lui-scroll-area fade="bottom">…</lui-scroll-area>
+```
+
+The gradient blends from the surface background color (token `bg(surface, neutral)`) to transparent. Override it with the `--lui-scroll-area-fade-color` CSS custom property when placing the component on a different background:
+
+```css
+lui-scroll-area {
+  --lui-scroll-area-fade-color: var(--my-card-background);
+}
+```
+
+<Canvas of={ScrollAreaStories.Fade} />
+<Canvas of={ScrollAreaStories.FadeDirections} />
+
+## scroll-shadow
+
+An alternative to `fade` that uses a dark semi-transparent gradient instead of the surface color. Works independently of the background, making it useful on non-white surfaces.
+
+```html
+<lui-scroll-area scroll-shadow>…</lui-scroll-area>
+```
+
+<Canvas of={ScrollAreaStories.ScrollShadow} />
+
+## snap
+
+Enables CSS Scroll Snap using native `scroll-snap-type`. Children automatically receive `scroll-snap-align` matching the `snap-align` attribute.
+
+```html
+<lui-scroll-area snap snap-align="start">…</lui-scroll-area>
+```
+
+`snap-align` accepts `start` (default), `center`, or `end`.
+
+<Canvas of={ScrollAreaStories.Snap} />
+<Canvas of={ScrollAreaStories.SnapCenter} />
+
+## overscroll
+
+Maps to `overscroll-behavior`. Use `contain` to prevent the scroll chain from propagating to the page when the area reaches its limit — useful for sidebars, modals, and floating panels.
+
+```html
+<lui-scroll-area overscroll="contain">…</lui-scroll-area>
+```
+
+<Canvas of={ScrollAreaStories.Overscroll} />
+
+## max-height
+
+The area expands naturally up to the `max-height` value, then becomes scrollable. Pair with `fade` to hint at hidden content.
+
+```html
+<lui-scroll-area max-height="200">…</lui-scroll-area>
+```
+
+<Canvas of={ScrollAreaStories.MaxHeight} />
+
+## disabled
+
+Prevents all scroll interaction (mouse, touch, keyboard). The viewport receives `tabindex="-1"` and `overflow: hidden`.
+
+```html
+<lui-scroll-area disabled>…</lui-scroll-area>
+```
+
+<Canvas of={ScrollAreaStories.Disabled} />
+
+## Events
+
+The component emits Custom Events on the host element. All events bubble and are composed (they cross Shadow DOM boundaries).
+
+| Event | When | `detail` payload |
+|---|---|---|
+| `scroll` | Every scroll tick | `{ scrollTop, scrollLeft, scrollHeight, scrollWidth, clientHeight, clientWidth }` |
+| `scroll-start` | First tick of a new scroll gesture | — |
+| `scroll-end` | 150 ms after the last scroll tick | — |
+| `reach-top` | Scroll position reaches the top edge | — |
+| `reach-bottom` | Scroll position reaches the bottom edge | — |
+| `reach-left` | Scroll position reaches the left edge | — |
+| `reach-right` | Scroll position reaches the right edge | — |
+
+```js
+const area = document.querySelector('lui-scroll-area');
+
+area.addEventListener('reach-bottom', () => {
+  loadMoreItems();
+});
+
+area.addEventListener('scroll-end', () => {
+  saveScrollPosition(area);
+});
+```
+
+<Canvas of={ScrollAreaStories.WithEvents} />
+
+## CSS custom properties
+
+| Property | Default | Description |
+|---|---|---|
+| `--lui-scroll-area-fade-color` | `bg(surface, neutral)` | Gradient color for `fade` mode |
+| `--lui-scroll-area-fade-size` | `80px` | Height/width of overlay indicators |

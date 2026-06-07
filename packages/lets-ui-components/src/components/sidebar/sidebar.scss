@@ -1,0 +1,25 @@
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: block;
+}
+
+.sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lui-sidebar-gap, #{fn.fluid(24)});
+  align-items: var(--lui-sidebar-align, stretch);
+}
+
+.sidebar__side {
+  flex: 0 0 var(--lui-sidebar-side-width, 240px);
+}
+
+.sidebar__content {
+  flex: 1 1 var(--lui-sidebar-content-min-width, 50%);
+  min-width: var(--lui-sidebar-content-min-width, 50%);
+}
+
+.sidebar--end {
+  flex-direction: row-reverse;
+}

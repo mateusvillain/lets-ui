@@ -1,0 +1,19 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FlexStories from './Flex.stories';
+
+<Meta of={FlexStories} />
+
+# Flex
+
+Raw flexbox primitive. Use `lui-flex-item` to control individual item properties.
+
+<Canvas of={FlexStories.Default} />
+<Controls of={FlexStories.Default} />
+
+## Column Direction
+
+<Canvas of={FlexStories.Column} />
+
+## With Flex Grow
+
+<Canvas of={FlexStories.WithGrow} />

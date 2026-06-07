@@ -1,4 +1,15 @@
 import { LuiAlert } from './components/alert/alert.js';
+import { LuiBox } from './components/box/box.js';
+import { LuiCenter } from './components/center/center.js';
+import { LuiColumns, LuiColumn } from './components/columns/columns.js';
+import { LuiContainer } from './components/container/container.js';
+import { LuiFlex, LuiFlexItem } from './components/flex/flex.js';
+import { LuiGrid, LuiGridItem } from './components/grid/grid.js';
+import { LuiInline } from './components/inline/inline.js';
+import { LuiSidebar } from './components/sidebar/sidebar.js';
+import { LuiStack } from './components/stack/stack.js';
+import { LuiSwitcher } from './components/switcher/switcher.js';
+import { LuiFloat } from './components/float/float.js';
 import { LuiBody } from './components/body/body.js';
 import { LuiImage } from './components/image/image.js';
 import { LuiDrawer } from './components/drawer/drawer.js';
@@ -27,6 +38,7 @@ import { LuiShortcut } from './components/shortcut/shortcut.js';
 import { LuiTag } from './components/tag/tag.js';
 import { LuiTextarea } from './components/textarea/textarea.js';
 import { LuiTooltip } from './components/tooltip/tooltip.js';
+import { LuiScrollArea } from './components/scroll-area/scroll-area.js';
 
 function define(name: string, elementClass: CustomElementConstructor) {
   if (!customElements.get(name)) {
@@ -34,6 +46,20 @@ function define(name: string, elementClass: CustomElementConstructor) {
   }
 }
 
+define('lui-box', LuiBox);
+define('lui-center', LuiCenter);
+define('lui-columns', LuiColumns);
+define('lui-column', LuiColumn);
+define('lui-container', LuiContainer);
+define('lui-flex', LuiFlex);
+define('lui-flex-item', LuiFlexItem);
+define('lui-grid', LuiGrid);
+define('lui-grid-item', LuiGridItem);
+define('lui-inline', LuiInline);
+define('lui-sidebar', LuiSidebar);
+define('lui-stack', LuiStack);
+define('lui-switcher', LuiSwitcher);
+define('lui-float', LuiFloat);
 define('lui-alert', LuiAlert);
 define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
@@ -63,8 +89,23 @@ define('lui-shortcut', LuiShortcut);
 define('lui-tag', LuiTag);
 define('lui-textarea', LuiTextarea);
 define('lui-tooltip', LuiTooltip);
+define('lui-scroll-area', LuiScrollArea);
 
 export {
+  LuiBox,
+  LuiCenter,
+  LuiColumns,
+  LuiColumn,
+  LuiContainer,
+  LuiFlex,
+  LuiFlexItem,
+  LuiGrid,
+  LuiGridItem,
+  LuiInline,
+  LuiSidebar,
+  LuiStack,
+  LuiSwitcher,
+  LuiFloat,
   LuiAlert,
   LuiBody,
   LuiHeading,
@@ -94,4 +135,5 @@ export {
   LuiTag,
   LuiTextarea,
   LuiTooltip,
+  LuiScrollArea,
 };

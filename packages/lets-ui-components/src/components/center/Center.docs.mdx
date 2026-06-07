@@ -1,0 +1,23 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CenterStories from './Center.stories';
+
+<Meta of={CenterStories} />
+
+# Center
+
+Centering layout with axis control. Useful for hero sections and empty states.
+
+<Canvas of={CenterStories.Default} />
+<Controls of={CenterStories.Default} />
+
+## Horizontal Only
+
+<Canvas of={CenterStories.Horizontal} />
+
+## Vertical Only
+
+<Canvas of={CenterStories.Vertical} />
+
+## With Max Width
+
+<Canvas of={CenterStories.WithMaxWidth} />

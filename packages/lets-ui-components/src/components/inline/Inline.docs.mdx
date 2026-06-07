@@ -1,0 +1,19 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as InlineStories from './Inline.stories';
+
+<Meta of={InlineStories} />
+
+# Inline
+
+Horizontal flex layout with wrapping support. Great for tags, chips, and button groups.
+
+<Canvas of={InlineStories.Default} />
+<Controls of={InlineStories.Default} />
+
+## Space Between
+
+<Canvas of={InlineStories.SpaceBetween} />
+
+## No Wrap
+
+<Canvas of={InlineStories.NoWrap} />

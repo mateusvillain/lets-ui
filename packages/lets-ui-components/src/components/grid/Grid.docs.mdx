@@ -1,0 +1,19 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as GridStories from './Grid.stories';
+
+<Meta of={GridStories} />
+
+# Grid
+
+Full CSS Grid layout primitive. Use `lui-grid-item` for individual items with span/placement control.
+
+<Canvas of={GridStories.Default} />
+<Controls of={GridStories.Default} />
+
+## Two Columns
+
+<Canvas of={GridStories.TwoColumns} />
+
+## With Column Spans
+
+<Canvas of={GridStories.WithSpans} />
