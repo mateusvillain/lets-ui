@@ -70,6 +70,7 @@ Formato: `component: <nome-em-kebab-case>`. Cor padrão: `#f5be58`.
 | `component: pagination`      | Pagination      |
 | `component: progress`        | Progress        |
 | `component: radio`           | Radio           |
+| `component: radio-group`     | Radio Group     |
 | `component: select`          | Select          |
 | `component: selection`       | Selection       |
 | `component: shortcut`        | Shortcut        |
