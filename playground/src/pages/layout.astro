@@ -3,367 +3,1694 @@ import '@lets-ui/tokens';
 import '@lets-ui/styles';
 ---
 
-<html lang="en" data-theme="light" data-brand="lets-ui">
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Layout Primitives — Let's UI Playground</title>
-    <script type="module">
-      import '/node_modules/lets-ui-components/src/index.ts';
+    <title>Layout Validation — Let's UI Playground</title>
+    <script>
+      import '@lets-ui/components';
     </script>
-    <style>
-      * { box-sizing: border-box; }
-
-      body {
-        padding: 32px;
-        padding-top: 72px;
-        background: var(--lui-color-neutral-background-surface);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        color: var(--lui-color-neutral-text-body);
-      }
-
-      .toolbar {
-        position: fixed;
-        top: 0; left: 0; right: 0;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 12px 24px;
-        background: var(--lui-color-neutral-background-surface);
-        border-bottom: 1px solid var(--lui-color-neutral-border-subtle);
-      }
-
-      .toolbar__title {
-        font-size: 15px;
-        font-weight: 600;
-      }
-
-      .toolbar__badge {
-        font-size: 12px;
-        background: #dbeafe;
-        color: #1e40af;
-        padding: 2px 8px;
-        border-radius: 999px;
-      }
-
-      .pg-sections {
-        display: flex;
-        flex-direction: column;
-        gap: 48px;
-        max-width: 960px;
-        margin: 0 auto;
-      }
-
-      .pg-section {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .pg-section__title {
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0;
-        padding-bottom: 8px;
-        border-bottom: 2px solid var(--lui-color-neutral-border-subtle);
-      }
-
-      .pg-section__subtitle {
-        font-size: 13px;
-        color: #64748b;
-        margin: 0;
-      }
-
-      .demo-box {
-        padding: 16px;
-        background: #dbeafe;
-        border-radius: 6px;
-        font-size: 13px;
-        text-align: center;
-      }
-
-      .demo-box--green { background: #dcfce7; }
-      .demo-box--yellow { background: #fef9c3; }
-      .demo-box--pink { background: #fce7f3; }
-      .demo-box--purple { background: #ede9fe; }
-      .demo-box--orange { background: #fed7aa; }
-
-      .demo-outline {
-        outline: 1px dashed #94a3b8;
-        padding: 8px;
-        border-radius: 4px;
-      }
-
-      .demo-label {
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #94a3b8;
-        margin: 0 0 8px;
-      }
-    </style>
   </head>
   <body>
-    <header class="toolbar">
-      <span class="toolbar__title">Let's UI — Layout Primitives</span>
-      <span class="toolbar__badge">Playground</span>
+    <header class="pg-header">
+      <a href="/" class="pg-header__back">← Playground</a>
+      <span class="pg-header__title">Layout Validation</span>
+      <span class="pg-header__tag">PR #58</span>
     </header>
 
-    <div class="pg-sections">
+    <div class="layout">
+      <!-- ── Sticky nav ──────────────────────────────────────────── -->
+      <nav class="sidenav">
+        <ul>
+          <li><a href="#stack">lui-stack</a></li>
+          <li><a href="#inline">lui-inline</a></li>
+          <li><a href="#center">lui-center</a></li>
+          <li><a href="#columns">lui-columns</a></li>
+          <li><a href="#grid">lui-grid</a></li>
+          <li><a href="#flex">lui-flex</a></li>
+          <li><a href="#container">lui-container</a></li>
+          <li><a href="#sidebar">lui-sidebar</a></li>
+          <li><a href="#switcher">lui-switcher</a></li>
+          <li><a href="#float">lui-float</a></li>
+          <li><a href="#scroll-area">lui-scroll-area</a></li>
+          <li><a href="#a11y">Acessibilidade</a></li>
+        </ul>
+      </nav>
 
-      <!-- ── Stack ──────────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Stack</h2>
-        <p class="pg-section__subtitle">Vertical flex container with consistent gap control.</p>
+      <main class="pg-main">
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-STACK                                              -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="stack" class="pg-section">
+          <h2 class="pg-section__title">lui-stack</h2>
 
-        <p class="demo-label">gap="md" (default)</p>
-        <div class="demo-outline">
-          <lui-stack gap="md">
-            <div class="demo-box">Item 1</div>
-            <div class="demo-box demo-box--green">Item 2</div>
-            <div class="demo-box demo-box--yellow">Item 3</div>
-          </lui-stack>
-        </div>
-
-        <p class="demo-label">gap="xl" + align="center"</p>
-        <div class="demo-outline">
-          <lui-stack gap="xl" align="center">
-            <div class="demo-box" style="width: 80px;">A</div>
-            <div class="demo-box demo-box--green" style="width: 120px;">B</div>
-            <div class="demo-box demo-box--yellow" style="width: 60px;">C</div>
-          </lui-stack>
-        </div>
-      </section>
-
-      <!-- ── Inline ─────────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Inline</h2>
-        <p class="pg-section__subtitle">Horizontal wrapping flex layout for tags, chips, buttons.</p>
-
-        <p class="demo-label">gap="sm" wrap="wrap" (default)</p>
-        <div class="demo-outline">
-          <lui-inline gap="sm">
-            <span class="demo-box" style="padding: 6px 12px; border-radius: 999px;">Design</span>
-            <span class="demo-box demo-box--green" style="padding: 6px 12px; border-radius: 999px;">Engineering</span>
-            <span class="demo-box demo-box--yellow" style="padding: 6px 12px; border-radius: 999px;">Product</span>
-            <span class="demo-box demo-box--pink" style="padding: 6px 12px; border-radius: 999px;">Research</span>
-            <span class="demo-box demo-box--purple" style="padding: 6px 12px; border-radius: 999px;">Analytics</span>
-          </lui-inline>
-        </div>
-
-        <p class="demo-label">justify="space-between"</p>
-        <div class="demo-outline">
-          <lui-inline justify="space-between">
-            <span class="demo-box" style="padding: 6px 12px;">Left</span>
-            <span class="demo-box demo-box--green" style="padding: 6px 12px;">Center</span>
-            <span class="demo-box demo-box--yellow" style="padding: 6px 12px;">Right</span>
-          </lui-inline>
-        </div>
-      </section>
-
-      <!-- ── Box ───────────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Box</h2>
-        <p class="pg-section__subtitle">Generic container with padding, background, border, and overflow.</p>
-
-        <p class="demo-label">padding="lg" + border</p>
-        <lui-box
-          padding="lg"
-          background="var(--lui-color-neutral-background-surface)"
-          border-radius="12px"
-          border-width="1px"
-          border-color="var(--lui-color-neutral-border-subtle)"
-        >
-          <p style="margin: 0; font-size: 14px;">Box content with <code>padding="lg"</code> and a subtle border.</p>
-        </lui-box>
-
-        <p class="demo-label">padding-x="xl" padding-y="sm" + colored background</p>
-        <lui-box
-          padding-x="xl"
-          padding-y="sm"
-          background="#dbeafe"
-          border-radius="8px"
-        >
-          <p style="margin: 0; font-size: 14px;">Asymmetric padding: <code>padding-x="xl"</code>, <code>padding-y="sm"</code></p>
-        </lui-box>
-      </section>
-
-      <!-- ── Container ─────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Container</h2>
-        <p class="pg-section__subtitle">Max-width centering wrapper.</p>
-
-        <p class="demo-label">size="md" padding="md" (centered)</p>
-        <div style="background: #f1f5f9; border-radius: 8px;">
-          <lui-container size="md" padding="md">
-            <div class="demo-box">Container content — max-width: 1024px</div>
-          </lui-container>
-        </div>
-
-        <p class="demo-label">size="sm" padding="lg"</p>
-        <div style="background: #f1f5f9; border-radius: 8px;">
-          <lui-container size="sm" padding="lg">
-            <div class="demo-box demo-box--green">Container content — max-width: 768px</div>
-          </lui-container>
-        </div>
-      </section>
-
-      <!-- ── Center ────────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Center</h2>
-        <p class="pg-section__subtitle">Centering layout with axis control.</p>
-
-        <p class="demo-label">axis="both" (default)</p>
-        <lui-center style="height: 160px; background: #f1f5f9; border-radius: 8px;">
-          <div class="demo-box">Centered both axes</div>
-        </lui-center>
-
-        <p class="demo-label">axis="horizontal"</p>
-        <lui-center axis="horizontal" style="height: 120px; background: #f1f5f9; border-radius: 8px;">
-          <div class="demo-box demo-box--green">Centered horizontally</div>
-        </lui-center>
-
-        <p class="demo-label">axis="both" max-width="320px"</p>
-        <lui-center max-width="320px" style="height: 120px; background: #f1f5f9; border-radius: 8px;">
-          <div class="demo-box demo-box--yellow">Max-width constrained content</div>
-        </lui-center>
-      </section>
-
-      <!-- ── Columns ───────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Columns</h2>
-        <p class="pg-section__subtitle">CSS Grid multi-column layout with collapse support.</p>
-
-        <p class="demo-label">columns="3" gap="md"</p>
-        <lui-columns columns="3" gap="md">
-          <lui-column><div class="demo-box">Col 1</div></lui-column>
-          <lui-column><div class="demo-box demo-box--green">Col 2</div></lui-column>
-          <lui-column><div class="demo-box demo-box--yellow">Col 3</div></lui-column>
-        </lui-columns>
-
-        <p class="demo-label">Custom template: ["2fr","1fr"] gap="lg"</p>
-        <lui-columns columns='["2fr","1fr"]' gap="lg">
-          <lui-column><div class="demo-box demo-box--purple">Main (2fr)</div></lui-column>
-          <lui-column><div class="demo-box demo-box--pink">Aside (1fr)</div></lui-column>
-        </lui-columns>
-
-        <p class="demo-label">span="2" + auto column</p>
-        <lui-columns columns="3" gap="md">
-          <lui-column span="2"><div class="demo-box">Spans 2 cols</div></lui-column>
-          <lui-column><div class="demo-box demo-box--orange">1 col</div></lui-column>
-        </lui-columns>
-      </section>
-
-      <!-- ── Grid ─────────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Grid</h2>
-        <p class="pg-section__subtitle">Full CSS Grid with item placement and span control.</p>
-
-        <p class="demo-label">columns="repeat(3, 1fr)" gap="md"</p>
-        <lui-grid columns="repeat(3, 1fr)" gap="md">
-          <lui-grid-item><div class="demo-box">1</div></lui-grid-item>
-          <lui-grid-item><div class="demo-box demo-box--green">2</div></lui-grid-item>
-          <lui-grid-item><div class="demo-box demo-box--yellow">3</div></lui-grid-item>
-          <lui-grid-item col-span="2"><div class="demo-box demo-box--pink">Span 2</div></lui-grid-item>
-          <lui-grid-item><div class="demo-box demo-box--purple">5</div></lui-grid-item>
-        </lui-grid>
-      </section>
-
-      <!-- ── Flex ──────────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Flex</h2>
-        <p class="pg-section__subtitle">Raw flexbox primitive with per-item control.</p>
-
-        <p class="demo-label">direction="row" gap="md" justify="space-between"</p>
-        <div class="demo-outline">
-          <lui-flex direction="row" gap="md" justify="space-between">
-            <lui-flex-item><div class="demo-box">Left</div></lui-flex-item>
-            <lui-flex-item><div class="demo-box demo-box--green">Center</div></lui-flex-item>
-            <lui-flex-item><div class="demo-box demo-box--yellow">Right</div></lui-flex-item>
-          </lui-flex>
-        </div>
-
-        <p class="demo-label">grow item</p>
-        <div class="demo-outline">
-          <lui-flex gap="md">
-            <lui-flex-item grow="1"><div class="demo-box">Grows (flex-grow: 1)</div></lui-flex-item>
-            <lui-flex-item><div class="demo-box demo-box--green" style="white-space: nowrap;">Fixed</div></lui-flex-item>
-          </lui-flex>
-        </div>
-      </section>
-
-      <!-- ── Sidebar ───────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Sidebar</h2>
-        <p class="pg-section__subtitle">Two-panel layout with named slots.</p>
-
-        <p class="demo-label">side="start" side-width="200px"</p>
-        <lui-sidebar side="start" side-width="200px" gap="lg">
-          <div slot="sidebar" class="demo-box" style="min-height: 120px;">
-            <strong>Sidebar</strong><br />Navigation
+          <div class="case">
+            <p class="case__label">1 — gap variants (xs → xl)</p>
+            <p class="case__expected">
+              Espaço entre filhos deve crescer progressivamente.
+            </p>
+            <div class="case__row">
+              {
+                ['xs', 'sm', 'md', 'lg', 'xl'].map((g) => (
+                  <div>
+                    <span class="tag">{g}</span>
+                    <lui-stack gap={g}>
+                      <div class="box" />
+                      <div class="box" />
+                      <div class="box" />
+                    </lui-stack>
+                  </div>
+                ))
+              }
+            </div>
           </div>
-          <div slot="content" class="demo-box demo-box--green" style="min-height: 120px;">
-            <strong>Content</strong><br />Main area
+
+          <div class="case">
+            <p class="case__label">2 — align variants</p>
+            <p class="case__expected">
+              Filhos com larguras diferentes devem se alinhar conforme o valor. <em
+                >start</em
+              >: esquerda; <em>center</em>: centro; <em>end</em>: direita; <em
+                >stretch</em
+              >: largura total.
+            </p>
+            <div class="case__row">
+              {
+                ['stretch', 'start', 'center', 'end'].map((a) => (
+                  <div>
+                    <span class="tag">{a}</span>
+                    <lui-stack
+                      align={a}
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:120px;"
+                    >
+                      <div class="box" style="width:60px" />
+                      <div class="box" style="width:40px" />
+                      <div class="box" style="width:80px" />
+                    </lui-stack>
+                  </div>
+                ))
+              }
+            </div>
           </div>
-        </lui-sidebar>
 
-        <p class="demo-label">side="end" side-width="160px"</p>
-        <lui-sidebar side="end" side-width="160px" gap="lg">
-          <div slot="sidebar" class="demo-box demo-box--yellow" style="min-height: 80px;">
-            <strong>Right Sidebar</strong>
+          <div class="case">
+            <p class="case__label">3 — justify variants</p>
+            <p class="case__expected">
+              Com altura fixa, os filhos devem ser distribuídos verticalmente. <em
+                >between</em
+              >: extremos + espaço igual no meio.
+            </p>
+            <div class="case__row">
+              {
+                ['start', 'center', 'end', 'between'].map((j) => (
+                  <div>
+                    <span class="tag">{j}</span>
+                    <lui-stack
+                      justify={j}
+                      style="height:140px; background:#f8fafc; border:1px dashed #e2e8f0; padding:4px;"
+                    >
+                      <div class="box box--sm" />
+                      <div class="box box--sm" />
+                    </lui-stack>
+                  </div>
+                ))
+              }
+            </div>
           </div>
-          <div slot="content" class="demo-box demo-box--pink" style="min-height: 80px;">
-            <strong>Content</strong>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-INLINE                                             -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="inline" class="pg-section">
+          <h2 class="pg-section__title">lui-inline</h2>
+
+          <div class="case">
+            <p class="case__label">1 — wrap vs nowrap</p>
+            <p class="case__expected">
+              <em>wrap</em>: itens quebram linha. <em>nowrap</em>: itens ficam
+              em uma linha (overflow horizontal).
+            </p>
+            <div class="case__col" style="max-width:280px;">
+              <span class="tag">wrap (default)</span>
+              <lui-inline
+                wrap="wrap"
+                style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;"
+              >
+                {
+                  Array.from({ length: 8 }, (_, i) => (
+                    <div class="chip">Tag {i + 1}</div>
+                  ))
+                }
+              </lui-inline>
+              <span class="tag" style="margin-top:12px">nowrap</span>
+              <lui-inline
+                wrap="nowrap"
+                style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; overflow:hidden;"
+              >
+                {
+                  Array.from({ length: 8 }, (_, i) => (
+                    <div class="chip">Tag {i + 1}</div>
+                  ))
+                }
+              </lui-inline>
+            </div>
           </div>
-        </lui-sidebar>
-      </section>
 
-      <!-- ── Switcher ──────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Switcher</h2>
-        <p class="pg-section__subtitle">Intrinsic responsive layout (Every Layout pattern). Resize the block below.</p>
+          <div class="case">
+            <p class="case__label">2 — gap-x / gap-y independentes</p>
+            <p class="case__expected">
+              Espaço horizontal (gap-x=xl) maior que o vertical (gap-y=xs).
+            </p>
+            <lui-inline
+              gap-x="xl"
+              gap-y="xs"
+              wrap="wrap"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; max-width:320px;"
+            >
+              {
+                Array.from({ length: 10 }, (_, i) => (
+                  <div class="chip">Item {i + 1}</div>
+                ))
+              }
+            </lui-inline>
+          </div>
 
-        <p class="demo-label">threshold="240px" — resize to see switch</p>
-        <div style="resize: horizontal; overflow: auto; min-width: 160px; border: 1px dashed #94a3b8; padding: 8px; border-radius: 4px;">
-          <lui-switcher threshold="240px" gap="md">
-            <div class="demo-box">Panel A</div>
-            <div class="demo-box demo-box--green">Panel B</div>
-            <div class="demo-box demo-box--yellow">Panel C</div>
-          </lui-switcher>
-        </div>
-      </section>
+          <div class="case">
+            <p class="case__label">
+              3 — align variants com itens de alturas diferentes
+            </p>
+            <p class="case__expected">
+              <em>start</em>: topo; <em>center</em>: meio; <em>end</em>: base; <em
+                >baseline</em
+              >: linha de texto alinhada.
+            </p>
+            <div class="case__row">
+              {
+                ['start', 'center', 'end', 'baseline'].map((a) => (
+                  <div>
+                    <span class="tag">{a}</span>
+                    <lui-inline
+                      align={a}
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:100px;"
+                    >
+                      <div class="box" style="height:20px; width:20px" />
+                      <div class="box" style="height:48px; width:20px" />
+                      <div class="box" style="height:32px; width:20px" />
+                    </lui-inline>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
 
-      <!-- ── Bleed ─────────────────────────────────────────────── -->
-      <section class="pg-section">
-        <h2 class="pg-section__title">Bleed</h2>
-        <p class="pg-section__subtitle">Container escape with negative margins.</p>
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-CENTER                                             -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="center" class="pg-section">
+          <h2 class="pg-section__title">lui-center</h2>
 
-        <p class="demo-label">horizontal bleed — escapes container padding</p>
-        <div style="background: #f1f5f9; padding: 32px; border-radius: 8px; overflow: hidden;">
-          <p style="font-size: 13px; color: #64748b; margin: 0 0 12px;">Normal content inside padded container</p>
-          <lui-bleed horizontal>
-            <div class="demo-box">Full-bleed horizontal element</div>
-          </lui-bleed>
-          <p style="font-size: 13px; color: #64748b; margin: 12px 0 0;">Normal content continues</p>
-        </div>
+          <div class="case">
+            <p class="case__label">1 — axis variants</p>
+            <p class="case__expected">
+              A centralização horizontal exige <em>max-width</em> (o inner div é sempre 100% largo — sem max-width não há espaço para centralizar). <em>both</em>: bloco no centro. <em>horizontal</em>: bloco centralizado apenas na horizontal. <em>vertical</em>: conteúdo centralizado apenas verticalmente.
+            </p>
+            <div class="case__row" style="align-items:flex-start;">
+              <div>
+                <span class="tag">both</span>
+                <lui-center
+                  axis="both"
+                  min-height="120px"
+                  max-width="100px"
+                  style="width:200px; background:#f8fafc; border:1px dashed #e2e8f0;"
+                >
+                  <div style="background:#dbeafe; border-radius:4px; padding:8px; font-size:11px; text-align:center; font-family:monospace;">center</div>
+                </lui-center>
+              </div>
+              <div>
+                <span class="tag">horizontal</span>
+                <lui-center
+                  axis="horizontal"
+                  max-width="100px"
+                  style="width:200px; background:#f8fafc; border:1px dashed #e2e8f0;"
+                >
+                  <div style="background:#dcfce7; border-radius:4px; padding:8px; font-size:11px; text-align:center; font-family:monospace;">horizontal</div>
+                </lui-center>
+              </div>
+              <div>
+                <span class="tag">vertical</span>
+                <lui-center
+                  axis="vertical"
+                  min-height="120px"
+                  style="width:200px; background:#f8fafc; border:1px dashed #e2e8f0;"
+                >
+                  <div style="background:#fef9c3; border-radius:4px; padding:8px; font-size:11px; text-align:center; font-family:monospace;">vertical</div>
+                </lui-center>
+              </div>
+            </div>
+          </div>
 
-        <p class="demo-label">left-only bleed</p>
-        <div style="background: #f1f5f9; padding: 32px; border-radius: 8px; overflow: hidden;">
-          <lui-bleed left>
-            <div class="demo-box demo-box--green">Left-only bleed</div>
-          </lui-bleed>
-        </div>
-      </section>
+          <div class="case">
+            <p class="case__label">2 — max-width</p>
+            <p class="case__expected">
+              Conteúdo não ultrapassa max-width="200", permanece centralizado
+              dentro do container maior.
+            </p>
+            <lui-center
+              max-width="200px"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; width:100%;"
+            >
+              <div
+                style="background:#dbeafe; border-radius:4px; padding:8px; font-size:12px; text-align:center;"
+              >
+                max-width 200px
+              </div>
+            </lui-center>
+          </div>
+        </section>
 
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-COLUMNS                                            -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="columns" class="pg-section">
+          <h2 class="pg-section__title">lui-columns / lui-column</h2>
+
+          <div class="case">
+            <p class="case__label">1 — columns="2" / "3" / "4"</p>
+            <p class="case__expected">Filhos distribuídos em colunas iguais.</p>
+            {
+              [2, 3, 4].map((n) => (
+                <div style="margin-bottom:12px;">
+                  <span class="tag">columns="{n}"</span>
+                  <lui-columns columns={String(n)} gap="sm">
+                    {Array.from({ length: n }, (_, i) => (
+                      <div class="box-col">Col {i + 1}</div>
+                    ))}
+                  </lui-columns>
+                </div>
+              ))
+            }
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — lui-column span="2"</p>
+            <p class="case__expected">
+              Em um grid de 3 colunas, o primeiro item com span="2" deve ocupar
+              2/3 da largura.
+            </p>
+            <lui-columns columns="3" gap="sm">
+              <lui-column span="2"
+                ><div class="box-col" style="background:#dbeafe;">
+                  span=2
+                </div></lui-column
+              >
+              <lui-column><div class="box-col">col</div></lui-column>
+              <lui-column><div class="box-col">col</div></lui-column>
+              <lui-column><div class="box-col">col</div></lui-column>
+            </lui-columns>
+          </div>
+
+          <div class="case">
+            <p class="case__label">3 — collapse-below (container resize)</p>
+            <p class="case__expected">
+              Arraste a borda direita para estreitar. Abaixo de 400px o layout
+              deve colapsar para coluna única.
+            </p>
+            <div class="resizable">
+              <lui-columns columns="3" gap="sm" collapse-below="400px">
+                {
+                  Array.from({ length: 3 }, (_, i) => (
+                    <div class="box-col">Col {i + 1}</div>
+                  ))
+                }
+              </lui-columns>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-GRID                                               -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="grid" class="pg-section">
+          <h2 class="pg-section__title">lui-grid / lui-grid-item</h2>
+
+          <div class="case">
+            <p class="case__label">1 — columns e gap</p>
+            <p class="case__expected">
+              Grid com 4 colunas de largura igual e gap-x maior que gap-y.
+            </p>
+            <lui-grid columns="4" gap-x="lg" gap-y="sm">
+              {
+                Array.from({ length: 8 }, (_, i) => (
+                  <div class="box-col">#{i + 1}</div>
+                ))
+              }
+            </lui-grid>
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — col-span e row-span</p>
+            <p class="case__expected">
+              Item A: col-span=2. Item B: row-span=2. Restante preenche
+              normalmente.
+            </p>
+            <lui-grid
+              columns="3"
+              gap="sm"
+              style="grid-template-rows: auto auto;"
+            >
+              <lui-grid-item col-span="2"
+                ><div class="box-col" style="background:#dbeafe;">
+                  A — col-span=2
+                </div></lui-grid-item
+              >
+              <lui-grid-item row-span="2"
+                ><div class="box-col" style="background:#dcfce7; height:100%;">
+                  B — row-span=2
+                </div></lui-grid-item
+              >
+              <div class="box-col">C</div>
+              <div class="box-col">D</div>
+            </lui-grid>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-FLEX                                               -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="flex" class="pg-section">
+          <h2 class="pg-section__title">lui-flex / lui-flex-item</h2>
+
+          <div class="case">
+            <p class="case__label">1 — direction</p>
+            <p class="case__expected">
+              <em>row</em>: horizontal. <em>column</em>: vertical. <em
+                >row-reverse</em
+              >: horizontal invertido.
+            </p>
+            <div class="case__col">
+              {
+                ['row', 'column', 'row-reverse'].map((d) => (
+                  <div style="margin-bottom:8px;">
+                    <span class="tag">{d}</span>
+                    <lui-flex
+                      direction={d}
+                      gap="sm"
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;"
+                    >
+                      <div class="box box--sm">A</div>
+                      <div class="box box--sm">B</div>
+                      <div class="box box--sm">C</div>
+                    </lui-flex>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — lui-flex-item grow / shrink / basis</p>
+            <p class="case__expected">
+              Item A: grow=2 (dobro do espaço). Item B: basis=120px (começa em
+              120px). Item C: sem modificadores.
+            </p>
+            <lui-flex
+              gap="sm"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px;"
+            >
+              <lui-flex-item grow="2"
+                ><div class="box-col" style="background:#dbeafe;">
+                  grow=2
+                </div></lui-flex-item
+              >
+              <lui-flex-item basis="120px"
+                ><div class="box-col" style="background:#dcfce7;">
+                  basis=120px
+                </div></lui-flex-item
+              >
+              <lui-flex-item><div class="box-col">normal</div></lui-flex-item>
+            </lui-flex>
+          </div>
+
+          <div class="case">
+            <p class="case__label">3 — wrap</p>
+            <p class="case__expected">
+              Itens estreitos com wrap="wrap" devem quebrar linha quando o
+              container não comporta todos.
+            </p>
+            <lui-flex
+              wrap="wrap"
+              gap="sm"
+              style="background:#f8fafc; border:1px dashed #e2e8f0; padding:8px; max-width:320px;"
+            >
+              {
+                Array.from({ length: 6 }, (_, i) => (
+                  <div class="chip">Item {i + 1}</div>
+                ))
+              }
+            </lui-flex>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-CONTAINER                                          -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="container" class="pg-section">
+          <h2 class="pg-section__title">lui-container</h2>
+
+          <div class="case">
+            <p class="case__label">1 — size variants (max-width progressivo)</p>
+            <p class="case__expected">
+              xs=480px · sm=768px · md=1024px · lg=1280px · xl=1440px. Cada barra deve ser mais larga que a anterior e centralizada horizontalmente.
+            </p>
+            <div style="background:#f1f5f9; border:1px dashed #e2e8f0; padding:8px; overflow:hidden;">
+              {
+                [
+                  { size: 'xs', color: '#dbeafe', label: 'xs — 480px' },
+                  { size: 'sm', color: '#bfdbfe', label: 'sm — 768px' },
+                  { size: 'md', color: '#dcfce7', label: 'md — 1024px' },
+                  { size: 'lg', color: '#fef9c3', label: 'lg — 1280px' },
+                  { size: 'xl', color: '#fce7f3', label: 'xl — 1440px' },
+                ].map(({ size, color, label }) => (
+                  <lui-container
+                    size={size}
+                    padding="xs"
+                    style={`background:${color}; margin-bottom:4px;`}
+                  >
+                    <div style="font-size:11px; font-family:monospace; color:#374151;">{label}</div>
+                  </lui-container>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — padding variants</p>
+            <p class="case__expected">
+              Espaço interno lateral cresce de xs para 2xl. A barra azul representa o conteúdo — o espaço branco ao redor é o padding do container.
+            </p>
+            <div class="case__col">
+              {
+                ['xs', 'sm', 'md', 'lg', 'xl', '2xl'].map((p) => (
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="tag" style="min-width:28px; text-align:center;">{p}</span>
+                    <lui-container
+                      size="lg"
+                      padding={p}
+                      style="background:#f8fafc; border:1px dashed #e2e8f0; width:100%;"
+                    >
+                      <div style="background:#dbeafe; border-radius:4px; font-size:11px; font-family:monospace; padding:2px 4px; text-align:center;">conteúdo</div>
+                    </lui-container>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-SIDEBAR                                            -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="sidebar" class="pg-section">
+          <h2 class="pg-section__title">lui-sidebar</h2>
+
+          <div class="case">
+            <p class="case__label">1 — side="start" (padrão)</p>
+            <p class="case__expected">
+              Coluna lateral à esquerda (240px), conteúdo ocupa o restante.
+            </p>
+            <lui-sidebar style="background:#f8fafc; border:1px dashed #e2e8f0;">
+              <div slot="sidebar" class="sidebar-side">Sidebar</div>
+              <div slot="content" class="sidebar-content">Content</div>
+            </lui-sidebar>
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — side="end"</p>
+            <p class="case__expected">
+              Coluna lateral à direita. Ordem visual invertida, conteúdo
+              principal vem primeiro no DOM.
+            </p>
+            <lui-sidebar
+              side="end"
+              style="background:#f8fafc; border:1px dashed #e2e8f0;"
+            >
+              <div slot="sidebar" class="sidebar-side">Sidebar</div>
+              <div slot="content" class="sidebar-content">Content</div>
+            </lui-sidebar>
+          </div>
+
+          <div class="case">
+            <p class="case__label">3 — collapse (container estreito)</p>
+            <p class="case__expected">
+              Arraste para estreitar abaixo de 400px. O sidebar deve colapsar
+              para coluna única (sidebar em cima do conteúdo).
+            </p>
+            <div class="resizable">
+              <lui-sidebar
+                side-width="160px"
+                content-min-width="40%"
+                gap="md"
+                style="background:#f8fafc; border:1px dashed #e2e8f0;"
+              >
+                <div slot="sidebar" class="sidebar-side">Sidebar</div>
+                <div slot="content" class="sidebar-content">Content area</div>
+              </lui-sidebar>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-SWITCHER                                           -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="switcher" class="pg-section">
+          <h2 class="pg-section__title">lui-switcher</h2>
+
+          <div class="case">
+            <p class="case__label">1 — threshold container-based</p>
+            <p class="case__expected">
+              O threshold é do <em>container</em>, não da viewport. Arraste a
+              borda do container. Abaixo de 480px os 3 cards empilham.
+            </p>
+            <div class="resizable">
+              <lui-switcher threshold="480px" gap="md">
+                <div class="sw-card" style="background:#dbeafe;">Card A</div>
+                <div class="sw-card" style="background:#dcfce7;">Card B</div>
+                <div class="sw-card" style="background:#fef9c3;">Card C</div>
+              </lui-switcher>
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — limit</p>
+            <p class="case__expected">
+              Com limit="2" e container estreito, somente os 2 primeiros ficam
+              inline; o terceiro ocupa linha inteira.
+            </p>
+            <div class="resizable" style="width:300px;">
+              <lui-switcher threshold="600px" gap="sm" limit="2">
+                <div class="sw-card" style="background:#dbeafe;">A</div>
+                <div class="sw-card" style="background:#dcfce7;">B</div>
+                <div class="sw-card" style="background:#fef9c3;">
+                  C (além do limit)
+                </div>
+              </lui-switcher>
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">3 — gap variants</p>
+            <p class="case__expected">
+              Espaço entre os cards cresce de none para xl.
+            </p>
+            <div class="case__col">
+              {
+                ['none', 'xs', 'sm', 'md', 'lg', 'xl'].map((g) => (
+                  <div style="margin-bottom:4px;">
+                    <span class="tag">{g}</span>
+                    <lui-switcher threshold="9999px" gap={g}>
+                      <div
+                        class="sw-card sw-card--sm"
+                        style="background:#dbeafe;"
+                      >
+                        A
+                      </div>
+                      <div
+                        class="sw-card sw-card--sm"
+                        style="background:#dcfce7;"
+                      >
+                        B
+                      </div>
+                      <div
+                        class="sw-card sw-card--sm"
+                        style="background:#fef9c3;"
+                      >
+                        C
+                      </div>
+                    </lui-switcher>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-FLOAT                                              -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="float" class="pg-section">
+          <h2 class="pg-section__title">lui-float</h2>
+
+          <div class="case">
+            <p class="case__label">1 — todos os placements</p>
+            <p class="case__expected">
+              Badge vermelho posicionado exatamente no canto/borda indicado em
+              cada box.
+            </p>
+            <div class="placements-grid">
+              {
+                [
+                  'top-start',
+                  'top-center',
+                  'top-end',
+                  'middle-start',
+                  'middle-center',
+                  'middle-end',
+                  'bottom-start',
+                  'bottom-center',
+                  'bottom-end',
+                ].map((p) => (
+                  <div class="placement-item">
+                    <lui-float placement={p}>
+                      <div class="float-anchor" />
+                      <span slot="float" class="float-badge">
+                        ●
+                      </span>
+                    </lui-float>
+                    <span class="placement-label">{p}</span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — offset-x / offset-y</p>
+            <p class="case__expected">
+              O badge deve se deslocar 8px para fora do canto em cada caso.
+            </p>
+            <div class="case__row">
+              {
+                [
+                  {
+                    p: 'top-end',
+                    ox: '-8',
+                    oy: '8',
+                    label: 'offset-x="-8" offset-y="8"',
+                  },
+                  {
+                    p: 'bottom-end',
+                    ox: '8',
+                    oy: '-8',
+                    label: 'offset-x="8" offset-y="-8"',
+                  },
+                  {
+                    p: 'top-end',
+                    ox: '0',
+                    oy: '0',
+                    label: 'sem offset (referência)',
+                  },
+                ].map(({ p, ox, oy, label }) => (
+                  <div class="placement-item">
+                    <lui-float placement={p} offset-x={ox} offset-y={oy}>
+                      <div class="float-anchor" />
+                      <span slot="float" class="float-badge">
+                        ●
+                      </span>
+                    </lui-float>
+                    <span class="placement-label">{label}</span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">3 — sem layout shift no pai</p>
+            <p class="case__expected">
+              O texto abaixo do lui-float deve estar exatamente onde estaria sem
+              o componente. A badge não empurra nada.
+            </p>
+            <div style="display:flex; gap:24px; align-items:flex-start;">
+              <div>
+                <lui-float placement="top-end">
+                  <div class="float-anchor"></div>
+                  <span slot="float" class="float-badge">9</span>
+                </lui-float>
+                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">
+                  com badge
+                </p>
+              </div>
+              <div>
+                <div class="float-anchor"></div>
+                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">
+                  sem badge
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- LUI-SCROLL-AREA                                        -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="scroll-area" class="pg-section">
+          <h2 class="pg-section__title">lui-scroll-area</h2>
+
+          <div class="case">
+            <p class="case__label">
+              1 — orientation vertical / horizontal / both
+            </p>
+            <p class="case__expected">
+              Cada área rola apenas na direção indicada. "both": rola em X e Y.
+            </p>
+            <div class="case__row" style="align-items:flex-start;">
+              <div>
+                <span class="tag">vertical</span>
+                <lui-scroll-area height="120" style="width:160px;">
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 10 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
+                </lui-scroll-area>
+              </div>
+              <div>
+                <span class="tag">horizontal</span>
+                <lui-scroll-area orientation="horizontal" style="width:160px;">
+                  <div class="sa-row">
+                    {
+                      Array.from({ length: 10 }, (_, i) => (
+                        <div class="sa-card">Card {i + 1}</div>
+                      ))
+                    }
+                  </div>
+                </lui-scroll-area>
+              </div>
+              <div>
+                <span class="tag">both</span>
+                <lui-scroll-area
+                  orientation="both"
+                  height="120"
+                  style="width:160px;"
+                >
+                  <div class="sa-grid">
+                    {
+                      Array.from({ length: 20 }, (_, i) => (
+                        <div class="sa-cell">#{i + 1}</div>
+                      ))
+                    }
+                  </div>
+                </lui-scroll-area>
+              </div>
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">2 — scrollbar-visibility</p>
+            <p class="case__expected">
+              <em>auto</em>: scrollbar ao transbordar. <em>always</em>:
+              scrollbar sempre visível. <em>hover</em>: scrollbar aparece ao
+              passar o mouse. <em>hidden</em>: sem scrollbar, mas rola.
+            </p>
+            <div class="case__row" style="align-items:flex-start;">
+              {
+                ['auto', 'always', 'hover', 'hidden'].map((v) => (
+                  <div>
+                    <span class="tag">{v}</span>
+                    <lui-scroll-area
+                      height="100"
+                      scrollbar-visibility={v}
+                      style="width:140px;"
+                    >
+                      <div class="sa-list">
+                        {Array.from({ length: 8 }, (_, i) => (
+                          <div class="sa-item">Item {i + 1}</div>
+                        ))}
+                      </div>
+                    </lui-scroll-area>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">3 — fade e scroll-shadow</p>
+            <p class="case__expected">
+              <em>fade</em>: gradiente da cor de fundo desaparece ao chegar no
+              limite. <em>scroll-shadow</em>: sombra escura independente do
+              fundo.
+            </p>
+            <div class="case__row" style="align-items:flex-start;">
+              <div>
+                <span class="tag">fade</span>
+                <div
+                  style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:8px;"
+                >
+                  <lui-scroll-area height="120" fade>
+                    <div class="sa-list">
+                      {
+                        Array.from({ length: 12 }, (_, i) => (
+                          <div class="sa-item">Item {i + 1}</div>
+                        ))
+                      }
+                    </div>
+                  </lui-scroll-area>
+                </div>
+              </div>
+              <div>
+                <span class="tag">fade="bottom"</span>
+                <div
+                  style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:8px;"
+                >
+                  <lui-scroll-area height="120" fade="bottom">
+                    <div class="sa-list">
+                      {
+                        Array.from({ length: 12 }, (_, i) => (
+                          <div class="sa-item">Item {i + 1}</div>
+                        ))
+                      }
+                    </div>
+                  </lui-scroll-area>
+                </div>
+              </div>
+              <div>
+                <span class="tag">scroll-shadow</span>
+                <lui-scroll-area height="120" scroll-shadow>
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 12 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
+                </lui-scroll-area>
+              </div>
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">4 — snap</p>
+            <p class="case__expected">
+              Ao soltar o scroll, a posição deve "encaixar" no slide mais
+              próximo. snap-align="start": borda esquerda do slide alinha com a
+              borda do container.
+            </p>
+            <lui-scroll-area
+              orientation="horizontal"
+              snap
+              snap-align="start"
+              scrollbar-visibility="hidden"
+              style="max-width:360px;"
+            >
+              <div class="sa-row" style="gap:0;">
+                {
+                  Array.from({ length: 5 }, (_, i) => (
+                    <div
+                      class="snap-slide"
+                      style={`background:hsl(${i * 60},60%,82%); margin-right:8px;`}
+                    >
+                      Slide {i + 1}
+                    </div>
+                  ))
+                }
+              </div>
+            </lui-scroll-area>
+          </div>
+
+          <div class="case">
+            <p class="case__label">5 — disabled</p>
+            <p class="case__expected">
+              Área não deve rolar com mouse, touch ou teclado. Cursor
+              "not-allowed".
+            </p>
+            <lui-scroll-area height="120" disabled style="max-width:280px;">
+              <div class="sa-list">
+                {
+                  Array.from({ length: 10 }, (_, i) => (
+                    <div class="sa-item">Item {i + 1}</div>
+                  ))
+                }
+              </div>
+            </lui-scroll-area>
+          </div>
+
+          <div class="case">
+            <p class="case__label">6 — eventos</p>
+            <p class="case__expected">
+              Role a área e confirme que cada evento aparece no log com o
+              momento certo. <em>reach-bottom</em> só deve disparar ao chegar no final
+              (não repetido).
+            </p>
+            <div
+              style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:480px;"
+            >
+              <lui-scroll-area id="sa-events" height="180" fade>
+                <div class="sa-list">
+                  {
+                    Array.from({ length: 16 }, (_, i) => (
+                      <div class="sa-item">Item {i + 1}</div>
+                    ))
+                  }
+                </div>
+              </lui-scroll-area>
+              <div id="sa-log" class="event-log">
+                <span class="event-log__empty" data-empty
+                  >Role para ver eventos…</span
+                >
+              </div>
+            </div>
+            <script>
+              const sa = document.getElementById('sa-events');
+              const log = document.getElementById('sa-log');
+              const add = (name, extra) => {
+                const empty = log.querySelector('[data-empty]');
+                if (empty) empty.remove();
+                const el = document.createElement('div');
+                el.className = 'event-entry';
+                el.innerHTML = `<strong>${name}</strong>${extra ? ` <span class="event-detail">${extra}</span>` : ''}`;
+                log.insertBefore(el, log.firstChild);
+                if (log.children.length > 8) log.removeChild(log.lastChild);
+              };
+              sa.addEventListener('scroll-start', () => add('scroll-start'));
+              sa.addEventListener('scroll-end', () => add('scroll-end'));
+              sa.addEventListener('reach-top', () =>
+                add('reach-top', '↑ topo')
+              );
+              sa.addEventListener('reach-bottom', () =>
+                add('reach-bottom', '↓ fim')
+              );
+              sa.addEventListener('scroll', (e) =>
+                add('scroll', `top:${Math.round(e.detail.scrollTop)}`)
+              );
+            </script>
+          </div>
+
+          <div class="case">
+            <p class="case__label">7 — max-height (cresce com conteúdo)</p>
+            <p class="case__expected">
+              Com poucos itens: sem scroll (altura natural). Com muitos itens:
+              scroll ativado ao atingir max-height.
+            </p>
+            <div class="case__row" style="align-items:flex-start;">
+              <div>
+                <span class="tag">3 itens — sem scroll</span>
+                <lui-scroll-area max-height="160" fade>
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 3 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
+                </lui-scroll-area>
+              </div>
+              <div>
+                <span class="tag">12 itens — com scroll</span>
+                <lui-scroll-area max-height="160" fade>
+                  <div class="sa-list">
+                    {
+                      Array.from({ length: 12 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))
+                    }
+                  </div>
+                </lui-scroll-area>
+              </div>
+            </div>
+          </div>
+
+          <div class="case">
+            <p class="case__label">8 — acessibilidade por teclado</p>
+            <p class="case__expected">
+              Clique na área abaixo e use ↑ ↓ para rolar. A área deve ter foco
+              visível (outline) e responder às teclas.
+            </p>
+            <lui-scroll-area height="120" style="max-width:280px;" fade>
+              <div class="sa-list">
+                {
+                  Array.from({ length: 12 }, (_, i) => (
+                    <div class="sa-item">Item {i + 1}</div>
+                  ))
+                }
+              </div>
+            </lui-scroll-area>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- ACCESSIBILITY — PR #58 CHECKLIST                       -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <section id="a11y" class="pg-section">
+          <h2 class="pg-section__title">Accessibility — PR #58 Checklist</h2>
+
+          <!-- ── Item 1 + 3 combinados: traversability & sem focus trap ── -->
+          <div class="case">
+            <p class="case__label">
+              1 + 3 — Keyboard traversability e sem focus trap (todos os componentes)
+            </p>
+            <p class="case__expected">
+              Use <kbd>Tab</kbd> a partir de cada botão <em>Antes</em>. O foco deve entrar nos
+              botões internos do componente em ordem e avançar para <em>Depois</em> — sem
+              pular, sem prender. Cada botão deve exibir outline visível ao receber foco.
+            </p>
+
+            <div class="a11y-seq-list">
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-stack</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-stack gap="sm">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-stack>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-inline</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-inline gap="sm">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-inline>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-center</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-center>
+                    <button class="a11y-btn">Btn 1</button>
+                  </lui-center>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-columns</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-columns columns="2" gap="sm" style="flex:1; min-width:160px;">
+                    <button class="a11y-btn" style="width:100%">Btn 1</button>
+                    <button class="a11y-btn" style="width:100%">Btn 2</button>
+                  </lui-columns>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-grid</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-grid columns="2" gap="sm" style="flex:1; min-width:160px;">
+                    <button class="a11y-btn" style="width:100%">Btn 1</button>
+                    <button class="a11y-btn" style="width:100%">Btn 2</button>
+                  </lui-grid>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-flex</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-flex gap="sm">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-flex>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-container</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-container size="sm" padding="xs" style="flex:1;">
+                    <button class="a11y-btn">Btn 1</button>
+                  </lui-container>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-sidebar</span>
+                <div class="a11y-seq__flow" style="flex-wrap:wrap;">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-sidebar style="flex:1; min-width:240px; background:#f8fafc; border:1px dashed #e2e8f0;">
+                    <button slot="sidebar" class="a11y-btn" style="width:100%">Sidebar Btn</button>
+                    <button slot="content" class="a11y-btn" style="width:100%">Content Btn</button>
+                  </lui-sidebar>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-switcher</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-switcher threshold="9999px" gap="sm" style="flex:1;">
+                    <button class="a11y-btn">Btn 1</button>
+                    <button class="a11y-btn">Btn 2</button>
+                  </lui-switcher>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-float</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <div style="position:relative; min-height:56px; min-width:80px; padding:4px; background:#f8fafc; border:1px dashed #e2e8f0; border-radius:4px;">
+                    <lui-float placement="top-end">
+                      <button class="a11y-btn">Âncora</button>
+                      <button slot="float" class="a11y-btn" style="font-size:10px; padding:2px 8px;">Float</button>
+                    </lui-float>
+                  </div>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+
+              <div class="a11y-seq">
+                <span class="a11y-seq__label">lui-scroll-area</span>
+                <div class="a11y-seq__flow">
+                  <button class="a11y-btn">Antes</button>
+                  <span class="a11y-arrow">›</span>
+                  <lui-scroll-area height="80" style="width:180px; border:1px dashed #e2e8f0;">
+                    <div class="sa-list">
+                      {Array.from({ length: 6 }, (_, i) => (
+                        <div class="sa-item">Item {i + 1}</div>
+                      ))}
+                    </div>
+                  </lui-scroll-area>
+                  <span class="a11y-arrow">›</span>
+                  <button class="a11y-btn">Depois</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Item 2: lui-scroll-area via Tab + setas ── -->
+          <div class="case">
+            <p class="case__label">
+              2 — lui-scroll-area: viewport alcançável via Tab e rolável via setas
+            </p>
+            <p class="case__expected">
+              Clique em <em>Tab para cá</em> e pressione <kbd>Tab</kbd> uma vez. A área de scroll deve
+              receber foco (outline visível). Use <kbd>↑</kbd> <kbd>↓</kbd> para rolar sem o mouse —
+              o conteúdo deve se mover. Um novo <kbd>Tab</kbd> deve avançar para <em>Tab sai aqui</em>.
+            </p>
+            <div style="display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;">
+              <button class="a11y-btn a11y-btn--anchor">Tab para cá →</button>
+              <lui-scroll-area
+                id="a11y-sa"
+                height="160"
+                fade
+                style="width:220px;"
+              >
+                <div class="sa-list">
+                  {Array.from({ length: 14 }, (_, i) => (
+                    <div class="sa-item">Item {i + 1}</div>
+                  ))}
+                </div>
+              </lui-scroll-area>
+              <button class="a11y-btn a11y-btn--anchor">→ Tab sai aqui</button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
-
-    <script type="module">
-      // Dynamic import of components
-      import('../../../packages/lets-ui-components/src/index.ts').catch(() => {
-        // fallback: components may already be registered via Astro
-      });
-    </script>
   </body>
 </html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f8fafc;
+    color: #1a1a1a;
+  }
+
+  /* ── Header ───────────────────────────── */
+  .pg-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .pg-header__back {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.5;
+  }
+  .pg-header__back:hover {
+    opacity: 1;
+  }
+  .pg-header__title {
+    font-weight: 600;
+    font-family: monospace;
+  }
+  .pg-header__tag {
+    font-size: 11px;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  /* ── Layout ───────────────────────────── */
+  .layout {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    min-height: calc(100vh - 45px);
+  }
+
+  .sidenav {
+    position: sticky;
+    top: 45px;
+    align-self: start;
+    padding: 24px 16px;
+    border-right: 1px solid #e5e7eb;
+    background: #fff;
+    height: calc(100vh - 45px);
+    overflow-y: auto;
+  }
+  .sidenav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .sidenav a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: monospace;
+    color: #374151;
+  }
+  .sidenav a:hover {
+    background: #f3f4f6;
+  }
+
+  .pg-main {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    padding: 32px 32px 80px;
+    max-width: 860px;
+  }
+
+  /* ── Sections ─────────────────────────── */
+  .pg-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .pg-section__title {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+    font-family: monospace;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  /* ── Cases ────────────────────────────── */
+  .case {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .case__label {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+  }
+  .case__expected {
+    margin: 0;
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+  .case__expected em {
+    font-style: normal;
+    font-family: monospace;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0 3px;
+    border-radius: 3px;
+  }
+  .case__row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .case__col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: monospace;
+    font-size: 11px;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+  /* ── Generic boxes ────────────────────── */
+  .box {
+    width: 100%;
+    height: 32px;
+    background: #dbeafe;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #1d4ed8;
+  }
+  .box--sm {
+    width: 32px;
+    height: 32px;
+  }
+  .box-col {
+    background: #e5e7eb;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 12px;
+    text-align: center;
+    color: #374151;
+  }
+  .chip {
+    background: #e5e7eb;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: #374151;
+    white-space: nowrap;
+  }
+
+  /* ── Resizable container ──────────────── */
+  .resizable {
+    resize: horizontal;
+    overflow: auto;
+    min-width: 200px;
+    max-width: 100%;
+    border: 1px dashed #94a3b8;
+    padding: 8px;
+    border-radius: 4px;
+  }
+
+  /* ── Sidebar ──────────────────────────── */
+  .sidebar-side {
+    background: #dbeafe;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 12px;
+    color: #1d4ed8;
+    font-weight: 600;
+    text-align: center;
+  }
+  .sidebar-content {
+    background: #dcfce7;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 12px;
+    color: #15803d;
+  }
+
+  /* ── Switcher ─────────────────────────── */
+  .sw-card {
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.5);
+  }
+  .sw-card--sm {
+    padding: 8px;
+  }
+
+  /* ── Float ────────────────────────────── */
+  .placements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 40px 48px;
+    justify-content: start;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+  }
+  .placement-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .placement-label {
+    font-family: monospace;
+    font-size: 10px;
+    color: #9ca3af;
+  }
+  .float-anchor {
+    width: 64px;
+    height: 64px;
+    background: #e5e7eb;
+    border-radius: 6px;
+  }
+  .float-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ef4444;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border: 2px solid #fff;
+  }
+
+  /* ── Scroll Area ──────────────────────── */
+  .sa-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .sa-item {
+    padding: 7px 12px;
+    font-size: 12px;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .sa-item:last-child {
+    border-bottom: none;
+  }
+  .sa-row {
+    display: flex;
+    gap: 8px;
+    padding: 4px 0;
+  }
+  .sa-card {
+    flex-shrink: 0;
+    width: 80px;
+    height: 56px;
+    border-radius: 6px;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+  }
+  .sa-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 48px);
+    gap: 4px;
+    min-width: 280px;
+  }
+  .sa-cell {
+    height: 36px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #9ca3af;
+  }
+  .snap-slide {
+    flex-shrink: 0;
+    width: 80%;
+    min-width: 240px;
+    height: 100px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+  /* ── Event log ────────────────────────── */
+  .event-log {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #94a3b8;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-height: 180px;
+    overflow: hidden;
+  }
+  .event-log__empty {
+    color: #475569;
+    font-style: italic;
+  }
+  .event-entry {
+    color: #e2e8f0;
+    line-height: 1.5;
+  }
+  .event-entry strong {
+    color: #38bdf8;
+  }
+  .event-detail {
+    color: #64748b;
+  }
+
+  /* ── Accessibility ────────────────────── */
+  kbd {
+    font-family: monospace;
+    font-size: 11px;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #374151;
+  }
+
+  .a11y-seq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .a11y-seq {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .a11y-seq__label {
+    font-family: monospace;
+    font-size: 10px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .a11y-seq__flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px;
+    background: #f8fafc;
+    border: 1px dashed #e2e8f0;
+    border-radius: 6px;
+  }
+
+  .a11y-arrow {
+    color: #cbd5e1;
+    font-size: 18px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .a11y-btn {
+    background: #fff;
+    border: 1.5px solid #d1d5db;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-family: monospace;
+    cursor: pointer;
+    color: #374151;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .a11y-btn:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+  }
+
+  .a11y-btn:focus-visible {
+    outline: 2.5px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  .a11y-btn--anchor {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+  }
+
+  .a11y-btn--anchor:focus-visible {
+    outline-color: #1d4ed8;
+  }
+</style>
