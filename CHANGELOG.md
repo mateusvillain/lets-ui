@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.5.1
+
+### Fixed
+
+- Remove `display: contents` reset from `_host.scss` that was applied globally to all web component tags.
+- Remove `.dropdown-menu__trigger { display: contents }` rule.
+
 ## v1.5.0
 
 ### Added
