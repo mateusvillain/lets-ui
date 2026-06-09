@@ -226,3 +226,15 @@ FormIntegration.parameters = {
     },
   },
 };
+
+export const CSSClass = () => `
+  <div class="textarea-field textarea-field--lg">
+    <div class="textarea-field__head">
+      <label class="textarea-field__label">Mensagem</label>
+    </div>
+    <div class="textarea-field__control">
+      <textarea class="textarea-field__input" rows="4" placeholder="Digite..."></textarea>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

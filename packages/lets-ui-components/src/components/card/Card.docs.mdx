@@ -19,3 +19,31 @@ import * as CardStories from './Card.stories';
 ## Full
 
 <Canvas of={CardStories.Full} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={CardStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-card>
+  <p>Conteúdo do card</p>
+  <button slot="actions" class="btn btn--primary btn--lg">Ação</button>
+</lui-card>
+```
+
+### Classe CSS
+
+```html
+<div class="card card--border">
+  <div class="card__body">
+    <p>Conteúdo do card</p>
+  </div>
+  <div class="card__actions">
+    <button class="btn btn--primary btn--lg">Ação</button>
+  </div>
+</div>
+```

@@ -13,3 +13,29 @@ Intrinsic responsive layout using the Every Layout switcher pattern. Children sw
 ## Wide Threshold
 
 <Canvas of={SwitcherStories.WideThreshold} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={SwitcherStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-switcher threshold="320px" gap="md">
+  <div>Panel A</div>
+  <div>Panel B</div>
+  <div>Panel C</div>
+</lui-switcher>
+```
+
+### Classe CSS
+
+```html
+<div class="switcher switcher--gap-md">
+  <div>Panel A</div>
+  <div>Panel B</div>
+  <div>Panel C</div>
+</div>
+```

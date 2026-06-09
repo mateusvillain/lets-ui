@@ -62,3 +62,15 @@ Full.args = {
   primaryButton: 'Confirm',
   secondaryButton: 'Cancel',
 };
+
+export const CSSClass = () => `
+  <div class="card card--border">
+    <div class="card__body">
+      <p>Conteúdo do card</p>
+    </div>
+    <div class="card__actions">
+      <button class="btn btn--primary btn--lg">Ação</button>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

@@ -27,3 +27,25 @@ Use quando o atalho exige uma combinação de teclas simultâneas. Passe as tecl
 Combine com listas de ações ou menus para documentar atalhos disponíveis na interface. O componente se alinha naturalmente em layouts `flex` com `justify-content: space-between`.
 
 <Canvas of={ShortcutStories.InContext} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={ShortcutStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-shortcut keys="⌘,K"></lui-shortcut>
+```
+
+### Classe CSS
+
+```html
+<span class="shortcut">
+  <kbd class="shortcut__key">⌘</kbd>
+  <span class="shortcut__sep">+</span>
+  <kbd class="shortcut__key">K</kbd>
+</span>
+```

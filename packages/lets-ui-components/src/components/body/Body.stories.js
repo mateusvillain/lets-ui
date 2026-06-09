@@ -3,7 +3,7 @@ import '../../../../../packages/styles/dist/letsui.css';
 import '../../index.js';
 
 export default {
-  title: 'Content/Typography/Body',
+  title: 'Typography/Body',
   argTypes: {
     variant: {
       control: { type: 'select' },
@@ -114,3 +114,8 @@ export const WithLineClamp = () => `
     style="max-width: 400px; display: block;"
   ></lui-body>
 `;
+
+export const CSSClass = () => `
+  <p class="body--md">Texto com escala tipográfica body médio.</p>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

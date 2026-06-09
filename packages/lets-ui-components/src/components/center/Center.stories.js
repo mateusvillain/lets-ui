@@ -40,3 +40,10 @@ Vertical.args = { axis: 'vertical', minHeight: '', maxWidth: '' };
 
 export const WithMaxWidth = Template.bind({});
 WithMaxWidth.args = { axis: 'both', minHeight: '', maxWidth: '400px' };
+
+export const CSSClass = () => `
+  <div class="center center--horizontal">
+    <div class="center__inner" style="max-width: 400px;">Conteúdo centralizado</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

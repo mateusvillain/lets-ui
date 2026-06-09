@@ -59,3 +59,12 @@ SpaceBetween.args = {
 
 export const NoWrap = Template.bind({});
 NoWrap.args = { gap: 'sm', align: 'center', justify: 'start', wrap: 'nowrap' };
+
+export const CSSClass = () => `
+  <div class="inline inline--gap-sm">
+    <span>Design</span>
+    <span>Engineering</span>
+    <span>Product</span>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

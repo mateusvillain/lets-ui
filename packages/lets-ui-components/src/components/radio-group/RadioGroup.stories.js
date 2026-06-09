@@ -229,3 +229,18 @@ FormIntegration.parameters = {
     },
   },
 };
+
+export const CSSClass = () => `
+  <fieldset class="radio-group radio-group--lg">
+    <legend class="radio-group__legend">Plano</legend>
+    <div class="radio-group__options">
+      <label class="radio">
+        <input type="radio" name="plano" value="basic"> Básico
+      </label>
+      <label class="radio">
+        <input type="radio" name="plano" value="pro"> Pro
+      </label>
+    </div>
+  </fieldset>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

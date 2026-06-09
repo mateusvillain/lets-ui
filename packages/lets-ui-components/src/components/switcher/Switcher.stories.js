@@ -32,3 +32,12 @@ Default.args = { threshold: '320px', gap: 'md' };
 
 export const WideThreshold = Template.bind({});
 WideThreshold.args = { threshold: '500px', gap: 'lg' };
+
+export const CSSClass = () => `
+  <div class="switcher switcher--gap-md">
+    <div>Panel A</div>
+    <div>Panel B</div>
+    <div>Panel C</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

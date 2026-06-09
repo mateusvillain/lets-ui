@@ -85,3 +85,8 @@ SizeMd.args = {
   variant: 'primary',
   size: 'md',
 };
+
+export const CSSClass = () => `
+  <span class="tag-md tag--md tag--surface-primary">Label</span>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

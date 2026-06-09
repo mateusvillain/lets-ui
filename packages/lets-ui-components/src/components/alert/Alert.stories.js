@@ -54,3 +54,14 @@ export const WithoutActions = () => `
   ></lui-alert>
 `;
 WithoutActions.storyName = 'Without actions';
+
+export const CSSClass = () => `
+  <div class="alert alert--info">
+    <div class="alert__content">
+      <div class="alert__text">
+        <p>Informação importante</p>
+      </div>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

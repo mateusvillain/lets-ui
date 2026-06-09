@@ -249,3 +249,10 @@ export const RawCSSFallback = () => `
   </div>
 `;
 RawCSSFallback.storyName = 'Raw CSS fallback';
+
+export const CSSClass = () => `
+  <div class="box box--padding-md">
+    Conteúdo com padding interno
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

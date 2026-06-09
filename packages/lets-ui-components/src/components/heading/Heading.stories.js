@@ -3,7 +3,7 @@ import '../../../../../packages/styles/dist/letsui.css';
 import '../../index.js';
 
 export default {
-  title: 'Content/Typography/Heading',
+  title: 'Typography/Heading',
   argTypes: {
     variant: {
       control: { type: 'select' },
@@ -120,3 +120,8 @@ export const WithLineClamp = () => `
     style="max-width: 400px; display: block;"
   ></lui-heading>
 `;
+
+export const CSSClass = () => `
+  <h1 class="title text--color-heading">Título da página</h1>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

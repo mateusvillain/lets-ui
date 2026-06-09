@@ -58,3 +58,16 @@ export const VerticalWithLabel = () => `
     <span>Abaixo</span>
   </div>
 `;
+
+export const CSSClass = () => `
+  <div style="padding: 16px; background: white; border-radius: 8px; width: 320px;">
+    <p style="margin: 0 0 16px;">Seção acima</p>
+    <hr class="divider">
+    <p style="margin: 16px 0 8px;">Com label:</p>
+    <div class="divider divider--labeled">
+      <span class="divider__label">ou</span>
+    </div>
+    <p style="margin: 8px 0 0;">Seção abaixo</p>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

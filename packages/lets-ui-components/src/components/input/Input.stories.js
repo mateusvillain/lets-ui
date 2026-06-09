@@ -279,3 +279,17 @@ FormIntegration.parameters = {
     },
   },
 };
+
+export const CSSClass = () => `
+  <div class="input-field input-field--lg">
+    <div class="input-field__head">
+      <div class="input-field__label-wrap">
+        <label class="input-field__label">Email</label>
+      </div>
+    </div>
+    <div class="input-field__control">
+      <input type="email" class="input-field__input" placeholder="seu@email.com">
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

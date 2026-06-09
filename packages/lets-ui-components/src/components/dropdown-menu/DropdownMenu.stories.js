@@ -91,3 +91,14 @@ export const WithDisabledItem = () => `
     </lui-dropdown-menu>
   </div>
 `;
+
+export const CSSClass = () => `
+  <div class="dropdown-menu" style="margin-bottom: 120px;">
+    <button class="btn btn--secondary btn--md" aria-expanded="false">Opções</button>
+    <div class="dropdown-menu__panel is-open">
+      <button class="menu-item"><span class="menu-item__label">Editar</span></button>
+      <button class="menu-item menu-item--danger"><span class="menu-item__label">Excluir</span></button>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

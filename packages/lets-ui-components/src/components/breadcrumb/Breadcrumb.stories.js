@@ -27,3 +27,14 @@ Default.args = {
   link: '#',
   ariaLabel: 'Breadcrumb',
 };
+
+export const CSSClass = () => `
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Categoria</a></li>
+      <li aria-current="page">Página atual</li>
+    </ol>
+  </nav>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

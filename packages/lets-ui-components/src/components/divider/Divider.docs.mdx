@@ -25,3 +25,34 @@ Use `orientation="vertical"` (web component) ou a classe `.divider--vertical` (H
 ## Vertical com label
 
 <Canvas of={DividerStories.VerticalWithLabel} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={DividerStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<!-- Horizontal -->
+<lui-divider></lui-divider>
+
+<!-- Horizontal com label -->
+<lui-divider label="ou"></lui-divider>
+
+<!-- Vertical -->
+<lui-divider orientation="vertical"></lui-divider>
+```
+
+### Classe CSS
+
+```html
+<hr class="divider">
+<!-- Vertical: -->
+<div class="divider divider--vertical"></div>
+<!-- Com label: -->
+<div class="divider divider--labeled">
+  <span class="divider__label">ou</span>
+</div>
+```

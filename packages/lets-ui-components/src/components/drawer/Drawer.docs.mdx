@@ -28,3 +28,36 @@ Omita `primary-button` e `secondary-button` quando o drawer for apenas informati
 Por padrão o backdrop não fecha o drawer. Ative `close-on-backdrop` quando o fluxo permitir descarte acidental. Desative em formulários ou fluxos onde o usuário deve tomar uma decisão explícita.
 
 <Canvas of={DrawerStories.CloseOnBackdropOff} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={DrawerStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-drawer title="Título" size="md" trigger-label="Abrir drawer" close-on-backdrop>
+  <p>Conteúdo do drawer</p>
+  <button slot="actions" data-drawer-close class="btn btn--secondary btn--lg">Cancelar</button>
+  <button slot="actions" class="btn btn--primary btn--lg">Confirmar</button>
+</lui-drawer>
+```
+
+### Classe CSS
+
+```html
+<div class="drawer-backdrop is-open"></div>
+<div class="drawer drawer--md is-open" role="dialog" aria-modal="true">
+  <div class="drawer__header">
+    <span class="drawer__title">Título</span>
+    <button class="drawer__close" aria-label="Fechar">×</button>
+  </div>
+  <div class="drawer__body">Conteúdo do drawer</div>
+  <div class="drawer__footer">
+    <button class="btn btn--secondary btn--lg">Cancelar</button>
+    <button class="btn btn--primary btn--lg">Confirmar</button>
+  </div>
+</div>
+```

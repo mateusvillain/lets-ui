@@ -96,3 +96,20 @@ export const CustomTrigger = () => `
   </lui-drawer>
 `;
 CustomTrigger.storyName = 'Trigger customizado (slot)';
+
+export const CSSClass = () => `
+  <div class="drawer-backdrop is-open" style="position: relative; width: 100%; height: 400px; background: rgba(0,0,0,0.3);">
+    <div class="drawer drawer--md is-open" role="dialog" aria-modal="true" style="position: absolute; right: 0; top: 0; height: 100%;">
+      <div class="drawer__header">
+        <span class="drawer__title">Título</span>
+        <button class="drawer__close" aria-label="Fechar">×</button>
+      </div>
+      <div class="drawer__body">Conteúdo do drawer</div>
+      <div class="drawer__footer">
+        <button class="btn btn--secondary btn--lg">Cancelar</button>
+        <button class="btn btn--primary btn--lg">Confirmar</button>
+      </div>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

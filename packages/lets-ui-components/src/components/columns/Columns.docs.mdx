@@ -27,3 +27,29 @@ Pass a JSON array to define column widths: `columns='["2fr","1fr"]'`.
 ## Collapse on Mobile
 
 <Canvas of={ColumnsStories.CollapseOnMobile} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={ColumnsStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-columns columns="3" gap="md" align="stretch">
+  <lui-column>Coluna 1</lui-column>
+  <lui-column>Coluna 2</lui-column>
+  <lui-column>Coluna 3</lui-column>
+</lui-columns>
+```
+
+### Classe CSS
+
+```html
+<div class="columns columns--3 columns--gap-md">
+  <div class="column">Coluna 1</div>
+  <div class="column">Coluna 2</div>
+  <div class="column">Coluna 3</div>
+</div>
+```

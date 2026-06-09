@@ -51,3 +51,24 @@ Com `required`, o form não submete enquanto o checkbox não estiver marcado.
 | `value`    | `string`  | `'on'` | Valor submetido quando marcado; omitido quando desmarcado                       |
 | `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o checkbox fora do elemento form         |
 | `required` | `boolean` | `false`| Bloqueia a submissão quando o checkbox não está marcado                         |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={CheckboxStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-checkbox size="lg">Aceito os termos</lui-checkbox>
+```
+
+### Classe CSS
+
+```html
+<label class="checkbox checkbox--lg">
+  <input type="checkbox">
+  Aceito os termos
+</label>
+```

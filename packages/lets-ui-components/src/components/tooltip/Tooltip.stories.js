@@ -62,3 +62,13 @@ export const WithCustomTrigger = () => `
     </lui-tooltip>
   </div>
 `;
+
+export const CSSClass = () => `
+  <div style="padding: 80px; display: flex; justify-content: center;">
+    <div class="tooltip tooltip--top">
+      <button class="tooltip__trigger">Hover aqui</button>
+      <div role="tooltip" class="tooltip__content">Texto do tooltip</div>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

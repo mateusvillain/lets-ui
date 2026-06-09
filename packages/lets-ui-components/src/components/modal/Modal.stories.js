@@ -72,3 +72,18 @@ export const CustomTrigger = () => `
   </lui-modal>
 `;
 CustomTrigger.storyName = 'Custom trigger (slot)';
+
+export const CSSClass = () => `
+  <div class="modal modal--md" role="dialog" aria-modal="true">
+    <div class="modal__header">
+      <span class="modal__title">Título</span>
+      <button class="modal__close" aria-label="Fechar">×</button>
+    </div>
+    <div class="modal__body">Conteúdo do modal</div>
+    <div class="modal__footer">
+      <button class="btn btn--secondary btn--lg">Cancelar</button>
+      <button class="btn btn--primary btn--lg">Confirmar</button>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

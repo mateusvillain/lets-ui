@@ -84,3 +84,11 @@ export const WithGrow = () => `
     </lui-flex>
   </div>
 `;
+
+export const CSSClass = () => `
+  <div class="flex flex--gap-md flex--align-center">
+    <div class="flex-item--grow">Cresce</div>
+    <div class="flex-item--shrink-0">Fixo</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';
