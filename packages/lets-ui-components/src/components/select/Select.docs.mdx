@@ -39,3 +39,39 @@ Com `required`, o form não submete enquanto o placeholder estiver ativo (nenhum
 | `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`       |
 | `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o select fora do elemento form            |
 | `required` | `boolean` | `false`| Bloqueia a submissão enquanto o placeholder estiver selecionado                  |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={SelectStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-native-select
+  label="País"
+  placeholder="Selecione..."
+  options="Brasil,Portugal"
+  size="lg"
+></lui-native-select>
+```
+
+### Classe CSS
+
+```html
+<div class="native-select native-select--lg">
+  <div class="native-select__head">
+    <label class="native-select__label">País</label>
+  </div>
+  <div class="native-select__control">
+    <select class="native-select__input">
+      <option value="">Selecione...</option>
+      <option value="br">Brasil</option>
+    </select>
+    <span class="native-select__arrow">
+      <svg ...>...</svg>
+    </span>
+  </div>
+</div>
+```

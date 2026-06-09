@@ -33,3 +33,32 @@ Use divisores para separar visualmente grupos de ações com propósitos distint
 Use para indicar ações temporariamente indisponíveis sem remover a opção da interface.
 
 <Canvas of={DropdownMenuStories.WithDisabledItem} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={DropdownMenuStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-dropdown-menu>
+  <lui-button slot="trigger" variant="secondary" size="md" label="Opções"></lui-button>
+  <lui-menu-item slot="items" label="Editar" shortcut="⌘,E"></lui-menu-item>
+  <lui-menu-divider slot="items"></lui-menu-divider>
+  <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
+</lui-dropdown-menu>
+```
+
+### Classe CSS
+
+```html
+<div class="dropdown-menu">
+  <button class="btn btn--secondary btn--md" aria-expanded="false">Opções</button>
+  <div class="dropdown-menu__panel is-open">
+    <button class="menu-item"><span class="menu-item__label">Editar</span></button>
+    <button class="menu-item menu-item--danger"><span class="menu-item__label">Excluir</span></button>
+  </div>
+</div>
+```

@@ -3,7 +3,7 @@ import '../../../../../packages/styles/dist/letsui.css';
 import '../../index.js';
 
 export default {
-  title: 'Miscellaneous/Shortcut',
+  title: 'Typography/Shortcut',
   argTypes: {
     keys: {
       control: 'text',
@@ -58,3 +58,12 @@ export const InContext = () => `
     </ul>
   </div>
 `;
+
+export const CSSClass = () => `
+  <span class="shortcut">
+    <kbd class="shortcut__key">⌘</kbd>
+    <span class="shortcut__sep">+</span>
+    <kbd class="shortcut__key">K</kbd>
+  </span>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

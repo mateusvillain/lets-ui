@@ -17,3 +17,29 @@ Vertical flex layout that stacks children with consistent spacing.
 ## Centered Items
 
 <Canvas of={StackStories.Centered} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={StackStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-stack gap="md" align="stretch" justify="start">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</lui-stack>
+```
+
+### Classe CSS
+
+```html
+<div class="stack stack--gap-md">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</div>
+```

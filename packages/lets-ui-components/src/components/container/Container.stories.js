@@ -39,3 +39,10 @@ Small.args = { size: 'sm', padding: 'md', center: true, as: 'div' };
 
 export const Full = Template.bind({});
 Full.args = { size: 'full', padding: 'lg', center: false, as: 'div' };
+
+export const CSSClass = () => `
+  <div class="container container--md">
+    Conteúdo centralizado
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

@@ -129,3 +129,25 @@ Unknown values are passed through as-is, so raw CSS values and `var()` reference
 ## Card
 
 <Canvas of={BoxStories.Card} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={BoxStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-box padding="md" background="neutral/surface" border-radius="md" border-width="1" border-color="neutral/subtle">
+  Conteúdo com padding interno
+</lui-box>
+```
+
+### Classe CSS
+
+```html
+<div class="box box--padding-md">
+  Conteúdo com padding interno
+</div>
+```

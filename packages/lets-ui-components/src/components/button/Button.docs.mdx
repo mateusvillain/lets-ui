@@ -118,3 +118,23 @@ como modais, drawers e alertas de confirmação.
 | `loading`      | `boolean` | `false`     | Exibe spinner e bloqueia interações; não aplica opacidade de disabled |
 | `loading-text` | `string`  | `''`        | Texto alternativo exibido enquanto `loading` estiver ativo            |
 | `aria-label`   | `string`  | `''`        | Label acessível sobrescrevendo o derivado do `label`                  |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={ButtonStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-button variant="primary" size="lg">Confirmar</lui-button>
+<lui-button variant="secondary" size="lg">Cancelar</lui-button>
+```
+
+### Classe CSS
+
+```html
+<button class="btn btn--primary btn--lg">Confirmar</button>
+<button class="btn btn--secondary btn--lg">Cancelar</button>
+```

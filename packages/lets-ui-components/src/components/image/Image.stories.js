@@ -206,3 +206,10 @@ export const AsPicture = () => `
     loading="eager"
   ></lui-image>
 `;
+
+export const CSSClass = () => `
+  <div class="img" style="width: 400px; aspect-ratio: 16 / 9; border-radius: 8px;">
+    <img class="img__element" src="${SAMPLE_SRC}" alt="Mountain landscape">
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

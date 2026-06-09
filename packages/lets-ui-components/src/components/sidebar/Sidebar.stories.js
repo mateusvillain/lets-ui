@@ -65,3 +65,11 @@ NarrowSidebar.args = {
   gap: 'md',
   align: 'stretch',
 };
+
+export const CSSClass = () => `
+  <div class="sidebar sidebar--gap-md">
+    <div class="sidebar__side">Sidebar (240px)</div>
+    <div class="sidebar__content">Conteúdo principal</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

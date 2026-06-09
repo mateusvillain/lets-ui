@@ -21,3 +21,24 @@ Use the `position` attribute to control where the tooltip appears relative to it
 Slot any focusable element inside `<lui-tooltip>` to use it as the trigger. The component automatically wires up `aria-describedby` on focusable children.
 
 <Canvas of={TooltipStories.WithCustomTrigger} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={TooltipStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-tooltip text="Texto do tooltip" position="top" label="Hover aqui"></lui-tooltip>
+```
+
+### Classe CSS
+
+```html
+<div class="tooltip tooltip--top">
+  <button class="tooltip__trigger">Hover aqui</button>
+  <div role="tooltip" class="tooltip__content">Texto do tooltip</div>
+</div>
+```

@@ -150,3 +150,11 @@ FormIntegration.parameters = {
     },
   },
 };
+
+export const CSSClass = () => `
+  <label class="checkbox checkbox--lg">
+    <input type="checkbox">
+    Aceito os termos
+  </label>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

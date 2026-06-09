@@ -31,3 +31,31 @@ Componente de navegação por abas. Suporta dois estilos visuais — **Line** (i
 ## Com aba desabilitada
 
 <Canvas of={TabsStories.WithDisabledTab} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={TabsStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-tabs variant="line">
+  <lui-tab label="Geral" active><p>Conteúdo da aba Geral.</p></lui-tab>
+  <lui-tab label="Segurança"><p>Conteúdo da aba Segurança.</p></lui-tab>
+</lui-tabs>
+```
+
+### Classe CSS
+
+```html
+<div class="tabs tabs--line">
+  <div class="tabs__list">
+    <button class="tab" role="tab" aria-selected="true">Geral</button>
+    <button class="tab" role="tab" aria-selected="false">Segurança</button>
+  </div>
+  <div class="tabs__panel" role="tabpanel">Conteúdo da tab Geral</div>
+  <div class="tabs__panel" role="tabpanel" hidden>Conteúdo da tab Segurança</div>
+</div>
+```

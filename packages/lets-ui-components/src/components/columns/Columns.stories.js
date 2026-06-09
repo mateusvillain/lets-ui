@@ -69,3 +69,12 @@ CollapseOnMobile.args = {
   align: 'stretch',
   collapseBelow: 'sm',
 };
+
+export const CSSClass = () => `
+  <div class="columns columns--3 columns--gap-md">
+    <div class="column">Coluna 1</div>
+    <div class="column">Coluna 2</div>
+    <div class="column">Coluna 3</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

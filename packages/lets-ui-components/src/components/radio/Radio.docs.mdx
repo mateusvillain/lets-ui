@@ -37,3 +37,24 @@ O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para 
 | `checked`    | `boolean`       | `false`| Estado marcado                                              |
 | `disabled`   | `boolean`       | `false`| Desabilita o radio                                          |
 | `size`       | `'lg' \| 'md'` | `'lg'` | Controlado pelo `lui-radio-group`; raramente definido direto|
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={RadioStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-radio value="a" size="lg">Opção A</lui-radio>
+```
+
+### Classe CSS
+
+```html
+<label class="radio radio--lg">
+  <input type="radio" name="opcao" value="a">
+  Opção A
+</label>
+```

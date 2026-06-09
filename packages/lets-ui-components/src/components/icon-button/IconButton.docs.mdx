@@ -28,3 +28,25 @@ Use o estado desabilitado quando a ação não está disponível no contexto atu
 Exemplos de uso com ícones SVG. O slot aceita qualquer SVG ou ícone de qualquer biblioteca.
 
 <Canvas of={IconButtonStories.AllIcons} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={IconButtonStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-icon-button size="lg" aria-label="Fechar">
+  <svg width="24" height="24" ...>...</svg>
+</lui-icon-button>
+```
+
+### Classe CSS
+
+```html
+<button class="icon-button icon-button--lg" aria-label="Fechar">
+  <svg width="24" height="24" ...>...</svg>
+</button>
+```

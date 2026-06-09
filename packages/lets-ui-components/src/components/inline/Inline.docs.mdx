@@ -17,3 +17,29 @@ Horizontal flex layout with wrapping support. Great for tags, chips, and button 
 ## No Wrap
 
 <Canvas of={InlineStories.NoWrap} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={InlineStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-inline gap="sm" align="center" justify="start" wrap="wrap">
+  <span>Design</span>
+  <span>Engineering</span>
+  <span>Product</span>
+</lui-inline>
+```
+
+### Classe CSS
+
+```html
+<div class="inline inline--gap-sm">
+  <span>Design</span>
+  <span>Engineering</span>
+  <span>Product</span>
+</div>
+```

@@ -66,3 +66,11 @@ export const Small = () =>
 
 export const Disabled = () =>
   `<lui-radio value="option" checked disabled size="lg">Desabilitado</lui-radio>`;
+
+export const CSSClass = () => `
+  <label class="radio radio--lg">
+    <input type="radio" name="opcao" value="a">
+    Opção A
+  </label>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

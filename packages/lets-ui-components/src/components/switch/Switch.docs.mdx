@@ -53,3 +53,24 @@ O `lui-switch` é form-associated. Use `name` para identificar o campo no `FormD
 | `value`    | `string`  | `'on'` | Valor submetido quando ativado; omitido quando desativado                       |
 | `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o switch fora do elemento form           |
 | `required` | `boolean` | `false`| Bloqueia a submissão quando o switch não está ativado                           |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={SwitchStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-switch size="lg">Notificações</lui-switch>
+```
+
+### Classe CSS
+
+```html
+<label class="switch switch--lg">
+  <input type="checkbox">
+  Notificações
+</label>
+```

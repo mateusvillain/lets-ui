@@ -74,3 +74,15 @@ export const WithDisabledTab = () => `
 `;
 WithDisabledTab.storyName = 'Com aba desabilitada';
 WithDisabledTab.parameters = { controls: { disable: true } };
+
+export const CSSClass = () => `
+  <div class="tabs tabs--line">
+    <div class="tabs__list">
+      <button class="tab" role="tab" aria-selected="true">Geral</button>
+      <button class="tab" role="tab" aria-selected="false">Segurança</button>
+    </div>
+    <div class="tabs__panel" role="tabpanel">Conteúdo da tab Geral</div>
+    <div class="tabs__panel" role="tabpanel" hidden>Conteúdo da tab Segurança</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

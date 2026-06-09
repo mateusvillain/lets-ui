@@ -246,3 +246,11 @@ FormIntegration.parameters = {
     },
   },
 };
+
+export const CSSClass = () => `
+  <div style="display: flex; gap: 12px;">
+    <button class="btn btn--primary btn--lg">Confirmar</button>
+    <button class="btn btn--secondary btn--lg">Cancelar</button>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

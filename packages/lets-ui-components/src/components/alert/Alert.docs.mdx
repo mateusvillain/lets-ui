@@ -19,3 +19,27 @@ import * as AlertStories from './Alert.stories';
 
 ## Success
 <Canvas of={AlertStories.Success} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={AlertStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-alert variant="info" title="Título" content="Informação importante"></lui-alert>
+```
+
+### Classe CSS
+
+```html
+<div class="alert alert--info">
+  <div class="alert__content">
+    <div class="alert__text">
+      <p>Informação importante</p>
+    </div>
+  </div>
+</div>
+```

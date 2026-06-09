@@ -144,3 +144,11 @@ FormIntegration.parameters = {
     },
   },
 };
+
+export const CSSClass = () => `
+  <label class="switch switch--lg">
+    <input type="checkbox">
+    Notificações
+  </label>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

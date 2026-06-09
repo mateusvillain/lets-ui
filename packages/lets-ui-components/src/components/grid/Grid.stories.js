@@ -62,3 +62,12 @@ export const WithSpans = () => `
     ${cell('1 col', '#ede9fe')}
   </lui-grid>
 `;
+
+export const CSSClass = () => `
+  <div class="grid grid--gap-md" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="grid-item">Item 1</div>
+    <div class="grid-item">Item 2</div>
+    <div class="grid-item">Item 3</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

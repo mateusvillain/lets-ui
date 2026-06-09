@@ -17,3 +17,27 @@ Raw flexbox primitive. Use `lui-flex-item` to control individual item properties
 ## With Flex Grow
 
 <Canvas of={FlexStories.WithGrow} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={FlexStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-flex gap="md" align="stretch" justify="start">
+  <lui-flex-item grow="1">Cresce</lui-flex-item>
+  <lui-flex-item>Fixo</lui-flex-item>
+</lui-flex>
+```
+
+### Classe CSS
+
+```html
+<div class="flex flex--gap-md flex--align-center">
+  <div class="flex-item--grow">Cresce</div>
+  <div class="flex-item--shrink-0">Fixo</div>
+</div>
+```

@@ -55,3 +55,33 @@ Com `required`, o campo bloqueia a submissão quando está vazio via `ElementInt
 | `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`    |
 | `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o textarea fora do elemento form       |
 | `required` | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals` |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={TextareaStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-textarea
+  label="Mensagem"
+  placeholder="Digite..."
+  size="lg"
+  rows="4"
+></lui-textarea>
+```
+
+### Classe CSS
+
+```html
+<div class="textarea-field textarea-field--lg">
+  <div class="textarea-field__head">
+    <label class="textarea-field__label">Mensagem</label>
+  </div>
+  <div class="textarea-field__control">
+    <textarea class="textarea-field__input" rows="4" placeholder="Digite..."></textarea>
+  </div>
+</div>
+```

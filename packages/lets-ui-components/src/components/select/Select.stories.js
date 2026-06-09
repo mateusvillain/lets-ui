@@ -204,3 +204,23 @@ FormIntegration.parameters = {
     },
   },
 };
+
+export const CSSClass = () => `
+  <div class="native-select native-select--lg">
+    <div class="native-select__head">
+      <label class="native-select__label">País</label>
+    </div>
+    <div class="native-select__control">
+      <select class="native-select__input">
+        <option value="">Selecione...</option>
+        <option value="br">Brasil</option>
+      </select>
+      <span class="native-select__arrow">
+        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M18.2197 8.46973C18.5126 8.17683 18.9874 8.17683 19.2803 8.46973C19.5732 8.76262 19.5732 9.23738 19.2803 9.53027L12.5303 16.2803C12.2374 16.5732 11.7626 16.5732 11.4697 16.2803L4.71973 9.53027C4.42684 9.23738 4.42684 8.76262 4.71973 8.46973C5.01262 8.17683 5.48738 8.17683 5.78028 8.46973L12 14.6895L18.2197 8.46973Z"/>
+        </svg>
+      </span>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

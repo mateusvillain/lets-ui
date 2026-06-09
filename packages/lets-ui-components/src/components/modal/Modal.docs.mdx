@@ -31,3 +31,35 @@ Omit the `actions` slot to render a modal with no footer.
 Slot any element with `slot="trigger"` to replace the default trigger button.
 
 <Canvas of={ModalStories.CustomTrigger} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={ModalStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-modal title="Título" size="md" trigger-label="Abrir modal">
+  <p>Conteúdo do modal</p>
+  <lui-button slot="actions" variant="secondary" label="Cancelar" data-modal-close></lui-button>
+  <lui-button slot="actions" label="Confirmar"></lui-button>
+</lui-modal>
+```
+
+### Classe CSS
+
+```html
+<div class="modal modal--md" role="dialog" aria-modal="true">
+  <div class="modal__header">
+    <span class="modal__title">Título</span>
+    <button class="modal__close" aria-label="Fechar">×</button>
+  </div>
+  <div class="modal__body">Conteúdo do modal</div>
+  <div class="modal__footer">
+    <button class="btn btn--secondary btn--lg">Cancelar</button>
+    <button class="btn btn--primary btn--lg">Confirmar</button>
+  </div>
+</div>
+```

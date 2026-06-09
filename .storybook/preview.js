@@ -18,6 +18,8 @@ const preview = {
           'Navigation',
           'Form and options',
           'Content',
+          'Typography',
+          ['Heading', 'Body', 'Shortcut'],
           'Layout',
           'Miscellaneous',
           'Utilities',

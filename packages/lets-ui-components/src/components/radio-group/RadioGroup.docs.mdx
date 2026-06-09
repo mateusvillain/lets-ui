@@ -61,3 +61,34 @@ O valor selecionado é submetido no `FormData` com a chave `name` do grupo. Múl
 | `error`      | `boolean` | `false`                 | Ativa o estado de erro manualmente                                |
 | `error-text` | `string`  | `'Selecione uma opção.'`| Mensagem exibida abaixo do grupo quando `error` é verdadeiro      |
 | `form`       | `string`  | `''`                    | ID do `<form>` associado; permite usar o grupo fora do `<form>`   |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={RadioGroupStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-radio-group name="plano" label="Plano" size="lg">
+  <lui-radio value="basic" label="Básico"></lui-radio>
+  <lui-radio value="pro" label="Pro"></lui-radio>
+</lui-radio-group>
+```
+
+### Classe CSS
+
+```html
+<fieldset class="radio-group radio-group--lg">
+  <legend class="radio-group__legend">Plano</legend>
+  <div class="radio-group__options">
+    <label class="radio">
+      <input type="radio" name="plano" value="basic"> Básico
+    </label>
+    <label class="radio">
+      <input type="radio" name="plano" value="pro"> Pro
+    </label>
+  </div>
+</fieldset>
+```

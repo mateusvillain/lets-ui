@@ -17,3 +17,29 @@ Full CSS Grid layout primitive. Use `lui-grid-item` for individual items with sp
 ## With Column Spans
 
 <Canvas of={GridStories.WithSpans} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={GridStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-grid columns="repeat(3, 1fr)" gap="md">
+  <lui-grid-item>Item 1</lui-grid-item>
+  <lui-grid-item>Item 2</lui-grid-item>
+  <lui-grid-item>Item 3</lui-grid-item>
+</lui-grid>
+```
+
+### Classe CSS
+
+```html
+<div class="grid grid--gap-md" style="grid-template-columns: repeat(3, 1fr);">
+  <div class="grid-item">Item 1</div>
+  <div class="grid-item">Item 2</div>
+  <div class="grid-item">Item 3</div>
+</div>
+```

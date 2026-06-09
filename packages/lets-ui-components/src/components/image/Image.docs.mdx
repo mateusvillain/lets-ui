@@ -51,3 +51,30 @@ Provide an alternative image to display when the primary `src` fails to load.
 Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<source>` elements).
 
 <Canvas of={ImageStories.AsPicture} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={ImageStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-image
+  src="..."
+  alt="Descrição"
+  width="400px"
+  aspect-ratio="16 / 9"
+  radius="md"
+  fit="cover"
+></lui-image>
+```
+
+### Classe CSS
+
+```html
+<div class="img" style="width: 400px; aspect-ratio: 16 / 9; border-radius: 8px;">
+  <img class="img__element" src="..." alt="Descrição">
+</div>
+```

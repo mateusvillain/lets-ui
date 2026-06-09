@@ -55,3 +55,12 @@ SpaceBetween.args = { gap: 'md', align: 'stretch', justify: 'space-between' };
 SpaceBetween.decorators = [
   (story) => `<div style="height: 240px;">${story()}</div>`,
 ];
+
+export const CSSClass = () => `
+  <div class="stack stack--gap-md">
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';

@@ -50,3 +50,35 @@ consistente com elementos nativos. A mensagem reportada é controlada pelo atrib
 | `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`   |
 | `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o input fora do elemento form         |
 | `required` | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals`|
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={InputStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-input
+  type="email"
+  label="Email"
+  placeholder="seu@email.com"
+  size="lg"
+></lui-input>
+```
+
+### Classe CSS
+
+```html
+<div class="input-field input-field--lg">
+  <div class="input-field__head">
+    <div class="input-field__label-wrap">
+      <label class="input-field__label">Email</label>
+    </div>
+  </div>
+  <div class="input-field__control">
+    <input type="email" class="input-field__input" placeholder="seu@email.com">
+  </div>
+</div>
+```
