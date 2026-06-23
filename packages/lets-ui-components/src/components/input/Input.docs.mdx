@@ -16,6 +16,47 @@ import * as InputStories from './Input.stories';
 
 <Canvas of={InputStories.NumberInput} />
 
+## Mask
+
+O atributo `mask` formata o valor automaticamente enquanto o usuário digita, sem nenhuma
+dependência externa. A sintaxe usa dois tipos de placeholder:
+
+| Placeholder | Aceita           |
+| ----------- | ---------------- |
+| `9`         | Apenas dígito     |
+| `*`         | Letra ou dígito (convertida para maiúscula) |
+
+Qualquer outro caractere no padrão (`.`, `-`, `/`, espaço) é tratado como literal e inserido
+automaticamente conforme o usuário avança no preenchimento.
+
+<Canvas of={InputStories.Mask} />
+
+### Padrões prontos
+
+| Campo                | Padrão                  |
+| --------------------- | ----------------------- |
+| CEP                   | `99999-999`             |
+| CPF                   | `999.999.999-99`        |
+| CNPJ (modelo alfanumérico, vigente a partir de 2026) | `**.***.***/****-99` — os 12 primeiros caracteres aceitam letra ou dígito; os 2 dígitos verificadores finais são sempre numéricos |
+| Data                  | `99/99/9999`             |
+| Número do cartão      | `9999 9999 9999 9999` (agrupamento genérico 4-4-4-4; bandeiras com outro tamanho, como Amex, não são cobertas) |
+| Validade do cartão    | `99/99`                   |
+
+<Canvas of={InputStories.MaskExamples} />
+
+### Valor emitido
+
+O `mask` afeta apenas a exibição/digitação: o `value`, o `FormData` do form e os eventos
+`input`/`change` sempre carregam a string já formatada (com pontuação), do mesmo jeito que um
+`<input>` nativo exporia `.value`. Se a aplicação precisar apenas dos dígitos (ou de letras e
+dígitos, no caso do CNPJ), remova a pontuação no consumidor, por exemplo
+`value.replace(/[^0-9a-zA-Z]/g, '')`.
+
+Digitar um caractere que não corresponde ao tipo esperado naquela posição (por exemplo, uma
+letra em um campo `9999-999`) é ignorado silenciosamente. Apagar com backspace sobre um
+caractere literal (como o `-` do CEP) também remove o dígito/letra anterior, para que o
+backspace nunca pareça "travado" na pontuação.
+
 ## Error
 
 <Canvas of={InputStories.Error} />
