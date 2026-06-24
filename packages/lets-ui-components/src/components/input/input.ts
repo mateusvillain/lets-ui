@@ -66,6 +66,8 @@ export class LuiInput extends LitElement {
   @property() min = '';
   @property() max = '';
   @property() step = '';
+  @property() pattern = '';
+  @property() inputmode = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
   @state() private _passwordVisible = false;
@@ -165,6 +167,12 @@ export class LuiInput extends LitElement {
         this.errorText,
         this._inputEl
       );
+    } else if (this.pattern && this._inputEl?.validity.patternMismatch) {
+      this._internals.setValidity(
+        { patternMismatch: true },
+        this.errorText,
+        this._inputEl
+      );
     } else {
       this._internals.setValidity({});
     }
@@ -225,6 +233,8 @@ export class LuiInput extends LitElement {
           placeholder="${this.placeholder}"
           .value="${this.value}"
           maxlength="${maxLen !== null ? maxLen : ''}"
+          pattern="${ifDefined(this.pattern || undefined)}"
+          inputmode="${ifDefined(this.inputmode || undefined)}"
           ?disabled="${this.disabled}"
           ?required="${this.required}"
           ?aria-disabled="${this.disabled}"
@@ -282,6 +292,7 @@ export class LuiInput extends LitElement {
           step="${this._stepValue}"
           min="${minVal !== null ? minVal : ''}"
           max="${maxVal !== null ? maxVal : ''}"
+          inputmode="${ifDefined(this.inputmode || undefined)}"
           ?disabled="${this.disabled}"
           ?required="${this.required}"
           ?aria-disabled="${this.disabled}"

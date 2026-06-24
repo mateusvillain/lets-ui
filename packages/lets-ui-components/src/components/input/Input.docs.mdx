@@ -43,13 +43,41 @@ consistente com elementos nativos. A mensagem reportada é controlada pelo atrib
 
 <Canvas of={InputStories.FormIntegration} />
 
+### Pattern
+
+O atributo `pattern` aceita uma expressão regular para validar o valor final do campo,
+via Constraint Validation API. Quando o valor não casa com o padrão, o campo reporta
+`patternMismatch` através de `ElementInternals.setValidity()`, exibindo a mensagem de
+`error-text`. Útil para indicar formato esperado de forma declarativa, como CEP ou
+CPF/CNPJ sem máscara.
+
+<Canvas of={InputStories.Pattern} />
+
+### Input Mode
+
+O atributo `inputmode` é refletido no `<input>` nativo e otimiza o teclado virtual
+exibido em dispositivos touch para o tipo de dado esperado, sem alterar o tipo nativo
+do campo (`type`). Aceita os valores padrão: `text`, `numeric`, `decimal`, `tel`,
+`email`, `url`, `search` e `none`.
+
+<Canvas of={InputStories.InputMode} />
+
+### Pattern + Input Mode
+
+`pattern` e `inputmode` podem ser combinados — o teclado é otimizado para entrada de
+dados enquanto a regex valida o valor final, útil para campos como CPF/CNPJ sem máscara.
+
+<Canvas of={InputStories.PatternAndInputMode} />
+
 ## Atributos de formulário
 
-| Atributo   | Tipo      | Padrão | Descrição                                                                    |
-| ---------- | --------- | ------ | ---------------------------------------------------------------------------- |
-| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`   |
-| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o input fora do elemento form         |
-| `required` | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals`|
+| Atributo    | Tipo      | Padrão | Descrição                                                                                  |
+| ----------- | --------- | ------ | ------------------------------------------------------------------------------------------- |
+| `name`      | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`                 |
+| `form`      | `string`  | `''`   | ID do `<form>` associado; permite usar o input fora do elemento form                       |
+| `required`  | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals`              |
+| `pattern`   | `string`  | `''`   | Regex para validar o valor final; reporta `patternMismatch` via `ElementInternals`          |
+| `inputmode` | `string`  | `''`   | Dica de teclado virtual em dispositivos touch (`text`, `numeric`, `decimal`, `tel`, `email`, `url`, `search`, `none`) |
 
 ## Classe CSS (sem Web Component)
 
