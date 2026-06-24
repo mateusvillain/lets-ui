@@ -62,7 +62,6 @@ export class LuiInput extends LitElement {
   @property() maxlength = '';
   @property() prefix = '';
   @property() suffix = '';
-  @property() mask = '';
   @property({ attribute: 'force-state' }) forceState = '';
   @property() min = '';
   @property() max = '';
@@ -75,7 +74,6 @@ export class LuiInput extends LitElement {
   @query('.input-field__input') private _inputEl!: HTMLInputElement;
 
   private _baseId: string;
-  private _previousMasked = '';
 
   constructor() {
     super();
@@ -146,86 +144,6 @@ export class LuiInput extends LitElement {
     return next;
   }
 
-  private _applyMask(raw: string): string {
-    const mask = this.mask;
-    if (!mask) return raw;
-    let result = '';
-    let valueIndex = 0;
-    for (let i = 0; i < mask.length; i++) {
-      const maskChar = mask[i];
-      if (maskChar === '9' || maskChar === '*') {
-        let found = false;
-        while (valueIndex < raw.length) {
-          const ch = raw[valueIndex];
-          valueIndex++;
-          if (maskChar === '9' && /[0-9]/.test(ch)) {
-            result += ch;
-            found = true;
-            break;
-          }
-          if (maskChar === '*' && /[0-9a-zA-Z]/.test(ch)) {
-            result += ch.toUpperCase();
-            found = true;
-            break;
-          }
-        }
-        if (!found) break;
-      } else {
-        result += maskChar;
-        if (raw[valueIndex] === maskChar) valueIndex++;
-      }
-    }
-    return result;
-  }
-
-  // Backspacing a mask literal (e.g. the "-" in a CEP) removes no real character on its
-  // own, so this also peels the preceding digit/letter — otherwise backspace would no-op.
-  private _applyMaskToInput() {
-    const native = this._inputEl;
-    const caret = native.selectionStart ?? native.value.length;
-    const browserValue = native.value;
-
-    let contentBeforeCaret = browserValue
-      .slice(0, caret)
-      .replace(/[^0-9a-zA-Z]/g, '').length;
-    let raw = browserValue;
-
-    const isSingleCharRemoval =
-      browserValue.length === this._previousMasked.length - 1 &&
-      browserValue ===
-        this._previousMasked.slice(0, caret) +
-          this._previousMasked.slice(caret + 1);
-
-    if (isSingleCharRemoval) {
-      const deletedChar = this._previousMasked[caret];
-      if (
-        deletedChar &&
-        !/[0-9a-zA-Z]/.test(deletedChar) &&
-        contentBeforeCaret > 0
-      ) {
-        const contentChars = browserValue
-          .split('')
-          .filter((c) => /[0-9a-zA-Z]/.test(c));
-        contentChars.splice(contentBeforeCaret - 1, 1);
-        raw = contentChars.join('');
-        contentBeforeCaret -= 1;
-      }
-    }
-
-    const masked = this._applyMask(raw);
-    native.value = masked;
-    this._previousMasked = masked;
-
-    let pos = 0;
-    let count = 0;
-    while (pos < masked.length && count < contentBeforeCaret) {
-      if (/[0-9a-zA-Z]/.test(masked[pos])) count++;
-      pos++;
-    }
-    while (pos < masked.length && !/[0-9a-zA-Z]/.test(masked[pos])) pos++;
-    native.setSelectionRange(pos, pos);
-  }
-
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
   }
@@ -233,7 +151,6 @@ export class LuiInput extends LitElement {
   formResetCallback() {
     this.value = '';
     this._charCount = 0;
-    this._previousMasked = '';
     this.error = false;
     if (this._inputEl) this._inputEl.value = '';
     this._syncFormValue();
@@ -256,8 +173,6 @@ export class LuiInput extends LitElement {
   private _handleInput() {
     if (this._inputType === 'number') {
       this._inputEl.value = String(this._clampNumber(this._inputEl.value));
-    } else if (this.mask) {
-      this._applyMaskToInput();
     }
     this._charCount = this._inputEl.value.length;
     this.error = false;

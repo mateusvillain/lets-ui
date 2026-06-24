@@ -73,9 +73,6 @@ export default {
     step: {
       control: 'number',
     },
-    mask: {
-      control: 'text',
-    },
   },
 };
 
@@ -100,7 +97,6 @@ const Template = ({
   min,
   max,
   step,
-  mask,
 }) => {
   const attrs = [
     `type="${type ?? 'text'}"`,
@@ -125,7 +121,6 @@ const Template = ({
     Number.isFinite(Number(min)) ? `min="${Number(min)}"` : '',
     Number.isFinite(Number(max)) ? `max="${Number(max)}"` : '',
     Number.isFinite(Number(step)) ? `step="${Number(step)}"` : '',
-    mask ? `mask="${mask}"` : '',
   ]
     .filter(Boolean)
     .join('\n  ');
@@ -155,7 +150,6 @@ Input.args = {
   min: undefined,
   max: undefined,
   step: undefined,
-  mask: '',
 };
 
 export const Error = () => `
@@ -207,49 +201,6 @@ export const NumberInput = () => `
     ></lui-input>
   </div>
 `;
-
-export const Mask = () => `
-  <div style="width: 244px;">
-    <lui-input
-      label="CPF"
-      mask="999.999.999-99"
-      placeholder="000.000.000-00"
-      size="lg"
-    ></lui-input>
-  </div>
-`;
-Mask.parameters = {
-  docs: {
-    description: {
-      story:
-        'O atributo `mask` formata o valor enquanto o usuário digita. Use `9` para um dígito e `*` para letra ou dígito.',
-    },
-  },
-};
-
-export const MaskExamples = () => {
-  const container = document.createElement('div');
-  container.style.cssText =
-    'display: flex; flex-direction: column; gap: 16px; width: 280px;';
-  container.innerHTML = `
-    <lui-input label="CEP" mask="99999-999" placeholder="00000-000" size="lg"></lui-input>
-    <lui-input label="CPF" mask="999.999.999-99" placeholder="000.000.000-00" size="lg"></lui-input>
-    <lui-input label="CNPJ" mask="**.***.***/****-99" placeholder="00.000.000/0001-00" size="lg"></lui-input>
-    <lui-input label="Data" mask="99/99/9999" placeholder="DD/MM/AAAA" size="lg"></lui-input>
-    <lui-input label="Número do cartão" mask="9999 9999 9999 9999" placeholder="0000 0000 0000 0000" size="lg"></lui-input>
-    <lui-input label="Validade do cartão" mask="99/99" placeholder="MM/AA" size="lg"></lui-input>
-  `;
-  return container;
-};
-MaskExamples.storyName = 'Mask — exemplos prontos';
-MaskExamples.parameters = {
-  docs: {
-    description: {
-      story:
-        'Os seis padrões cobertos hoje: CEP, CPF, CNPJ (modelo alfanumérico, com letras automaticamente convertidas para maiúsculas), Data, Número do cartão e Validade do cartão.',
-    },
-  },
-};
 
 export const Required = () => `
   <div style="width: 244px;">
