@@ -1,0 +1,191 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Mask (lib externa) — Let's UI Playground</title>
+    <script type="module" src="https://unpkg.com/imask@7"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--lui-brand-typography-font-family-body);
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+        margin: 0;
+        padding: 40px 24px 80px;
+      }
+
+      .page-header {
+        margin-bottom: 48px;
+        max-width: 560px;
+      }
+
+      .page-header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+
+      .page-header p {
+        font-size: 0.875rem;
+        color: var(--lui-color-neutral-text-subtle);
+        margin: 0 0 8px;
+      }
+
+      .card {
+        background: var(--lui-color-neutral-background-default);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 420px;
+      }
+
+      .form-body {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+      }
+
+      .output {
+        background: var(--lui-color-neutral-background-subtle);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.8125rem;
+        font-family: monospace;
+        min-height: 48px;
+        white-space: pre-wrap;
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      .output.success {
+        border-color: var(--lui-color-success-border-default);
+        color: var(--lui-color-success-text-body);
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid var(--lui-color-neutral-border-subtle);
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>Input Mask — integração com lib externa</h1>
+      <p>
+        Este teste valida a integração com o
+        <a href="https://imask.js.org/" target="_blank" rel="noreferrer"
+          >IMask.js</a
+        > anexado diretamente ao <code>&lt;input&gt;</code> nativo dentro do shadow
+        DOM, combinada com os atributos nativos <code>pattern</code> e
+        <code>inputmode</code> (PR #71) para validação e teclado mobile.
+      </p>
+    </div>
+
+    <div class="card">
+      <form class="form-body" id="form-mask">
+        <lui-input
+          id="cpf"
+          name="cpf"
+          label="CPF"
+          placeholder="000.000.000-00"
+          pattern="\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"
+          inputmode="numeric"
+          size="lg"
+          required
+          error-text="CPF inválido."></lui-input>
+        <lui-input
+          id="cnpj"
+          name="cnpj"
+          label="CNPJ"
+          placeholder="00.000.000/0000-00"
+          pattern="\\d{2}\\.\\d{3}\\.\\d{3}\\/\\d{4}-\\d{2}"
+          inputmode="numeric"
+          size="lg"
+          optional></lui-input>
+        <lui-input
+          id="cep"
+          name="cep"
+          label="CEP"
+          placeholder="00000-000"
+          pattern="\\d{5}-\\d{3}"
+          inputmode="numeric"
+          size="lg"
+          optional></lui-input>
+        <div class="form-row">
+          <lui-button type="reset" variant="secondary" size="md"
+            >Limpar</lui-button
+          >
+          <lui-button type="submit" variant="primary" size="md"
+            >Enviar</lui-button
+          >
+        </div>
+      </form>
+      <hr class="divider" />
+      <div class="output" id="output-mask">Aguardando submissão...</div>
+    </div>
+
+    <script>
+      import '@lets-ui/components';
+    </script>
+
+    <script type="module">
+      const MASKS = {
+        cpf: '000.000.000-00',
+        cnpj: '00.000.000/0000-00',
+        cep: '00000-000',
+      };
+
+      async function attachMask(id, mask) {
+        const luiInput = document.getElementById(id);
+        await customElements.whenDefined('lui-input');
+        await luiInput.updateComplete;
+        const nativeInput = luiInput.shadowRoot.querySelector(
+          '.input-field__input'
+        );
+        // IMask formats the native input directly and dispatches a real
+        // `input` event, which lui-input already listens to internally —
+        // no changes needed on the component side.
+        IMask(nativeInput, { mask });
+      }
+
+      Object.entries(MASKS).forEach(([id, mask]) => attachMask(id, mask));
+
+      const form = document.getElementById('form-mask');
+      const output = document.getElementById('output-mask');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = [...new FormData(e.target).entries()];
+        output.className = 'output success';
+        output.textContent =
+          '✓ Submetido:\n' + data.map(([k, v]) => `${k}: "${v}"`).join('\n');
+      });
+
+      form.addEventListener('reset', () => {
+        output.className = 'output';
+        output.textContent = 'Aguardando submissão...';
+      });
+    </script>
+  </body>
+</html>
