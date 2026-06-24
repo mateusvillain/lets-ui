@@ -73,6 +73,23 @@ export default {
     step: {
       control: 'number',
     },
+    pattern: {
+      control: 'text',
+    },
+    inputmode: {
+      control: { type: 'select' },
+      options: [
+        '',
+        'text',
+        'numeric',
+        'decimal',
+        'tel',
+        'email',
+        'url',
+        'search',
+        'none',
+      ],
+    },
   },
 };
 
@@ -97,6 +114,8 @@ const Template = ({
   min,
   max,
   step,
+  pattern,
+  inputmode,
 }) => {
   const attrs = [
     `type="${type ?? 'text'}"`,
@@ -121,6 +140,8 @@ const Template = ({
     Number.isFinite(Number(min)) ? `min="${Number(min)}"` : '',
     Number.isFinite(Number(max)) ? `max="${Number(max)}"` : '',
     Number.isFinite(Number(step)) ? `step="${Number(step)}"` : '',
+    pattern ? `pattern="${pattern}"` : '',
+    inputmode ? `inputmode="${inputmode}"` : '',
   ]
     .filter(Boolean)
     .join('\n  ');
@@ -150,6 +171,8 @@ Input.args = {
   min: undefined,
   max: undefined,
   step: undefined,
+  pattern: '',
+  inputmode: '',
 };
 
 export const Error = () => `
@@ -220,6 +243,80 @@ Required.parameters = {
     description: {
       story:
         'Com `required`, o campo bloqueia a submissão do form quando vazio e reporta o erro via `ElementInternals.setValidity()`. A mensagem de erro exibida é controlada pelo atributo `error-text`.',
+    },
+  },
+};
+
+export const Pattern = () => `
+  <div style="width: 244px;">
+    <lui-input
+      name="cep"
+      label="CEP"
+      placeholder="00000-000"
+      pattern="[0-9]{5}-?[0-9]{3}"
+      size="lg"
+      hint="Formato: 00000-000"
+      error-text="CEP inválido. Use o formato 00000-000."
+    ></lui-input>
+  </div>
+`;
+Pattern.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com `pattern`, o campo é validado por regex (via Constraint Validation API). Quando o valor não casa com o padrão, o campo reporta `patternMismatch` através de `ElementInternals.setValidity()`, exibindo a mensagem de `error-text`.',
+    },
+  },
+};
+
+export const InputMode = () => `
+  <div style="width: 244px; display: flex; flex-direction: column; gap: 16px;">
+    <lui-input
+      name="phone"
+      label="Telefone"
+      placeholder="(00) 00000-0000"
+      inputmode="tel"
+      size="lg"
+    ></lui-input>
+    <lui-input
+      name="email"
+      label="E-mail"
+      placeholder="seu@email.com"
+      inputmode="email"
+      size="lg"
+    ></lui-input>
+  </div>
+`;
+InputMode.storyName = 'Input Mode';
+InputMode.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com `inputmode`, o teclado virtual exibido em dispositivos touch é otimizado para o tipo de dado esperado (ex.: `tel`, `email`, `numeric`), sem alterar o tipo nativo do campo.',
+    },
+  },
+};
+
+export const PatternAndInputMode = () => `
+  <div style="width: 244px;">
+    <lui-input
+      name="cpf"
+      label="CPF"
+      placeholder="000.000.000-00"
+      pattern="[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}-?[0-9]{2}"
+      inputmode="numeric"
+      size="lg"
+      hint="Formato: 000.000.000-00"
+      error-text="CPF inválido."
+    ></lui-input>
+  </div>
+`;
+PatternAndInputMode.storyName = 'Pattern + Input Mode';
+PatternAndInputMode.parameters = {
+  docs: {
+    description: {
+      story:
+        'Combinando `pattern` e `inputmode`: o teclado numérico é exibido em dispositivos touch e o valor final é validado pela regex, útil para campos como CPF/CNPJ sem máscara.',
     },
   },
 };
