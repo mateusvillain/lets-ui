@@ -121,6 +121,8 @@ export class LuiRadioGroup extends LitElement {
         class="radio-group radio-group--${this._size}${this.error
           ? ' radio-group--error'
           : ''}"
+        aria-invalid="${this.error ? 'true' : 'false'}"
+        aria-required="${this.required ? 'true' : 'false'}"
       >
         ${this.label
           ? html`<legend class="radio-group__legend">${this.label}</legend>`
