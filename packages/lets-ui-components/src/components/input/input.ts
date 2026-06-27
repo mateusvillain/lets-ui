@@ -238,6 +238,8 @@ export class LuiInput extends LitElement {
           ?disabled="${this.disabled}"
           ?required="${this.required}"
           ?aria-disabled="${this.disabled}"
+          aria-invalid="${this.error ? 'true' : 'false'}"
+          aria-required="${this.required ? 'true' : 'false'}"
           @input="${this._handleInput}"
           @change="${this._handleChange}"
         />
@@ -296,6 +298,8 @@ export class LuiInput extends LitElement {
           ?disabled="${this.disabled}"
           ?required="${this.required}"
           ?aria-disabled="${this.disabled}"
+          aria-invalid="${this.error ? 'true' : 'false'}"
+          aria-required="${this.required ? 'true' : 'false'}"
           @input="${this._handleInput}"
           @change="${this._handleChange}"
         />
