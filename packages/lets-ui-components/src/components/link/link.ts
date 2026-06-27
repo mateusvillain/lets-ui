@@ -59,7 +59,12 @@ export class LuiLink extends LitElement {
       tabindex="${ifDefined(this.disabled ? '0' : undefined)}"
       aria-disabled="${ifDefined(this.disabled ? 'true' : undefined)}"
       aria-label="${ifDefined(this.ariaLabel || undefined)}"
-      ><slot>${this.label}</slot>${this.external ? externalIcon : ''}</a
+      ><slot>${this.label}</slot>${this.external
+        ? html`${externalIcon}<span
+              style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"
+              >(abre em nova aba)</span
+            >`
+        : ''}</a
     >`;
   }
 }

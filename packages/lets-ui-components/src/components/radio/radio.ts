@@ -12,6 +12,7 @@ export class LuiRadio extends LitElement {
   @property() value = '';
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean }) disabled = false;
+  @property({ type: Boolean }) error = false;
   @property() size = 'lg';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
@@ -85,6 +86,7 @@ export class LuiRadio extends LitElement {
           type="radio"
           value="${this.value}"
           aria-label="${ariaLabel}"
+          aria-invalid="${this.error ? 'true' : 'false'}"
           .checked="${this.checked}"
           ?disabled="${this.disabled}"
           ?aria-disabled="${this.disabled}"
