@@ -277,6 +277,10 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
 
     <script>
       import '@lets-ui/components';
+
+      document.addEventListener('lui-dismiss', (e) => {
+        (e.target as HTMLElement).remove();
+      });
     </script>
   </body>
 
