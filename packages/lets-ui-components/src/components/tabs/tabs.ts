@@ -1,4 +1,5 @@
 import { LitElement, html, unsafeCSS } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { property, state } from 'lit/decorators.js';
 import styles from './tabs.scss?inline';
 
@@ -188,6 +189,7 @@ export class LuiTabs extends LitElement {
               class="tabs__panel"
               role="tabpanel"
               aria-labelledby="${this._baseId}-tab-${i}"
+              tabindex="${ifDefined(tab.active ? '0' : undefined)}"
               ?hidden="${!tab.active}"
               .innerHTML="${tab.content}"
             ></div>

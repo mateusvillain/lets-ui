@@ -53,6 +53,10 @@ export default {
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } },
     },
+    externalLabel: {
+      control: 'text',
+      table: { defaultValue: { summary: '(abre em nova aba)' } },
+    },
     disabled: {
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } },
@@ -77,6 +81,7 @@ const Template = ({
   hreflang,
   referrerpolicy,
   external,
+  externalLabel,
   disabled,
   visited,
   ariaLabel,
@@ -90,6 +95,10 @@ const Template = ({
     hreflang && `hreflang="${hreflang}"`,
     referrerpolicy && `referrerpolicy="${referrerpolicy}"`,
     external && 'external',
+    external &&
+      externalLabel &&
+      externalLabel !== '(abre em nova aba)' &&
+      `external-label="${externalLabel}"`,
     disabled && 'disabled',
     visited && 'visited',
     ariaLabel && `aria-label="${ariaLabel}"`,
@@ -108,6 +117,7 @@ Default.args = {
   target: '',
   size: '',
   external: false,
+  externalLabel: '(abre em nova aba)',
   visited: false,
   rel: '',
   download: '',
@@ -139,6 +149,24 @@ export const ExternalLink = () => `
   </lui-link>
 `;
 ExternalLink.storyName = 'Link externo';
+
+export const ExternalLabelI18n = () => `
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <lui-link href="https://example.com" external>
+      pt-BR (padrão)
+    </lui-link>
+    <lui-link href="https://example.com" external external-label="(opens in a new tab)">
+      English
+    </lui-link>
+    <lui-link href="https://example.com" external external-label="(abre en una nueva pestaña)">
+      Español
+    </lui-link>
+    <lui-link href="https://example.com" external external-label="(s'ouvre dans un nouvel onglet)">
+      Français
+    </lui-link>
+  </div>
+`;
+ExternalLabelI18n.storyName = 'Link externo — i18n (external-label)';
 
 export const ExternalInParagraph = () => `
   <lui-body variant="lg">

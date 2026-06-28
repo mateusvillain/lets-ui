@@ -53,6 +53,28 @@ export class LuiDrawer extends LitElement {
     if (changedProps.has('open')) {
       this._syncOpenState(changedProps.get('open') !== undefined);
     }
+    if (changedProps.has('open') || changedProps.has('_hasTriggerSlot')) {
+      this._updateSlottedTrigger();
+    }
+  }
+
+  private _updateSlottedTrigger() {
+    if (!this._hasTriggerSlot) return;
+    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="trigger"]'
+    );
+    const assigned = slot?.assignedElements({ flatten: true }) ?? [];
+    for (const el of assigned) {
+      const focusable = (
+        el.matches('button, [href], input, [tabindex]')
+          ? el
+          : el.querySelector('button, [href], input, [tabindex]')
+      ) as HTMLElement | null;
+      const target = (focusable ?? el) as HTMLElement;
+      target.setAttribute('aria-haspopup', 'dialog');
+      target.setAttribute('aria-controls', `${this._baseId}-panel`);
+      target.setAttribute('aria-expanded', this.open ? 'true' : 'false');
+    }
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
@@ -200,6 +222,7 @@ export class LuiDrawer extends LitElement {
         role="dialog"
         aria-modal="true"
         aria-labelledby="${this._baseId}-title"
+        aria-describedby="${this._baseId}-body"
         aria-hidden="true"
         inert
       >
@@ -226,7 +249,7 @@ export class LuiDrawer extends LitElement {
           </button>
         </div>
 
-        <div class="drawer__body">
+        <div id="${this._baseId}-body" class="drawer__body">
           <slot></slot>
         </div>
 

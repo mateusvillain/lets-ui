@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './radio-group.scss?inline';
 import { LuiRadio } from '../radio/radio.js';
 
@@ -8,6 +9,7 @@ export class LuiRadioGroup extends LitElement {
   static formAssociated = true;
 
   private _internals: ElementInternals;
+  private _baseId: string;
   private _value = '';
 
   @property() name = '';
@@ -21,6 +23,7 @@ export class LuiRadioGroup extends LitElement {
 
   constructor() {
     super();
+    this._baseId = `lui-radio-group-${Math.random().toString(36).slice(2, 9)}`;
     this._internals = this.attachInternals();
   }
 
@@ -48,7 +51,11 @@ export class LuiRadioGroup extends LitElement {
   }
 
   protected updated(changed: PropertyValues) {
-    if (changed.has('disabled') || changed.has('size')) {
+    if (
+      changed.has('disabled') ||
+      changed.has('size') ||
+      changed.has('error')
+    ) {
       this._applyToRadios();
     }
   }
@@ -62,6 +69,7 @@ export class LuiRadioGroup extends LitElement {
     this.error = false;
     this._getRadios().forEach((r) => {
       r.checked = false;
+      r.error = false;
     });
     this._internals.setFormValue(null);
     this._internals.setValidity({});
@@ -106,6 +114,7 @@ export class LuiRadioGroup extends LitElement {
     this._getRadios().forEach((r) => {
       r.size = this._size;
       if (this.disabled) r.disabled = true;
+      r.error = this.error;
     });
   }
 
@@ -116,6 +125,13 @@ export class LuiRadioGroup extends LitElement {
   }
 
   render() {
+    const describedBy =
+      this.error && this.errorText
+        ? `${this._baseId}-error`
+        : this.hint
+          ? `${this._baseId}-hint`
+          : undefined;
+
     return html`
       <fieldset
         class="radio-group radio-group--${this._size}${this.error
@@ -123,16 +139,23 @@ export class LuiRadioGroup extends LitElement {
           : ''}"
         aria-invalid="${this.error ? 'true' : 'false'}"
         aria-required="${this.required ? 'true' : 'false'}"
+        aria-describedby="${ifDefined(describedBy)}"
       >
         ${this.label
           ? html`<legend class="radio-group__legend">${this.label}</legend>`
           : ''}
-        ${this.hint ? html`<p class="radio-group__hint">${this.hint}</p>` : ''}
+        ${this.hint
+          ? html`<p id="${this._baseId}-hint" class="radio-group__hint">
+              ${this.hint}
+            </p>`
+          : ''}
         <div class="radio-group__options">
           <slot @slotchange=${this._handleSlotChange}></slot>
         </div>
         ${this.error && this.errorText
-          ? html`<p class="radio-group__message">${this.errorText}</p>`
+          ? html`<p id="${this._baseId}-error" class="radio-group__message">
+              ${this.errorText}
+            </p>`
           : ''}
       </fieldset>
     `;

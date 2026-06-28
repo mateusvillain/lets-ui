@@ -53,6 +53,28 @@ export class LuiModal extends LitElement {
         requestAnimationFrame(() => this._dialog.focus());
       }
     }
+    if (changedProps.has('open') || changedProps.has('_hasTriggerSlot')) {
+      this._updateSlottedTrigger();
+    }
+  }
+
+  private _updateSlottedTrigger() {
+    if (!this._hasTriggerSlot) return;
+    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="trigger"]'
+    );
+    const assigned = slot?.assignedElements({ flatten: true }) ?? [];
+    for (const el of assigned) {
+      const focusable = (
+        el.matches('button, [href], input, [tabindex]')
+          ? el
+          : el.querySelector('button, [href], input, [tabindex]')
+      ) as HTMLElement | null;
+      const target = (focusable ?? el) as HTMLElement;
+      target.setAttribute('aria-haspopup', 'dialog');
+      target.setAttribute('aria-controls', `${this._baseId}-dialog`);
+      target.setAttribute('aria-expanded', this.open ? 'true' : 'false');
+    }
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {

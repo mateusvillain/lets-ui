@@ -98,12 +98,18 @@ export class LuiSwitch extends LitElement {
             ?required="${this.required}"
             ?aria-disabled="${this.disabled}"
             aria-invalid="${this.error ? 'true' : 'false'}"
+            aria-required="${this.required ? 'true' : 'false'}"
+            aria-describedby="${ifDefined(
+              this.error ? `${this._baseId}-error` : undefined
+            )}"
             @change="${this._handleChange}"
           />
           <slot>${this.label}</slot>
         </label>
         ${this.error && this.errorText
-          ? html`<p class="switch-field__message">${this.errorText}</p>`
+          ? html`<p id="${this._baseId}-error" class="switch-field__message">
+              ${this.errorText}
+            </p>`
           : ''}
       </div>
     `;

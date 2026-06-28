@@ -146,6 +146,10 @@ export class LuiDropdownMenu extends LitElement {
         );
         first?.focus();
       });
+    } else {
+      panel
+        .querySelectorAll<HTMLElement>('.menu-item[aria-expanded="true"]')
+        .forEach((btn) => btn.setAttribute('aria-expanded', 'false'));
     }
   }
 
@@ -224,7 +228,13 @@ export class LuiDropdownMenu extends LitElement {
           const firstItem = submenuPanel?.querySelector<HTMLElement>(
             '.menu-item:not([disabled]):not([aria-disabled="true"])'
           );
-          firstItem?.focus();
+          if (firstItem) {
+            li.querySelector<HTMLElement>(':scope > .menu-item')?.setAttribute(
+              'aria-expanded',
+              'true'
+            );
+            firstItem.focus();
+          }
         }
         break;
       }
@@ -234,7 +244,11 @@ export class LuiDropdownMenu extends LitElement {
         ) as HTMLElement | null;
         if (parentLi) {
           e.preventDefault();
-          parentLi.querySelector<HTMLElement>(':scope > .menu-item')?.focus();
+          const parentButton = parentLi.querySelector<HTMLElement>(
+            ':scope > .menu-item'
+          );
+          parentButton?.setAttribute('aria-expanded', 'false');
+          parentButton?.focus();
         }
         break;
       }
@@ -250,6 +264,8 @@ export class LuiDropdownMenu extends LitElement {
         <span
           class="dropdown-menu__trigger"
           data-dropdown-trigger
+          aria-expanded="${this.open ? 'true' : 'false'}"
+          aria-controls="${this._baseId}-panel"
           @click="${this._handleTriggerClick}"
         >
           <slot
