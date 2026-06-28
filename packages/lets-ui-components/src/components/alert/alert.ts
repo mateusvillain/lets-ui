@@ -114,7 +114,7 @@ export class LuiAlert extends LitElement {
           </div>
           ${this.dismissible
             ? html`<lui-close-button
-                size="sm"
+                size="lg"
                 label="${this.closeLabel}"
                 @click="${this._handleDismiss}"
               ></lui-close-button>`
