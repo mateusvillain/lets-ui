@@ -1,0 +1,55 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+.close-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  border-radius: radius(md);
+  cursor: pointer;
+  color: icon(neutral);
+  transition: background-color 0.2s ease-in-out;
+
+  svg {
+    display: block;
+    pointer-events: none;
+  }
+
+  &--sm {
+    width: fixed(24);
+    height: fixed(24);
+    padding: fluid(4);
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &--md {
+    width: fixed(32);
+    height: fixed(32);
+    padding: fixed(8);
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &--lg {
+    width: fixed(40);
+    height: fixed(40);
+    padding: fixed(8);
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  @include states(neutral, primary, primary);
+}
