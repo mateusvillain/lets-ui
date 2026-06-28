@@ -1,0 +1,82 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CloseButtonStories from './CloseButton.stories';
+
+<Meta of={CloseButtonStories} />
+
+# Close Button
+
+Botão compacto e autossuficiente para dispensar ou fechar elementos de UI como modais, drawers, alerts e tags. Ao contrário do Icon Button, o Close Button já inclui o ícone X embutido e um `aria-label` padrão acessível, eliminando a necessidade de configuração repetitiva em cada uso.
+
+<Canvas of={CloseButtonStories.CloseButton} />
+<Controls of={CloseButtonStories.CloseButton} />
+
+## Tamanhos
+
+Três tamanhos disponíveis: `sm` (24px) para espaços compactos como tags e alerts, `md` (32px, padrão) para uso geral, e `lg` (40px) para cabeçalhos de modal e drawer.
+
+<Canvas of={CloseButtonStories.AllSizes} />
+
+## Disabled
+
+Use o estado desabilitado quando a ação de fechar não está disponível no contexto atual.
+
+<Canvas of={CloseButtonStories.Disabled} />
+
+## Dentro do Alert
+
+O atributo `dismissible` no `<lui-alert>` adiciona automaticamente um Close Button. Ao clicar, o componente emite o evento `lui-dismiss` — cabe ao consumidor remover ou ocultar o alert.
+
+<Canvas of={CloseButtonStories.InsideAlert} />
+
+## Dentro do Modal
+
+O cabeçalho do Modal usa o Close Button no tamanho `lg` para fechar o diálogo.
+
+<Canvas of={CloseButtonStories.InsideModal} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={CloseButtonStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-close-button size="md" label="Close"></lui-close-button>
+```
+
+Personalizando o label:
+
+```html
+<lui-close-button size="lg" label="Fechar modal"></lui-close-button>
+```
+
+### Alert dismissível
+
+```html
+<lui-alert
+  variant="info"
+  title="Título"
+  content="Conteúdo"
+  dismissible
+></lui-alert>
+```
+
+Escutando o evento de dismiss:
+
+```js
+document.querySelector('lui-alert').addEventListener('lui-dismiss', () => {
+  // remover ou ocultar o alert
+});
+```
+
+### Classe CSS
+
+```html
+<button class="close-button close-button--lg" aria-label="Close">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.4697 5.46973..."/>
+  </svg>
+</button>
+```

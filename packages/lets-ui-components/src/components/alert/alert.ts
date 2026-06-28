@@ -71,6 +71,8 @@ export class LuiAlert extends LitElement {
   @property() variant = 'success';
   @property() title = '';
   @property() content = '';
+  @property({ type: Boolean }) dismissible = false;
+  @property({ attribute: 'close-label' }) closeLabel = 'Close';
 
   @state() private _actionsSlotted = false;
 
@@ -84,6 +86,12 @@ export class LuiAlert extends LitElement {
   private _handleActionsSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     this._actionsSlotted = slot.assignedNodes({ flatten: true }).length > 0;
+  }
+
+  private _handleDismiss() {
+    this.dispatchEvent(
+      new CustomEvent('lui-dismiss', { bubbles: true, composed: true })
+    );
   }
 
   render() {
@@ -104,6 +112,13 @@ export class LuiAlert extends LitElement {
             <p id="${this._baseId}-title" class="body--lg">${this.title}</p>
             <p id="${this._baseId}-content" class="body--lg">${this.content}</p>
           </div>
+          ${this.dismissible
+            ? html`<lui-close-button
+                size="sm"
+                label="${this.closeLabel}"
+                @click="${this._handleDismiss}"
+              ></lui-close-button>`
+            : ''}
         </div>
         <div
           class="alert__actions"
