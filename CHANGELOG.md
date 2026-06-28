@@ -5,8 +5,8 @@
 ### Added
 
 - New `lui-close-button` Web Component — dedicated close/dismiss button with `size` (`sm` | `md` | `lg`), `disabled`, and `label` props; also registered in `letsui.min.css` as a CSS-only component.
-- New `dismissible` boolean prop on `lui-alert` — renders a `lui-close-button` inside the alert and emits a `lui-dismiss` custom event when clicked; `close-label` prop overrides the accessible button label.
 - New `pattern` and `inputmode` props on `lui-input` for native HTML input validation and virtual keyboard hints.
+- New `dismissible` boolean prop on `lui-alert` — renders a `lui-close-button` and emits a `lui-dismiss` custom event when clicked; `close-label` prop customizes the accessible button label.
 
 ### Changed
 
