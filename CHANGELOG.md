@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.6.0
+
+### Added
+
+- New `lui-close-button` Web Component — dedicated close/dismiss button with `size` (`sm` | `md` | `lg`), `disabled`, and `label` props; also registered in `letsui.min.css` as a CSS-only component.
+- New `pattern` and `inputmode` props on `lui-input` for native HTML input validation and virtual keyboard hints.
+- New `dismissible` boolean prop on `lui-alert` — renders a `lui-close-button` and emits a `lui-dismiss` custom event when clicked; `close-label` prop customizes the accessible button label.
+
+### Changed
+
+- `lui-drawer` and `lui-modal` now use `lui-close-button` internally, replacing the previous inline close button markup.
+
+### Fixed
+
+- Add `aria-invalid` and `aria-required` attributes to form controls (`lui-input`, `lui-select`, `lui-textarea`, `lui-checkbox`, `lui-switch`) for better screen reader compatibility.
+- Fix missing ARIA attributes across interactive components (`lui-modal`, `lui-drawer`, `lui-tabs`, `lui-dropdown-menu`, `lui-tooltip`).
+
 ## v1.5.1
 
 ### Fixed
