@@ -20,7 +20,7 @@
     "build": "pnpm -r build",
     "lint": "pnpm run lint:css && pnpm run lint:md",
     "lint:css": "stylelint \"**/*.{css,scss}\"",
-    "lint:md": "markdownlint-cli2 \"**/*.md\" \"!node_modules/**\" \"!storybook-static/**\"",
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" \"!storybook-static/**\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "deploy-storybook": "pnpm run build-storybook && gh-pages -b storybook -d storybook-static",
