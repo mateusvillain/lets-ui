@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.7.0
+
+### Changed
+
+- Spacing props on all layout components (`lui-box`, `lui-columns`, `lui-container`, `lui-flex`, `lui-grid`, `lui-inline`, `lui-sidebar`, `lui-stack`, `lui-switcher`) now accept direct numeric fluid token values (`gap="16"`, `padding="24"`, etc.) that map to `--lui-spacing-fluid-{n}` CSS custom properties. Named aliases (`xs`, `sm`, `md`, `lg`, `xl`, `2xl`) remain supported for backward compatibility.
+- CSS-only SCSS modifier classes for layout components are now generated from the fluid token scale (`--padding-2`, `--padding-4`, … `--padding-80`) replacing the previous named variants (`--padding-xs`, `--padding-sm`, etc.).
+
+### Fixed
+
+- `markdownlint` glob pattern updated to `!**/node_modules/**` — previously only the root `node_modules/` was excluded, causing 26 000+ false errors from dependency READMEs in nested package `node_modules/`.
+
 ## v1.6.0
 
 ### Added
