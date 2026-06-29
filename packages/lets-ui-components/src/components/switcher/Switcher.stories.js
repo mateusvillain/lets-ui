@@ -8,7 +8,23 @@ export default {
     threshold: { control: 'text' },
     gap: {
       control: { type: 'select' },
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
   },
 };
@@ -28,13 +44,13 @@ const Template = ({ threshold, gap }) => `
 `;
 
 export const Default = Template.bind({});
-Default.args = { threshold: '320px', gap: 'md' };
+Default.args = { threshold: '320px', gap: '16' };
 
 export const WideThreshold = Template.bind({});
-WideThreshold.args = { threshold: '500px', gap: 'lg' };
+WideThreshold.args = { threshold: '500px', gap: '24' };
 
 export const CSSClass = () => `
-  <div class="switcher switcher--gap-md">
+  <div class="switcher switcher--gap-16">
     <div>Panel A</div>
     <div>Panel B</div>
     <div>Panel C</div>

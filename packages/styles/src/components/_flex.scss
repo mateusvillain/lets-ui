@@ -1,5 +1,8 @@
 @use '../utilities/functions' as fn;
 
+// Fluid spacing values that have a token. Others fall back to absolute px.
+$-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
+
 .flex {
   display: flex;
   flex-flow: row nowrap;
@@ -30,32 +33,14 @@
     flex-wrap: wrap-reverse;
   }
 
-  &--gap-none {
+  &--gap-0 {
     gap: 0;
   }
 
-  &--gap-xs {
-    gap: fn.fluid(4);
-  }
-
-  &--gap-sm {
-    gap: fn.fluid(8);
-  }
-
-  &--gap-md {
-    gap: fn.fluid(16);
-  }
-
-  &--gap-lg {
-    gap: fn.fluid(24);
-  }
-
-  &--gap-xl {
-    gap: fn.fluid(32);
-  }
-
-  &--gap-2xl {
-    gap: fn.fluid(48);
+  @each $n in $-fluid-tokens {
+    &--gap-#{$n} {
+      gap: fn.fluid($n);
+    }
   }
 
   &--align-start {

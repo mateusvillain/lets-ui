@@ -1,31 +1,19 @@
 @use '../utilities/functions' as fn;
 
+$-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
+
 .box {
   box-sizing: border-box;
   display: block;
 
-  &--padding-xs {
-    padding: fn.fluid(4);
+  &--padding-0 {
+    padding: 0;
   }
 
-  &--padding-sm {
-    padding: fn.fluid(8);
-  }
-
-  &--padding-md {
-    padding: fn.fluid(16);
-  }
-
-  &--padding-lg {
-    padding: fn.fluid(24);
-  }
-
-  &--padding-xl {
-    padding: fn.fluid(32);
-  }
-
-  &--padding-2xl {
-    padding: fn.fluid(48);
+  @each $n in $-fluid-tokens {
+    &--padding-#{$n} {
+      padding: fn.fluid($n);
+    }
   }
 
   &--overflow-hidden {

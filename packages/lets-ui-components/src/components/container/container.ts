@@ -17,7 +17,7 @@ export class LuiContainer extends LitElement {
   static styles = unsafeCSS(styles);
 
   @property() size = 'lg';
-  @property() padding = 'xl';
+  @property() padding = '32';
   @property({ type: Boolean }) center = true;
   @property() as = 'div';
 

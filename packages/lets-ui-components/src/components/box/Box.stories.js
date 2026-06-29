@@ -38,16 +38,67 @@ export default {
   argTypes: {
     padding: {
       control: { type: 'select' },
-      options: ['', 'none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '',
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     paddingX: {
       control: { type: 'select' },
-      options: ['', 'none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '',
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
       name: 'padding-x',
     },
     paddingY: {
       control: { type: 'select' },
-      options: ['', 'none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '',
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
       name: 'padding-y',
     },
     background: {
@@ -113,7 +164,7 @@ const Template = ({
 
 export const Default = Template.bind({});
 Default.args = {
-  padding: 'md',
+  padding: '16',
   paddingX: '',
   paddingY: '',
   background: 'neutral/surface',
@@ -126,7 +177,7 @@ Default.args = {
 
 export const Card = () => `
   <lui-box
-    padding="lg"
+    padding="24"
     background="neutral/surface"
     border-radius="md"
     border-width="1"
@@ -143,7 +194,7 @@ export const BackgroundVariants = () => `
     ${BG_OPTIONS.filter(Boolean)
       .map(
         (alias) => `
-      <lui-box padding="sm" background="${alias}" border-radius="xs">
+      <lui-box padding="8" background="${alias}" border-radius="xs">
         <p style="margin: 0; font-size: 11px; font-family: monospace; opacity: 0.75;">${alias}</p>
       </lui-box>
     `
@@ -159,7 +210,7 @@ export const BorderRadiusVariants = () => `
       .map(
         (r) => `
       <lui-box
-        padding="md"
+        padding="16"
         background="neutral/surface"
         border-radius="${r}"
         border-width="1"
@@ -210,7 +261,7 @@ export const BorderColorVariants = () => `
       .map(
         ({ bg, bc, label }) => `
       <lui-box
-        padding="md"
+        padding="16"
         background="${bg}"
         border-radius="sm"
         border-width="2"
@@ -229,7 +280,7 @@ BorderColorVariants.storyName = 'border-color — semantic aliases';
 export const RawCSSFallback = () => `
   <div style="display: flex; gap: 12px; padding: 16px;">
     <lui-box
-      padding="md"
+      padding="16"
       background="#fef9c3"
       border-radius="12px"
       border-width="2px"
@@ -238,7 +289,7 @@ export const RawCSSFallback = () => `
       <p style="margin: 0; font-size: 12px; font-family: monospace;">raw CSS values</p>
     </lui-box>
     <lui-box
-      padding="md"
+      padding="16"
       background="var(--lui-color-neutral-background-surface)"
       border-radius="var(--lui-border-radius-md)"
       border-width="1px"
@@ -251,7 +302,7 @@ export const RawCSSFallback = () => `
 RawCSSFallback.storyName = 'Raw CSS fallback';
 
 export const CSSClass = () => `
-  <div class="box box--padding-md">
+  <div class="box box--padding-16">
     Conteúdo com padding interno
   </div>
 `;

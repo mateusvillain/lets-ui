@@ -7,7 +7,7 @@ export class LuiSwitcher extends LitElement {
   static styles = unsafeCSS(styles);
 
   @property() threshold = '320px';
-  @property() gap = 'md';
+  @property() gap = '16';
   @property() limit = '';
 
   @state() private _count = 0;

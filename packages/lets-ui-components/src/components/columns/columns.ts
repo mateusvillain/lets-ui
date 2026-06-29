@@ -23,7 +23,7 @@ export class LuiColumns extends LitElement {
   static styles = unsafeCSS(styles);
 
   @property() columns = '2';
-  @property() gap = 'md';
+  @property() gap = '16';
   @property({ attribute: 'gap-x' }) gapX = '';
   @property({ attribute: 'gap-y' }) gapY = '';
   @property() align = 'stretch';

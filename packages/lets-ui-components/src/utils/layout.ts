@@ -1,4 +1,22 @@
-export const SPACE: Record<string, string> = {
+const FLUID_SPACING_TOKENS = new Set([
+  '2',
+  '4',
+  '8',
+  '12',
+  '16',
+  '20',
+  '24',
+  '32',
+  '40',
+  '48',
+  '56',
+  '64',
+  '72',
+  '80',
+]);
+
+// Legacy named aliases kept for backward compatibility.
+const NAMED_SPACE: Record<string, string> = {
   none: '0',
   xs: 'var(--lui-spacing-fluid-4)',
   sm: 'var(--lui-spacing-fluid-8)',
@@ -9,8 +27,14 @@ export const SPACE: Record<string, string> = {
 };
 
 export function resolveSpace(value: string | undefined | null): string | null {
-  if (!value) return null;
-  return SPACE[value] ?? value;
+  if (value === null || value === undefined || value === '') return null;
+  if (value === '0') return '0';
+  if (/^\d+(\.\d+)?$/.test(value)) {
+    return FLUID_SPACING_TOKENS.has(value)
+      ? `var(--lui-spacing-fluid-${value})`
+      : `${value}px`;
+  }
+  return NAMED_SPACE[value] ?? value;
 }
 
 export const RADIUS: Record<string, string> = {

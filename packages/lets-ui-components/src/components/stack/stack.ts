@@ -6,7 +6,7 @@ import { resolveSpace, ALIGN_MAP, JUSTIFY_MAP } from '../../utils/layout.js';
 export class LuiStack extends LitElement {
   static styles = unsafeCSS(styles);
 
-  @property() gap = 'md';
+  @property() gap = '16';
   @property() align = 'stretch';
   @property() justify = 'start';
 

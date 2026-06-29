@@ -13,7 +13,23 @@ export default {
     contentMinWidth: { control: 'text' },
     gap: {
       control: { type: 'select' },
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     align: {
       control: { type: 'select' },
@@ -44,7 +60,7 @@ Default.args = {
   side: 'start',
   sideWidth: '240px',
   contentMinWidth: '50%',
-  gap: 'lg',
+  gap: '24',
   align: 'stretch',
 };
 
@@ -53,7 +69,7 @@ End.args = {
   side: 'end',
   sideWidth: '200px',
   contentMinWidth: '50%',
-  gap: 'lg',
+  gap: '24',
   align: 'stretch',
 };
 
@@ -62,12 +78,12 @@ NarrowSidebar.args = {
   side: 'start',
   sideWidth: '160px',
   contentMinWidth: '60%',
-  gap: 'md',
+  gap: '16',
   align: 'stretch',
 };
 
 export const CSSClass = () => `
-  <div class="sidebar sidebar--gap-md">
+  <div class="sidebar sidebar--gap-16">
     <div class="sidebar__side">Sidebar (240px)</div>
     <div class="sidebar__content">Conteúdo principal</div>
   </div>

@@ -9,7 +9,23 @@ export default {
     rows: { control: 'text' },
     gap: {
       control: { type: 'select' },
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     align: {
       control: { type: 'select' },
@@ -41,7 +57,7 @@ export const Default = Template.bind({});
 Default.args = {
   columns: 'repeat(3, 1fr)',
   rows: '',
-  gap: 'md',
+  gap: '16',
   align: 'stretch',
 };
 
@@ -49,12 +65,12 @@ export const TwoColumns = Template.bind({});
 TwoColumns.args = {
   columns: 'repeat(2, 1fr)',
   rows: '',
-  gap: 'lg',
+  gap: '24',
   align: 'stretch',
 };
 
 export const WithSpans = () => `
-  <lui-grid columns="repeat(4, 1fr)" gap="md">
+  <lui-grid columns="repeat(4, 1fr)" gap="16">
     ${cell('Span 2 cols', '#dbeafe', 'col-span="2"')}
     ${cell('1 col', '#dcfce7')}
     ${cell('1 col', '#fef9c3')}
@@ -64,7 +80,7 @@ export const WithSpans = () => `
 `;
 
 export const CSSClass = () => `
-  <div class="grid grid--gap-md" style="grid-template-columns: repeat(3, 1fr);">
+  <div class="grid grid--gap-16" style="grid-template-columns: repeat(3, 1fr);">
     <div class="grid-item">Item 1</div>
     <div class="grid-item">Item 2</div>
     <div class="grid-item">Item 3</div>

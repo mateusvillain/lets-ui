@@ -8,7 +8,23 @@ export default {
     columns: { control: 'text' },
     gap: {
       control: { type: 'select' },
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     align: {
       control: { type: 'select' },
@@ -38,25 +54,25 @@ const Template = ({ columns, gap, align, collapseBelow }) => `
 `;
 
 export const Default = Template.bind({});
-Default.args = { columns: '3', gap: 'md', align: 'stretch', collapseBelow: '' };
+Default.args = { columns: '3', gap: '16', align: 'stretch', collapseBelow: '' };
 
 export const TwoColumns = Template.bind({});
 TwoColumns.args = {
   columns: '2',
-  gap: 'md',
+  gap: '16',
   align: 'stretch',
   collapseBelow: '',
 };
 
 export const CustomTemplate = () => `
-  <lui-columns columns='["2fr","1fr"]' gap="md">
+  <lui-columns columns='["2fr","1fr"]' gap="16">
     ${col('Main (2fr)', '#dbeafe')}
     ${col('Sidebar (1fr)', '#dcfce7')}
   </lui-columns>
 `;
 
 export const WithSpan = () => `
-  <lui-columns columns="3" gap="md">
+  <lui-columns columns="3" gap="16">
     ${col('Span 2', '#dbeafe').replace('<lui-column>', '<lui-column span="2">')}
     ${col('Auto', '#dcfce7')}
   </lui-columns>
@@ -65,13 +81,13 @@ export const WithSpan = () => `
 export const CollapseOnMobile = Template.bind({});
 CollapseOnMobile.args = {
   columns: '3',
-  gap: 'md',
+  gap: '16',
   align: 'stretch',
   collapseBelow: 'sm',
 };
 
 export const CSSClass = () => `
-  <div class="columns columns--3 columns--gap-md">
+  <div class="columns columns--3 columns--gap-16">
     <div class="column">Coluna 1</div>
     <div class="column">Coluna 2</div>
     <div class="column">Coluna 3</div>

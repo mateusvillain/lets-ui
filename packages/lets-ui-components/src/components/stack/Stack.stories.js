@@ -7,7 +7,23 @@ export default {
   argTypes: {
     gap: {
       control: { type: 'select' },
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     align: {
       control: { type: 'select' },
@@ -41,23 +57,23 @@ const Template = ({ gap, align, justify }) => `
 `;
 
 export const Default = Template.bind({});
-Default.args = { gap: 'md', align: 'stretch', justify: 'start' };
+Default.args = { gap: '16', align: 'stretch', justify: 'start' };
 
 export const SmallGap = Template.bind({});
-SmallGap.args = { gap: 'sm', align: 'stretch', justify: 'start' };
+SmallGap.args = { gap: '8', align: 'stretch', justify: 'start' };
 
 export const Centered = Template.bind({});
-Centered.args = { gap: 'md', align: 'center', justify: 'start' };
+Centered.args = { gap: '16', align: 'center', justify: 'start' };
 
 export const SpaceBetween = Template.bind({});
 SpaceBetween.storyName = 'Space Between (fixed height)';
-SpaceBetween.args = { gap: 'md', align: 'stretch', justify: 'space-between' };
+SpaceBetween.args = { gap: '16', align: 'stretch', justify: 'space-between' };
 SpaceBetween.decorators = [
   (story) => `<div style="height: 240px;">${story()}</div>`,
 ];
 
 export const CSSClass = () => `
-  <div class="stack stack--gap-md">
+  <div class="stack stack--gap-16">
     <div>Item 1</div>
     <div>Item 2</div>
     <div>Item 3</div>

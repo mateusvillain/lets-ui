@@ -11,7 +11,23 @@ export default {
     },
     padding: {
       control: { type: 'select' },
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     center: { control: 'boolean' },
     as: {
@@ -32,13 +48,13 @@ const Template = ({ size, padding, center, as: asTag }) => `
 `;
 
 export const Default = Template.bind({});
-Default.args = { size: 'lg', padding: 'xl', center: true, as: 'div' };
+Default.args = { size: 'lg', padding: '32', center: true, as: 'div' };
 
 export const Small = Template.bind({});
-Small.args = { size: 'sm', padding: 'md', center: true, as: 'div' };
+Small.args = { size: 'sm', padding: '16', center: true, as: 'div' };
 
 export const Full = Template.bind({});
-Full.args = { size: 'full', padding: 'lg', center: false, as: 'div' };
+Full.args = { size: 'full', padding: '24', center: false, as: 'div' };
 
 export const CSSClass = () => `
   <div class="container container--md">
