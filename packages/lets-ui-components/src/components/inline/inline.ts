@@ -6,7 +6,7 @@ import { resolveSpace, ALIGN_MAP, JUSTIFY_MAP } from '../../utils/layout.js';
 export class LuiInline extends LitElement {
   static styles = unsafeCSS(styles);
 
-  @property() gap = 'sm';
+  @property() gap = '8';
   @property({ attribute: 'gap-x' }) gapX = '';
   @property({ attribute: 'gap-y' }) gapY = '';
   @property() align = 'center';

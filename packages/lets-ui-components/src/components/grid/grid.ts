@@ -9,7 +9,7 @@ export class LuiGrid extends LitElement {
 
   @property() columns = '';
   @property() rows = '';
-  @property() gap = 'md';
+  @property() gap = '16';
   @property({ attribute: 'gap-x' }) gapX = '';
   @property({ attribute: 'gap-y' }) gapY = '';
   @property() align = 'stretch';

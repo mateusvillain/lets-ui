@@ -1,5 +1,7 @@
 @use '../utilities/functions' as fn;
 
+$-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
+
 .container {
   box-sizing: border-box;
   width: 100%;
@@ -38,38 +40,15 @@
     margin-right: 0;
   }
 
-  &--padding-none {
+  &--padding-0 {
     padding-left: 0;
     padding-right: 0;
   }
 
-  &--padding-xs {
-    padding-left: fn.fluid(4);
-    padding-right: fn.fluid(4);
-  }
-
-  &--padding-sm {
-    padding-left: fn.fluid(8);
-    padding-right: fn.fluid(8);
-  }
-
-  &--padding-md {
-    padding-left: fn.fluid(16);
-    padding-right: fn.fluid(16);
-  }
-
-  &--padding-lg {
-    padding-left: fn.fluid(24);
-    padding-right: fn.fluid(24);
-  }
-
-  &--padding-xl {
-    padding-left: fn.fluid(32);
-    padding-right: fn.fluid(32);
-  }
-
-  &--padding-2xl {
-    padding-left: fn.fluid(48);
-    padding-right: fn.fluid(48);
+  @each $n in $-fluid-tokens {
+    &--padding-#{$n} {
+      padding-left: fn.fluid($n);
+      padding-right: fn.fluid($n);
+    }
   }
 }

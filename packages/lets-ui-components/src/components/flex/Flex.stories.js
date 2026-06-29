@@ -15,7 +15,24 @@ export default {
     },
     gap: {
       control: { type: 'select' },
-      options: ['', 'none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '',
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     align: {
       control: { type: 'select' },
@@ -60,7 +77,7 @@ export const Default = Template.bind({});
 Default.args = {
   direction: 'row',
   wrap: 'nowrap',
-  gap: 'md',
+  gap: '16',
   align: 'stretch',
   justify: 'start',
   inline: false,
@@ -70,7 +87,7 @@ export const Column = Template.bind({});
 Column.args = {
   direction: 'column',
   wrap: 'nowrap',
-  gap: 'sm',
+  gap: '8',
   align: 'start',
   justify: 'start',
   inline: false,
@@ -78,7 +95,7 @@ Column.args = {
 
 export const WithGrow = () => `
   <div style="outline: 1px dashed #cbd5e1; padding: 8px; border-radius: 4px;">
-    <lui-flex gap="md">
+    <lui-flex gap="16">
       <lui-flex-item grow="1"><div style="padding: 12px 16px; background: #dbeafe; border-radius: 6px; font-size: 13px;">Grows (flex-grow: 1)</div></lui-flex-item>
       <lui-flex-item><div style="padding: 12px 16px; background: #dcfce7; border-radius: 6px; font-size: 13px;">Fixed</div></lui-flex-item>
     </lui-flex>
@@ -86,7 +103,7 @@ export const WithGrow = () => `
 `;
 
 export const CSSClass = () => `
-  <div class="flex flex--gap-md flex--align-center">
+  <div class="flex flex--gap-16 flex--align-center">
     <div class="flex-item--grow">Cresce</div>
     <div class="flex-item--shrink-0">Fixo</div>
   </div>

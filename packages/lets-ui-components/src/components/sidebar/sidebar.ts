@@ -9,7 +9,7 @@ export class LuiSidebar extends LitElement {
   @property() side = 'start';
   @property({ attribute: 'side-width' }) sideWidth = '240px';
   @property({ attribute: 'content-min-width' }) contentMinWidth = '50%';
-  @property() gap = 'lg';
+  @property() gap = '24';
   @property() align = 'stretch';
 
   updated() {

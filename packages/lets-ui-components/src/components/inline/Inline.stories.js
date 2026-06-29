@@ -7,7 +7,23 @@ export default {
   argTypes: {
     gap: {
       control: { type: 'select' },
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      options: [
+        '0',
+        '2',
+        '4',
+        '8',
+        '12',
+        '16',
+        '20',
+        '24',
+        '32',
+        '40',
+        '48',
+        '56',
+        '64',
+        '72',
+        '80',
+      ],
     },
     align: {
       control: { type: 'select' },
@@ -47,21 +63,21 @@ const Template = ({ gap, align, justify, wrap }) => `
 `;
 
 export const Default = Template.bind({});
-Default.args = { gap: 'sm', align: 'center', justify: 'start', wrap: 'wrap' };
+Default.args = { gap: '8', align: 'center', justify: 'start', wrap: 'wrap' };
 
 export const SpaceBetween = Template.bind({});
 SpaceBetween.args = {
-  gap: 'sm',
+  gap: '8',
   align: 'center',
   justify: 'space-between',
   wrap: 'wrap',
 };
 
 export const NoWrap = Template.bind({});
-NoWrap.args = { gap: 'sm', align: 'center', justify: 'start', wrap: 'nowrap' };
+NoWrap.args = { gap: '8', align: 'center', justify: 'start', wrap: 'nowrap' };
 
 export const CSSClass = () => `
-  <div class="inline inline--gap-sm">
+  <div class="inline inline--gap-8">
     <span>Design</span>
     <span>Engineering</span>
     <span>Product</span>
