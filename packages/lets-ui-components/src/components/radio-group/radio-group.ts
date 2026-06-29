@@ -33,17 +33,20 @@ export class LuiRadioGroup extends LitElement {
       this.error = true;
     });
     this.addEventListener('change', this._handleRadioChange);
+    this.addEventListener('keydown', this._handleKeydown);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('change', this._handleRadioChange);
+    this.removeEventListener('keydown', this._handleKeydown);
   }
 
   protected firstUpdated() {
     this._applyToRadios();
     this._initFromChildren();
     this._syncFormValue();
+    this._initRovingTabIndex();
   }
 
   get _size(): 'lg' | 'md' {
@@ -80,6 +83,19 @@ export class LuiRadioGroup extends LitElement {
     return Array.from(this.querySelectorAll<LuiRadio>('lui-radio'));
   }
 
+  private _getEnabledRadios(): LuiRadio[] {
+    return this._getRadios().filter((r) => !r.disabled);
+  }
+
+  private _initRovingTabIndex() {
+    const radios = this._getRadios();
+    const active =
+      radios.find((r) => r.checked) ?? radios.find((r) => !r.disabled);
+    radios.forEach((r) => {
+      r.inputTabIndex = r === active ? 0 : -1;
+    });
+  }
+
   private _initFromChildren() {
     const checked = this._getRadios().find((r) => r.checked);
     if (checked) this._value = checked.value;
@@ -103,10 +119,56 @@ export class LuiRadioGroup extends LitElement {
     this.error = false;
 
     this._getRadios().forEach((r) => {
-      if (r !== radio) r.checked = false;
+      if (r !== radio) {
+        r.checked = false;
+        r.inputTabIndex = -1;
+      } else {
+        r.inputTabIndex = 0;
+      }
     });
 
     this._syncFormValue();
+    this.requestUpdate();
+  };
+
+  private _handleKeydown = (e: KeyboardEvent) => {
+    const navKeys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', ' '];
+    if (!navKeys.includes(e.key)) return;
+
+    const target = e.target;
+    if (!(target instanceof LuiRadio) || !this.contains(target)) return;
+
+    e.preventDefault();
+
+    if (e.key === ' ') {
+      if (!target.checked && !target.disabled) {
+        target.checked = true;
+        target.dispatchEvent(
+          new Event('change', { bubbles: true, composed: true })
+        );
+      }
+      return;
+    }
+
+    const enabled = this._getEnabledRadios();
+    if (enabled.length === 0) return;
+
+    const currentIndex = enabled.indexOf(target);
+    const isForward = e.key === 'ArrowDown' || e.key === 'ArrowRight';
+    const direction = isForward ? 1 : -1;
+    const nextIndex =
+      (currentIndex + direction + enabled.length) % enabled.length;
+    const next = enabled[nextIndex];
+
+    this._getRadios().forEach((r) => {
+      r.checked = r === next;
+      r.inputTabIndex = r === next ? 0 : -1;
+    });
+
+    this._value = next.value;
+    this.error = false;
+    this._syncFormValue();
+    next.focus();
     this.requestUpdate();
   };
 
@@ -122,6 +184,7 @@ export class LuiRadioGroup extends LitElement {
     this._applyToRadios();
     this._initFromChildren();
     this._syncFormValue();
+    this._initRovingTabIndex();
   }
 
   render() {
@@ -134,6 +197,7 @@ export class LuiRadioGroup extends LitElement {
 
     return html`
       <fieldset
+        role="radiogroup"
         class="radio-group radio-group--${this._size}${this.error
           ? ' radio-group--error'
           : ''}"

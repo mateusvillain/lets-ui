@@ -15,6 +15,7 @@ export class LuiRadio extends LitElement {
   @property({ type: Boolean }) error = false;
   @property() size = 'lg';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
+  @property({ type: Number, attribute: false }) inputTabIndex = 0;
 
   private _baseId: string;
 
@@ -46,6 +47,10 @@ export class LuiRadio extends LitElement {
   formResetCallback() {
     this.checked = false;
     this._internals.setFormValue(null);
+  }
+
+  focus(options?: FocusOptions) {
+    this.shadowRoot?.querySelector('input')?.focus(options);
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
@@ -88,6 +93,7 @@ export class LuiRadio extends LitElement {
           aria-label="${ariaLabel}"
           aria-invalid="${this.error ? 'true' : 'false'}"
           .checked="${this.checked}"
+          tabindex="${this.inputTabIndex}"
           ?disabled="${this.disabled}"
           ?aria-disabled="${this.disabled}"
           @change="${this._handleChange}"
