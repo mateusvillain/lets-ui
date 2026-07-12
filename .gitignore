@@ -23,6 +23,11 @@ Thumbs.db
 .env.test.local
 .env.production.local
 
+# Tasks
+.agent/prd
+.agent/tasks
+.agent/tasks.json
+
 # Others
 *.local
 *.log
@@ -30,6 +35,7 @@ Thumbs.db
 .nyc_output/
 coverage/
 .claude
+.study
 
 *storybook.log
 storybook-static
