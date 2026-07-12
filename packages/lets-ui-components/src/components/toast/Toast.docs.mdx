@@ -1,0 +1,185 @@
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as ToastStories from './Toast.stories';
+
+<Meta of={ToastStories} />
+
+# Toast
+
+<Canvas of={ToastStories.Toast} />
+<Controls of={ToastStories.Toast} />
+
+## Default
+<Canvas of={ToastStories.Default} />
+
+## Success
+<Canvas of={ToastStories.Success} />
+
+## Danger
+<Canvas of={ToastStories.Danger} />
+
+## Custom icon
+
+O ícone é personalizável em todas as variantes via o slot `icon`. Cada variante já vem com um ícone padrão em estilo outline — `bell` (`default`), `circle-check` (`success`) e `circle-x` (`danger`) — que é substituído automaticamente quando algo é passado no slot.
+
+<Canvas of={ToastStories.CustomIcon} />
+
+## Conteúdo (slot padrão)
+
+A descrição secundária pode ser passada de duas formas: como filhos diretos do elemento (slot padrão/sem nome — a forma recomendada, usada na maioria dos exemplos desta página) **ou** pelo atributo `content` (texto puro, sempre escapado). Quando há conteúdo real no slot padrão, ele tem prioridade sobre `content`; caso contrário, `content` é usado como fallback.
+
+<Canvas of={ToastStories.SlottedContent} />
+
+### Via atributo (`content=""`)
+
+<Canvas of={ToastStories.ContentAttribute} />
+
+## Auto-dismiss
+
+Por padrão o toast desaparece sozinho após `duration` milissegundos (padrão `5000`). Passar o mouse sobre o toast, ou mover o foco do teclado para dentro dele, pausa a contagem; ela retoma de onde parou quando o ponteiro sai ou o foco se move para fora.
+
+<Canvas of={ToastStories.AutoDismiss} />
+
+## Persistent
+
+Use `duration="0"` para desabilitar o auto-dismiss por completo — o toast permanece até ser fechado manualmente.
+
+<Canvas of={ToastStories.Persistent} />
+
+## Danger nunca desaparece sozinho
+
+`variant="danger"` sempre se comporta como persistente e ignora qualquer valor de `duration`, mesmo que seja explicitamente definido. Essa é uma decisão de acessibilidade deliberada (ver seção abaixo), não um bug.
+
+<Canvas of={ToastStories.DangerNeverAutoDismisses} />
+
+## Com ação
+
+O botão de ação é opcional e fica sempre à direita. **Quando um botão de ação está presente, o botão de fechar (X) não é renderizado** — clicar em qualquer lugar da área de ação dispensa o toast (além de disparar o clique normal do botão). Isso significa que, se o consumidor usar um botão de ação em um toast `danger`, essa passa a ser a única forma de dispensá-lo.
+
+<Canvas of={ToastStories.WithAction} />
+
+### Com ação — todas as variantes
+
+O `variant` do botão de ação é escolhido pelo consumidor (não é derivado automaticamente do `variant` do toast) — combine-os manualmente para manter a consistência visual, como no exemplo abaixo.
+
+<Canvas of={ToastStories.WithActionAllVariants} />
+
+## Posicionamento
+
+Por padrão, `.toast-region` fica fixo na parte inferior central da tela, com ~24px de respiro em relação à borda (padrão mobile/Android — ver `.study/toast.md` §10). Outras posições são opt-in via modificador na própria classe:
+
+```html
+<div class="toast-region toast-region--top-right" role="region" aria-label="Notificações">...</div>
+```
+
+Modificadores disponíveis: `--top-left`, `--top-center`, `--top-right`, `--bottom-left`, `--bottom-center` (equivalente ao padrão), `--bottom-right`. Em telas `< 768px` a região sempre ocupa a largura toda (menos 16px de margem em cada lado) e fica ancorada embaixo, respeitando `env(safe-area-inset-bottom)`, independentemente do modificador escolhido.
+
+## Empilhado (stacked)
+
+Múltiplos elementos `<lui-toast>` dentro do mesmo `.toast-region` colapsam visualmente em uma pilha: o último elemento no DOM fica em primeiro plano em escala normal, e os anteriores recuam atrás dele em escala 95%, espiando levemente por cima — sem sobreposição bagunçada. Empilhamento/posicionamento continuam sendo apenas CSS neste release — não há API imperativa de fila (`toast.show()`) ainda (planejada como follow-up).
+
+<Canvas of={ToastStories.Stacked} />
+
+## XSS-safe content
+
+`title` e o atributo `content` são interpolados como texto puro via o template `html` do Lit (com escape automático) — strings parecidas com HTML são renderizadas literalmente, nunca como marcação ou script. **Essa garantia vale apenas para o atributo `content`.** Se você usar o slot padrão em vez do atributo, o conteúdo passado é HTML real no light DOM e não é escapado — nunca insira texto de origem não confiável diretamente no slot sem sanitizar antes.
+
+<Canvas of={ToastStories.XSSSafeContent} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={ToastStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+O container `.toast-region` deve ser um landmark de navegação (`role="region"` + `aria-label`) para que usuários de teclado/leitor de tela consigam alcançá-lo via navegação por landmarks (F6):
+
+```html
+<div class="toast-region" role="region" aria-label="Notificações">
+  <lui-toast variant="default" title="Título">Informação importante</lui-toast>
+</div>
+```
+
+### Ícone customizado
+
+```html
+<lui-toast variant="default" title="Novo seguidor" content="Ana começou a seguir você.">
+  <svg slot="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">...</svg>
+</lui-toast>
+```
+
+### Conteúdo via slot (em vez do atributo)
+
+```html
+<lui-toast variant="success" title="Alterações salvas">
+  Seus dados foram atualizados. <a href="/perfil">Ver perfil</a>.
+</lui-toast>
+```
+
+### Com ação
+
+```html
+<lui-toast variant="success" title="Alterações salvas" content="Seus dados foram atualizados.">
+  <lui-button slot="action" variant="success" label="Ver"></lui-button>
+</lui-toast>
+```
+
+### Fechamento manual
+
+O componente emite o evento `lui-close` (`bubbles`, `composed`) no fechamento manual (X ou clique na área de ação) e no auto-dismiss.
+
+```html
+<script>
+  document.querySelector('lui-toast').addEventListener('lui-close', (e) => {
+    // e.target já se remove do DOM sozinho após a animação de saída;
+    // use este evento para sincronizar estado da aplicação (ex: fila de toasts).
+  });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="toast">
+  <div class="toast__text">
+    <p>Informação importante</p>
+  </div>
+</div>
+```
+
+## API Reference
+
+| Prop/Attribute | Type                              | Default     | Description                                                                      |
+| --------------- | ----------------------------------- | ------------- | ------------------------------------------------------------------------------------ |
+| `variant`       | `default` \| `success` \| `danger` | `default`   | Variante semântica — controla ícone padrão, cor do ícone e role ARIA.               |
+| `title`         | `string`                            | `''`          | Mensagem principal curta.                                                            |
+| `content`       | `string`                            | `''`          | Descrição secundária opcional. Serve como fallback do slot padrão — ignorado se houver conteúdo real slotado. |
+| `duration`      | `number` (ms)                       | `5000`        | Delay de auto-dismiss. `0` desabilita. Ignorado quando `variant="danger"`.            |
+| `close-label`   | `string`                            | `'Close'`     | Label acessível do botão de fechar (só renderizado quando não há `action` slotada). |
+
+### Slots
+
+| Slot                | Description                                                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------- |
+| _(padrão/sem nome)_ | Descrição secundária, com suporte a marcação (ex: links). Substitui o atributo `content` quando presente. |
+| `icon`              | Ícone customizado. Fallback outline por variante: bell (`default`), circle-check (`success`), circle-x (`danger`). |
+| `action`            | Botão de ação opcional, alinhado à direita. Quando presente, substitui o botão de fechar (X).       |
+
+### Events
+
+| Event       | Detail | When                                                                             |
+| ----------- | ------ | ------------------------------------------------------------------------------------ |
+| `lui-close` | —      | Disparado no fechamento manual (X, `Esc`, clique na área de ação) e no auto-dismiss. |
+
+## Acessibilidade
+
+- **Role por variante:** `default`/`success` usam `role="status"` (`aria-live="polite"` implícito) — não interrompem o leitor de tela. `danger` usa `role="alert"` (`aria-live="assertive"` implícito) — interrompe imediatamente. `aria-atomic="true"` está sempre presente para garantir que o conteúdo completo seja anunciado.
+- **Landmark da região:** dê `role="region"` + `aria-label` ao container `.toast-region` (como nos exemplos) para que ele seja alcançável via navegação por landmarks (F6) sem que o usuário precise tabular pela página inteira.
+- **Fila além de 3 toasts:** a partir do 4º toast na pilha, os mais antigos ficam ocultos com `visibility: hidden` — saem da árvore de acessibilidade e da ordem de tabulação até subirem na fila.
+- **Pausa no hover e no foco:** o timer de auto-dismiss pausa enquanto o ponteiro está sobre o toast ou enquanto o foco está em um de seus elementos interativos (botão de fechar ou ação), e retoma do tempo restante — não reinicia do zero. Isso atende WCAG 2.2.1 (Timing Adjustable).
+- **`danger` ignora `duration`:** erros nunca desaparecem sozinhos, mesmo se `duration` for explicitamente definido — exige fechamento manual.
+- **Botão de fechar vs. ação:** como o botão de fechar (X) desaparece quando há uma ação, todo toast `danger` com `action` slotada depende exclusivamente do clique nessa área para ser dispensado — garanta que a ação realmente resolva ou dispense a notificação.
+- **Sem roubo de foco:** o toast nunca move o foco automaticamente ao aparecer. `Esc` fecha o toast que atualmente contém o foco.
+- **Ícone + cor:** os ícones padrão de cada variante têm forma distinta, nunca dependendo apenas da cor (WCAG 1.4.1). Ao customizar o ícone via slot, mantenha esse princípio.
+- **Motion:** a animação de entrada/saída e o efeito de empilhamento (escala) respeitam `prefers-reduced-motion`.
