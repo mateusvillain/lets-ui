@@ -2,6 +2,7 @@ import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './checkbox.scss?inline';
+import { nameProperty } from '../../utils/form.js';
 
 export class LuiCheckbox extends LitElement {
   static styles = unsafeCSS(styles);
@@ -10,7 +11,7 @@ export class LuiCheckbox extends LitElement {
   private _internals: ElementInternals;
 
   @property() label = '';
-  @property() name = '';
+  @property(nameProperty) name = '';
   @property() value = 'on';
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean }) disabled = false;

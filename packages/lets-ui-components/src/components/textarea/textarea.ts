@@ -2,6 +2,7 @@ import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './textarea.scss?inline';
+import { nameProperty } from '../../utils/form.js';
 
 export class LuiTextarea extends LitElement {
   static styles = unsafeCSS(styles);
@@ -12,7 +13,7 @@ export class LuiTextarea extends LitElement {
   @property() label = '';
   @property() placeholder = '';
   @property() size = 'lg';
-  @property() name = '';
+  @property(nameProperty) name = '';
   @property() value = '';
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;

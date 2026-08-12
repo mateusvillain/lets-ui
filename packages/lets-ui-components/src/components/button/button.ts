@@ -2,6 +2,7 @@ import { LitElement, html, svg, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './button.scss?inline';
+import { nameProperty } from '../../utils/form.js';
 
 const spinnerIcon = svg`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true" class="btn__spinner">
   <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="56.549" stroke-dashoffset="42.412"/>
@@ -21,7 +22,7 @@ export class LuiButton extends LitElement {
   @property() variant = 'primary';
   @property({ reflect: true }) size = 'lg';
   @property() type: 'button' | 'submit' | 'reset' = 'button';
-  @property() name = '';
+  @property(nameProperty) name = '';
   @property() value = '';
   @property({ type: Boolean }) autofocus = false;
   @property({ type: Boolean, reflect: true }) disabled = false;

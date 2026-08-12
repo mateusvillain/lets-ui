@@ -2,6 +2,7 @@ import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './radio-group.scss?inline';
+import { nameProperty } from '../../utils/form.js';
 import { LuiRadio } from '../radio/radio.js';
 
 export class LuiRadioGroup extends LitElement {
@@ -12,7 +13,7 @@ export class LuiRadioGroup extends LitElement {
   private _baseId: string;
   private _value = '';
 
-  @property() name = '';
+  @property(nameProperty) name = '';
   @property() label = '';
   @property() size = 'lg';
   @property({ type: Boolean }) required = false;
