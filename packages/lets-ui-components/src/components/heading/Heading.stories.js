@@ -117,7 +117,7 @@ export const WithLineClamp = () => `
     color="heading"
     line-clamp="2"
     label="Este texto é longo o suficiente para ser cortado em duas linhas. Quanto mais texto houver aqui, mais evidente fica o comportamento do line-clamp em ação."
-    style="max-width: 400px; display: block;"
+    style="max-width: 400px;"
   ></lui-heading>
 `;
 
