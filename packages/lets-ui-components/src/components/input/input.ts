@@ -182,6 +182,7 @@ export class LuiInput extends LitElement {
     if (this._inputType === 'number') {
       this._inputEl.value = String(this._clampNumber(this._inputEl.value));
     }
+    this.value = this._inputEl.value;
     this._charCount = this._inputEl.value.length;
     this.error = false;
     this._syncFormValue();
@@ -192,6 +193,7 @@ export class LuiInput extends LitElement {
     if (this._inputType === 'number') {
       this._inputEl.value = String(this._clampNumber(this._inputEl.value));
     }
+    this.value = this._inputEl.value;
     this.error = false;
     this._syncFormValue();
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
@@ -205,6 +207,8 @@ export class LuiInput extends LitElement {
     const current = this._clampNumber(this._inputEl?.value ?? '');
     const next = this._clampNumber(String(current + delta * this._stepValue));
     if (this._inputEl) this._inputEl.value = String(next);
+    this.value = String(next);
+    this._charCount = this.value.length;
     this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   }
