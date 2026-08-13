@@ -30,9 +30,23 @@ export class LuiButton extends LitElement {
   @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
+  @property() href = '';
+  @property() target = '';
+  @property() rel = '';
+  @property() download = '';
 
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
+  }
+
+  private get _isLink(): boolean {
+    return this.href !== '';
+  }
+
+  private get _rel(): string | undefined {
+    if (this.rel) return this.rel;
+    if (this.target === '_blank') return 'noopener noreferrer';
+    return undefined;
   }
 
   get _size(): 'lg' | 'md' {
@@ -62,10 +76,51 @@ export class LuiButton extends LitElement {
     }
   };
 
+  private _handleLinkClick = (e: Event) => {
+    if (this.disabled || this.loading) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  private _renderContent(displayLabel: string) {
+    return this.loading
+      ? html`${spinnerIcon}${displayLabel}`
+      : html`<slot name="prefix"></slot><slot>${this.label}</slot
+          ><slot name="suffix"></slot>`;
+  }
+
+  private _renderAnchor(displayLabel: string, isDisabled: boolean) {
+    return html`
+      <a
+        class="${this._classes}"
+        href="${ifDefined(isDisabled ? undefined : this.href)}"
+        ?autofocus="${this.autofocus}"
+        target="${ifDefined(isDisabled ? undefined : this.target || undefined)}"
+        rel="${ifDefined(isDisabled ? undefined : this._rel)}"
+        download="${ifDefined(
+          isDisabled ? undefined : this.download || undefined
+        )}"
+        role="${ifDefined(isDisabled ? 'link' : undefined)}"
+        tabindex="${ifDefined(this.disabled ? '-1' : undefined)}"
+        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
+        aria-disabled="${isDisabled ? 'true' : 'false'}"
+        aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        @click="${this._handleLinkClick}"
+      >
+        ${this._renderContent(displayLabel)}
+      </a>
+    `;
+  }
+
   render() {
     const displayLabel =
       this.loading && this.loadingText ? this.loadingText : this.label;
     const isDisabled = this.disabled || this.loading;
+
+    if (this._isLink) {
+      return this._renderAnchor(displayLabel, isDisabled);
+    }
 
     return html`
       <button
@@ -78,10 +133,7 @@ export class LuiButton extends LitElement {
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
         @click="${this._handleClick}"
       >
-        ${this.loading
-          ? html`${spinnerIcon}${displayLabel}`
-          : html`<slot name="prefix"></slot><slot>${this.label}</slot
-              ><slot name="suffix"></slot>`}
+        ${this._renderContent(displayLabel)}
       </button>
     `;
   }

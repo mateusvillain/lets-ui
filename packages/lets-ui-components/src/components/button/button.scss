@@ -13,7 +13,8 @@
 :host([block]) {
   display: block;
 
-  button {
+  button,
+  a {
     width: 100%;
     justify-content: center;
   }
