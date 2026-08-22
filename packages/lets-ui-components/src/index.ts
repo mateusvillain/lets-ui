@@ -1,7 +1,6 @@
 import { LuiAlert } from './components/alert/alert.js';
 import { LuiBox } from './components/box/box.js';
 import { LuiCenter } from './components/center/center.js';
-import { LuiColumns, LuiColumn } from './components/columns/columns.js';
 import { LuiContainer } from './components/container/container.js';
 import { LuiFlex, LuiFlexItem } from './components/flex/flex.js';
 import { LuiGrid, LuiGridItem } from './components/grid/grid.js';
@@ -50,8 +49,6 @@ function define(name: string, elementClass: CustomElementConstructor) {
 
 define('lui-box', LuiBox);
 define('lui-center', LuiCenter);
-define('lui-columns', LuiColumns);
-define('lui-column', LuiColumn);
 define('lui-container', LuiContainer);
 define('lui-flex', LuiFlex);
 define('lui-flex-item', LuiFlexItem);
@@ -98,8 +95,6 @@ define('lui-scroll-area', LuiScrollArea);
 export {
   LuiBox,
   LuiCenter,
-  LuiColumns,
-  LuiColumn,
   LuiContainer,
   LuiFlex,
   LuiFlexItem,

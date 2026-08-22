@@ -1,0 +1,121 @@
+@use 'sass:map';
+@use './functions' as fn;
+@use './mixins' as mx;
+
+// Single source of truth for the responsive grid, shared by the global
+// `.grid` component and the `<lui-grid>` shadow-DOM styles.
+//   1xs  (< 768px)    4 columns   gap 16   margin 16
+//   sm   (>= 768px)   8 columns   gap 16   margin 32
+//   md   (>= 1024px)  8 columns   gap 16   margin 40
+//   lg   (>= 1280px)  12 columns  gap 24   margin 40
+//   1xl  (>= 1440px)  12 columns  gap 24   max-width 1360px, centered
+
+$grid: (
+  '1xs': (
+    columns: 4,
+    gap: 16,
+    margin: 16,
+  ),
+  sm: (
+    columns: 8,
+    gap: 16,
+    margin: 32,
+  ),
+  md: (
+    columns: 8,
+    gap: 16,
+    margin: 40,
+  ),
+  lg: (
+    columns: 12,
+    gap: 24,
+    margin: 40,
+  ),
+  '1xl': (
+    columns: 12,
+    gap: 24,
+    max-width: 1360px,
+  ),
+);
+
+// Container custom properties for one breakpoint step.
+@mixin step($name) {
+  $step: map.get($grid, $name);
+
+  --lui-grid-columns: #{map.get($step, columns)};
+  --lui-grid-gap: #{fn.fixed(map.get($step, gap))};
+
+  @if map.get($step, max-width) {
+    --lui-grid-margin: auto;
+    --lui-grid-max-width: #{map.get($step, max-width)};
+  } @else {
+    --lui-grid-margin: #{fn.fixed(map.get($step, margin))};
+    --lui-grid-max-width: none;
+  }
+}
+
+// Emits `@content` once per breakpoint step, with `$name` and `$columns`
+// exposed through the two arguments of the content block.
+@mixin each-step {
+  @each $name, $step in $grid {
+    $columns: map.get($step, columns);
+
+    @if $name == '1xs' {
+      @content ($name, $columns);
+    } @else {
+      @include mx.media-up($name) {
+        @content ($name, $columns);
+      }
+    }
+  }
+}
+
+// The shared container declarations, including every breakpoint step.
+@mixin container {
+  display: grid;
+  grid-template-columns: repeat(var(--lui-grid-columns), minmax(0, 1fr));
+  gap: var(--lui-grid-gap);
+  align-items: var(--lui-grid-align, stretch);
+  max-width: var(--lui-grid-max-width);
+  margin-inline: var(--lui-grid-margin);
+
+  @include step('1xs');
+
+  @include mx.media-up(sm) {
+    @include step(sm);
+  }
+
+  @include mx.media-up(md) {
+    @include step(md);
+  }
+
+  @include mx.media-up(lg) {
+    @include step(lg);
+  }
+
+  @include mx.media-up('1xl') {
+    @include step('1xl');
+  }
+}
+
+// The shared grid-item declarations: `grid-column` resolved through a
+// mobile-first chain of `--lui-grid-item-{breakpoint}` custom properties, so
+// each step falls back to the last one declared below it.
+@mixin item {
+  $chain: 'span 1';
+
+  display: block;
+  min-width: 0;
+
+  @each $name, $step in $grid {
+    $chain: 'var(--lui-grid-item-#{$name}, #{$chain})';
+
+    @if $name == '1xs' {
+      grid-column: #{$chain};
+    } @else {
+      @include mx.media-up($name) {
+        grid-column: #{$chain};
+      }
+    }
+  }
+}

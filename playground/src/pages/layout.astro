@@ -26,8 +26,6 @@ import '@lets-ui/styles';
           <li><a href="#stack">lui-stack</a></li>
           <li><a href="#inline">lui-inline</a></li>
           <li><a href="#center">lui-center</a></li>
-          <li><a href="#columns">lui-columns</a></li>
-          <li><a href="#grid">lui-grid</a></li>
           <li><a href="#flex">lui-flex</a></li>
           <li><a href="#container">lui-container</a></li>
           <li><a href="#sidebar">lui-sidebar</a></li>
@@ -268,112 +266,6 @@ import '@lets-ui/styles';
                 max-width 200px
               </div>
             </lui-center>
-          </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════════════════ -->
-        <!-- LUI-COLUMNS                                            -->
-        <!-- ═══════════════════════════════════════════════════════ -->
-        <section id="columns" class="pg-section">
-          <h2 class="pg-section__title">lui-columns / lui-column</h2>
-
-          <div class="case">
-            <p class="case__label">1 — columns="2" / "3" / "4"</p>
-            <p class="case__expected">Filhos distribuídos em colunas iguais.</p>
-            {
-              [2, 3, 4].map((n) => (
-                <div style="margin-bottom:12px;">
-                  <span class="tag">columns="{n}"</span>
-                  <lui-columns columns={String(n)} gap="sm">
-                    {Array.from({ length: n }, (_, i) => (
-                      <div class="box-col">Col {i + 1}</div>
-                    ))}
-                  </lui-columns>
-                </div>
-              ))
-            }
-          </div>
-
-          <div class="case">
-            <p class="case__label">2 — lui-column span="2"</p>
-            <p class="case__expected">
-              Em um grid de 3 colunas, o primeiro item com span="2" deve ocupar
-              2/3 da largura.
-            </p>
-            <lui-columns columns="3" gap="sm">
-              <lui-column span="2"
-                ><div class="box-col" style="background:#dbeafe;">
-                  span=2
-                </div></lui-column
-              >
-              <lui-column><div class="box-col">col</div></lui-column>
-              <lui-column><div class="box-col">col</div></lui-column>
-              <lui-column><div class="box-col">col</div></lui-column>
-            </lui-columns>
-          </div>
-
-          <div class="case">
-            <p class="case__label">3 — collapse-below (container resize)</p>
-            <p class="case__expected">
-              Arraste a borda direita para estreitar. Abaixo de 400px o layout
-              deve colapsar para coluna única.
-            </p>
-            <div class="resizable">
-              <lui-columns columns="3" gap="sm" collapse-below="400px">
-                {
-                  Array.from({ length: 3 }, (_, i) => (
-                    <div class="box-col">Col {i + 1}</div>
-                  ))
-                }
-              </lui-columns>
-            </div>
-          </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════════════════ -->
-        <!-- LUI-GRID                                               -->
-        <!-- ═══════════════════════════════════════════════════════ -->
-        <section id="grid" class="pg-section">
-          <h2 class="pg-section__title">lui-grid / lui-grid-item</h2>
-
-          <div class="case">
-            <p class="case__label">1 — columns e gap</p>
-            <p class="case__expected">
-              Grid com 4 colunas de largura igual e gap-x maior que gap-y.
-            </p>
-            <lui-grid columns="4" gap-x="lg" gap-y="sm">
-              {
-                Array.from({ length: 8 }, (_, i) => (
-                  <div class="box-col">#{i + 1}</div>
-                ))
-              }
-            </lui-grid>
-          </div>
-
-          <div class="case">
-            <p class="case__label">2 — col-span e row-span</p>
-            <p class="case__expected">
-              Item A: col-span=2. Item B: row-span=2. Restante preenche
-              normalmente.
-            </p>
-            <lui-grid
-              columns="3"
-              gap="sm"
-              style="grid-template-rows: auto auto;"
-            >
-              <lui-grid-item col-span="2"
-                ><div class="box-col" style="background:#dbeafe;">
-                  A — col-span=2
-                </div></lui-grid-item
-              >
-              <lui-grid-item row-span="2"
-                ><div class="box-col" style="background:#dcfce7; height:100%;">
-                  B — row-span=2
-                </div></lui-grid-item
-              >
-              <div class="box-col">C</div>
-              <div class="box-col">D</div>
-            </lui-grid>
           </div>
         </section>
 
@@ -1093,27 +985,17 @@ import '@lets-ui/styles';
               </div>
 
               <div class="a11y-seq">
-                <span class="a11y-seq__label">lui-columns</span>
-                <div class="a11y-seq__flow">
-                  <button class="a11y-btn">Antes</button>
-                  <span class="a11y-arrow">›</span>
-                  <lui-columns columns="2" gap="sm" style="flex:1; min-width:160px;">
-                    <button class="a11y-btn" style="width:100%">Btn 1</button>
-                    <button class="a11y-btn" style="width:100%">Btn 2</button>
-                  </lui-columns>
-                  <span class="a11y-arrow">›</span>
-                  <button class="a11y-btn">Depois</button>
-                </div>
-              </div>
-
-              <div class="a11y-seq">
                 <span class="a11y-seq__label">lui-grid</span>
                 <div class="a11y-seq__flow">
                   <button class="a11y-btn">Antes</button>
                   <span class="a11y-arrow">›</span>
-                  <lui-grid columns="2" gap="sm" style="flex:1; min-width:160px;">
-                    <button class="a11y-btn" style="width:100%">Btn 1</button>
-                    <button class="a11y-btn" style="width:100%">Btn 2</button>
+                  <lui-grid flush style="flex:1; min-width:160px;">
+                    <lui-grid-item span="2" span-sm="4" span-lg="6"
+                      ><button class="a11y-btn" style="width:100%">Btn 1</button></lui-grid-item
+                    >
+                    <lui-grid-item span="2" span-sm="4" span-lg="6"
+                      ><button class="a11y-btn" style="width:100%">Btn 2</button></lui-grid-item
+                    >
                   </lui-grid>
                   <span class="a11y-arrow">›</span>
                   <button class="a11y-btn">Depois</button>

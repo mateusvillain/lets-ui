@@ -5,18 +5,34 @@ import * as GridStories from './Grid.stories';
 
 # Grid
 
-Full CSS Grid layout primitive. Use `lui-grid-item` for individual items with span/placement control.
+Grid de colunas responsivo. A quantidade de colunas, o gap e a margem lateral
+são definidos pelo breakpoint — não pelo autor. O item só escolhe **quantas
+colunas ocupa** em cada breakpoint.
+
+| Breakpoint | Viewport   | Colunas | Gap  | Margem lateral   |
+| ---------- | ---------- | ------- | ---- | ---------------- |
+| `1xs`      | < 768px    | 4       | 16px | 16px             |
+| `sm`       | ≥ 768px    | 8       | 16px | 32px             |
+| `md`       | ≥ 1024px   | 8       | 16px | 40px             |
+| `lg`       | ≥ 1280px   | 12      | 24px | 40px             |
+| `1xl`      | ≥ 1440px   | 12      | 24px | `max-width` 1360px, centralizado |
 
 <Canvas of={GridStories.Default} />
 <Controls of={GridStories.Default} />
 
-## Two Columns
+## Spans responsivos
 
-<Canvas of={GridStories.TwoColumns} />
+Os spans são **mobile-first**: um valor declarado em `sm` vale de `sm` para
+cima até que outro breakpoint o substitua.
 
-## With Column Spans
+<Canvas of={GridStories.Spans} />
 
-<Canvas of={GridStories.WithSpans} />
+## Grid aninhado
+
+Um `lui-grid` dentro de um `lui-grid-item` recebe `flush` automaticamente —
+ele reparte a largura da track do pai em vez de reaplicar a margem de página.
+
+<Canvas of={GridStories.Nested} />
 
 ## Classe CSS (sem Web Component)
 
@@ -27,19 +43,44 @@ Full CSS Grid layout primitive. Use `lui-grid-item` for individual items with sp
 ### Web Component
 
 ```html
-<lui-grid columns="repeat(3, 1fr)" gap="md">
-  <lui-grid-item>Item 1</lui-grid-item>
-  <lui-grid-item>Item 2</lui-grid-item>
-  <lui-grid-item>Item 3</lui-grid-item>
+<lui-grid>
+  <lui-grid-item span="full">Cabeçalho</lui-grid-item>
+  <lui-grid-item span="2" span-sm="4" span-lg="6">Coluna A</lui-grid-item>
+  <lui-grid-item span="2" span-sm="4" span-lg="6">Coluna B</lui-grid-item>
 </lui-grid>
 ```
 
 ### Classe CSS
 
 ```html
-<div class="grid grid--gap-md" style="grid-template-columns: repeat(3, 1fr);">
-  <div class="grid-item">Item 1</div>
-  <div class="grid-item">Item 2</div>
-  <div class="grid-item">Item 3</div>
+<div class="grid">
+  <div class="grid-item grid-item--1xs-full">Cabeçalho</div>
+  <div class="grid-item grid-item--1xs-2 grid-item--sm-4 grid-item--lg-6">Coluna A</div>
+  <div class="grid-item grid-item--1xs-2 grid-item--sm-4 grid-item--lg-6">Coluna B</div>
 </div>
 ```
+
+## API
+
+### `lui-grid` / `.grid`
+
+| Atributo | Classe                | Valores                          | Padrão    |
+| -------- | --------------------- | -------------------------------- | --------- |
+| `align`  | `.grid--align-{v}`    | `stretch`, `start`, `center`, `end` | `stretch` |
+| `flush`  | `.grid--flush`        | booleano                         | `false`   |
+
+`flush` remove a margem lateral e o `max-width`, mantendo colunas e gap do
+breakpoint. Use em seções full-bleed.
+
+### `lui-grid-item` / `.grid-item`
+
+| Atributo    | Classe                     | Valores                |
+| ----------- | -------------------------- | ---------------------- |
+| `span`      | `.grid-item--1xs-{n}`      | `1`–`4`, `full`        |
+| `span-sm`   | `.grid-item--sm-{n}`       | `1`–`8`, `full`        |
+| `span-md`   | `.grid-item--md-{n}`       | `1`–`8`, `full`        |
+| `span-lg`   | `.grid-item--lg-{n}`       | `1`–`12`, `full`       |
+| `span-1xl`  | `.grid-item--1xl-{n}`      | `1`–`12`, `full`       |
+
+No Web Component o span é limitado ao número de colunas do breakpoint, então
+`span="8"` em `1xs` vira `span 4`.

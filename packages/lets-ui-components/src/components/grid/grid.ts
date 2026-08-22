@@ -2,42 +2,52 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import styles from './grid.scss?inline';
 import gridItemStyles from './grid-item.scss?inline';
-import { resolveSpace, ALIGN_MAP, JUSTIFY_MAP } from '../../utils/layout.js';
+
+// Mirrors `packages/styles/src/utilities/_grid.map.scss`: the column count
+// available at each breakpoint. Spans are clamped to it so an item can never
+// overflow the row.
+const COLUMNS: Record<string, number> = {
+  '1xs': 4,
+  sm: 8,
+  md: 8,
+  lg: 12,
+  '1xl': 12,
+};
+
+const ALIGN = new Set(['start', 'center', 'end', 'stretch']);
+
+function resolveSpan(value: string, breakpoint: string): string | null {
+  if (!value) return null;
+  if (value === 'full') return '1 / -1';
+
+  const span = parseInt(value, 10);
+  if (isNaN(span) || span < 1) return null;
+
+  return `span ${Math.min(span, COLUMNS[breakpoint])}`;
+}
 
 export class LuiGrid extends LitElement {
   static styles = unsafeCSS(styles);
 
-  @property() columns = '';
-  @property() rows = '';
-  @property() gap = '16';
-  @property({ attribute: 'gap-x' }) gapX = '';
-  @property({ attribute: 'gap-y' }) gapY = '';
+  @property({ reflect: true, type: Boolean }) flush = false;
   @property() align = 'stretch';
-  @property() justify = 'stretch';
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    // A grid nested in a grid item already sits inside a parent track, so it
+    // must never re-apply the page margin or the max-width.
+    if (this.parentElement?.tagName === 'LUI-GRID-ITEM') {
+      this.flush = true;
+    }
+  }
 
   updated() {
-    if (this.columns)
-      this.style.setProperty('--lui-grid-columns', this.columns);
-    else this.style.removeProperty('--lui-grid-columns');
-
-    if (this.rows) this.style.setProperty('--lui-grid-rows', this.rows);
-    else this.style.removeProperty('--lui-grid-rows');
-
-    if (this.gapX || this.gapY) {
-      const gx = resolveSpace(this.gapX) ?? resolveSpace(this.gap) ?? '0';
-      const gy = resolveSpace(this.gapY) ?? resolveSpace(this.gap) ?? '0';
-      this.style.setProperty('--lui-grid-gap', `${gy} ${gx}`);
+    if (ALIGN.has(this.align)) {
+      this.style.setProperty('--lui-grid-align', this.align);
     } else {
-      const gap = resolveSpace(this.gap);
-      if (gap) this.style.setProperty('--lui-grid-gap', gap);
-      else this.style.removeProperty('--lui-grid-gap');
+      this.style.removeProperty('--lui-grid-align');
     }
-
-    const align = ALIGN_MAP[this.align] ?? this.align;
-    this.style.setProperty('--lui-grid-align', align);
-
-    const justify = JUSTIFY_MAP[this.justify] ?? this.justify;
-    this.style.setProperty('--lui-grid-justify', justify);
   }
 
   render() {
@@ -48,26 +58,28 @@ export class LuiGrid extends LitElement {
 export class LuiGridItem extends LitElement {
   static styles = unsafeCSS(gridItemStyles);
 
-  @property({ attribute: 'col-span' }) colSpan = '';
-  @property({ attribute: 'row-span' }) rowSpan = '';
-  @property({ attribute: 'col-start' }) colStart = '';
-  @property({ attribute: 'col-end' }) colEnd = '';
-  @property({ attribute: 'row-start' }) rowStart = '';
-  @property({ attribute: 'row-end' }) rowEnd = '';
+  @property() span = '';
+  @property({ attribute: 'span-sm' }) spanSm = '';
+  @property({ attribute: 'span-md' }) spanMd = '';
+  @property({ attribute: 'span-lg' }) spanLg = '';
+  @property({ attribute: 'span-1xl' }) span1xl = '';
 
   updated() {
-    let col = 'auto';
-    if (this.colStart && this.colEnd) col = `${this.colStart} / ${this.colEnd}`;
-    else if (this.colStart) col = `${this.colStart} / span 1`;
-    else if (this.colSpan) col = `span ${this.colSpan}`;
+    const spans: Record<string, string> = {
+      '1xs': this.span,
+      sm: this.spanSm,
+      md: this.spanMd,
+      lg: this.spanLg,
+      '1xl': this.span1xl,
+    };
 
-    let row = 'auto';
-    if (this.rowStart && this.rowEnd) row = `${this.rowStart} / ${this.rowEnd}`;
-    else if (this.rowStart) row = `${this.rowStart} / span 1`;
-    else if (this.rowSpan) row = `span ${this.rowSpan}`;
+    for (const [breakpoint, value] of Object.entries(spans)) {
+      const resolved = resolveSpan(value, breakpoint);
+      const property = `--lui-grid-item-${breakpoint}`;
 
-    this.style.setProperty('--lui-grid-item-col', col);
-    this.style.setProperty('--lui-grid-item-row', row);
+      if (resolved) this.style.setProperty(property, resolved);
+      else this.style.removeProperty(property);
+    }
   }
 
   render() {

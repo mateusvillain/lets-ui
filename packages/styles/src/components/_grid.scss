@@ -1,23 +1,53 @@
-@use '../utilities/functions' as fn;
+@use '../utilities/grid.map' as grid;
 
-$-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
+// Responsive column grid. Column count, gap and inline margin are driven by
+// the breakpoint, never by the author; items only opt into a span per
+// breakpoint and inherit the last span declared below them.
+// See `utilities/_grid.map.scss` for the breakpoint table.
 
 .grid {
-  display: grid;
-  gap: fn.fluid(16);
-  align-items: stretch;
+  @include grid.container;
 
-  &--gap-0 {
-    gap: 0;
+  &--align-start {
+    --lui-grid-align: start;
   }
 
-  @each $n in $-fluid-tokens {
-    &--gap-#{$n} {
-      gap: fn.fluid($n);
-    }
+  &--align-center {
+    --lui-grid-align: center;
+  }
+
+  &--align-end {
+    --lui-grid-align: end;
+  }
+
+  // Full-bleed: keeps the breakpoint columns and gap, drops the page margin
+  // and max-width.
+  &--flush {
+    max-width: none;
+    margin-inline: 0;
   }
 }
 
+// A nested grid already sits inside a parent track, so it must never re-apply
+// the page margin or the max-width.
+.grid-item .grid {
+  max-width: none;
+  margin-inline: 0;
+}
+
 .grid-item {
-  display: block;
+  grid-column: span 1;
+  min-width: 0;
+}
+
+@include grid.each-step using ($name, $columns) {
+  @for $i from 1 through $columns {
+    .grid-item--#{$name}-#{$i} {
+      grid-column: span $i;
+    }
+  }
+
+  .grid-item--#{$name}-full {
+    grid-column: 1 / -1;
+  }
 }

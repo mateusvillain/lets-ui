@@ -1,0 +1,65 @@
+@use '../utilities/functions' as fn;
+@use '../utilities/mixins' as mx;
+@use '../utilities/tokens.map' as tokens;
+
+// Page shell and breakpoint visibility helpers.
+// Extracted from the former `_grid.scss` when the grid system was rewritten.
+// These are not part of the grid: `.layout` is the app shell (header +
+// sidebar + content) and `.show-*` / `.hide-*` are visibility utilities.
+
+@each $name, $value in tokens.$breakpoint {
+  .show-#{$name} {
+    display: none;
+
+    @media (min-width: $value) {
+      display: block;
+    }
+  }
+
+  .hide-#{$name} {
+    display: block;
+
+    @media (min-width: $value) {
+      display: none;
+    }
+  }
+}
+
+.layout {
+  display: grid;
+}
+
+// Mobile
+@include mx.media-down(lg) {
+  .main-content {
+    padding: fn.fixed(16);
+    margin-left: 0;
+    max-width: none;
+  }
+
+  .sidebar {
+    position: static;
+    width: auto;
+  }
+
+  .layout {
+    grid-template-areas:
+      'header'
+      'content';
+  }
+}
+
+// Desktop
+@include mx.media-up(lg) {
+  .main-content {
+    grid-area: content;
+    padding: fn.fluid(40);
+    margin-left: 280px;
+  }
+
+  .layout {
+    grid-template-areas:
+      'header header'
+      'sidebar content';
+  }
+}
