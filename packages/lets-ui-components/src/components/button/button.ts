@@ -33,7 +33,7 @@ export class LuiButton extends LitElement {
   @property() href = '';
   @property() target = '';
   @property() rel = '';
-  @property() download = '';
+  @property() download?: string;
 
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
@@ -44,9 +44,14 @@ export class LuiButton extends LitElement {
   }
 
   private get _rel(): string | undefined {
-    if (this.rel) return this.rel;
-    if (this.target === '_blank') return 'noopener noreferrer';
-    return undefined;
+    const tokens = new Set(this.rel.split(/\s+/).filter(Boolean));
+
+    if (this.target === '_blank') {
+      tokens.add('noopener');
+      tokens.add('noreferrer');
+    }
+
+    return tokens.size ? [...tokens].join(' ') : undefined;
   }
 
   get _size(): 'lg' | 'md' {
@@ -79,7 +84,6 @@ export class LuiButton extends LitElement {
   private _handleLinkClick = (e: Event) => {
     if (this.disabled || this.loading) {
       e.preventDefault();
-      e.stopPropagation();
     }
   };
 
@@ -98,11 +102,11 @@ export class LuiButton extends LitElement {
         ?autofocus="${this.autofocus}"
         target="${ifDefined(isDisabled ? undefined : this.target || undefined)}"
         rel="${ifDefined(isDisabled ? undefined : this._rel)}"
-        download="${ifDefined(
-          isDisabled ? undefined : this.download || undefined
-        )}"
+        download="${ifDefined(isDisabled ? undefined : this.download)}"
         role="${ifDefined(isDisabled ? 'link' : undefined)}"
-        tabindex="${ifDefined(this.disabled ? '-1' : undefined)}"
+        tabindex="${ifDefined(
+          this.disabled ? '-1' : this.loading ? '0' : undefined
+        )}"
         aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
