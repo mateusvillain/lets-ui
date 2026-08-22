@@ -170,7 +170,7 @@ export class LuiTextarea extends LitElement {
             rows="${this.rows}"
             style="resize: ${this._resizeValue};"
             maxlength="${maxLen !== null ? maxLen : ''}"
-            .value="${live(this.value)}"
+            .value="${live(String(this.value ?? ''))}"
             ?disabled="${this.disabled}"
             ?required="${this.required}"
             ?aria-disabled="${this.disabled}"

@@ -180,9 +180,6 @@ export class LuiInput extends LitElement {
   }
 
   private _handleInput() {
-    if (this._inputType === 'number') {
-      this._inputEl.value = String(this._clampNumber(this._inputEl.value));
-    }
     this.value = this._inputEl.value;
     this._charCount = this._inputEl.value.length;
     this.error = false;
@@ -191,7 +188,7 @@ export class LuiInput extends LitElement {
   }
 
   private _handleChange() {
-    if (this._inputType === 'number') {
+    if (this._inputType === 'number' && this._inputEl.value !== '') {
       this._inputEl.value = String(this._clampNumber(this._inputEl.value));
     }
     this.value = this._inputEl.value;
@@ -238,7 +235,7 @@ export class LuiInput extends LitElement {
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
           placeholder="${this.placeholder}"
-          .value="${live(this.value)}"
+          .value="${live(String(this.value ?? ''))}"
           maxlength="${maxLen !== null ? maxLen : ''}"
           pattern="${ifDefined(this.pattern || undefined)}"
           inputmode="${ifDefined(this.inputmode || undefined)}"
@@ -297,7 +294,7 @@ export class LuiInput extends LitElement {
           name="${ifDefined(this.name || undefined)}"
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
-          .value="${live(this.value)}"
+          .value="${live(String(this.value ?? ''))}"
           step="${this._stepValue}"
           min="${minVal !== null ? minVal : ''}"
           max="${maxVal !== null ? maxVal : ''}"
