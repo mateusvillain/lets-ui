@@ -6,12 +6,10 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: transparent;
   border: none;
   border-radius: radius(md);
   cursor: pointer;
   color: icon(neutral);
-  transition: background-color 0.2s ease-in-out;
 
   svg {
     display: block;
@@ -51,5 +49,5 @@
     }
   }
 
-  @include states(neutral, primary, primary);
+  @include states(primary, primary);
 }

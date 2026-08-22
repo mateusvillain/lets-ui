@@ -130,20 +130,6 @@ $color: (
         neutral: token('lui.color.neutral.background.container'),
         overlay: token('lui.color.neutral.background.overlay'),
       ),
-      hover: (
-        primary: token('lui.color.primary.background.hover'),
-        secondary: token('lui.color.secondary.background.hover'),
-        danger: token('lui.color.danger.background.hover'),
-        success: token('lui.color.success.background.hover'),
-        neutral: token('lui.color.neutral.background.hover'),
-      ),
-      pressed: (
-        primary: token('lui.color.primary.background.pressed'),
-        secondary: token('lui.color.secondary.background.pressed'),
-        danger: token('lui.color.danger.background.pressed'),
-        success: token('lui.color.success.background.pressed'),
-        neutral: token('lui.color.neutral.background.pressed'),
-      ),
     ),
 
     border: (
@@ -204,6 +190,13 @@ $focus-ring: (
   danger: token('lui.focus-ring.danger'),
   success: token('lui.focus-ring.success'),
   neutral: token('lui.focus-ring.neutral'),
+);
+
+// Interaction state layer. Only the tint is a token: it resolves per theme
+// (black in light, white in dark). How much of it to mix in never varies, so it
+// lives in _functions.scss next to the logic instead.
+$interaction: (
+  tint: token('lui.color.interaction.tint'),
 );
 $opacity: (
   disabled: token('lui.opacity.disabled'),

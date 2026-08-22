@@ -18,8 +18,6 @@ export const semanticGroups = [
     tokens: [
       { role: 'background-surface',   desc: 'Fundo suave'           },
       { role: 'background-container', desc: 'Fundo de destaque'      },
-      { role: 'background-hover',     desc: 'Hover'                  },
-      { role: 'background-pressed',   desc: 'Pressed'                },
       { role: 'border-default',       desc: 'Borda'                  },
       { role: 'text-body',            desc: 'Texto'                  },
       { role: 'icon-default',         desc: 'Ícone'                  },
@@ -32,8 +30,6 @@ export const semanticGroups = [
     tokens: [
       { role: 'background-surface',   desc: 'Fundo suave'           },
       { role: 'background-container', desc: 'Fundo de destaque'      },
-      { role: 'background-hover',     desc: 'Hover'                  },
-      { role: 'background-pressed',   desc: 'Pressed'                },
       { role: 'border-default',       desc: 'Borda'                  },
       { role: 'icon-default',         desc: 'Ícone'                  },
       { role: 'focus-ring',           desc: 'Cor do anel de foco'    },
@@ -45,8 +41,6 @@ export const semanticGroups = [
     tokens: [
       { role: 'background-surface',   desc: 'Fundo suave'           },
       { role: 'background-container', desc: 'Fundo de destaque'      },
-      { role: 'background-hover',     desc: 'Hover'                  },
-      { role: 'background-pressed',   desc: 'Pressed'                },
       { role: 'border-default',       desc: 'Borda'                  },
       { role: 'border-hover',         desc: 'Borda hover'            },
       { role: 'border-pressed',       desc: 'Borda pressed'          },
@@ -61,8 +55,6 @@ export const semanticGroups = [
     tokens: [
       { role: 'background-surface',   desc: 'Fundo suave'           },
       { role: 'background-container', desc: 'Fundo de destaque'      },
-      { role: 'background-hover',     desc: 'Hover'                  },
-      { role: 'background-pressed',   desc: 'Pressed'                },
       { role: 'border-default',       desc: 'Borda'                  },
       { role: 'icon-default',         desc: 'Ícone'                  },
       { role: 'focus-ring',           desc: 'Cor do anel de foco'    },
@@ -95,8 +87,6 @@ export const semanticGroups = [
       { role: 'background-surface',   desc: 'Fundo padrão'          },
       { role: 'background-container', desc: 'Fundo de destaque'      },
       { role: 'background-overlay',   desc: 'Overlay'                },
-      { role: 'background-hover',     desc: 'Hover'                  },
-      { role: 'background-pressed',   desc: 'Pressed'                },
       { role: 'border-subtle',        desc: 'Borda suave'            },
       { role: 'border-default',       desc: 'Borda padrão'           },
       { role: 'border-hover',         desc: 'Borda hover'            },
@@ -148,7 +138,7 @@ Escalas de 8 tons, do mais claro ao mais escuro. Use a função SCSS `color($pal
 
 ### Black Alpha
 
-Sobreposições em preto com opacidade crescente, usadas em estados de hover e pressed.
+Sobreposições em preto com opacidade crescente (invertidas para branco nos temas escuros).
 
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '6px', marginBottom: '32px' }}>
   {[
@@ -168,6 +158,46 @@ Sobreposições em preto com opacidade crescente, usadas em estados de hover e p
       </code>
       <span style={{ display: 'block', fontSize: '10px', color: 'var(--lui-color-neutral-text-caption)' }}>
         {alpha} opacidade
+      </span>
+    </div>
+  ))}
+</div>
+
+### Estado de Interação
+
+Hover e pressed não têm mais uma cor por marca e variante: são uma única tinta
+— preta nos temas claros, branca nos escuros — misturada ao background de
+repouso do componente, em 8% e 16%. Use a função SCSS `state($state)` ou o mixin
+`state-layer($bg)`.
+
+A tinta é o único token aqui. As duas quantidades não variam por tema nem por
+marca, então vivem como constantes em `_functions.scss`, junto da lógica que as
+usa.
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '32px' }}>
+  {[
+    ['8%', 'Hover'],
+    ['16%', 'Pressed / active'],
+  ].map(([amount, desc]) => (
+    <div key={desc} style={{
+      display: 'grid',
+      gridTemplateColumns: '48px 1fr auto',
+      alignItems: 'center',
+      gap: '12px',
+      padding: '10px 12px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <div style={{
+        height: '40px',
+        borderRadius: '6px',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        backgroundColor: `color-mix(in srgb, var(--lui-color-interaction-tint) ${amount}, var(--lui-color-neutral-background-surface))`,
+      }} />
+      <code style={{ fontSize: '11px' }}>--lui-color-interaction-tint</code>
+      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>
+        {desc} · {amount}
       </span>
     </div>
   ))}

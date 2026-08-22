@@ -48,7 +48,6 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: transparent;
     border: none;
     border-radius: radius(md);
     cursor: pointer;
@@ -63,7 +62,7 @@
       height: 1.5rem;
     }
 
-    @include states(neutral, primary, primary);
+    @include states(primary, primary);
   }
 
   &__body {

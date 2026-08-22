@@ -1,0 +1,687 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+import 'lets-ui-icons/dist/lets-ui-icons.css';
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>State Layer — Let's UI Playground</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 96px 24px 64px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      /* ── Toolbar ─────────────────────────────────────────── */
+      .toolbar {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 12px 24px;
+        background: var(--lui-color-neutral-background-surface);
+        border-bottom: 1px solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .toolbar__group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .toolbar__label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.5;
+      }
+
+      .segment {
+        display: flex;
+        border: 1px solid var(--lui-color-neutral-border-default);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .segment__btn {
+        padding: 6px 14px;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        background: transparent;
+        color: var(--lui-color-neutral-text-body);
+        border: none;
+        border-right: 1px solid var(--lui-color-neutral-border-default);
+        cursor: pointer;
+      }
+
+      .segment__btn:last-child {
+        border-right: none;
+      }
+
+      .segment__btn[aria-pressed='true'] {
+        background: var(--lui-color-neutral-background-overlay);
+        color: var(--lui-color-neutral-text-inverse);
+      }
+
+      /* ── Page scaffold ───────────────────────────────────── */
+      .page {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      .intro h1 {
+        margin: 0 0 8px;
+        font-size: 22px;
+      }
+
+      .intro p {
+        margin: 0;
+        max-width: 68ch;
+        line-height: 1.6;
+        opacity: 0.75;
+      }
+
+      .section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .section__title {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.5;
+      }
+
+      .section__note {
+        margin: -8px 0 0;
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: 0.6;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .panel {
+        padding: 16px;
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+        background: var(--lui-color-neutral-background-surface);
+      }
+
+      /* ── Token readout ───────────────────────────────────── */
+      .swatches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .swatch {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+        min-width: 260px;
+      }
+
+      .swatch__chip {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        background-color: color-mix(
+          in srgb,
+          var(--lui-color-interaction-tint) var(--swatch-amount, 0%),
+          var(--lui-color-neutral-background-surface)
+        );
+      }
+
+      .swatch__name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .swatch__value {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        opacity: 0.65;
+      }
+
+      /* ── Forced-state simulation ─────────────────────────── */
+      /* Every component mixes the same tint into its own `--lui-bg`, so the
+         playground can pin a state without hovering by repeating that mix. */
+      [data-force] .force-scope
+        :is(
+          .btn,
+          .icon-button,
+          .close-button,
+          .tab,
+          .menu-item,
+          .navbar-section a,
+          .checkbox input:checked,
+          .radio input:checked,
+          .switch input:checked
+        ):not(:disabled, [aria-disabled='true']) {
+        background-color: color-mix(
+          in srgb,
+          var(--lui-color-interaction-tint) var(--forced-amount),
+          var(--lui-bg, transparent)
+        );
+      }
+
+      /* Spelled out on purpose: the amounts are not tokens, they are constants
+         of the interaction model declared in _functions.scss. */
+      [data-force='hover'] {
+        --forced-amount: 8%;
+      }
+
+      [data-force='active'] {
+        --forced-amount: 16%;
+      }
+
+
+      /* ── Timing comparison ───────────────────────────────── */
+      /* Timing is two custom properties, so swapping a row's profile is just
+         overriding them. Specificity 0,4,0 to beat the mixin rule (0,3,1). */
+      .tt-row {
+        display: grid;
+        grid-template-columns: 190px 1fr;
+        align-items: center;
+        gap: 16px;
+        padding: 10px 0;
+        border-top: 1px solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .tt-row__meta {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .tt-row__name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .tt-row__spec {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        opacity: 0.6;
+      }
+
+      .tt-row .btn[data-tt='a'] { --lui-state-duration: 220ms; }
+      .tt-row .btn[data-tt='a']:hover {
+        --lui-state-duration: 140ms;
+        --lui-state-easing: ease-out;
+      }
+      .tt-row .btn[data-tt='a']:active {
+        --lui-state-duration: 40ms;
+        --lui-state-easing: linear;
+      }
+
+      .tt-row .btn[data-tt='b'] { --lui-state-duration: 320ms; }
+      .tt-row .btn[data-tt='b']:hover {
+        --lui-state-duration: 240ms;
+        --lui-state-easing: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .tt-row .btn[data-tt='b']:active {
+        --lui-state-duration: 90ms;
+        --lui-state-easing: linear;
+      }
+
+      .tt-row .btn[data-tt='c'] { --lui-state-duration: 420ms; }
+      .tt-row .btn[data-tt='c']:hover {
+        --lui-state-duration: 320ms;
+        --lui-state-easing: linear;
+      }
+      .tt-row .btn[data-tt='c']:active {
+        --lui-state-duration: 120ms;
+        --lui-state-easing: linear;
+      }
+
+      .tt-row .btn[data-tt='d'] { --lui-state-duration: 600ms; }
+      .tt-row .btn[data-tt='d']:hover {
+        --lui-state-duration: 450ms;
+        --lui-state-easing: ease-in-out;
+      }
+      .tt-row .btn[data-tt='d']:active {
+        --lui-state-duration: 180ms;
+        --lui-state-easing: linear;
+      }
+
+      /* ── Demo-only overrides ─────────────────────────────── */
+      /* The real navbar is fixed and hidden under 1280px; unpin it so the
+         section links can be inspected inline. */
+      .navbar-demo .navbar {
+        display: block;
+        position: static;
+        width: 260px;
+        min-width: 260px;
+        max-width: 260px;
+        height: auto;
+        border-right: none;
+      }
+
+      .navbar-demo .navbar-section ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .menu-demo {
+        width: 260px;
+        list-style: none;
+        margin: 0;
+        padding: 8px;
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="toolbar">
+      <div class="toolbar__group">
+        <span class="toolbar__label">Tema</span>
+        <div class="segment" role="group" aria-label="Tema">
+          <button class="segment__btn" data-theme-value="light" aria-pressed="true">Light</button>
+          <button class="segment__btn" data-theme-value="dark" aria-pressed="false">Dark</button>
+          <button class="segment__btn" data-theme-value="system" aria-pressed="false">System</button>
+        </div>
+      </div>
+
+      <div class="toolbar__group">
+        <span class="toolbar__label">Estado forçado</span>
+        <div class="segment" role="group" aria-label="Estado forçado">
+          <button class="segment__btn" data-force-value="none" aria-pressed="true">Rest</button>
+          <button class="segment__btn" data-force-value="hover" aria-pressed="false">Hover 8%</button>
+          <button class="segment__btn" data-force-value="active" aria-pressed="false">Active 16%</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="intro">
+        <h1>State layer</h1>
+        <p>
+          Hover e active deixaram de ser uma cor por marca e variante. Agora são
+          uma única camada translúcida — preta nos temas claros, branca nos
+          escuros — misturada ao background do próprio componente a partir da
+          tinta única <code>--lui-color-interaction-tint</code>, misturada ao fundo
+          de repouso do componente. Use o seletor
+          <strong>Estado forçado</strong> para fixar o estado sem passar o mouse
+          (funciona nos componentes de CSS global) e o seletor de
+          <strong>Tema</strong> para conferir a inversão no dark.
+        </p>
+      </section>
+
+      <!-- ── Tokens ─────────────────────────────────────────── -->
+      <section class="section">
+        <h2 class="section__title">Tokens</h2>
+        <p class="section__note">
+          Um token só — a tinta, que resolve por tema. As quantidades (8% e 16%)
+          não variam por tema nem por marca, então são constantes SCSS, não
+          tokens. Juntos substituem os 10 tokens de
+          <code>background.hover</code> / <code>background.pressed</code> que
+          existiam por variante.
+        </p>
+        <div class="swatches">
+          <div class="swatch">
+            <span class="swatch__chip" style="--swatch-amount: 8%;"></span>
+            <span class="col" style="gap: 2px;">
+              <span class="swatch__name">hover</span>
+              <span class="swatch__value">8% · constante SCSS</span>
+            </span>
+          </div>
+          <div class="swatch">
+            <span class="swatch__chip" style="--swatch-amount: 16%;"></span>
+            <span class="col" style="gap: 2px;">
+              <span class="swatch__name">pressed</span>
+              <span class="swatch__value">16% · constante SCSS</span>
+            </span>
+          </div>
+          <div class="swatch">
+            <span class="swatch__chip" style="background-color: var(--lui-color-interaction-tint);"></span>
+            <span class="col" style="gap: 2px;">
+              <span class="swatch__name">--lui-color-interaction-tint</span>
+              <span class="swatch__value" data-readout="--lui-color-interaction-tint">…</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <div class="force-scope col" style="gap: 48px;">
+        <!-- ── Button ───────────────────────────────────────── -->
+        <section class="section">
+          <h2 class="section__title">Button — CSS global</h2>
+          <div class="row">
+            <button class="btn btn--primary btn--lg">Primary</button>
+            <button class="btn btn--secondary btn--lg">Secondary</button>
+            <button class="btn btn--neutral btn--lg">Neutral</button>
+            <button class="btn btn--danger btn--lg">Danger</button>
+            <button class="btn btn--success btn--lg">Success</button>
+          </div>
+          <div class="row">
+            <button class="btn btn--primary btn--md">Primary</button>
+            <button class="btn btn--secondary btn--md">Secondary</button>
+            <button class="btn btn--neutral btn--md">Neutral</button>
+            <button class="btn btn--danger btn--md">Danger</button>
+            <button class="btn btn--success btn--md">Success</button>
+            <button class="btn btn--primary btn--md" disabled>Disabled</button>
+          </div>
+        </section>
+
+        <!-- ── Icon button / Close button ───────────────────── -->
+        <section class="section">
+          <h2 class="section__title">Icon button · Close button</h2>
+          <div class="row">
+            <button class="icon-button icon-button--lg" aria-label="Editar">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+            </button>
+            <button class="icon-button icon-button--md" aria-label="Editar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+            </button>
+            <button class="close-button close-button--lg" aria-label="Fechar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+            </button>
+            <button class="close-button close-button--md" aria-label="Fechar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+            </button>
+            <button class="close-button close-button--sm" aria-label="Fechar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- ── Tabs ─────────────────────────────────────────── -->
+        <section class="section">
+          <h2 class="section__title">Tabs</h2>
+          <p class="section__note">
+            A mesma camada cobre aba selecionada e não selecionada, nos dois
+            variants — antes eram oito regras de background concorrendo por
+            especificidade.
+          </p>
+          <div class="col">
+            <div class="tabs tabs--line" style="max-width: 480px;">
+              <div class="tabs__list" role="tablist">
+                <button class="tab" role="tab" aria-selected="true">Visão geral</button>
+                <button class="tab" role="tab" aria-selected="false">Configurações</button>
+                <button class="tab" role="tab" aria-selected="false">Histórico</button>
+                <button class="tab" role="tab" aria-selected="false" disabled>Desabilitada</button>
+              </div>
+            </div>
+
+            <div class="tabs tabs--card" style="max-width: 480px;">
+              <div class="tabs__list" role="tablist">
+                <button class="tab" role="tab" aria-selected="true">Visão geral</button>
+                <button class="tab" role="tab" aria-selected="false">Configurações</button>
+                <button class="tab" role="tab" aria-selected="false">Histórico</button>
+                <button class="tab" role="tab" aria-selected="false" disabled>Desabilitada</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Menu item ────────────────────────────────────── -->
+        <section class="section">
+          <h2 class="section__title">Menu item · Navbar</h2>
+          <div class="row" style="align-items: flex-start; gap: 32px;">
+            <ul class="menu-demo">
+              <li><button class="menu-item"><span class="menu-item__label">Renomear</span></button></li>
+              <li><button class="menu-item"><span class="menu-item__label">Duplicar</span></button></li>
+              <li><button class="menu-item"><span class="menu-item__label">Compartilhar</span></button></li>
+              <li><button class="menu-item" disabled><span class="menu-item__label">Arquivar</span></button></li>
+            </ul>
+
+            <div class="navbar-demo">
+              <nav class="navbar">
+                <div class="navbar-section">
+                  <h6>Componentes</h6>
+                  <ul>
+                    <li><a href="#">Button</a></li>
+                    <li><a href="#">Tabs</a></li>
+                    <li><a href="#">Dropdown menu</a></li>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Selection controls ───────────────────────────── -->
+        <section class="section">
+          <h2 class="section__title">Checkbox · Radio · Switch</h2>
+          <p class="section__note">
+            A camada só se aplica ao controle marcado, que é quem tem background
+            preenchido.
+          </p>
+          <div class="row" style="gap: 24px;">
+            <label class="checkbox checkbox--lg">
+              <input type="checkbox" checked />
+              <span>Marcado</span>
+            </label>
+            <label class="checkbox checkbox--lg">
+              <input type="checkbox" />
+              <span>Desmarcado</span>
+            </label>
+            <label class="radio radio--lg">
+              <input type="radio" name="pg-radio" checked />
+              <span>Marcado</span>
+            </label>
+            <label class="radio radio--lg">
+              <input type="radio" name="pg-radio" />
+              <span>Desmarcado</span>
+            </label>
+            <label class="switch switch--lg">
+              <input type="checkbox" checked />
+              <span>Ligado</span>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <!-- ── Timing comparison ──────────────────────────────── -->
+      <section class="section">
+        <h2 class="section__title">Comparador de timing</h2>
+        <p class="section__note">
+          Mesma camada, quatro ritmos. Passe o cursor devagar em cada botão e
+          depois clique e segure. O perfil A é o que está aplicado hoje.
+        </p>
+        <div>
+          {[
+            ['a', 'A — atual', '140ms ease-out · press 40ms · saída 220ms'],
+            ['b', 'B — médio', '240ms standard · press 90ms · saída 320ms'],
+            ['c', 'C — longo', '320ms linear · press 120ms · saída 420ms'],
+            ['d', 'D — muito longo', '450ms ease-in-out · press 180ms · saída 600ms'],
+          ].map(([key, name, spec]) => (
+            <div class="tt-row">
+              <span class="tt-row__meta">
+                <span class="tt-row__name">{name}</span>
+                <span class="tt-row__spec">{spec}</span>
+              </span>
+              <span class="row">
+                <button class="btn btn--primary btn--lg" data-tt={key}>Primary</button>
+                <button class="btn btn--neutral btn--lg" data-tt={key}>Neutral</button>
+                <button class="btn btn--danger btn--md" data-tt={key}>Danger</button>
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ── Web components ─────────────────────────────────── -->
+      <section class="section">
+        <h2 class="section__title">Web components (shadow DOM)</h2>
+        <p class="section__note">
+          O CSS global não atravessa o shadow root, então o estado forçado não
+          alcança estes — passe o mouse e clique para conferir que a camada é a
+          mesma.
+        </p>
+        <div class="panel col" style="gap: 20px;">
+          <div class="row">
+            <lui-button variant="primary" size="lg" label="Primary"></lui-button>
+            <lui-button variant="secondary" size="lg" label="Secondary"></lui-button>
+            <lui-button variant="neutral" size="lg" label="Neutral"></lui-button>
+            <lui-button variant="danger" size="lg" label="Danger"></lui-button>
+            <lui-button variant="success" size="lg" label="Success"></lui-button>
+            <lui-button variant="primary" size="lg" label="Disabled" disabled></lui-button>
+          </div>
+
+          <div class="row">
+            <lui-icon-button size="lg" aria-label="Fechar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"></path></svg>
+            </lui-icon-button>
+            <lui-close-button size="lg" label="Fechar"></lui-close-button>
+            <lui-checkbox label="Checkbox" checked></lui-checkbox>
+            <lui-radio name="wc-radio" label="Radio" checked></lui-radio>
+            <lui-switch label="Switch" checked></lui-switch>
+          </div>
+
+          <lui-tabs variant="line" style="max-width: 480px;">
+            <lui-tab label="Visão geral" active><p>Conteúdo da aba Visão geral.</p></lui-tab>
+            <lui-tab label="Configurações"><p>Conteúdo da aba Configurações.</p></lui-tab>
+            <lui-tab label="Histórico"><p>Conteúdo da aba Histórico.</p></lui-tab>
+          </lui-tabs>
+
+          <lui-tabs variant="card" style="max-width: 480px;">
+            <lui-tab label="Visão geral" active><p>Conteúdo da aba Visão geral.</p></lui-tab>
+            <lui-tab label="Configurações"><p>Conteúdo da aba Configurações.</p></lui-tab>
+            <lui-tab label="Histórico"><p>Conteúdo da aba Histórico.</p></lui-tab>
+          </lui-tabs>
+
+          <div class="row">
+            <lui-dropdown-menu>
+              <lui-button slot="trigger" variant="secondary" size="md" label="Abrir menu"></lui-button>
+              <lui-menu-item slot="items" label="Renomear" shortcut="⌘,R"></lui-menu-item>
+              <lui-menu-item slot="items" label="Duplicar" shortcut="⌘,D"></lui-menu-item>
+              <lui-menu-divider slot="items"></lui-menu-divider>
+              <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
+            </lui-dropdown-menu>
+
+            <lui-modal title="Modal" trigger-label="Abrir modal">
+              <p>O botão de fechar do modal também usa a camada de estado.</p>
+              <lui-button
+                slot="actions"
+                data-modal-close
+                variant="secondary"
+                label="Cancelar"></lui-button>
+              <lui-button slot="actions" label="Salvar"></lui-button>
+            </lui-modal>
+
+            <lui-drawer
+              title="Drawer"
+              trigger-label="Abrir drawer"
+              close-on-backdrop
+            >
+              <p>O botão de fechar do drawer também usa a camada de estado.</p>
+              <lui-button
+                slot="actions"
+                data-drawer-close
+                variant="secondary"
+                label="Cancelar"></lui-button>
+              <lui-button slot="actions" label="Salvar"></lui-button>
+            </lui-drawer>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      import '@lets-ui/components';
+
+      const html = document.documentElement;
+
+      // Theme
+      const systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      let systemListener: ((e: MediaQueryListEvent) => void) | null = null;
+
+      function applyTheme(value: string) {
+        if (systemListener) {
+          systemQuery.removeEventListener('change', systemListener);
+          systemListener = null;
+        }
+
+        if (value === 'system') {
+          html.setAttribute('data-theme', systemQuery.matches ? 'dark' : 'light');
+          systemListener = (e) =>
+            html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+          systemQuery.addEventListener('change', systemListener);
+        } else {
+          html.setAttribute('data-theme', value);
+        }
+
+        readTokens();
+      }
+
+      // Forced state
+      function applyForce(value: string) {
+        if (value === 'none') html.removeAttribute('data-force');
+        else html.setAttribute('data-force', value);
+      }
+
+      function wireSegment(attr: string, apply: (value: string) => void) {
+        const buttons = document.querySelectorAll<HTMLButtonElement>(`[${attr}]`);
+
+        buttons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+            btn.setAttribute('aria-pressed', 'true');
+            apply(btn.getAttribute(attr) ?? '');
+          });
+        });
+      }
+
+      wireSegment('data-theme-value', applyTheme);
+      wireSegment('data-force-value', applyForce);
+
+      // Token readout
+      function readTokens() {
+        const styles = getComputedStyle(html);
+
+        document
+          .querySelectorAll<HTMLElement>('[data-readout]')
+          .forEach((el) => {
+            const name = el.getAttribute('data-readout') as string;
+            el.textContent = styles.getPropertyValue(name).trim() || '—';
+          });
+      }
+
+      readTokens();
+    </script>
+  </body>
+</html>

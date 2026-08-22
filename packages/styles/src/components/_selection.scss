@@ -13,9 +13,12 @@
 @mixin input-base {
   appearance: none;
   position: relative;
-  background-color: bg(surface, neutral);
   border: width(1) solid stroke(neutral, subtle);
   transition: all 0.2s ease;
+
+  @include state-base(bg(surface, neutral));
+
+  background-color: var(--lui-bg);
 }
 
 @mixin focus {
@@ -25,9 +28,7 @@
 }
 
 @mixin checked-base {
-  background-color: bg(container, primary);
-
-  @include states(primary, primary, primary);
+  @include states(primary, primary, $bg: bg(container, primary));
 }
 
 // $input-type-sel = full native input selector, e.g. "input[type='checkbox']"

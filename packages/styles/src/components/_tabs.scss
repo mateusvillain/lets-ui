@@ -25,13 +25,12 @@ lui-tab {
   justify-content: center;
   gap: fluid(8);
   border: 0;
-  background: transparent;
   color: text(body);
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: all 0.2s ease-in-out;
 
+  @include state-layer;
   @include font-scale(body--lg);
   @include focus-ring(primary);
   @include disabled;
@@ -83,7 +82,6 @@ lui-tab {
   .tab {
     border-radius: radius(md);
     padding: fluid(8) fluid(12);
-    transition: background 0.15s ease;
   }
 }
 
@@ -94,42 +92,24 @@ lui-tab {
 }
 
 .tabs--card .tab[aria-selected='true'] {
-  background: bg(container, primary);
   color: text(inverse);
+
+  @include state-base(bg(container, primary));
 }
 
-// --- Hover states ---
-.tabs--line .tab:hover:not(:disabled, [aria-disabled='true']) {
-  background: hover(neutral);
+// --- Interaction states — specificity 0,3,0 ---
+// One neutral overlay tints whatever background the tab already has, so both
+// the line and card variants — selected or not — share a single rule.
+.tab:not(:disabled, [aria-disabled='true']):hover {
+  background-color: state(hover);
+
+  @include state-timing(hover);
 }
 
-.tabs--card .tab:hover:not(:disabled, [aria-disabled='true']) {
-  background: hover(primary);
-}
+.tab:not(:disabled, [aria-disabled='true']):active {
+  background-color: state(pressed);
 
-.tabs--card .tab:hover[aria-selected='true'] {
-  background: hover(primary);
-}
-
-.tabs--card .tab:hover:not([aria-selected='true']) {
-  background: hover(neutral);
-}
-
-// --- Active states ---
-.tabs--line .tab:active:not(:disabled, [aria-disabled='true']) {
-  background: pressed(neutral);
-}
-
-.tabs--card .tab:active:not(:disabled, [aria-disabled='true']) {
-  background: pressed(primary);
-}
-
-.tabs--card .tab:active[aria-selected='true'] {
-  background: pressed(primary);
-}
-
-.tabs--card .tab:active:not([aria-selected='true']) {
-  background: pressed(neutral);
+  @include state-timing(pressed);
 }
 
 .tabs__panel {

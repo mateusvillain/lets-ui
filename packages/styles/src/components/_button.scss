@@ -11,20 +11,6 @@ $colors: (
   danger: bg(container, danger),
   success: bg(container, success),
 );
-$hover-colors: (
-  primary: hover(primary),
-  secondary: hover(secondary),
-  neutral: hover(neutral),
-  danger: hover(danger),
-  success: hover(success),
-);
-$pressed-colors: (
-  primary: pressed(primary),
-  secondary: pressed(secondary),
-  neutral: pressed(neutral),
-  danger: pressed(danger),
-  success: pressed(success),
-);
 $focus-rings: (
   primary: focus-ring(primary),
   secondary: focus-ring(secondary),
@@ -104,21 +90,8 @@ button {
   @each $variant in $variants {
     &.btn--#{$variant} {
       color: text(inverse);
-      background-color: map.get($colors, $variant);
 
-      @include states($variant, $variant, $variant);
-
-      // &:hover {
-      //   background-color: map.get($hover-colors, $variant);
-      // }
-
-      // &:active {
-      //   background-color: map.get($pressed-colors, $variant);
-      // }
-
-      // &:focus {
-      //   box-shadow: map.get($focus-rings, $variant);
-      // }
+      @include states($variant, $variant, $bg: map.get($colors, $variant));
     }
   }
 }

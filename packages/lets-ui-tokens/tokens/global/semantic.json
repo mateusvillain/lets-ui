@@ -10,12 +10,6 @@
           },
           "container": {
             "$value": "{lui.brand.color.primary.4}"
-          },
-          "hover": {
-            "$value": "{lui.brand.color.primary.5}"
-          },
-          "pressed": {
-            "$value": "{lui.brand.color.primary.6}"
           }
         },
         "border": {
@@ -48,12 +42,6 @@
           },
           "container": {
             "$value": "{lui.brand.color.secondary.4}"
-          },
-          "hover": {
-            "$value": "{lui.brand.color.secondary.5}"
-          },
-          "pressed": {
-            "$value": "{lui.brand.color.secondary.6}"
           }
         },
         "border": {
@@ -127,12 +115,6 @@
           },
           "container": {
             "$value": "{lui.color.red.4}"
-          },
-          "hover": {
-            "$value": "{lui.color.red.5}"
-          },
-          "pressed": {
-            "$value": "{lui.color.red.6}"
           }
         },
         "border": {
@@ -171,12 +153,6 @@
           },
           "container": {
             "$value": "{lui.color.green.4}"
-          },
-          "hover": {
-            "$value": "{lui.color.green.5}"
-          },
-          "pressed": {
-            "$value": "{lui.color.green.6}"
           }
         },
         "border": {
@@ -206,12 +182,6 @@
           },
           "overlay": {
             "$value": "{lui.color.gray.8}"
-          },
-          "hover": {
-            "$value": "{lui.color.black.alpha.2}"
-          },
-          "pressed": {
-            "$value": "{lui.color.black.alpha.3}"
           }
         },
         "border": {

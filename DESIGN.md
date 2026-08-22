@@ -147,8 +147,7 @@ All SCSS must consume tokens through functions defined in `packages/utilities/sr
 | `color()`      | `color($category, $scale)`     | `color(brand, 5)`        |
 | `icon()`       | `icon($variant)`               | `icon(caution)`          |
 | `stroke()`     | `stroke($variant, $category?)` | `stroke(danger, hover)`  |
-| `hover()`      | `hover($variant)`              | `hover(primary)`         |
-| `pressed()`    | `pressed($variant)`            | `pressed(primary)`       |
+| `state()`      | `state($state, $bg?)`          | `state(hover)`           |
 | `focus-ring()` | `focus-ring($variant)`         | `focus-ring(primary)`    |
 | `radius()`     | `radius($size)`                | `radius(md)`             |
 | `width()`      | `width($size)`                 | `width(1)`               |
@@ -160,13 +159,93 @@ All SCSS must consume tokens through functions defined in `packages/utilities/sr
 
 ### Mixins
 
-| Mixin               | Signature                                    | Purpose                                   |
-| ------------------- | -------------------------------------------- | ----------------------------------------- |
-| `flex()`            | `flex($dir, $align, $justify, $gap, $wrap)`  | Flexbox shorthand                         |
-| `states()`          | `states($variant, $focus-visible?, $focus?)` | Hover / active / disabled / focus states  |
-| `center()`          | `center($axis)`                              | `both` / `x` / `y` alignment              |
-| `center-absolute()` | —                                            | Absolute centering via transform          |
-| `sr-only()`         | —                                            | Visually hidden, screen-reader accessible |
+| Mixin               | Signature                                   | Purpose                                   |
+| ------------------- | ------------------------------------------- | ----------------------------------------- |
+| `flex()`            | `flex($dir, $align, $justify, $gap, $wrap)` | Flexbox shorthand                         |
+| `states()`          | `states($focus-visible, $focus?)`           | Hover / active / disabled / focus states  |
+| `state-layer()`     | `state-layer($bg?)`                         | Interaction overlay only, without focus   |
+| `state-base()`      | `state-base($bg)`                           | Resting background for a state layer      |
+| `state-timing()`    | `state-timing($state)`                      | Per-direction timing for the overlay      |
+| `center()`          | `center($axis)`                             | `both` / `x` / `y` alignment              |
+| `center-absolute()` | —                                           | Absolute centering via transform          |
+| `sr-only()`         | —                                           | Visually hidden, screen-reader accessible |
+
+### Interaction states
+
+Hover and active are **not** colors picked per brand or variant. They are one
+translucent state layer painted on top of whatever background a component
+already has — black at 8% (hover) and 16% (active) in light themes, white at
+the same alphas in dark themes.
+
+A component declares its resting colour through the `--lui-bg` custom property
+instead of `background-color`, and the state rules mix the tint into it with
+`color-mix()`:
+
+```scss
+.thing {
+  @include state-layer(bg(container, primary));
+
+  &:hover {
+    background-color: state(hover);
+
+    @include state-timing(hover);
+  }
+  &:active {
+    background-color: state(pressed);
+
+    @include state-timing(pressed);
+  }
+}
+```
+
+Over an opaque base, mixing the tint in at 8% is identical to compositing it on
+top; over a transparent base it resolves to the tint at exactly that alpha. So
+the model really is a black overlay — it is just expressed as a colour.
+
+**Expressing it as a colour is the whole point.** `background-color`
+interpolates natively in every engine. The obvious alternative — an animated
+custom property inside a `background-image` gradient — animates in Chromium and
+Firefox but _not_ in WebKit, which resolves `var()` inside an image once per
+style change rather than once per animation frame. Safari would jump straight to
+the end value. Anything that must animate has to end up in a real animatable
+property, not behind a `var()` in an image.
+
+Most components should use `states()` instead, which wraps `state-layer` with
+the timing, disabled and focus handling. Because the tint is brand-agnostic,
+adding a brand costs zero state tokens: `--lui-color-interaction-tint` is the
+only one, resolved per theme. The 8% / 16% amounts are not tokens — they never vary
+by theme or brand, so they sit in `$state-amounts` in `_functions.scss`,
+alongside the timings, next to the logic that consumes them.
+
+### Timing
+
+A transition reads its timing from the state being entered, so `state-timing()`
+overrides `--lui-state-duration` / `--lui-state-easing` inside `:hover` and
+`:active` to give each direction its own pace out of a single `transition`
+declaration:
+
+| Direction      | Duration | Easing     | Set by    |
+| -------------- | -------- | ---------- | --------- |
+| rest → hover   | 140ms    | `ease-out` | `:hover`  |
+| hover → active | 40ms     | `linear`   | `:active` |
+| active → hover | 140ms    | `ease-out` | `:hover`  |
+| hover → rest   | 220ms    | `ease-out` | base rule |
+
+The press is the short one on purpose: mousedown to mouseup is roughly 80ms, so
+a slower transition never reaches the pressed tint during a real click. The
+exits are the slowest, which stops a cursor sweeping across a toolbar from
+flickering. CSS cannot tell "hovered from rest" apart from "hovered after
+releasing a press", so both entering-hover directions share one duration.
+
+Two consequences to keep in mind when writing component SCSS:
+
+- Set the resting background with `state-layer($bg)` or `state-base($bg)`, never
+  with `background-color` directly. A rule that sets `background-color` on a
+  component with a state layer competes with the state rules on specificity and
+  usually wins, killing hover. Overriding `--lui-bg` instead — as the selected
+  card tab and the checked inputs do — costs no specificity fight at all.
+- The layer tints the element's own background, so a variant that looks
+  different at rest needs no extra state rules at all.
 
 ---
 

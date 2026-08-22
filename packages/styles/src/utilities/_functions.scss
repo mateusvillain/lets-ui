@@ -1,24 +1,51 @@
 @use 'sass:map';
 @use './tokens.map' as tokens;
 
-@function hover($variant) {
-  $value: map.get(tokens.$color, semantic, bg, hover, $variant);
+// state-tint()
+// The interaction tint: solid black in light themes, solid white in dark ones.
+// Brand-agnostic on purpose — every variant of every brand shares it.
+@function state-tint() {
+  $value: map.get(tokens.$interaction, tint);
 
   @if not $value {
-    @error 'Invalid background hover color: "#{$variant}"';
+    @error 'Missing interaction state tint token';
   }
 
   @return $value;
 }
 
-@function pressed($variant) {
-  $value: map.get(tokens.$color, semantic, bg, pressed, $variant);
+// How much of the tint each state mixes in. Deliberately not tokens: these are
+// the same in every brand, every theme and every context, so they belong next
+// to the logic rather than behind a custom property with one consumer.
+$state-amounts: (
+  hover: 8%,
+  pressed: 16%,
+);
+
+// state-amount($state)
+//  $state = hover, pressed
+@function state-amount($state) {
+  $value: map.get($state-amounts, $state);
 
   @if not $value {
-    @error 'Invalid background pressed color: "#{$variant}"';
+    @error 'Invalid interaction state: "#{$state}"';
   }
 
   @return $value;
+}
+
+// state($state, $bg)
+//  $state = hover, pressed
+// The background a component takes on in that state: the tint mixed into its
+// own resting background. `color-mix()` over an opaque base is identical to
+// compositing the tint on top of it, and over a transparent base it resolves to
+// the tint at exactly its own alpha — so this stays a black-overlay model.
+// The result is a plain colour, which is what makes it animate: `background-color`
+// interpolates natively in every engine. Driving the tint through a custom
+// property inside `background-image` does not — WebKit resolves `var()` in an
+// image once per style change, never per animation frame, so Safari would jump.
+@function state($state, $bg: var(--lui-bg, transparent)) {
+  @return color-mix(in srgb, #{state-tint()} #{state-amount($state)}, #{$bg});
 }
 
 // focus-ring($variant)

@@ -43,17 +43,22 @@ export const colorFns = [
     ],
   },
   {
-    fn: 'hover($variant)',
-    desc: 'Fundo de estado hover',
+    fn: 'state($state, $bg?)',
+    desc: 'Background do componente no estado: a tinta misturada ao fundo de repouso',
     params: [
-      { label: '$variant', values: ['primary', 'secondary', 'danger', 'success', 'neutral'] },
+      { label: '$state', values: ['hover', 'pressed'] },
     ],
   },
   {
-    fn: 'pressed($variant)',
-    desc: 'Fundo de estado pressed/active',
+    fn: 'state-tint()',
+    desc: 'A tinta de interação — preta nos temas claros, branca nos escuros',
+    params: [],
+  },
+  {
+    fn: 'state-amount($state)',
+    desc: 'Quanto da tinta misturar, como número de 0 a 1',
     params: [
-      { label: '$variant', values: ['primary', 'secondary', 'danger', 'success', 'neutral'] },
+      { label: '$state', values: ['hover', 'pressed'] },
     ],
   },
 ];
@@ -170,11 +175,22 @@ Funções SCSS definidas em `packages/styles/src/utilities/_functions.scss`. Use
 }
 
 .btn--primary {
-  background-color: bg(container, primary);
   color: text(inverse);
 
-  &:hover  { background-color: hover(primary); }
-  &:active { background-color: pressed(primary); }
+  // A camada de estado é a mesma para toda variante e marca: o fundo de
+  // repouso entra pelo mixin e as regras de estado misturam a tinta nele.
+  // `states()` já embute tudo isso.
+  @include state-layer(bg(container, primary));
+
+  &:hover {
+    background-color: state(hover);
+    @include state-timing(hover);
+  }
+
+  &:active {
+    background-color: state(pressed);
+    @include state-timing(pressed);
+  }
 }
 ```
 
