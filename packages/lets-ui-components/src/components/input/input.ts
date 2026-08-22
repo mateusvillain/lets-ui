@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { live } from 'lit/directives/live.js';
 import styles from './input.scss?inline';
 
 const EYE_CLOSED = html`
@@ -209,6 +210,8 @@ export class LuiInput extends LitElement {
     if (this._inputEl) this._inputEl.value = String(next);
     this.value = String(next);
     this._charCount = this.value.length;
+    this.error = false;
+    this._syncFormValue();
     this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   }
@@ -235,7 +238,7 @@ export class LuiInput extends LitElement {
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
           placeholder="${this.placeholder}"
-          .value="${this.value}"
+          .value="${live(this.value)}"
           maxlength="${maxLen !== null ? maxLen : ''}"
           pattern="${ifDefined(this.pattern || undefined)}"
           inputmode="${ifDefined(this.inputmode || undefined)}"
@@ -294,7 +297,7 @@ export class LuiInput extends LitElement {
           name="${ifDefined(this.name || undefined)}"
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
-          .value="${this.value || '1'}"
+          .value="${live(this.value)}"
           step="${this._stepValue}"
           min="${minVal !== null ? minVal : ''}"
           max="${maxVal !== null ? maxVal : ''}"

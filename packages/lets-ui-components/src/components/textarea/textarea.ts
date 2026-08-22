@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { live } from 'lit/directives/live.js';
 import styles from './textarea.scss?inline';
 
 export class LuiTextarea extends LitElement {
@@ -169,7 +170,7 @@ export class LuiTextarea extends LitElement {
             rows="${this.rows}"
             style="resize: ${this._resizeValue};"
             maxlength="${maxLen !== null ? maxLen : ''}"
-            .value="${this.value}"
+            .value="${live(this.value)}"
             ?disabled="${this.disabled}"
             ?required="${this.required}"
             ?aria-disabled="${this.disabled}"
