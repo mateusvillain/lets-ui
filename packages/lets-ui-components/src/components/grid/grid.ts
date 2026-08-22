@@ -4,7 +4,7 @@ import styles from './grid.scss?inline';
 import gridItemStyles from './grid-item.scss?inline';
 
 // Mirrors `packages/styles/src/utilities/_grid.map.scss`: the column count
-// available at each breakpoint. Spans are clamped to it so an item can never
+// available at each breakpoint. Spans are clamped to it so a cell can never
 // overflow the row.
 const COLUMNS: Record<string, number> = {
   '1xs': 4,
@@ -58,24 +58,24 @@ export class LuiGrid extends LitElement {
 export class LuiGridItem extends LitElement {
   static styles = unsafeCSS(gridItemStyles);
 
-  @property() span = '';
-  @property({ attribute: 'span-sm' }) spanSm = '';
-  @property({ attribute: 'span-md' }) spanMd = '';
-  @property({ attribute: 'span-lg' }) spanLg = '';
-  @property({ attribute: 'span-1xl' }) span1xl = '';
+  @property() col = '';
+  @property({ attribute: 'col-sm' }) colSm = '';
+  @property({ attribute: 'col-md' }) colMd = '';
+  @property({ attribute: 'col-lg' }) colLg = '';
+  @property({ attribute: 'col-1xl' }) col1xl = '';
 
   updated() {
-    const spans: Record<string, string> = {
-      '1xs': this.span,
-      sm: this.spanSm,
-      md: this.spanMd,
-      lg: this.spanLg,
-      '1xl': this.span1xl,
+    const cols: Record<string, string> = {
+      '1xs': this.col,
+      sm: this.colSm,
+      md: this.colMd,
+      lg: this.colLg,
+      '1xl': this.col1xl,
     };
 
-    for (const [breakpoint, value] of Object.entries(spans)) {
+    for (const [breakpoint, value] of Object.entries(cols)) {
       const resolved = resolveSpan(value, breakpoint);
-      const property = `--lui-grid-item-${breakpoint}`;
+      const property = `--lui-grid-col-${breakpoint}`;
 
       if (resolved) this.style.setProperty(property, resolved);
       else this.style.removeProperty(property);

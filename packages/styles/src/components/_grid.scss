@@ -1,8 +1,8 @@
 @use '../utilities/grid.map' as grid;
 
 // Responsive column grid. Column count, gap and inline margin are driven by
-// the breakpoint, never by the author; items only opt into a span per
-// breakpoint and inherit the last span declared below them.
+// the breakpoint, never by the author; children only opt into how many
+// columns they span.
 // See `utilities/_grid.map.scss` for the breakpoint table.
 
 .grid {
@@ -26,28 +26,32 @@
     max-width: none;
     margin-inline: 0;
   }
+
+  // Every child is a cell. One column by default, so a child that spans a
+  // single column needs no class at all.
+  > * {
+    grid-column: span 1;
+    min-width: 0;
+  }
 }
 
 // A nested grid already sits inside a parent track, so it must never re-apply
 // the page margin or the max-width.
-.grid-item .grid {
+.grid .grid {
   max-width: none;
   margin-inline: 0;
 }
 
-.grid-item {
-  grid-column: span 1;
-  min-width: 0;
-}
-
-@include grid.each-step using ($name, $columns) {
+// Span utilities: `.col-{n}` for the base step, `.col-{breakpoint}-{n}` from
+// that breakpoint up. Mobile-first — each one holds until another replaces it.
+@include grid.each-step using ($prefix, $columns) {
   @for $i from 1 through $columns {
-    .grid-item--#{$name}-#{$i} {
+    .#{$prefix}-#{$i} {
       grid-column: span $i;
     }
   }
 
-  .grid-item--#{$name}-full {
+  .#{$prefix}-full {
     grid-column: 1 / -1;
   }
 }

@@ -54,17 +54,19 @@ $grid: (
   }
 }
 
-// Emits `@content` once per breakpoint step, with `$name` and `$columns`
-// exposed through the two arguments of the content block.
+// Emits `@content` once per breakpoint step, with the class prefix and the
+// column count exposed through the two arguments of the content block.
+// `1xs` is the base step — it carries no media query, so its classes are
+// unprefixed (`.col-4`) the way every mobile-first system spells the default.
 @mixin each-step {
   @each $name, $step in $grid {
     $columns: map.get($step, columns);
 
     @if $name == '1xs' {
-      @content ($name, $columns);
+      @content ('col', $columns);
     } @else {
       @include mx.media-up($name) {
-        @content ($name, $columns);
+        @content ('col-#{$name}', $columns);
       }
     }
   }
@@ -98,17 +100,17 @@ $grid: (
   }
 }
 
-// The shared grid-item declarations: `grid-column` resolved through a
-// mobile-first chain of `--lui-grid-item-{breakpoint}` custom properties, so
+// The shared column declarations: `grid-column` resolved through a
+// mobile-first chain of `--lui-grid-col-{breakpoint}` custom properties, so
 // each step falls back to the last one declared below it.
-@mixin item {
+@mixin column {
   $chain: 'span 1';
 
   display: block;
   min-width: 0;
 
   @each $name, $step in $grid {
-    $chain: 'var(--lui-grid-item-#{$name}, #{$chain})';
+    $chain: 'var(--lui-grid-col-#{$name}, #{$chain})';
 
     @if $name == '1xs' {
       grid-column: #{$chain};

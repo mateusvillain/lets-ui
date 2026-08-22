@@ -37,41 +37,44 @@ export const Default = Template.bind({});
 Default.args = { align: 'stretch', flush: false };
 Default.storyName = 'Colunas do breakpoint';
 
-export const Spans = () => `
+export const Columns = () => `
   <lui-grid>
-    ${cell('span 4 / sm 8 / lg 12 — full', '#dbeafe', 'span="full"')}
-    ${cell('span 2 / sm 4 / lg 6', '#dcfce7', 'span="2" span-sm="4" span-lg="6"')}
-    ${cell('span 2 / sm 4 / lg 6', '#fef9c3', 'span="2" span-sm="4" span-lg="6"')}
-    ${cell('span 4 / sm 2 / lg 3', '#fce7f3', 'span="4" span-sm="2" span-lg="3"')}
-    ${cell('span 4 / sm 2 / lg 3', '#ede9fe', 'span="4" span-sm="2" span-lg="3"')}
-    ${cell('span 4 / sm 4 / lg 6', '#fed7aa', 'span="4" span-sm="4" span-lg="6"')}
+    ${cell('full', '#dbeafe', 'col="full"')}
+    ${cell('2 / 4 / 6', '#dcfce7', 'col="2" col-sm="4" col-lg="6"')}
+    ${cell('2 / 4 / 6', '#fef9c3', 'col="2" col-sm="4" col-lg="6"')}
+    ${cell('4 / 2 / 3', '#fce7f3', 'col="4" col-sm="2" col-lg="3"')}
+    ${cell('4 / 2 / 3', '#ede9fe', 'col="4" col-sm="2" col-lg="3"')}
+    ${cell('4 / 4 / 6', '#fed7aa', 'col="4" col-sm="4" col-lg="6"')}
   </lui-grid>
 `;
-Spans.storyName = 'Spans responsivos';
+Columns.storyName = 'Colunas responsivas';
 
 export const Nested = () => `
   <lui-grid>
-    <lui-grid-item span="full" span-sm="4" span-lg="6">
+    <lui-grid-item col="full" col-sm="4" col-lg="6">
       <lui-grid>
-        ${cell('aninhado 1', '#dbeafe', 'span="2" span-sm="2" span-lg="3"')}
-        ${cell('aninhado 2', '#dcfce7', 'span="2" span-sm="2" span-lg="3"')}
+        ${cell('aninhado 1', '#dbeafe', 'col="2" col-sm="2" col-lg="3"')}
+        ${cell('aninhado 2', '#dcfce7', 'col="2" col-sm="2" col-lg="3"')}
       </lui-grid>
     </lui-grid-item>
-    ${cell('irmão', '#fef9c3', 'span="full" span-sm="4" span-lg="6"')}
+    ${cell('irmão', '#fef9c3', 'col="full" col-sm="4" col-lg="6"')}
   </lui-grid>
 `;
 Nested.storyName = 'Grid aninhado';
 
 export const CSSClass = () => `
   <div class="grid">
-    <div class="grid-item grid-item--1xs-full">
-      <div style="padding:16px;background:#dbeafe;border-radius:6px;font-size:13px;">full</div>
+    <div class="col-full">
+      <div style="padding:16px;background:#dbeafe;border-radius:6px;font-size:13px;">col-full</div>
     </div>
-    <div class="grid-item grid-item--1xs-2 grid-item--sm-4 grid-item--lg-6">
+    <div class="col-2 col-sm-4 col-lg-6">
       <div style="padding:16px;background:#dcfce7;border-radius:6px;font-size:13px;">2 / 4 / 6</div>
     </div>
-    <div class="grid-item grid-item--1xs-2 grid-item--sm-4 grid-item--lg-6">
+    <div class="col-2 col-sm-4 col-lg-6">
       <div style="padding:16px;background:#fef9c3;border-radius:6px;font-size:13px;">2 / 4 / 6</div>
+    </div>
+    <div>
+      <div style="padding:16px;background:#ede9fe;border-radius:6px;font-size:13px;">sem classe = 1 col</div>
     </div>
   </div>
 `;

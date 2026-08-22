@@ -1,5 +1,5 @@
 @use 'packages/styles/src/utilities/grid.map' as grid;
 
 :host {
-  @include grid.item;
+  @include grid.column;
 }

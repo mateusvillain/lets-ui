@@ -65,7 +65,9 @@ const stats = [
       <div class="grid overlay__grid">
         {
           Array.from({ length: 12 }, (_, i) => (
-            <div class:list={['grid-item', 'overlay__col', `overlay__col--${i + 1}`]} />
+            <div
+              class:list={['overlay__col', `overlay__col--${i + 1}`]}
+            />
           ))
         }
       </div>
@@ -73,14 +75,16 @@ const stats = [
 
     <header class="site-header">
       <div class="grid site-header__inner">
-        <div class="grid-item grid-item--1xs-full grid-item--sm-4 grid-item--lg-6 brand">
+        <div
+          class="col-full col-sm-4 col-lg-6 brand"
+        >
           <a href="/" class="brand__back">←</a>
           <span class="brand__name">Let's UI</span>
           <span class="brand__page">Grid</span>
         </div>
 
         <div
-          class="grid-item grid-item--1xs-full grid-item--sm-4 grid-item--lg-6 site-header__actions"
+          class="col-full col-sm-4 col-lg-6 site-header__actions"
         >
           <span class="readout" data-readout>—</span>
           <button class="toggle" data-toggle type="button" aria-pressed="false">
@@ -94,7 +98,7 @@ const stats = [
       <!-- ── Hero ────────────────────────────────────────────────── -->
       <section class="grid section">
         <div
-          class="grid-item grid-item--1xs-full grid-item--sm-6 grid-item--lg-8 hero"
+          class="col-full col-sm-6 col-lg-8 hero"
         >
           <p class="eyebrow">Sistema de grid</p>
           <h1 class="hero__title">
@@ -104,15 +108,15 @@ const stats = [
             Colunas, gap e margem lateral vêm do breakpoint. Nenhum componente
             desta página define <code>grid-template-columns</code>, gap ou
             padding horizontal — tudo é <code>.grid</code> e
-            <code>.grid-item</code>.
+            <code>.col-*</code>.
           </p>
         </div>
 
         <div
-          class="grid-item grid-item--1xs-full grid-item--sm-2 grid-item--lg-4 hero__aside"
+          class="col-full col-sm-2 col-lg-4 hero__aside"
         >
           <dl class="spec">
-            <div class="spec__row"><dt>1xs</dt><dd>4 col · 16 · 16</dd></div>
+            <div class="spec__row"><dt>base</dt><dd>4 col · 16 · 16</dd></div>
             <div class="spec__row"><dt>sm</dt><dd>8 col · 16 · 32</dd></div>
             <div class="spec__row"><dt>md</dt><dd>8 col · 16 · 40</dd></div>
             <div class="spec__row"><dt>lg</dt><dd>12 col · 24 · 40</dd></div>
@@ -125,7 +129,7 @@ const stats = [
       <section class="grid section">
         {
           stats.map((s) => (
-            <div class="grid-item grid-item--1xs-2 grid-item--sm-2 grid-item--lg-3 stat">
+            <div class="col-2 col-sm-2 col-lg-3 stat">
               <strong class="stat__value">{s.value}</strong>
               <span class="stat__label">{s.label}</span>
             </div>
@@ -136,25 +140,35 @@ const stats = [
       <!-- ── Faixa full-bleed com grid aninhado ──────────────────── -->
       <section class="band">
         <div class="grid section">
-          <div class="grid-item grid-item--1xs-full grid-item--sm-full grid-item--lg-4">
+          <div
+            class="col-full col-sm-full col-lg-4"
+          >
             <h2 class="section__title">Grid aninhado</h2>
             <p class="section__lead">
               A faixa é full-bleed, mas o conteúdo continua alinhado às mesmas
-              colunas. O bloco à direita é um <code>.grid</code> dentro de um
-              <code>.grid-item</code>: ele reparte a track do pai, sem reaplicar
-              a margem de página.
+              colunas. O bloco à direita é um <code>.grid</code> dentro de
+              outro: ele reparte a track do pai, sem reaplicar a margem de
+              página.
             </p>
           </div>
 
-          <div class="grid-item grid-item--1xs-full grid-item--sm-full grid-item--lg-8">
+          <div
+            class="col-full col-sm-full col-lg-8"
+          >
             <div class="grid">
-              <div class="grid-item grid-item--1xs-2 grid-item--sm-4 grid-item--lg-4 nested">
+              <div
+                class="col-2 col-sm-4 col-lg-4 nested"
+              >
                 Aninhado A
               </div>
-              <div class="grid-item grid-item--1xs-2 grid-item--sm-4 grid-item--lg-4 nested">
+              <div
+                class="col-2 col-sm-4 col-lg-4 nested"
+              >
                 Aninhado B
               </div>
-              <div class="grid-item grid-item--1xs-full grid-item--sm-full grid-item--lg-4 nested">
+              <div
+                class="col-full col-sm-full col-lg-4 nested"
+              >
                 Aninhado C
               </div>
             </div>
@@ -164,13 +178,13 @@ const stats = [
 
       <!-- ── Cards ───────────────────────────────────────────────── -->
       <section class="grid section">
-        <div class="grid-item grid-item--1xs-full">
+        <div class="col-full">
           <h2 class="section__title">Cards</h2>
         </div>
 
         {
           posts.map((post) => (
-            <article class="grid-item grid-item--1xs-full grid-item--sm-4 grid-item--lg-4 card">
+            <article class="col-full col-sm-4 col-lg-4 card">
               <span class="card__tag">{post.tag}</span>
               <h3 class="card__title">{post.title}</h3>
               <p class="card__excerpt">{post.excerpt}</p>
@@ -182,24 +196,25 @@ const stats = [
       <!-- ── Conteúdo + trilho lateral ───────────────────────────── -->
       <section class="grid section">
         <div
-          class="grid-item grid-item--1xs-full grid-item--sm-full grid-item--lg-8 prose"
+          class="col-full col-sm-full col-lg-8 prose"
         >
           <h2 class="section__title">Artigo</h2>
           <p>
-            Em <code>1xs</code> o texto ocupa as 4 colunas e o trilho vai para
-            baixo. Em <code>sm</code> e <code>md</code> ambos ocupam as 8
-            colunas inteiras, empilhados. A partir de <code>lg</code> o artigo
-            fica com 8 das 12 colunas e o trilho ocupa as 4 restantes.
+            No passo base o texto ocupa as 4 colunas e o trilho vai para baixo.
+            Em <code>sm</code> e <code>md</code> ambos ocupam as 8 colunas inteiras,
+            empilhados. A partir de <code>lg</code> o artigo fica com 8 das 12 colunas
+            e o trilho ocupa as 4 restantes.
           </p>
           <p>
             Nenhuma media query foi escrita nesta página. As três configurações
-            saem das classes <code>--1xs-</code>, <code>--sm-</code> e
-            <code>--lg-</code>, que cascateiam para cima até serem substituídas.
+            saem das classes <code>col-</code>, <code>col-sm-</code> e
+            <code>col-lg-</code>, que cascateiam para cima até serem
+            substituídas.
           </p>
         </div>
 
         <aside
-          class="grid-item grid-item--1xs-full grid-item--sm-full grid-item--lg-4 rail"
+          class="col-full col-sm-full col-lg-4 rail"
         >
           <h3 class="rail__title">Nesta página</h3>
           <ul class="rail__list">
@@ -216,7 +231,7 @@ const stats = [
 
       <!-- ── Web Components ──────────────────────────────────────── -->
       <section class="grid section">
-        <div class="grid-item grid-item--1xs-full">
+        <div class="col-full">
           <h2 class="section__title">Mesma grade via Web Component</h2>
           <p class="section__lead">
             <code>&lt;lui-grid&gt;</code> e <code>&lt;lui-grid-item&gt;</code>
@@ -224,27 +239,27 @@ const stats = [
           </p>
         </div>
 
-        <div class="grid-item grid-item--1xs-full">
+        <div class="col-full">
           <lui-grid>
-            <lui-grid-item span="full"
-              ><div class="wc">span="full"</div></lui-grid-item
+            <lui-grid-item col="full"
+              ><div class="wc">col="full"</div></lui-grid-item
             >
-            <lui-grid-item span="2" span-sm="4" span-lg="6"
+            <lui-grid-item col="2" col-sm="4" col-lg="6"
               ><div class="wc">2 / 4 / 6</div></lui-grid-item
             >
-            <lui-grid-item span="2" span-sm="4" span-lg="6"
+            <lui-grid-item col="2" col-sm="4" col-lg="6"
               ><div class="wc">2 / 4 / 6</div></lui-grid-item
             >
-            <lui-grid-item span="1" span-sm="2" span-lg="3"
+            <lui-grid-item col="1" col-sm="2" col-lg="3"
               ><div class="wc">1 / 2 / 3</div></lui-grid-item
             >
-            <lui-grid-item span="1" span-sm="2" span-lg="3"
+            <lui-grid-item col="1" col-sm="2" col-lg="3"
               ><div class="wc">1 / 2 / 3</div></lui-grid-item
             >
-            <lui-grid-item span="1" span-sm="2" span-lg="3"
+            <lui-grid-item col="1" col-sm="2" col-lg="3"
               ><div class="wc">1 / 2 / 3</div></lui-grid-item
             >
-            <lui-grid-item span="1" span-sm="2" span-lg="3"
+            <lui-grid-item col="1" col-sm="2" col-lg="3"
               ><div class="wc">1 / 2 / 3</div></lui-grid-item
             >
           </lui-grid>
@@ -253,11 +268,13 @@ const stats = [
     </main>
 
     <footer class="grid section site-footer">
-      <div class="grid-item grid-item--1xs-full grid-item--sm-4 grid-item--lg-6">
+      <div
+        class="col-full col-sm-4 col-lg-6"
+      >
         <strong>Let's UI</strong> — Playground
       </div>
       <div
-        class="grid-item grid-item--1xs-full grid-item--sm-4 grid-item--lg-6 site-footer__right"
+        class="col-full col-sm-4 col-lg-6 site-footer__right"
       >
         <a href="/">Voltar</a>
       </div>
@@ -270,7 +287,7 @@ const stats = [
         { name: 'lg', min: 1280 },
         { name: 'md', min: 1024 },
         { name: 'sm', min: 768 },
-        { name: '1xs', min: 0 },
+        { name: 'base', min: 0 },
       ];
 
       const overlay = document.querySelector('[data-overlay]');
