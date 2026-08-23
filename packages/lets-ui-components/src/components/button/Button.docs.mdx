@@ -1,4 +1,4 @@
-import { Meta, Canvas, Controls, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as ButtonStories from './Button.stories';
 
 <Meta of={ButtonStories} />
@@ -80,6 +80,44 @@ O atributo `loading-text` substitui o label exibido enquanto `loading` estiver a
 
 <Canvas of={ButtonStories.AllVariantsLoading} />
 
+## Como link (`href`)
+
+Quando o controle **navega ou baixa** em vez de executar uma ação, ele é semanticamente um link.
+Passar `href` faz o componente renderizar `<a>` no lugar de `<button>`, mantendo a mesma aparência
+e os mesmos atributos de estilo (`variant`, `size`, `block`).
+
+Isso preserva os comportamentos nativos que se perdem ao usar um botão com navegação programática:
+abrir em nova aba, botão direito, clique do meio, Ctrl/Cmd + clique e o atributo `download`.
+
+<Canvas of={ButtonStories.AsLink} />
+
+### Nova aba
+
+Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente.
+Um `rel` informado é somado a essa proteção, não a substitui — `rel="nofollow"`
+com `target="_blank"` resulta em `nofollow noopener noreferrer`.
+
+<Canvas of={ButtonStories.LinkNewTab} />
+
+### Download
+
+<Canvas of={ButtonStories.LinkDownload} />
+
+### Desabilitado e loading
+
+Links não têm `disabled` nativo. Com `disabled` ou `loading`, o `href` é omitido, então o elemento
+não navega por clique, clique do meio ou "abrir em nova aba", e `aria-disabled="true"` mais
+`role="link"` mantêm o anúncio correto em leitores de tela.
+
+Os dois estados diferem no foco: `disabled` recebe `tabindex="-1"` e sai da ordem de tabulação,
+como um botão nativo desabilitado. `loading` é transitório e recebe `tabindex="0"`, mantendo o
+foco de quem já estava no elemento quando a operação começou — sem `href`, uma âncora não é
+focável nem programaticamente.
+
+<Canvas of={ButtonStories.LinkDisabled} />
+
+Atributos de formulário (`type`, `name`, `value`, `form`) não se aplicam quando há `href`.
+
 ## Integração com formulários
 
 `type="submit"` e `type="reset"` funcionam nativamente com qualquer `<form>` pai.
@@ -103,21 +141,25 @@ como modais, drawers e alertas de confirmação.
 
 ## Atributos
 
-| Atributo       | Tipo      | Padrão      | Descrição                                                             |
-| -------------- | --------- | ----------- | --------------------------------------------------------------------- |
-| `label`        | `string`  | `''`        | Texto exibido no botão                                                |
-| `variant`      | `string`  | `'primary'` | Estilo visual: `primary`, `secondary`, `neutral`, `danger`, `success` |
-| `size`         | `string`  | `'lg'`      | Tamanho: `lg`, `md`                                                   |
-| `type`         | `string`  | `'button'`  | Tipo HTML: `button`, `submit`, `reset`                                |
-| `name`         | `string`  | `''`        | Nome submetido com o form ao usar `type="submit"`                     |
+| Atributo       | Tipo      | Padrão      | Descrição                                                                           |
+| -------------- | --------- | ----------- | ----------------------------------------------------------------------------------- |
+| `label`        | `string`  | `''`        | Texto exibido no botão                                                              |
+| `variant`      | `string`  | `'primary'` | Estilo visual: `primary`, `secondary`, `neutral`, `danger`, `success`               |
+| `size`         | `string`  | `'lg'`      | Tamanho: `lg`, `md`                                                                 |
+| `type`         | `string`  | `'button'`  | Tipo HTML: `button`, `submit`, `reset`                                              |
+| `name`         | `string`  | `''`        | Nome submetido com o form ao usar `type="submit"`                                   |
 | `value`        | `string`  | `''`        | Valor submetido junto ao `name`; incluído apenas quando este botão dispara o submit |
-| `form`         | `string`  | `''`        | ID do `<form>` associado; permite usar o botão fora do elemento form  |
-| `disabled`     | `boolean` | `false`     | Desabilita o botão e previne interações                               |
-| `autofocus`    | `boolean` | `false`     | Move o foco para o botão automaticamente ao renderizar o contexto     |
-| `block`        | `boolean` | `false`     | Torna o botão full-width dentro do seu container                      |
-| `loading`      | `boolean` | `false`     | Exibe spinner e bloqueia interações; não aplica opacidade de disabled |
-| `loading-text` | `string`  | `''`        | Texto alternativo exibido enquanto `loading` estiver ativo            |
-| `aria-label`   | `string`  | `''`        | Label acessível sobrescrevendo o derivado do `label`                  |
+| `form`         | `string`  | `''`        | ID do `<form>` associado; permite usar o botão fora do elemento form                |
+| `disabled`     | `boolean` | `false`     | Desabilita o botão e previne interações                                             |
+| `autofocus`    | `boolean` | `false`     | Move o foco para o botão automaticamente ao renderizar o contexto                   |
+| `block`        | `boolean` | `false`     | Torna o botão full-width dentro do seu container                                    |
+| `loading`      | `boolean` | `false`     | Exibe spinner e bloqueia interações; não aplica opacidade de disabled               |
+| `loading-text` | `string`  | `''`        | Texto alternativo exibido enquanto `loading` estiver ativo                          |
+| `href`         | `string`  | `''`        | Quando preenchido, renderiza `<a>` no lugar de `<button>`                           |
+| `target`       | `string`  | `''`        | Alvo da navegação; só aplicado junto de `href`                                      |
+| `rel`          | `string`  | `''`        | Relação do link; somado a `noopener noreferrer` com `target="_blank"`               |
+| `download`     | `string`  | —           | Baixa o recurso em vez de navegar; aceito sem valor; só junto de `href`             |
+| `aria-label`   | `string`  | `''`        | Label acessível sobrescrevendo o derivado do `label`                                |
 
 ## Classe CSS (sem Web Component)
 
@@ -130,6 +172,7 @@ como modais, drawers e alertas de confirmação.
 ```html
 <lui-button variant="primary" size="lg">Confirmar</lui-button>
 <lui-button variant="secondary" size="lg">Cancelar</lui-button>
+<lui-button variant="primary" size="lg" href="/cursos">Ver curso</lui-button>
 ```
 
 ### Classe CSS
@@ -137,4 +180,5 @@ como modais, drawers e alertas de confirmação.
 ```html
 <button class="btn btn--primary btn--lg">Confirmar</button>
 <button class="btn btn--secondary btn--lg">Cancelar</button>
+<a class="btn btn--primary btn--lg" href="/cursos">Ver curso</a>
 ```

@@ -51,17 +51,20 @@ $size: (
   }
 }
 
-button {
+button,
+a {
   &.btn {
     position: relative;
     overflow: hidden;
     display: inline-flex;
+    box-sizing: border-box;
     align-items: center;
     gap: fluid(8);
     font-weight: weight(regular);
     border: fixed(0);
     outline: fixed(0);
     background-color: transparent;
+    text-decoration: none;
     transition: all 0.2s ease-in-out;
     z-index: 0;
 

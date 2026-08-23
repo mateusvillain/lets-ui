@@ -54,6 +54,23 @@ export default {
     'loading-text': {
       control: 'text',
     },
+    href: {
+      control: 'text',
+      table: { defaultValue: { summary: "''" } },
+    },
+    target: {
+      control: { type: 'select' },
+      options: ['', '_self', '_blank', '_parent', '_top'],
+      table: { defaultValue: { summary: "''" } },
+    },
+    rel: {
+      control: 'text',
+      table: { defaultValue: { summary: "''" } },
+    },
+    download: {
+      control: 'text',
+      table: { defaultValue: { summary: "''" } },
+    },
     'aria-label': {
       control: 'text',
     },
@@ -73,6 +90,10 @@ const Template = ({
   block,
   loading,
   'loading-text': loadingText,
+  href,
+  target,
+  rel,
+  download,
   'aria-label': ariaLabel,
 }) => {
   const attrs = [
@@ -87,6 +108,10 @@ const Template = ({
     block && 'block',
     loading && 'loading',
     loadingText && `loading-text="${loadingText}"`,
+    href && `href="${href}"`,
+    href && target && `target="${target}"`,
+    href && rel && `rel="${rel}"`,
+    href && download && `download="${download}"`,
     ariaLabel && `aria-label="${ariaLabel}"`,
   ]
     .filter(Boolean)
@@ -110,6 +135,10 @@ Button.args = {
   disabled: false,
   loading: false,
   'loading-text': '',
+  href: '',
+  target: '',
+  rel: '',
+  download: '',
 };
 
 export const Primary = () =>
@@ -247,10 +276,65 @@ FormIntegration.parameters = {
   },
 };
 
+export const AsLink = () =>
+  `<div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+    <lui-button variant="primary" size="lg" href="#ver-curso">Ver curso</lui-button>
+    <lui-button variant="secondary" size="md" href="#explorar">Explorar cursos</lui-button>
+  </div>`;
+AsLink.storyName = 'Como link (href)';
+AsLink.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com `href`, o componente renderiza `<a>` em vez de `<button>`, mantendo `variant`, `size` e `block`. Isso preserva os comportamentos nativos de navegação — abrir em nova aba, botão direito, clique do meio e Ctrl/Cmd + clique — que se perdem ao navegar programaticamente a partir de um botão.',
+    },
+  },
+};
+
+export const LinkNewTab = () =>
+  `<lui-button variant="primary" size="lg" href="https://example.com" target="_blank">Assinar agora</lui-button>`;
+LinkNewTab.storyName = 'Link em nova aba';
+LinkNewTab.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente. Um `rel` informado é somado a essa proteção, não a substitui.',
+    },
+  },
+};
+
+export const LinkDownload = () =>
+  `<lui-button variant="secondary" size="lg" href="data:text/plain;charset=utf-8,certificado" download="certificado.txt">Baixar certificado</lui-button>`;
+LinkDownload.storyName = 'Link de download';
+LinkDownload.parameters = {
+  docs: {
+    description: {
+      story:
+        'O atributo `download` é repassado para o `<a>`, cobrindo o caso de baixar arquivos sem JavaScript.',
+    },
+  },
+};
+
+export const LinkDisabled = () =>
+  `<div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+    <lui-button variant="primary" size="lg" href="#indisponivel" disabled>Indisponível</lui-button>
+    <lui-button variant="primary" size="lg" href="#salvando" loading loading-text="Gerando...">Baixar certificado</lui-button>
+  </div>`;
+LinkDisabled.storyName = 'Link desabilitado e em loading';
+LinkDisabled.parameters = {
+  docs: {
+    description: {
+      story:
+        'Links não têm `disabled` nativo. Com `disabled` ou `loading`, o `href` é omitido — o elemento sai da ordem de tabulação e não navega — e `aria-disabled="true"` mais `role="link"` mantêm o anúncio correto em leitores de tela.',
+    },
+  },
+};
+
 export const CSSClass = () => `
   <div style="display: flex; gap: 12px;">
     <button class="btn btn--primary btn--lg">Confirmar</button>
     <button class="btn btn--secondary btn--lg">Cancelar</button>
+    <a class="btn btn--primary btn--lg" href="#ver-curso">Ver curso</a>
   </div>
 `;
 CSSClass.storyName = 'Classe CSS (sem Web Component)';
