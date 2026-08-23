@@ -123,7 +123,7 @@ foundations/             # CSS layers for global primitives
   _border.scss
   _color.scss
   _elevation.scss
-  _grid.scss
+  _layout.scss
   _opacity.scss
   _spacing.scss
   _typography.scss
@@ -134,6 +134,7 @@ components/              # One file per component
   …
 utilities/
   _flex.scss             # Flex utility classes
+  _grid.map.scss         # Responsive grid config, shared by `.grid` and `<lui-grid>`
 ```
 
 ### Utility accessor functions
@@ -181,7 +182,7 @@ Core behavior is achievable with CSS alone (layout primitives and most UI elemen
 1. `packages/styles/src/components/_name.scss` — Standalone implementation. Registered in `_components.scss`. Works without the Web Component.
 2. `packages/lets-ui-components/src/components/name/name.scss` — Shadow DOM implementation. Uses `:host` and `::slotted()`. Imports utilities directly; does **not** re-import the global file to avoid duplication.
 
-List: `alert`, `body`, `box`, `breadcrumb`, `button`, `card`, `center`, `checkbox`, `columns`, `container`, `divider`, `drawer`, `dropdown-menu`, `field`, `flex`, `grid`, `heading`, `icon-button`, `image`, `inline`, `input`, `link`, `modal`, `navbar`, `radio`, `radio-group`, `select`, `shortcut`, `sidebar`, `stack`, `switch`, `switcher`, `tabs`, `tag`, `textarea`, `tooltip`.
+List: `alert`, `body`, `box`, `breadcrumb`, `button`, `card`, `center`, `checkbox`, `container`, `divider`, `drawer`, `dropdown-menu`, `field`, `flex`, `grid`, `heading`, `icon-button`, `image`, `inline`, `input`, `link`, `modal`, `navbar`, `radio`, `radio-group`, `select`, `shortcut`, `sidebar`, `stack`, `switch`, `switcher`, `tabs`, `tag`, `textarea`, `tooltip`.
 
 ### JS-driven components
 
@@ -249,20 +250,19 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 
 ### Layout & Structural
 
-| Component        | Tag                         | Type                |
-| ---------------- | --------------------------- | ------------------- |
-| Box              | `lui-box`                   | Pure CSS + WC       |
-| Center           | `lui-center`                | Pure CSS + WC       |
-| Columns / Column | `lui-columns`, `lui-column` | Pure CSS + WC       |
-| Container        | `lui-container`             | Pure CSS + WC       |
-| Flex / FlexItem  | `lui-flex`, `lui-flex-item` | Pure CSS + WC       |
-| Grid / GridItem  | `lui-grid`, `lui-grid-item` | Pure CSS + WC       |
-| Inline           | `lui-inline`                | Pure CSS + WC       |
-| Sidebar          | `lui-sidebar`               | Pure CSS + WC       |
-| Stack            | `lui-stack`                 | Pure CSS + WC       |
-| Switcher         | `lui-switcher`              | Pure CSS + WC       |
-| Float            | `lui-float`                 | JS-driven (WC only) |
-| Body             | `lui-body`                  | Pure CSS + WC       |
+| Component       | Tag                         | Type                |
+| --------------- | --------------------------- | ------------------- |
+| Box             | `lui-box`                   | Pure CSS + WC       |
+| Center          | `lui-center`                | Pure CSS + WC       |
+| Container       | `lui-container`             | Pure CSS + WC       |
+| Flex / FlexItem | `lui-flex`, `lui-flex-item` | Pure CSS + WC       |
+| Grid / GridItem | `lui-grid`, `lui-grid-item` | Pure CSS + WC       |
+| Inline          | `lui-inline`                | Pure CSS + WC       |
+| Sidebar         | `lui-sidebar`               | Pure CSS + WC       |
+| Stack           | `lui-stack`                 | Pure CSS + WC       |
+| Switcher        | `lui-switcher`              | Pure CSS + WC       |
+| Float           | `lui-float`                 | JS-driven (WC only) |
+| Body            | `lui-body`                  | Pure CSS + WC       |
 
 ### Interactive & Form
 
@@ -314,7 +314,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 4. Navigation — Links, Breadcrumb, Tabs, Dropdown Menu
 5. Form and options — Input, Textarea, Checkbox, Radio, Select, Switch
 6. Content — Card, Alert, Tag, Divider, Heading, Image, Body
-7. Layout — Container, Flex, Grid, Stack, Sidebar, Columns, Box, Center, Inline, Switcher, Float
+7. Layout — Container, Flex, Grid, Stack, Sidebar, Box, Center, Inline, Switcher, Float
 8. Miscellaneous — Modal, Drawer, Tooltip, Shortcut
 9. Utilities — Functions, Mixins, Flex
 

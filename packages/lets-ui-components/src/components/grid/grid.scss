@@ -1,9 +1,12 @@
-@use 'packages/styles/src/utilities/functions' as fn;
+@use 'packages/styles/src/utilities/grid.map' as grid;
 
 :host {
-  display: grid;
-  grid-template-columns: var(--lui-grid-columns, none);
-  grid-template-rows: var(--lui-grid-rows, none);
-  gap: var(--lui-grid-gap, #{fn.fluid(16)});
-  place-items: var(--lui-grid-align, stretch) var(--lui-grid-justify, stretch);
+  @include grid.container;
+}
+
+// Full-bleed: keeps the breakpoint columns and gap, drops the page margin
+// and max-width. Also set automatically on a grid nested in a grid item.
+:host([flush]) {
+  max-width: none;
+  margin-inline: 0;
 }

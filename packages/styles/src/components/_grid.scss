@@ -1,23 +1,57 @@
-@use '../utilities/functions' as fn;
+@use '../utilities/grid.map' as grid;
 
-$-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
+// Responsive column grid. Column count, gap and inline margin are driven by
+// the breakpoint, never by the author; children only opt into how many
+// columns they span.
+// See `utilities/_grid.map.scss` for the breakpoint table.
 
 .grid {
-  display: grid;
-  gap: fn.fluid(16);
-  align-items: stretch;
+  @include grid.container;
 
-  &--gap-0 {
-    gap: 0;
+  &--align-start {
+    --lui-grid-align: start;
   }
 
-  @each $n in $-fluid-tokens {
-    &--gap-#{$n} {
-      gap: fn.fluid($n);
-    }
+  &--align-center {
+    --lui-grid-align: center;
+  }
+
+  &--align-end {
+    --lui-grid-align: end;
+  }
+
+  // Full-bleed: keeps the breakpoint columns and gap, drops the page margin
+  // and max-width.
+  &--flush {
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  // Every child is a cell. One column by default, so a child that spans a
+  // single column needs no class at all.
+  > * {
+    grid-column: span 1;
+    min-width: 0;
   }
 }
 
-.grid-item {
-  display: block;
+// A nested grid already sits inside a parent track, so it must never re-apply
+// the page margin or the max-width.
+.grid .grid {
+  max-width: none;
+  margin-inline: 0;
+}
+
+// Span utilities: `.col-{n}` for the base step, `.col-{breakpoint}-{n}` from
+// that breakpoint up. Mobile-first — each one holds until another replaces it.
+@include grid.each-step using ($prefix, $columns) {
+  @for $i from 1 through $columns {
+    .#{$prefix}-#{$i} {
+      grid-column: span $i;
+    }
+  }
+
+  .#{$prefix}-full {
+    grid-column: 1 / -1;
+  }
 }
