@@ -12,6 +12,7 @@ import { LuiFloat } from './components/float/float.js';
 import { LuiBody } from './components/body/body.js';
 import { LuiImage } from './components/image/image.js';
 import { LuiDrawer } from './components/drawer/drawer.js';
+import { LuiEmptyState } from './components/empty-state/empty-state.js';
 import { LuiHeading } from './components/heading/heading.js';
 import { LuiTabs, LuiTab } from './components/tabs/tabs.js';
 import { LuiDivider } from './components/divider/divider.js';
@@ -64,6 +65,7 @@ define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
 define('lui-image', LuiImage);
 define('lui-drawer', LuiDrawer);
+define('lui-empty-state', LuiEmptyState);
 define('lui-tabs', LuiTabs);
 define('lui-tab', LuiTab);
 define('lui-divider', LuiDivider);
@@ -110,6 +112,7 @@ export {
   LuiHeading,
   LuiImage,
   LuiDrawer,
+  LuiEmptyState,
   LuiTabs,
   LuiTab,
   LuiDivider,
