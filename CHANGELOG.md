@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.8.0
+
+### Added
+
+- New `lui-toast` Web Component for transient notifications, plus CSS-only `.toast` / `.toast-region` styles — `default`, `success`, and `danger` variants, auto-dismiss `duration` that pauses on hover and focus, Escape-to-dismiss, icon and action slots, and a `lui-close` event.
+- New `href`, `target`, `rel`, and `download` props on `lui-button` — renders an `<a>` instead of a `<button>`, keeping `variant`, `size`, and `block` identical. `target="_blank"` adds `noopener noreferrer`, merging any supplied `rel` rather than replacing it.
+- The CSS-only `.btn` classes now apply to `<a>` as well.
+- As a link, `disabled` and `loading` both drop `href`; `disabled` leaves the tab order with `tabindex="-1"`, `loading` keeps focus with `tabindex="0"`.
+
+### Changed
+
+- Replaced three overlapping grid systems with one driven by the breakpoint: 4 columns below 768px, 8 at `sm` and `md`, 12 at `lg` and `1xl`, with gap and inline margin following. The configuration in `_grid.map.scss` is shared by `.grid` and `<lui-grid>`.
+- Column spans are flat `col-*` utilities (`col-full`, `col-sm-4`) instead of `grid-item` BEM modifiers. `.grid > *` carries the one-column default, so a single-column child needs no class.
+- Hover and active are one brand-agnostic tint — black in light themes, white in dark — mixed into a component's own background at 8% and 16%, replacing the per-variant hover/pressed colors. Components declare their resting background through `--lui-bg`.
+- `navbar` links use the same state layer, dropping `filter: brightness()`.
+
+### Fixed
+
+- `lui-heading` and `lui-body` ignored `margin`, `padding`, `border`, and size on the host — the document-level `display: contents` beat the components' own `:host { display: block }`. Both now declare `display: block`, and `[hidden]` is honoured.
+- `name` did not reach `FormData` on form-associated components (`lui-input`, `lui-textarea`, `lui-select`, `lui-checkbox`, `lui-switch`, `lui-radio-group`, `lui-button`) when set as a property, as React does. It is now reflected to an attribute.
+- `lui-input` and `lui-textarea` did not write the typed value back to the host `value`, so `event.target.value` returned the initial value on the re-emitted `input` / `change` events.
+- Values corrected by a consumer inside its own `input` handler never reached the DOM, and the rejected text was submitted anyway. The `.value` bindings now use `live()`.
+- Number inputs reported values nobody typed: clearing a `required` field submitted `0` while `checkValidity()` passed, `form.reset()` left a `1` the property did not report, and per-keystroke clamping made bounded fields unfillable. Clamping moved to commit.
+
+### Removed
+
+- `.columns`, `.column`, `<lui-columns>`, and `<lui-column>` — use `.grid` / `<lui-grid>` with column spans.
+- The 12-column `.col-{bp}-{n}` utilities, `.grid--gap-{n}`, and `.grid-item`. `<lui-grid>` no longer takes `columns`, `rows`, `gap`, `gap-x`, `gap-y`, or `justify`; `<lui-grid-item>` uses `col`, `col-sm`, `col-md`, `col-lg`, `col-1xl`.
+- The per-variant `background.hover` and `background.pressed` tokens and the `hover()` / `pressed()` SCSS functions — replaced by `--lui-color-interaction-tint` and `state()`.
+
 ## v1.7.0
 
 ### Changed
