@@ -298,7 +298,7 @@ LinkNewTab.parameters = {
   docs: {
     description: {
       story:
-        'Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente. Passe `rel` explicitamente para sobrescrever.',
+        'Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente. Um `rel` informado é somado a essa proteção, não a substitui.',
     },
   },
 };

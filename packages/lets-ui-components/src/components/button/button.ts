@@ -40,11 +40,11 @@ export class LuiButton extends LitElement {
   }
 
   private get _isLink(): boolean {
-    return this.href !== '';
+    return !!this.href;
   }
 
   private get _rel(): string | undefined {
-    const tokens = new Set(this.rel.split(/\s+/).filter(Boolean));
+    const tokens = new Set((this.rel ?? '').split(/\s+/).filter(Boolean));
 
     if (this.target === '_blank') {
       tokens.add('noopener');
@@ -82,9 +82,13 @@ export class LuiButton extends LitElement {
   };
 
   private _handleLinkClick = (e: Event) => {
-    if (this.disabled || this.loading) {
-      e.preventDefault();
-    }
+    if (!this.disabled && !this.loading) return;
+
+    e.preventDefault();
+
+    // A native `<button disabled>` dispatches no click at all, while a
+    // loading one still does — mirror both instead of picking one.
+    if (this.disabled) e.stopPropagation();
   };
 
   private _renderContent(displayLabel: string) {
