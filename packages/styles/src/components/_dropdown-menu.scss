@@ -53,14 +53,12 @@ lui-menu-divider {
   width: 100%;
   box-sizing: border-box;
   border: 0;
-  background: transparent;
   color: text(body);
   cursor: pointer;
   text-align: left;
-  transition: background-color 0.2s;
 
   @include font-scale(body--lg);
-  @include states(neutral, primary);
+  @include states(primary);
 
   &:not(:has(:disabled), [aria-disabled='true']) {
     cursor: pointer;

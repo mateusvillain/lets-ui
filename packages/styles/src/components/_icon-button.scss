@@ -24,26 +24,14 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
   display: flex;
   align-content: center;
   align-items: center;
-  background: transparent;
   border: none;
   border-radius: radius(md);
   place-self: start;
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
   z-index: 0;
-  background-color: bg(surface, neutral);
 
   ::slotted(*) {
     color: icon(neutral);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: opacity(hidden);
-    transition: opacity 0.2s;
-    z-index: -1;
   }
 
   &-- {
@@ -74,10 +62,9 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
     }
   }
 
-  &:active:not(:disabled)::before,
   &:focus {
     border-radius: radius(lg);
   }
 
-  @include states(neutral, primary, primary);
+  @include states(primary, primary, $bg: bg(surface, neutral));
 }

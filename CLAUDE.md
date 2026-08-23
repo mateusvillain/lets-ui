@@ -47,7 +47,19 @@ Documentation and interactive testing live in `docs/` (Storybook stories + MDX) 
 
 ## Token & Styling System
 
-**All design values must come from tokens — no hardcoded colors, spacing, or radii.**
+**Tokens are for values that vary — never hardcode one that does.** A value earns
+a token when it changes across brands (`data-brand`), across themes
+(`data-theme`), or across the semantic roles the system exposes. Colors,
+spacing, and radii are almost always in this category: take them from the
+functions below, never as literals.
+
+The inverse is just as important: **a constant that never varies is not a
+token.** A value that is the same in every brand, every theme, and every
+context — the 8% / 16% of the interaction state layer, its transition timings —
+belongs in code next to the logic that uses it. Wrapping it in a token buys no
+flexibility and costs a custom property on every page plus a layer of
+indirection between the value and its only consumer. The test is not "is this a
+design value?" but "will this ever resolve differently?".
 
 Component SCSS uses utility functions from `packages/utilities/src/_functions.scss`:
 

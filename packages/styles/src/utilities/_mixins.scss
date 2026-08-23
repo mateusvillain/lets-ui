@@ -21,9 +21,83 @@
   }
 }
 
+// Interaction state layer
+//  @include state-layer($bg);
+// Hover and active tint the component's own resting background with one
+// brand-agnostic overlay — black at 8% / 16% in light themes, white in dark.
+// The resting background goes through the `--lui-bg` custom property so the
+// state rules can mix against it without knowing the variant, and so a
+// higher-specificity rule can restyle a component (a selected tab, a checked
+// input) by overriding one property instead of fighting the state rules.
+// Set the resting colour with this mixin or `state-base()` — never with
+// `background-color` directly on an element that has a state layer, or the
+// state rules lose the specificity contest.
+// Registered so a component's resting colour cannot leak into a nested one, and
+// so the timing properties resolve to the exit values when no state rule is
+// active. None of the three is animated — `background-color` is what animates.
+@property --lui-bg {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
+@property --lui-state-duration {
+  syntax: '<time>';
+  inherits: false;
+  initial-value: 220ms;
+}
+
+@property --lui-state-easing {
+  syntax: '*';
+  inherits: false;
+  initial-value: ease-out;
+}
+
+@mixin state-base($bg) {
+  --lui-bg: #{$bg};
+}
+
+// A transition reads its timing from the state being entered, so overriding
+// these two properties inside `:hover` / `:active` gives each direction its own
+// pace from a single `transition` declaration:
+//   rest   → hover    140ms ease-out  (from the :hover rule)
+//   hover  → active    40ms linear    (from the :active rule)
+//   active → hover    140ms ease-out  (back to the :hover rule)
+//   hover  → rest     220ms ease-out  (back to the base rule)
+// CSS cannot tell "hovered from rest" apart from "hovered after releasing a
+// press", so both entering-hover directions share the one duration.
+// The press has to land inside a click — mousedown to mouseup is roughly 80ms,
+// so anything slower never reaches the pressed tint. The exits are the slowest
+// of the four, which keeps a cursor sweeping across a toolbar from flickering.
+@mixin state-layer($bg: transparent) {
+  @include state-base($bg);
+
+  background-color: var(--lui-bg, transparent);
+  transition:
+    all 0.2s ease-in-out,
+    background-color var(--lui-state-duration, 220ms)
+      var(--lui-state-easing, ease-out);
+}
+
+// The entering half of the timings above. Pair it with whatever rule sets the
+// state background when a component drives its states by hand.
+@mixin state-timing($state) {
+  @if $state == hover {
+    --lui-state-duration: 140ms;
+    --lui-state-easing: ease-out;
+  } @else if $state == pressed {
+    --lui-state-duration: 40ms;
+    --lui-state-easing: linear;
+  } @else {
+    @error 'Invalid interaction state: "#{$state}"';
+  }
+}
+
 // States
-//  @include states(hover, active, size, color);
-@mixin states($variant, $focus-visible, $focus: null) {
+//  @include states($focus-visible, $focus);
+@mixin states($focus-visible, $focus: null, $bg: transparent) {
+  @include state-layer($bg);
+
   &:disabled,
   &.is-disabled,
   &[aria-disabled='true'] {
@@ -32,13 +106,17 @@
     text-decoration: none;
   }
 
-  &:not([aria-disabled='true'], .is-disabled, :disabled):hover {
-    background-color: hover($variant);
-  }
+  &:not([aria-disabled='true'], .is-disabled, :disabled) {
+    &:hover {
+      background-color: state(hover);
 
-  &:not([aria-disabled='true'], .is-disabled) {
+      @include state-timing(hover);
+    }
+
     &:active {
-      background-color: pressed($variant);
+      background-color: state(pressed);
+
+      @include state-timing(pressed);
     }
 
     &:focus-visible {
