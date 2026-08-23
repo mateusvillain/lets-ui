@@ -4,3 +4,8 @@
 :host {
   display: block;
 }
+
+// `display: block` no host sobrescreve o `[hidden]` do user agent.
+:host([hidden]) {
+  display: none;
+}

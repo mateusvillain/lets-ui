@@ -1,5 +1,13 @@
 @use '../utilities/functions' as *;
 
+// Um seletor de tipo no documento vence o `:host` do shadow para o elemento
+// hospedeiro, então esta regra precisa concordar com `:host { display: block }`
+// do componente. `display: contents` aqui fazia o host não gerar caixa e
+// silenciava margin/padding/width/height aplicados no `<lui-heading>`.
 lui-heading {
-  display: contents;
+  display: block;
+}
+
+lui-heading[hidden] {
+  display: none;
 }

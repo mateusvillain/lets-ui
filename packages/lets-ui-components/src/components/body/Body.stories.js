@@ -101,7 +101,7 @@ export const Aligned = () => `
     <lui-body variant="md" color="body" align="left" label="Alinhamento à esquerda"></lui-body>
     <lui-body variant="md" color="body" align="center" label="Alinhamento centralizado"></lui-body>
     <lui-body variant="md" color="body" align="right" label="Alinhamento à direita"></lui-body>
-    <lui-body variant="md" color="body" align="justify" label="Texto justificado — o espaçamento entre palavras é ajustado para preencher a largura disponível da linha de forma uniforme." style="max-width: 400px; display: block;"></lui-body>
+    <lui-body variant="md" color="body" align="justify" label="Texto justificado — o espaçamento entre palavras é ajustado para preencher a largura disponível da linha de forma uniforme." style="max-width: 400px;"></lui-body>
   </div>
 `;
 
@@ -111,7 +111,7 @@ export const WithLineClamp = () => `
     color="body"
     line-clamp="3"
     label="Este parágrafo tem conteúdo suficiente para demonstrar o comportamento de corte por número de linhas. O line-clamp limita a exibição a três linhas e oculta o restante do texto com reticências no final da última linha visível."
-    style="max-width: 400px; display: block;"
+    style="max-width: 400px;"
   ></lui-body>
 `;
 
