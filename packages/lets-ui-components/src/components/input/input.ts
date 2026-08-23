@@ -2,6 +2,7 @@ import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './input.scss?inline';
+import { nameProperty } from '../../utils/form.js';
 
 const EYE_CLOSED = html`
   <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -50,7 +51,7 @@ export class LuiInput extends LitElement {
   @property() placeholder = '';
   @property() size = 'lg';
   @property() type = 'text';
-  @property() name = '';
+  @property(nameProperty) name = '';
   @property() value = '';
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;

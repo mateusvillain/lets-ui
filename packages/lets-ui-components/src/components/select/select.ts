@@ -2,6 +2,7 @@ import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './select.scss?inline';
+import { nameProperty } from '../../utils/form.js';
 
 export class LuiSelect extends LitElement {
   static styles = unsafeCSS(styles);
@@ -10,7 +11,7 @@ export class LuiSelect extends LitElement {
   private _internals: ElementInternals;
 
   @property() label = '';
-  @property() name = '';
+  @property(nameProperty) name = '';
   @property() options = 'Option 1,Option 2,Option 3';
   @property({ type: Number }) selected = 0;
   @property({ type: Boolean }) disabled = false;
