@@ -161,11 +161,82 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
         height: 44px;
         border-radius: 8px;
         border: 1px solid var(--lui-color-neutral-border-subtle);
+        /* The same expression the components use: the element's own content
+           colour mixed into its own background. Each swatch below sets that
+           pair, so the chips move in opposite directions from one rule. */
         background-color: color-mix(
           in srgb,
-          var(--lui-color-interaction-tint) var(--swatch-amount, 0%),
-          var(--lui-color-neutral-background-surface)
+          currentcolor var(--swatch-amount, 0%),
+          var(--swatch-bg, var(--lui-color-neutral-background-surface))
         );
+      }
+
+      .swatch--on-light {
+        color: var(--lui-color-neutral-text-body);
+        --swatch-bg: var(--lui-color-neutral-background-surface);
+      }
+
+      .swatch--on-dark {
+        color: var(--lui-color-neutral-text-inverse);
+        --swatch-bg: var(--lui-color-neutral-background-overlay);
+        background: var(--lui-color-neutral-background-overlay);
+      }
+
+      .swatch--on-dark .swatch__name,
+      .swatch--on-dark .swatch__value {
+        color: var(--lui-color-neutral-text-inverse);
+      }
+
+      /* ── Direction lanes ─────────────────────────────────── */
+      .lane {
+        display: grid;
+        grid-template-columns: 210px 1fr;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 0;
+        border-top: 1px solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .lane__meta {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .lane__name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .lane__spec {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        opacity: 0.6;
+      }
+
+      /* The lanes ride on a real variant so they get the real state rules, and
+         only swap the resting colour on top of it. Doubled class to outrank the
+         variant's own `button.btn--neutral` (0,1,1). */
+
+      /* A near-black filled button: the case the old fixed tint could not
+         serve — 8% black over it is imperceptible. */
+      .btn.btn--ink {
+        --lui-bg: #14141a;
+
+        color: #fff;
+      }
+
+      /* The previous model, kept as a control: a black tint pinned by hand. */
+      .btn.btn--legacy-tint {
+        --lui-state-tint: #000;
+      }
+
+      /* A transparent, dark-on-light action in the very same theme. */
+      .btn.btn--ghost {
+        --lui-bg: transparent;
+
+        color: var(--lui-color-neutral-text-body);
+        border: 1px solid var(--lui-color-neutral-border-default);
       }
 
       .swatch__name {
@@ -190,13 +261,14 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
           .tab,
           .menu-item,
           .navbar-section a,
+          .lane .btn,
           .checkbox input:checked,
           .radio input:checked,
           .switch input:checked
         ):not(:disabled, [aria-disabled='true']) {
         background-color: color-mix(
           in srgb,
-          var(--lui-color-interaction-tint) var(--forced-amount),
+          var(--lui-state-tint, currentcolor) var(--forced-amount),
           var(--lui-bg, transparent)
         );
       }
@@ -339,53 +411,108 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
       <section class="intro">
         <h1>State layer</h1>
         <p>
-          Hover e active deixaram de ser uma cor por marca e variante. Agora são
-          uma única camada translúcida — preta nos temas claros, branca nos
-          escuros — misturada ao background do próprio componente a partir da
-          tinta única <code>--lui-color-interaction-tint</code>, misturada ao fundo
-          de repouso do componente. Use o seletor
-          <strong>Estado forçado</strong> para fixar o estado sem passar o mouse
-          (funciona nos componentes de CSS global) e o seletor de
-          <strong>Tema</strong> para conferir a inversão no dark.
+          Hover e active são uma camada translúcida misturada ao fundo de
+          repouso do próprio componente. A tinta dessa camada é a
+          <strong>cor de conteúdo do componente</strong> —
+          <code>currentColor</code>, a on-color do seu background — e não mais
+          uma tinta preta ou branca escolhida por tema. Como conteúdo e fundo já
+          são obrigados a ter contraste entre si, a camada clareia o que é
+          escuro e escurece o que é claro sozinha, sem medir luminância e sem
+          precisar saber sobre que superfície um componente transparente está.
+          Use o seletor <strong>Estado forçado</strong> para fixar o estado sem
+          passar o mouse (funciona nos componentes de CSS global) e o seletor de
+          <strong>Tema</strong> para conferir os dois temas.
         </p>
       </section>
 
-      <!-- ── Tokens ─────────────────────────────────────────── -->
+      <!-- ── Modelo ─────────────────────────────────────────── -->
       <section class="section">
-        <h2 class="section__title">Tokens</h2>
+        <h2 class="section__title">Modelo</h2>
         <p class="section__note">
-          Um token só — a tinta, que resolve por tema. As quantidades (8% e 16%)
-          não variam por tema nem por marca, então são constantes SCSS, não
-          tokens. Juntos substituem os 10 tokens de
-          <code>background.hover</code> / <code>background.pressed</code> que
-          existiam por variante.
+          Nenhum token. A tinta é <code>currentColor</code>, que o componente já
+          declarava ao lado do próprio fundo, e as quantidades (8% e 16%) não
+          variam por tema nem por marca — são constantes SCSS em
+          <code>_functions.scss</code>. O token
+          <code>--lui-color-interaction-tint</code> foi removido junto com os 10
+          tokens de <code>background.hover</code> /
+          <code>background.pressed</code> que ele já havia substituído.
         </p>
         <div class="swatches">
-          <div class="swatch">
+          <div class="swatch swatch--on-light">
             <span class="swatch__chip" style="--swatch-amount: 8%;"></span>
             <span class="col" style="gap: 2px;">
-              <span class="swatch__name">hover</span>
-              <span class="swatch__value">8% · constante SCSS</span>
+              <span class="swatch__name">hover sobre claro</span>
+              <span class="swatch__value">texto escuro 8% → escurece</span>
             </span>
           </div>
-          <div class="swatch">
+          <div class="swatch swatch--on-light">
             <span class="swatch__chip" style="--swatch-amount: 16%;"></span>
             <span class="col" style="gap: 2px;">
-              <span class="swatch__name">pressed</span>
-              <span class="swatch__value">16% · constante SCSS</span>
+              <span class="swatch__name">pressed sobre claro</span>
+              <span class="swatch__value">texto escuro 16% → escurece</span>
             </span>
           </div>
-          <div class="swatch">
-            <span class="swatch__chip" style="background-color: var(--lui-color-interaction-tint);"></span>
+          <div class="swatch swatch--on-dark">
+            <span class="swatch__chip" style="--swatch-amount: 8%;"></span>
             <span class="col" style="gap: 2px;">
-              <span class="swatch__name">--lui-color-interaction-tint</span>
-              <span class="swatch__value" data-readout="--lui-color-interaction-tint">…</span>
+              <span class="swatch__name">hover sobre escuro</span>
+              <span class="swatch__value">texto claro 8% → clareia</span>
+            </span>
+          </div>
+          <div class="swatch swatch--on-dark">
+            <span class="swatch__chip" style="--swatch-amount: 16%;"></span>
+            <span class="col" style="gap: 2px;">
+              <span class="swatch__name">pressed sobre escuro</span>
+              <span class="swatch__value">texto claro 16% → clareia</span>
             </span>
           </div>
         </div>
       </section>
 
       <div class="force-scope col" style="gap: 48px;">
+        <!-- ── Direction ────────────────────────────────────── -->
+        <section class="section">
+          <h2 class="section__title">Direção automática</h2>
+          <p class="section__note">
+            Os três casos que nenhuma tinta fixa por tema atende ao mesmo tempo.
+            Todos estão no mesmo tema: mantenha o seletor em <strong>Light</strong>
+            e passe o mouse.
+          </p>
+          <div>
+            <div class="lane">
+              <span class="lane__meta">
+                <span class="lane__name">Fundo quase preto</span>
+                <span class="lane__spec">tinta = texto branco → clareia</span>
+              </span>
+              <span class="row">
+                <button class="btn btn--neutral btn--lg btn--ink">Ação primária</button>
+              </span>
+            </div>
+
+            <div class="lane">
+              <span class="lane__meta">
+                <span class="lane__name">O mesmo, tinta preta fixa</span>
+                <span class="lane__spec">--lui-state-tint: #000 → invisível</span>
+              </span>
+              <span class="row">
+                <button class="btn btn--neutral btn--lg btn--ink btn--legacy-tint">
+                  Ação primária
+                </button>
+              </span>
+            </div>
+
+            <div class="lane">
+              <span class="lane__meta">
+                <span class="lane__name">Fundo transparente</span>
+                <span class="lane__spec">tinta = texto escuro → escurece</span>
+              </span>
+              <span class="row">
+                <button class="btn btn--neutral btn--lg btn--ghost">Ação secundária</button>
+              </span>
+            </div>
+          </div>
+        </section>
+
         <!-- ── Button ───────────────────────────────────────── -->
         <section class="section">
           <h2 class="section__title">Button — CSS global</h2>
@@ -669,7 +796,8 @@ import 'lets-ui-icons/dist/lets-ui-icons.css';
       wireSegment('data-theme-value', applyTheme);
       wireSegment('data-force-value', applyForce);
 
-      // Token readout
+      // Token readout — kept generic: any element with `data-readout` prints the
+      // computed value of the custom property it names, re-read on theme change.
       function readTokens() {
         const styles = getComputedStyle(html);
 

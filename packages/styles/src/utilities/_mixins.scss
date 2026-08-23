@@ -23,8 +23,10 @@
 
 // Interaction state layer
 //  @include state-layer($bg);
-// Hover and active tint the component's own resting background with one
-// brand-agnostic overlay — black at 8% / 16% in light themes, white in dark.
+// Hover and active tint the component's own resting background with its own
+// content colour at 8% / 16% — the on-colour of the surface, which lightens a
+// dark background and darkens a light one without anything having to measure
+// either. See `$state-tint` in _functions.scss.
 // The resting background goes through the `--lui-bg` custom property so the
 // state rules can mix against it without knowing the variant, and so a
 // higher-specificity rule can restyle a component (a selected tab, a checked
@@ -34,7 +36,7 @@
 // state rules lose the specificity contest.
 // Registered so a component's resting colour cannot leak into a nested one, and
 // so the timing properties resolve to the exit values when no state rule is
-// active. None of the three is animated — `background-color` is what animates.
+// active. None of the four is animated — `background-color` is what animates.
 @property --lui-bg {
   syntax: '<color>';
   inherits: false;
@@ -53,8 +55,26 @@
   initial-value: ease-out;
 }
 
+// Left without an initial value on purpose: an unset registered property with
+// syntax `*` is guaranteed-invalid, so `var(--lui-state-tint, currentColor)`
+// falls back to the content colour. Declaring one would shadow that fallback,
+// and `currentColor` cannot be an initial value anyway — it is not
+// computationally independent. `inherits: false` still stops an override on a
+// container from reaching the components inside it.
+@property --lui-state-tint {
+  syntax: '*';
+  inherits: false;
+}
+
 @mixin state-base($bg) {
   --lui-bg: #{$bg};
+}
+
+// The on-colour a component's states tint with, when that is not the element's
+// own `color` — a checked input painting its mark, an element whose text colour
+// is set on a child.
+@mixin state-tint($tint) {
+  --lui-state-tint: #{$tint};
 }
 
 // A transition reads its timing from the state being entered, so overriding

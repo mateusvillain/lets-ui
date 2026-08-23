@@ -34,8 +34,7 @@ export default defineConfig({
             "lui.color.orange.**",
             "lui.color.red.**",
             "lui.color.violet.**",
-            "lui.color.black.**",
-            "lui.color.interaction.**"
+            "lui.color.black.**"
           ],
           prepare: (cssOutput) => `@media (prefers-color-scheme: dark) {\n  :root {\n    color-scheme: dark;\n${cssOutput}\n  }\n}`,
         },
@@ -62,8 +61,7 @@ export default defineConfig({
             "lui.color.orange.**",
             "lui.color.red.**",
             "lui.color.violet.**",
-            "lui.color.black.**",
-            "lui.color.interaction.**"
+            "lui.color.black.**"
           ],
           prepare: (cssOutput) => `[data-theme="light"] {\n  color-scheme: light;\n${cssOutput}\n}`,
         },
@@ -76,8 +74,7 @@ export default defineConfig({
             "lui.color.orange.**",
             "lui.color.red.**",
             "lui.color.violet.**",
-            "lui.color.black.**",
-            "lui.color.interaction.**"
+            "lui.color.black.**"
           ],
           prepare: (cssOutput) => `[data-theme="dark"] {\n  color-scheme: dark;\n${cssOutput}\n}`,
         },

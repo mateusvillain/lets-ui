@@ -1,18 +1,23 @@
 @use 'sass:map';
 @use './tokens.map' as tokens;
 
-// state-tint()
-// The interaction tint: solid black in light themes, solid white in dark ones.
-// Brand-agnostic on purpose — every variant of every brand shares it.
-@function state-tint() {
-  $value: map.get(tokens.$interaction, tint);
-
-  @if not $value {
-    @error 'Missing interaction state tint token';
-  }
-
-  @return $value;
-}
+// The interaction tint is the component's own content colour — the "on-colour"
+// of its background, in Material's terms. Nothing is derived from the
+// background: a component that declares `color` and `--lui-bg` together has
+// already stated both halves of the pair, and `currentColor` reads the half
+// that was written one line above.
+// Direction falls out of that for free. The content colour is, by the contrast
+// requirement the component already meets, the luminous opposite of its
+// background — so mixing it in lightens a dark surface and darkens a light one,
+// with no luminance test, no threshold to flip across, and no need to know what
+// surface a transparent component is sitting on.
+// Magnitude comes along too: because the two colours are at least 4.5:1 apart,
+// 8% of the content colour is always a visible move. A fixed black or white
+// tint had no such guarantee — 8% black over a near-black button was invisible,
+// which is what this replaces.
+// Override `--lui-state-tint` when the element's text colour is not the
+// on-colour you want the state to use.
+$state-tint: var(--lui-state-tint, currentColor);
 
 // How much of the tint each state mixes in. Deliberately not tokens: these are
 // the same in every brand, every theme and every context, so they belong next
@@ -36,16 +41,17 @@ $state-amounts: (
 
 // state($state, $bg)
 //  $state = hover, pressed
-// The background a component takes on in that state: the tint mixed into its
-// own resting background. `color-mix()` over an opaque base is identical to
-// compositing the tint on top of it, and over a transparent base it resolves to
-// the tint at exactly its own alpha — so this stays a black-overlay model.
+// The background a component takes on in that state: its content colour mixed
+// into its own resting background. `color-mix()` over an opaque base is
+// identical to compositing the tint on top of it, and over a transparent base
+// it resolves to the tint at exactly its own alpha — so this stays an overlay
+// model, only with an overlay that knows which way to move.
 // The result is a plain colour, which is what makes it animate: `background-color`
 // interpolates natively in every engine. Driving the tint through a custom
 // property inside `background-image` does not — WebKit resolves `var()` in an
 // image once per style change, never per animation frame, so Safari would jump.
 @function state($state, $bg: var(--lui-bg, transparent)) {
-  @return color-mix(in srgb, #{state-tint()} #{state-amount($state)}, #{$bg});
+  @return color-mix(in srgb, #{$state-tint} #{state-amount($state)}, #{$bg});
 }
 
 // focus-ring($variant)

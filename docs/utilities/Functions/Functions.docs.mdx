@@ -44,19 +44,14 @@ export const colorFns = [
   },
   {
     fn: 'state($state, $bg?)',
-    desc: 'Background do componente no estado: a tinta misturada ao fundo de repouso',
+    desc: 'Background do componente no estado: a cor de conteúdo dele (currentColor) misturada ao fundo de repouso',
     params: [
       { label: '$state', values: ['hover', 'pressed'] },
     ],
   },
   {
-    fn: 'state-tint()',
-    desc: 'A tinta de interação — preta nos temas claros, branca nos escuros',
-    params: [],
-  },
-  {
     fn: 'state-amount($state)',
-    desc: 'Quanto da tinta misturar, como número de 0 a 1',
+    desc: 'Quanto da tinta misturar',
     params: [
       { label: '$state', values: ['hover', 'pressed'] },
     ],
@@ -178,8 +173,9 @@ Funções SCSS definidas em `packages/styles/src/utilities/_functions.scss`. Use
   color: text(inverse);
 
   // A camada de estado é a mesma para toda variante e marca: o fundo de
-  // repouso entra pelo mixin e as regras de estado misturam a tinta nele.
-  // `states()` já embute tudo isso.
+  // repouso entra pelo mixin e as regras de estado misturam nele a cor de
+  // conteúdo declarada acima — clareando fundos escuros e escurecendo os
+  // claros sem medir nada. `states()` já embute tudo isso.
   @include state-layer(bg(container, primary));
 
   &:hover {
