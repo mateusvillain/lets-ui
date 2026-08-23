@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { live } from 'lit/directives/live.js';
 import styles from './input.scss?inline';
 import { nameProperty } from '../../utils/form.js';
 
@@ -180,9 +181,7 @@ export class LuiInput extends LitElement {
   }
 
   private _handleInput() {
-    if (this._inputType === 'number') {
-      this._inputEl.value = String(this._clampNumber(this._inputEl.value));
-    }
+    this.value = this._inputEl.value;
     this._charCount = this._inputEl.value.length;
     this.error = false;
     this._syncFormValue();
@@ -190,9 +189,10 @@ export class LuiInput extends LitElement {
   }
 
   private _handleChange() {
-    if (this._inputType === 'number') {
+    if (this._inputType === 'number' && this._inputEl.value !== '') {
       this._inputEl.value = String(this._clampNumber(this._inputEl.value));
     }
+    this.value = this._inputEl.value;
     this.error = false;
     this._syncFormValue();
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
@@ -206,6 +206,10 @@ export class LuiInput extends LitElement {
     const current = this._clampNumber(this._inputEl?.value ?? '');
     const next = this._clampNumber(String(current + delta * this._stepValue));
     if (this._inputEl) this._inputEl.value = String(next);
+    this.value = String(next);
+    this._charCount = this.value.length;
+    this.error = false;
+    this._syncFormValue();
     this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   }
@@ -232,7 +236,7 @@ export class LuiInput extends LitElement {
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
           placeholder="${this.placeholder}"
-          .value="${this.value}"
+          .value="${live(String(this.value ?? ''))}"
           maxlength="${maxLen !== null ? maxLen : ''}"
           pattern="${ifDefined(this.pattern || undefined)}"
           inputmode="${ifDefined(this.inputmode || undefined)}"
@@ -291,7 +295,7 @@ export class LuiInput extends LitElement {
           name="${ifDefined(this.name || undefined)}"
           aria-label="${ariaLabel}"
           aria-describedby="${describedBy}"
-          .value="${this.value || '1'}"
+          .value="${live(String(this.value ?? ''))}"
           step="${this._stepValue}"
           min="${minVal !== null ? minVal : ''}"
           max="${maxVal !== null ? maxVal : ''}"

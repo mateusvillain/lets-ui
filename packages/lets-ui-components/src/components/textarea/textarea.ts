@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { live } from 'lit/directives/live.js';
 import styles from './textarea.scss?inline';
 import { nameProperty } from '../../utils/form.js';
 
@@ -109,13 +110,15 @@ export class LuiTextarea extends LitElement {
 
   private _handleInput = (e: Event) => {
     const textarea = e.target as HTMLTextAreaElement;
+    this.value = textarea.value;
     this._charCount = textarea.value.length;
     this.error = false;
     this._syncFormValue();
     this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
   };
 
-  private _handleChange = () => {
+  private _handleChange = (e: Event) => {
+    this.value = (e.target as HTMLTextAreaElement).value;
     this.error = false;
     this._syncFormValue();
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
@@ -168,6 +171,7 @@ export class LuiTextarea extends LitElement {
             rows="${this.rows}"
             style="resize: ${this._resizeValue};"
             maxlength="${maxLen !== null ? maxLen : ''}"
+            .value="${live(String(this.value ?? ''))}"
             ?disabled="${this.disabled}"
             ?required="${this.required}"
             ?aria-disabled="${this.disabled}"
@@ -175,9 +179,7 @@ export class LuiTextarea extends LitElement {
             aria-required="${this.required ? 'true' : 'false'}"
             @input="${this._handleInput}"
             @change="${this._handleChange}"
-          >
-${this.value}</textarea
-          >
+          ></textarea>
         </label>
 
         ${message
