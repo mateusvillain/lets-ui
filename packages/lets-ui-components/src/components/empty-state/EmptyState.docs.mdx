@@ -1,0 +1,170 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as EmptyStateStories from './EmptyState.stories';
+
+<Meta of={EmptyStateStories} />
+
+# Empty State
+
+O Empty State substitui uma área da interface quando não há dados para exibir ali. Ele não é decoração: comunica **por que** o espaço está vazio e **o que fazer a seguir**.
+
+Use quando: o usuário acessa uma funcionalidade pela primeira vez, uma busca ou filtro não retornou resultados, o conteúdo foi excluído/arquivado, uma tarefa foi concluída (fila zerada), ou os dados não podem ser exibidos por permissão, configuração pendente ou falha externa.
+
+Não use para estado de carregamento (isso é _skeleton_) nem para páginas de erro de servidor (404/500).
+
+**Regra de integração:** o Empty State deve substituir **integralmente** o componente vazio. Nada de cabeçalho de tabela, rodapé ou contador de paginação "fantasma" ao lado dele. Isso confunde visualmente e força o leitor de tela a atravessar colunas vazias antes de chegar à mensagem.
+
+<Canvas of={EmptyStateStories.EmptyState} />
+<Controls of={EmptyStateStories.EmptyState} />
+
+## Tom é conteúdo, não variante
+
+Não existe prop `variant` de "tipo visual" (`error`, `success`, `no-data`). O tipo de Empty State é decisão de **conteúdo** (o que você escreve em `title`/`description`) e de **composição** (qual capa e quais ações você passa). Isso mantém a evolução da UX writing fora do código.
+
+| Situação              | Tom              | Estrutura recomendada                                      |
+| --------------------- | ---------------- | ---------------------------------------------------------- |
+| Primeiro uso          | Neutro/positivo  | Capa + título + descrição + ação de criação                |
+| Sem resultados        | Neutro           | Título + descrição com sugestão de ajuste, sem capa pesada |
+| Confirmação/sucesso   | Celebratório     | Título; ação opcional                                      |
+| Erro de permissão     | Neutro/sério     | Título + descrição + "solicitar acesso"                    |
+| Erro de sistema       | Sério, sem humor | Título + descrição + "tentar de novo"                      |
+| Configuração pendente | Instrutivo       | Título + descrição + ação de configuração                  |
+
+## Alinhamento
+
+O bloco todo alinha ao centro (padrão) ou à esquerda. Centro funciona bem em páginas inteiras e painéis grandes; esquerda acompanha melhor conteúdo de leitura já alinhado à esquerda, como o corpo de uma tabela.
+
+### Center
+
+<Canvas of={EmptyStateStories.AlignCenter} />
+
+### Left
+
+<Canvas of={EmptyStateStories.AlignLeft} />
+
+## Capa opcional
+
+A capa (`slot="cover"`) aceita imagem, ilustração ou ícone, e é sempre **decorativa**, considerando que o componente aplica `aria-hidden="true"`. Nada que ela comunique pode ser exclusivo dela; título e descrição carregam todo o significado, e o layout absorve a ausência da capa sem quebrar.
+
+Omita a capa em espaços pequenos ou quando vários Empty States aparecem na mesma tela (vários widgets falhando ao mesmo tempo). Repetir a mesma ilustração reduz o impacto de todas.
+
+<Canvas of={EmptyStateStories.WithoutCover} />
+
+## Ações opcionais
+
+Ações entram por `slot="actions"` como `<button class="btn">` ou `<lui-button>`, e não por props de configuração, assim você usa toda a API de Button sem que o Empty State precise reimplementá-la.
+
+Uma única ação primária. Se não há nada que o usuário possa fazer (ex.: aguardando um processo externo), não invente um botão.
+
+<Canvas of={EmptyStateStories.WithoutActions} />
+
+### Caso mínimo
+
+Só o título já é um Empty State válido.
+
+<Canvas of={EmptyStateStories.TitleOnly} />
+
+## Anunciar mudanças dinâmicas (`announce`)
+
+Este é o ponto de acessibilidade menos intuitivo do padrão. Quando o Empty State aparece **como resultado de uma ação do usuário na mesma navegação** (busca, filtro, exclusão do último item), o leitor de tela precisa ser avisado, senão o usuário não descobre que o resultado mudou sem navegar manualmente até a área.
+
+| `announce`     | Renderiza       | Quando usar                                                                                  |
+| -------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `off` (padrão) | sem role        | O Empty State já está presente no carregamento inicial da página, anunciar seria redundante. |
+| `polite`       | `role="status"` | Busca sem resultado, filtro aplicado, último item excluído.                                  |
+| `assertive`    | `role="alert"`  | Só para erro que exige atenção imediata, interrompendo a leitura em curso.                   |
+
+<Canvas of={EmptyStateStories.NoSearchResults} />
+
+<Canvas of={EmptyStateStories.SystemError} />
+
+**Gerenciamento de foco:** quando o Empty State substitui algo que estava com o foco (o item que o usuário acabou de excluir), mova o foco de forma previsível, para o campo de busca ou para o próximo elemento lógico. Nunca deixe o foco "perdido" no `<body>`. O container do Empty State não é focável: ele não é um widget, e o `Tab` vai direto para os botões.
+
+**Debounce:** não troque para o Empty State a cada tecla digitada em um campo de busca. Espere a query "assentar", senão o bloco pisca a cada caractere.
+
+## Hierarquia do título
+
+O título é um heading nativo real. Como o componente não sabe onde foi inserido, o nível é configurável por `title-level` (1–6, padrão `2`). Ajuste conforme a hierarquia do documento ao redor.
+
+## Responsividade
+
+Layout mobile-first. Até `md` (1024px) as ações empilham em largura total; a partir daí voltam a ser uma linha. O bloco tem `max-width: 560px` e o título nunca trunca. Textos longos (e traduções mais extensas) simplesmente ocupam mais altura.
+
+Com `<lui-button>`, adicione o atributo `block` para que o botão preencha a largura no empilhamento mobile. Botões nativos com a classe `.btn` já esticam sozinhos.
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={EmptyStateStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-empty-state
+  align="center"
+  title="No projects yet"
+  title-level="2"
+  description="Create your first project to start organizing your work."
+>
+  <img slot="cover" src="/empty-projects.svg" alt="" width="240" height="160" />
+  <button slot="actions" class="btn btn--secondary btn--lg">Learn more</button>
+  <button slot="actions" class="btn btn--primary btn--lg">
+    Create project
+  </button>
+</lui-empty-state>
+```
+
+### Sem resultados, anunciado
+
+```html
+<lui-empty-state
+  title="Nenhum resultado para “relatório financeiro”"
+  description="Tente termos mais genéricos ou remova os filtros ativos."
+  announce="polite"
+>
+  <button slot="actions" class="btn btn--secondary btn--lg">
+    Limpar filtros
+  </button>
+</lui-empty-state>
+```
+
+### Classe CSS
+
+```html
+<div class="empty-state empty-state--align-center">
+  <div class="empty-state__cover" aria-hidden="true">
+    <img src="/empty-projects.svg" alt="" width="240" height="160" />
+  </div>
+  <div class="empty-state__text">
+    <h2 class="empty-state__title">No projects yet</h2>
+    <p class="empty-state__description">
+      Create your first project to start organizing your work.
+    </p>
+  </div>
+  <div
+    class="empty-state__actions"
+    role="group"
+    aria-label="Empty state actions"
+  >
+    <button class="btn btn--secondary btn--lg">Learn more</button>
+    <button class="btn btn--primary btn--lg">Create project</button>
+  </div>
+</div>
+```
+
+## API
+
+| Atributo        | Valores                      | Padrão                | Descrição                                                 |
+| --------------- | ---------------------------- | --------------------- | --------------------------------------------------------- |
+| `align`         | `center`, `left`             | `center`              | Alinhamento do bloco inteiro.                             |
+| `title`         | texto                        | `''`                  | Título. Único conteúdo obrigatório.                       |
+| `title-level`   | `1`–`6`                      | `2`                   | Nível do heading HTML renderizado.                        |
+| `description`   | texto                        | `''`                  | Texto de apoio. Omitido quando vazio.                     |
+| `announce`      | `off`, `polite`, `assertive` | `off`                 | Anuncia a região quando ela aparece após ação do usuário. |
+| `actions-label` | texto                        | `Empty state actions` | Rótulo acessível do grupo de ações.                       |
+
+| Slot      | Descrição                                                       |
+| --------- | --------------------------------------------------------------- |
+| `cover`   | Imagem, ilustração ou ícone. Sempre decorativo (`aria-hidden`). |
+| (padrão)  | Conteúdo extra abaixo da descrição. Ex.: lista de sugestões.    |
+| `actions` | Botões ou links de ação.                                        |

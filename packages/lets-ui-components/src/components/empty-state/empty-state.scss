@@ -1,0 +1,27 @@
+@use 'packages/styles/src/components/empty-state' as *;
+@use 'packages/styles/src/foundations/typography' as *;
+@use 'packages/styles/src/utilities/mixins' as *;
+
+:host {
+  display: block;
+}
+
+::slotted([slot='cover']) {
+  max-width: 100%;
+}
+
+// Seletor de descendente não cruza o slot, então `.empty-state__actions > .btn`
+// do arquivo global só alcança o uso por classe CSS. Aqui as ações vêm do light
+// DOM: o `align-items: stretch` do container já as estica no empilhamento
+// mobile, e o alinhamento do rótulo precisa de `::slotted`.
+// `<lui-button>` é uma exceção conhecida: o seletor não entra no shadow dele,
+// então ele precisa do atributo `block` para preencher a largura.
+::slotted([slot='actions']) {
+  justify-content: center;
+}
+
+@include media-up(md) {
+  ::slotted([slot='actions']) {
+    justify-content: flex-start;
+  }
+}

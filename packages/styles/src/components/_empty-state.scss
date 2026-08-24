@@ -1,0 +1,94 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+// O Empty State substitui integralmente a área que teria conteúdo (a tabela, o
+// painel, a página) — nunca convive com cabeçalho, rodapé ou paginação do
+// componente vazio, tanto por clareza visual quanto para o leitor de tela não
+// precisar atravessar colunas vazias antes de chegar à mensagem.
+// Mobile-first: até `md` (1024px) as ações empilham em largura total, como no
+// breakpoint `sm/1xs` do protótipo; de `md` para cima voltam a ser uma linha.
+.empty-state {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: fluid(24);
+  width: 100%;
+  max-width: 560px;
+  text-align: center;
+
+  &--align-center {
+    align-items: center;
+    text-align: center;
+  }
+
+  &--align-left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  // A capa é decorativa: imagem, ilustração ou ícone. Nada que ela comunique
+  // pode ser exclusivo dela — título e descrição carregam todo o significado.
+  &__cover {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    overflow: hidden;
+
+    img,
+    svg,
+    picture {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: fluid(8);
+    width: 100%;
+  }
+
+  &__title {
+    @include font-scale(headline);
+
+    margin: 0;
+    color: text(heading);
+  }
+
+  &__description {
+    @include font-scale(body--lg);
+
+    margin: 0;
+    color: text(body);
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: fluid(16);
+    width: 100%;
+
+    > .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @include media-up(md) {
+    &__actions {
+      flex-direction: row;
+      align-items: center;
+      width: auto;
+
+      > .btn {
+        width: auto;
+        justify-content: flex-start;
+      }
+    }
+  }
+}
