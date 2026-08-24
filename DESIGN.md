@@ -167,16 +167,28 @@ All SCSS must consume tokens through functions defined in `packages/utilities/sr
 | `state-layer()`     | `state-layer($bg?)`                         | Interaction overlay only, without focus   |
 | `state-base()`      | `state-base($bg)`                           | Resting background for a state layer      |
 | `state-timing()`    | `state-timing($state)`                      | Per-direction timing for the overlay      |
+| `state-tint()`      | `state-tint($tint)`                         | On-colour override for the overlay        |
 | `center()`          | `center($axis)`                             | `both` / `x` / `y` alignment              |
 | `center-absolute()` | —                                           | Absolute centering via transform          |
 | `sr-only()`         | —                                           | Visually hidden, screen-reader accessible |
 
 ### Interaction states
 
-Hover and active are **not** colors picked per brand or variant. They are one
-translucent state layer painted on top of whatever background a component
-already has — black at 8% (hover) and 16% (active) in light themes, white at
-the same alphas in dark themes.
+Hover and active are **not** colors picked per brand, variant or theme. They
+are one translucent state layer painted on top of whatever background a
+component already has, at 8% (hover) and 16% (active) — and the colour of that
+layer is the component's own content colour, the on-colour of its background.
+
+Nothing is measured to decide whether to lighten or darken. A component that
+declares `color` and `--lui-bg` together has already stated both halves of the
+pair, so the layer just reads `currentColor`. Direction follows from the
+contrast the pair is required to have: the content colour is the luminous
+opposite of the background, so mixing it in lightens a dark surface and darkens
+a light one — with no luminance test, no threshold to flip across, and nothing
+to work out about the surface a transparent component happens to sit on.
+Magnitude follows too: at 4.5:1 or better, 8% of the content colour is always a
+visible move. A fixed black-or-white tint had no such guarantee — 8% black over
+a near-black button was imperceptible.
 
 A component declares its resting colour through the `--lui-bg` custom property
 instead of `background-color`, and the state rules mix the tint into it with
@@ -201,7 +213,8 @@ instead of `background-color`, and the state rules mix the tint into it with
 
 Over an opaque base, mixing the tint in at 8% is identical to compositing it on
 top; over a transparent base it resolves to the tint at exactly that alpha. So
-the model really is a black overlay — it is just expressed as a colour.
+the model really is an overlay — one that knows which way to move — just
+expressed as a colour.
 
 **Expressing it as a colour is the whole point.** `background-color`
 interpolates natively in every engine. The obvious alternative — an animated
@@ -212,11 +225,16 @@ the end value. Anything that must animate has to end up in a real animatable
 property, not behind a `var()` in an image.
 
 Most components should use `states()` instead, which wraps `state-layer` with
-the timing, disabled and focus handling. Because the tint is brand-agnostic,
-adding a brand costs zero state tokens: `--lui-color-interaction-tint` is the
-only one, resolved per theme. The 8% / 16% amounts are not tokens — they never vary
-by theme or brand, so they sit in `$state-amounts` in `_functions.scss`,
-alongside the timings, next to the logic that consumes them.
+the timing, disabled and focus handling. Interaction costs **zero tokens**:
+the tint is a colour the component already declares, and the 8% / 16% amounts
+never vary by theme or brand, so they sit in `$state-amounts` in
+`_functions.scss`, alongside the timings, next to the logic that consumes them.
+
+Where the element's `color` is not the on-colour the state should use, override
+it with the `state-tint($tint)` mixin. Two cases exist today, both because the
+element paints no text of its own: a checked checkbox / radio / switch, whose
+mark colour is the real on-colour (declared once in `_selection.scss`), and
+`icon-button`, whose icon arrives through a slot.
 
 ### Timing
 
@@ -247,6 +265,8 @@ Two consequences to keep in mind when writing component SCSS:
   card tab and the checked inputs do — costs no specificity fight at all.
 - The layer tints the element's own background, so a variant that looks
   different at rest needs no extra state rules at all.
+- Declare `color` on the same element that gets the state layer. An element that
+  inherits its text colour tints with whatever an ancestor happened to set.
 
 ---
 

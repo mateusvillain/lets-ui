@@ -3,20 +3,32 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
-$variants: primary, secondary, neutral, danger, success;
 $colors: (
-  primary: bg(container, primary),
-  secondary: bg(container, secondary),
-  neutral: bg(container, neutral),
-  danger: bg(container, danger),
-  success: bg(container, success),
-);
-$focus-rings: (
-  primary: focus-ring(primary),
-  secondary: focus-ring(secondary),
-  neutral: focus-ring(neutral),
-  danger: focus-ring(danger),
-  success: focus-ring(success),
+  primary: (
+    bg: bg(container, primary),
+    fg: text(inverse),
+    focus-ring: focus-ring(primary),
+  ),
+  secondary: (
+    bg: bg(container, secondary),
+    fg: text(inverse),
+    focus-ring: focus-ring(secondary),
+  ),
+  neutral: (
+    bg: bg(container, neutral),
+    fg: text(body),
+    focus-ring: focus-ring(neutral),
+  ),
+  danger: (
+    bg: bg(container, danger),
+    fg: text(inverse),
+    focus-ring: focus-ring(danger),
+  ),
+  success: (
+    bg: bg(container, success),
+    fg: text(inverse),
+    focus-ring: focus-ring(success),
+  ),
 );
 $size: (
   lg: (
@@ -57,10 +69,6 @@ a {
     &:active {
       outline: width(2) solid transparent;
       outline-offset: width(2);
-
-      // &:not(:disabled) {
-      //   transform: scale(0.98);
-      // }
     }
 
     &:disabled {
@@ -90,11 +98,11 @@ a {
     }
   }
 
-  @each $variant in $variants {
-    &.btn--#{$variant} {
-      color: text(inverse);
+  @each $key, $values in $colors {
+    &.btn--#{$key} {
+      color: map.get($values, fg);
 
-      @include states($variant, $variant, $bg: map.get($colors, $variant));
+      @include states($key, $key, $bg: map.get($values, bg));
     }
   }
 }

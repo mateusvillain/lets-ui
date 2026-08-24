@@ -27,7 +27,13 @@
   outline-offset: 3px;
 }
 
+// A checked control has no text, so `currentColor` would otherwise be whatever
+// the label inherits — dark, which would darken the filled background instead
+// of lightening it. Declaring the colour here states the pair the state layer
+// needs and gives the mark (check, dot, thumb) a single source: `currentColor`.
 @mixin checked-base {
+  color: bg(surface, neutral);
+
   @include states(primary, primary, $bg: bg(container, primary));
 }
 

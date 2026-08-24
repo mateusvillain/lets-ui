@@ -56,8 +56,8 @@ input[type='checkbox'] {
         position: absolute;
         width: 6px;
         height: 12px;
-        border-right: 2px solid bg(surface, neutral);
-        border-bottom: 2px solid bg(surface, neutral);
+        border-right: 2px solid currentcolor;
+        border-bottom: 2px solid currentcolor;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -60%) rotate(45deg);

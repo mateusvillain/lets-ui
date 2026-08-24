@@ -529,17 +529,6 @@
           },
           "$type": "color"
         }
-      },
-      "interaction": {
-        "$type": "color",
-        "tint": {
-          "$value": {
-            "colorSpace": "srgb",
-            "components": [0, 0, 0],
-            "alpha": 1,
-            "hex": "#000000"
-          }
-        }
       }
     }
   }

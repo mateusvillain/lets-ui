@@ -191,13 +191,6 @@ $focus-ring: (
   success: token('lui.focus-ring.success'),
   neutral: token('lui.focus-ring.neutral'),
 );
-
-// Interaction state layer. Only the tint is a token: it resolves per theme
-// (black in light, white in dark). How much of it to mix in never varies, so it
-// lives in _functions.scss next to the logic instead.
-$interaction: (
-  tint: token('lui.color.interaction.tint'),
-);
 $opacity: (
   disabled: token('lui.opacity.disabled'),
   hidden: token('lui.opacity.hidden'),

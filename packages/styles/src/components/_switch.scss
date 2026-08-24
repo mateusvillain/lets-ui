@@ -59,7 +59,7 @@ $sizes: (
       border: width(1) solid transparent;
 
       &::after {
-        background-color: bg(surface, neutral);
+        background-color: currentcolor;
       }
     }
 

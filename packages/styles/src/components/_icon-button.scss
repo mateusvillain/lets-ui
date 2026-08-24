@@ -30,6 +30,11 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
   text-decoration: none;
   z-index: 0;
 
+  // The icon lives in a slot, so the host has no content colour of its own to
+  // give the state layer. Declaring it here states the on-colour once; the
+  // slotted rule below is what actually paints the icon.
+  color: icon(neutral);
+
   ::slotted(*) {
     color: icon(neutral);
   }
