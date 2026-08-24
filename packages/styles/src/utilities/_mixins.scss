@@ -198,16 +198,32 @@
 // Responsive Utilities
 //  @include media-up($breakpoint) { ... }
 //  @include media-down($breakpoint) { ... }
-//  $breakpoint = 1xs | sm | md | lg | 1xl
+//  $breakpoint = sm | md | lg | 1xl  (media-up)
+//  $breakpoint = 1xs | sm | md | lg | 1xl  (media-down)
+// Every step except `1xs` is the min-width it opens at, so `media-down` stops
+// one pixel below it. `1xs` is the other way round — it is the top of the
+// mobile range, the width the layout holds up to — so it is already the bound
+// and takes no subtraction, and it has no `media-up` at all: below it there is
+// nothing but the base styles, which need no media query to reach.
 @mixin media-up($breakpoint) {
+  @if $breakpoint == '1xs' {
+    @error '`1xs` is the base step and has no lower bound. Write the rule unconditionally, or use `media-down(1xs)` to scope it to mobile.';
+  }
+
   @media (min-width: breakpoint($breakpoint)) {
     @content;
   }
 }
 
 @mixin media-down($breakpoint) {
-  @media (width <= calc(breakpoint($breakpoint) - 1px)) {
-    @content;
+  @if $breakpoint == '1xs' {
+    @media (width <= breakpoint('1xs')) {
+      @content;
+    }
+  } @else {
+    @media (width <= calc(breakpoint($breakpoint) - 1px)) {
+      @content;
+    }
   }
 }
 

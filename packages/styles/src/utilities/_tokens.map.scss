@@ -1,12 +1,47 @@
 @use 'sass:map';
 @use '@lets-ui/tokens/dist/letsui.tokens.scss' as *;
+@use '@lets-ui/tokens/dist/letsui.tokens.static.scss' as static;
 
+// Breakpoints and column counts come from `static-token()`, not `token()`: they
+// are read at compile time — by a media query prelude and by the `@for` that
+// generates the span utilities — and neither can take a `var()`. Every other
+// grid value goes through `token()` and so still follows `data-brand` live.
+// Authored low to high; `each-step` and `column` walk this map in order.
 $breakpoint: (
-  '1xs': 320px,
-  sm: 768px,
-  md: 1024px,
-  lg: 1280px,
-  '1xl': 1440px,
+  '1xs': static.static-token('lui.brand.grid.breakpoint.1xs'),
+  sm: static.static-token('lui.brand.grid.breakpoint.sm'),
+  md: static.static-token('lui.brand.grid.breakpoint.md'),
+  lg: static.static-token('lui.brand.grid.breakpoint.lg'),
+  '1xl': static.static-token('lui.brand.grid.breakpoint.1xl'),
+);
+
+// `margin` has no `1xl` and `container` has only `1xl`: from that step up the
+// grid stops taking a page margin and is centred inside a max-width instead.
+// `step()` reads the absence, so the switch lives in the tokens.
+$grid: (
+  columns: (
+    '1xs': static.static-token('lui.brand.grid.column.1xs'),
+    sm: static.static-token('lui.brand.grid.column.sm'),
+    md: static.static-token('lui.brand.grid.column.md'),
+    lg: static.static-token('lui.brand.grid.column.lg'),
+    '1xl': static.static-token('lui.brand.grid.column.1xl'),
+  ),
+  gap: (
+    '1xs': token('lui.brand.grid.gap.1xs'),
+    sm: token('lui.brand.grid.gap.sm'),
+    md: token('lui.brand.grid.gap.md'),
+    lg: token('lui.brand.grid.gap.lg'),
+    '1xl': token('lui.brand.grid.gap.1xl'),
+  ),
+  margin: (
+    '1xs': token('lui.brand.grid.margin.1xs'),
+    sm: token('lui.brand.grid.margin.sm'),
+    md: token('lui.brand.grid.margin.md'),
+    lg: token('lui.brand.grid.margin.lg'),
+  ),
+  container: (
+    '1xl': token('lui.brand.grid.container.1xl'),
+  ),
 );
 $border: (
   radius: (

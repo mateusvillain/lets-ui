@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.9.0
+
+### Added
+
+- New `lui-empty-state` Web Component and CSS-only `.empty-state` styles for the state a list, table, or page takes when it has nothing to show. `title` is the only required content; `description`, a `cover` slot for a decorative image or illustration, an `actions` slot, and a default slot for extra content are all optional and collapse when empty.
+  - `title-level` (1–6) sets the rendered heading tag, so a reusable Empty State can match the heading hierarchy of the page it lands in.
+  - `align` switches between `center` (default) and `left`.
+  - `announce` opts the region into a live announcement when the Empty State appears after a user action such as a search or a filter — `polite` renders `role="status"`, `assertive` renders `role="alert"`. It stays `off` by default, since announcing a state that was already there on load is redundant.
+  - The action group is a labelled `role="group"`; `actions-label` sets the label. Actions stack full width below `md` and return to a row above it.
+
+### Changed
+
+- The interaction state layer now mixes in the component's own content colour instead of one tint per theme. Hover and active still mix 8% and 16% into a component's resting background, but the colour mixed in is `currentColor` — the on-colour of that background — rather than black in light themes and white in dark ones.
+  - A single tint per theme could not serve two components in the same theme that need opposite directions: 8% black over a near-black button is imperceptible, while a transparent button with dark text in that same theme does need darkening. Because a component's content and background are already required to contrast, the tint is always the luminous opposite of the surface, so the layer lightens what is dark and darkens what is light — with no luminance test, no threshold to flip across, and no need to know which surface a transparent component sits on. The contrast requirement also guarantees the move is visible, which a fixed tint did not.
+  - Components that take the state layer must declare `color` on the same element that receives it; one that inherits its text colour now tints with whatever an ancestor set. Checked `checkbox`, `radio`, and `switch` declare the colour their mark is painted with, and `icon-button` declares the colour of its slotted icon.
+  - New `state-tint($tint)` mixin sets `--lui-state-tint` for the cases where an element's `color` is not the on-colour its states should use.
+
+### Removed
+
+- The `--lui-color-interaction-tint` token. There is no interaction token any more: the tint is a colour the component already declares, and the 8% / 16% amounts stay SCSS constants in `_functions.scss`.
+- The `state-tint()` SCSS function — replaced by the `state-tint($tint)` mixin.
+
 ## v1.8.0
 
 ### Added

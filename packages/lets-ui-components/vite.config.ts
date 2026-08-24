@@ -2,11 +2,44 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 
-// Resolve the actual path to the tokens SCSS file in the workspace
-const tokensScssPath = resolve(
-  __dirname,
-  'node_modules/@lets-ui/tokens/dist/letsui.tokens.scss'
-);
+// Resolve the actual path to a tokens dist file in the workspace. The package
+// exports map does not expose `./dist/*`, so Sass cannot follow the deep
+// specifier on its own.
+const TOKENS_PREFIX = '@lets-ui/tokens/dist/';
+
+function tokensDistPath(url: string): string | null {
+  if (!url.startsWith(TOKENS_PREFIX)) return null;
+
+  const file = url.slice(TOKENS_PREFIX.length);
+  if (file.includes('/') || !file.endsWith('.scss')) return null;
+
+  return resolve(__dirname, 'node_modules/@lets-ui/tokens/dist', file);
+}
+
+// Inline the literal token values (breakpoints and column counts) as a virtual
+// module, for the same reason as the icons CSS below: preserveModules would
+// otherwise emit the JSON as its own file outside `dist/components`.
+function inlineStaticTokensPlugin(): Plugin {
+  const RESOLVED_ID = resolve(__dirname, 'src/tokens/static.js');
+  const jsonPath = resolve(
+    __dirname,
+    'node_modules/@lets-ui/tokens/dist/letsui.tokens.static.json'
+  );
+  return {
+    name: 'inline-static-tokens',
+    enforce: 'pre',
+    resolveId(source) {
+      if (source === '@lets-ui/tokens/static') {
+        return RESOLVED_ID;
+      }
+    },
+    load(id) {
+      if (id === RESOLVED_ID) {
+        return `export default ${readFileSync(jsonPath, 'utf-8').trim()};`;
+      }
+    },
+  };
+}
 
 // Intercept lets-ui-icons CSS imports and serve them as virtual modules so
 // Rollup's preserveModules does not output them under dist/node_modules.
@@ -45,7 +78,7 @@ function inlineIconsCssPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [inlineIconsCssPlugin()],
+  plugins: [inlineStaticTokensPlugin(), inlineIconsCssPlugin()],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -71,12 +104,10 @@ export default defineConfig({
         ],
         importers: [
           {
-            // Redirect @lets-ui/tokens/dist/letsui.tokens.scss to the actual file
+            // Redirect @lets-ui/tokens/dist/*.scss to the actual files
             findFileUrl(url: string) {
-              if (url === '@lets-ui/tokens/dist/letsui.tokens.scss') {
-                return new URL(`file://${tokensScssPath}`);
-              }
-              return null;
+              const path = tokensDistPath(url);
+              return path ? new URL(`file://${path}`) : null;
             },
           },
         ],

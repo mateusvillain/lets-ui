@@ -1,7 +1,7 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
-@media (width <= 1279px) {
+@include media-down(lg) {
   .navbar {
     display: none;
   }

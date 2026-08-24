@@ -34,13 +34,20 @@ const config = {
       __dirname,
       '../packages/lets-ui-components/node_modules'
     );
-    // @lets-ui/tokens/dist/letsui.tokens.scss is not in the package exports map,
-    // so Sass can't resolve it via the exports field. Redirect it to the actual file,
+    // @lets-ui/tokens/dist/*.scss is not in the package exports map, so Sass
+    // can't resolve it via the exports field. Redirect it to the actual file,
     // mirroring the custom importer in packages/lets-ui-components/vite.config.ts.
-    const tokensScssPath = resolve(
-      __dirname,
-      '../packages/lets-ui-tokens/dist/letsui.tokens.scss'
-    );
+    const tokensDist = resolve(__dirname, '../packages/lets-ui-tokens/dist');
+    const TOKENS_PREFIX = '@lets-ui/tokens/dist/';
+
+    const tokensDistPath = (url) => {
+      if (!url.startsWith(TOKENS_PREFIX)) return null;
+
+      const file = url.slice(TOKENS_PREFIX.length);
+      if (file.includes('/') || !file.endsWith('.scss')) return null;
+
+      return resolve(tokensDist, file);
+    };
     const scss = config.css?.preprocessorOptions?.scss ?? {};
     const existingAlias = Array.isArray(config.resolve?.alias)
       ? config.resolve.alias
@@ -60,6 +67,12 @@ const config = {
           // lit is installed only in the components package; expose it to the Storybook Vite instance
           { find: 'lit', replacement: `${componentsModules}/lit` },
           { find: /^lit\/(.+)$/, replacement: `${componentsModules}/lit/$1` },
+          // @lets-ui/tokens is a workspace dependency of the components
+          // package, not of the root; grid.ts reads its literal values from it
+          {
+            find: '@lets-ui/tokens/static',
+            replacement: `${tokensDist}/letsui.tokens.static.json`,
+          },
         ],
       },
       css: {
@@ -73,10 +86,8 @@ const config = {
               ...(scss.importers ?? []),
               {
                 findFileUrl(url) {
-                  if (url === '@lets-ui/tokens/dist/letsui.tokens.scss') {
-                    return new URL(`file://${tokensScssPath}`);
-                  }
-                  return null;
+                  const path = tokensDistPath(url);
+                  return path ? new URL(`file://${path}`) : null;
                 },
               },
             ],

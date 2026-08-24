@@ -11,11 +11,23 @@ colunas ocupa** em cada breakpoint.
 
 | Breakpoint | Viewport | Colunas | Gap  | Margem lateral                   |
 | ---------- | -------- | ------- | ---- | -------------------------------- |
-| base       | < 768px  | 4       | 16px | 16px                             |
+| base       | ≤ 767px  | 4       | 16px | 16px                             |
 | `sm`       | ≥ 768px  | 8       | 16px | 32px                             |
 | `md`       | ≥ 1024px | 8       | 16px | 40px                             |
 | `lg`       | ≥ 1280px | 12      | 24px | 40px                             |
 | `1xl`      | ≥ 1440px | 12      | 24px | `max-width` 1360px, centralizado |
+
+Toda a tabela vem dos tokens de marca `lui.brand.grid.*` — `breakpoint`,
+`column`, `gap`, `margin` e `container` —, então uma marca redefine o grid
+inteiro redefinindo esses tokens. Gap e margem apontam para `spacing.fixed`: a
+responsividade do grid vem dos breakpoints, que já movem a margem de 16 para 32
+e 40, e não de uma rampa dentro de cada step.
+
+Gap, margem e o `max-width` do `1xl` resolvem para custom properties e trocam
+junto com `data-brand` em runtime. Os breakpoints e a contagem de colunas são
+fixados em tempo de compilação — um prelúdio de media query e o `@for` que gera
+as classes `.col-*` não conseguem ler um `var()` —, então uma marca que mude
+esses dois precisa compilar o CSS a partir do fonte.
 
 <Canvas of={GridStories.Default} />
 <Controls of={GridStories.Default} />

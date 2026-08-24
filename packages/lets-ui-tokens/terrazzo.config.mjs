@@ -1,6 +1,7 @@
 import { defineConfig } from "@terrazzo/cli";
 import css from "@terrazzo/plugin-css";
 import sass from "@terrazzo/plugin-sass";
+import staticValues from "./plugins/static-values.mjs";
 
 export default defineConfig({
   tokens: ["./letsui.resolver.json"],
@@ -94,6 +95,16 @@ export default defineConfig({
     }),
     sass({
       filename: "letsui.tokens.scss",
+    }),
+
+    // Breakpoints and column counts are read at compile time — a media query
+    // prelude and a Sass loop cannot take a `var()` — so they are emitted a
+    // second time as literals. See `plugins/static-values.mjs`.
+    staticValues({
+      include: [
+        "lui.brand.grid.breakpoint.*",
+        "lui.brand.grid.column.*",
+      ],
     }),
   ],
 });
