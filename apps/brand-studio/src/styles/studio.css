@@ -80,6 +80,12 @@ body {
   display: none;
 }
 
+/* Colapsar é uma ação do painel; expandir só pode viver na barra do palco, que
+   é tudo o que sobra na tela. Cada botão aparece no estado em que faz sentido. */
+.st[data-collapsed='false'] [data-action='expand-panel'] {
+  display: none;
+}
+
 .st-stage {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -93,9 +99,17 @@ body {
   overflow-x: auto;
 }
 
+.st-panel__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lui-spacing-fixed-8);
+}
+
 .st-brandmark {
   display: flex;
   align-items: center;
+  min-width: 0;
   gap: var(--lui-spacing-fixed-8);
 }
 
@@ -244,6 +258,19 @@ body {
   background: var(--lui-color-neutral-background-surface);
   border-bottom: var(--lui-border-width-1) solid
     var(--lui-color-neutral-border-subtle);
+}
+
+/* O guia não é um controle do preview: encosta no canto oposto para sair do
+   caminho dos que são. O `lui-modal` é `display: contents`, então quem ocupa a
+   linha é o próprio gatilho. */
+.st-toolbar [slot='trigger'] {
+  margin-left: auto;
+}
+
+/* O ícone anuncia o tema que o clique liga, não o que está ligado. */
+.st[data-preview-theme='light'] .st-icon--sun,
+.st[data-preview-theme='dark'] .st-icon--moon {
+  display: none;
 }
 
 .st-frame {

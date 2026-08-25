@@ -162,7 +162,7 @@ export function mountStudio({ root, templates, meta }) {
   function colorSection() {
     return el('div', { class: 'st-section' }, [
       caption(
-        `Editando o tema ${THEME_LABEL[theme]}. Use o seletor de tema na barra do preview para trocar.`
+        `Editando o tema ${THEME_LABEL[theme]}. Use o botão de tema na barra do preview para trocar.`
       ),
       ...FAMILIES.map((family) =>
         el('div', { class: 'st-group' }, [
@@ -592,13 +592,21 @@ export function mountStudio({ root, templates, meta }) {
     );
   });
 
-  root
-    .querySelector('[data-theme-switch]')
-    .addEventListener('change', (event) => {
-      theme = event.target.checked ? 'dark' : 'light';
-      if (activeTab === 'color') renderPanel();
-      apply();
-    });
+  /* O tema é do preview, não do chrome: `data-preview-theme` só existe para o
+     ícone saber qual das duas faces mostrar. */
+  const themeToggle = root.querySelector('[data-theme-toggle]');
+
+  themeToggle.addEventListener('click', () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    root.dataset.previewTheme = theme;
+    // O rótulo é o estado: `aria-pressed` no host não chega ao `button`.
+    themeToggle.setAttribute(
+      'aria-label',
+      theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'
+    );
+    if (activeTab === 'color') renderPanel();
+    apply();
+  });
 
   /**
    * O seletor de largura é uma leitura dos breakpoints da marca, não uma lista
@@ -652,18 +660,21 @@ export function mountStudio({ root, templates, meta }) {
   viewport.addEventListener('change', applyViewport);
 
   /* Painel colapsável: o preview ocupa a tela inteira quando não se está
-     editando. */
-  const toggle = root.querySelector('[data-action="toggle-panel"]');
+     editando. Colapsar parte do próprio painel; expandir vem da barra do palco,
+     porque é o único ponto de apoio que sobra na tela. */
+  const collapseButton = root.querySelector('[data-action="collapse-panel"]');
+  const expandButton = root.querySelector('[data-action="expand-panel"]');
 
-  toggle.addEventListener('click', () => {
-    const collapsed = root.dataset.collapsed !== 'true';
+  function setCollapsed(collapsed) {
     root.dataset.collapsed = String(collapsed);
-    toggle.setAttribute(
-      'label',
-      collapsed ? 'Mostrar painel' : 'Ocultar painel'
-    );
-    toggle.setAttribute('aria-expanded', String(!collapsed));
-  });
+    // Foco não pode cair em um botão que acabou de sair da tela. O alvo é o
+    // `button` do shadow DOM: o host do componente não é focável.
+    const next = collapsed ? expandButton : collapseButton;
+    next.shadowRoot?.querySelector('button')?.focus();
+  }
+
+  collapseButton.addEventListener('click', () => setCollapsed(true));
+  expandButton.addEventListener('click', () => setCollapsed(false));
 
   dom.brandName.addEventListener('input', (event) => {
     state.name = event.target.value;

@@ -31,13 +31,22 @@ const meta = { name: "Let's UI", slug: 'lets-ui' };
     <title>Brand Studio — Let's UI</title>
   </head>
   <body>
-    <div class="st" data-studio data-collapsed="false">
+    <div class="st" data-studio data-collapsed="false" data-preview-theme="light">
       <!-- ── Painel de edição ───────────────────────────────── -->
       <aside class="st-panel">
         <header class="st-panel__head">
-          <div class="st-brandmark">
-            <lui-heading variant="block-title" as="p" label="Brand Studio"></lui-heading>
-            <lui-tag label="Let's UI" variant="neutral" size="sm"></lui-tag>
+          <div class="st-panel__title">
+            <div class="st-brandmark">
+              <lui-heading variant="block-title" as="p" label="Brand Studio"></lui-heading>
+              <lui-tag label="Let's UI" variant="neutral" size="sm"></lui-tag>
+            </div>
+
+            <lui-icon-button
+              size="md"
+              aria-label="Ocultar painel"
+              data-action="collapse-panel">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.0947 5.09473C14.3876 4.80183 14.8624 4.80183 15.1553 5.09473C15.4482 5.38762 15.4482 5.86238 15.1553 6.15527L9.31055 12L15.1553 17.8447C15.4482 18.1376 15.4482 18.6124 15.1553 18.9053C14.8624 19.1982 14.3876 19.1982 14.0947 18.9053L7.71973 12.5303C7.42684 12.2374 7.42684 11.7626 7.71973 11.4697L14.0947 5.09473Z"/></svg>
+            </lui-icon-button>
           </div>
 
           <div class="st-identity">
@@ -79,36 +88,27 @@ const meta = { name: "Let's UI", slug: 'lets-ui' };
           </div>
 
           <input type="file" accept="application/json" multiple hidden data-action="import" />
-
-          <lui-modal title="Como registrar a marca" size="lg" data-guide>
-            <lui-button
-              slot="trigger"
-              size="md"
-              variant="ghost"
-              block
-              label="Como registrar a marca"></lui-button>
-
-            <lui-body
-              variant="md"
-              label="Salve os três arquivos exportados em packages/lets-ui-tokens/tokens/brand/<identificador>/, acrescente os contextos abaixo ao letsui.resolver.json, espelhe as permutações de lets-ui no terrazzo.config.js e rode pnpm build na raiz."
-            ></lui-body>
-
-            <pre class="st-code" data-resolver></pre>
-          </lui-modal>
         </footer>
       </aside>
 
       <!-- ── Palco de preview ───────────────────────────────── -->
       <main class="st-stage">
         <div class="st-toolbar">
-          <lui-button
+          <lui-icon-button
             size="md"
-            variant="ghost"
-            label="Ocultar painel"
-            aria-expanded="true"
-            data-action="toggle-panel"></lui-button>
+            aria-label="Mostrar painel"
+            data-action="expand-panel">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.84467 5.09473C9.13756 4.80183 9.61232 4.80183 9.90522 5.09473L16.2802 11.4697C16.5731 11.7626 16.5731 12.2374 16.2802 12.5303L9.90522 18.9053C9.61232 19.1982 9.13756 19.1982 8.84467 18.9053C8.55178 18.6124 8.55178 18.1376 8.84467 17.8447L14.6894 12L8.84467 6.15527C8.55178 5.86238 8.55178 5.38762 8.84467 5.09473Z"/></svg>
+          </lui-icon-button>
 
-          <lui-switch size="md" label="Tema escuro" data-theme-switch></lui-switch>
+          <!-- Um só controle para o tema: o ícone mostra para onde o clique leva. -->
+          <lui-icon-button
+            size="md"
+            aria-label="Ativar tema escuro"
+            data-theme-toggle>
+            <svg class="st-icon st-icon--moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.2104 3.00293C11.4885 2.98789 11.7513 3.13032 11.8896 3.37207C12.0279 3.61388 12.0177 3.91291 11.8633 4.14453C11.1934 5.14921 10.8027 6.35472 10.8027 7.65527C10.8027 11.1621 13.6459 14.0053 17.1527 14.0053C18.4533 14.0053 19.6588 13.6146 20.6635 12.9447C20.8951 12.7903 21.1941 12.7801 21.4359 12.9184C21.6777 13.0567 21.8201 13.3195 21.8051 13.5977C21.5254 18.7666 17.2455 22.8711 12.0059 22.8711C6.58506 22.8711 2.19141 18.4774 2.19141 13.0566C2.19141 7.81699 6.29586 3.53711 11.2104 3.00293ZM9.30273 7.65527C9.30273 6.75612 9.4405 5.88732 9.69629 5.06934C6.29085 6.03177 3.69141 9.24219 3.69141 13.0566C3.69141 17.649 7.41353 21.3711 12.0059 21.3711C15.8203 21.3711 19.0307 18.7716 19.9932 15.3662C19.1752 15.622 18.3064 15.7598 17.4072 15.7598C13.0132 15.7598 9.30273 12.0493 9.30273 7.65527Z"/></svg>
+            <svg class="st-icon st-icon--sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 6.75C14.8995 6.75 17.25 9.10051 17.25 12C17.25 14.8995 14.8995 17.25 12 17.25C9.10051 17.25 6.75 14.8995 6.75 12C6.75 9.10051 9.10051 6.75 12 6.75ZM12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25ZM12 2.25C12.4142 2.25 12.75 2.58579 12.75 3V4.5C12.75 4.91421 12.4142 5.25 12 5.25C11.5858 5.25 11.25 4.91421 11.25 4.5V3C11.25 2.58579 11.5858 2.25 12 2.25ZM12 18.75C12.4142 18.75 12.75 19.0858 12.75 19.5V21C12.75 21.4142 12.4142 21.75 12 21.75C11.5858 21.75 11.25 21.4142 11.25 21V19.5C11.25 19.0858 11.5858 18.75 12 18.75ZM21.75 12C21.75 12.4142 21.4142 12.75 21 12.75H19.5C19.0858 12.75 18.75 12.4142 18.75 12C18.75 11.5858 19.0858 11.25 19.5 11.25H21C21.4142 11.25 21.75 11.5858 21.75 12ZM5.25 12C5.25 12.4142 4.91421 12.75 4.5 12.75H3C2.58579 12.75 2.25 12.4142 2.25 12C2.25 11.5858 2.58579 11.25 3 11.25H4.5C4.91421 11.25 5.25 11.5858 5.25 12ZM18.8945 5.10547C19.1874 5.39836 19.1874 5.87312 18.8945 6.16602L17.8338 7.22668C17.5409 7.51957 17.0662 7.51957 16.7733 7.22668C16.4804 6.93378 16.4804 6.45902 16.7733 6.16613L17.8339 5.10547C18.1268 4.81258 18.6016 4.81258 18.8945 5.10547ZM7.22668 16.7733C7.51957 17.0662 7.51957 17.541 7.22668 17.8339L6.16602 18.8945C5.87312 19.1874 5.39836 19.1874 5.10547 18.8945C4.81258 18.6016 4.81258 18.1269 5.10547 17.834L6.16613 16.7733C6.45902 16.4804 6.93378 16.4804 7.22668 16.7733ZM18.8945 18.8945C18.6016 19.1874 18.1268 19.1874 17.8339 18.8945L16.7733 17.8339C16.4804 17.541 16.4804 17.0662 16.7733 16.7733C17.0662 16.4804 17.541 16.4804 17.8339 16.7733L18.8945 17.8339C19.1874 18.1268 19.1874 18.6016 18.8945 18.8945ZM7.22668 7.22668C6.93378 7.51957 6.45902 7.51957 6.16613 7.22668L5.10547 6.16602C4.81258 5.87312 4.81258 5.39836 5.10547 5.10547C5.39836 4.81258 5.87312 4.81258 6.16602 5.10547L7.22668 6.16613C7.51957 6.45902 7.51957 6.93378 7.22668 7.22668Z"/></svg>
+          </lui-icon-button>
 
           <!-- As opções são reconstruídas a partir dos breakpoints da marca. -->
           <lui-native-select
@@ -119,6 +119,21 @@ const meta = { name: "Let's UI", slug: 'lets-ui' };
             data-viewport></lui-native-select>
 
           <lui-link label="Abrir preview isolado" href="/preview" target="_blank" external></lui-link>
+
+          <lui-modal title="Como registrar a marca" size="lg" data-guide>
+            <lui-button
+              slot="trigger"
+              size="md"
+              variant="ghost"
+              label="Como registrar a marca"></lui-button>
+
+            <lui-body
+              variant="md"
+              label="Salve os três arquivos exportados em packages/lets-ui-tokens/tokens/brand/<identificador>/, acrescente os contextos abaixo ao letsui.resolver.json, espelhe as permutações de lets-ui no terrazzo.config.js e rode pnpm build na raiz."
+            ></lui-body>
+
+            <pre class="st-code" data-resolver></pre>
+          </lui-modal>
         </div>
 
         <div class="st-frame">
