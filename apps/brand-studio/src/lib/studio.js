@@ -29,6 +29,7 @@ import {
   contrastRatio,
 } from './color.js';
 import { parseClamp, buildClamp } from './clamp.js';
+import { randomBrand } from './random.js';
 
 const THEME_LABEL = { light: 'claro', dark: 'escuro' };
 
@@ -596,6 +597,15 @@ export function mountStudio({ root, templates, meta }) {
     commit({ rerender: true });
   }
 
+  /**
+   * Sorteia uma marca inteira. Só a identidade sobrevive: nome e identificador
+   * são do usuário, o resto é derivado dos parâmetros sorteados em `random.js`.
+   */
+  function randomize() {
+    state = randomBrand(defaults, { name: state.name, slug: state.slug });
+    commit({ rerender: true });
+  }
+
   function syncIdentity() {
     dom.brandName.value = state.name;
     dom.brandSlug.value = state.slug;
@@ -610,6 +620,9 @@ export function mountStudio({ root, templates, meta }) {
     .querySelector('[data-action="export"]')
     .addEventListener('click', exportTokens);
   root.querySelector('[data-action="reset"]').addEventListener('click', reset);
+  root
+    .querySelector('[data-action="randomize"]')
+    .addEventListener('click', randomize);
   root
     .querySelector('[data-action="import-trigger"]')
     .addEventListener('click', () => fileInput.click());
