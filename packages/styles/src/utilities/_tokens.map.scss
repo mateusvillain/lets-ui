@@ -263,68 +263,73 @@ $typography: (
     body: token('lui.brand.typography.font-family.body'),
   ),
 
+  // `weight` guarda o token já resolvido, não uma chave do mapa `weight`
+  // abaixo: cada escala de título tem um peso próprio em `lui.brand`, e repetir
+  // aqui o valor primitivo deixava esses tokens de marca sem nenhum consumidor —
+  // trocar o peso da marca não mudava nada. As escalas de corpo não têm token de
+  // marca e seguem no peso global.
   scales: (
-    display: (
-      family: heading,
-      size: 3xl,
-      weight: regular,
-      case: none,
+      display: (
+        family: heading,
+        size: 3xl,
+        weight: token('lui.brand.typography.weight.display'),
+        case: none,
+      ),
+      title: (
+        family: heading,
+        size: 2xl,
+        weight: token('lui.brand.typography.weight.title'),
+        case: none,
+      ),
+      headline: (
+        family: heading,
+        size: 1xl,
+        weight: token('lui.brand.typography.weight.headline'),
+        case: none,
+      ),
+      subtitle: (
+        family: heading,
+        size: lg,
+        weight: token('lui.brand.typography.weight.subtitle'),
+        case: none,
+      ),
+      block-title: (
+        family: heading,
+        size: md,
+        weight: token('lui.brand.typography.weight.block-title'),
+        case: none,
+      ),
+      subheadline: (
+        family: heading,
+        size: sm,
+        weight: token('lui.brand.typography.weight.subheadline'),
+        case: none,
+      ),
+      overtitle: (
+        family: heading,
+        size: 3xs,
+        weight: token('lui.brand.typography.weight.overtitle'),
+        case: uppercase,
+      ),
+      body--lg: (
+        family: body,
+        size: 1xs,
+        weight: token('lui.typography.weight.regular'),
+        case: none,
+      ),
+      body--md: (
+        family: body,
+        size: 2xs,
+        weight: token('lui.typography.weight.regular'),
+        case: none,
+      ),
+      body--sm: (
+        family: body,
+        size: 3xs,
+        weight: token('lui.typography.weight.regular'),
+        case: none,
+      ),
     ),
-    title: (
-      family: heading,
-      size: 2xl,
-      weight: bold,
-      case: none,
-    ),
-    headline: (
-      family: heading,
-      size: 1xl,
-      weight: semibold,
-      case: none,
-    ),
-    subtitle: (
-      family: heading,
-      size: lg,
-      weight: regular,
-      case: none,
-    ),
-    block-title: (
-      family: heading,
-      size: md,
-      weight: medium,
-      case: none,
-    ),
-    subheadline: (
-      family: heading,
-      size: sm,
-      weight: regular,
-      case: none,
-    ),
-    overtitle: (
-      family: heading,
-      size: 3xs,
-      weight: medium,
-      case: uppercase,
-    ),
-    body--lg: (
-      family: body,
-      size: 1xs,
-      weight: regular,
-      case: none,
-    ),
-    body--md: (
-      family: body,
-      size: 2xs,
-      weight: regular,
-      case: none,
-    ),
-    body--sm: (
-      family: body,
-      size: 3xs,
-      weight: regular,
-      case: none,
-    ),
-  ),
 
   weight: (
     regular: token('lui.typography.weight.regular'),
