@@ -73,13 +73,39 @@ const caption = (text) =>
 const selectIndex = (options, value) =>
   options.findIndex((option) => option.value === value) + 1;
 
+/**
+ * Nome legível -> nome de pasta. Acentos viram a letra base e o que não é
+ * alfanumérico some ou vira hífen — "Ação & Cor" e "Material Design" precisam
+ * dar caminhos válidos em `tokens/brand/`.
+ *
+ * Apóstrofos são apagados em vez de virarem hífen: "Let's UI" é `lets-ui`, e
+ * não `let-s-ui`, que é como a marca de referência já está versionada.
+ */
+export function slugify(value) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/['\u2019]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export function mountStudio({ root, templates, meta }) {
   const defaults = createDefaultState(templates, meta);
   const stored = load();
 
   let state = stored ?? structuredClone(defaults);
   let theme = 'light';
+  let scene = 'landing';
   let activeTab = 'color';
+
+  /* Enquanto o identificador for exatamente o que o nome geraria, ele é
+     derivado e acompanha o campo de nome. Assim que diverge, passou por edição
+     manual e para de ser sobrescrito. Comparar em vez de guardar uma flag evita
+     um campo a mais no estado persistido — e se autocorrige quando o usuário
+     apaga a customização. */
+  let slugIsDerived = state.slug === slugify(state.name);
 
   const dom = {
     frame: root.querySelector('[data-preview]'),
@@ -104,6 +130,10 @@ export function mountStudio({ root, templates, meta }) {
     // cascade e todos os tokens editados entram por cima, inline.
     const element = document_.documentElement;
     element.setAttribute('data-theme', theme);
+    element.dataset.scene = scene;
+    // A composição assina com o nome da marca em edição: é o que separa um
+    // preview do produto de quem edita de um exemplo genérico.
+    element.dataset.brandName = state.name;
     syncOverlay();
 
     for (const [name, value] of Object.entries(toCssVars(state, theme))) {
@@ -569,6 +599,7 @@ export function mountStudio({ root, templates, meta }) {
   function syncIdentity() {
     dom.brandName.value = state.name;
     dom.brandSlug.value = state.slug;
+    slugIsDerived = state.slug === slugify(state.name);
   }
 
   /* ── Ligações ─────────────────────────────────────────────── */
@@ -605,6 +636,18 @@ export function mountStudio({ root, templates, meta }) {
       theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'
     );
     if (activeTab === 'color') renderPanel();
+    apply();
+  });
+
+  /* Cena do preview: a landing mostra a marca em composição real e a folha de
+     tokens dá o valor cru de cada degrau. */
+  const SCENES = ['landing', 'tokens'];
+  const sceneSelect = root.querySelector('[data-scene]');
+  const previewLink = root.querySelector('[data-preview-link]');
+
+  sceneSelect.addEventListener('change', () => {
+    scene = SCENES[sceneSelect.selected - 1] ?? 'landing';
+    previewLink.setAttribute('href', `/preview?scene=${scene}`);
     apply();
   });
 
@@ -678,12 +721,29 @@ export function mountStudio({ root, templates, meta }) {
 
   dom.brandName.addEventListener('input', (event) => {
     state.name = event.target.value;
+
+    if (slugIsDerived) {
+      state.slug = slugify(state.name);
+      dom.brandSlug.value = state.slug;
+    }
+
     save(state);
+
+    // Só o rótulo da cena depende do nome; reaplicar todos os tokens a cada
+    // tecla seria caro à toa.
+    const element = previewDocument()?.documentElement;
+    if (!element) return;
+    element.dataset.brandName = state.name;
+    element.ownerDocument.dispatchEvent(
+      new element.ownerDocument.defaultView.Event('lui-brand-update')
+    );
   });
 
   dom.brandSlug.addEventListener('change', (event) => {
-    state.slug = event.target.value.trim().toLowerCase().replace(/\s+/g, '-');
+    // Campo esvaziado é um pedido para voltar a acompanhar o nome.
+    state.slug = slugify(event.target.value) || slugify(state.name);
     event.target.value = state.slug;
+    slugIsDerived = state.slug === slugify(state.name);
     commit();
   });
 
