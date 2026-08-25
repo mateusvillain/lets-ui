@@ -1,0 +1,152 @@
+---
+/**
+ * Brand Studio — edição dos tokens `lui.brand` de uma marca do Let's UI.
+ *
+ * Os arquivos DTCG da marca de referência são lidos em tempo de build e viram
+ * o estado inicial da interface, então o studio nunca sai de sincronia com o
+ * que está versionado em `packages/lets-ui-tokens/tokens/brand/`.
+ *
+ * A interface é montada com os próprios componentes do design system: o studio
+ * é o primeiro consumidor do que ele edita. Isso só é possível porque o preview
+ * vive em um iframe — a marca em edição não vaza para o chrome de edição.
+ */
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+import '@/styles/studio.css';
+
+import foundation from '@tokens/brand/lets-ui/foundation.json';
+import light from '@tokens/brand/lets-ui/colors.light.json';
+import dark from '@tokens/brand/lets-ui/colors.dark.json';
+
+const templates = { foundation, light, dark };
+const meta = { name: "Let's UI", slug: 'lets-ui' };
+
+---
+
+<!doctype html>
+<html lang="pt-BR" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brand Studio — Let's UI</title>
+  </head>
+  <body>
+    <div class="st" data-studio data-collapsed="false">
+      <!-- ── Painel de edição ───────────────────────────────── -->
+      <aside class="st-panel">
+        <header class="st-panel__head">
+          <div class="st-brandmark">
+            <lui-heading variant="block-title" as="p" label="Brand Studio"></lui-heading>
+            <lui-tag label="Let's UI" variant="neutral" size="sm"></lui-tag>
+          </div>
+
+          <div class="st-identity">
+            <lui-input size="md" label="Nome da marca" data-brand-name></lui-input>
+            <lui-input
+              size="md"
+              label="Identificador"
+              hint="Pasta em tokens/brand/"
+              data-brand-slug></lui-input>
+          </div>
+
+          <lui-tabs variant="line" data-tabs></lui-tabs>
+        </header>
+
+        <div class="st-panel__body" data-panel></div>
+
+        <footer class="st-panel__foot">
+          <lui-tag data-status label="Sem alterações" variant="neutral" size="sm"></lui-tag>
+
+          <lui-button
+            size="md"
+            block
+            label="Exportar tokens"
+            data-action="export"></lui-button>
+
+          <div class="st-foot__row">
+            <lui-button
+              size="md"
+              variant="ghost"
+              block
+              label="Importar"
+              data-action="import-trigger"></lui-button>
+            <lui-button
+              size="md"
+              variant="ghost"
+              block
+              label="Restaurar padrões"
+              data-action="reset"></lui-button>
+          </div>
+
+          <input type="file" accept="application/json" multiple hidden data-action="import" />
+
+          <lui-modal title="Como registrar a marca" size="lg" data-guide>
+            <lui-button
+              slot="trigger"
+              size="md"
+              variant="ghost"
+              block
+              label="Como registrar a marca"></lui-button>
+
+            <lui-body
+              variant="md"
+              label="Salve os três arquivos exportados em packages/lets-ui-tokens/tokens/brand/<identificador>/, acrescente os contextos abaixo ao letsui.resolver.json, espelhe as permutações de lets-ui no terrazzo.config.js e rode pnpm build na raiz."
+            ></lui-body>
+
+            <pre class="st-code" data-resolver></pre>
+          </lui-modal>
+        </footer>
+      </aside>
+
+      <!-- ── Palco de preview ───────────────────────────────── -->
+      <main class="st-stage">
+        <div class="st-toolbar">
+          <lui-button
+            size="md"
+            variant="ghost"
+            label="Ocultar painel"
+            aria-expanded="true"
+            data-action="toggle-panel"></lui-button>
+
+          <lui-switch size="md" label="Tema escuro" data-theme-switch></lui-switch>
+
+          <!-- As opções são reconstruídas a partir dos breakpoints da marca. -->
+          <lui-native-select
+            size="md"
+            aria-label="Largura do preview"
+            placeholder="Largura"
+            selected="1"
+            data-viewport></lui-native-select>
+
+          <lui-link label="Abrir preview isolado" href="/preview" target="_blank" external></lui-link>
+        </div>
+
+        <div class="st-frame">
+          <iframe src="/preview" title="Preview da marca" data-preview></iframe>
+        </div>
+      </main>
+    </div>
+
+    <script
+      is:inline
+      type="application/json"
+      id="brand-templates"
+      set:html={JSON.stringify({ templates, meta })}
+    />
+
+    <script>
+      import '@lets-ui/components';
+      import { mountStudio } from '@/lib/studio.js';
+
+      const { templates, meta } = JSON.parse(
+        document.getElementById('brand-templates').textContent
+      );
+
+      mountStudio({
+        root: document.querySelector('[data-studio]'),
+        templates,
+        meta,
+      });
+    </script>
+  </body>
+</html>

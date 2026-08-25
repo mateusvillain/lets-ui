@@ -1,0 +1,15 @@
+{
+  "name": "brand-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Editor visual dos tokens de brand do Let's UI",
+  "scripts": {
+    "dev": "astro dev --port 4323",
+    "build": "astro build",
+    "preview": "astro preview --port 4323"
+  },
+  "devDependencies": {
+    "astro": "^5.0.0"
+  }
+}

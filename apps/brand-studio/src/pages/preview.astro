@@ -1,0 +1,469 @@
+---
+/**
+ * Página renderizada dentro do iframe do studio.
+ *
+ * Vive isolada de propósito: o studio sobrescreve as custom properties
+ * `--lui-brand-*` no `:root` deste documento, e como os tokens semânticos são
+ * `var()` para os tokens de marca, tudo aqui reage — sem contaminar a interface
+ * de edição, que roda com a marca padrão no documento de fora.
+ */
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+
+const FAMILIES = ['primary', 'secondary'];
+const STEPS = [1, 2, 3, 4, 5, 6, 7, 8];
+const RADII = ['xs', 'sm', 'md', 'lg', 'xl'];
+const HEADINGS = [
+  ['display', 'Display'],
+  ['title', 'Title'],
+  ['subtitle', 'Subtitle'],
+  ['headline', 'Headline'],
+  ['subheadline', 'Subheadline'],
+  ['block-title', 'Block title'],
+  ['overtitle', 'Overtitle'],
+];
+---
+
+<!doctype html>
+<html lang="pt-BR" data-brand="lets-ui" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview — Brand Studio</title>
+  </head>
+  <body>
+    <!--
+      Régua de colunas sobre o conteúdo: o studio a liga enquanto a aba Grid
+      está aberta, para que colunas, gutter e margem sejam avaliados sobre a
+      página real e não sobre um exemplo isolado.
+    -->
+    <div class="pv-overlay" aria-hidden="true">
+      <div class="pv-overlay__grid" data-overlay></div>
+    </div>
+
+    <main class="pv-main">
+      <!-- ── Escalas de cor ───────────────────────────────────── -->
+      <section class="pv-section" id="section-color">
+        <h2 class="pv-section__title">Escalas de cor</h2>
+        {
+          FAMILIES.map((family) => (
+            <div class="pv-ramp">
+              <span class="pv-ramp__label">{family}</span>
+              <div class="pv-ramp__steps">
+                {STEPS.map((step) => (
+                  <div class="pv-swatch">
+                    <span
+                      class="pv-swatch__chip"
+                      style={`background: var(--lui-brand-color-${family}-${step})`}
+                    ></span>
+                    <span class="pv-swatch__step">{step}</span>
+                    <span class="pv-swatch__hex" data-swatch={`${family}.${step}`}></span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </section>
+
+      <!-- ── Ações ────────────────────────────────────────────── -->
+      <section class="pv-section" id="section-actions">
+        <h2 class="pv-section__title">Ações</h2>
+        <div class="pv-row">
+          <lui-button label="Primary" size="lg"></lui-button>
+          <lui-button label="Secondary" variant="secondary" size="lg"></lui-button>
+          <lui-button label="Ghost" variant="ghost" size="lg"></lui-button>
+          <lui-button label="Danger" variant="danger" size="lg"></lui-button>
+          <lui-button label="Desabilitado" disabled size="lg"></lui-button>
+        </div>
+        <div class="pv-row">
+          <lui-button label="Medium" size="md"></lui-button>
+          <lui-button label="Large" size="lg"></lui-button>
+          <lui-link label="Link de apoio" href="#"></lui-link>
+          <lui-shortcut keys="Cmd+K"></lui-shortcut>
+          <lui-tooltip text="Ação secundária" label="Tooltip"></lui-tooltip>
+        </div>
+        <div class="pv-row">
+          <lui-tag label="Primary" variant="primary"></lui-tag>
+          <lui-tag label="Success" variant="success"></lui-tag>
+          <lui-tag label="Danger" variant="danger"></lui-tag>
+          <lui-tag label="Caution" variant="caution"></lui-tag>
+          <lui-tag label="Neutral" variant="neutral"></lui-tag>
+          <lui-tag label="Container" variant="primary" tag-style="container"></lui-tag>
+        </div>
+      </section>
+
+      <!-- ── Tipografia ───────────────────────────────────────── -->
+      <section class="pv-section" id="section-typography">
+        <h2 class="pv-section__title">Tipografia</h2>
+        <div class="pv-col">
+          {
+            HEADINGS.map(([variant, label]) => (
+              <lui-heading variant={variant} label={`${label} — Uma marca, um sistema`} />
+            ))
+          }
+          <lui-body
+            variant="md"
+            label="Corpo de texto — a escala é fluida: cada degrau interpola entre um mínimo e um máximo conforme a largura da viewport."
+          ></lui-body>
+          <lui-body variant="sm" color="caption" label="Legenda — texto de apoio em escala menor."></lui-body>
+        </div>
+      </section>
+
+      <!-- ── Formulário ───────────────────────────────────────── -->
+      <section class="pv-section" id="section-form">
+        <h2 class="pv-section__title">Formulário</h2>
+        <lui-card>
+          <div class="pv-form">
+            <lui-input
+              name="workspace"
+              label="Nome do workspace"
+              placeholder="minha-marca"
+              size="lg"
+            ></lui-input>
+            <lui-native-select
+              name="plan"
+              label="Plano"
+              placeholder="Selecione um plano"
+              options="Free,Pro,Enterprise"
+              size="lg"
+            ></lui-native-select>
+            <lui-textarea
+              name="notes"
+              label="Observações"
+              placeholder="Contexto da marca..."
+              size="lg"
+            ></lui-textarea>
+            <lui-radio-group name="theme" label="Tema padrão">
+              <lui-radio value="light" label="Claro" size="lg"></lui-radio>
+              <lui-radio value="dark" label="Escuro" size="lg"></lui-radio>
+            </lui-radio-group>
+            <lui-checkbox
+              name="terms"
+              value="accepted"
+              label="Aceito publicar os tokens da marca"
+              size="lg"
+            ></lui-checkbox>
+            <lui-switch name="notify" value="on" label="Notificar o time" checked size="lg"></lui-switch>
+          </div>
+          <lui-button slot="actions" label="Cancelar" variant="secondary"></lui-button>
+          <lui-button slot="actions" label="Salvar marca"></lui-button>
+        </lui-card>
+      </section>
+
+      <!-- ── Feedback ─────────────────────────────────────────── -->
+      <section class="pv-section" id="section-feedback">
+        <h2 class="pv-section__title">Feedback e navegação</h2>
+        <div class="pv-col">
+          <lui-alert variant="info" content="Os tokens ainda não foram publicados."></lui-alert>
+          <lui-alert variant="success" content="Marca salva com sucesso."></lui-alert>
+          <lui-alert variant="caution" content="Revise o contraste antes de publicar."></lui-alert>
+          <lui-alert variant="danger" content="Não foi possível compilar os tokens."></lui-alert>
+        </div>
+        <lui-tabs variant="line">
+          <lui-tab label="Visão geral" active>
+            <p>Cada aba herda tipografia, raio e cor direto dos tokens da marca.</p>
+          </lui-tab>
+          <lui-tab label="Componentes">
+            <p>Nenhum valor está fixo no CSS do componente.</p>
+          </lui-tab>
+          <lui-tab label="Histórico">
+            <p>O histórico de publicação apareceria aqui.</p>
+          </lui-tab>
+        </lui-tabs>
+        <lui-empty-state
+          title="Nenhuma marca publicada"
+          description="Exporte os arquivos de token para versionar a primeira marca."
+        >
+          <lui-button slot="actions" label="Exportar tokens"></lui-button>
+        </lui-empty-state>
+      </section>
+
+      <!-- ── Forma ────────────────────────────────────────────── -->
+      <section class="pv-section" id="section-shape">
+        <h2 class="pv-section__title">Raio de borda</h2>
+        <div class="pv-row">
+          {
+            RADII.map((size) => (
+              <div class="pv-radius">
+                <span
+                  class="pv-radius__box"
+                  style={`border-radius: var(--lui-brand-border-radius-${size})`}
+                ></span>
+                <span class="pv-radius__label">{size}</span>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- ── Grid ─────────────────────────────────────────────── -->
+      <section class="pv-section" id="section-grid">
+        <h2 class="pv-section__title">Grid</h2>
+        <p class="pv-note" data-grid-note>
+          Colunas, gutter e margem seguem o breakpoint ativo para a largura do preview.
+        </p>
+        <div class="pv-grid" data-grid></div>
+      </section>
+    </main>
+
+    <script>
+      import '@lets-ui/components';
+
+      /**
+       * Os chips de cor mostram o hex resolvido. Como o valor vem de uma custom
+       * property sobrescrita pelo studio, ele é lido do estilo computado a cada
+       * atualização — o studio dispara `lui-brand-update` depois de aplicar.
+       */
+      function refreshSwatchLabels() {
+        const styles = getComputedStyle(document.documentElement);
+
+        for (const element of document.querySelectorAll('[data-swatch]')) {
+          const [family, step] = element.getAttribute('data-swatch').split('.');
+          const value = styles.getPropertyValue(`--lui-brand-color-${family}-${step}`).trim();
+          element.textContent = toHex(value);
+        }
+      }
+
+      /** `rgb(92.157% 96.863% 100%)` e `rgb(1 2 3)` -> `#rrggbb`. */
+      function toHex(value) {
+        if (value.startsWith('#')) return value;
+
+        const channels = value.match(/-?[\d.]+%?/g);
+        if (!channels || channels.length < 3) return value;
+
+        return (
+          '#' +
+          channels
+            .slice(0, 3)
+            .map((channel) => {
+              const number = parseFloat(channel);
+              const scaled = channel.endsWith('%') ? (number / 100) * 255 : number;
+              return Math.round(scaled).toString(16).padStart(2, '0');
+            })
+            .join('')
+        );
+      }
+
+      /** Breakpoints do maior para o menor: o primeiro que couber é o ativo. */
+      const BREAKPOINTS = ['1xl', 'lg', 'md', 'sm', '1xs'];
+
+      /**
+       * O grid é remontado em JS porque a quantidade de colunas é um token: uma
+       * media query não consegue ler `var()`, então o breakpoint ativo é
+       * resolvido aqui a partir dos próprios tokens da marca em edição.
+       */
+      function refreshGrid() {
+        const styles = getComputedStyle(document.documentElement);
+        const read = (name) => styles.getPropertyValue(name).trim();
+
+        // `innerWidth` inclui a barra de rolagem, como fazem as media queries —
+        // `clientWidth` a desconta e faria o preview trocar de breakpoint cedo
+        // demais.
+        const width = window.innerWidth;
+        const active =
+          BREAKPOINTS.find((step) => {
+            const min = parseFloat(read(`--lui-brand-grid-breakpoint-${step}`));
+            return Number.isFinite(min) && width >= min;
+          }) ?? '1xs';
+
+        const columns = parseInt(read(`--lui-brand-grid-column-${active}`), 10) || 12;
+        const gap = read(`--lui-brand-grid-gap-${active}`);
+        const margin = read(`--lui-brand-grid-margin-${active}`) || read('--lui-brand-grid-margin-lg');
+
+        const fill = (node, className) => {
+          node.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+          node.style.gap = gap;
+          node.replaceChildren(
+            ...Array.from({ length: columns }, () => {
+              const column = document.createElement('span');
+              column.className = className;
+              return column;
+            })
+          );
+        };
+
+        fill(document.querySelector('[data-grid]'), 'pv-grid__column');
+
+        const overlay = document.querySelector('[data-overlay]');
+        overlay.style.paddingInline = margin;
+        fill(overlay, 'pv-overlay__column');
+
+        document.querySelector('[data-grid-note]').textContent =
+          `Breakpoint ativo: ${active} · ${columns} colunas · gutter ${gap} · margem ${margin}`;
+        document.documentElement.style.setProperty('--pv-margin', margin);
+      }
+
+      function refresh() {
+        refreshSwatchLabels();
+        refreshGrid();
+      }
+
+      document.addEventListener('lui-brand-update', refresh);
+      window.addEventListener('resize', refreshGrid);
+      refresh();
+    </script>
+
+    <style is:global>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+        font-family: var(--lui-brand-typography-font-family-body);
+        line-height: var(--lui-brand-typography-line-height-body);
+      }
+
+      .pv-main {
+        display: flex;
+        flex-direction: column;
+        gap: var(--lui-spacing-fluid-56);
+        max-width: var(--lui-brand-grid-container-1xl);
+        margin: 0 auto;
+        padding: var(--lui-spacing-fluid-48) var(--pv-margin, var(--lui-brand-grid-margin-lg));
+      }
+
+      .pv-section {
+        display: flex;
+        flex-direction: column;
+        gap: var(--lui-spacing-fluid-16);
+      }
+
+      .pv-section__title {
+        margin: 0;
+        font-size: var(--lui-brand-typography-font-size-2xs);
+        font-weight: var(--lui-typography-weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--lui-color-neutral-text-caption);
+      }
+
+      .pv-note {
+        margin: 0;
+        font-size: var(--lui-brand-typography-font-size-2xs);
+        color: var(--lui-color-neutral-text-caption);
+      }
+
+      .pv-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--lui-spacing-fixed-16);
+      }
+
+      .pv-col {
+        display: flex;
+        flex-direction: column;
+        gap: var(--lui-spacing-fixed-16);
+      }
+
+      .pv-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--lui-spacing-fixed-16);
+      }
+
+      .pv-ramp {
+        display: flex;
+        flex-direction: column;
+        gap: var(--lui-spacing-fixed-8);
+      }
+
+      .pv-ramp__label {
+        font-size: var(--lui-brand-typography-font-size-2xs);
+        color: var(--lui-color-neutral-text-caption);
+      }
+
+      .pv-ramp__steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+        gap: var(--lui-spacing-fixed-8);
+      }
+
+      .pv-swatch {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .pv-swatch__chip {
+        display: block;
+        height: 56px;
+        border-radius: var(--lui-brand-border-radius-md);
+        border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .pv-swatch__step {
+        font-size: var(--lui-brand-typography-font-size-3xs);
+        font-weight: var(--lui-typography-weight-semibold);
+      }
+
+      .pv-swatch__hex {
+        font-family: ui-monospace, monospace;
+        font-size: var(--lui-brand-typography-font-size-3xs);
+        color: var(--lui-color-neutral-text-caption);
+        text-transform: uppercase;
+      }
+
+      .pv-radius {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .pv-radius__box {
+        display: block;
+        width: 72px;
+        height: 72px;
+        background: var(--lui-color-primary-background-container);
+        border: var(--lui-border-width-1) solid var(--lui-color-primary-border-default);
+      }
+
+      .pv-radius__label {
+        font-size: var(--lui-brand-typography-font-size-3xs);
+        color: var(--lui-color-neutral-text-caption);
+      }
+
+      .pv-grid {
+        display: grid;
+      }
+
+      .pv-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: none;
+        pointer-events: none;
+      }
+
+      :root[data-grid-overlay='on'] .pv-overlay {
+        display: block;
+      }
+
+      .pv-overlay__grid {
+        display: grid;
+        height: 100%;
+        max-width: var(--lui-brand-grid-container-1xl);
+        margin: 0 auto;
+      }
+
+      .pv-overlay__column {
+        background: var(--lui-color-primary-background-container);
+        opacity: 0.14;
+      }
+
+      .pv-grid__column {
+        height: 72px;
+        border-radius: var(--lui-brand-border-radius-sm);
+        background: var(--lui-color-primary-background-container);
+      }
+
+    </style>
+  </body>
+</html>
