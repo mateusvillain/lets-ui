@@ -1,11 +1,11 @@
 /**
- * Layout do Brand Studio.
+ * Brand Studio layout.
  *
- * Os controles são componentes do Let's UI, então aqui ficam só o esqueleto da
- * tela e o punhado de elementos sem equivalente no design system — o seletor de
- * cor nativo, o bloco de código e o marcador de token alterado. Tudo usa tokens
- * da marca de referência: o chrome precisa ficar estável enquanto a marca em
- * edição muda dentro do iframe.
+ * The controls are Let's UI components, so all that lives here is the skeleton
+ * of the screen plus the handful of elements with no design system equivalent —
+ * the native color picker, the code block and the changed-token marker.
+ * Everything uses the reference brand's tokens: the chrome has to stay steady
+ * while the brand being edited changes inside the iframe.
  */
 
 *,
@@ -23,11 +23,14 @@ body {
   line-height: var(--lui-brand-typography-line-height-body);
 }
 
-/* ── Esqueleto ──────────────────────────────────────────────── */
+/* ── Skeleton ───────────────────────────────────────────────── */
 
 .st {
   display: grid;
-  grid-template-columns: 440px minmax(0, 1fr);
+
+  /* Wide enough for the five tab labels to sit on one line without the strip
+     scrolling — a tab clipped at rest reads as a bug, not as an affordance. */
+  grid-template-columns: 464px minmax(0, 1fr);
   height: 100dvh;
 }
 
@@ -48,8 +51,8 @@ body {
   padding: var(--lui-spacing-fixed-24) var(--lui-spacing-fixed-24) 0;
 }
 
-/* Textos de apoio dos campos não quebram linha, então o painel recorta o que
-   ainda assim transbordar em vez de empurrar o preview. */
+/* Field hints do not wrap, so the panel clips whatever still overflows instead
+   of pushing the preview aside. */
 .st-panel__head,
 .st-panel__body,
 .st-panel__foot {
@@ -71,7 +74,7 @@ body {
     var(--lui-color-neutral-border-subtle);
 }
 
-/* Colapsado: o painel sai da grade e o preview ocupa a tela inteira. */
+/* Collapsed: the panel leaves the grid and the preview takes the whole screen. */
 .st[data-collapsed='true'] {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -80,8 +83,9 @@ body {
   display: none;
 }
 
-/* Colapsar é uma ação do painel; expandir só pode viver na barra do palco, que
-   é tudo o que sobra na tela. Cada botão aparece no estado em que faz sentido. */
+/* Collapsing is an action of the panel; expanding can only live in the stage
+   bar, which is all that is left on screen. Each button shows up in the state
+   where it makes sense. */
 .st[data-collapsed='false'] [data-action='expand-panel'] {
   display: none;
 }
@@ -92,9 +96,9 @@ body {
   min-width: 0;
 }
 
-/* ── Cabeçalho e rodapé do painel ───────────────────────────── */
+/* ── Panel header and footer ────────────────────────────────── */
 
-/* As abas não encolhem: se a marca tiver rótulos longos, a barra rola. */
+/* The tabs do not shrink: if the brand has long labels, the bar scrolls. */
 .st-panel__head lui-tabs {
   overflow-x: auto;
 }
@@ -133,7 +137,7 @@ body {
   margin-bottom: var(--lui-spacing-fixed-8);
 }
 
-/* ── Seções do painel ───────────────────────────────────────── */
+/* ── Panel sections ─────────────────────────────────────────── */
 
 .st-section,
 .st-group,
@@ -156,8 +160,8 @@ body {
   gap: var(--lui-spacing-fixed-8);
 }
 
-/* Os campos numéricos do design system embutem steppers e não cabem lado a
-   lado na largura do painel, então mínimo e máximo empilham. */
+/* The design system's number fields embed steppers and do not fit side by side
+   at the panel's width, so minimum and maximum stack. */
 .st-pair {
   display: flex;
   flex-direction: column;
@@ -168,7 +172,7 @@ body {
   display: block;
 }
 
-/* O ponto marca o token que já não é mais o padrão da marca de referência. */
+/* The dot marks a token that is no longer the reference brand's default. */
 .st-field {
   position: relative;
 }
@@ -194,7 +198,7 @@ body {
   transform: translateY(-50%);
 }
 
-/* ── Cores ──────────────────────────────────────────────────── */
+/* ── Colors ────────────────────────────────────────────────── */
 
 .st-ramp {
   display: flex;
@@ -215,7 +219,7 @@ body {
   font-size: var(--lui-brand-typography-font-size-2xs);
 }
 
-/* Sem equivalente no design system: o seletor de cor nativo do navegador. */
+/* No design system equivalent: the browser's native color picker. */
 .st-swatch {
   width: 40px;
   height: 40px;
@@ -248,7 +252,7 @@ body {
   gap: var(--lui-spacing-fixed-8);
 }
 
-/* ── Palco ──────────────────────────────────────────────────── */
+/* ── Stage ──────────────────────────────────────────────────── */
 
 .st-toolbar {
   display: flex;
@@ -260,14 +264,14 @@ body {
     var(--lui-color-neutral-border-subtle);
 }
 
-/* O guia não é um controle do preview: encosta no canto oposto para sair do
-   caminho dos que são. O `lui-modal` é `display: contents`, então quem ocupa a
-   linha é o próprio gatilho. */
+/* The guide is not a preview control: it hugs the opposite corner to stay out
+   of the way of the ones that are. `lui-modal` is `display: contents`, so what
+   occupies the row is the trigger itself. */
 .st-toolbar [slot='trigger'] {
   margin-left: auto;
 }
 
-/* O ícone anuncia o tema que o clique liga, não o que está ligado. */
+/* The icon announces the theme the click turns on, not the one already on. */
 .st[data-preview-theme='light'] .st-icon--sun,
 .st[data-preview-theme='dark'] .st-icon--moon {
   display: none;
@@ -279,9 +283,9 @@ body {
   overflow: auto;
 }
 
-/* `content-box` para que a largura escolhida seja a viewport de fato: com
-   `border-box` a borda comeria 2px e o preview trocaria de breakpoint antes da
-   hora. */
+/* `content-box` so the chosen width is genuinely the viewport: with
+   `border-box` the border would eat 2px and the preview would switch
+   breakpoints early. */
 .st-frame iframe {
   box-sizing: content-box;
   display: block;
@@ -293,7 +297,7 @@ body {
   background: var(--lui-color-neutral-background-surface);
 }
 
-/* ── Bloco de código do guia ────────────────────────────────── */
+/* ── The guide's code block ─────────────────────────────────── */
 
 .st-code {
   margin: var(--lui-spacing-fixed-16) 0 0;

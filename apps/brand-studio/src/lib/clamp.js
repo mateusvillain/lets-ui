@@ -1,26 +1,26 @@
 /**
- * A escala tipográfica da marca é fluida: cada degrau é um `clamp()` que
- * interpola entre um tamanho mínimo e um máximo ao longo de uma faixa de
- * viewport. Editar essa string à mão é inviável, então a interface expõe só o
- * mínimo e o máximo em `rem` e recompõe o `clamp()` aqui.
+ * The brand's type scale is fluid: every step is a `clamp()` interpolating
+ * between a minimum and a maximum size across a viewport range. Editing that
+ * string by hand is unworkable, so the interface exposes only the minimum and
+ * the maximum in `rem` and recomposes the `clamp()` here.
  */
 
 const ROOT_FONT_SIZE = 16;
 
-/** Faixa de viewport usada pela escala original do Let's UI. */
+/** Viewport range used by the original Let's UI scale. */
 export const DEFAULT_VIEWPORT = { min: 320, max: 1440 };
 
 const CLAMP_PATTERN =
   /^clamp\(\s*([\d.]+)rem\s*,\s*(-?[\d.]+)rem\s*([+-])\s*([\d.]+)vw\s*,\s*([\d.]+)rem\s*\)$/;
 
-/** Extrai `{ min, max }` em rem de um `clamp()` — `null` se não for uma escala fluida. */
+/** Extracts `{ min, max }` in rem from a `clamp()` — `null` if not a fluid scale. */
 export function parseClamp(value) {
   const match = String(value).trim().match(CLAMP_PATTERN);
   if (!match) return null;
   return { min: Number(match[1]), max: Number(match[5]) };
 }
 
-/** Monta o `clamp()` fluido entre `min` e `max` (rem) para a faixa de viewport. */
+/** Builds the fluid `clamp()` between `min` and `max` (rem) for the viewport range. */
 export function buildClamp(min, max, viewport = DEFAULT_VIEWPORT) {
   const round = (n) => Number(n.toFixed(4));
 

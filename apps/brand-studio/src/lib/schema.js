@@ -1,9 +1,9 @@
 /**
- * Descrição declarativa de tudo que uma marca pode customizar.
+ * Declarative description of everything a brand can customize.
  *
- * A fonte da verdade continua sendo os arquivos DTCG da marca; este arquivo só
- * diz **como** cada token é editado (controle, rótulo, unidade, opções) e em
- * que seção da barra lateral ele aparece.
+ * The source of truth is still the brand's DTCG files; this file only says
+ * **how** each token is edited (control, label, unit, options) and which
+ * section of the sidebar it appears in.
  */
 
 import { isAlias, aliasToVar, cssVarName } from './dtcg.js';
@@ -12,7 +12,7 @@ export const FAMILIES = ['primary', 'secondary'];
 export const STEPS = [1, 2, 3, 4, 5, 6, 7, 8];
 export const THEMES = ['light', 'dark'];
 
-/** Pesos disponíveis nos tokens globais — o token da marca é um alias para um deles. */
+/** Weights available in the global tokens — the brand token aliases one of them. */
 export const WEIGHT_OPTIONS = [
   { label: 'Light (300)', value: '{lui.typography.weight.light}' },
   { label: 'Regular (400)', value: '{lui.typography.weight.regular}' },
@@ -21,16 +21,16 @@ export const WEIGHT_OPTIONS = [
   { label: 'Bold (700)', value: '{lui.typography.weight.bold}' },
 ];
 
-/** Espaçamentos fixos globais — margens e gutters do grid são aliases para eles. */
+/** Global fixed spacing — grid margins and gutters alias these. */
 export const SPACING_OPTIONS = [0, 8, 16, 24, 32, 40].map((n) => ({
   label: `${n}px`,
   value: `{lui.spacing.fixed.${n}}`,
 }));
 
-/** Pilhas de fonte prontas, para quem não quer digitar a lista inteira. */
+/** Ready-made font stacks, for when you would rather not type the whole list. */
 export const FONT_STACKS = [
   {
-    label: 'Sistema (padrão)',
+    label: 'System (default)',
     value: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -48,19 +48,19 @@ export const FONT_STACKS = [
     ],
   },
   {
-    label: 'Geométrica',
+    label: 'Geometric',
     value: ['Futura', 'Avenir Next', 'Avenir', 'sans-serif'],
   },
   {
-    label: 'Grotesca',
+    label: 'Grotesque',
     value: ['Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
   },
   {
-    label: 'Serifada',
+    label: 'Serif',
     value: ['Iowan Old Style', 'Georgia', 'Times New Roman', 'serif'],
   },
   {
-    label: 'Monoespaçada',
+    label: 'Monospace',
     value: ['SF Mono', 'Menlo', 'Consolas', 'monospace'],
   },
 ];
@@ -87,37 +87,37 @@ const field = (path, label, control, extra = {}) => ({
 });
 
 /**
- * Seções da barra lateral. `path` é relativo à raiz `lui.brand`, que é o
- * recorte exato que uma marca controla.
+ * Sidebar sections. `path` is relative to the `lui.brand` root, which is
+ * exactly the slice a brand controls.
  */
 export const SECTIONS = [
   {
     id: 'typography',
-    label: 'Tipografia',
+    label: 'Typography',
     groups: [
       {
-        label: 'Famílias',
+        label: 'Families',
         fields: [
-          field('typography.font-family.heading', 'Títulos', 'font-family'),
-          field('typography.font-family.body', 'Corpo', 'font-family'),
+          field('typography.font-family.heading', 'Headings', 'font-family'),
+          field('typography.font-family.body', 'Body', 'font-family'),
         ],
       },
       {
-        label: 'Escala fluida',
-        hint: 'Mínimo e máximo em rem. O valor intermediário é recalculado como clamp().',
+        label: 'Fluid scale',
+        hint: 'Minimum and maximum in rem. The value in between is recomputed as clamp().',
         fields: FONT_SIZE_STEPS.map((step) =>
           field(`typography.font-size.${step}`, step, 'clamp')
         ),
       },
       {
-        label: 'Entrelinha',
+        label: 'Line height',
         fields: [
-          field('typography.line-height.heading', 'Títulos', 'number', {
+          field('typography.line-height.heading', 'Headings', 'number', {
             step: 0.05,
             min: 1,
             max: 2,
           }),
-          field('typography.line-height.body', 'Corpo', 'number', {
+          field('typography.line-height.body', 'Body', 'number', {
             step: 0.05,
             min: 1,
             max: 2,
@@ -125,7 +125,7 @@ export const SECTIONS = [
         ],
       },
       {
-        label: 'Pesos por variante',
+        label: 'Weight per variant',
         fields: [
           field('typography.weight.display', 'Display', 'select', {
             options: WEIGHT_OPTIONS,
@@ -154,10 +154,10 @@ export const SECTIONS = [
   },
   {
     id: 'border',
-    label: 'Bordas',
+    label: 'Borders',
     groups: [
       {
-        label: 'Raio',
+        label: 'Radius',
         fields: RADIUS_STEPS.map((step) =>
           field(`border.radius.${step}`, step, 'dimension', {
             min: 0,
@@ -174,7 +174,7 @@ export const SECTIONS = [
     groups: [
       {
         label: 'Breakpoints',
-        hint: 'Compilados como literais no build (media queries não aceitam var()), então o preview não reage em tempo real.',
+        hint: 'Compiled as literals at build time (media queries cannot read var()), so the preview does not react live.',
         fields: BREAKPOINTS.map((step) =>
           field(`grid.breakpoint.${step}`, step, 'dimension', {
             min: 240,
@@ -195,8 +195,8 @@ export const SECTIONS = [
         ],
       },
       {
-        label: 'Colunas',
-        hint: 'Também resolvidas no build — o preview simula o breakpoint ativo por JavaScript.',
+        label: 'Columns',
+        hint: 'Also resolved at build time — the preview simulates the active breakpoint in JavaScript.',
         fields: BREAKPOINTS.map((step) =>
           field(`grid.column.${step}`, step, 'number', {
             min: 1,
@@ -208,7 +208,7 @@ export const SECTIONS = [
         ),
       },
       {
-        label: 'Margens',
+        label: 'Margins',
         fields: ['1xs', 'sm', 'md', 'lg'].map((step) =>
           field(`grid.margin.${step}`, step, 'select', {
             options: SPACING_OPTIONS,
@@ -227,12 +227,12 @@ export const SECTIONS = [
   },
   {
     id: 'effects',
-    label: 'Efeitos',
+    label: 'Effects',
     groups: [
       {
-        label: 'Opacidade',
+        label: 'Opacity',
         fields: [
-          field('opacity.disabled', 'Desabilitado', 'number', {
+          field('opacity.disabled', 'Disabled', 'number', {
             min: 0,
             max: 1,
             step: 0.05,
@@ -243,12 +243,12 @@ export const SECTIONS = [
   },
 ];
 
-/** Todos os campos de fundação em uma lista plana. */
+/** Every foundation field in a single flat list. */
 export const FOUNDATION_FIELDS = SECTIONS.flatMap((section) =>
   section.groups.flatMap((group) => group.fields)
 );
 
-/** Converte um `$value` DTCG no valor CSS equivalente ao emitido pelo build. */
+/** Converts a DTCG `$value` into the CSS value the build would emit. */
 export function toCssValue(value) {
   if (isAlias(value)) return aliasToVar(value);
   if (Array.isArray(value)) {
@@ -263,7 +263,7 @@ export function toCssValue(value) {
   return String(value);
 }
 
-/** Nome da custom property de um caminho relativo a `lui.brand`. */
+/** Custom property name for a path relative to `lui.brand`. */
 export function brandVar(relativePath) {
   return cssVarName(`lui.brand.${relativePath}`);
 }

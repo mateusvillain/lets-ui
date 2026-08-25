@@ -1,9 +1,9 @@
 /**
- * Estado da marca em edição.
+ * State of the brand being edited.
  *
- * Os valores são guardados exatamente no formato DTCG dos arquivos de origem —
- * assim o export é uma substituição direta e nenhuma informação se perde no
- * caminho entre o arquivo, a interface e o preview.
+ * Values are stored in exactly the DTCG format of the source files — that way
+ * the export is a straight substitution and nothing is lost on the way between
+ * the file, the interface and the preview.
  */
 
 import { flatten, applyValues } from './dtcg.js';
@@ -11,12 +11,12 @@ import { toCssValue, brandVar, THEMES } from './schema.js';
 
 const STORAGE_KEY = 'lets-ui:brand-studio';
 
-/** Recorta o subconjunto `lui.brand` de um arquivo de tokens. */
+/** Slices the `lui.brand` subset out of a token file. */
 function brandRoot(tree) {
   return tree?.lui?.brand ?? {};
 }
 
-/** Estado inicial a partir dos arquivos da marca de referência. */
+/** Initial state from the reference brand's files. */
 export function createDefaultState(templates, meta) {
   return {
     name: meta.name,
@@ -42,7 +42,7 @@ function mapValues(flat, stripPrefix = '') {
   );
 }
 
-/** Custom properties a aplicar no preview para um tema. */
+/** Custom properties to apply to the preview for a given theme. */
 export function toCssVars(state, theme) {
   const vars = {};
 
@@ -57,7 +57,7 @@ export function toCssVars(state, theme) {
   return vars;
 }
 
-/** Caminhos cujo valor difere do estado padrão — usado para marcar o que mudou. */
+/** Paths whose value differs from the default state — used to flag what changed. */
 export function changedPaths(state, defaults) {
   const changed = new Set();
   const differs = (a, b) => JSON.stringify(a) !== JSON.stringify(b);
@@ -76,7 +76,7 @@ export function changedPaths(state, defaults) {
   return changed;
 }
 
-/** Arquivos DTCG prontos para gravar em `tokens/brand/<slug>/`. */
+/** DTCG files ready to be written to `tokens/brand/<slug>/`. */
 export function toFiles(state, templates) {
   const prefix = (values, extra = '') =>
     Object.fromEntries(
@@ -103,8 +103,8 @@ export function toFiles(state, templates) {
 }
 
 /**
- * Trecho de `letsui.resolver.json` que registra a marca. Sem isso o Terrazzo
- * não conhece os arquivos exportados.
+ * The `letsui.resolver.json` fragment that registers the brand. Without it
+ * Terrazzo does not know the exported files exist.
  */
 export function resolverSnippet(slug) {
   return JSON.stringify(
@@ -134,7 +134,7 @@ export function save(state) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
-    /* modo privado / storage cheio: o studio segue funcionando sem persistir */
+    /* private mode / storage full: the studio keeps working without persisting */
   }
 }
 
@@ -151,11 +151,11 @@ export function clear() {
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch {
-    /* nada a limpar */
+    /* nothing to clear */
   }
 }
 
-/** Importa arquivos DTCG enviados pelo usuário, ignorando o que não reconhece. */
+/** Imports DTCG files supplied by the user, ignoring anything it does not recognize. */
 export function fromFiles(files, fallback) {
   const next = structuredClone(fallback);
 

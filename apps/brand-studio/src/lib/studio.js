@@ -1,11 +1,11 @@
 /**
- * Interface do Brand Studio: monta os controles a partir do schema, mantém o
- * estado da marca e projeta cada alteração no iframe de preview.
+ * The Brand Studio interface: builds the controls from the schema, holds the
+ * brand state and projects every change into the preview iframe.
  *
- * Os controles são componentes do próprio Let's UI. O `lui-tabs` entra só como
- * barra de navegação — ele serializa o conteúdo dos `lui-tab` em HTML, o que
- * descartaria os listeners dos campos, então o painel é renderizado por fora e
- * trocado no evento `tab-change`.
+ * The controls are Let's UI components themselves. `lui-tabs` is used purely as
+ * a navigation bar — it serializes the content of its `lui-tab`s to HTML, which
+ * would discard the fields' listeners, so the panel is rendered outside it and
+ * swapped on the `tab-change` event.
  */
 
 import { FAMILIES, STEPS, SECTIONS, FONT_STACKS, brandVar } from './schema.js';
@@ -31,14 +31,14 @@ import {
 import { parseClamp, buildClamp } from './clamp.js';
 import { randomBrand } from './random.js';
 
-const THEME_LABEL = { light: 'claro', dark: 'escuro' };
+const THEME_LABEL = { light: 'light', dark: 'dark' };
 
-/** Do menor para o maior: a ordem que os breakpoints precisam respeitar. */
+/** Smallest to largest: the order the breakpoints must respect. */
 const BREAKPOINT_ORDER = ['1xs', 'sm', 'md', 'lg', '1xl'];
 
 const BREAKPOINT_PREFIX = 'grid.breakpoint.';
 
-/* ── Helpers de DOM ─────────────────────────────────────────── */
+/* ── DOM helpers ────────────────────────────────────────────── */
 
 const el = (tag, attrs = {}, children = []) => {
   const node = document.createElement(tag);
@@ -55,7 +55,7 @@ const el = (tag, attrs = {}, children = []) => {
   return node;
 };
 
-/** Campo do design system com o marcador de "alterado" no invólucro. */
+/** A design system field with the "changed" marker on its wrapper. */
 const field = (token, control) =>
   el('div', { class: 'st-field', 'data-token': token }, control);
 
@@ -68,19 +68,19 @@ const caption = (text) =>
   });
 
 /**
- * `lui-native-select` reserva o índice 0 para o placeholder, então a posição de
- * uma opção real é sempre `índice + 1`.
+ * `lui-native-select` reserves index 0 for the placeholder, so a real option's
+ * position is always `index + 1`.
  */
 const selectIndex = (options, value) =>
   options.findIndex((option) => option.value === value) + 1;
 
 /**
- * Nome legível -> nome de pasta. Acentos viram a letra base e o que não é
- * alfanumérico some ou vira hífen — "Ação & Cor" e "Material Design" precisam
- * dar caminhos válidos em `tokens/brand/`.
+ * Readable name -> folder name. Accents fall back to their base letter and
+ * anything non-alphanumeric is dropped or becomes a hyphen — "Ação & Cor" and
+ * "Material Design" both have to yield valid paths under `tokens/brand/`.
  *
- * Apóstrofos são apagados em vez de virarem hífen: "Let's UI" é `lets-ui`, e
- * não `let-s-ui`, que é como a marca de referência já está versionada.
+ * Apostrophes are deleted rather than turned into hyphens: "Let's UI" is
+ * `lets-ui`, not `let-s-ui`, which is how the reference brand is versioned.
  */
 export function slugify(value) {
   return value
@@ -101,11 +101,11 @@ export function mountStudio({ root, templates, meta }) {
   let scene = 'landing';
   let activeTab = 'color';
 
-  /* Enquanto o identificador for exatamente o que o nome geraria, ele é
-     derivado e acompanha o campo de nome. Assim que diverge, passou por edição
-     manual e para de ser sobrescrito. Comparar em vez de guardar uma flag evita
-     um campo a mais no estado persistido — e se autocorrige quando o usuário
-     apaga a customização. */
+  /* As long as the identifier is exactly what the name would generate, it is
+     derived and follows the name field. The moment it diverges, it has been
+     edited by hand and stops being overwritten. Comparing instead of storing a
+     flag avoids one more field in the persisted state — and it self-corrects
+     when the user clears their customization. */
   let slugIsDerived = state.slug === slugify(state.name);
 
   const dom = {
@@ -117,7 +117,7 @@ export function mountStudio({ root, templates, meta }) {
     brandSlug: root.querySelector('[data-brand-slug]'),
   };
 
-  /* ── Aplicação no preview ─────────────────────────────────── */
+  /* ── Applying to the preview ──────────────────────────────── */
 
   function previewDocument() {
     return dom.frame.contentDocument;
@@ -127,13 +127,14 @@ export function mountStudio({ root, templates, meta }) {
     const document_ = previewDocument();
     if (!document_?.documentElement) return;
 
-    // O `data-brand` permanece na marca de referência: ela é a base do
-    // cascade e todos os tokens editados entram por cima, inline.
+    // `data-brand` stays on the reference brand: it is the base of the
+    // cascade, and every edited token lands on top of it, inline.
     const element = document_.documentElement;
     element.setAttribute('data-theme', theme);
     element.dataset.scene = scene;
-    // A composição assina com o nome da marca em edição: é o que separa um
-    // preview do produto de quem edita de um exemplo genérico.
+    // The composition signs itself with the name of the brand being edited:
+    // that is what separates a preview of the user's own product from a
+    // generic example.
     element.dataset.brandName = state.name;
     syncOverlay();
 
@@ -146,14 +147,14 @@ export function mountStudio({ root, templates, meta }) {
     );
   }
 
-  /** A régua de colunas acompanha a aba Grid. */
+  /** The column ruler follows the Grid tab. */
   function syncOverlay() {
     const element = previewDocument()?.documentElement;
     if (element)
       element.dataset.gridOverlay = activeTab === 'grid' ? 'on' : 'off';
   }
 
-  /** Fonte única de verdade: grava, projeta e atualiza os indicadores. */
+  /** Single source of truth: persists, projects and refreshes the indicators. */
   function commit({ rerender = false } = {}) {
     save(state);
     apply();
@@ -168,14 +169,12 @@ export function mountStudio({ root, templates, meta }) {
 
     dom.status.setAttribute(
       'label',
-      count
-        ? `${count} token${count > 1 ? 's' : ''} alterado${count > 1 ? 's' : ''}`
-        : 'Sem alterações'
+      count ? `${count} token${count > 1 ? 's' : ''} changed` : 'No changes'
     );
     dom.status.setAttribute('variant', count ? 'primary' : 'neutral');
   }
 
-  /** Marca visualmente os campos que divergem do padrão. */
+  /** Visually flags the fields that diverge from the defaults. */
   function refreshIndicators() {
     const changed = changedPaths(state, defaults);
 
@@ -188,12 +187,12 @@ export function mountStudio({ root, templates, meta }) {
     }
   }
 
-  /* ── Cores ────────────────────────────────────────────────── */
+  /* ── Colors ──────────────────────────────────────────────── */
 
   function colorSection() {
     return el('div', { class: 'st-section' }, [
       caption(
-        `Editando o tema ${THEME_LABEL[theme]}. Use o botão de tema na barra do preview para trocar.`
+        `Editing the ${THEME_LABEL[theme]} theme. Use the theme button in the preview bar to switch.`
       ),
       ...FAMILIES.map((family) =>
         el('div', { class: 'st-group' }, [
@@ -250,13 +249,13 @@ export function mountStudio({ root, templates, meta }) {
     );
   }
 
-  /** Gera os 8 degraus da família a partir de uma cor base. */
+  /** Generates the family's 8 steps from a base color. */
   function rampGenerator(family) {
     const picker = el('input', {
       type: 'color',
       class: 'st-swatch',
       value: tokenValueToHex(state.colors[theme][`${family}.5`]),
-      'aria-label': `Cor base de ${family}`,
+      'aria-label': `Base color for ${family}`,
     });
 
     const generate = (themes) => {
@@ -273,30 +272,30 @@ export function mountStudio({ root, templates, meta }) {
       el('lui-button', {
         size: 'md',
         variant: 'secondary',
-        label: 'Gerar escala',
+        label: 'Generate ramp',
         onclick: () => generate([theme]),
       }),
       el('lui-button', {
         size: 'md',
         variant: 'ghost',
-        label: 'Claro + escuro',
+        label: 'Light + dark',
         onclick: () => generate(['light', 'dark']),
       }),
     ]);
   }
 
   /**
-   * Pares de contraste que decidem legibilidade na prática: superfície contra
-   * texto e contra a cor de ação.
+   * The contrast pairs that decide legibility in practice: surface against
+   * text, and against the action color.
    */
   const CONTRAST_PAIRS = {
     primary: [
-      ['primary.5', 'secondary.1', 'Ação sobre superfície'],
-      ['primary.6', 'secondary.1', 'Ação pressionada'],
+      ['primary.5', 'secondary.1', 'Action on surface'],
+      ['primary.6', 'secondary.1', 'Action pressed'],
     ],
     secondary: [
-      ['secondary.8', 'secondary.1', 'Texto sobre superfície'],
-      ['secondary.5', 'secondary.1', 'Texto de apoio'],
+      ['secondary.8', 'secondary.1', 'Text on surface'],
+      ['secondary.5', 'secondary.1', 'Supporting text'],
     ],
   };
 
@@ -327,7 +326,7 @@ export function mountStudio({ root, templates, meta }) {
     );
   }
 
-  /* ── Fundação ─────────────────────────────────────────────── */
+  /* ── Foundation ───────────────────────────────────────────── */
 
   function foundationSection(section) {
     return el(
@@ -387,8 +386,8 @@ export function mountStudio({ root, templates, meta }) {
 
     const presets = el('lui-native-select', {
       size: 'md',
-      placeholder: 'Pilhas prontas…',
-      'aria-label': `Pilhas prontas para ${item.label}`,
+      placeholder: 'Ready-made stacks…',
+      'aria-label': `Ready-made stacks for ${item.label}`,
       options: FONT_STACKS.map((stack) => stack.label).join(','),
     });
 
@@ -405,8 +404,8 @@ export function mountStudio({ root, templates, meta }) {
   function clampControl(item, value, write) {
     const parsed = parseClamp(value) ?? { min: 1, max: 1 };
 
-    // O input numérico do design system traz seus próprios steppers e ignora
-    // `suffix`, então a unidade vive no rótulo.
+    // The design system's number input brings its own steppers and ignores
+    // `suffix`, so the unit lives in the label.
     const bound = (key, label) => {
       const input = el('lui-input', {
         size: 'md',
@@ -428,8 +427,8 @@ export function mountStudio({ root, templates, meta }) {
     return field(
       item.path,
       el('div', { class: 'st-pair' }, [
-        bound('min', `${item.label} · mínimo (rem)`),
-        bound('max', `${item.label} · máximo (rem)`),
+        bound('min', `${item.label} · minimum (rem)`),
+        bound('max', `${item.label} · maximum (rem)`),
       ])
     );
   }
@@ -438,7 +437,7 @@ export function mountStudio({ root, templates, meta }) {
     const select = el('lui-native-select', {
       size: 'md',
       label: item.label,
-      placeholder: 'Selecione',
+      placeholder: 'Select',
       options: item.options.map((option) => option.label).join(','),
       selected: String(selectIndex(item.options, value)),
     });
@@ -452,9 +451,9 @@ export function mountStudio({ root, templates, meta }) {
   }
 
   /**
-   * Breakpoints precisam ser estritamente crescentes: um `sm` menor ou igual ao
-   * `1xs` produziria media queries que nunca casam. A checagem olha só os
-   * vizinhos porque a ordem inteira já foi validada nas edições anteriores.
+   * Breakpoints must be strictly ascending: an `sm` at or below `1xs` would
+   * produce media queries that never match. The check looks only at the
+   * neighbours because the whole ordering was validated on previous edits.
    */
   function breakpointError(step, next) {
     const index = BREAKPOINT_ORDER.indexOf(step);
@@ -464,7 +463,7 @@ export function mountStudio({ root, templates, meta }) {
     const smaller = BREAKPOINT_ORDER[index - 1];
     const larger = BREAKPOINT_ORDER[index + 1];
 
-    if (!Number.isFinite(next)) return 'Informe um valor em pixels.';
+    if (!Number.isFinite(next)) return 'Enter a value in pixels.';
     if (smaller && next <= read(smaller)) {
       return `Precisa ser maior que ${smaller} (${read(smaller)}px).`;
     }
@@ -524,10 +523,10 @@ export function mountStudio({ root, templates, meta }) {
     return field(item.path, input);
   }
 
-  /* ── Navegação e render ───────────────────────────────────── */
+  /* ── Navigation and rendering ─────────────────────────────── */
 
   const TABS = [
-    { id: 'color', label: 'Cores' },
+    { id: 'color', label: 'Colors' },
     ...SECTIONS.map((section) => ({ id: section.id, label: section.label })),
   ];
 
@@ -555,7 +554,7 @@ export function mountStudio({ root, templates, meta }) {
     updateStatus();
   }
 
-  /* ── Ações globais ────────────────────────────────────────── */
+  /* ── Global actions ───────────────────────────────────────── */
 
   function download(name, content) {
     const url = URL.createObjectURL(
@@ -598,8 +597,9 @@ export function mountStudio({ root, templates, meta }) {
   }
 
   /**
-   * Sorteia uma marca inteira. Só a identidade sobrevive: nome e identificador
-   * são do usuário, o resto é derivado dos parâmetros sorteados em `random.js`.
+   * Rolls a whole brand. Only identity survives: the name and identifier belong
+   * to the user, everything else is derived from the parameters `random.js`
+   * draws.
    */
   function randomize() {
     state = randomBrand(defaults, { name: state.name, slug: state.slug });
@@ -612,7 +612,7 @@ export function mountStudio({ root, templates, meta }) {
     slugIsDerived = state.slug === slugify(state.name);
   }
 
-  /* ── Ligações ─────────────────────────────────────────────── */
+  /* ── Wiring ───────────────────────────────────────────────── */
 
   const fileInput = root.querySelector('[data-action="import"]');
 
@@ -636,24 +636,24 @@ export function mountStudio({ root, templates, meta }) {
     );
   });
 
-  /* O tema é do preview, não do chrome: `data-preview-theme` só existe para o
-     ícone saber qual das duas faces mostrar. */
+  /* The theme belongs to the preview, not to the chrome: `data-preview-theme`
+     exists only so the icon knows which of its two faces to show. */
   const themeToggle = root.querySelector('[data-theme-toggle]');
 
   themeToggle.addEventListener('click', () => {
     theme = theme === 'dark' ? 'light' : 'dark';
     root.dataset.previewTheme = theme;
-    // O rótulo é o estado: `aria-pressed` no host não chega ao `button`.
+    // The label carries the state: `aria-pressed` on the host never reaches the `button`.
     themeToggle.setAttribute(
       'aria-label',
-      theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'
+      theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
     );
     if (activeTab === 'color') renderPanel();
     apply();
   });
 
-  /* Cena do preview: a landing mostra a marca em composição real e a folha de
-     tokens dá o valor cru de cada degrau. */
+  /* Preview scene: the landing shows the brand in a real composition, and the
+     token sheet gives the raw value of every step. */
   const SCENES = ['landing', 'tokens'];
   const sceneSelect = root.querySelector('[data-scene]');
   const previewLink = root.querySelector('[data-preview-link]');
@@ -665,8 +665,8 @@ export function mountStudio({ root, templates, meta }) {
   });
 
   /**
-   * O seletor de largura é uma leitura dos breakpoints da marca, não uma lista
-   * fixa: editar `md` muda a largura que o preview passa a simular.
+   * The width selector is a reading of the brand's breakpoints, not a fixed
+   * list: editing `md` changes the width the preview then simulates.
    */
   const viewport = root.querySelector('[data-viewport]');
 
@@ -685,15 +685,15 @@ export function mountStudio({ root, templates, meta }) {
     if (signature === viewportSignature) return;
     viewportSignature = signature;
 
-    // A seleção acompanha o breakpoint, não o número: quem estava vendo o
-    // preview em `sm` continua em `sm` depois de mudar o valor de `sm`.
+    // The selection follows the breakpoint, not the number: whoever was
+    // viewing the preview at `sm` stays at `sm` after `sm`'s value changes.
     const previous = viewportSteps[viewport.selected - 1];
     viewportSteps = ['full', ...entries.map((entry) => entry.step)];
 
     viewport.setAttribute(
       'options',
       [
-        'Preencher',
+        'Fill',
         ...entries.map((entry) => `${entry.width} — ${entry.step}`),
       ].join(',')
     );
@@ -715,16 +715,16 @@ export function mountStudio({ root, templates, meta }) {
 
   viewport.addEventListener('change', applyViewport);
 
-  /* Painel colapsável: o preview ocupa a tela inteira quando não se está
-     editando. Colapsar parte do próprio painel; expandir vem da barra do palco,
-     porque é o único ponto de apoio que sobra na tela. */
+  /* Collapsible panel: the preview takes the whole screen when you are not
+     editing. Collapsing starts from the panel itself; expanding comes from the
+     stage bar, because it is the only foothold left on screen. */
   const collapseButton = root.querySelector('[data-action="collapse-panel"]');
   const expandButton = root.querySelector('[data-action="expand-panel"]');
 
   function setCollapsed(collapsed) {
     root.dataset.collapsed = String(collapsed);
-    // Foco não pode cair em um botão que acabou de sair da tela. O alvo é o
-    // `button` do shadow DOM: o host do componente não é focável.
+    // Focus must not land on a button that just left the screen. The target is
+    // the shadow DOM `button`: the component host is not focusable.
     const next = collapsed ? expandButton : collapseButton;
     next.shadowRoot?.querySelector('button')?.focus();
   }
@@ -742,8 +742,8 @@ export function mountStudio({ root, templates, meta }) {
 
     save(state);
 
-    // Só o rótulo da cena depende do nome; reaplicar todos os tokens a cada
-    // tecla seria caro à toa.
+    // Only the scene's label depends on the name; reapplying every token on
+    // each keystroke would be needlessly expensive.
     const element = previewDocument()?.documentElement;
     if (!element) return;
     element.dataset.brandName = state.name;
@@ -753,7 +753,7 @@ export function mountStudio({ root, templates, meta }) {
   });
 
   dom.brandSlug.addEventListener('change', (event) => {
-    // Campo esvaziado é um pedido para voltar a acompanhar o nome.
+    // An emptied field is a request to follow the name again.
     state.slug = slugify(event.target.value) || slugify(state.name);
     event.target.value = state.slug;
     slugIsDerived = state.slug === slugify(state.name);

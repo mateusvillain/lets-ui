@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Editor visual dos tokens de brand do Let's UI",
+  "description": "Visual editor for the Let's UI brand tokens",
   "scripts": {
     "dev": "astro dev --port 4323",
     "build": "astro build",

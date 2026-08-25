@@ -1,15 +1,15 @@
 # Brand Studio
 
-Editor visual dos tokens de marca (`lui.brand.*`) do Let's UI.
+Visual editor for the Let's UI brand tokens (`lui.brand.*`).
 
-Uma marca do Let's UI é definida por três arquivos DTCG em
-`packages/lets-ui-tokens/tokens/brand/<marca>/`: `colors.light.json`,
-`colors.dark.json` e `foundation.json`. Todo o resto do design system —
-tokens semânticos, componentes SCSS e Web Components — deriva deles. O Brand
-Studio é a interface para quem cuida da marca editar exatamente esse recorte
-sem abrir um arquivo JSON.
+A Let's UI brand is defined by three DTCG files in
+`packages/lets-ui-tokens/tokens/brand/<brand>/`: `colors.light.json`,
+`colors.dark.json` and `foundation.json`. Everything else in the design system —
+semantic tokens, SCSS components and Web Components — derives from them. Brand
+Studio is the interface for whoever owns the brand to edit exactly that slice
+without opening a JSON file.
 
-## Como rodar
+## Running it
 
 ```bash
 cd apps/brand-studio
@@ -17,69 +17,96 @@ pnpm install --ignore-workspace
 pnpm dev
 ```
 
-O app fica em <http://localhost:4323>. Ele consome os `dist/` dos pacotes, então
-rode `pnpm build` na raiz do repositório antes se os tokens ou os componentes
-tiverem mudado.
+The app runs at <http://localhost:4323>. It consumes the packages' `dist/`
+output, so run `pnpm build` at the repository root first if the tokens or the
+components have changed.
 
-## Como funciona
+## How it works
 
-O painel da esquerda monta seus controles a partir do schema em
-`src/lib/schema.js`; os valores iniciais são lidos dos próprios arquivos da
-marca de referência em tempo de build, então a interface nunca sai de sincronia
-com o que está versionado. Os controles são componentes do próprio Let's UI —
-`lui-tabs`, `lui-input`, `lui-native-select`, `lui-button` — de modo que o
-studio é o primeiro consumidor daquilo que edita.
+The left-hand panel builds its controls from the schema in `src/lib/schema.js`;
+the initial values are read from the reference brand's own files at build time,
+so the interface never drifts out of sync with what is versioned. The controls
+are Let's UI components themselves — `lui-tabs`, `lui-input`,
+`lui-native-select`, `lui-button` — which makes the studio the first consumer of
+what it edits.
 
-O preview da direita é um `<iframe>` isolado. A cada edição o studio escreve as
-custom properties `--lui-brand-*` no `:root` daquele documento; como os tokens
-semânticos são `var()` apontando para os tokens de marca, todos os componentes
-reagem na hora. O isolamento é o que permite editar a marca sem que a própria
-interface de edição mude junto.
+The preview on the right is an isolated `<iframe>`. On every edit the studio
+writes the `--lui-brand-*` custom properties onto that document's `:root`; since
+the semantic tokens are `var()`s pointing at the brand tokens, every component
+reacts immediately. That isolation is what lets you edit the brand without the
+editing interface changing along with it.
 
-Alterações ficam em `localStorage`, e o indicador no rodapé mostra quantos
-tokens divergem do padrão.
+Changes are kept in `localStorage`, and the indicator in the footer shows how
+many tokens diverge from the defaults.
 
-O painel colapsa pela barra superior, deixando o preview ocupar a tela inteira.
-O seletor de largura ao lado do tema não é uma lista fixa: ele é montado a
-partir dos breakpoints da marca, então editar `sm` muda a largura que o preview
-passa a simular — e a seleção acompanha o breakpoint, não o número.
+**Identifier** follows **Brand name** — "Material Design" becomes
+`material-design` — until you edit it by hand, at which point it stops being
+overwritten. Clearing the field makes it follow the name again.
 
-Com a aba **Grid** aberta, uma régua de colunas aparece sobre o preview, com a
-contagem de colunas, o gutter e a margem do breakpoint ativo. Breakpoints são
-validados como estritamente crescentes: um `sm` menor ou igual ao `1xs`
-produziria media queries que nunca casam, então o campo recusa o valor e explica
-o limite em vez de aplicar.
+### The preview
 
-### Tokens resolvidos no build
+The preview bar switches between two scenes:
 
-Breakpoints e contagem de colunas viram literais no CSS compilado — uma media
-query não aceita `var()`. O preview reproduz esse comportamento em JavaScript,
-lendo os tokens para decidir o breakpoint ativo, mas as media queries reais dos
-componentes só mudam depois de um novo `pnpm build`.
+| Scene       | What it is for                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------------------------- |
+| **Landing** | The brand in a real composition, laid out on the brand's own grid, with the whole type scale in use      |
+| **Tokens**  | A specimen sheet: color ramps with hex values, the type scale, the radii and the column ruler           |
 
-## Publicando uma marca
+The panel collapses from its own header, letting the preview take the whole
+screen; the button to bring it back sits at the start of the preview bar. The
+width selector is not a fixed list: it is built from the brand's breakpoints, so
+editing `sm` changes the width the preview then simulates — and the selection
+follows the breakpoint, not the number.
 
-1. **Exportar tokens** baixa os três arquivos DTCG já no formato do repositório.
-2. Salve-os em `packages/lets-ui-tokens/tokens/brand/<identificador>/`.
-3. Registre a marca em `packages/lets-ui-tokens/letsui.resolver.json` — o studio
-   mostra o trecho pronto em "Como registrar a marca".
-4. Adicione as permutações da nova marca em
-   `packages/lets-ui-tokens/terrazzo.config.js`, espelhando as de `lets-ui`.
-5. Rode `pnpm build` na raiz e aplique `data-brand="<identificador>"` na página.
+With the **Grid** tab open, a column ruler appears over the preview along with
+the column count, gutter and margin of the active breakpoint. The landing scene
+is laid out on those same columns, so content edges land on real column lines.
+Breakpoints are validated as strictly ascending: an `sm` at or below `1xs` would
+produce media queries that never match, so the field refuses the value and
+explains the limit instead of applying it.
 
-O export é uma substituição de valores sobre o arquivo original: `$type`,
-`description` e a ordem das chaves são preservados, e tokens que a interface
-ainda não expõe atravessam intactos.
+### Randomize brand
 
-## Estrutura
+**Randomize brand** draws a complete brand at once. It does not roll each token
+independently — that produces junk, not a brand. What gets rolled are the
+parameters each scale is born from (a hue, a modular ratio, a base radius, a set
+of column counts), and the scales are derived from them by the same rules the
+reference brand follows. The type scale stays a geometric progression, the
+breakpoints stay ascending, the gutter keeps fitting inside the margin. The
+brand name and identifier stay untouched. See `src/lib/random.js`.
 
-| Arquivo                | Papel                                                      |
-| ---------------------- | ---------------------------------------------------------- |
-| `src/lib/schema.js`    | Quais tokens são editáveis e com que controle              |
-| `src/lib/state.js`     | Estado da marca, persistência, import e export             |
-| `src/lib/dtcg.js`      | Leitura e escrita do formato DTCG                          |
-| `src/lib/color.js`     | Conversões de cor, geração de escala e contraste WCAG      |
-| `src/lib/clamp.js`     | Escala tipográfica fluida (`clamp()`)                      |
-| `src/lib/studio.js`    | Montagem da interface e aplicação no preview               |
-| `src/pages/index.astro`| Shell do studio                                            |
-| `src/pages/preview.astro`| Galeria de componentes renderizada no iframe             |
+### Tokens resolved at build time
+
+Breakpoints and column counts become literals in the compiled CSS — a media
+query cannot take `var()`. The preview reproduces that behavior in JavaScript,
+reading the tokens to decide the active breakpoint, but the components' real
+media queries only change after a fresh `pnpm build`.
+
+## Publishing a brand
+
+1. **Export tokens** downloads the three DTCG files already in the repository's
+   format.
+2. Save them under `packages/lets-ui-tokens/tokens/brand/<identifier>/`.
+3. Register the brand in `packages/lets-ui-tokens/letsui.resolver.json` — the
+   studio shows the ready-made fragment under "How to register the brand".
+4. Add the new brand's permutations to
+   `packages/lets-ui-tokens/terrazzo.config.js`, mirroring those of `lets-ui`.
+5. Run `pnpm build` at the root and set `data-brand="<identifier>"` on the page.
+
+The export is a value substitution over the original file: `$type`,
+`description` and key order are preserved, and tokens the interface does not
+expose yet pass through intact.
+
+## Structure
+
+| File                      | Role                                                     |
+| ------------------------- | -------------------------------------------------------- |
+| `src/lib/schema.js`       | Which tokens are editable and with which control          |
+| `src/lib/state.js`        | Brand state, persistence, import and export               |
+| `src/lib/dtcg.js`         | Reading and writing the DTCG format                       |
+| `src/lib/color.js`        | Color conversions, ramp generation and WCAG contrast     |
+| `src/lib/clamp.js`        | The fluid type scale (`clamp()`)                          |
+| `src/lib/random.js`       | Drawing a complete, coherent brand                        |
+| `src/lib/studio.js`       | Building the interface and applying it to the preview     |
+| `src/pages/index.astro`   | The studio shell                                          |
+| `src/pages/preview.astro` | The scenes rendered inside the iframe                     |

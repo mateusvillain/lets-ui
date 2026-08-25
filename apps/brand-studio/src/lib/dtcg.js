@@ -1,13 +1,13 @@
 /**
- * Leitura e escrita dos arquivos de token no formato DTCG usado pelo Let's UI.
+ * Reading and writing the token files in the DTCG format used by Let's UI.
  *
- * O studio nunca reconstrói um arquivo do zero: ele clona o arquivo original da
- * marca e substitui apenas os `$value`. Assim `$type`, `description`, ordem das
- * chaves e qualquer token que a interface ainda não exponha sobrevivem ao
- * export intactos.
+ * The studio never rebuilds a file from scratch: it clones the brand's original
+ * file and replaces only the `$value`s. That way `$type`, `description`, key
+ * order and any token the interface does not expose yet survive the export
+ * intact.
  */
 
-/** Percorre a árvore DTCG e devolve um mapa `caminho -> { value, type }`. */
+/** Walks the DTCG tree and returns a `path -> { value, type }` map. */
 export function flatten(node, prefix = '', inheritedType = null, out = {}) {
   const type = node.$type ?? inheritedType;
 
@@ -27,14 +27,14 @@ export function flatten(node, prefix = '', inheritedType = null, out = {}) {
   return out;
 }
 
-/** Lê o `$value` de um caminho pontuado dentro da árvore DTCG. */
+/** Reads the `$value` at a dotted path inside the DTCG tree. */
 export function getToken(tree, path) {
   return path.split('.').reduce((node, key) => node?.[key], tree);
 }
 
 /**
- * Clona a árvore e aplica os valores do mapa `caminho -> value`.
- * Caminhos ausentes na árvore são ignorados — nunca criamos tokens novos.
+ * Clones the tree and applies the values from a `path -> value` map.
+ * Paths missing from the tree are ignored — we never create new tokens.
  */
 export function applyValues(tree, values) {
   const clone = structuredClone(tree);
@@ -53,11 +53,11 @@ export function cssVarName(path) {
 }
 
 /**
- * Alias DTCG (`{lui.spacing.fixed.40}`) -> `var(--lui-spacing-fixed-40)`.
+ * DTCG alias (`{lui.spacing.fixed.40}`) -> `var(--lui-spacing-fixed-40)`.
  *
- * Os pesos de fonte são a única exceção: o Terrazzo emite `lui.typography.weight.*`
- * também como `--lui-typography-weight-*`, que é o nome referenciado pelo CSS
- * compilado — mantemos esse nome para bater com o build.
+ * Font weights are the only exception: Terrazzo also emits
+ * `lui.typography.weight.*` as `--lui-typography-weight-*`, which is the name
+ * the compiled CSS references — we keep that name to match the build.
  */
 export function aliasToVar(alias) {
   const path = alias.slice(1, -1);

@@ -1,9 +1,9 @@
 /**
- * Conversões de cor e geração de escalas.
+ * Color conversions and ramp generation.
  *
- * Os tokens de cor do Let's UI são objetos DTCG `srgb` com `components`
- * normalizados (0–1) e um `hex` de conveniência. A interface trabalha em hex e
- * converte nas bordas.
+ * Let's UI color tokens are DTCG `srgb` objects with normalized `components`
+ * (0–1) and a convenience `hex`. The interface works in hex and converts at the
+ * edges.
  */
 
 export function hexToComponents(hex) {
@@ -23,7 +23,7 @@ export function componentsToHex([r, g, b]) {
   return `#${channel(r)}${channel(g)}${channel(b)}`;
 }
 
-/** Aceita `#abc`, `abc`, `#aabbcc` e devolve sempre `#aabbcc`. */
+/** Accepts `#abc`, `abc`, `#aabbcc` and always returns `#aabbcc`. */
 export function normalizeHex(input) {
   let hex = String(input).trim().replace(/^#/, '');
   if (hex.length === 3) hex = hex.replace(/./g, (c) => c + c);
@@ -36,7 +36,7 @@ export function isValidHex(input) {
   return /^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex);
 }
 
-/** Valor DTCG de cor a partir de um hex. */
+/** DTCG color value from a hex string. */
 export function hexToTokenValue(hex) {
   const value = normalizeHex(hex);
   return {
@@ -47,7 +47,7 @@ export function hexToTokenValue(hex) {
   };
 }
 
-/** Hex a partir de um valor DTCG de cor (usa `hex` quando presente). */
+/** Hex from a DTCG color value (uses `hex` when present). */
 export function tokenValueToHex(value) {
   if (typeof value === 'string') return normalizeHex(value);
   if (value?.hex) return normalizeHex(value.hex);
@@ -91,10 +91,11 @@ export function hslToHex({ h, s, l }) {
 }
 
 /**
- * Curvas extraídas da marca de referência (`lets-ui`): luminosidade alvo de
- * cada degrau e o multiplicador de saturação relativo ao degrau 5, que é onde
- * a cor base é ancorada. Gerar por curva — em vez de clarear/escurecer
- * linearmente — mantém a nova marca com o mesmo ritmo de contraste da original.
+ * Curves extracted from the reference brand (`lets-ui`): the target lightness
+ * of each step and the saturation multiplier relative to step 5, where the base
+ * color is anchored. Generating from a curve — rather than lightening and
+ * darkening linearly — keeps the new brand on the same contrast rhythm as the
+ * original.
  */
 const RAMPS = {
   primary: {
@@ -120,9 +121,10 @@ const RAMPS = {
 };
 
 /**
- * Gera os 8 degraus de uma família a partir de uma cor base.
- * Em `secondary` a base entra apenas como matiz: a saturação é fixada no nível
- * neutro da escala de referência para não colorir demais superfícies e textos.
+ * Generates the 8 steps of a family from a base color.
+ * In `secondary` the base contributes hue only: saturation is pinned to the
+ * neutral level of the reference scale so surfaces and text are not overly
+ * tinted.
  */
 export function generateRamp(baseHex, family, theme) {
   const curve = RAMPS[family][theme];
@@ -138,7 +140,7 @@ export function generateRamp(baseHex, family, theme) {
   );
 }
 
-/** Luminância relativa (WCAG 2.1). */
+/** Relative luminance (WCAG 2.1). */
 export function luminance(hex) {
   const [r, g, b] = hexToComponents(hex).map((c) =>
     c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
@@ -146,7 +148,7 @@ export function luminance(hex) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-/** Razão de contraste WCAG entre duas cores. */
+/** WCAG contrast ratio between two colors. */
 export function contrastRatio(a, b) {
   const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x);
   return (light + 0.05) / (dark + 0.05);

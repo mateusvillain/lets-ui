@@ -1,23 +1,25 @@
 ---
 /**
- * Página renderizada dentro do iframe do studio.
+ * The page rendered inside the studio's iframe.
  *
- * Vive isolada de propósito: o studio sobrescreve as custom properties
- * `--lui-brand-*` no `:root` deste documento, e como os tokens semânticos são
- * `var()` para os tokens de marca, tudo aqui reage — sem contaminar a interface
- * de edição, que roda com a marca padrão no documento de fora.
+ * It lives in isolation on purpose: the studio overwrites the `--lui-brand-*`
+ * custom properties on this document's `:root`, and because the semantic tokens
+ * are `var()`s pointing at the brand tokens, everything here reacts — without
+ * contaminating the editing interface, which runs the default brand in the
+ * outer document.
  *
- * O corpo são duas cenas mutuamente exclusivas, trocadas pelo `data-scene` do
- * `:root` — o mesmo canal por onde já entram tema e overlay de grid:
+ * The body is two mutually exclusive scenes, switched by the `:root`'s
+ * `data-scene` — the same channel theme and grid overlay already come through:
  *
- *   landing  página de marketing: a marca em composição real, sobre a grade da
- *            própria marca, com a escala tipográfica inteira em uso.
- *   tokens   folha de espécime: as rampas de cor com hex, os raios e a régua de
- *            colunas, para leitura direta de valor quando a composição não
- *            responde a pergunta.
+ *   landing  marketing page: the brand in a real composition, on the brand's
+ *            own grid, with the entire type scale in use.
+ *   tokens   specimen sheet: the color ramps with their hex values, the radii
+ *            and the column ruler, for reading a value directly when the
+ *            composition does not answer the question.
  *
- * As duas ficam no DOM o tempo todo — o CSS só mostra a ativa — porque a régua
- * de grid e os rótulos de hex são atualizados por consulta ao documento inteiro.
+ * Both stay in the DOM at all times — CSS only shows the active one — because
+ * the grid ruler and the hex labels are refreshed by querying the whole
+ * document.
  */
 import '@lets-ui/tokens';
 import '@lets-ui/styles';
@@ -35,7 +37,7 @@ const HEADINGS = [
   ['overtitle', 'Overtitle'],
 ];
 
-/* Ícones do próprio design system, usados como conteúdo da landing. */
+/* Icons from the design system itself, used as landing content. */
 const ICONS = {
   grid: 'M5.625 17.25C6.24632 17.25 6.75 17.7537 6.75 18.375C6.75 18.9963 6.24632 19.5 5.625 19.5C5.00368 19.5 4.5 18.9963 4.5 18.375C4.5 17.7537 5.00368 17.25 5.625 17.25ZM12 17.25C12.6213 17.25 13.125 17.7537 13.125 18.375C13.125 18.9963 12.6213 19.5 12 19.5C11.3787 19.5 10.875 18.9963 10.875 18.375C10.875 17.7537 11.3787 17.25 12 17.25ZM18.375 17.25C18.9963 17.25 19.5 17.7537 19.5 18.375C19.5 18.9963 18.9963 19.5 18.375 19.5C17.7537 19.5 17.25 18.9963 17.25 18.375C17.25 17.7537 17.7537 17.25 18.375 17.25ZM5.625 10.875C6.24632 10.875 6.75 11.3787 6.75 12C6.75 12.6213 6.24632 13.125 5.625 13.125C5.00368 13.125 4.5 12.6213 4.5 12C4.5 11.3787 5.00368 10.875 5.625 10.875ZM12 10.875C12.6213 10.875 13.125 11.3787 13.125 12C13.125 12.6213 12.6213 13.125 12 13.125C11.3787 13.125 10.875 12.6213 10.875 12C10.875 11.3787 11.3787 10.875 12 10.875ZM18.375 10.875C18.9963 10.875 19.5 11.3787 19.5 12C19.5 12.6213 18.9963 13.125 18.375 13.125C17.7537 13.125 17.25 12.6213 17.25 12C17.25 11.3787 17.7537 10.875 18.375 10.875ZM5.625 4.5C6.24632 4.5 6.75 5.00368 6.75 5.625C6.75 6.24632 6.24632 6.75 5.625 6.75C5.00368 6.75 4.5 6.24632 4.5 5.625C4.5 5.00368 5.00368 4.5 5.625 4.5ZM12 4.5C12.6213 4.5 13.125 5.00368 13.125 5.625C13.125 6.24632 12.6213 6.75 12 6.75C11.3787 6.75 10.875 6.24632 10.875 5.625C10.875 5.00368 11.3787 4.5 12 4.5ZM18.375 4.5C18.9963 4.5 19.5 5.00368 19.5 5.625C19.5 6.24632 18.9963 6.75 18.375 6.75C17.7537 6.75 17.25 6.24632 17.25 5.625C17.25 5.00368 17.7537 4.5 18.375 4.5Z',
   check:
@@ -43,77 +45,77 @@ const ICONS = {
   info: 'M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3ZM12 4.5C7.85786 4.5 4.5 7.85786 4.5 12C4.5 16.1421 7.85786 19.5 12 19.5C16.1421 19.5 19.5 16.1421 19.5 12C19.5 7.85786 16.1421 4.5 12 4.5ZM12.75 15H13.5C13.9142 15 14.25 15.3358 14.25 15.75C14.25 16.1642 13.9142 16.5 13.5 16.5H10.5C10.0858 16.5 9.75 16.1642 9.75 15.75C9.75 15.3358 10.0858 15 10.5 15H11.25V12H10.5C10.0858 12 9.75 11.6642 9.75 11.25C9.75 10.8358 10.0858 10.5 10.5 10.5H12.75V15ZM11.8125 7.5C12.3303 7.5 12.75 7.91973 12.75 8.4375C12.75 8.95527 12.3303 9.375 11.8125 9.375C11.2947 9.375 10.875 8.95527 10.875 8.4375C10.875 7.91973 11.2947 7.5 11.8125 7.5Z',
 };
 
-const NAV_LINKS = ['Produto', 'Preços', 'Documentação', 'Changelog'];
+const NAV_LINKS = ['Product', 'Pricing', 'Documentation', 'Changelog'];
 
 const FEATURES = [
   {
     icon: ICONS.grid,
-    title: 'Tokens em DTCG',
-    body: 'Cor, tipografia, espaçamento e grade em arquivos versionados, compilados para CSS e SCSS.',
+    title: 'Tokens in DTCG',
+    body: 'Color, typography, spacing and grid in versioned files, compiled to CSS and SCSS.',
   },
   {
     icon: ICONS.check,
-    title: 'Contraste verificado',
-    body: 'Cada par de texto e fundo é medido contra a WCAG antes de a marca ir para produção.',
+    title: 'Contrast, verified',
+    body: 'Every text and background pair is measured against WCAG before the brand ships.',
   },
   {
     icon: ICONS.info,
-    title: 'Claro e escuro por padrão',
-    body: 'Um mesmo conjunto de papéis semânticos resolve nos dois temas sem componente duplicado.',
+    title: 'Light and dark by default',
+    body: 'One set of semantic roles resolves in both themes with no duplicated component.',
   },
 ];
 
 const METRICS = [
-  ['312', 'tokens publicados'],
-  ['44', 'componentes'],
-  ['2', 'temas por marca'],
-  ['0', 'valores fixos no CSS'],
+  ['312', 'published tokens'],
+  ['44', 'components'],
+  ['2', 'themes per brand'],
+  ['0', 'hardcoded values in CSS'],
 ];
 
 const PLANS = [
   {
     name: 'Individual',
-    price: 'R$ 0',
-    note: 'para sempre',
+    price: '$0',
+    note: 'forever',
     featured: false,
-    items: ['1 marca', 'Tema claro e escuro', 'Exportação DTCG'],
-    action: 'Começar',
+    items: ['1 brand', 'Light and dark themes', 'DTCG export'],
+    action: 'Get started',
     variant: 'secondary',
   },
   {
-    name: 'Time',
-    price: 'R$ 89',
-    note: 'por editor / mês',
+    name: 'Team',
+    price: '$19',
+    note: 'per editor / month',
     featured: true,
     items: [
-      'Marcas ilimitadas',
-      'Revisão de contraste',
-      'Histórico de publicação',
-      'Integração com o repositório',
+      'Unlimited brands',
+      'Contrast review',
+      'Publishing history',
+      'Repository integration',
     ],
-    action: 'Testar 14 dias',
+    action: 'Try 14 days free',
     variant: 'primary',
   },
   {
-    name: 'Organização',
-    price: 'Sob consulta',
-    note: 'faturamento anual',
+    name: 'Organization',
+    price: 'Talk to us',
+    note: 'billed annually',
     featured: false,
-    items: ['SSO e auditoria', 'Ambientes isolados', 'Suporte dedicado'],
-    action: 'Falar com vendas',
+    items: ['SSO and audit logs', 'Isolated environments', 'Dedicated support'],
+    action: 'Contact sales',
     variant: 'secondary',
   },
 ];
 
 const FOOTER = [
-  ['Produto', ['Visão geral', 'Preços', 'Changelog', 'Status']],
-  ['Recursos', ['Documentação', 'Guia de marca', 'Exemplos', 'API']],
-  ['Empresa', ['Sobre', 'Blog', 'Carreiras', 'Contato']],
+  ['Product', ['Overview', 'Pricing', 'Changelog', 'Status']],
+  ['Resources', ['Documentation', 'Brand guide', 'Examples', 'API']],
+  ['Company', ['About', 'Blog', 'Careers', 'Contact']],
 ];
 ---
 
 <!doctype html>
-<html lang="pt-BR" data-brand="lets-ui" data-theme="light" data-scene="landing">
+<html lang="en" data-brand="lets-ui" data-theme="light" data-scene="landing">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -121,16 +123,16 @@ const FOOTER = [
   </head>
   <body>
     <!--
-      Régua de colunas sobre o conteúdo: o studio a liga enquanto a aba Grid
-      está aberta, para que colunas, gutter e margem sejam avaliados sobre a
-      página real e não sobre um exemplo isolado.
+      Column ruler over the content: the studio turns it on while the Grid tab
+      is open, so columns, gutter and margin are judged against the real page
+      rather than an isolated example.
     -->
     <div class="pv-overlay" aria-hidden="true">
       <div class="pv-overlay__grid" data-overlay></div>
       <p class="pv-overlay__readout" data-grid-note></p>
     </div>
 
-    <!-- ══ Cena: landing ═══════════════════════════════════════ -->
+    <!-- ══ Scene: landing ══════════════════════════════════════ -->
     <div class="pv-scene" data-scene="landing">
       <header class="pv-topbar">
         <div class="pv-topbar__inner">
@@ -139,34 +141,34 @@ const FOOTER = [
             <span class="pv-brandmark__name" data-brand-label>Let's UI</span>
           </a>
 
-          <nav class="pv-topbar__links" aria-label="Principal">
+          <nav class="pv-topbar__links" aria-label="Main">
             {NAV_LINKS.map((label) => <lui-link label={label} href="#" size="sm" />)}
           </nav>
 
           <div class="pv-topbar__actions">
-            <lui-button label="Entrar" variant="ghost" size="md"></lui-button>
-            <lui-button label="Criar conta" size="md"></lui-button>
+            <lui-button label="Sign in" variant="ghost" size="md"></lui-button>
+            <lui-button label="Sign up" size="md"></lui-button>
           </div>
         </div>
       </header>
 
       <section class="pv-hero pv-cols pv-cols--2">
         <div class="pv-hero__copy">
-          <lui-tag label="Novo · exportação DTCG" variant="primary" tag-style="container" size="sm"></lui-tag>
-          <lui-heading variant="display" as="h1" label="A sua marca, do token ao produto" />
+          <lui-tag label="New · DTCG export" variant="primary" tag-style="container" size="sm"></lui-tag>
+          <lui-heading variant="display" as="h1" label="Your brand, from token to product" />
           <lui-body
             variant="lg"
-            label="Defina cor, tipografia e forma uma única vez. Cada componente do sistema resolve a partir daí — em qualquer marca, em qualquer tema."
+            label="Define color, typography and shape once. Every component in the system resolves from there — in any brand, in any theme."
           />
           <div class="pv-hero__actions">
-            <lui-button label="Começar agora" size="lg"></lui-button>
-            <lui-button label="Ver documentação" variant="secondary" size="lg"></lui-button>
+            <lui-button label="Start now" size="lg"></lui-button>
+            <lui-button label="Read the docs" variant="secondary" size="lg"></lui-button>
           </div>
-          <lui-body variant="sm" color="caption" label="Sem cartão de crédito · Cancele quando quiser" />
+          <lui-body variant="sm" color="caption" label="No credit card · Cancel any time" />
         </div>
 
-        <!-- Maquete de produto: o fill primário em superfície grande é onde a
-             troca de marca aparece primeiro. -->
+        <!-- Product mock-up: the primary fill on a large surface is where a
+             brand swap shows up first. -->
         <div class="pv-mock" aria-hidden="true">
           <div class="pv-mock__bar">
             <span class="pv-mock__dot"></span>
@@ -209,12 +211,12 @@ const FOOTER = [
 
       <section class="pv-block">
         <header class="pv-block__head">
-          <lui-heading variant="overtitle" as="p" label="Por que tokens" />
-          <lui-heading variant="title" as="h2" label="Um sistema que não depende de disciplina" />
+          <lui-heading variant="overtitle" as="p" label="Why tokens" />
+          <lui-heading variant="title" as="h2" label="A system that does not rely on discipline" />
           <lui-body
             variant="md"
             color="caption"
-            label="Nada aqui está fixo no CSS do componente: trocar a marca é trocar os arquivos de token."
+            label="Nothing here is hardcoded in the component CSS: swapping the brand is swapping the token files."
           />
         </header>
 
@@ -228,7 +230,7 @@ const FOOTER = [
                   </span>
                   <lui-heading variant="block-title" as="h3" label={feature.title} />
                   <lui-body variant="sm" color="caption" label={feature.body} />
-                  <lui-link label="Saber mais" href="#" size="sm" />
+                  <lui-link label="Learn more" href="#" size="sm" />
                 </div>
               </lui-card>
             ))
@@ -238,8 +240,8 @@ const FOOTER = [
 
       <section class="pv-block">
         <header class="pv-block__head">
-          <lui-heading variant="overtitle" as="p" label="Planos" />
-          <lui-heading variant="title" as="h2" label="Comece de graça, cresça quando precisar" />
+          <lui-heading variant="overtitle" as="p" label="Pricing" />
+          <lui-heading variant="title" as="h2" label="Start free, grow when you need to" />
         </header>
 
         <div class="pv-cards pv-cols pv-cols--3">
@@ -250,7 +252,7 @@ const FOOTER = [
                   <div class="pv-plan__body">
                     <div class="pv-plan__head">
                       <lui-heading variant="block-title" as="h3" label={plan.name} />
-                      {plan.featured && <lui-tag label="Mais escolhido" variant="primary" size="sm" />}
+                      {plan.featured && <lui-tag label="Most popular" variant="primary" size="sm" />}
                     </div>
 
                     <p class="pv-plan__price">
@@ -284,11 +286,11 @@ const FOOTER = [
       <section class="pv-cta">
         <div class="pv-cta__inner pv-cols pv-cols--2">
           <div class="pv-cta__copy">
-            <lui-heading variant="subtitle" as="h2" label="Publique a primeira marca hoje" color="inverse" />
+            <lui-heading variant="subtitle" as="h2" label="Publish your first brand today" color="inverse" />
             <lui-body
               variant="md"
               color="inverse"
-              label="Sem cartão de crédito. Exporte os arquivos e versione junto com o código."
+              label="No credit card. Export the files and version them alongside your code."
             />
           </div>
           <form class="pv-cta__form" onsubmit="return false">
@@ -296,10 +298,10 @@ const FOOTER = [
               size="lg"
               name="email"
               type="email"
-              aria-label="E-mail de trabalho"
-              placeholder="voce@empresa.com"
+              aria-label="Work email"
+              placeholder="you@company.com"
             ></lui-input>
-            <lui-button label="Criar conta" size="lg" variant="neutral"></lui-button>
+            <lui-button label="Sign up" size="lg" variant="neutral"></lui-button>
           </form>
         </div>
       </section>
@@ -308,7 +310,7 @@ const FOOTER = [
         <div class="pv-footer__inner pv-cols pv-cols--4">
           <div class="pv-footer__brand">
             <span class="pv-brandmark__mark" aria-hidden="true"></span>
-            <lui-body variant="sm" color="caption" label="Design system multimarca, aberto e sem framework." />
+            <lui-body variant="sm" color="caption" label="A multi-brand design system: open source and framework-agnostic." />
           </div>
 
           {
@@ -324,17 +326,17 @@ const FOOTER = [
         <lui-divider />
 
         <p class="pv-footer__legal">
-          <span data-brand-label>Let's UI</span> © 2026 · Todos os direitos reservados
+          <span data-brand-label>Let's UI</span> © 2026 · All rights reserved
         </p>
       </footer>
     </div>
 
-    <!-- ══ Cena: tokens ════════════════════════════════════════ -->
+    <!-- ══ Scene: tokens ═══════════════════════════════════════ -->
     <div class="pv-scene" data-scene="tokens">
       <main class="pv-main">
-        <!-- ── Escalas de cor ───────────────────────────────────── -->
+        <!-- ── Color ramps ─────────────────────────────────────── -->
         <section class="pv-section" id="section-color">
-          <h2 class="pv-section__title">Escalas de cor</h2>
+          <h2 class="pv-section__title">Color ramps</h2>
           {
             FAMILIES.map((family) => (
               <div class="pv-ramp">
@@ -356,26 +358,26 @@ const FOOTER = [
           }
         </section>
 
-        <!-- ── Tipografia ───────────────────────────────────────── -->
+        <!-- ── Typography ───────────────────────────────────────── -->
         <section class="pv-section" id="section-typography">
-          <h2 class="pv-section__title">Tipografia</h2>
+          <h2 class="pv-section__title">Typography</h2>
           <div class="pv-col">
             {
               HEADINGS.map(([variant, label]) => (
-                <lui-heading variant={variant} label={`${label} — Uma marca, um sistema`} />
+                <lui-heading variant={variant} label={`${label} — One brand, one system`} />
               ))
             }
             <lui-body
               variant="md"
-              label="Corpo de texto — a escala é fluida: cada degrau interpola entre um mínimo e um máximo conforme a largura da viewport."
+              label="Body copy — the scale is fluid: every step interpolates between a minimum and a maximum as the viewport width changes."
             ></lui-body>
-            <lui-body variant="sm" color="caption" label="Legenda — texto de apoio em escala menor."></lui-body>
+            <lui-body variant="sm" color="caption" label="Caption — supporting text at a smaller step."></lui-body>
           </div>
         </section>
 
-        <!-- ── Forma ────────────────────────────────────────────── -->
+        <!-- ── Shape ────────────────────────────────────────────── -->
         <section class="pv-section" id="section-shape">
-          <h2 class="pv-section__title">Raio de borda</h2>
+          <h2 class="pv-section__title">Border radius</h2>
           <div class="pv-row">
             {
               RADII.map((size) => (
@@ -395,7 +397,7 @@ const FOOTER = [
         <section class="pv-section" id="section-grid">
           <h2 class="pv-section__title">Grid</h2>
           <p class="pv-note">
-            Colunas, gutter e margem seguem o breakpoint ativo para a largura do preview.
+            Columns, gutter and margin follow the active breakpoint for the preview width.
           </p>
           <div class="pv-grid" data-grid></div>
         </section>
@@ -406,9 +408,10 @@ const FOOTER = [
       import '@lets-ui/components';
 
       /**
-       * Os chips de cor mostram o hex resolvido. Como o valor vem de uma custom
-       * property sobrescrita pelo studio, ele é lido do estilo computado a cada
-       * atualização — o studio dispara `lui-brand-update` depois de aplicar.
+       * The color chips show the resolved hex. Since the value comes from a
+       * custom property the studio overwrites, it is read from the computed
+       * style on every update — the studio fires `lui-brand-update` after
+       * applying.
        */
       function refreshSwatchLabels() {
         const styles = getComputedStyle(document.documentElement);
@@ -441,9 +444,10 @@ const FOOTER = [
       }
 
       /**
-       * O nome da marca em edição chega pelo `data-brand-name` do `:root` e
-       * preenche a marca-d'água da landing — é o que faz a composição parecer o
-       * produto de quem está editando, e não um exemplo genérico.
+       * The name of the brand being edited arrives through the `:root`'s
+       * `data-brand-name` and fills the landing's wordmark — that is what makes
+       * the composition look like the editor's own product rather than a
+       * generic example.
        */
       function refreshBrandLabel() {
         const name = document.documentElement.dataset.brandName;
@@ -454,13 +458,13 @@ const FOOTER = [
         }
       }
 
-      /** Breakpoints do maior para o menor: o primeiro que couber é o ativo. */
+      /** Breakpoints largest to smallest: the first one that fits is active. */
       const BREAKPOINTS = ['1xl', 'lg', 'md', 'sm', '1xs'];
 
       /**
-       * Reparte `columns` entre `parts` faixas: o resto vai para as primeiras,
-       * de modo que a soma seja sempre o total de colunas — é isso que faz a
-       * última coluna de uma linha terminar exatamente na margem.
+       * Splits `columns` across `parts` slots: the remainder goes to the first
+       * ones, so the sum is always the full column count — that is what makes
+       * the last item in a row end exactly on the margin.
        */
       function distribute(columns, parts) {
         const base = Math.floor(columns / parts);
@@ -469,10 +473,10 @@ const FOOTER = [
       }
 
       /**
-       * Quantos itens cabem por linha antes de cada um ficar estreito demais.
-       * Três colunas é o piso: abaixo disso o card deixa de comportar texto e a
-       * composição vira tira. Com 12 colunas cabem os três cards; com 8, dois;
-       * com 4, um.
+       * How many items fit per row before each one gets too narrow. Three
+       * columns is the floor: below that a card stops holding text and the
+       * composition turns into a strip. Twelve columns fit all three cards;
+       * eight fit two; four fit one.
        */
       const MIN_SPAN = 3;
 
@@ -485,20 +489,20 @@ const FOOTER = [
       }
 
       /**
-       * O grid é remontado em JS porque a quantidade de colunas é um token: uma
-       * media query não consegue ler `var()`, então o breakpoint ativo é
-       * resolvido aqui a partir dos próprios tokens da marca em edição — e as
-       * mesmas colunas alimentam a régua e a composição, que por isso não têm
-       * como sair de alinhamento uma com a outra.
+       * The grid is rebuilt in JS because the column count is a token: a media
+       * query cannot read `var()`, so the active breakpoint is resolved here
+       * from the edited brand's own tokens — and the same columns feed both the
+       * ruler and the composition, which is why the two cannot fall out of
+       * alignment with each other.
        */
       function refreshGrid() {
         const root = document.documentElement;
         const styles = getComputedStyle(root);
         const read = (name) => styles.getPropertyValue(name).trim();
 
-        // `innerWidth` inclui a barra de rolagem, como fazem as media queries —
-        // `clientWidth` a desconta e faria o preview trocar de breakpoint cedo
-        // demais.
+        // `innerWidth` includes the scrollbar, the way media queries do —
+        // `clientWidth` subtracts it and would make the preview switch
+        // breakpoints too early.
         const width = window.innerWidth;
         const active =
           BREAKPOINTS.find((step) => {
@@ -531,8 +535,8 @@ const FOOTER = [
         document.querySelector('[data-grid-note]').textContent =
           `Breakpoint ativo: ${active} · ${columns} colunas · gutter ${gap} · margem ${margin}`;
 
-        // A composição lê a grade daqui: colunas, gutter, margem e quantas
-        // colunas cada item ocupa em cada padrão de repetição.
+        // The composition reads the grid from here: columns, gutter, margin
+        // and how many columns each item spans in each repetition pattern.
         root.style.setProperty('--pv-columns', String(columns));
         root.style.setProperty('--pv-gap', gap);
         root.style.setProperty('--pv-margin', margin);
@@ -544,8 +548,8 @@ const FOOTER = [
         }
       }
 
-      /* Aberto fora do studio, o preview ainda escolhe a cena pela URL:
-         /preview?scene=tokens. */
+      /* Opened outside the studio, the preview still picks its scene from the
+         URL: /preview?scene=tokens. */
       const SCENES = ['landing', 'tokens'];
       const requested = new URLSearchParams(location.search).get('scene');
       if (SCENES.includes(requested)) document.documentElement.dataset.scene = requested;
@@ -576,9 +580,9 @@ const FOOTER = [
         line-height: var(--lui-brand-typography-line-height-body);
       }
 
-      /* ── Cenas ────────────────────────────────────────────────── */
+      /* ── Scenes ───────────────────────────────────────────────── */
 
-      /* As duas convivem no DOM; só a do `data-scene` do `:root` é exibida. */
+      /* Both live in the DOM; only the one named by `:root`'s `data-scene` shows. */
       .pv-scene {
         display: none;
       }
@@ -588,12 +592,12 @@ const FOOTER = [
         display: block;
       }
 
-      /* ── Grade da composição ──────────────────────────────────── */
+      /* ── The composition's grid ───────────────────────────────── */
 
-      /* Largura útil compartilhada por todas as faixas: container e margem são
-         os mesmos tokens que a régua de colunas usa, então as bordas do
-         conteúdo caem sobre a primeira e a última coluna. Os valores em JS são
-         a fonte; os literais aqui só valem até o primeiro `refreshGrid`. */
+      /* Usable width shared by every band: container and margin are the same
+         tokens the column ruler uses, so the content edges land on the first
+         and last column. The JS values are the source; the literals here only
+         hold until the first `refreshGrid`. */
       .pv-topbar__inner,
       .pv-hero,
       .pv-band__inner,
@@ -605,8 +609,8 @@ const FOOTER = [
         padding-inline: var(--pv-margin, var(--lui-brand-grid-margin-lg));
       }
 
-      /* Toda faixa em colunas usa a grade da marca: o gutter é o token, nunca
-         um espaçamento escolhido à parte. */
+      /* Every banded row uses the brand's grid: the gutter is the token, never
+         a spacing picked on the side. */
       .pv-cols {
         display: grid;
         grid-template-columns: repeat(var(--pv-columns, 12), minmax(0, 1fr));
@@ -650,7 +654,7 @@ const FOOTER = [
         grid-column: span var(--pv-4-4, 3);
       }
 
-      /* ── Marca ────────────────────────────────────────────────── */
+      /* ── Wordmark ─────────────────────────────────────────────── */
 
       .pv-brandmark {
         display: inline-flex;
@@ -673,7 +677,7 @@ const FOOTER = [
         font-weight: var(--lui-typography-weight-semibold);
       }
 
-      /* ── Landing: topo ────────────────────────────────────────── */
+      /* ── Landing: top bar ─────────────────────────────────────── */
 
       .pv-topbar {
         position: sticky;
@@ -724,7 +728,7 @@ const FOOTER = [
         margin-top: var(--lui-spacing-fluid-8);
       }
 
-      /* Maquete: só formas em tokens de cor e raio, sem texto para traduzir. */
+      /* Mock-up: shapes in color and radius tokens only, no text to read. */
       .pv-mock {
         border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
         border-radius: var(--lui-brand-border-radius-lg);
@@ -792,7 +796,7 @@ const FOOTER = [
         background: var(--lui-color-secondary-background-surface);
       }
 
-      /* ── Landing: números ─────────────────────────────────────── */
+      /* ── Landing: numbers ─────────────────────────────────────── */
 
       .pv-band {
         background: var(--lui-color-neutral-background-container);
@@ -816,10 +820,10 @@ const FOOTER = [
         color: var(--lui-color-neutral-text-caption);
       }
 
-      /* ── Landing: blocos ──────────────────────────────────────── */
+      /* ── Landing: blocks ──────────────────────────────────────── */
 
-      /* O bloco é a própria grade: o texto de abertura ocupa metade das colunas
-         e a fileira de cards ocupa todas. */
+      /* The block is the grid itself: the opening copy takes half the columns
+         and the row of cards takes all of them. */
       .pv-block {
         display: grid;
         grid-template-columns: repeat(var(--pv-columns, 12), minmax(0, 1fr));
@@ -861,17 +865,17 @@ const FOOTER = [
         height: 20px;
       }
 
-      /* ── Landing: planos ──────────────────────────────────────── */
+      /* ── Landing: pricing ─────────────────────────────────────── */
 
-      /* O plano em destaque ganha a borda da marca — é o pedaço da página que
-         mais depende de o primário funcionar contra a superfície. */
+      /* The featured plan gets the brand's border — it is the part of the page
+         that leans hardest on the primary working against the surface. */
       .pv-plan--featured {
         border-radius: var(--lui-brand-border-radius-lg);
         outline: var(--lui-border-width-2) solid var(--lui-color-primary-border-default);
       }
 
-      /* `block` no botão só estica o `<button>` dentro do host; quem precisa
-         ocupar a linha de ações é o próprio host. */
+      /* `block` on the button only stretches the `<button>` inside the host;
+         what needs to fill the actions row is the host itself. */
       .pv-plan lui-button[slot='actions'] {
         width: 100%;
       }
@@ -929,7 +933,7 @@ const FOOTER = [
         color: var(--lui-color-success-icon-default);
       }
 
-      /* ── Landing: chamada e rodapé ────────────────────────────── */
+      /* ── Landing: call to action and footer ───────────────────── */
 
       .pv-cta {
         background: var(--lui-color-primary-background-container);
@@ -981,8 +985,8 @@ const FOOTER = [
         color: var(--lui-color-neutral-text-caption);
       }
 
-      /* Já está dentro do `padding-inline` do rodapé: repetir a margem aqui
-         empurraria a linha para dentro do resto da faixa. */
+      /* It already sits inside the footer's `padding-inline`: repeating the
+         margin here would push the line inwards from the rest of the band. */
       .pv-footer__legal {
         margin: 0;
         padding-block: var(--lui-spacing-fixed-24) var(--lui-spacing-fluid-40);
@@ -990,7 +994,7 @@ const FOOTER = [
         color: var(--lui-color-neutral-text-caption);
       }
 
-      /* ── Cena de tokens ───────────────────────────────────────── */
+      /* ── Token scene ──────────────────────────────────────────── */
 
       .pv-main {
         display: flex;
@@ -1101,7 +1105,7 @@ const FOOTER = [
         display: grid;
       }
 
-      /* ── Régua de colunas ─────────────────────────────────────── */
+      /* ── Column ruler ─────────────────────────────────────────── */
 
       .pv-overlay {
         position: fixed;
@@ -1127,8 +1131,8 @@ const FOOTER = [
         opacity: 0.14;
       }
 
-      /* O resumo do breakpoint acompanha a régua: fora dela é ruído sobre a
-         composição. */
+      /* The breakpoint readout travels with the ruler: outside it, it is just
+         noise on top of the composition. */
       .pv-overlay__readout {
         position: absolute;
         left: 50%;
@@ -1149,8 +1153,8 @@ const FOOTER = [
         background: var(--lui-color-primary-background-container);
       }
 
-      /* A barra de navegação não cabe em telas estreitas: os links saem antes de
-         a linha quebrar. */
+      /* The nav bar does not fit on narrow screens: the links leave before the
+         row wraps. */
       @media (width <= 767px) {
         .pv-topbar__links {
           display: none;

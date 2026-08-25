@@ -1,18 +1,18 @@
 /**
- * Marca aleatória — uma marca inteira sorteada de uma vez.
+ * Random brand — a whole brand drawn in one go.
  *
- * O ponto não é sortear cada token de forma independente: um `font-size.md`
- * solto entre 0,5rem e 4rem não produz uma marca, produz lixo. O que se sorteia
- * aqui são os **parâmetros** de que cada escala nasce — um matiz, uma razão
- * modular, um raio base, um jogo de colunas — e as escalas são então derivadas
- * deles com as mesmas regras que a marca de referência usa. O resultado é
- * sempre inesperado e sempre coerente: a tipografia continua sendo uma
- * progressão geométrica, os breakpoints continuam crescentes, o gutter continua
- * cabendo dentro da margem.
+ * The point is not to roll each token independently: a `font-size.md` picked
+ * loose between 0.5rem and 4rem does not produce a brand, it produces junk.
+ * What gets rolled here are the **parameters** each scale is born from — a hue,
+ * a modular ratio, a base radius, a set of column counts — and the scales are
+ * then derived from them by the same rules the reference brand follows. The
+ * result is always unexpected and always coherent: the type scale stays a
+ * geometric progression, the breakpoints stay ascending, the gutter keeps
+ * fitting inside the margin.
  *
- * Os limites de cada sorteio são os mesmos declarados em `schema.js` para a
- * edição manual, então nada que sai daqui é um valor que o usuário não pudesse
- * ter digitado.
+ * Every draw is bounded by the same limits `schema.js` declares for manual
+ * editing, so nothing coming out of here is a value the user could not have
+ * typed themselves.
  */
 
 import { buildClamp } from './clamp.js';
@@ -24,15 +24,15 @@ const randomInt = (min, max) => Math.floor(random(min, max + 1));
 const pick = (list) => list[randomInt(0, list.length - 1)];
 const roundTo = (value, step) => Math.round(value / step) * step;
 
-/* ── Cor ──────────────────────────────────────────────────────── */
+/* ── Color ───────────────────────────────────────────────────── */
 
 /**
- * As duas famílias saem de um único matiz sorteado. `secondary` recebe um
- * desvio de matiz mas a curva de saturação dela já ancora num nível quase
- * neutro, então continua servindo de superfície e texto em vez de competir com
- * a primária. As duas rampas vêm de `generateRamp`, isto é, das mesmas curvas de
- * luminosidade da marca de referência — é isso que preserva o ritmo de
- * contraste entre os degraus, e com ele a legibilidade.
+ * Both families come out of a single rolled hue. `secondary` gets a hue offset,
+ * but its saturation curve already anchors at a near-neutral level, so it goes
+ * on serving as surface and text instead of competing with the primary. Both
+ * ramps come from `generateRamp` — that is, from the reference brand's own
+ * lightness curves — which is what preserves the contrast rhythm between steps,
+ * and with it the legibility.
  */
 function randomColors() {
   const hue = random(0, 360);
@@ -61,7 +61,7 @@ function randomColors() {
   );
 }
 
-/* ── Tipografia ───────────────────────────────────────────────── */
+/* ── Typography ───────────────────────────────────────────────── */
 
 const FONT_SIZE_STEPS = [
   '3xs',
@@ -75,21 +75,21 @@ const FONT_SIZE_STEPS = [
   '3xl',
 ];
 
-/** `1xs` é o degrau de corpo de texto: a escala cresce e decresce a partir dele. */
+/** `1xs` is the body-copy step: the scale grows and shrinks out from it. */
 const BODY_STEP = FONT_SIZE_STEPS.indexOf('1xs');
 
 /**
- * Uma razão modular por extremidade: a do mínimo é mais fechada que a do
- * máximo, que é o que faz a escala abrir conforme a viewport cresce em vez de
- * apenas escalar junto. O último degrau ganha um salto extra porque `3xl` é
- * tamanho de display, não a continuação natural da progressão.
+ * One modular ratio per end: the minimum's is tighter than the maximum's, which
+ * is what makes the scale open up as the viewport grows instead of merely
+ * scaling with it. The last step gets an extra jump because `3xl` is display
+ * size, not the natural continuation of the progression.
  *
- * A distância entre mínimo e máximo do corpo não é livre: como o máximo cresce
- * mais rápido que o mínimo, ele também **encolhe** mais rápido descendo a
- * escala, e nos degraus abaixo do corpo pode passar por baixo do mínimo. Um
- * `clamp()` invertido é um degrau que diminui conforme a tela cresce. Daí o
- * piso: a folga do corpo precisa cobrir o quanto as duas razões divergem até o
- * menor degrau.
+ * The gap between the body's minimum and maximum is not free: because the
+ * maximum grows faster than the minimum, it also **shrinks** faster going down
+ * the scale, and on the steps below body it can drop under the minimum. An
+ * inverted `clamp()` is a step that gets smaller as the screen gets bigger.
+ * Hence the floor: the body's spread has to cover how far the two ratios
+ * diverge by the smallest step.
  */
 function randomFontSizes() {
   const ratioMin = random(1.1, 1.18);
@@ -117,10 +117,10 @@ function randomFontSizes() {
 const weight = (name) => `{lui.typography.weight.${name}}`;
 
 /**
- * Os pesos não são sorteados um a um: a hierarquia entre as variantes é o que
- * dá caráter à marca, e sorteio independente a desmancha. Cada entrada aqui é
- * um jogo coerente — o display pode ser leve e dramático ou pesado e sólido,
- * mas nunca mais leve que o corpo do texto que ele encima.
+ * Weights are not rolled one by one: the hierarchy between variants is what
+ * gives the brand its character, and rolling them independently dissolves it.
+ * Each entry here is a coherent set — the display can be light and dramatic or
+ * heavy and solid, but never lighter than the body copy it sits above.
  */
 const WEIGHT_SETS = [
   { display: 'light', strong: 'semibold', soft: 'regular', mid: 'medium' },
@@ -132,8 +132,8 @@ const WEIGHT_SETS = [
 function randomTypography() {
   const set = pick(WEIGHT_SETS);
 
-  // A monoespaçada serve de título, não de corpo: em texto corrido ela custa
-  // legibilidade sem devolver caráter.
+  // Monospace works as a heading face, not as body: in running text it costs
+  // legibility without giving character back.
   const bodyStacks = FONT_STACKS.filter((stack) => !/mono/i.test(stack.label));
 
   return {
@@ -152,14 +152,14 @@ function randomTypography() {
   };
 }
 
-/* ── Forma ────────────────────────────────────────────────────── */
+/* ── Shape ────────────────────────────────────────────────────── */
 
 const px = (value) => ({ value, unit: 'px' });
 
 /**
- * Um raio base sorteado, e os cinco degraus derivados dele por proporção. Zero
- * é um resultado válido e desejável: marcas de canto vivo existem, e é a única
- * forma de o sorteio produzir uma.
+ * One rolled base radius, and the five steps derived from it by proportion.
+ * Zero is a valid and desirable outcome: sharp-cornered brands exist, and this
+ * is the only way for the draw to produce one.
  */
 function randomRadii() {
   const md = pick([0, 2, 4, 6, 8, 10, 12, 16, 20]);
@@ -178,9 +178,9 @@ function randomRadii() {
 const spacing = (value) => `{lui.spacing.fixed.${value}}`;
 
 /**
- * Jogos de colunas plausíveis, do maior breakpoint para o menor. Nunca crescem
- * conforme a tela encolhe, e todos são divisíveis de formas que o layout
- * consegue usar.
+ * Plausible column sets, from the largest breakpoint down to the smallest. They
+ * never grow as the screen shrinks, and every one of them divides in ways a
+ * layout can actually use.
  */
 const COLUMN_SETS = [
   [12, 12, 8, 8, 4],
@@ -191,10 +191,10 @@ const COLUMN_SETS = [
 ];
 
 /**
- * Os breakpoints são sorteados em cascata, cada um a partir do anterior, porque
- * a única regra que não pode ser quebrada é a ordem: `sm` menor ou igual a
- * `1xs` produz media queries que nunca casam. `1xs` é sempre um pixel abaixo de
- * `sm` — ele marca o teto da faixa menor, não o piso de uma nova.
+ * Breakpoints are rolled in a cascade, each one out of the previous, because
+ * the one rule that cannot be broken is the ordering: an `sm` at or below `1xs`
+ * produces media queries that never match. `1xs` is always one pixel below
+ * `sm` — it marks the ceiling of the smaller band, not the floor of a new one.
  */
 function randomGrid() {
   const sm = roundTo(random(720, 840), 8);
@@ -204,9 +204,9 @@ function randomGrid() {
 
   const [c1xl, clg, cmd, csm, c1xs] = pick(COLUMN_SETS);
 
-  // Margens não encolhem conforme a tela cresce, e o gutter nunca passa da
-  // margem do mesmo degrau — senão as colunas encostam entre si antes de
-  // respeitarem a borda, e a página perde o respiro lateral.
+  // Margins never shrink as the screen grows, and the gutter never exceeds the
+  // margin at the same step — otherwise the columns breathe from each other
+  // before they respect the edge, and the page loses its side air.
   const marginLg = pick([24, 32, 40]);
   const marginMd = pick([16, 24, 32].filter((v) => v <= marginLg));
   const marginSm = pick([16, 24, 32].filter((v) => v <= marginMd));
@@ -226,8 +226,8 @@ function randomGrid() {
     'grid.breakpoint.lg': px(lg),
     'grid.breakpoint.1xl': px(xl),
 
-    // O container é o maior breakpoint menos as margens dos dois lados: é o que
-    // faz a última coluna terminar onde a margem começa.
+    // The container is the largest breakpoint minus the margins on both sides:
+    // that is what makes the last column end where the margin begins.
     'grid.container.1xl': px(roundTo(xl - marginLg * 2, 8)),
 
     'grid.column.1xl': c1xl,
@@ -249,14 +249,14 @@ function randomGrid() {
   };
 }
 
-/* ── Marca ────────────────────────────────────────────────────── */
+/* ── Brand ────────────────────────────────────────────────────── */
 
 /**
- * Marca sorteada inteira. A identidade — nome e identificador — não entra no
- * sorteio: ela é do usuário, não da paleta.
+ * A whole brand, rolled. Identity — name and identifier — stays out of the
+ * draw: it belongs to the user, not to the palette.
  *
- * Parte dos valores padrão em vez do estado atual para que duas aleatorizações
- * seguidas não acumulem resíduo de uma na outra.
+ * It starts from the default values rather than the current state so that two
+ * randomizations in a row do not accumulate leftovers from one another.
  */
 export function randomBrand(defaults, identity) {
   const state = structuredClone(defaults);
