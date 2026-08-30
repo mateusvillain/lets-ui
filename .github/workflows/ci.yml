@@ -53,9 +53,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
 
-      # The studio is deliberately outside the pnpm workspace: it is a browser
-      # app and must never enter the dependency graph of the published
+      # The studio aliases the packages' `dist/` output by relative path
+      # (see `astro.config.mjs`), so the workspace has to be built before the
+      # app can be. It is not a dependency in `package.json` — it is a build
+      # input, and a clean checkout has no `dist/` to point at.
+      - name: Build the packages the studio consumes
+        run: |
+          pnpm install
+          pnpm build
+
+      # The studio itself is deliberately outside the pnpm workspace: it is a
+      # browser app and must never enter the dependency graph of the published
       # packages. That is why it installs from its own lockfile.
       - name: Install dependencies
         run: pnpm install --ignore-workspace
