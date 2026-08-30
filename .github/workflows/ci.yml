@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  packages:
+    name: Packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint:css
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Unit tests
+        run: pnpm test
+
+  brand-studio:
+    name: Brand Studio
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The studio is deliberately outside the pnpm workspace: it is a browser
+      # app and must never enter the dependency graph of the published
+      # packages. That is why it installs from its own lockfile.
+      - name: Install dependencies
+        run: pnpm install --ignore-workspace
+        working-directory: apps/brand-studio
+
+      - name: Build
+        run: pnpm build
+        working-directory: apps/brand-studio
+
+      - name: Assert the build emitted a site
+        run: test -f apps/brand-studio/dist/index.html
