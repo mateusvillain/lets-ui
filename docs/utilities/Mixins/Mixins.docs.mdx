@@ -50,7 +50,7 @@ export const mixins = [
     signature: '@include media-up($breakpoint)',
     desc: 'Aplica estilos a partir de um breakpoint mínimo (mobile-first).',
     params: [
-      { name: '$breakpoint', default: '—', values: '1xs | sm | md | lg | 1xl' },
+      { name: '$breakpoint', default: '—', values: 'sm | md | lg | 1xl' },
     ],
     example: `.sidebar {
   display: none;
@@ -213,15 +213,34 @@ Mixins SCSS definidos em `packages/styles/src/utilities/_mixins.scss`. Encapsula
 
 ## Breakpoints de referência
 
-Os mixins `media-up()` e `media-down()` usam internamente a função `breakpoint()`:
+Os mixins `media-up()` e `media-down()` usam internamente a função `breakpoint()`,
+que lê os tokens de marca `lui.brand.grid.breakpoint.*`. Os valores abaixo são os
+da marca `lets-ui` — uma marca que redefinir esses tokens muda a tabela inteira.
 
-| Nome  | Largura |
-|-------|---------|
-| `1xs` | 320px   |
-| `sm`  | 768px   |
-| `md`  | 1024px  |
-| `lg`  | 1280px  |
-| `1xl` | 1440px  |
+| Nome  | Largura | Significado                                       |
+|-------|---------|---------------------------------------------------|
+| `1xs` | 767px   | Teto da faixa mobile — só existe em `media-down`  |
+| `sm`  | 768px   | Piso a partir do qual o step abre                 |
+| `md`  | 1024px  | Piso a partir do qual o step abre                 |
+| `lg`  | 1280px  | Piso a partir do qual o step abre                 |
+| `1xl` | 1440px  | Piso a partir do qual o step abre                 |
+
+`1xs` é o step base e corre no sentido oposto aos demais: é a largura máxima que
+o layout mobile sustenta, não um mínimo. Por isso `media-up(1xs)` é um erro de
+compilação — abaixo dele só existem os estilos base, que não precisam de media
+query.
+
+`media-down()` para estritamente abaixo do piso do step, e não um pixel abaixo
+dele: `media-down(lg)` gera `width < 1280px`, complemento exato de
+`min-width: 1280px` que `media-up(lg)` gera. Um teto inclusivo (`<= 1279px`)
+deixaria uma fresta — em uma largura fracionária como 1279.5px, que zoom de
+browser e escala de display produzem, nenhuma das duas consultas casaria e o
+elemento ficaria sem regra. Como `1xs` não é um piso, seu limite é o piso do
+step acima: `media-down(1xs)` gera `width < 768px`.
+
+> A largura de `1xs` na tabela é o teto conceitual da faixa mobile e serve de
+> referência; nenhuma media query lê esse valor, justamente porque o limite
+> exato é o piso de `sm`.
 
 ---
 

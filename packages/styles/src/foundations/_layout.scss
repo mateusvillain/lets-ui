@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '../utilities/functions' as fn;
 @use '../utilities/mixins' as mx;
 @use '../utilities/tokens.map' as tokens;
@@ -7,20 +8,37 @@
 // These are not part of the grid: `.layout` is the app shell (header +
 // sidebar + content) and `.show-*` / `.hide-*` are visibility utilities.
 
-@each $name, $value in tokens.$breakpoint {
+// `.show-{step}` / `.hide-{step}` follow the step they are named after: from
+// `sm` up each one opens at its min-width, while `1xs` is the mobile range and
+// so runs the other way, holding only up to its max-width.
+@each $name in map.keys(tokens.$breakpoint) {
   .show-#{$name} {
     display: none;
-
-    @media (min-width: $value) {
-      display: block;
-    }
   }
 
   .hide-#{$name} {
     display: block;
+  }
 
-    @media (min-width: $value) {
-      display: none;
+  @if $name == '1xs' {
+    @include mx.media-down('1xs') {
+      .show-#{$name} {
+        display: block;
+      }
+
+      .hide-#{$name} {
+        display: none;
+      }
+    }
+  } @else {
+    @include mx.media-up($name) {
+      .show-#{$name} {
+        display: block;
+      }
+
+      .hide-#{$name} {
+        display: none;
+      }
     }
   }
 }

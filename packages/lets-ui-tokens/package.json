@@ -23,7 +23,9 @@
   "exports": {
     ".": "./dist/letsui.tokens.css",
     "./css": "./dist/letsui.tokens.css",
-    "./scss": "./dist/letsui.tokens.scss"
+    "./scss": "./dist/letsui.tokens.scss",
+    "./scss-static": "./dist/letsui.tokens.static.scss",
+    "./static": "./dist/letsui.tokens.static.json"
   },
   "publishConfig": {
     "access": "public"

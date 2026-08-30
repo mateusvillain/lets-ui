@@ -2,17 +2,20 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import styles from './grid.scss?inline';
 import gridItemStyles from './grid-item.scss?inline';
+import staticTokens from '@lets-ui/tokens/static';
 
-// Mirrors `packages/styles/src/utilities/_grid.map.scss`: the column count
-// available at each breakpoint. Spans are clamped to it so a cell can never
-// overflow the row.
-const COLUMNS: Record<string, number> = {
-  '1xs': 4,
-  sm: 8,
-  md: 8,
-  lg: 12,
-  '1xl': 12,
-};
+// The column count available at each breakpoint, read from the same tokens the
+// SCSS compiles against — `packages/styles/src/utilities/_grid.map.scss` builds
+// its tracks and its `.col-*` utilities from these exact numbers, so a brand
+// that redefines them cannot leave the clamp here disagreeing with the grid.
+// Spans are clamped to the count so a cell can never overflow the row.
+const COLUMN_PREFIX = 'lui.brand.grid.column.';
+
+const COLUMNS: Record<string, number> = Object.fromEntries(
+  Object.entries(staticTokens)
+    .filter(([id]) => id.startsWith(COLUMN_PREFIX))
+    .map(([id, value]) => [id.slice(COLUMN_PREFIX.length), Number(value)])
+);
 
 const ALIGN = new Set(['start', 'center', 'end', 'stretch']);
 

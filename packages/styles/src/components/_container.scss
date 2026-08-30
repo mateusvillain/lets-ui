@@ -2,10 +2,14 @@
 
 $-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
 
+// The size scale mirrors the breakpoint scale, so a container caps exactly
+// where the step it is named after opens. `xs` is the one rung with no
+// breakpoint behind it — there is no step below `sm` to point at, since `1xs`
+// is the top of the mobile range rather than a width the layout snaps to.
 .container {
   box-sizing: border-box;
   width: 100%;
-  max-width: 1280px;
+  max-width: fn.breakpoint(lg);
   padding-left: fn.fluid(32);
   padding-right: fn.fluid(32);
   margin-left: auto;
@@ -16,19 +20,19 @@ $-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
   }
 
   &--sm {
-    max-width: 768px;
+    max-width: fn.breakpoint(sm);
   }
 
   &--md {
-    max-width: 1024px;
+    max-width: fn.breakpoint(md);
   }
 
   &--lg {
-    max-width: 1280px;
+    max-width: fn.breakpoint(lg);
   }
 
   &--xl {
-    max-width: 1440px;
+    max-width: fn.breakpoint('1xl');
   }
 
   &--full {

@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use 'sass:map';
 @use './tokens.map' as tokens;
 
@@ -68,8 +69,53 @@ $state-amounts: (
 
 // breakpoint($name)
 //  $name = 1xs, sm, md, lg, 1xl
+// Every step is the min-width it opens at, except `1xs`: that one is the top of
+// the mobile range rather than a floor, so its value is the conceptual ceiling
+// of that range and no media query reads it — `media-down(1xs)` bounds itself
+// by the floor of `sm`, the only bound that leaves no gap between the two.
 @function breakpoint($name) {
-  @return map.get(tokens.$breakpoint, $name);
+  $value: map.get(tokens.$breakpoint, $name);
+
+  @if not $value {
+    @error 'Invalid breakpoint: "#{$name}"';
+  }
+
+  @return $value;
+}
+
+// step-above($name)
+//  $name = 1xs, sm, md, lg
+// The next step up the scale, in the order `tokens.$breakpoint` declares it.
+// `media-down` bounds a range by the floor of the step above rather than by a
+// ceiling of its own, which is what keeps it the exact complement of
+// `media-up`; this is how it finds that floor without hardcoding the order.
+@function step-above($name) {
+  $steps: map.keys(tokens.$breakpoint);
+  $index: list.index($steps, $name);
+
+  @if not $index {
+    @error 'Invalid breakpoint: "#{$name}"';
+  }
+
+  @if $index == list.length($steps) {
+    @error '"#{$name}" is the last step and has nothing above it.';
+  }
+
+  @return list.nth($steps, $index + 1);
+}
+
+// grid($category, $name)
+//  $category = columns, gap, margin, container
+//  $name     = 1xs, sm, md, lg, 1xl
+// Returns `null` for a step a category does not define — `margin` stops at
+// `lg` and `container` exists only at `1xl`, which is how the grid knows where
+// the page margin gives way to a centred max-width.
+@function grid($category, $name) {
+  @if not map.has-key(tokens.$grid, $category) {
+    @error 'Invalid grid category: "#{$category}"';
+  }
+
+  @return map.get(tokens.$grid, $category, $name);
 }
 
 // radius($size)

@@ -3,13 +3,22 @@ import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 import { property } from 'lit/decorators.js';
 import styles from './container.scss?inline';
 import { resolveSpace } from '../../utils/layout.js';
+import staticTokens from '@lets-ui/tokens/static';
+
+// The size scale mirrors the breakpoint scale, read from the same tokens the
+// CSS-only `.container` compiles against, so the two cannot drift. `xs` is the
+// one rung with no breakpoint behind it — there is no step below `sm` to point
+// at, since `1xs` is the top of the mobile range rather than a width the
+// layout snaps to.
+const breakpoint = (name: string): string =>
+  staticTokens[`lui.brand.grid.breakpoint.${name}`];
 
 const SIZE_MAP: Record<string, string> = {
   xs: '480px',
-  sm: '768px',
-  md: '1024px',
-  lg: '1280px',
-  xl: '1440px',
+  sm: breakpoint('sm'),
+  md: breakpoint('md'),
+  lg: breakpoint('lg'),
+  xl: breakpoint('1xl'),
   full: 'none',
 };
 

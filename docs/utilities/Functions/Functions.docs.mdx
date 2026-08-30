@@ -101,7 +101,9 @@ export const stateFns = [
   { fn: 'focus-ring($variant)', desc: 'Box-shadow de foco', values: ['primary', 'secondary', 'danger', 'success', 'neutral'] },
   { fn: 'elevation($layer)',    desc: 'Box-shadow de elevação', values: ['base', 'hovered', 'floating', 'overlay'] },
   { fn: 'opacity($category)',   desc: 'Opacidade semântica', values: ['disabled', 'hidden', 'visible'] },
-  { fn: 'breakpoint($name)',    desc: 'Valor de breakpoint responsivo', values: ['1xs (320px)', 'sm (768px)', 'md (1024px)', 'lg (1280px)', '1xl (1440px)'] },
+  { fn: 'breakpoint($name)',    desc: 'Valor de breakpoint responsivo', values: ['1xs (767px, teto)', 'sm (768px)', 'md (1024px)', 'lg (1280px)', '1xl (1440px)'] },
+  { fn: 'step-above($name)',    desc: 'Próximo step da escala de breakpoints', values: ['1xs', 'sm', 'md', 'lg'] },
+  { fn: 'grid($category, $name)', desc: 'Valor da tabela do grid', values: ['columns', 'gap', 'margin', 'container'] },
 ];
 
 # Functions
@@ -352,3 +354,13 @@ Funções SCSS definidas em `packages/styles/src/utilities/_functions.scss`. Use
 ```
 
 > Para responsividade, prefira os mixins `media-up()` e `media-down()` em vez de chamar `breakpoint()` diretamente.
+> Eles são complementos exatos um do outro — `media-down()` para estritamente
+> abaixo do piso do step —, enquanto um `max-width` escrito à mão costuma deixar
+> uma fresta em larguras fracionárias.
+
+`breakpoint()` e `grid(columns, …)` são as duas únicas funções que devolvem um
+valor literal em vez de um `var()`. Elas são lidas em tempo de compilação — por
+um prelúdio de media query e pelo `@for` que gera as classes `.col-*` — e nenhum
+dos dois consegue ler uma custom property. As demais categorias de `grid()`
+(`gap`, `margin`, `container`) devolvem `var()` e continuam acompanhando
+`data-brand` em runtime.
