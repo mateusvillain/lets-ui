@@ -8,7 +8,14 @@
  * swapped on the `tab-change` event.
  */
 
-import { FAMILIES, STEPS, SECTIONS, FONT_STACKS, brandVar } from './schema.js';
+import {
+  FAMILIES,
+  STEPS,
+  SECTIONS,
+  FONT_STACKS,
+  FOUNDATION_FIELDS,
+  brandVar,
+} from './schema.js';
 import {
   createDefaultState,
   toCssVars,
@@ -162,6 +169,7 @@ export function mountStudio({ root, templates, meta }) {
     updateStatus();
     if (rerender) renderPanel();
     else refreshIndicators();
+    refreshBreakpointBounds();
   }
 
   function updateStatus() {
@@ -474,20 +482,78 @@ export function mountStudio({ root, templates, meta }) {
     return null;
   }
 
+  /**
+   * The window a breakpoint may move in: strictly between its neighbours, and
+   * never outside the range the schema declares. Handing this to the input is
+   * what stops the steppers at the last valid value instead of letting them
+   * walk into an ordering that cannot compile.
+   */
+  function breakpointBounds(step) {
+    const item = FOUNDATION_FIELDS.find(
+      (field_) => field_.path === `${BREAKPOINT_PREFIX}${step}`
+    );
+    const index = BREAKPOINT_ORDER.indexOf(step);
+    const read = (other) =>
+      state.foundation[`${BREAKPOINT_PREFIX}${other}`].value;
+
+    const smaller = BREAKPOINT_ORDER[index - 1];
+    const larger = BREAKPOINT_ORDER[index + 1];
+
+    return {
+      min: smaller ? Math.max(item.min, read(smaller) + 1) : item.min,
+      max: larger ? Math.min(item.max, read(larger) - 1) : item.max,
+    };
+  }
+
+  /**
+   * Breakpoints bound each other, so editing one moves the window the fields
+   * beside it may occupy. Re-reading those windows after every commit is also
+   * what releases an error a later edit made obsolete: raising `sm` above the
+   * `1xs` that was rejected against it has to clear the message on `1xs`,
+   * because the error belonged to the pair and not to the field showing it.
+   *
+   * The field is resynced with the state at the same time — a value that was
+   * rejected never reached it, and leaving it on screen next to a cleared
+   * error would show an edit that did not happen.
+   */
+  function refreshBreakpointBounds() {
+    for (const step of BREAKPOINT_ORDER) {
+      const input = dom.panel.querySelector(
+        `[data-token="${BREAKPOINT_PREFIX}${step}"] lui-input`
+      );
+      if (!input) continue;
+
+      const { min, max } = breakpointBounds(step);
+      input.setAttribute('min', String(min));
+      input.setAttribute('max', String(max));
+
+      const current = state.foundation[`${BREAKPOINT_PREFIX}${step}`].value;
+      if (Number(input.value) !== current) input.value = String(current);
+
+      input.removeAttribute('error');
+      input.removeAttribute('error-text');
+    }
+  }
+
   function dimensionControl(item, value, write) {
+    const isBreakpoint = item.path.startsWith(BREAKPOINT_PREFIX);
+    const bounds = isBreakpoint
+      ? breakpointBounds(item.path.slice(BREAKPOINT_PREFIX.length))
+      : { min: item.min ?? 0, max: item.max ?? 9999 };
+
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
       label: `${item.label} (${value.unit ?? 'px'})`,
-      min: String(item.min ?? 0),
-      max: String(item.max ?? 9999),
+      min: String(bounds.min),
+      max: String(bounds.max),
       step: String(item.step ?? 1),
       value: String(value.value),
     });
 
     input.addEventListener('change', (event) => {
       const next = Number(event.target.value);
-      const error = item.path.startsWith(BREAKPOINT_PREFIX)
+      const error = isBreakpoint
         ? breakpointError(item.path.slice(BREAKPOINT_PREFIX.length), next)
         : null;
 
