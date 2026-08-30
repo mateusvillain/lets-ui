@@ -649,6 +649,7 @@ export function mountStudio({ root, templates, meta }) {
       theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
     );
     if (activeTab === 'color') renderPanel();
+    syncPreviewLink();
     apply();
   });
 
@@ -658,11 +659,23 @@ export function mountStudio({ root, templates, meta }) {
   const sceneSelect = root.querySelector('[data-scene]');
   const previewLink = root.querySelector('[data-preview-link]');
 
+  /**
+   * The standalone preview opens in a tab of its own, with no studio around it
+   * to write the brand onto its `:root`. It reads the saved state instead, so
+   * the link has to carry what the state does not: the scene and the theme,
+   * which belong to the studio's chrome rather than to the brand.
+   */
+  function syncPreviewLink() {
+    previewLink.setAttribute('href', `/preview?scene=${scene}&theme=${theme}`);
+  }
+
   sceneSelect.addEventListener('change', () => {
     scene = SCENES[sceneSelect.selected - 1] ?? 'landing';
-    previewLink.setAttribute('href', `/preview?scene=${scene}`);
+    syncPreviewLink();
     apply();
   });
+
+  syncPreviewLink();
 
   /**
    * The width selector is a reading of the brand's breakpoints, not a fixed

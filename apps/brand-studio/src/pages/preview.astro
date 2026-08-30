@@ -406,6 +406,7 @@ const FOOTER = [
 
     <script>
       import '@lets-ui/components';
+      import { load, toCssVars } from '@/lib/state.js';
 
       /**
        * The color chips show the resolved hex. Since the value comes from a
@@ -549,10 +550,43 @@ const FOOTER = [
       }
 
       /* Opened outside the studio, the preview still picks its scene from the
-         URL: /preview?scene=tokens. */
+         URL: /preview?scene=tokens&theme=dark. */
       const SCENES = ['landing', 'tokens'];
-      const requested = new URLSearchParams(location.search).get('scene');
+      const THEMES = ['light', 'dark'];
+      const params = new URLSearchParams(location.search);
+      const requested = params.get('scene');
       if (SCENES.includes(requested)) document.documentElement.dataset.scene = requested;
+
+      /**
+       * Inside the studio's iframe the brand arrives from the outside: the
+       * studio writes the `--lui-brand-*` properties onto this `:root` on every
+       * edit. Opened on its own there is nobody to do that, and the page would
+       * render the reference brand instead of the one being edited — so it
+       * reads the same state the studio persists and applies it itself.
+       *
+       * Only when standalone: inside the iframe this would race the studio for
+       * the same properties, and the studio holds the newer state of the two.
+       */
+      function applySavedBrand() {
+        if (window.parent !== window) return;
+
+        const state = load();
+        if (!state) return;
+
+        const theme = THEMES.includes(params.get('theme'))
+          ? params.get('theme')
+          : 'light';
+
+        const element = document.documentElement;
+        element.dataset.theme = theme;
+        element.dataset.brandName = state.name;
+
+        for (const [name, value] of Object.entries(toCssVars(state, theme))) {
+          element.style.setProperty(name, value);
+        }
+      }
+
+      applySavedBrand();
 
       function refresh() {
         refreshSwatchLabels();
