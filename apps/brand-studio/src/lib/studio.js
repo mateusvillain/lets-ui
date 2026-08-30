@@ -465,10 +465,10 @@ export function mountStudio({ root, templates, meta }) {
 
     if (!Number.isFinite(next)) return 'Enter a value in pixels.';
     if (smaller && next <= read(smaller)) {
-      return `Precisa ser maior que ${smaller} (${read(smaller)}px).`;
+      return `Must be greater than ${smaller} (${read(smaller)}px).`;
     }
     if (larger && next >= read(larger)) {
-      return `Precisa ser menor que ${larger} (${read(larger)}px).`;
+      return `Must be less than ${larger} (${read(larger)}px).`;
     }
 
     return null;
