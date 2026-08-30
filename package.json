@@ -19,6 +19,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "lint": "pnpm run lint:css && pnpm run lint:md",
+    "test": "vitest run --project brand-studio",
     "lint:css": "stylelint \"**/*.{css,scss}\"",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" \"!storybook-static/**\"",
     "storybook": "storybook dev -p 6006",

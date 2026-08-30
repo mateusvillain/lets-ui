@@ -8,12 +8,24 @@ import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
 
 const dirname =
-  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+  typeof __dirname !== 'undefined'
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   test: {
     projects: [
+      {
+        // The Brand Studio lives outside the pnpm workspace, but its `src/lib`
+        // is pure: pure functions, no DOM at import time. It runs here in Node
+        // so the studio's invariants are checked on every PR.
+        test: {
+          name: 'brand-studio',
+          environment: 'node',
+          include: ['apps/brand-studio/src/lib/**/*.test.js'],
+        },
+      },
       {
         extends: true,
         plugins: [
