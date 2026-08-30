@@ -52,6 +52,7 @@ Formato: `component: <nome-em-kebab-case>`. Cor padrão: `#f5be58`.
 | `component: close-button`    | Close Button    |
 | `component: code-block`      | Code Block      |
 | `component: command-palette` | Command Palette |
+| `component: container`       | Container       |
 | `component: date-picker`     | Date Picker     |
 | `component: divider`         | Divider         |
 | `component: drawer`          | Drawer          |
