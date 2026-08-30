@@ -8,14 +8,7 @@
  * swapped on the `tab-change` event.
  */
 
-import {
-  FAMILIES,
-  STEPS,
-  SECTIONS,
-  FONT_STACKS,
-  FOUNDATION_FIELDS,
-  brandVar,
-} from './schema.js';
+import { FAMILIES, STEPS, SECTIONS, FONT_STACKS, brandVar } from './schema.js';
 import {
   createDefaultState,
   toCssVars,
@@ -35,15 +28,19 @@ import {
   generateRamp,
   contrastRatio,
 } from './color.js';
+import {
+  BREAKPOINT_ORDER,
+  BREAKPOINT_PREFIX,
+  breakpointError,
+  breakpointBounds,
+  viewportModel,
+  viewportSelection,
+  viewportWidth,
+} from './breakpoints.js';
 import { parseClamp, buildClamp } from './clamp.js';
 import { randomBrand } from './random.js';
 
 const THEME_LABEL = { light: 'light', dark: 'dark' };
-
-/** Smallest to largest: the order the breakpoints must respect. */
-const BREAKPOINT_ORDER = ['1xs', 'sm', 'md', 'lg', '1xl'];
-
-const BREAKPOINT_PREFIX = 'grid.breakpoint.';
 
 /* ── DOM helpers ────────────────────────────────────────────── */
 
@@ -459,53 +456,6 @@ export function mountStudio({ root, templates, meta }) {
   }
 
   /**
-   * Breakpoints must be strictly ascending: an `sm` at or below `1xs` would
-   * produce media queries that never match. The check looks only at the
-   * neighbours because the whole ordering was validated on previous edits.
-   */
-  function breakpointError(step, next) {
-    const index = BREAKPOINT_ORDER.indexOf(step);
-    const read = (other) =>
-      state.foundation[`${BREAKPOINT_PREFIX}${other}`].value;
-
-    const smaller = BREAKPOINT_ORDER[index - 1];
-    const larger = BREAKPOINT_ORDER[index + 1];
-
-    if (!Number.isFinite(next)) return 'Enter a value in pixels.';
-    if (smaller && next <= read(smaller)) {
-      return `Must be greater than ${smaller} (${read(smaller)}px).`;
-    }
-    if (larger && next >= read(larger)) {
-      return `Must be less than ${larger} (${read(larger)}px).`;
-    }
-
-    return null;
-  }
-
-  /**
-   * The window a breakpoint may move in: strictly between its neighbours, and
-   * never outside the range the schema declares. Handing this to the input is
-   * what stops the steppers at the last valid value instead of letting them
-   * walk into an ordering that cannot compile.
-   */
-  function breakpointBounds(step) {
-    const item = FOUNDATION_FIELDS.find(
-      (field_) => field_.path === `${BREAKPOINT_PREFIX}${step}`
-    );
-    const index = BREAKPOINT_ORDER.indexOf(step);
-    const read = (other) =>
-      state.foundation[`${BREAKPOINT_PREFIX}${other}`].value;
-
-    const smaller = BREAKPOINT_ORDER[index - 1];
-    const larger = BREAKPOINT_ORDER[index + 1];
-
-    return {
-      min: smaller ? Math.max(item.min, read(smaller) + 1) : item.min,
-      max: larger ? Math.min(item.max, read(larger) - 1) : item.max,
-    };
-  }
-
-  /**
    * Breakpoints bound each other, so editing one moves the window the fields
    * beside it may occupy. Re-reading those windows after every commit is also
    * what releases an error a later edit made obsolete: raising `sm` above the
@@ -523,7 +473,7 @@ export function mountStudio({ root, templates, meta }) {
       );
       if (!input) continue;
 
-      const { min, max } = breakpointBounds(step);
+      const { min, max } = breakpointBounds(state.foundation, step);
       input.setAttribute('min', String(min));
       input.setAttribute('max', String(max));
 
@@ -538,7 +488,10 @@ export function mountStudio({ root, templates, meta }) {
   function dimensionControl(item, value, write) {
     const isBreakpoint = item.path.startsWith(BREAKPOINT_PREFIX);
     const bounds = isBreakpoint
-      ? breakpointBounds(item.path.slice(BREAKPOINT_PREFIX.length))
+      ? breakpointBounds(
+          state.foundation,
+          item.path.slice(BREAKPOINT_PREFIX.length)
+        )
       : { min: item.min ?? 0, max: item.max ?? 9999 };
 
     const input = el('lui-input', {
@@ -552,9 +505,13 @@ export function mountStudio({ root, templates, meta }) {
     });
 
     input.addEventListener('change', (event) => {
-      const next = Number(event.target.value);
+      const raw = event.target.value;
       const error = isBreakpoint
-        ? breakpointError(item.path.slice(BREAKPOINT_PREFIX.length), next)
+        ? breakpointError(
+            state.foundation,
+            item.path.slice(BREAKPOINT_PREFIX.length),
+            raw
+          )
         : null;
 
       if (error) {
@@ -564,7 +521,7 @@ export function mountStudio({ root, templates, meta }) {
       }
 
       input.removeAttribute('error');
-      write({ value: next, unit: value.unit ?? 'px' });
+      write({ value: Number(raw), unit: value.unit ?? 'px' });
     });
 
     return field(item.path, input);
@@ -753,41 +710,26 @@ export function mountStudio({ root, templates, meta }) {
   let viewportSignature = '';
 
   function syncViewportOptions() {
-    const entries = BREAKPOINT_ORDER.map((step) => ({
-      step,
-      width: state.foundation[`${BREAKPOINT_PREFIX}${step}`].value,
-    })).sort((a, b) => b.width - a.width);
+    const model = viewportModel(state.foundation);
+    if (model.signature === viewportSignature) return;
+    viewportSignature = model.signature;
 
-    const signature = entries
-      .map((entry) => `${entry.step}:${entry.width}`)
-      .join(',');
-    if (signature === viewportSignature) return;
-    viewportSignature = signature;
-
-    // The selection follows the breakpoint, not the number: whoever was
-    // viewing the preview at `sm` stays at `sm` after `sm`'s value changes.
     const previous = viewportSteps[viewport.selected - 1];
-    viewportSteps = ['full', ...entries.map((entry) => entry.step)];
+    viewportSteps = model.steps;
 
+    viewport.setAttribute('options', model.labels.join(','));
     viewport.setAttribute(
-      'options',
-      [
-        'Fill',
-        ...entries.map((entry) => `${entry.width} — ${entry.step}`),
-      ].join(',')
+      'selected',
+      String(viewportSelection(viewportSteps, previous))
     );
-
-    const index = viewportSteps.indexOf(previous);
-    viewport.setAttribute('selected', String(index > 0 ? index + 1 : 1));
     applyViewport();
   }
 
   function applyViewport() {
-    const step = viewportSteps[viewport.selected - 1];
-    const width =
-      step && step !== 'full'
-        ? state.foundation[`${BREAKPOINT_PREFIX}${step}`].value
-        : null;
+    const width = viewportWidth(
+      state.foundation,
+      viewportSteps[viewport.selected - 1]
+    );
 
     dom.frame.style.maxWidth = width ? `${width}px` : '';
   }

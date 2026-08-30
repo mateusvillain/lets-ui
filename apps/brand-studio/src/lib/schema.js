@@ -77,7 +77,8 @@ const FONT_SIZE_STEPS = [
   '3xl',
 ];
 const RADIUS_STEPS = ['xs', 'sm', 'md', 'lg', 'xl'];
-const BREAKPOINTS = ['1xs', 'sm', 'md', 'lg', '1xl'];
+/** Smallest to largest: the order the breakpoints must respect. */
+export const BREAKPOINTS = ['1xs', 'sm', 'md', 'lg', '1xl'];
 
 const field = (path, label, control, extra = {}) => ({
   path,
