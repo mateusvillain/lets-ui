@@ -200,11 +200,16 @@
 //  @include media-down($breakpoint) { ... }
 //  $breakpoint = sm | md | lg | 1xl  (media-up)
 //  $breakpoint = 1xs | sm | md | lg | 1xl  (media-down)
-// Every step except `1xs` is the min-width it opens at, so `media-down` stops
-// one pixel below it. `1xs` is the other way round — it is the top of the
-// mobile range, the width the layout holds up to — so it is already the bound
-// and takes no subtraction, and it has no `media-up` at all: below it there is
-// nothing but the base styles, which need no media query to reach.
+// Every step except `1xs` is the min-width it opens at, and `media-down` stops
+// strictly below that same width — so the two are exact complements and no
+// viewport falls between them. An inclusive ceiling one pixel down would not
+// hold: at a fractional width like 767.5px, which browser zoom and display
+// scaling both produce, `width <= 767px` and `min-width: 768px` are each false
+// and the element is left unclaimed by either side.
+// `1xs` differs in kind, not in shape. It is not a floor — it is the top of the
+// mobile range — so it has no `media-up` at all (below it there is nothing but
+// the base styles, which need no media query to reach) and its `media-down` is
+// bounded by the floor of the step above it instead of by a width of its own.
 @mixin media-up($breakpoint) {
   @if $breakpoint == '1xs' {
     @error '`1xs` is the base step and has no lower bound. Write the rule unconditionally, or use `media-down(1xs)` to scope it to mobile.';
@@ -216,14 +221,14 @@
 }
 
 @mixin media-down($breakpoint) {
+  $bound: breakpoint($breakpoint);
+
   @if $breakpoint == '1xs' {
-    @media (width <= breakpoint('1xs')) {
-      @content;
-    }
-  } @else {
-    @media (width <= calc(breakpoint($breakpoint) - 1px)) {
-      @content;
-    }
+    $bound: breakpoint(step-above('1xs'));
+  }
+
+  @media (width < $bound) {
+    @content;
   }
 }
 
