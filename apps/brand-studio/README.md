@@ -97,6 +97,38 @@ The export is a value substitution over the original file: `$type`,
 `description` and key order are preserved, and tokens the interface does not
 expose yet pass through intact.
 
+## Deploying
+
+The studio is published at <https://studio.lets-ui.com>.
+
+It sits outside the pnpm workspace on purpose — it is a browser app and must
+never enter the dependency graph of the published packages — but it is not
+self-contained. The Vite aliases in `astro.config.mjs` point at
+`../../packages/*/dist` by relative path, so the packages have to be **built**
+before the studio can be. That is a build input, not a dependency in
+`package.json`, and a clean checkout has no `dist/` for those aliases to
+resolve to.
+
+The consequence for any host: pointing it at `apps/brand-studio` and running
+`pnpm build` there fails on the first import, with
+`ENOENT: ... letsui.tokens.css`. The workspace build has to run first.
+
+On Vercel:
+
+| Setting         | Value                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------- |
+| Root Directory  | `apps/brand-studio`                                                                      |
+| Install Command | `cd ../.. && pnpm install && pnpm build && cd apps/brand-studio && pnpm install --ignore-workspace` |
+| Build Command   | `pnpm build`                                                                             |
+| Output Directory | `dist`                                                                                   |
+
+"Include source files outside of the Root Directory" must stay **enabled**: the
+build reads the whole repository, not just this folder.
+
+The `Brand Studio` job in `.github/workflows/ci.yml` runs the same sequence on
+every pull request, so a break in this ordering surfaces there before it
+reaches the deploy.
+
 ## Structure
 
 | File                      | Role                                                     |
