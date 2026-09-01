@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build && cd apps/brand-studio && pnpm install --ignore-workspace --frozen-lockfile && pnpm build",
+  "outputDirectory": "apps/brand-studio/dist"
+}
