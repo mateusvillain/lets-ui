@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.9.1
+## v1.10.0
 
 ### Fixed
 
