@@ -11,6 +11,9 @@ pnpm install
 # Build all packages
 pnpm build
 
+# Unit tests
+pnpm test
+
 # Lint CSS/SCSS and Markdown
 pnpm lint
 pnpm lint:css      # Stylelint only
@@ -27,12 +30,16 @@ Commits must follow the **Conventional Commits** spec (enforced via commitlint).
 
 ## Architecture
 
-This is a **pnpm monorepo** (`pnpm-workspace.yaml`) for an open-source, framework-agnostic design system. Four packages:
+This is a **pnpm monorepo** (`pnpm-workspace.yaml`) for an open-source, framework-agnostic design system. Three packages:
 
 - **`packages/lets-ui-tokens`** — Design tokens as JSON, compiled by [Terrazzo](https://terrazzo.app/) into CSS custom properties and a SCSS variable map. Supports light/dark themes and multi-brand via `data-theme` / `data-brand` attributes.
-- **`packages/utilities`** — Shared SCSS utilities: `_functions.scss` (semantic accessor functions), `_mixins.scss`, `_tokens.map.scss` (bridges Terrazzo output to component SCSS).
-- **`packages/styles`** — Component SCSS files using utility functions. Built with Sass → PostCSS/cssnano → `/dist/letsui.min.css`.
-- **`packages/lets-ui-components`** — Vanilla JS Web Components (custom elements, no framework). Built via a Node.js script.
+- **`packages/styles`** — Component SCSS files, plus the shared SCSS utilities they build on in `src/utilities/`: `_functions.scss` (semantic accessor functions), `_mixins.scss`, `_tokens.map.scss` (bridges Terrazzo output to component SCSS), `_grid.map.scss`, `_flex.scss`. Built with Sass → PostCSS/cssnano → `/dist/letsui.min.css`.
+- **`packages/lets-ui-components`** — Web Components built on [Lit](https://lit.dev/), in TypeScript. Built with Vite.
+
+Two apps live outside the pnpm workspace, each with its own lockfile, so a browser app never enters the published packages' dependency graph:
+
+- **`apps/brand-studio`** — visual editor for the brand tokens, deployed to `studio.lets-ui.com` from Vercel (`vercel.json` at the root). It reaches the packages by relative path, so their `dist/` must be built before it.
+- **`playground/`** — raw pages for manual testing. No CI; it is a test surface, not a deliverable.
 
 ### SCSS split rule
 
@@ -61,7 +68,7 @@ flexibility and costs a custom property on every page plus a layer of
 indirection between the value and its only consumer. The test is not "is this a
 design value?" but "will this ever resolve differently?".
 
-Component SCSS uses utility functions from `packages/utilities/src/_functions.scss`:
+Component SCSS uses utility functions from `packages/styles/src/utilities/_functions.scss`:
 
 | Function                   | Usage                                                    |
 | -------------------------- | -------------------------------------------------------- |
@@ -73,17 +80,19 @@ Component SCSS uses utility functions from `packages/utilities/src/_functions.sc
 | `fluid($px)`               | Fluid/responsive sizing                                  |
 | `fixed($px)`               | Fixed pixel sizing                                       |
 
-Token source files are in `packages/lets-ui-tokens/tokens/{brand,global}/`. The compiled SCSS token map is `packages/utilities/src/_tokens.map.scss` (~9000 lines — do not edit manually).
+Token source files are in `packages/lets-ui-tokens/tokens/{brand,global}/`. Terrazzo compiles them into `packages/lets-ui-tokens/dist/` — `letsui.tokens.scss` (the generated map, do not edit manually) and `letsui.tokens.static.scss` (literal values for media query preludes and Sass loops, which cannot take a `var()`).
+
+`packages/styles/src/utilities/_tokens.map.scss` is hand-authored and short: it names the semantic slots the component SCSS asks for and points each at a token. Edit it when a new semantic role appears — not to change a value.
 
 ## Web Components
 
-Each interactive component in `packages/lets-ui-components/src/components/` is a vanilla JS class extending `HTMLElement`. Pattern:
+Each interactive component in `packages/lets-ui-components/src/components/` is a TypeScript class extending Lit's `LitElement`. Pattern:
 
-- Declare `static get observedAttributes()` for reactive props
-- Implement `connectedCallback()` for initial render
-- Implement `attributeChangedCallback()` for updates
-- Use semantic HTML with ARIA attributes for accessibility
-- Register in `src/index.js`
+- Declare reactive props with the `@property()` decorator
+- Return the markup from `render()`; Lit re-renders when a reactive prop changes
+- Import the component's own `.scss` with `?inline` and pass it through `unsafeCSS` into `static styles`
+- Use semantic HTML with ARIA attributes for accessibility; components that take part in forms set `static formAssociated = true` and drive `ElementInternals`
+- Register in `src/index.ts`
 
 ## Agent Skills
 
