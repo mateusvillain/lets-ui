@@ -38,6 +38,7 @@ import {
   viewportWidth,
 } from './breakpoints.js';
 import { parseClamp, buildClamp } from './clamp.js';
+import { zip } from './zip.js';
 import { randomBrand } from './random.js';
 
 const THEME_LABEL = { light: 'light', dark: 'dark' };
@@ -579,22 +580,35 @@ export function mountStudio({ root, templates, meta }) {
 
   /* ── Global actions ───────────────────────────────────────── */
 
-  function download(name, content) {
-    const url = URL.createObjectURL(
-      new Blob([content], { type: 'application/json' })
-    );
+  function download(name, blob) {
+    const url = URL.createObjectURL(blob);
     const anchor = Object.assign(document.createElement('a'), {
       href: url,
       download: name,
     });
+    document.body.append(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    anchor.remove();
+    // Revoking synchronously can cancel a download the browser has not
+    // started reading yet.
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
+  /**
+   * The three files travel as one archive: browsers drop downloads fired
+   * back-to-back, and the files only make sense together — they land in the
+   * same `tokens/brand/<slug>/` folder.
+   */
   function exportTokens() {
-    for (const [name, tree] of Object.entries(toFiles(state, templates))) {
-      download(name, `${JSON.stringify(tree, null, 2)}\n`);
-    }
+    const slug = state.slug || 'lets-ui';
+    const files = Object.fromEntries(
+      Object.entries(toFiles(state, templates)).map(([name, tree]) => [
+        name,
+        `${JSON.stringify(tree, null, 2)}\n`,
+      ])
+    );
+
+    download(`${slug}.zip`, zip(files));
   }
 
   async function importTokens(files) {
