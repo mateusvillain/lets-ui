@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.10.0
+
+### Fixed
+
+- Heading scales ignored the brand's per-variant font weights. The `scales` map in `_tokens.map.scss` repeated a primitive weight key (`title: bold`) instead of pointing at `lui.brand.typography.weight.title`, so every scale compiled to the global `--lui-typography-weight-*` and the brand weight tokens had no consumer at all — editing one changed nothing. Each heading scale now resolves its own brand token; the body scales keep the global weight, since `lui.brand` defines none for them.
+  - Three defaults move to the weight the brand file already declared: `display` 400 → 300, `title` 700 → 600, `overtitle` 500 → 600. `headline`, `subtitle`, `block-title`, and `subheadline` already agreed with their tokens and are unaffected.
+  - `font-scale()` now takes the resolved value straight from the scale. `weight()` and the `.text--weight-*` utilities are untouched and still operate on the primitive weights.
+
 ## v1.9.0
 
 ### Added

@@ -257,8 +257,9 @@
 @mixin font-scale($scale-name) {
   $scale: map.get($typography, scales, $scale-name);
 
+  // O peso já vem resolvido do mapa de escalas — ver `$typography.scales`.
   /* stylelint-disable-next-line scss/operator-no-newline-after */
-  font: weight(map.get($scale, weight)) size(map.get($scale, size)) /
+  font: map.get($scale, weight) size(map.get($scale, size)) /
     line-height(map.get($scale, family)) font(map.get($scale, family));
   text-transform: case(map.get($scale, case));
 }
