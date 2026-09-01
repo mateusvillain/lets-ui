@@ -2,6 +2,22 @@
 
 ## v1.10.0
 
+### Added
+
+- The grid now comes from brand tokens. `lui.brand.grid.*` declares the breakpoints, column counts, gutters, margins and the `1xl` container width, so a brand restyles the grid through `data-brand` instead of a fork of the stylesheet. The reference brand keeps the values the old hardcoded map used.
+- New `grid($category, $name)` and `step-above($name)` accessors. `grid()` returns `null` where a category has no value for a step — `margin` stops at `lg`, `container` exists only at `1xl`.
+- New `@lets-ui/tokens/static` export, carrying breakpoints and column counts as literals for the two places a `var()` cannot reach: a media query prelude and a Sass `@for`. Everything else still resolves at runtime, so changing a brand's breakpoints or column counts is the one grid edit that needs a rebuild from source.
+- **Brand Studio** (`apps/brand-studio`), a visual editor for `lui.brand.*` with a live preview, exporting the three DTCG files as one `<identifier>.zip`. A standalone app outside the pnpm workspace; no published package changes.
+
+### Changed
+
+- `media-down($breakpoint)` now stops at `width < breakpoint` instead of an inclusive ceiling one pixel below, making it the exact complement of `media-up` again. The old bound skipped fractional widths: at 767.5px, which zoom and display scaling produce, neither side matched.
+- `.container` and `lui-container` take their max-widths from the breakpoint tokens, so a container caps exactly where the step it is named after opens.
+
+### Removed
+
+- `media-up('1xs')`. `1xs` is the top of the mobile range, not a floor, so it has no width to open at. The mixin now errors, pointing at the two real options: write the rule unconditionally, or scope it with `media-down('1xs')`.
+
 ### Fixed
 
 - Heading scales ignored the brand's per-variant font weights. The `scales` map in `_tokens.map.scss` repeated a primitive weight key (`title: bold`) instead of pointing at `lui.brand.typography.weight.title`, so every scale compiled to the global `--lui-typography-weight-*` and the brand weight tokens had no consumer at all — editing one changed nothing. Each heading scale now resolves its own brand token; the body scales keep the global weight, since `lui.brand` defines none for them.
