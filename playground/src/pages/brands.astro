@@ -1,0 +1,673 @@
+---
+// Banco de prova da troca de brand (`data-brand`) e de tema (`data-theme`).
+//
+// `lets-test` é o slot fixo para a brand que estiver sendo testada: registre
+// os arquivos dela sob esse nome em `tokens/brand/lets-test/`, some os
+// contextos ao resolver e as permutações ao `terrazzo.config.mjs`, e esta
+// página passa a mostrá-la sem precisar de nenhuma edição aqui. Enquanto
+// `lets-test` não existir nas tokens, o botão continua funcionando: sem
+// seletor correspondente, os valores caem nos defaults do `:root`.
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+import 'lets-ui-icons/dist/lets-ui-icons.css';
+
+const BRANDS = ['lets-ui', 'lets-test'];
+const STEPS = [1, 2, 3, 4, 5, 6, 7, 8];
+
+/* Semânticos que apontam para a rampa da brand: são eles que os componentes
+   consomem, então provam que a troca chega até o componente, e não só à
+   custom property da brand. */
+const SEMANTIC = [
+  '--lui-color-primary-background-container',
+  '--lui-color-primary-text-body',
+  '--lui-color-primary-border-default',
+  '--lui-color-secondary-background-container',
+  '--lui-color-link-default',
+  '--lui-color-link-visited',
+];
+
+const FOUNDATION = [
+  '--lui-brand-typography-font-family-heading',
+  '--lui-brand-typography-font-family-body',
+  '--lui-brand-border-radius-xs',
+  '--lui-brand-border-radius-sm',
+  '--lui-brand-border-radius-md',
+  '--lui-brand-border-radius-lg',
+  '--lui-brand-border-radius-xl',
+  '--lui-brand-opacity-disabled',
+];
+
+const GRID = ['1xs', 'sm', 'md', 'lg', '1xl'];
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brand switch — Let's UI Playground</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 96px 0 64px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      /* ── Toolbar ─────────────────────────────────────────── */
+      .toolbar {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 12px 24px;
+        background: var(--lui-color-neutral-background-surface);
+        border-bottom: 1px solid var(--lui-color-neutral-border-subtle);
+      }
+
+      .toolbar__group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .toolbar__label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.5;
+      }
+
+      .segment {
+        display: flex;
+        border: 1px solid var(--lui-color-neutral-border-default);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .segment__btn {
+        padding: 6px 14px;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        background: transparent;
+        color: var(--lui-color-neutral-text-body);
+        border: none;
+        border-right: 1px solid var(--lui-color-neutral-border-default);
+        cursor: pointer;
+      }
+
+      .segment__btn:last-child {
+        border-right: none;
+      }
+
+      .segment__btn[aria-pressed='true'] {
+        background: var(--lui-color-neutral-background-overlay);
+        color: var(--lui-color-neutral-text-inverse);
+      }
+
+      /* ── Page scaffold ───────────────────────────────────── */
+      /* Container, margem, trilhas e gutter saem dos mesmos tokens que a
+         régua lê, então o conteúdo pousa exatamente sobre ela. Os `--pg-*`
+         são escritos pelo JS a cada troca de brand; os fallbacks valem só
+         para o primeiro paint. */
+      .page {
+        display: grid;
+        grid-template-columns: repeat(var(--pg-columns, 12), minmax(0, 1fr));
+        column-gap: var(--pg-gap, 24px);
+        row-gap: 48px;
+        max-width: var(--lui-brand-grid-container-1xl);
+        margin: 0 auto;
+        padding-inline: var(--pg-margin, 24px);
+      }
+
+      /* Subgrid propaga as trilhas do container para dentro das seções: sem
+         ele cada seção criaria a própria grade e só coincidiria por acaso. */
+      .page > * {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: subgrid;
+        row-gap: 16px;
+      }
+
+      .page > * > * {
+        grid-column: 1 / -1;
+      }
+
+      /* Medida de leitura pela grid, não por `ch`. Casado como `> p` de
+         propósito: o Astro soma um atributo de escopo a cada compound, então
+         a regra acima vence `.intro p` na especificidade e só um seletor da
+         mesma forma a supera. */
+      .page > * > p {
+        grid-column: span var(--pg-text, 8);
+      }
+
+      .intro h1 {
+        margin: 0 0 8px;
+        font-size: 22px;
+        /* A própria headline usa a fonte da brand: a troca de `data-brand`
+           tem que ser visível sem ler nenhum readout. */
+        font-family: var(--lui-brand-typography-font-family-heading);
+      }
+
+      .intro p {
+        margin: 0;
+        line-height: 1.6;
+        opacity: 0.75;
+      }
+
+
+      .section__title {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.5;
+      }
+
+      .section__note {
+        margin: -8px 0 0;
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: 0.6;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* ── Rampas ──────────────────────────────────────────── */
+      /* Os 8 degraus ocupam `--pg-chip` trilhas cada; o que sobrar fica com
+         o rótulo. Quando não sobra nada (16 ou 8 colunas), o rótulo sobe para
+         uma linha própria — é o que mantém o degrau sempre alinhado. */
+      .ramp {
+        display: grid;
+        grid-template-columns: subgrid;
+        align-items: stretch;
+        row-gap: 8px;
+      }
+
+      .ramp__name {
+        display: flex;
+        align-items: center;
+        grid-column: span var(--pg-ramp-name, 4);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .ramp__step {
+        display: flex;
+        flex-direction: column;
+        grid-column: span var(--pg-chip, 1);
+        gap: 6px;
+        min-width: 0;
+      }
+
+      .ramp__chip {
+        height: 56px;
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: var(--lui-brand-border-radius-sm);
+      }
+
+      .ramp__label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 10px;
+        text-align: center;
+        opacity: 0.6;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* ── Readouts ────────────────────────────────────────── */
+      .readouts {
+        display: grid;
+        grid-template-columns: subgrid;
+      }
+
+      .readout {
+        grid-column: span var(--pg-half, 6);
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 8px 0;
+        border-top: 1px solid var(--lui-color-neutral-border-subtle);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+      }
+
+      .readout__value {
+        text-align: right;
+        opacity: 0.7;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .readout__swatch {
+        flex: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        align-self: center;
+      }
+
+      /* ── Amostra de componentes ──────────────────────────── */
+      .sample {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px;
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        /* O raio vem da brand, então o próprio card muda de forma na troca. */
+        border-radius: var(--lui-brand-border-radius-md);
+        background: var(--lui-color-neutral-background-surface);
+      }
+
+      .sample__type {
+        font-family: var(--lui-brand-typography-font-family-body);
+        line-height: var(--lui-brand-typography-line-height-body);
+        font-size: var(--lui-brand-typography-font-size-md);
+        margin: 0;
+        max-width: 60ch;
+      }
+
+      /* ── Régua de colunas ────────────────────────────────── */
+      /* Desenhada a partir das custom properties em runtime, então ela segue
+         a brand ativa — inclusive onde o CSS compilado não segue. */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: none;
+        pointer-events: none;
+      }
+
+      :root[data-grid-overlay='on'] .overlay {
+        display: block;
+      }
+
+      .overlay__grid {
+        display: grid;
+        height: 100%;
+        max-width: var(--lui-brand-grid-container-1xl);
+        margin: 0 auto;
+      }
+
+      /* As colunas nascem do JS e não carregam o atributo de escopo que o
+         Astro injeta no markup, então a regra tem que sair do escopo — presa
+         ao pai, que é estático, para não vazar para a página. */
+      .overlay__grid > :global(.overlay__column) {
+        background: var(--lui-color-primary-background-container);
+        opacity: 0.14;
+      }
+
+      .overlay__readout {
+        position: absolute;
+        left: 50%;
+        bottom: 16px;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 8px 16px;
+        border-radius: var(--lui-brand-border-radius-md);
+        background: var(--lui-color-neutral-background-overlay);
+        color: var(--lui-color-neutral-text-inverse);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="toolbar">
+      <div class="toolbar__group">
+        <span class="toolbar__label">Brand</span>
+        <div class="segment" role="group" aria-label="Brand">
+          {
+            BRANDS.map((brand, index) => (
+              <button
+                class="segment__btn"
+                data-brand-value={brand}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+              >
+                {brand}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="toolbar__group">
+        <span class="toolbar__label">Tema</span>
+        <div class="segment" role="group" aria-label="Tema">
+          <button class="segment__btn" data-theme-value="light" aria-pressed="true">Light</button>
+          <button class="segment__btn" data-theme-value="dark" aria-pressed="false">Dark</button>
+          <button class="segment__btn" data-theme-value="system" aria-pressed="false">System</button>
+        </div>
+      </div>
+
+      <div class="toolbar__group">
+        <span class="toolbar__label">Colunas</span>
+        <lui-switch size="md" label="Mostrar régua de colunas" data-grid-toggle></lui-switch>
+      </div>
+    </header>
+
+    <div class="overlay" aria-hidden="true">
+      <div class="overlay__grid" data-overlay></div>
+      <p class="overlay__readout" data-grid-note></p>
+    </div>
+
+    <main class="page">
+      <section class="intro">
+        <h1>Troca de brand e de tema</h1>
+        <p>
+          Os dois eixos são atributos no <code>&lt;html&gt;</code>:
+          <code>data-brand</code> escolhe a rampa e a foundation,
+          <code>data-theme</code> escolhe claro ou escuro. Tudo abaixo lê
+          custom properties — nada é recompilado —, então cada troca precisa
+          aparecer na hora nas cores, no raio, na tipografia e nos componentes.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">Rampas da brand</h2>
+        <p class="section__note">
+          <code>--lui-brand-color-*</code> resolvidas nos quatro cruzamentos de
+          brand e tema. Os valores impressos são os computados.
+        </p>
+
+        {
+          ['primary', 'secondary'].map((family) => (
+            <div class="ramp">
+              <span class="ramp__name">{family}</span>
+              {STEPS.map((step) => (
+                <div class="ramp__step">
+                  <div
+                    class="ramp__chip"
+                    style={`background: var(--lui-brand-color-${family}-${step})`}
+                  />
+                  <span
+                    class="ramp__label"
+                    data-readout={`--lui-brand-color-${family}-${step}`}
+                  >
+                    —
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">Semânticos que apontam para a brand</h2>
+        <p class="section__note">
+          O elo que importa: os componentes não consomem
+          <code>--lui-brand-color-*</code> direto, e sim estes apelidos. Se eles
+          seguem a troca, o componente segue junto.
+        </p>
+
+        <div class="readouts">
+          {
+            SEMANTIC.map((name) => (
+              <div class="readout">
+                <span>{name}</span>
+                <span class="readout__swatch" style={`background: var(${name})`} />
+                <span class="readout__value" data-readout={name}>
+                  —
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">Foundation</h2>
+        <p class="section__note">
+          Não varia com o tema — só com a brand. É onde a troca aparece na
+          forma e na voz do texto, não só na cor.
+        </p>
+
+        <div class="readouts">
+          {
+            FOUNDATION.map((name) => (
+              <div class="readout">
+                <span>{name}</span>
+                <span class="readout__value" data-readout={name}>
+                  —
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">Grid</h2>
+        <p class="section__note">
+          Atenção ao comparar: estes são os valores em runtime, que seguem a
+          brand. O SCSS compila breakpoint e contagem de coluna como literais
+          (<code>letsui.tokens.static.json</code>), e esses literais são os da
+          brand default — os media queries e os loops de coluna do CSS
+          publicado continuam nos números da <code>lets-ui</code> mesmo sob
+          <code>data-brand="lets-test"</code>.
+        </p>
+
+        <div class="readouts">
+          {
+            GRID.map((size) => (
+              <div class="readout">
+                <span>{`breakpoint ${size} / colunas`}</span>
+                <span class="readout__value">
+                  <span data-readout={`--lui-brand-grid-breakpoint-${size}`}>—</span>
+                  {' · '}
+                  <span data-readout={`--lui-brand-grid-column-${size}`}>—</span>
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">Componentes</h2>
+        <p class="section__note">
+          A prova final: nada aqui sabe qual é a brand ativa.
+        </p>
+
+        <div class="sample">
+          <div class="row">
+            <lui-button label="Primary"></lui-button>
+            <lui-button label="Secondary" variant="secondary"></lui-button>
+            <lui-button label="Ghost" variant="ghost"></lui-button>
+            <lui-button label="Danger" variant="danger"></lui-button>
+            <lui-button label="Disabled" disabled></lui-button>
+          </div>
+
+          <div class="row">
+            <lui-tag label="Default"></lui-tag>
+            <lui-tag label="Primary" variant="primary"></lui-tag>
+            <lui-tag label="Success" variant="success"></lui-tag>
+          </div>
+
+          <lui-alert variant="info" content="A brand ativa manda na cor, no raio e na fonte deste alerta."></lui-alert>
+
+          <p class="sample__type">
+            Um parágrafo na tipografia da brand — família, tamanho e entrelinha
+            saem de <code>--lui-brand-typography-*</code>. Trocar de brand troca
+            a voz do texto, não só a cor.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      import '@lets-ui/components';
+
+      const html = document.documentElement;
+
+      // Brand
+      function applyBrand(value: string) {
+        html.setAttribute('data-brand', value);
+        readTokens();
+        refreshGrid();
+      }
+
+      // Tema — `system` devolve o controle ao `prefers-color-scheme`, que é o
+      // eixo que as permutações `@media` do Terrazzo cobrem.
+      const systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      let systemListener: ((e: MediaQueryListEvent) => void) | null = null;
+
+      function applyTheme(value: string) {
+        if (systemListener) {
+          systemQuery.removeEventListener('change', systemListener);
+          systemListener = null;
+        }
+
+        if (value === 'system') {
+          // Sem `data-theme` nenhum, para que as regras `@media` valham.
+          html.removeAttribute('data-theme');
+          systemListener = () => readTokens();
+          systemQuery.addEventListener('change', systemListener);
+        } else {
+          html.setAttribute('data-theme', value);
+        }
+
+        readTokens();
+      }
+
+      function wireSegment(attr: string, apply: (value: string) => void) {
+        const buttons = document.querySelectorAll<HTMLButtonElement>(`[${attr}]`);
+
+        buttons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+            btn.setAttribute('aria-pressed', 'true');
+            apply(btn.getAttribute(attr) ?? '');
+          });
+        });
+      }
+
+      wireSegment('data-brand-value', applyBrand);
+      wireSegment('data-theme-value', applyTheme);
+
+      /* ── Régua de colunas ──────────────────────────────────────
+         Do maior para o menor: o primeiro breakpoint que a largura
+         alcança é o ativo, com `1xs` como piso. */
+      const BREAKPOINTS = ['1xl', 'lg', 'md', 'sm', '1xs'];
+
+      function refreshGrid() {
+        const styles = getComputedStyle(html);
+        const read = (name: string) => styles.getPropertyValue(name).trim();
+
+        // `innerWidth` inclui a barra de rolagem, como fazem os media
+        // queries; `clientWidth` a desconta e trocaria de breakpoint cedo
+        // demais.
+        const width = window.innerWidth;
+        const active =
+          BREAKPOINTS.find((step) => {
+            const min = parseFloat(read(`--lui-brand-grid-breakpoint-${step}`));
+            return Number.isFinite(min) && width >= min;
+          }) ?? '1xs';
+
+        const columns = parseInt(read(`--lui-brand-grid-column-${active}`), 10) || 12;
+        const gap = read(`--lui-brand-grid-gap-${active}`);
+        const margin =
+          read(`--lui-brand-grid-margin-${active}`) || read('--lui-brand-grid-margin-lg');
+
+        const overlay = document.querySelector<HTMLElement>('[data-overlay]');
+        if (!overlay) return;
+
+        overlay.style.paddingInline = margin;
+        overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+        overlay.style.gap = gap;
+        overlay.replaceChildren(
+          ...Array.from({ length: columns }, () => {
+            const column = document.createElement('span');
+            column.className = 'overlay__column';
+            return column;
+          })
+        );
+
+        /* A página lê a grade daqui: as mesmas colunas, o mesmo gutter e a
+           mesma margem que a régua acabou de usar. */
+        html.style.setProperty('--pg-columns', String(columns));
+        html.style.setProperty('--pg-gap', gap);
+        html.style.setProperty('--pg-margin', margin);
+
+        // Duas por linha só enquanto sobra largura; abaixo de 8 colunas cada
+        // readout toma a linha inteira.
+        html.style.setProperty(
+          '--pg-half',
+          String(columns >= 8 ? Math.floor(columns / 2) : columns)
+        );
+
+        // Medida de leitura: dois terços das trilhas, arredondando para cima.
+        html.style.setProperty(
+          '--pg-text',
+          String(columns >= 8 ? Math.ceil((columns * 2) / 3) : columns)
+        );
+
+        /* Os degraus tomam trilhas inteiras; o resto vai para o rótulo, que
+           some para uma linha própria quando não sobra nada. */
+        const chip = Math.max(1, Math.floor(columns / 8));
+        html.style.setProperty('--pg-chip', String(chip));
+        html.style.setProperty(
+          '--pg-ramp-name',
+          String(columns - chip * 8 >= 1 ? columns - chip * 8 : columns)
+        );
+
+        const note = document.querySelector('[data-grid-note]');
+        if (note) {
+          note.textContent =
+            `${html.getAttribute('data-brand')} · breakpoint ${active} · ` +
+            `${columns} colunas · gutter ${gap} · margem ${margin}`;
+        }
+      }
+
+      const gridToggle = document.querySelector('[data-grid-toggle]');
+
+      gridToggle?.addEventListener('change', (event) => {
+        // O `change` que chega aqui é o que o próprio `lui-switch` reemite no
+        // host — o do input interno não é `composed` e não sai do shadow root.
+        const on = (event.target as HTMLElement & { checked: boolean }).checked;
+        if (on) {
+          html.setAttribute('data-grid-overlay', 'on');
+          refreshGrid();
+        } else {
+          html.removeAttribute('data-grid-overlay');
+        }
+      });
+
+      window.addEventListener('resize', refreshGrid);
+      refreshGrid();
+
+      // Qualquer elemento com `data-readout` imprime o valor computado da
+      // custom property que nomeia, relido a cada troca.
+      function readTokens() {
+        const styles = getComputedStyle(html);
+
+        document.querySelectorAll<HTMLElement>('[data-readout]').forEach((el) => {
+          const name = el.getAttribute('data-readout') as string;
+          el.textContent = styles.getPropertyValue(name).trim() || '—';
+        });
+      }
+
+      readTokens();
+    </script>
+  </body>
+</html>
