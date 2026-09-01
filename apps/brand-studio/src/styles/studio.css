@@ -1,0 +1,331 @@
+/**
+ * Brand Studio layout.
+ *
+ * The controls are Let's UI components, so all that lives here is the skeleton
+ * of the screen plus the handful of elements with no design system equivalent —
+ * the native color picker, the code block and the changed-token marker.
+ * Everything uses the reference brand's tokens: the chrome has to stay steady
+ * while the brand being edited changes inside the iframe.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--lui-color-neutral-background-container);
+  color: var(--lui-color-neutral-text-body);
+  font-family: var(--lui-brand-typography-font-family-body);
+  font-size: var(--lui-brand-typography-font-size-1xs);
+  line-height: var(--lui-brand-typography-line-height-body);
+}
+
+/* ── Skeleton ───────────────────────────────────────────────── */
+
+.st {
+  display: grid;
+
+  /* Wide enough for the five tab labels to sit on one line without the strip
+     scrolling — a tab clipped at rest reads as a bug, not as an affordance. */
+  grid-template-columns: 464px minmax(0, 1fr);
+  height: 100dvh;
+}
+
+.st-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  min-width: 0;
+  background: var(--lui-color-neutral-background-surface);
+  border-right: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-subtle);
+}
+
+.st-panel__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lui-spacing-fixed-16);
+  padding: var(--lui-spacing-fixed-24) var(--lui-spacing-fixed-24) 0;
+}
+
+/* Field hints do not wrap, so the panel clips whatever still overflows instead
+   of pushing the preview aside. */
+.st-panel__head,
+.st-panel__body,
+.st-panel__foot {
+  min-width: 0;
+}
+
+.st-panel__body {
+  min-height: 0;
+  overflow: clip auto;
+  padding: var(--lui-spacing-fixed-24);
+}
+
+.st-panel__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lui-spacing-fixed-8);
+  padding: var(--lui-spacing-fixed-16) var(--lui-spacing-fixed-24);
+  border-top: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-subtle);
+}
+
+/* Collapsed: the panel leaves the grid and the preview takes the whole screen. */
+.st[data-collapsed='true'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.st[data-collapsed='true'] .st-panel {
+  display: none;
+}
+
+/* Collapsing is an action of the panel; expanding can only live in the stage
+   bar, which is all that is left on screen. Each button shows up in the state
+   where it makes sense. */
+.st[data-collapsed='false'] [data-action='expand-panel'] {
+  display: none;
+}
+
+.st-stage {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+}
+
+/* ── Panel header and footer ────────────────────────────────── */
+
+/* The tabs do not shrink: if the brand has long labels, the bar scrolls. */
+.st-panel__head lui-tabs {
+  overflow-x: auto;
+}
+
+.st-panel__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-brandmark {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lui-spacing-fixed-16);
+}
+
+.st-foot__row {
+  display: flex;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-foot__row > * {
+  flex: 1;
+}
+
+.st-panel__foot lui-tag {
+  align-self: flex-start;
+  margin-bottom: var(--lui-spacing-fixed-8);
+}
+
+/* ── Panel sections ─────────────────────────────────────────── */
+
+.st-section,
+.st-group,
+.st-fields,
+.st-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.st-section {
+  gap: var(--lui-spacing-fixed-32);
+}
+
+.st-group,
+.st-fields {
+  gap: var(--lui-spacing-fixed-16);
+}
+
+.st-stack {
+  gap: var(--lui-spacing-fixed-8);
+}
+
+/* The design system's number fields embed steppers and do not fit side by side
+   at the panel's width, so minimum and maximum stack. */
+.st-pair {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-caption {
+  display: block;
+}
+
+/* The dot marks a token that is no longer the reference brand's default. */
+.st-field {
+  position: relative;
+}
+
+.st-field[data-changed='true']::before,
+.st-color[data-changed='true'] .st-color__step::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--lui-border-radius-circle);
+  background: var(--lui-color-primary-icon-default);
+}
+
+.st-field[data-changed='true']::before {
+  top: 6px;
+  right: 0;
+}
+
+.st-color[data-changed='true'] .st-color__step::after {
+  top: 50%;
+  right: -2px;
+  transform: translateY(-50%);
+}
+
+/* ── Colors ────────────────────────────────────────────────── */
+
+.st-ramp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-color {
+  display: grid;
+  grid-template-columns: 20px 40px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-color__step {
+  position: relative;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: var(--lui-brand-typography-font-size-2xs);
+}
+
+/* No design system equivalent: the browser's native color picker. */
+.st-swatch {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-default);
+  border-radius: var(--lui-brand-border-radius-md);
+  background: none;
+  cursor: pointer;
+}
+
+.st-swatch::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.st-swatch::-webkit-color-swatch {
+  border: 0;
+  border-radius: var(--lui-brand-border-radius-sm);
+}
+
+.st-generator {
+  display: flex;
+  align-items: center;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-contrast {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+/* ── Stage ──────────────────────────────────────────────────── */
+
+.st-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--lui-spacing-fixed-24);
+  padding: var(--lui-spacing-fixed-16) var(--lui-spacing-fixed-24);
+  background: var(--lui-color-neutral-background-surface);
+  border-bottom: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-subtle);
+}
+
+/* The guide is not a preview control: it hugs the opposite corner to stay out
+   of the way of the ones that are. `lui-modal` is `display: contents`, so what
+   occupies the row is the trigger itself. */
+.st-toolbar [slot='trigger'] {
+  margin-left: auto;
+}
+
+/* The icon announces the theme the click turns on, not the one already on. */
+.st[data-preview-theme='light'] .st-icon--sun,
+.st[data-preview-theme='dark'] .st-icon--moon {
+  display: none;
+}
+
+.st-frame {
+  min-height: 0;
+  padding: var(--lui-spacing-fixed-24);
+  overflow: auto;
+}
+
+/* `content-box` so the chosen width is genuinely the viewport: with
+   `border-box` the border would eat 2px and the preview would switch
+   breakpoints early. */
+.st-frame iframe {
+  box-sizing: content-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-brand-border-radius-lg);
+  background: var(--lui-color-neutral-background-surface);
+}
+
+/* ── The guide's code block ─────────────────────────────────── */
+
+.st-code {
+  margin: var(--lui-spacing-fixed-16) 0 0;
+  padding: var(--lui-spacing-fixed-16);
+  max-height: 320px;
+  overflow: auto;
+  border-radius: var(--lui-brand-border-radius-md);
+  background: var(--lui-color-neutral-background-container);
+  color: var(--lui-color-neutral-text-body);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--lui-brand-typography-font-size-2xs);
+  white-space: pre;
+}
+
+@media (width <= 1023px) {
+  .st {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    height: auto;
+  }
+
+  .st-panel {
+    border-right: 0;
+    border-bottom: var(--lui-border-width-1) solid
+      var(--lui-color-neutral-border-subtle);
+  }
+
+  .st-frame iframe {
+    height: 70dvh;
+  }
+}
