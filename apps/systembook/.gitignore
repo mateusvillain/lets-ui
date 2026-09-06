@@ -1,0 +1,5 @@
+# Connector output: generated entrypoints and the static preview artifact.
+.systembook/
+
+# The instance credentials live here and are never committed.
+.env

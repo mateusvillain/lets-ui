@@ -1,0 +1,26 @@
+{
+  "name": "systembook-previews",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "SystemBook preview harness for the Let's UI Web Components",
+  "scripts": {
+    "discover": "systembook-connector discover --root .",
+    "build": "systembook-connector build --root .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@systembook/connector": "^0.2.0",
+    "@systembook/schema": "^0.2.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

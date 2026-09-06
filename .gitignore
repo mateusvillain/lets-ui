@@ -39,3 +39,6 @@ coverage/
 
 *storybook.log
 storybook-static
+
+# SystemBook connector output
+.systembook/
