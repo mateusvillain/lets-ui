@@ -1,0 +1,87 @@
+# Publishes the component previews to the SystemBook instance that hosts the
+# documentation. The instance renders each artifact in an iframe, so what the
+# docs show is the component this repository actually builds.
+#
+# Inert until the instance exists: the job is skipped while the
+# SYSTEMBOOK_INSTANCE_URL repository variable is unset.
+#
+# Required repository settings:
+#   Variable `SYSTEMBOOK_INSTANCE_URL` — public URL, no trailing slash.
+#   Secret   `SYSTEMBOOK_UPLOAD_TOKEN` — generated in the instance's Tokens page.
+name: SystemBook previews
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: systembook-previews
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Publish previews
+    if: vars.SYSTEMBOOK_INSTANCE_URL != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # The previews import the packages' `dist/` output by relative path, so
+      # the workspace has to be built first — a clean checkout has none.
+      - name: Build the packages the previews consume
+        run: |
+          pnpm install
+          pnpm build
+
+      # Outside the pnpm workspace, like the Brand Studio: React and the
+      # connector must never reach the published packages' dependency graph.
+      - name: Install dependencies
+        run: pnpm install --ignore-workspace
+        working-directory: apps/systembook
+
+      # discover → generate → build. Fails the job if any *.preview.tsx is
+      # invalid, leaving no partial artifact behind.
+      - name: Build the previews
+        run: pnpm build
+        working-directory: apps/systembook
+
+      # One upload per variant. `manifest.json` maps each variant directory
+      # back to its canonical (component, variantId) pair — the directory name
+      # is a slug and cannot be parsed back into them.
+      - name: Upload to the SystemBook instance
+        env:
+          SYSTEMBOOK_UPLOAD_TOKEN: ${{ secrets.SYSTEMBOOK_UPLOAD_TOKEN }}
+          SYSTEMBOOK_INSTANCE_URL: ${{ vars.SYSTEMBOOK_INSTANCE_URL }}
+        working-directory: apps/systembook/.systembook/dist
+        run: |
+          jq -c '.[]' manifest.json | while read -r entry; do
+            component=$(jq -r '.component' <<<"$entry")
+            variant=$(jq -r '.variantId' <<<"$entry")
+            dir=$(jq -r '.entryDir' <<<"$entry")
+
+            # The shared assets/ directory travels with every variant: the
+            # entry HTML references it as ../assets/.
+            tar -czf /tmp/artifact.tar.gz "$dir" assets
+
+            echo "Publishing $component / $variant…"
+            curl --fail-with-body -sS -X POST "$SYSTEMBOOK_INSTANCE_URL/api/previews" \
+              -H "Authorization: Bearer $SYSTEMBOOK_UPLOAD_TOKEN" \
+              -F component_name="$component" \
+              -F variant_id="$variant" \
+              -F commit_sha="${{ github.sha }}" \
+              -F artifact=@/tmp/artifact.tar.gz
+            echo
+          done
