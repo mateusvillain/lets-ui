@@ -36,9 +36,10 @@ This is a **pnpm monorepo** (`pnpm-workspace.yaml`) for an open-source, framewor
 - **`packages/styles`** — Component SCSS files, plus the shared SCSS utilities they build on in `src/utilities/`: `_functions.scss` (semantic accessor functions), `_mixins.scss`, `_tokens.map.scss` (bridges Terrazzo output to component SCSS), `_grid.map.scss`, `_flex.scss`. Built with Sass → PostCSS/cssnano → `/dist/letsui.min.css`.
 - **`packages/lets-ui-components`** — Web Components built on [Lit](https://lit.dev/), in TypeScript. Built with Vite.
 
-Two apps live outside the pnpm workspace, each with its own lockfile, so a browser app never enters the published packages' dependency graph:
+Three apps live outside the pnpm workspace, each with its own lockfile, so a browser app never enters the published packages' dependency graph:
 
 - **`apps/brand-studio`** — visual editor for the brand tokens, deployed to `studio.lets-ui.com` from Vercel (`vercel.json` at the root). It reaches the packages by relative path, so their `dist/` must be built before it.
+- **`apps/systembook`** — the `*.preview.tsx` files that publish each component to the [SystemBook](https://github.com/mateusvillain/systembook) instance hosting the documentation, plus the compose file that runs the instance. Also reaches the packages by relative path. See its `README.md`.
 - **`playground/`** — raw pages for manual testing. No CI; it is a test surface, not a deliverable.
 
 ### SCSS split rule
