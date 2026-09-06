@@ -1,0 +1,41 @@
+# SystemBook instance that hosts the Let's UI documentation.
+#
+# Mirrors `docker-compose.production.yml` from the upstream repository
+# (https://github.com/mateusvillain/systembook) — it runs the published image,
+# not a local build. Everything (SQLite database + uploaded preview artifacts)
+# lives in the `systembook-data` volume, so it survives container updates.
+#
+#   cp .env.example .env   # then fill in the four required variables
+#   docker compose up -d
+#   docker compose ps      # should settle on "healthy"
+#
+# The instance is not backed up automatically; see the upstream backup guide
+# before pointing a domain at it.
+
+services:
+  app:
+    # Pin a release tag once the docs instance is public — `latest` follows
+    # every upstream release, migrations included.
+    image: ghcr.io/mateusvillain/systembook:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - '${PORT:-3000}:${PORT:-3000}'
+    volumes:
+      - systembook-data:/app/data
+    healthcheck:
+      # The image is node:slim — no curl or wget, so node makes the request.
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/trpc/health.check').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  systembook-data:
