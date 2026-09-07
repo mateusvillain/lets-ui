@@ -160,11 +160,12 @@ body {
   gap: var(--lui-spacing-fixed-8);
 }
 
-/* The design system's number fields embed steppers and do not fit side by side
-   at the panel's width, so minimum and maximum stack. */
+/* Minimum and maximum are one value read together, so they sit on one line.
+   Equal columns rather than auto ones: the two fields carry the same kind of
+   number, and a row that resized with the digits typed into it would jitter. */
 .st-pair {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--lui-spacing-fixed-8);
 }
 

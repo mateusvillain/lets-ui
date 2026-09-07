@@ -407,6 +407,24 @@ export function mountStudio({ root, templates, meta }) {
     return field(item.path, el('div', { class: 'st-stack' }, [input, presets]));
   }
 
+  /** Precision of the fluid scale's bounds, in rem. */
+  const CLAMP_STEP = 0.001;
+
+  /**
+   * `lui-input`'s steppers add in binary floating point: clicking `+` on 1
+   * with a step of 0.1 lands on 1.0999999999999999. Rounding to the step's own
+   * precision keeps the token a decimal the user could have typed — and the
+   * rounded value goes back into the field, since the number on screen is the
+   * one the next click adds to.
+   */
+  function snap(input, raw, step) {
+    const decimals = String(step).split('.')[1]?.length ?? 0;
+    const next = Number(Number(raw).toFixed(decimals));
+
+    if (input.value !== String(next)) input.value = String(next);
+    return next;
+  }
+
   function clampControl(item, value, write) {
     const parsed = parseClamp(value) ?? { min: 1, max: 1 };
 
@@ -416,14 +434,14 @@ export function mountStudio({ root, templates, meta }) {
       const input = el('lui-input', {
         size: 'md',
         type: 'number',
-        step: '0.001',
+        step: String(CLAMP_STEP),
         min: '0.1',
         label,
         value: String(parsed[key]),
       });
 
       input.addEventListener('change', (event) => {
-        parsed[key] = Number(event.target.value);
+        parsed[key] = snap(input, event.target.value, CLAMP_STEP);
         write(buildClamp(parsed.min, parsed.max));
       });
 
@@ -433,8 +451,8 @@ export function mountStudio({ root, templates, meta }) {
     return field(
       item.path,
       el('div', { class: 'st-pair' }, [
-        bound('min', `${item.label} · minimum (rem)`),
-        bound('max', `${item.label} · maximum (rem)`),
+        bound('min', `${item.label} · min (rem)`),
+        bound('max', `${item.label} · max (rem)`),
       ])
     );
   }
@@ -486,7 +504,24 @@ export function mountStudio({ root, templates, meta }) {
     }
   }
 
-  function dimensionControl(item, value, write) {
+  /**
+   * A session saved before a token stopped being a `clamp()` still holds the
+   * string, and reading `.value` off it renders an empty field the next edit
+   * would write back as `NaN`. The largest end of the old clamp is the size
+   * that token now keeps, so it is what the field opens on.
+   */
+  function asDimension(value, item) {
+    if (value && typeof value === 'object') return value;
+
+    const parsed = parseClamp(value);
+    return {
+      value: parsed?.max ?? Number(value) ?? item.min ?? 0,
+      unit: item.unit ?? 'px',
+    };
+  }
+
+  function dimensionControl(item, rawValue, write) {
+    const value = asDimension(rawValue, item);
     const isBreakpoint = item.path.startsWith(BREAKPOINT_PREFIX);
     const bounds = isBreakpoint
       ? breakpointBounds(
@@ -495,10 +530,12 @@ export function mountStudio({ root, templates, meta }) {
         )
       : { min: item.min ?? 0, max: item.max ?? 9999 };
 
+    const unit = value.unit ?? item.unit ?? 'px';
+
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
-      label: `${item.label} (${value.unit ?? 'px'})`,
+      label: `${item.label} (${unit})`,
       min: String(bounds.min),
       max: String(bounds.max),
       step: String(item.step ?? 1),
@@ -522,7 +559,7 @@ export function mountStudio({ root, templates, meta }) {
       }
 
       input.removeAttribute('error');
-      write({ value: Number(raw), unit: value.unit ?? 'px' });
+      write({ value: snap(input, raw, item.step ?? 1), unit });
     });
 
     return field(item.path, input);
