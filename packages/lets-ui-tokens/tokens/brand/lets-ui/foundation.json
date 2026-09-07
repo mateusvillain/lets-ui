@@ -48,32 +48,40 @@
           }
         },
         "font-size": {
-          "$type": "string",
           "3xs": {
-            "$value": "clamp(0.691rem, 0.6901rem + 0.0043vw, 0.694rem)"
+            "$type": "dimension",
+            "$value": { "value": 0.694, "unit": "rem" }
           },
           "2xs": {
-            "$value": "clamp(0.778rem, 0.7623rem + 0.0786vw, 0.833rem)"
+            "$type": "dimension",
+            "$value": { "value": 0.833, "unit": "rem" }
           },
           "1xs": {
-            "$value": "clamp(0.875rem, 0.8393rem + 0.1786vw, 1rem)"
+            "$type": "dimension",
+            "$value": { "value": 1, "unit": "rem" }
           },
           "sm": {
-            "$value": "clamp(0.984rem, 0.9223rem + 0.3086vw, 1.2rem)"
+            "$type": "string",
+            "$value": "clamp(1.05rem, 1.0071rem + 0.2143vw, 1.2rem)"
           },
           "md": {
+            "$type": "string",
             "$value": "clamp(1.107rem, 1.0119rem + 0.4757vw, 1.44rem)"
           },
           "lg": {
+            "$type": "string",
             "$value": "clamp(1.246rem, 1.1083rem + 0.6886vw, 1.728rem)"
           },
           "1xl": {
+            "$type": "string",
             "$value": "clamp(1.402rem, 1.21rem + 0.96vw, 2.074rem)"
           },
           "2xl": {
+            "$type": "string",
             "$value": "clamp(1.577rem, 1.3167rem + 1.3014vw, 2.488rem)"
           },
           "3xl": {
+            "$type": "string",
             "$value": "clamp(2.245rem, 1.6579rem + 2.9357vw, 4.3rem)"
           }
         },
