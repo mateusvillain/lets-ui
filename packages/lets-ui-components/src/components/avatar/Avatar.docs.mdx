@@ -80,6 +80,10 @@ Um avatar sem `name` e sem `status` não tem nome acessível, então fica escond
 
 <Canvas of={AvatarStories.GroupSizes} />
 
+Dentro de um grupo, o ponto de status vai para o canto inferior esquerdo, o canto que o avatar seguinte deixa livre. A sobreposição acompanha o tamanho de cada avatar, e não o do grupo.
+
+<Canvas of={AvatarStories.GroupWithStatus} />
+
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `role="img"` e `aria-label`, e o que está dentro dele leva `aria-hidden="true"` (iniciais e ponto de status) ou `alt=""` (foto). O fallback da foto que falha não existe nesta versão.

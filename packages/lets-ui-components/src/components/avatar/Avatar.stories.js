@@ -161,6 +161,17 @@ export const Group = () => `
 Group.storyName = 'Grupo';
 Group.parameters = { controls: { disable: true } };
 
+export const GroupWithStatus = () => `
+  <lui-avatar-group label="Membros do projeto">
+    <lui-avatar name="Ana Lima" variant="blue" status="online"></lui-avatar>
+    <lui-avatar name="Bia Souza" variant="green" status="busy"></lui-avatar>
+    <lui-avatar name="Caio Reis" variant="orange" status="away"></lui-avatar>
+    <lui-avatar name="Duda Alves" variant="violet" status="offline"></lui-avatar>
+  </lui-avatar-group>
+`;
+GroupWithStatus.storyName = 'Grupo com status';
+GroupWithStatus.parameters = { controls: { disable: true } };
+
 export const GroupSizes = () =>
   `<div style="display: flex; flex-direction: column; gap: 16px;">${[
     'lg',
