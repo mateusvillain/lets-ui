@@ -23,8 +23,7 @@ const tag = ({ status, variant }) =>
 
 const Template = ({ bordered, label }) => `
   <lui-table ${bordered ? 'bordered' : ''} ${label ? `label="${label}"` : ''}>
-    <table>
-      <caption>Orders</caption>
+    <table aria-label="Orders">
       <thead>
         <tr>
           <th scope="col">Name</th>
@@ -53,11 +52,30 @@ Default.args = { bordered: false, label: '' };
 export const Bordered = Template.bind({});
 Bordered.args = { bordered: true, label: '' };
 
+export const WithCaption = () => `
+  <lui-table bordered>
+    <table>
+      <caption>Orders</caption>
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Ana Souza</th><td>Completed</td></tr>
+        <tr><th scope="row">Bruno Lima</th><td>In Progress</td></tr>
+      </tbody>
+    </table>
+  </lui-table>
+`;
+WithCaption.storyName = 'Com caption';
+WithCaption.parameters = { controls: { disable: true } };
+
 export const Scrollable = () => `
   <div style="max-width: 280px">
     <lui-table bordered label="Orders, scrollable">
-      <table style="min-width: 560px">
-        <caption>Orders</caption>
+      <table aria-label="Orders" style="min-width: 560px">
         <thead>
           <tr>
             <th scope="col">Name</th>
@@ -82,8 +100,7 @@ Scrollable.parameters = { controls: { disable: true } };
 
 export const CSSClass = () => `
   <div class="table-wrapper table-wrapper--bordered">
-    <table class="table">
-      <caption>Orders</caption>
+    <table class="table" aria-label="Orders">
       <thead>
         <tr>
           <th scope="col">Name</th>
