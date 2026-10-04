@@ -1,9 +1,19 @@
+@use 'sass:map';
 @use '../utilities/functions' as *;
 
 $sizes: (
-  sm: fixed(24),
-  md: fixed(32),
-  lg: fixed(40),
+  sm: (
+    size: fixed(24),
+    status: 10px,
+  ),
+  md: (
+    size: fixed(32),
+    status: 12px,
+  ),
+  lg: (
+    size: fixed(40),
+    status: 16px,
+  ),
 );
 
 // Avatars in a group overlap by 30% of their size and each wears a ring in the
@@ -24,6 +34,7 @@ $sizes: (
 
 @each $name, $value in $sizes {
   .avatar-group--#{$name} {
-    --lui-avatar-size: #{$value};
+    --lui-avatar-size: #{map.get($value, size)};
+    --lui-avatar-status-size: #{map.get($value, status)};
   }
 }

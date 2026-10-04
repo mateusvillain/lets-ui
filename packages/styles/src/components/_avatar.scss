@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
@@ -7,10 +8,21 @@
 // status dot, and `alt=""` on the photo. A decorative avatar, next to the
 // person's name in text, takes `aria-hidden="true"` on the wrapper instead.
 
+// The status dot is 10, 12 and 16px. Fixed values, not tokens: they are the same
+// in every brand and theme, and no step of the spacing scale matches 10.
 $sizes: (
-  sm: fixed(24),
-  md: fixed(32),
-  lg: fixed(40),
+  sm: (
+    size: fixed(24),
+    status: 10px,
+  ),
+  md: (
+    size: fixed(32),
+    status: 12px,
+  ),
+  lg: (
+    size: fixed(40),
+    status: 16px,
+  ),
 );
 $radii: (
   circle: radius(circle),
@@ -24,10 +36,10 @@ $statuses: (
   offline: color(gray, 3),
 );
 
-// Everything below scales from the avatar's own size, so there is one number to
-// change. The ratios are proportions of the design, not design values: the
-// initials are 30% of the avatar, the status dot 40% of it.
+// The initials scale from the avatar's own size: 30% of it, a proportion of the
+// design rather than a design value.
 $size: var(--lui-avatar-size, #{fixed(40)});
+$status-size: var(--lui-avatar-status-size, 16px);
 
 .avatar {
   position: relative;
@@ -61,7 +73,8 @@ $size: var(--lui-avatar-size, #{fixed(40)});
 
 @each $name, $value in $sizes {
   .avatar--#{$name} {
-    --lui-avatar-size: #{$value};
+    --lui-avatar-size: #{map.get($value, size)};
+    --lui-avatar-status-size: #{map.get($value, status)};
   }
 }
 
@@ -110,8 +123,8 @@ $size: var(--lui-avatar-size, #{fixed(40)});
   inset-block-end: calc(#{width(2)} * -1);
   inset-inline-end: calc(#{width(2)} * -1);
   box-sizing: border-box;
-  inline-size: calc(#{$size} * 0.4);
-  block-size: calc(#{$size} * 0.4);
+  inline-size: $status-size;
+  block-size: $status-size;
   background-color: var(--lui-avatar-status, #{color(gray, 3)});
   border: width(2) solid bg(surface, neutral);
   border-radius: radius(circle);
@@ -125,4 +138,38 @@ $size: var(--lui-avatar-size, #{fixed(40)});
   .avatar__status--#{$name} {
     --lui-avatar-status: #{$value};
   }
+}
+
+// Each status also has a shape of its own inside the dot, so it does not rest
+// on colour alone: online stays solid, away shows clock hands, busy a bar and
+// offline a hollow centre. The shapes are measured against the area inside the
+// dot's ring (12px at the largest size) and scale with it.
+.avatar__status--away::after,
+.avatar__status--busy::after,
+.avatar__status--offline::after {
+  position: absolute;
+  content: '';
+}
+
+.avatar__status--away::after {
+  inset-block-end: 45.83%;
+  inset-inline-start: 45.83%;
+  inline-size: 29.17%;
+  block-size: 37.5%;
+  border-block-end: width(1) solid icon(neutral);
+  border-inline-start: width(1) solid icon(neutral);
+}
+
+.avatar__status--busy::after {
+  inset-block-start: 50%;
+  inset-inline: 25%;
+  block-size: width(1);
+  background-color: icon(neutral);
+  transform: translateY(-50%);
+}
+
+.avatar__status--offline::after {
+  inset: 25%;
+  background-color: bg(surface, neutral);
+  border-radius: radius(circle);
 }
