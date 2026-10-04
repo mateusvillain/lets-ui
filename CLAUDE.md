@@ -11,7 +11,7 @@ pnpm install
 # Build all packages
 pnpm build
 
-# Unit tests
+# Unit tests (Brand Studio in Node, Web Components in Chromium via Playwright)
 pnpm test
 
 # Lint CSS/SCSS and Markdown
