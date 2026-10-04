@@ -103,7 +103,8 @@ Sem o Web Component, a marcação e o estado ficam a cargo de quem usa: alterne 
 - A animação de altura e a rotação da seta são desligadas com `prefers-reduced-motion: reduce`.
 - Item desabilitado recebe `disabled` e `aria-disabled="true"`.
 - O ícone é decorativo: coloque `aria-hidden="true"` no SVG. A seta já é escondida do leitor de tela.
-- As setas do teclado, `Home` e `End` não movem o foco entre cabeçalhos. O padrão ARIA trata isso como opcional.
+- `Seta para baixo` e `Seta para cima` movem o foco entre os cabeçalhos, voltando ao primeiro ou ao último nas pontas. `Home` e `End` vão para o primeiro e o último. Itens desabilitados são pulados, e as teclas só valem quando o foco está em um cabeçalho, não no conteúdo do painel.
+- Essa navegação vem do Web Component. Na classe CSS, só `Tab` funciona.
 
 ## Uso
 

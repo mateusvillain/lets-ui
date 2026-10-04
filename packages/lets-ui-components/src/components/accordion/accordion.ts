@@ -13,6 +13,7 @@ export class LuiAccordion extends LitElement {
   constructor() {
     super();
     this.addEventListener('lui-toggle', this._handleToggle as EventListener);
+    this.addEventListener('keydown', this._handleKeydown);
   }
 
   get _variant(): 'default' | 'bordered' | 'highlighted' {
@@ -44,6 +45,41 @@ export class LuiAccordion extends LitElement {
     this._items.forEach((item) => {
       if (item !== e.target && item.open) item.open = false;
     });
+  };
+
+  // Arrow keys, Home and End move focus between the headers, skipping disabled
+  // items. Only a keydown on a trigger counts: the same keys inside an open
+  // panel — a text field, say — belong to the content.
+  private _handleKeydown = (e: KeyboardEvent) => {
+    const trigger = e.composedPath()[0] as HTMLElement;
+    if (!trigger.classList?.contains('accordion__trigger')) return;
+
+    const items = this._items.filter((item) => !item.disabled);
+    const current = items.findIndex((item) =>
+      item.shadowRoot?.contains(trigger)
+    );
+    if (current === -1) return;
+
+    let next: number;
+    switch (e.key) {
+      case 'ArrowDown':
+        next = (current + 1) % items.length;
+        break;
+      case 'ArrowUp':
+        next = (current - 1 + items.length) % items.length;
+        break;
+      case 'Home':
+        next = 0;
+        break;
+      case 'End':
+        next = items.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    e.preventDefault();
+    items[next].focus();
   };
 
   private _syncItems() {

@@ -29,6 +29,11 @@ export class LuiAccordionItem extends LitElement {
     this._hasIcon = slot.assignedNodes({ flatten: true }).length > 0;
   }
 
+  // The focusable part is the trigger inside the shadow root, not the host.
+  focus(options?: FocusOptions) {
+    this.shadowRoot?.querySelector('button')?.focus(options);
+  }
+
   private _toggle() {
     if (this.disabled) return;
     this.open = !this.open;
