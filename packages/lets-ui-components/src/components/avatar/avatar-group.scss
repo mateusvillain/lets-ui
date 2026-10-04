@@ -1,0 +1,11 @@
+@use 'packages/styles/src/components/avatar-group' as *;
+
+:host {
+  display: inline-flex;
+}
+
+// The avatars are slotted, so the group's own `> :not(:first-child)` rule does
+// not reach them.
+::slotted(:not(:first-child)) {
+  margin-inline-start: var(--lui-avatar-overlap);
+}

@@ -1,4 +1,6 @@
 import { LuiAlert } from './components/alert/alert.js';
+import { LuiAvatar } from './components/avatar/avatar.js';
+import { LuiAvatarGroup } from './components/avatar/avatar-group.js';
 import { LuiBox } from './components/box/box.js';
 import { LuiCenter } from './components/center/center.js';
 import { LuiContainer } from './components/container/container.js';
@@ -61,6 +63,8 @@ define('lui-stack', LuiStack);
 define('lui-switcher', LuiSwitcher);
 define('lui-float', LuiFloat);
 define('lui-alert', LuiAlert);
+define('lui-avatar', LuiAvatar);
+define('lui-avatar-group', LuiAvatarGroup);
 define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
 define('lui-image', LuiImage);
@@ -108,6 +112,8 @@ export {
   LuiSwitcher,
   LuiFloat,
   LuiAlert,
+  LuiAvatar,
+  LuiAvatarGroup,
   LuiBody,
   LuiHeading,
   LuiImage,
