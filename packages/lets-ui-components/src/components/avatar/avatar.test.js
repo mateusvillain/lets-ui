@@ -31,6 +31,7 @@ afterEach(() => {
 const box = (avatar) => avatar.shadowRoot.querySelector('.avatar');
 const initials = (avatar) =>
   avatar.shadowRoot.querySelector('.avatar__initials');
+const icon = (avatar) => avatar.shadowRoot.querySelector('.avatar__icon');
 const image = (avatar) => avatar.shadowRoot.querySelector('img');
 const dot = (avatar) => avatar.shadowRoot.querySelector('.avatar__status');
 const size = (avatar) => box(avatar).getBoundingClientRect().width;
@@ -365,6 +366,60 @@ describe('size, radius and variant', () => {
         luminance(style.backgroundColor),
       ].sort((x, y) => y - x);
       expect((a + 0.05) / (b + 0.05), variant).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+});
+
+describe('placeholder icon', () => {
+  it('shows when there is no photo and no initials', async () => {
+    const { avatar } = await mount('<lui-avatar></lui-avatar>');
+    expect(icon(avatar)).not.toBeNull();
+    expect(initials(avatar)).toBeNull();
+  });
+
+  it('shows when the name yields no initials', async () => {
+    const { avatar } = await mount('<lui-avatar name="   "></lui-avatar>');
+    expect(icon(avatar)).not.toBeNull();
+  });
+
+  it('gives way to the initials and to the photo', async () => {
+    const { avatars } = await mount(`
+      <lui-avatar initials="MV"></lui-avatar>
+      <lui-avatar name="Maria"></lui-avatar>
+      <lui-avatar src="data:image/gif;base64,R0lGODlhAQABAAAAACw="></lui-avatar>
+    `);
+    avatars.forEach((avatar) => expect(icon(avatar)).toBeNull());
+  });
+
+  it('shows when the photo fails and there are no initials', async () => {
+    const { avatar } = await mount(
+      '<lui-avatar src="/nao-existe.png"></lui-avatar>'
+    );
+    image(avatar).dispatchEvent(new Event('error'));
+    await avatar.updateComplete;
+    expect(icon(avatar)).not.toBeNull();
+  });
+
+  it('is hidden from the accessibility tree', async () => {
+    const { avatar } = await mount('<lui-avatar name=" "></lui-avatar>');
+    expect(icon(avatar).getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('takes the colour of the initials in every variant', async () => {
+    for (const variant of [
+      'gray',
+      'blue',
+      'green',
+      'orange',
+      'red',
+      'violet',
+    ]) {
+      const { avatar } = await mount(
+        `<lui-avatar variant="${variant}"></lui-avatar>`
+      );
+      expect(getComputedStyle(icon(avatar)).fill, variant).toBe(
+        getComputedStyle(box(avatar)).color
+      );
     }
   });
 });
