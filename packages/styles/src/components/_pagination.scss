@@ -54,3 +54,8 @@
 .pagination__ellipsis {
   cursor: default;
 }
+
+// Live region: tells screen readers which page loaded after a change.
+.pagination__status {
+  @include sr-only;
+}

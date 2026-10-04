@@ -76,6 +76,9 @@ export class LuiPagination extends LitElement {
   @property({ attribute: 'aria-label' }) ariaLabel = 'Pagination';
   @property({ attribute: 'previous-label' }) previousLabel = 'Previous page';
   @property({ attribute: 'next-label' }) nextLabel = 'Next page';
+  @property({ attribute: 'page-label' }) pageLabel = 'Page';
+  @property({ attribute: 'status-label' }) statusLabel =
+    'Page {current} of {total}';
 
   // Which control should hold focus once the new page has rendered. Lit reuses
   // the buttons by position, so without this the focus would stay on whatever
@@ -140,6 +143,7 @@ export class LuiPagination extends LitElement {
       <button
         class="pagination__item"
         type="button"
+        aria-label="${this.pageLabel} ${item}"
         aria-current="${ifDefined(isCurrent ? 'page' : undefined)}"
         data-control="${ifDefined(isCurrent ? 'current' : undefined)}"
         @click="${() => this._goTo(item, 'current')}"
@@ -189,6 +193,11 @@ export class LuiPagination extends LitElement {
           </li>
         </ul>
       </nav>
+      <p class="pagination__status" role="status">
+        ${this.statusLabel
+          .replace('{current}', String(current))
+          .replace('{total}', String(total))}
+      </p>
     `;
   }
 }
