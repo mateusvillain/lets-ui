@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.11.0
+
+### Added
+
+- New `lui-accordion` and `lui-accordion-item` Web Components and CSS-only `.accordion` styles for a list of collapsible sections. The chevron turns when an item opens, and the animation is removed under `prefers-reduced-motion`.
+  - Opening an item closes the one that was open; `multiple` lets several stay open. `lui-accordion-item` takes `label`, `subtitle`, `open` and `disabled`, an `icon` slot, and a default slot for the description.
+  - `variant` is `default` (dividers), `bordered` (the list wrapped in a rounded border) or `highlighted` (no dividers; the open item is outlined).
+  - Each item emits `lui-toggle` with `{ open }` in `detail` whenever its state changes. The initial `open` attribute does not emit it.
+  - Every header is a native `<button>` with `aria-expanded` and `aria-controls`, inside an element with `role="heading"` whose level `heading-level` sets (1–6, default 3). Enter and Space toggle it, and Arrow keys, `Home` and `End` move focus between headers, skipping disabled ones.
+  - A closed panel is `visibility: hidden`, so its content leaves the tab order and the accessibility tree. The panel has no `role="region"`, which the ARIA pattern advises against for accordions with many panels.
+- Browser tests for the Web Components: a `components` project in the Vitest config runs `*.test.js` files in Chromium through Playwright, starting with the Accordion. `pnpm test` runs it, and CI installs Chromium first.
+
 ## v1.10.0
 
 ### Added
