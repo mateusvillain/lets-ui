@@ -1,0 +1,86 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TableStories from './Table.stories';
+
+<Meta of={TableStories} />
+
+# Table
+
+Apresenta dados em linhas e colunas. O componente usa o `<table>` nativo, então a leitura por tecnologia assistiva vem da própria marcação: `<caption>`, `<thead>`, `<tbody>` e `<th scope>`.
+
+<Canvas of={TableStories.Default} />
+<Controls of={TableStories.Default} />
+
+## Com borda
+
+`bordered` desenha a borda externa com cantos arredondados.
+
+<Canvas of={TableStories.Bordered} />
+
+## Estrutura
+
+A tabela fica dentro de `<lui-table>`, na marcação de quem usa. O Web Component não gera linhas nem células: ele coloca a classe `.table` na tabela, cuida da rolagem horizontal e da borda.
+
+- `<caption>` dá o nome da tabela. Inclua sempre.
+- `<th scope="col">` no cabeçalho de cada coluna.
+- `<th scope="row">` na primeira célula de cada linha, quando ela identifica a linha. Dados comuns ficam em `<td>`.
+- Ações dentro das células precisam de nome próprio que diga a qual linha pertencem ("Ações de Ana Souza").
+- `.table__cell--end` alinha ao fim uma coluna numérica.
+
+## Rolagem horizontal
+
+Quando a tabela é mais larga que o espaço disponível, a área vira uma região rolável. Ela ganha `role="region"`, `tabindex="0"` e um nome, para que o teclado consiga rolar. O nome vem de `label` ou, sem ele, do `<caption>`.
+
+<Canvas of={TableStories.Scrollable} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-table bordered>
+  <table>
+    <caption>
+      Pedidos
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Ana Souza</th>
+        <td>Concluído</td>
+      </tr>
+    </tbody>
+  </table>
+</lui-table>
+```
+
+### Classe CSS
+
+<Canvas of={TableStories.CSSClass} />
+
+```html
+<div class="table-wrapper table-wrapper--bordered">
+  <table class="table">
+    …
+  </table>
+</div>
+```
+
+Sem o Web Component, a região rolável é responsabilidade de quem usa: adicione `role="region"`, `tabindex="0"` e `aria-label` ao `.table-wrapper` se a tabela puder transbordar.
+
+## Propriedades
+
+| Propriedade | Atributo   | Tipo      | Padrão  | Descrição                                           |
+| ----------- | ---------- | --------- | ------- | --------------------------------------------------- |
+| `bordered`  | `bordered` | `boolean` | `false` | Borda externa com cantos arredondados.              |
+| `label`     | `label`    | `string`  | `''`    | Nome da região rolável. Sem ele, usa o `<caption>`. |
+
+## Acessibilidade
+
+- A semântica é a do `<table>` nativo: nenhum `role` é sobrescrito.
+- O hover da linha é só um apoio visual; não carrega informação.
+- Status dentro das células deve ter texto, não só cor.

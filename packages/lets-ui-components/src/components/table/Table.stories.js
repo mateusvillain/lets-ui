@@ -1,0 +1,101 @@
+import '../../../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
+import '../../../../../packages/styles/dist/letsui.css';
+import '../../index.js';
+
+export default {
+  title: 'Content/Table',
+  argTypes: {
+    bordered: { control: 'boolean' },
+    label: { control: 'text' },
+  },
+};
+
+const MORE = `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>`;
+
+const ROWS = [
+  { name: 'Ana Souza', status: 'Completed', variant: 'success' },
+  { name: 'Bruno Lima', status: 'In Progress', variant: 'caution' },
+  { name: 'Carla Dias', status: 'Canceled', variant: 'danger' },
+];
+
+const tag = ({ status, variant }) =>
+  `<lui-tag label="${status}" variant="${variant}" size="sm"></lui-tag>`;
+
+const Template = ({ bordered, label }) => `
+  <lui-table ${bordered ? 'bordered' : ''} ${label ? `label="${label}"` : ''}>
+    <table>
+      <caption>Orders</caption>
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${ROWS.map(
+          (row) => `<tr>
+          <th scope="row">${row.name}</th>
+          <td>${tag(row)}</td>
+          <td>
+            <lui-icon-button size="md" aria-label="Actions for ${row.name}">${MORE}</lui-icon-button>
+          </td>
+        </tr>`
+        ).join('')}
+      </tbody>
+    </table>
+  </lui-table>
+`;
+
+export const Default = Template.bind({});
+Default.args = { bordered: false, label: '' };
+
+export const Bordered = Template.bind({});
+Bordered.args = { bordered: true, label: '' };
+
+export const Scrollable = () => `
+  <div style="max-width: 280px">
+    <lui-table bordered label="Orders, scrollable">
+      <table style="min-width: 560px">
+        <caption>Orders</caption>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ROWS.map(
+            (row) => `<tr>
+            <th scope="row">${row.name}</th>
+            <td>${row.name.split(' ')[0].toLowerCase()}@example.com</td>
+            <td>${tag(row)}</td>
+          </tr>`
+          ).join('')}
+        </tbody>
+      </table>
+    </lui-table>
+  </div>
+`;
+Scrollable.parameters = { controls: { disable: true } };
+
+export const CSSClass = () => `
+  <div class="table-wrapper table-wrapper--bordered">
+    <table class="table">
+      <caption>Orders</caption>
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Ana Souza</th><td>Completed</td></tr>
+        <tr><th scope="row">Bruno Lima</th><td>In Progress</td></tr>
+      </tbody>
+    </table>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';
+CSSClass.parameters = { controls: { disable: true } };
