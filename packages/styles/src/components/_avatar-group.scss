@@ -1,0 +1,29 @@
+@use '../utilities/functions' as *;
+
+$sizes: (
+  sm: fixed(24),
+  md: fixed(32),
+  lg: fixed(40),
+);
+
+// Avatars in a group overlap by 30% of their size and each wears a ring in the
+// surface colour, so the edge of one stays readable over the next. The group
+// hands both to its avatars as custom properties: they inherit, which lets the
+// rule reach an avatar whose own styles live in a shadow root.
+.avatar-group {
+  --lui-avatar-overlap: calc(var(--lui-avatar-size, #{fixed(40)}) * -0.3);
+  --lui-avatar-ring: 0 0 0 #{width(2)} #{bg(surface, neutral)};
+
+  display: inline-flex;
+  align-items: center;
+
+  > :not(:first-child) {
+    margin-inline-start: var(--lui-avatar-overlap);
+  }
+}
+
+@each $name, $value in $sizes {
+  .avatar-group--#{$name} {
+    --lui-avatar-size: #{$value};
+  }
+}
