@@ -174,6 +174,38 @@ describe('single-open mode (default)', () => {
     expect(openStates(items)).toEqual([false, true]);
   });
 
+  it('does not close the outer item when an item of a nested accordion opens', async () => {
+    // Document order: outer One, inner A, inner B, outer Two.
+    const { items } = await mount(`
+      <lui-accordion>
+        <lui-accordion-item label="One" open>
+          <lui-accordion>
+            <lui-accordion-item label="A">a</lui-accordion-item>
+            <lui-accordion-item label="B">b</lui-accordion-item>
+          </lui-accordion>
+        </lui-accordion-item>
+        <lui-accordion-item label="Two">two</lui-accordion-item>
+      </lui-accordion>
+    `);
+    const [outerOne, innerA, innerB, outerTwo] = items;
+
+    await userEvent.click(trigger(innerA));
+    expect(openStates([outerOne, innerA, innerB, outerTwo])).toEqual([
+      true,
+      true,
+      false,
+      false,
+    ]);
+
+    await userEvent.click(trigger(innerB));
+    expect(openStates([outerOne, innerA, innerB, outerTwo])).toEqual([
+      true,
+      false,
+      true,
+      false,
+    ]);
+  });
+
   it('can close the only open item, leaving all closed', async () => {
     const { items } = await mount(`
       <lui-accordion>

@@ -42,6 +42,8 @@ export class LuiAccordion extends LitElement {
 
   private _handleToggle = (e: CustomEvent<{ open: boolean }>) => {
     if (this.multiple || !e.detail.open) return;
+    // lui-toggle is composed and bubbles: ignore items of a nested accordion.
+    if (!this._items.includes(e.target as LuiAccordionItem)) return;
     this._items.forEach((item) => {
       if (item !== e.target && item.open) item.open = false;
     });
