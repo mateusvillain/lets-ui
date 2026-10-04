@@ -1,0 +1,80 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+// Native <table>: the semantics (caption, th[scope], row/column headers) come
+// from the markup, this file only paints it. `border-collapse: separate` so the
+// row dividers live on the cells and the outer border can sit on the wrapper,
+// where `overflow` can clip it to the radius.
+
+.table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+
+  &--bordered {
+    border: width(1) solid stroke(neutral, subtle);
+    border-radius: radius(md);
+  }
+
+  // A scrollable region has to be reachable by keyboard (WCAG 2.1.1).
+  &:focus-visible {
+    box-shadow: focus-ring(primary);
+    outline: none;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: start;
+
+  @include font-scale(body--lg);
+
+  caption {
+    padding: fluid(12);
+    color: text(heading);
+    text-align: start;
+    caption-side: top;
+
+    @include font-scale(body--lg);
+
+    font-weight: weight(bold);
+  }
+
+  th,
+  td {
+    padding: fluid(12);
+    text-align: start;
+    vertical-align: middle;
+    border-bottom: width(1) solid var(--lui-divider-color-border-default);
+  }
+
+  th {
+    color: text(heading);
+    font-weight: weight(bold);
+  }
+
+  td {
+    color: text(body);
+  }
+
+  // The last row closes the table on its own, without a divider underneath.
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  tbody tr {
+    @include state-layer;
+
+    &:hover {
+      background-color: state(hover);
+
+      @include state-timing(hover);
+    }
+  }
+
+  // Numeric columns read better flush to the end of the cell.
+  .table__cell--end {
+    text-align: end;
+  }
+}

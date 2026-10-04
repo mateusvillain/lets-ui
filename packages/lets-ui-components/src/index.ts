@@ -38,6 +38,7 @@ import { LuiLink } from './components/link/link.js';
 import { LuiModal } from './components/modal/modal.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
+import { LuiTable } from './components/table/table.js';
 import { LuiTag } from './components/tag/tag.js';
 import { LuiTextarea } from './components/textarea/textarea.js';
 import { LuiToast } from './components/toast/toast.js';
@@ -92,6 +93,7 @@ define('lui-modal', LuiModal);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
 define('lui-shortcut', LuiShortcut);
+define('lui-table', LuiTable);
 define('lui-tag', LuiTag);
 define('lui-textarea', LuiTextarea);
 define('lui-toast', LuiToast);
@@ -141,6 +143,7 @@ export {
   LuiNativeSelect,
   LuiSelect,
   LuiShortcut,
+  LuiTable,
   LuiTag,
   LuiTextarea,
   LuiToast,
