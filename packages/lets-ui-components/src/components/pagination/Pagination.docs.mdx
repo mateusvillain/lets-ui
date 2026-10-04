@@ -44,16 +44,17 @@ Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com 
 
 ## Propriedades
 
-| Atributo         | Tipo     | Padrão          | Descrição                                        |
-| ---------------- | -------- | --------------- | ------------------------------------------------ |
-| `current-page`   | `number` | `1`             | Página atual. Refletido no atributo ao navegar.  |
-| `total-pages`    | `number` | `1`             | Total de páginas.                                |
-| `sibling-count`  | `number` | `1`             | Páginas vizinhas exibidas de cada lado da atual. |
-| `aria-label`     | `string` | `Pagination`    | Nome acessível do landmark `<nav>`.              |
-| `previous-label` | `string` | `Previous page` | Nome acessível do botão de página anterior.      |
-| `next-label`     | `string` | `Next page`     | Nome acessível do botão de próxima página.       |
-| `page-label`     | `string` | `Page`          | Prefixo do nome acessível de cada página ("Page 3"). |
-| `status-label`   | `string` | `Page {current} of {total}` | Texto anunciado por leitores de tela após a troca de página. |
+| Atributo                | Tipo     | Padrão                      | Descrição                                                                                                         |
+| ----------------------- | -------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `current-page`          | `number` | `1`                         | Página atual. Refletido no atributo ao navegar.                                                                   |
+| `total-pages`           | `number` | `1`                         | Total de páginas.                                                                                                 |
+| `sibling-count`         | `number` | `1`                         | Páginas vizinhas exibidas de cada lado da atual.                                                                  |
+| `compact-sibling-count` | `number` | `0`                         | Vizinhas de cada lado abaixo de 768px (limitado a `sibling-count`). Primeira, última e atual permanecem visíveis. |
+| `aria-label`            | `string` | `Pagination`                | Nome acessível do landmark `<nav>`.                                                                               |
+| `previous-label`        | `string` | `Previous page`             | Nome acessível do botão de página anterior.                                                                       |
+| `next-label`            | `string` | `Next page`                 | Nome acessível do botão de próxima página.                                                                        |
+| `page-label`            | `string` | `Page`                      | Prefixo do nome acessível de cada página ("Page 3").                                                              |
+| `status-label`          | `string` | `Page {current} of {total}` | Texto anunciado por leitores de tela após a troca de página.                                                      |
 
 ## Acessibilidade
 

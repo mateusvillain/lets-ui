@@ -73,6 +73,8 @@ export class LuiPagination extends LitElement {
   currentPage = 1;
   @property({ type: Number, attribute: 'total-pages' }) totalPages = 1;
   @property({ type: Number, attribute: 'sibling-count' }) siblingCount = 1;
+  @property({ type: Number, attribute: 'compact-sibling-count' })
+  compactSiblingCount = 0;
   @property({ attribute: 'aria-label' }) ariaLabel = 'Pagination';
   @property({ attribute: 'previous-label' }) previousLabel = 'Previous page';
   @property({ attribute: 'next-label' }) nextLabel = 'Next page';
@@ -98,7 +100,33 @@ export class LuiPagination extends LitElement {
   }
 
   get _siblings(): number {
-    return Math.max(0, Math.floor(this.siblingCount) || 0);
+    const siblings = Math.max(0, Math.floor(this.siblingCount) || 0);
+    if (!this._compact) return siblings;
+    return Math.min(
+      siblings,
+      Math.max(0, Math.floor(this.compactSiblingCount) || 0)
+    );
+  }
+
+  // Below the `sm` grid breakpoint (768px) the row drops to
+  // `compact-sibling-count`. The value lives here because a media query cannot
+  // reach into a Lit property; keep it in step with the grid breakpoint token.
+  private _compact = false;
+  private _mql = window.matchMedia('(width < 768px)');
+  private _onMediaChange = (e: MediaQueryListEvent) => {
+    this._compact = e.matches;
+    this.requestUpdate();
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._compact = this._mql.matches;
+    this._mql.addEventListener('change', this._onMediaChange);
+  }
+
+  disconnectedCallback() {
+    this._mql.removeEventListener('change', this._onMediaChange);
+    super.disconnectedCallback();
   }
 
   private _goTo(page: number, focusTarget: FocusTarget) {
