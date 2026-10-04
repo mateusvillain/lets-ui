@@ -8,14 +8,36 @@ export default {
     currentPage: { control: { type: 'number', min: 1 } },
     totalPages: { control: { type: 'number', min: 1 } },
     siblingCount: { control: { type: 'number', min: 0 } },
+    compactSiblingCount: { control: { type: 'number', min: 0 } },
+    ariaLabel: { control: 'text' },
+    previousLabel: { control: 'text' },
+    nextLabel: { control: 'text' },
+    pageLabel: { control: 'text' },
+    statusLabel: { control: 'text' },
   },
 };
 
-const Template = ({ currentPage, totalPages, siblingCount }) => `
+const Template = ({
+  currentPage,
+  totalPages,
+  siblingCount,
+  compactSiblingCount,
+  ariaLabel,
+  previousLabel,
+  nextLabel,
+  pageLabel,
+  statusLabel,
+}) => `
   <lui-pagination
     current-page="${currentPage}"
     total-pages="${totalPages}"
     sibling-count="${siblingCount}"
+    compact-sibling-count="${compactSiblingCount}"
+    aria-label="${ariaLabel}"
+    previous-label="${previousLabel}"
+    next-label="${nextLabel}"
+    page-label="${pageLabel}"
+    status-label="${statusLabel}"
   ></lui-pagination>
 `;
 
@@ -24,6 +46,12 @@ Default.args = {
   currentPage: 8,
   totalPages: 20,
   siblingCount: 1,
+  compactSiblingCount: 0,
+  ariaLabel: 'Pagination',
+  previousLabel: 'Previous page',
+  nextLabel: 'Next page',
+  pageLabel: 'Page',
+  statusLabel: 'Page {current} of {total}',
 };
 
 export const FewPages = () => `
