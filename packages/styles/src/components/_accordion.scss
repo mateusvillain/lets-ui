@@ -107,6 +107,13 @@
   @include font-scale(body--lg);
 }
 
+// With an icon the description lines up with the title text rather than with
+// the icon: the trigger's padding, the icon, its trailing space and the row gap
+// — the same four measures that place the title.
+.accordion__item--with-icon .accordion__description {
+  padding-inline-start: calc(fluid(16) + fluid(24) + fluid(8) + fluid(8));
+}
+
 .accordion__item--open {
   > .accordion__heading .accordion__chevron {
     transform: rotate(180deg);

@@ -64,7 +64,11 @@ export class LuiAccordionItem extends LitElement {
     const panelId = `${this._baseId}-panel`;
 
     return html`
-      <div class="accordion__item ${this.open ? 'accordion__item--open' : ''}">
+      <div
+        class="accordion__item ${this.open
+          ? 'accordion__item--open'
+          : ''} ${this._hasIcon ? 'accordion__item--with-icon' : ''}"
+      >
         <div
           class="accordion__heading"
           role="heading"

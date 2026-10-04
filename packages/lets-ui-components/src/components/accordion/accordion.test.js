@@ -1,3 +1,4 @@
+import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
 import { afterEach, describe, expect, it } from 'vitest';
 import { userEvent } from 'vitest/browser';
 import { LuiAccordion } from './accordion.ts';
@@ -268,6 +269,43 @@ describe('lui-toggle event', () => {
     `);
     document.removeEventListener('lui-toggle', listener);
     expect(events).toEqual([]);
+  });
+});
+
+describe('description alignment', () => {
+  const ICON = '<svg slot="icon" viewBox="0 0 24 24" aria-hidden="true"></svg>';
+
+  // Where the title text starts and where the description content starts,
+  // both measured from the item's left edge.
+  const offsets = async (html) => {
+    const { items } = await mount(html);
+    const root = items[0].shadowRoot;
+    const left = items[0].getBoundingClientRect().left;
+    const description = root.querySelector('.accordion__description');
+    return {
+      title:
+        root.querySelector('.accordion__title').getBoundingClientRect().left -
+        left,
+      description:
+        description.getBoundingClientRect().left -
+        left +
+        parseFloat(getComputedStyle(description).paddingLeft),
+    };
+  };
+
+  it('lines the description up with the title when there is an icon', async () => {
+    const { title, description } = await offsets(`
+      <lui-accordion><lui-accordion-item label="One" open>${ICON}one</lui-accordion-item></lui-accordion>
+    `);
+    expect(title).toBeGreaterThan(16);
+    expect(description).toBeCloseTo(title, 1);
+  });
+
+  it('lines the description up with the title when there is no icon', async () => {
+    const { title, description } = await offsets(`
+      <lui-accordion><lui-accordion-item label="One" open>one</lui-accordion-item></lui-accordion>
+    `);
+    expect(description).toBeCloseTo(title, 1);
   });
 });
 
