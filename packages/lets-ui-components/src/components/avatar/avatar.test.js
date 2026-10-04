@@ -188,7 +188,76 @@ describe('status', () => {
 
     expect(inner.right - outer.right).toBeCloseTo(2, 0);
     expect(inner.bottom - outer.bottom).toBeCloseTo(2, 0);
-    expect(inner.width).toBeCloseTo(16, 0);
+  });
+
+  it('is 10, 12 and 16px at sm, md and lg', async () => {
+    const widths = {};
+    for (const s of ['sm', 'md', 'lg']) {
+      const { avatar } = await mount(
+        `<lui-avatar name="Maria" size="${s}" status="online"></lui-avatar>`
+      );
+      widths[s] = dot(avatar).getBoundingClientRect().width;
+    }
+    expect(widths).toEqual({ sm: 10, md: 12, lg: 16 });
+  });
+});
+
+describe('status shape', () => {
+  const after = async (status, size = 'lg') => {
+    const { avatar } = await mount(
+      `<lui-avatar name="Maria" size="${size}" status="${status}"></lui-avatar>`
+    );
+    return {
+      dot: dot(avatar),
+      style: getComputedStyle(dot(avatar), '::after'),
+    };
+  };
+
+  it('draws a shape in the dot for every status but online', async () => {
+    expect((await after('online')).style.content).toBe('none');
+    for (const status of ['away', 'busy', 'offline']) {
+      expect((await after(status)).style.content, status).not.toBe('none');
+    }
+  });
+
+  it('keeps the ring inside the dot', async () => {
+    const { style, dot: el } = await after('busy', 'md');
+    const dotStyle = getComputedStyle(el);
+
+    expect(parseFloat(dotStyle.borderTopWidth)).toBe(2);
+    expect(dotStyle.boxShadow).toBe('none');
+    expect(style.position).toBe('absolute');
+  });
+
+  it('centres the busy bar: 1px high, half the area inside the ring', async () => {
+    const { style } = await after('busy');
+
+    expect(parseFloat(style.height)).toBe(1);
+    // The area inside the ring is the dot minus 2px of ring on each side.
+    const { dot: el } = await after('busy');
+    const inside = el.getBoundingClientRect().width - 4;
+    expect(parseFloat(style.width)).toBeCloseTo(inside / 2, 0);
+  });
+
+  it('makes the offline centre a circle of half the inside area', async () => {
+    const { style, dot: el } = await after('offline');
+    const inside = el.getBoundingClientRect().width - 4;
+
+    expect(parseFloat(style.width)).toBeCloseTo(inside / 2, 0);
+    expect(parseFloat(style.borderTopLeftRadius)).toBeGreaterThan(0);
+  });
+
+  it('scales the shape with the dot', async () => {
+    const lg = parseFloat((await after('offline', 'lg')).style.width);
+    const sm = parseFloat((await after('offline', 'sm')).style.width);
+    expect(sm).toBeLessThan(lg);
+  });
+
+  it('does not change the accessible name', async () => {
+    const { avatar } = await mount(
+      '<lui-avatar name="Maria Villain" status="busy"></lui-avatar>'
+    );
+    expect(box(avatar).getAttribute('aria-label')).toBe('Maria Villain, Busy');
   });
 });
 
