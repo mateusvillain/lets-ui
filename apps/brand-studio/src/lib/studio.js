@@ -514,8 +514,10 @@ export function mountStudio({ root, templates, meta }) {
     if (value && typeof value === 'object') return value;
 
     const parsed = parseClamp(value);
+    const number = Number(value);
     return {
-      value: parsed?.max ?? Number(value) ?? item.min ?? 0,
+      value:
+        parsed?.max ?? (Number.isFinite(number) ? number : (item.min ?? 0)),
       unit: item.unit ?? 'px',
     };
   }

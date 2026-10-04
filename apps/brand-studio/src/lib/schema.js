@@ -106,7 +106,9 @@ export const SECTIONS = [
           field(`typography.font-size.${step}`, step, 'dimension', {
             min: 0.5,
             max: 2,
-            step: 0.1,
+            // The tokens and the random draw both carry thousandths (0.694,
+            // 0.833); a coarser step would round them away on the first edit.
+            step: 0.001,
             unit: 'rem',
           })
         ),
