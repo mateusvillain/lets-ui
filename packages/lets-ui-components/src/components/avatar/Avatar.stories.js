@@ -112,6 +112,16 @@ export const PhotoFallback = () =>
 PhotoFallback.storyName = 'Foto que não carrega';
 PhotoFallback.parameters = { controls: { disable: true } };
 
+export const Placeholder = () =>
+  row(`
+    <lui-avatar></lui-avatar>
+    <lui-avatar variant="blue"></lui-avatar>
+    <lui-avatar variant="violet" radius="rounded"></lui-avatar>
+    <lui-avatar size="sm"></lui-avatar>
+  `);
+Placeholder.storyName = 'Sem foto e sem iniciais';
+Placeholder.parameters = { controls: { disable: true } };
+
 export const Status = () =>
   row(`
     <lui-avatar name="Mateus Villain" status="online"></lui-avatar>

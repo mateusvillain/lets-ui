@@ -46,6 +46,12 @@ Se a imagem falhar ao carregar, o avatar volta para as iniciais. Trocar o `src` 
 
 <Canvas of={AvatarStories.PhotoFallback} />
 
+## Sem foto e sem iniciais
+
+Sem `src`, `initials` e `name`, o avatar mostra o ícone de uma pessoa. Ele usa a cor das iniciais da `variant`, e fica fora da árvore de acessibilidade.
+
+<Canvas of={AvatarStories.Placeholder} />
+
 ## Status
 
 `status` desenha um indicador no canto inferior direito: `online`, `away`, `busy` ou `offline`.
@@ -97,7 +103,7 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `r
 | Atributo       | Tipo     | Padrão   | Descrição                                                                                 |
 | -------------- | -------- | -------- | ----------------------------------------------------------------------------------------- |
 | `name`         | `string` | `''`     | Nome da pessoa. Vira o nome acessível e a fonte das iniciais.                             |
-| `src`          | `string` | `''`     | URL da foto. Se falhar, mostra as iniciais.                                               |
+| `src`          | `string` | `''`     | URL da foto. Se falhar, mostra as iniciais ou o ícone.                                    |
 | `initials`     | `string` | `''`     | Iniciais a mostrar. Se omitido, vêm do `name`.                                            |
 | `variant`      | `string` | `gray`   | `gray`, `blue`, `green`, `orange`, `red` ou `violet`.                                     |
 | `size`         | `string` | `''`     | `sm`, `md` ou `lg`. Vazio vale `lg`, ou o tamanho do grupo.                               |
@@ -122,6 +128,7 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `r
 - Com `name` ou `status`, o invólucro é `role="img"` com `aria-label` ("Mateus Villain, Online"). O leitor de tela anuncia uma imagem com o nome inteiro, e não as iniciais letra por letra.
 - As iniciais, o ponto de status e a foto ficam fora da árvore de acessibilidade: o nome está no invólucro, e anunciá-los de novo seria ruído.
 - Sem `name` e sem `status`, o avatar recebe `aria-hidden="true"`. É o caso do avatar ao lado do nome escrito.
+- O ícone de pessoa é decorativo: `aria-hidden="true"`.
 - O status vai como texto no nome acessível, e não só como cor.
 - O status também tem uma forma própria no ponto, e não depende de cor para quem enxerga.
 - Contraste das iniciais sobre o fundo: de 8,1:1 (`violet`) a 15,6:1 (`gray`), acima dos 4,5:1 do WCAG AA.

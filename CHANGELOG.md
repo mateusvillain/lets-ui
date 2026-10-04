@@ -4,7 +4,7 @@
 
 ### Added
 
-- New `lui-avatar` and `lui-avatar-group` Web Components, plus CSS-only `.avatar` / `.avatar-group` styles, for representing a person or entity with a photo or initials. A photo that fails to load falls back to the initials, which come from `name` (first letter of the first and last word) unless `initials` sets them.
+- New `lui-avatar` and `lui-avatar-group` Web Components, plus CSS-only `.avatar` / `.avatar-group` styles, for representing a person or entity with a photo or initials. A photo that fails to load falls back to the initials, which come from `name` (first letter of the first and last word) unless `initials` sets them. With neither, a person icon in the initials colour takes their place.
   - `size` (`sm`, `md`, `lg`), `radius` (`circle`, `rounded`, `square`) and `variant` (`gray`, `blue`, `green`, `orange`, `red`, `violet`), each variant keeping 4.5 : 1 contrast for the initials.
   - `status` (`online`, `away`, `busy`, `offline`) adds a dot with a shape of its own inside — solid, clock hands, a bar, a hollow centre — so it does not rest on colour alone.
   - `lui-avatar-group` stacks avatars with a 30% overlap and a surface-coloured ring, passes its `size` down, and moves the status dot to the bottom-left. `label` names the group.
