@@ -1,0 +1,56 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+.pagination__list {
+  @include flex($gap: fluid(4), $wrap: wrap);
+
+  list-style: none;
+  padding: fixed(0);
+  margin: fixed(0);
+}
+
+// Page buttons, the previous/next controls and the ellipsis share one box, so
+// the row keeps a steady rhythm whichever mix of them it renders. The minimum
+// width is the icon slot plus its padding: a single-digit page comes out
+// square, the same size as the arrows beside it.
+.pagination__item,
+.pagination__ellipsis {
+  @include center;
+  @include font-scale(body--md);
+
+  box-sizing: border-box;
+  min-inline-size: calc(fluid(20) + fluid(8) * 2);
+  padding: fluid(8);
+  border: 0;
+  border-radius: radius(md);
+  color: text(body);
+}
+
+.pagination__item {
+  cursor: pointer;
+  text-decoration: none;
+
+  @include states(primary);
+
+  svg {
+    display: block;
+    width: fluid(20);
+    height: fluid(20);
+  }
+}
+
+.pagination__item--direction {
+  color: icon(neutral);
+}
+
+// Specificity 0,2,0 — above the 0,1,0 resting colour `states()` sets, below its
+// hover and active rules, which mix their tint into this background.
+.pagination__item[aria-current='page'] {
+  color: text(inverse);
+
+  @include state-base(bg(container, primary));
+}
+
+.pagination__ellipsis {
+  cursor: default;
+}
