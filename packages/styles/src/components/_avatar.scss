@@ -118,10 +118,13 @@ $status-size: var(--lui-avatar-status-size, 16px);
 
 // Sits on the bottom-right corner and overhangs it by the ring's width, which
 // is what the ring is for: it separates the dot from the avatar underneath.
+// A group moves it to the bottom-left through the two custom properties, since
+// the next avatar in the stack covers the right-hand corner.
 .avatar__status {
   position: absolute;
   inset-block-end: calc(#{width(2)} * -1);
-  inset-inline-end: calc(#{width(2)} * -1);
+  inset-inline: var(--lui-avatar-status-start, auto)
+    var(--lui-avatar-status-end, calc(#{width(2)} * -1));
   box-sizing: border-box;
   inline-size: $status-size;
   block-size: $status-size;

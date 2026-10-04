@@ -1,5 +1,15 @@
+@use 'sass:map';
 @use 'packages/styles/src/components/avatar' as *;
 
 :host {
   display: inline-flex;
+}
+
+// The size is also set on the host, not only on the inner element, so a group
+// can read it to work out how much this avatar overlaps its neighbour.
+@each $name, $value in $sizes {
+  :host([size='#{$name}']) {
+    --lui-avatar-size: #{map.get($value, size)};
+    --lui-avatar-status-size: #{map.get($value, status)};
+  }
 }

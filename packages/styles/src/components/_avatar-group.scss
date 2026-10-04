@@ -16,19 +16,22 @@ $sizes: (
   ),
 );
 
-// Avatars in a group overlap by 30% of their size and each wears a ring in the
-// surface colour, so the edge of one stays readable over the next. The group
-// hands both to its avatars as custom properties: they inherit, which lets the
-// rule reach an avatar whose own styles live in a shadow root.
+// Avatars in a group overlap by 30% of their own size and each wears a ring in
+// the surface colour, so the edge of one stays readable over the next. The
+// status dot moves to the bottom-left, the corner the next avatar leaves free.
+// The group hands the ring and the dot's position to its avatars as custom
+// properties: they inherit, which lets the rule reach an avatar whose own
+// styles live in a shadow root.
 .avatar-group {
-  --lui-avatar-overlap: calc(var(--lui-avatar-size, #{fixed(40)}) * -0.3);
   --lui-avatar-ring: 0 0 0 #{width(2)} #{bg(surface, neutral)};
+  --lui-avatar-status-start: calc(#{width(2)} * -1);
+  --lui-avatar-status-end: auto;
 
   display: inline-flex;
   align-items: center;
 
   > :not(:first-child) {
-    margin-inline-start: var(--lui-avatar-overlap);
+    margin-inline-start: calc(var(--lui-avatar-size, #{fixed(40)}) * -0.3);
   }
 }
 
