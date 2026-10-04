@@ -5,8 +5,25 @@ import '../../index.js';
 export default {
   title: 'Content/Table',
   argTypes: {
-    bordered: { control: 'boolean' },
-    label: { control: 'text' },
+    bordered: {
+      control: 'boolean',
+      description: 'Borda externa com cantos arredondados.',
+    },
+    label: {
+      control: 'text',
+      description:
+        'Nome da região rolável. Sem ele, usa o nome da tabela. Só tem efeito quando a tabela transborda.',
+    },
+    ariaLabel: {
+      control: 'text',
+      description:
+        'aria-label do <table>. Nome acessível quando não há título visível.',
+    },
+    caption: {
+      control: 'text',
+      description:
+        'Texto do <caption>. Use com título visível; quando preenchido, o aria-label não é aplicado.',
+    },
   },
 };
 
@@ -21,9 +38,18 @@ const ROWS = [
 const tag = ({ status, variant }) =>
   `<lui-tag label="${status}" variant="${variant}" size="sm"></lui-tag>`;
 
-const Template = ({ bordered, label }) => `
+// `aria-label` e `<caption>` não andam juntos: com caption, ele nomeia a tabela.
+const tableName = ({ ariaLabel, caption }) =>
+  caption
+    ? { attrs: '', caption: `<caption>${caption}</caption>` }
+    : { attrs: ariaLabel ? `aria-label="${ariaLabel}"` : '', caption: '' };
+
+const Template = ({ bordered, label, ariaLabel, caption }) => {
+  const name = tableName({ ariaLabel, caption });
+  return `
   <lui-table ${bordered ? 'bordered' : ''} ${label ? `label="${label}"` : ''}>
-    <table aria-label="Orders">
+    <table ${name.attrs}>
+      ${name.caption}
       <thead>
         <tr>
           <th scope="col">Name</th>
@@ -45,12 +71,13 @@ const Template = ({ bordered, label }) => `
     </table>
   </lui-table>
 `;
+};
 
 export const Default = Template.bind({});
-Default.args = { bordered: false, label: '' };
+Default.args = { bordered: false, label: '', ariaLabel: 'Orders', caption: '' };
 
 export const Bordered = Template.bind({});
-Bordered.args = { bordered: true, label: '' };
+Bordered.args = { bordered: true, label: '', ariaLabel: 'Orders', caption: '' };
 
 export const WithCaption = () => `
   <lui-table bordered>
