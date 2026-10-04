@@ -97,7 +97,7 @@ Sem o Web Component, a marcação e o estado ficam a cargo de quem usa: alterne 
 
 - Cada cabeçalho é um `<button>` dentro de um elemento com `role="heading"`. `Tab` e `Shift + Tab` percorrem os botões, e `Enter` ou `Espaço` abrem e fecham a seção.
 - O botão expõe `aria-expanded` e `aria-controls`, que aponta para o painel.
-- O painel tem `role="region"` e `aria-labelledby` apontando para o botão. Em listas longas, muitas regiões poluem a navegação por landmarks; considere poucos itens ou o `heading-level` correto para manter a estrutura.
+- O painel não recebe `role="region"`: o padrão ARIA recomenda evitar o papel em accordions com muitos painéis, porque cada região vira um landmark e polui a navegação. A relação entre botão e painel fica por conta de `aria-controls`.
 - Um painel fechado fica com `visibility: hidden`: o conteúdo não recebe foco nem é lido por leitor de tela.
 - O foco visível usa o anel de foco do sistema, e o cabeçalho tem feedback de hover e de pressionado.
 - A animação de altura e a rotação da seta são desligadas com `prefers-reduced-motion: reduce`.
@@ -148,12 +148,7 @@ Sem o Web Component, a marcação e o estado ficam a cargo de quem usa: alterne 
         <!-- svg.accordion__chevron -->
       </button>
     </div>
-    <div
-      id="a1-panel"
-      class="accordion__panel"
-      role="region"
-      aria-labelledby="a1-trigger"
-    >
+    <div id="a1-panel" class="accordion__panel">
       <div class="accordion__panel-inner">
         <div class="accordion__description">
           Orders ship in two business days.

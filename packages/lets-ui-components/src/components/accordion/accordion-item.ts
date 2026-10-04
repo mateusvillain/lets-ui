@@ -107,12 +107,7 @@ export class LuiAccordionItem extends LitElement {
             </svg>
           </button>
         </div>
-        <div
-          id="${panelId}"
-          class="accordion__panel"
-          role="region"
-          aria-labelledby="${triggerId}"
-        >
+        <div id="${panelId}" class="accordion__panel">
           <div class="accordion__panel-inner">
             <div class="accordion__description"><slot></slot></div>
           </div>

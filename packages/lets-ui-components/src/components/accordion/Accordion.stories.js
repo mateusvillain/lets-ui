@@ -193,7 +193,7 @@ const cssItem = (id, open) => `
         ${CHEVRON}
       </button>
     </div>
-    <div id="${id}-panel" class="accordion__panel" role="region" aria-labelledby="${id}-trigger">
+    <div id="${id}-panel" class="accordion__panel">
       <div class="accordion__panel-inner">
         <div class="accordion__description">Description</div>
       </div>

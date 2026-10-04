@@ -2,8 +2,8 @@
 @use '../utilities/mixins' as *;
 
 // Without the Web Component the markup is yours to drive: toggle
-// `aria-expanded` on the trigger, `accordion__item--open` on the item and
-// `aria-labelledby` on the panel by hand.
+// `aria-expanded` on the trigger and `accordion__item--open` on the item by
+// hand.
 
 // The row is one flex line — leading icon, text, chevron — so the trigger keeps
 // the same height with or without an icon or a subtitle.
