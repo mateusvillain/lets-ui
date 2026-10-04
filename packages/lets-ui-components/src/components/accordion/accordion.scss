@@ -7,8 +7,11 @@
 
 // The items sit in this component's light DOM, so the group rules that the CSS
 // class API writes against `.accordion__item` reach them through `::slotted()`.
-::slotted(lui-accordion-item:not(:first-child)) {
-  border-top: fn.width(1) solid var(--lui-divider-color-border-default);
+.accordion--default,
+.accordion--bordered {
+  ::slotted(lui-accordion-item:not(:first-child)) {
+    border-top: fn.width(1) solid var(--lui-divider-color-border-default);
+  }
 }
 
 .accordion--bordered {
@@ -25,16 +28,19 @@
   }
 }
 
+// See the same variant in the CSS class API: no dividers, and a border that is
+// transparent on closed items so opening one shifts nothing.
 .accordion--highlighted {
+  ::slotted(lui-accordion-item) {
+    --lui-accordion-radius: #{fn.radius(md)};
+
+    border: fn.width(1) solid transparent;
+    border-radius: fn.radius(md);
+  }
+
   ::slotted(lui-accordion-item[open]) {
     --lui-accordion-radius: #{$radius-top};
 
-    // `::slotted()` takes no sibling combinator, so the divider under the open
-    // item cannot be cleared from the next one: the open item overlaps it
-    // instead, and the outline covers the same pixel row.
-    margin-bottom: calc(#{fn.width(1)} * -1);
-    border-top-color: transparent;
-    border-radius: fn.radius(md);
-    box-shadow: inset 0 0 0 fn.width(1) fn.stroke(neutral, subtle);
+    border-color: fn.stroke(neutral, subtle);
   }
 }

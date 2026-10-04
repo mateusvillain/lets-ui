@@ -146,22 +146,26 @@
 $radius-top: #{radius(md)} #{radius(md)} 0 0;
 $radius-bottom: 0 0 #{radius(md)} #{radius(md)};
 
-// The open item is outlined as a box. Its dividers go transparent rather than
-// disappearing so the item keeps the same height, and so the outline does not
-// sit next to a divider and read as a double line.
+// No dividers: every item keeps a transparent border of the same width and the
+// open one shows it. A real border rather than an inset shadow, because a
+// shadow sits underneath the trigger's opaque background and the outline would
+// disappear behind it; the border sits outside the item's padding box.
+// Keeping the border on closed items means opening one does not shift the rest.
 .accordion--highlighted {
   border-radius: radius(md);
+
+  .accordion__item,
+  .accordion__item + .accordion__item {
+    --lui-accordion-radius: #{radius(md)};
+
+    border: width(1) solid transparent;
+    border-radius: radius(md);
+  }
 
   .accordion__item--open {
     --lui-accordion-radius: #{$radius-top};
 
-    border-top-color: transparent;
-    border-radius: radius(md);
-    box-shadow: inset 0 0 0 width(1) stroke(neutral, subtle);
-  }
-
-  .accordion__item--open + .accordion__item {
-    border-top-color: transparent;
+    border-color: stroke(neutral, subtle);
   }
 }
 

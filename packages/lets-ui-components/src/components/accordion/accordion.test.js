@@ -309,6 +309,82 @@ describe('description alignment', () => {
   });
 });
 
+describe('variants', () => {
+  const GROUP = (variant) => `
+    <lui-accordion variant="${variant}">
+      <lui-accordion-item label="One" open>one</lui-accordion-item>
+      <lui-accordion-item label="Two">two</lui-accordion-item>
+      <lui-accordion-item label="Three">three</lui-accordion-item>
+    </lui-accordion>
+  `;
+  const border = (el, side) => {
+    const style = getComputedStyle(el);
+    return {
+      width: parseFloat(style[`border${side}Width`]),
+      color: style[`border${side}Color`],
+    };
+  };
+  const TRANSPARENT = 'rgba(0, 0, 0, 0)';
+
+  it('separates the items with dividers in the default variant', async () => {
+    const { items } = await mount(GROUP('default'));
+
+    expect(border(items[0], 'Top').width).toBe(0);
+    expect(border(items[1], 'Top').width).toBe(1);
+    expect(border(items[1], 'Top').color).not.toBe(TRANSPARENT);
+    expect(border(items[2], 'Top').color).not.toBe(TRANSPARENT);
+  });
+
+  it('has no dividers in the highlighted variant', async () => {
+    const { items } = await mount(GROUP('highlighted'));
+
+    // Closed items keep the border's width but not its colour.
+    expect(border(items[1], 'Top').color).toBe(TRANSPARENT);
+    expect(border(items[2], 'Top').color).toBe(TRANSPARENT);
+    expect(border(items[2], 'Bottom').color).toBe(TRANSPARENT);
+  });
+
+  it('outlines only the open item in the highlighted variant', async () => {
+    const { items } = await mount(GROUP('highlighted'));
+
+    for (const side of ['Top', 'Right', 'Bottom', 'Left']) {
+      expect(border(items[0], side).width).toBe(1);
+      expect(border(items[0], side).color).not.toBe(TRANSPARENT);
+    }
+  });
+
+  it('keeps the outline outside the trigger so it is not painted over', async () => {
+    const { items } = await mount(GROUP('highlighted'));
+    const box = items[0].getBoundingClientRect();
+    const button = trigger(items[0]).getBoundingClientRect();
+
+    expect(button.top - box.top).toBeGreaterThanOrEqual(1);
+    expect(button.left - box.left).toBeGreaterThanOrEqual(1);
+    expect(box.right - button.right).toBeGreaterThanOrEqual(1);
+  });
+
+  it('moves the outline to the item that opens, without shifting the others', async () => {
+    const { items } = await mount(GROUP('highlighted'));
+    const heights = () => items.map((i) => i.getBoundingClientRect().height);
+    const before = heights();
+
+    await userEvent.click(trigger(items[1]));
+    await Promise.all(items.map((i) => i.updateComplete));
+
+    expect(border(items[0], 'Top').color).toBe(TRANSPARENT);
+    expect(border(items[1], 'Top').color).not.toBe(TRANSPARENT);
+    // Same chrome on every item: only the description's height differs.
+    expect(heights()[2]).toBe(before[2]);
+  });
+
+  it('wraps the whole list in a border in the bordered variant', async () => {
+    const { accordion } = await mount(GROUP('bordered'));
+    const wrapper = accordion.shadowRoot.querySelector('.accordion');
+
+    expect(border(wrapper, 'Top').width).toBe(1);
+  });
+});
+
 describe('collapsed content', () => {
   const WITH_LINKS = `
     <lui-accordion multiple>
