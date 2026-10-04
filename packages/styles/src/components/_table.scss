@@ -30,17 +30,6 @@
 
   @include font-scale(body--lg);
 
-  caption {
-    padding: fluid(12);
-    color: text(heading);
-    text-align: start;
-    caption-side: top;
-
-    @include font-scale(body--lg);
-
-    font-weight: weight(bold);
-  }
-
   th,
   td {
     padding: fluid(12);
@@ -71,10 +60,5 @@
 
       @include state-timing(hover);
     }
-  }
-
-  // Numeric columns read better flush to the end of the cell.
-  .table__cell--end {
-    text-align: end;
   }
 }

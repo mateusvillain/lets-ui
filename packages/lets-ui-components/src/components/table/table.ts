@@ -27,12 +27,12 @@ export class LuiTable extends LitElement {
 
   /**
    * Nome acessível da região rolável. Só é usado quando a tabela transborda na
-   * horizontal; sem ele, cai no texto do `<caption>`.
+   * horizontal; sem ele, cai no `aria-label` da tabela e depois no `<caption>`.
    */
   @property() label = '';
 
   @state() private _scrollable = false;
-  @state() private _caption = '';
+  @state() private _tableName = '';
 
   private _resizeObserver: ResizeObserver | null = null;
 
@@ -65,14 +65,17 @@ export class LuiTable extends LitElement {
     const table = this._table;
     if (!table) return;
     table.classList.add('table');
-    this._caption = table.caption?.textContent?.trim() ?? '';
+    this._tableName =
+      table.getAttribute('aria-label') ??
+      table.caption?.textContent?.trim() ??
+      '';
     this._resizeObserver?.observe(table);
     this._measure();
   }
 
   render() {
     const scrollable = this._scrollable;
-    const name = this.label || this._caption || undefined;
+    const name = this.label || this._tableName || undefined;
 
     return html`
       <div

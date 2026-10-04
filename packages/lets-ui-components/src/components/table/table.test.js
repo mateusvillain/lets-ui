@@ -63,6 +63,20 @@ describe('semantics', () => {
   });
 });
 
+describe('accessible name', () => {
+  const NAMED = TABLE.replace('<caption>Orders</caption>', '').replace(
+    '<table>',
+    '<table aria-label="Pedidos">'
+  );
+
+  it('works without a caption, named by aria-label on the table', async () => {
+    const el = await mount('', NAMED);
+    const table = el.querySelector('table');
+    expect(table.caption).toBeNull();
+    expect(table.getAttribute('aria-label')).toBe('Pedidos');
+  });
+});
+
 describe('bordered', () => {
   it('is off by default', async () => {
     const el = await mount();
@@ -98,6 +112,17 @@ describe('scrollable region', () => {
     await new Promise((r) => setTimeout(r, 50));
     await el.updateComplete;
     expect(wrapper(el).getAttribute('aria-label')).toBe('Orders');
+  });
+
+  it('names the region from the aria-label of a table without caption', async () => {
+    const wide = WIDE.replace('<caption>Orders</caption>', '').replace(
+      '<table ',
+      '<table aria-label="Pedidos" '
+    );
+    const el = await mount('', wide, 'display: block; width: 200px');
+    await new Promise((r) => setTimeout(r, 50));
+    await el.updateComplete;
+    expect(wrapper(el).getAttribute('aria-label')).toBe('Pedidos');
   });
 
   it('prefers the label attribute over the caption', async () => {
