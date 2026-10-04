@@ -9,7 +9,7 @@ export default {
     totalPages: { control: { type: 'number', min: 1 } },
     siblingCount: { control: { type: 'number', min: 0 } },
     compactSiblingCount: { control: { type: 'number', min: 0 } },
-    ariaLabel: { control: 'text' },
+    label: { control: 'text' },
     previousLabel: { control: 'text' },
     nextLabel: { control: 'text' },
     pageLabel: { control: 'text' },
@@ -22,7 +22,7 @@ const Template = ({
   totalPages,
   siblingCount,
   compactSiblingCount,
-  ariaLabel,
+  label,
   previousLabel,
   nextLabel,
   pageLabel,
@@ -33,7 +33,7 @@ const Template = ({
     total-pages="${totalPages}"
     sibling-count="${siblingCount}"
     compact-sibling-count="${compactSiblingCount}"
-    aria-label="${ariaLabel}"
+    label="${label}"
     previous-label="${previousLabel}"
     next-label="${nextLabel}"
     page-label="${pageLabel}"
@@ -47,7 +47,7 @@ Default.args = {
   totalPages: 20,
   siblingCount: 1,
   compactSiblingCount: 0,
-  ariaLabel: 'Pagination',
+  label: 'Pagination',
   previousLabel: 'Previous page',
   nextLabel: 'Next page',
   pageLabel: 'Page',

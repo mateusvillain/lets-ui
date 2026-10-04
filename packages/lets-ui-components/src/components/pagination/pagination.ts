@@ -75,7 +75,7 @@ export class LuiPagination extends LitElement {
   @property({ type: Number, attribute: 'sibling-count' }) siblingCount = 1;
   @property({ type: Number, attribute: 'compact-sibling-count' })
   compactSiblingCount = 0;
-  @property({ attribute: 'aria-label' }) ariaLabel = 'Pagination';
+  @property() label = 'Pagination';
   @property({ attribute: 'previous-label' }) previousLabel = 'Previous page';
   @property({ attribute: 'next-label' }) nextLabel = 'Next page';
   @property({ attribute: 'page-label' }) pageLabel = 'Page';
@@ -188,7 +188,7 @@ export class LuiPagination extends LitElement {
     const isLast = current === total;
 
     return html`
-      <nav class="pagination" aria-label="${this.ariaLabel}">
+      <nav class="pagination" aria-label="${this.label}">
         <ul class="pagination__list">
           <li>
             <button
