@@ -54,7 +54,15 @@ Se a imagem falhar ao carregar, o avatar volta para as iniciais. Trocar o `src` 
 
 <Canvas of={AvatarStories.StatusSizes} />
 
-O ponto sozinho comunica o status só por cor, então o status entra no nome acessível como texto: "Mateus Villain, Online". Os textos padrão estão em inglês. Troque-os com `status-label`.
+Os pontos medem 10, 12 e 16px em `sm`, `md` e `lg`.
+
+### Forma do status
+
+Cada status tem uma forma própria dentro do ponto, além da cor, para que quem não distingue as cores ainda distinga os estados: `online` fica cheio, `away` mostra ponteiros de relógio, `busy` uma barra e `offline` um centro vazio. As formas são medidas sobre a área dentro do anel do ponto e acompanham o tamanho. Em `sm` o ponto tem 10px e as formas ficam muito pequenas, então prefira `md` ou `lg` quando a diferença de status importar.
+
+### Texto do status
+
+Nos dois modos o status entra no nome acessível como texto: "Mateus Villain, Online". Os textos padrão estão em inglês. Troque-os com `status-label`.
 
 <Canvas of={AvatarStories.StatusLabel} />
 
@@ -111,6 +119,7 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `r
 - As iniciais, o ponto de status e a foto ficam fora da árvore de acessibilidade: o nome está no invólucro, e anunciá-los de novo seria ruído.
 - Sem `name` e sem `status`, o avatar recebe `aria-hidden="true"`. É o caso do avatar ao lado do nome escrito.
 - O status vai como texto no nome acessível, e não só como cor.
+- O status também tem uma forma própria no ponto, e não depende de cor para quem enxerga.
 - Contraste das iniciais sobre o fundo: de 8,1:1 (`violet`) a 15,6:1 (`gray`), acima dos 4,5:1 do WCAG AA.
 - O ponto de status não alcança 3:1 contra o anel que o contorna (de 1,6:1 a 2,6:1 com os tokens atuais). O WCAG 1.4.11 pede 3:1 para um elemento gráfico que carrega informação, e o texto no nome acessível não resolve a leitura visual. Veja a pendência abaixo.
 - Em modo de alto contraste (`forced-colors`), o avatar ganha uma borda para não sumir da página, e o ponto de status mantém as cores, porque a cor é a informação.
@@ -119,7 +128,6 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `r
 
 ### Pendências
 
-- O `A11Y.md` pede que o status nunca dependa só de cor, com ícone, texto ou padrão ao lado. O protótipo do ponto de status é só cor. Para quem enxerga, a diferença entre `online`, `away`, `busy` e `offline` está apenas no tom. Resolver isso pede uma decisão de design, como um glifo dentro do ponto.
 - As cores do ponto de status (`green.3`, `orange.3`, `red.3` e `gray.3`) vêm do protótipo. Para chegar a 3:1 contra o anel, precisariam de um passo mais escuro da escala.
 
 ## Uso
