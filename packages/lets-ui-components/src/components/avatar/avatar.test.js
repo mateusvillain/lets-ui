@@ -426,6 +426,42 @@ describe('lui-avatar-group', () => {
     expect(avatars.map(size)).toEqual([24, 40]);
   });
 
+  it('overlaps by the size of each avatar, not of the group', async () => {
+    const { avatars } = await mount(`
+      <lui-avatar-group size="lg">
+        <lui-avatar name="Ana Lima"></lui-avatar>
+        <lui-avatar name="Bia Souza" size="sm"></lui-avatar>
+      </lui-avatar-group>
+    `);
+    const [first, second] = avatars.map((a) => box(a).getBoundingClientRect());
+
+    expect(first.right - second.left).toBeCloseTo(7.2, 0);
+  });
+
+  it('puts the status dot on the left, where the next avatar does not cover it', async () => {
+    const { avatars } = await mount(`
+      <lui-avatar-group>
+        <lui-avatar name="Ana Lima" status="online"></lui-avatar>
+        <lui-avatar name="Bia Souza" status="busy"></lui-avatar>
+        <lui-avatar name="Caio Reis" status="away"></lui-avatar>
+      </lui-avatar-group>
+    `);
+
+    avatars.forEach((avatar, i) => {
+      const outer = box(avatar).getBoundingClientRect();
+      const inner = dot(avatar).getBoundingClientRect();
+
+      expect(inner.left, i).toBeLessThan(outer.left + outer.width / 2);
+      expect(inner.bottom - outer.bottom, i).toBeCloseTo(2, 0);
+
+      const centre = document.elementFromPoint(
+        inner.left + inner.width / 2,
+        inner.top + inner.height / 2
+      );
+      expect(centre, i).toBe(avatar);
+    });
+  });
+
   it('rings each avatar so the edges stay apart', async () => {
     const { avatars } = await mount(GROUP());
     expect(getComputedStyle(box(avatars[1])).boxShadow).not.toBe('none');
