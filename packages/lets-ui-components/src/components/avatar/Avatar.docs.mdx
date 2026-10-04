@@ -1,0 +1,153 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as AvatarStories from './Avatar.stories';
+
+<Meta of={AvatarStories} />
+
+# Avatar
+
+Representa uma pessoa ou uma entidade com uma foto ou com as iniciais do nome. Pode mostrar um indicador de status no canto e se agrupar em pilha com outros avatares.
+
+<Canvas of={AvatarStories.Default} />
+<Controls of={AvatarStories.Default} />
+
+## Quando usar
+
+Use o Avatar para identificar quem fez algo ou a quem algo pertence: autoria de um comentário, dono de um item, membro de uma equipe, conta no menu do usuário.
+
+- Passe sempre `name` quando o avatar for a única identificação da pessoa. O nome é o que o leitor de tela anuncia, e as iniciais são derivadas dele.
+- Se o nome já aparece como texto ao lado, o avatar é decorativo. Omita `name` e use `initials`: o avatar sai da árvore de acessibilidade e o nome não é lido duas vezes.
+- O Avatar não é interativo. Para abrir um perfil ou um menu, envolva-o em um `<button>` ou em um `<a>` com nome acessível próprio.
+
+## Tamanhos
+
+`lg` (40px) é o padrão, `md` mede 32px e `sm` mede 24px. As iniciais e o indicador de status acompanham o tamanho.
+
+<Canvas of={AvatarStories.Sizes} />
+
+## Formatos
+
+`circle` é o padrão. `rounded` arredonda os cantos e `square` os deixa retos. Use `circle` para pessoas e `rounded` ou `square` para organizações, projetos e outras entidades.
+
+<Canvas of={AvatarStories.Radii} />
+
+## Cores
+
+`variant` escolhe a cor do fundo e das iniciais: `gray` (padrão), `blue`, `green`, `orange`, `red` ou `violet`. A cor só distingue um avatar do outro, não carrega significado. Todas as combinações têm contraste de pelo menos 8:1 entre iniciais e fundo.
+
+<Canvas of={AvatarStories.Variants} />
+
+## Foto
+
+Com `src`, o avatar mostra a imagem, recortada para cobrir o formato. A foto é decorativa para o leitor de tela, porque o nome já está no avatar.
+
+<Canvas of={AvatarStories.Photo} />
+
+Se a imagem falhar ao carregar, o avatar volta para as iniciais. Trocar o `src` tenta de novo.
+
+<Canvas of={AvatarStories.PhotoFallback} />
+
+## Status
+
+`status` desenha um indicador no canto inferior direito: `online`, `away`, `busy` ou `offline`.
+
+<Canvas of={AvatarStories.Status} />
+
+<Canvas of={AvatarStories.StatusSizes} />
+
+O ponto sozinho comunica o status só por cor, então o status entra no nome acessível como texto: "Mateus Villain, Online". Os textos padrão estão em inglês. Troque-os com `status-label`.
+
+<Canvas of={AvatarStories.StatusLabel} />
+
+## Decorativo
+
+Um avatar sem `name` e sem `status` não tem nome acessível, então fica escondido da tecnologia assistiva.
+
+<Canvas of={AvatarStories.Decorative} />
+
+## Grupo
+
+`lui-avatar-group` empilha os avatares com uma sobreposição de 30% do tamanho e um anel na cor da superfície, que mantém a borda de cada um legível. O `size` do grupo vale para todos os avatares, e um avatar pode ter o seu.
+
+<Canvas of={AvatarStories.Group} />
+
+<Canvas of={AvatarStories.GroupSizes} />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `role="img"` e `aria-label`, e o que está dentro dele leva `aria-hidden="true"` (iniciais e ponto de status) ou `alt=""` (foto). O fallback da foto que falha não existe nesta versão.
+
+<Canvas of={AvatarStories.CSSClass} />
+
+## Propriedades
+
+### `lui-avatar`
+
+| Atributo       | Tipo     | Padrão   | Descrição                                                                                 |
+| -------------- | -------- | -------- | ----------------------------------------------------------------------------------------- |
+| `name`         | `string` | `''`     | Nome da pessoa. Vira o nome acessível e a fonte das iniciais.                             |
+| `src`          | `string` | `''`     | URL da foto. Se falhar, mostra as iniciais.                                               |
+| `initials`     | `string` | `''`     | Iniciais a mostrar. Se omitido, vêm do `name`.                                            |
+| `variant`      | `string` | `gray`   | `gray`, `blue`, `green`, `orange`, `red` ou `violet`.                                     |
+| `size`         | `string` | `''`     | `sm`, `md` ou `lg`. Vazio vale `lg`, ou o tamanho do grupo.                               |
+| `radius`       | `string` | `circle` | `circle`, `rounded` ou `square`.                                                          |
+| `status`       | `string` | `''`     | `online`, `away`, `busy` ou `offline`. Vazio não desenha o indicador.                     |
+| `status-label` | `string` | `''`     | Texto do status para o leitor de tela. Se omitido: "Online", "Away", "Busy" ou "Offline". |
+
+### `lui-avatar-group`
+
+| Atributo | Tipo     | Padrão | Descrição                                                        |
+| -------- | -------- | ------ | ---------------------------------------------------------------- |
+| `label`  | `string` | `''`   | Nome acessível do grupo, como "Membros do projeto".              |
+| `size`   | `string` | `''`   | `sm`, `md` ou `lg`. Vale para os avatares que não definem o seu. |
+
+| Slot     | Descrição                 |
+| -------- | ------------------------- |
+| (padrão) | Os `lui-avatar` do grupo. |
+
+## Acessibilidade
+
+- O avatar não tem comportamento, então não entra na ordem de foco e não responde a teclado.
+- Com `name` ou `status`, o invólucro é `role="img"` com `aria-label` ("Mateus Villain, Online"). O leitor de tela anuncia uma imagem com o nome inteiro, e não as iniciais letra por letra.
+- As iniciais, o ponto de status e a foto ficam fora da árvore de acessibilidade: o nome está no invólucro, e anunciá-los de novo seria ruído.
+- Sem `name` e sem `status`, o avatar recebe `aria-hidden="true"`. É o caso do avatar ao lado do nome escrito.
+- O status vai como texto no nome acessível, e não só como cor.
+- Contraste das iniciais sobre o fundo: de 8,1:1 (`violet`) a 15,6:1 (`gray`), acima dos 4,5:1 do WCAG AA.
+- O ponto de status não alcança 3:1 contra o anel que o contorna (de 1,6:1 a 2,6:1 com os tokens atuais). O WCAG 1.4.11 pede 3:1 para um elemento gráfico que carrega informação, e o texto no nome acessível não resolve a leitura visual. Veja a pendência abaixo.
+- Em modo de alto contraste (`forced-colors`), o avatar ganha uma borda para não sumir da página, e o ponto de status mantém as cores, porque a cor é a informação.
+- `lui-avatar-group` é `role="group"`. Dê um `label` para que o conjunto tenha nome.
+- Um avatar clicável precisa de um `<button>` ou `<a>` por fora, com nome acessível próprio, e do anel de foco do sistema nesse elemento.
+
+### Pendências
+
+- O `A11Y.md` pede que o status nunca dependa só de cor, com ícone, texto ou padrão ao lado. O protótipo do ponto de status é só cor. Para quem enxerga, a diferença entre `online`, `away`, `busy` e `offline` está apenas no tom. Resolver isso pede uma decisão de design, como um glifo dentro do ponto.
+- As cores do ponto de status (`green.3`, `orange.3`, `red.3` e `gray.3`) vêm do protótipo. Para chegar a 3:1 contra o anel, precisariam de um passo mais escuro da escala.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-avatar name="Mateus Villain" status="online"></lui-avatar>
+
+<lui-avatar name="Ana Lima" src="/fotos/ana.jpg" size="md" radius="rounded">
+</lui-avatar>
+
+<lui-avatar-group label="Membros do projeto" size="md">
+  <lui-avatar name="Ana Lima" variant="blue"></lui-avatar>
+  <lui-avatar name="Bia Souza" variant="green"></lui-avatar>
+  <lui-avatar name="Caio Reis" variant="orange"></lui-avatar>
+</lui-avatar-group>
+```
+
+### Classe CSS
+
+```html
+<span
+  class="avatar avatar--lg avatar--circle avatar--blue"
+  role="img"
+  aria-label="Mateus Villain, Online"
+>
+  <span class="avatar__initials" aria-hidden="true">MV</span>
+  <span class="avatar__status avatar__status--online" aria-hidden="true"></span>
+</span>
+```
