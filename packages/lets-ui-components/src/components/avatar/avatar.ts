@@ -2,6 +2,11 @@ import { LitElement, html, nothing, unsafeCSS } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import styles from './avatar.scss?inline';
 
+// The placeholder for an avatar with no photo and no initials. It paints with
+// `currentColor`, so it takes the variant's colour like the initials do.
+const PERSON_PATH =
+  'M18,20.25L18,19.5C18,18.3065,17.5255,17.1623,16.6816,16.3184C15.8377,15.4745,14.6935,15,13.5,15L10.5,15C9.3065,15,8.1623,15.4745,7.3184,16.3184C6.4745,17.1623,6,18.3065,6,19.5L6,20.25C6,20.6642,5.6642,21,5.25,21C4.8358,21,4.5,20.6642,4.5,20.25L4.5,19.5C4.5,17.9087,5.1326,16.383,6.2578,15.2578C7.383,14.1326,8.9087,13.5,10.5,13.5L13.5,13.5C15.0913,13.5,16.617,14.1326,17.7422,15.2578C18.8674,16.383,19.5,17.9087,19.5,19.5L19.5,20.25C19.5,20.6642,19.1642,21,18.75,21C18.3358,21,18,20.6642,18,20.25ZM15,7.5C15,6.7043,14.6837,5.9415,14.1211,5.3789C13.5585,4.8163,12.7957,4.5,12,4.5C11.2043,4.5,10.4415,4.8163,9.8789,5.3789C9.3163,5.9415,9,6.7043,9,7.5C9,8.2957,9.3163,9.0585,9.8789,9.6211C10.4415,10.1837,11.2043,10.5,12,10.5C12.7957,10.5,13.5585,10.1837,14.1211,9.6211C14.6837,9.0585,15,8.2957,15,7.5ZM16.5,7.5C16.5,8.6935,16.0255,9.8377,15.1816,10.6816C14.3377,11.5255,13.1935,12,12,12C10.8065,12,9.6623,11.5255,8.8184,10.6816C7.9745,9.8377,7.5,8.6935,7.5,7.5C7.5,6.3065,7.9745,5.1623,8.8184,4.3184C9.6623,3.4745,10.8065,3,12,3C13.1935,3,14.3377,3.4745,15.1816,4.3184C16.0255,5.1623,16.5,6.3065,16.5,7.5Z';
+
 const SIZES = ['sm', 'md', 'lg'] as const;
 const RADII = ['circle', 'rounded', 'square'] as const;
 const VARIANTS = ['gray', 'blue', 'green', 'orange', 'red', 'violet'] as const;
@@ -109,9 +114,18 @@ export class LuiAvatar extends LitElement {
                 this._imageFailed = true;
               }}"
             />`
-          : html`<span class="avatar__initials" aria-hidden="true"
-              >${initials}</span
-            >`}
+          : initials
+            ? html`<span class="avatar__initials" aria-hidden="true"
+                >${initials}</span
+              >`
+            : html`<svg
+                class="avatar__icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="${PERSON_PATH}" />
+              </svg>`}
         ${this._status
           ? html`<span
               class="avatar__status avatar__status--${this._status}"

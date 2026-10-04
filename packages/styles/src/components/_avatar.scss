@@ -106,6 +106,16 @@ $status-size: var(--lui-avatar-status-size, 16px);
   text-transform: uppercase;
 }
 
+// The placeholder when there is no photo and no initials. It paints with the
+// avatar's text colour, so each variant colours it like its initials, and takes
+// 60% of the avatar, a proportion of the design rather than a design value.
+.avatar__icon {
+  display: block;
+  inline-size: 60%;
+  block-size: 60%;
+  fill: currentcolor;
+}
+
 // The photo takes the avatar's corners so the shape does not depend on an
 // `overflow: hidden` that would also clip the status dot.
 .avatar__image {
