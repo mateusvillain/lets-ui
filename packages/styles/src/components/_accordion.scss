@@ -143,6 +143,16 @@
   border-top: width(1) solid var(--lui-divider-color-border-default);
 }
 
+// Same reason as the `::slotted()` reset in the Web Component: the radius
+// inherits, so a nested accordion must start square rather than take the
+// corners of the item that holds it. The variants below are more specific.
+// Scoped to the group's children: the Web Component's shadow DOM reuses the
+// `.accordion__item` class on its own wrapper, which would reset the radius
+// the group sets on the host.
+.accordion > .accordion__item {
+  --lui-accordion-radius: 0;
+}
+
 $radius-top: #{radius(md)} #{radius(md)} 0 0;
 $radius-bottom: 0 0 #{radius(md)} #{radius(md)};
 

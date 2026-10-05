@@ -40,7 +40,11 @@ export class LuiAccordionItem extends LitElement {
   }
 
   private get _level() {
-    const level = this.headingLevel ?? this.inheritedHeadingLevel;
+    // `heading-level="abc"` parses to NaN: fall back to the group's level.
+    const own = Number.isFinite(this.headingLevel)
+      ? this.headingLevel
+      : undefined;
+    const level = own ?? this.inheritedHeadingLevel;
     return Math.min(6, Math.max(1, level));
   }
 

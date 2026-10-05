@@ -5,6 +5,13 @@
   display: block;
 }
 
+// The radius is an inherited custom property: an accordion nested in a panel
+// would otherwise pick up the corners of the item that holds it. Every item
+// starts square and the variants below opt in with a more specific selector.
+::slotted(lui-accordion-item) {
+  --lui-accordion-radius: 0;
+}
+
 // The items sit in this component's light DOM, so the group rules that the CSS
 // class API writes against `.accordion__item` reach them through `::slotted()`.
 .accordion--default,

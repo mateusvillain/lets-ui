@@ -53,6 +53,10 @@ export class LuiAccordion extends LitElement {
   // items. Only a keydown on a trigger counts: the same keys inside an open
   // panel — a text field, say — belong to the content.
   private _handleKeydown = (e: KeyboardEvent) => {
+    // Alt+Arrow, Ctrl+Home and the like belong to the browser and assistive
+    // technology, not to the roving focus.
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+
     const trigger = e.composedPath()[0] as HTMLElement;
     if (!trigger.classList?.contains('accordion__trigger')) return;
 

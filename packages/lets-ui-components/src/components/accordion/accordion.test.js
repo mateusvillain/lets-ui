@@ -94,6 +94,20 @@ describe('lui-accordion-item markup', () => {
     expect(level(items[0])).toBe('6');
     expect(level(items[1])).toBe('1');
   });
+
+  it('falls back to the group level when heading-level is not a number', async () => {
+    const { items } = await mount(`
+      <lui-accordion heading-level="4">
+        <lui-accordion-item label="One" heading-level="abc">one</lui-accordion-item>
+      </lui-accordion>
+    `);
+
+    expect(
+      items[0].shadowRoot
+        .querySelector('[role="heading"]')
+        .getAttribute('aria-level')
+    ).toBe('4');
+  });
 });
 
 describe('opening and closing', () => {
@@ -496,6 +510,15 @@ describe('keyboard navigation between headers', () => {
     expect(focused(items)).toBe(3);
   });
 
+  it('leaves modified arrow keys and Home/End to the browser', async () => {
+    const { items } = await mount(FOUR);
+    items[0].focus();
+
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await userEvent.keyboard('{Control>}{End}{/Control}');
+    expect(focused(items)).toBe(0);
+  });
+
   it('jumps to the first and last enabled header with Home and End', async () => {
     const { items } = await mount(FOUR);
     items[2].focus();
@@ -528,5 +551,30 @@ describe('keyboard navigation between headers', () => {
     await userEvent.keyboard('{ArrowDown}{Home}{End}');
     expect(document.activeElement).toBe(field);
     expect(focused(items)).toBe(-1);
+  });
+});
+
+describe('nested accordions', () => {
+  it('does not inherit the corners of the item that holds them', async () => {
+    const { accordion } = await mount(`
+      <lui-accordion variant="bordered">
+        <lui-accordion-item label="Outer" open>
+          <lui-accordion>
+            <lui-accordion-item label="Inner one">one</lui-accordion-item>
+            <lui-accordion-item label="Inner two">two</lui-accordion-item>
+          </lui-accordion>
+        </lui-accordion-item>
+        <lui-accordion-item label="Last">last</lui-accordion-item>
+      </lui-accordion>
+    `);
+    const outer = accordion.querySelector(':scope > lui-accordion-item');
+    const inner = outer.querySelector('lui-accordion-item');
+    await Promise.all([outer.updateComplete, inner.updateComplete]);
+
+    const radius = (item) =>
+      getComputedStyle(trigger(item)).borderTopLeftRadius;
+
+    expect(radius(outer)).not.toBe('0px');
+    expect(radius(inner)).toBe('0px');
   });
 });
