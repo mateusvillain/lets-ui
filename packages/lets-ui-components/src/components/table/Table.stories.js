@@ -14,16 +14,15 @@ export default {
       description:
         'Nome da região rolável. Sem ele, usa o nome da tabela. Só tem efeito quando a tabela transborda.',
     },
-    actionsAlign: {
-      control: { type: 'inline-radio' },
-      options: ['start', 'end'],
-      description:
-        'Alinhamento da coluna de ações. `end` aplica `.table__cell--end` no cabeçalho e em cada célula da coluna.',
-    },
-    actionsFit: {
+    cellEnd: {
       control: 'boolean',
       description:
-        'A coluna de ações ocupa só a largura do conteúdo. Aplica `.table__cell--fit` no cabeçalho e em cada célula da coluna.',
+        'Aplica `.table__cell--end` no cabeçalho e em cada célula da coluna Actions deste exemplo, alinhando-a ao fim. Não é uma prop do `lui-table`.',
+    },
+    cellFit: {
+      control: 'boolean',
+      description:
+        'Aplica `.table__cell--fit` no cabeçalho e em cada célula da coluna Actions deste exemplo, para que ocupe só a largura do conteúdo. Não é uma prop do `lui-table`.',
     },
     ariaLabel: {
       control: 'text',
@@ -60,12 +59,12 @@ const Template = ({
   label,
   ariaLabel,
   caption,
-  actionsAlign,
-  actionsFit,
+  cellEnd,
+  cellFit,
 }) => {
   const actionsClass = [
-    actionsAlign === 'end' && 'table__cell--end',
-    actionsFit && 'table__cell--fit',
+    cellEnd && 'table__cell--end',
+    cellFit && 'table__cell--fit',
   ].filter(Boolean);
   const end = actionsClass.length ? ` class="${actionsClass.join(' ')}"` : '';
   const name = tableName({ ariaLabel, caption });
@@ -98,8 +97,8 @@ const Template = ({
 
 export const Default = Template.bind({});
 Default.args = {
-  actionsAlign: 'start',
-  actionsFit: true,
+  cellEnd: false,
+  cellFit: true,
   bordered: false,
   label: '',
   ariaLabel: '',
@@ -108,8 +107,8 @@ Default.args = {
 
 export const Bordered = Template.bind({});
 Bordered.args = {
-  actionsAlign: 'end',
-  actionsFit: true,
+  cellEnd: true,
+  cellFit: true,
   bordered: true,
   label: '',
   ariaLabel: '',
