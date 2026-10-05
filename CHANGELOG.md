@@ -9,6 +9,11 @@
   - `status` (`online`, `away`, `busy`, `offline`) adds a dot with a shape of its own inside — solid, clock hands, a bar, a hollow centre — so it does not rest on colour alone.
   - `lui-avatar-group` stacks avatars with a 30% overlap and a surface-coloured ring, passes its `size` down, and moves the status dot to the bottom-left. `label` names the group.
   - With a `name` or `status` the avatar is `role="img"` with an `aria-label` that reads both ("Maria Villain, Online"); `status-label` overrides the English text. With neither it is decorative and hidden from the accessibility tree.
+- New `lui-table` Web Component, plus CSS-only `.table` / `.table-wrapper` styles, for data in rows and columns. It works on the native `<table>`, so rows, columns and headers keep their semantics; the author writes the table and the component adds none of its own markup.
+  - `bordered` draws the outer border with rounded corners, and a `<caption>` is styled as the title inside it. Row dividers (none under the last row), the bold header and a hover state layer come from existing tokens.
+  - `.table__cell--end` aligns a column to the end and `.table__cell--fit` makes it take only the width its content needs, both as opt-in classes on the header and on each cell of the column.
+  - `sticky-header` with `max-height` keeps the header in view while the rows scroll, and reserves its height with `scroll-padding-top` so a focused row is never hidden behind it.
+  - Every table needs an accessible name: a `<caption>`, `aria-label` or `aria-labelledby`. When the table scrolls, its area becomes a labelled, focusable `role="region"`, named from `label` or from the table's own name.
 
 ## v1.10.0
 
