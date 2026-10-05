@@ -14,6 +14,12 @@ export default {
       description:
         'Nome da região rolável. Sem ele, usa o nome da tabela. Só tem efeito quando a tabela transborda.',
     },
+    actionsAlign: {
+      control: { type: 'inline-radio' },
+      options: ['start', 'end'],
+      description:
+        'Alinhamento da coluna de ações. `end` aplica `.table__cell--end` no cabeçalho e em cada célula da coluna.',
+    },
     ariaLabel: {
       control: 'text',
       description:
@@ -44,7 +50,8 @@ const tableName = ({ ariaLabel, caption }) =>
     ? { attrs: '', caption: `<caption>${caption}</caption>` }
     : { attrs: ariaLabel ? `aria-label="${ariaLabel}"` : '', caption: '' };
 
-const Template = ({ bordered, label, ariaLabel, caption }) => {
+const Template = ({ bordered, label, ariaLabel, caption, actionsAlign }) => {
+  const end = actionsAlign === 'end' ? ' class="table__cell--end"' : '';
   const name = tableName({ ariaLabel, caption });
   return `
   <lui-table ${bordered ? 'bordered' : ''} ${label ? `label="${label}"` : ''}>
@@ -54,7 +61,7 @@ const Template = ({ bordered, label, ariaLabel, caption }) => {
         <tr>
           <th scope="col">Name</th>
           <th scope="col">Status</th>
-          <th scope="col">Actions</th>
+          <th scope="col"${end}>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -62,7 +69,7 @@ const Template = ({ bordered, label, ariaLabel, caption }) => {
           (row) => `<tr>
           <th scope="row">${row.name}</th>
           <td>${tag(row)}</td>
-          <td>
+          <td${end}>
             <lui-icon-button size="md" aria-label="Actions for ${row.name}">${MORE}</lui-icon-button>
           </td>
         </tr>`
@@ -74,10 +81,22 @@ const Template = ({ bordered, label, ariaLabel, caption }) => {
 };
 
 export const Default = Template.bind({});
-Default.args = { bordered: false, label: '', ariaLabel: '', caption: 'Orders' };
+Default.args = {
+  actionsAlign: 'start',
+  bordered: false,
+  label: '',
+  ariaLabel: '',
+  caption: 'Orders',
+};
 
 export const Bordered = Template.bind({});
-Bordered.args = { bordered: true, label: '', ariaLabel: '', caption: 'Orders' };
+Bordered.args = {
+  actionsAlign: 'end',
+  bordered: true,
+  label: '',
+  ariaLabel: '',
+  caption: 'Orders',
+};
 
 // Monta uma tabela a partir de dados. A primeira coluna vira `<th scope="row">`
 // quando `rowHeader` é verdadeiro; as demais células são `<td>`.
@@ -90,23 +109,32 @@ const build = ({
   bordered = true,
   attrs = '',
   tableStyle = '',
+  endColumns = [],
 }) => `
   <lui-table ${bordered ? 'bordered' : ''} ${attrs}>
     <table ${caption ? '' : `aria-label="${ariaLabel}"`} ${tableStyle ? `style="${tableStyle}"` : ''}>
       ${caption ? `<caption>${caption}</caption>` : ''}
       <thead>
-        <tr>${columns.map((c) => `<th scope="col">${c}</th>`).join('')}</tr>
+        <tr>${columns
+          .map(
+            (c, i) =>
+              `<th scope="col"${endColumns.includes(i) ? ' class="table__cell--end"' : ''}>${c}</th>`
+          )
+          .join('')}</tr>
       </thead>
       <tbody>
         ${rows
           .map(
             (cells) =>
               `<tr>${cells
-                .map((cell, i) =>
-                  i === 0 && rowHeader
-                    ? `<th scope="row">${cell}</th>`
-                    : `<td>${cell}</td>`
-                )
+                .map((cell, i) => {
+                  const cls = endColumns.includes(i)
+                    ? ' class="table__cell--end"'
+                    : '';
+                  return i === 0 && rowHeader
+                    ? `<th scope="row"${cls}>${cell}</th>`
+                    : `<td${cls}>${cell}</td>`;
+                })
                 .join('')}</tr>`
           )
           .join('')}
@@ -149,7 +177,16 @@ const FILES = [
 export const Selectable = () =>
   build({
     caption: 'Arquivos',
-    columns: ['Selecionar', 'Nome', 'Tipo', 'Tamanho', 'Modificado em'],
+    attrs:
+      'selectable selection-label="{count} de {total} arquivos selecionados"',
+    columns: [
+      '<lui-checkbox aria-label="Selecionar todos os arquivos"></lui-checkbox>',
+      'Nome',
+      'Tipo',
+      'Tamanho',
+      'Modificado em',
+    ],
+    endColumns: [3],
     rowHeader: false,
     rows: FILES.map(([name, type, size, date], i) => [
       `<lui-checkbox aria-label="Selecionar ${name}" ${i === 1 ? 'checked' : ''}></lui-checkbox>`,
@@ -159,12 +196,13 @@ export const Selectable = () =>
       date,
     ]),
   });
-Selectable.storyName = 'Com seleção';
+Selectable.storyName = 'Com seleção e selecionar tudo';
 Selectable.parameters = { controls: { disable: true } };
 
 export const Invoices = () =>
   build({
     caption: 'Faturas',
+    endColumns: [3],
     columns: ['Fatura', 'Cliente', 'Vencimento', 'Valor', 'Situação'],
     rows: [
       [

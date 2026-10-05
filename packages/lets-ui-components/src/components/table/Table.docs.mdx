@@ -24,11 +24,47 @@ Células aceitam outros componentes. Cada um mantém o próprio nome acessível,
 
 <Canvas of={TableStories.WithAvatarAndLink} />
 
-### Seleção
+### Seleção e selecionar tudo
 
-Um `lui-checkbox` por linha, com `aria-label` que cita a linha ("Selecionar Base de clientes.csv"). A coluna da caixa precisa de um `<th scope="col">` com texto, nem que seja só para leitores de tela.
+Com `selectable`, o `lui-checkbox` do `<thead>` seleciona todas as linhas e cada `lui-checkbox` do `<tbody>` seleciona uma. O do cabeçalho acompanha o conjunto: marcado quando todas estão selecionadas, desmarcado quando nenhuma está e **misto** quando só algumas estão. Linhas com checkbox `disabled` ficam fora do "selecionar tudo".
 
 <Canvas of={TableStories.Selectable} />
+
+```html
+<lui-table
+  selectable
+  selection-label="{count} de {total} arquivos selecionados"
+>
+  <table>
+    <caption>
+      Arquivos
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">
+          <lui-checkbox
+            aria-label="Selecionar todos os arquivos"
+          ></lui-checkbox>
+        </th>
+        <th scope="col">Nome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <lui-checkbox aria-label="Selecionar contrato.docx"></lui-checkbox>
+        </td>
+        <td>contrato.docx</td>
+      </tr>
+    </tbody>
+  </table>
+</lui-table>
+```
+
+- O `aria-label` de cada checkbox é obrigatório e deve citar a linha. O do cabeçalho é o nome da coluna.
+- A cada mudança, o componente emite `lui-selection-change`, com `detail.rows` (as `<tr>` selecionadas), `detail.count` e `detail.total`.
+- A contagem é anunciada em uma região `polite`. O texto vem de `selection-label`, com `{count}` e `{total}`; o padrão está em inglês.
+- A seleção só funciona com o Web Component. Em CSS puro, é preciso ligar o comportamento por conta própria.
 
 ### Valores e situação
 
@@ -41,6 +77,22 @@ A situação vem em texto dentro da tag, não só em cor.
 Sem `bordered`, a tabela fica sem moldura e usa só os divisores de linha.
 
 <Canvas of={TableStories.Schedule} />
+
+## Alinhamento à direita
+
+Colunas de ações ou de valores podem ficar alinhadas ao fim. Coloque `.table__cell--end` no cabeçalho **e em cada célula** da coluna, para que título e conteúdo andem juntos. Use quando fizer sentido: ações e valores numéricos, que se comparam pelo fim. Texto corrido continua à esquerda.
+
+<Canvas of={TableStories.Bordered} />
+
+```html
+<th scope="col" class="table__cell--end">Ações</th>
+…
+<td class="table__cell--end">
+  <lui-icon-button aria-label="Ações de Ana Souza">…</lui-icon-button>
+</td>
+```
+
+A classe usa `text-align: end`, então acompanha a direção de escrita (em idiomas da direita para a esquerda, o fim é a esquerda).
 
 ## Estrutura
 
@@ -113,14 +165,17 @@ Sem o Web Component, a região rolável é responsabilidade de quem usa: adicion
 
 ## Propriedades
 
-| Propriedade | Atributo   | Tipo      | Padrão  | Descrição                                              |
-| ----------- | ---------- | --------- | ------- | ------------------------------------------------------ |
-| `bordered`  | `bordered` | `boolean` | `false` | Borda externa com cantos arredondados.                 |
-| `label`     | `label`    | `string`  | `''`    | Nome da região rolável. Sem ele, usa o nome da tabela. |
+| Propriedade      | Atributo          | Tipo      | Padrão                               | Descrição                                              |
+| ---------------- | ----------------- | --------- | ------------------------------------ | ------------------------------------------------------ |
+| `bordered`       | `bordered`        | `boolean` | `false`                              | Borda externa com cantos arredondados.                 |
+| `label`          | `label`           | `string`  | `''`                                 | Nome da região rolável. Sem ele, usa o nome da tabela. |
+| `selectable`     | `selectable`      | `boolean` | `false`                              | Liga a seleção de linhas e o selecionar tudo.          |
+| `selectionLabel` | `selection-label` | `string`  | `'{count} of {total} rows selected'` | Texto anunciado quando a seleção muda.                 |
 
 ## Acessibilidade
 
 - A semântica é a do `<table>` nativo: nenhum `role` é sobrescrito.
 - Dê sempre um nome à tabela: `aria-label`, `aria-labelledby` ou `<caption>`.
+- Com `selectable`, o checkbox do cabeçalho usa o estado misto nativo, anunciado como "parcialmente marcado", e a contagem é anunciada em uma região `polite`.
 - O hover da linha é só um apoio visual; não carrega informação.
 - Status dentro das células deve ter texto, não só cor.

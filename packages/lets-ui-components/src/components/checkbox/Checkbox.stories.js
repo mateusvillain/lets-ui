@@ -82,6 +82,9 @@ LabelAttribute.parameters = {
 export const Checked = () =>
   `<lui-checkbox checked size="lg">Opção selecionada</lui-checkbox>`;
 
+export const Indeterminate = () =>
+  `<lui-checkbox indeterminate aria-label="Selecionar tudo">Selecionar tudo</lui-checkbox>`;
+
 export const Small = () => `<lui-checkbox size="md">Label</lui-checkbox>`;
 
 export const Disabled = () =>
