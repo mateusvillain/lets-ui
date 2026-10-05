@@ -22,7 +22,10 @@ import { FAMILIES, FONT_STACKS, STEPS, THEMES } from './schema.js';
 const random = (min, max) => min + Math.random() * (max - min);
 const randomInt = (min, max) => Math.floor(random(min, max + 1));
 const pick = (list) => list[randomInt(0, list.length - 1)];
-const roundTo = (value, step) => Math.round(value / step) * step;
+const roundTo = (value, step) => {
+  const decimals = String(step).split('.')[1]?.length ?? 0;
+  return Number((Math.round(value / step) * step).toFixed(decimals));
+};
 
 /* ── Color ───────────────────────────────────────────────────── */
 

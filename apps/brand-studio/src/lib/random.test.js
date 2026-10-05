@@ -144,6 +144,8 @@ describe('randomBrand', () => {
 
         if (FIXED_FONT_SIZE_STEPS.includes(step)) {
           expect(value.unit).toBe('rem');
+          // Three decimals at most: no float noise like 0.8330000000000001.
+          expect(value.value).toBe(Number(value.value.toFixed(3)));
           return { min: value.value, max: value.value };
         }
 
