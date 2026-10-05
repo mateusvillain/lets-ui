@@ -31,7 +31,7 @@
           }
         },
         "focus-ring": {
-          "$value": "{lui.brand.color.primary.3}"
+          "$value": "{lui.brand.color.primary.5}"
         }
       },
       "secondary": {
@@ -57,7 +57,7 @@
           }
         },
         "focus-ring": {
-          "$value": "{lui.brand.color.secondary.3}"
+          "$value": "{lui.brand.color.secondary.5}"
         }
       },
       "caution": {
@@ -142,7 +142,7 @@
           }
         },
         "focus-ring": {
-          "$value": "{lui.color.red.3}"
+          "$value": "{lui.color.red.5}"
         }
       },
       "success": {
@@ -168,7 +168,7 @@
           }
         },
         "focus-ring": {
-          "$value": "{lui.color.green.3}"
+          "$value": "{lui.color.green.5}"
         }
       },
       "neutral": {
@@ -224,7 +224,7 @@
           }
         },
         "focus-ring": {
-          "$value": "{lui.color.gray.2}"
+          "$value": "{lui.color.gray.5}"
         }
       },
       "link": {
