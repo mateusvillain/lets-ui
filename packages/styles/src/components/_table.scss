@@ -65,6 +65,16 @@
     text-align: end;
   }
 
+  // Opt-in, per cell, like the one above: the column takes only the width its
+  // content needs and the other columns share the rest. In an auto-layout table
+  // a 1% width with no wrapping resolves to the widest cell's own width, so
+  // there is no number to keep in sync with the content (an actions column, a
+  // status tag, an id).
+  .table__cell--fit {
+    width: 1%;
+    white-space: nowrap;
+  }
+
   // The last row closes the table on its own, without a divider underneath.
   tbody tr:last-child > * {
     border-bottom: 0;

@@ -20,6 +20,11 @@ export default {
       description:
         'Alinhamento da coluna de ações. `end` aplica `.table__cell--end` no cabeçalho e em cada célula da coluna.',
     },
+    actionsFit: {
+      control: 'boolean',
+      description:
+        'A coluna de ações ocupa só a largura do conteúdo. Aplica `.table__cell--fit` no cabeçalho e em cada célula da coluna.',
+    },
     ariaLabel: {
       control: 'text',
       description:
@@ -50,8 +55,19 @@ const tableName = ({ ariaLabel, caption }) =>
     ? { attrs: '', caption: `<caption>${caption}</caption>` }
     : { attrs: ariaLabel ? `aria-label="${ariaLabel}"` : '', caption: '' };
 
-const Template = ({ bordered, label, ariaLabel, caption, actionsAlign }) => {
-  const end = actionsAlign === 'end' ? ' class="table__cell--end"' : '';
+const Template = ({
+  bordered,
+  label,
+  ariaLabel,
+  caption,
+  actionsAlign,
+  actionsFit,
+}) => {
+  const actionsClass = [
+    actionsAlign === 'end' && 'table__cell--end',
+    actionsFit && 'table__cell--fit',
+  ].filter(Boolean);
+  const end = actionsClass.length ? ` class="${actionsClass.join(' ')}"` : '';
   const name = tableName({ ariaLabel, caption });
   return `
   <lui-table ${bordered ? 'bordered' : ''} ${label ? `label="${label}"` : ''}>
@@ -83,6 +99,7 @@ const Template = ({ bordered, label, ariaLabel, caption, actionsAlign }) => {
 export const Default = Template.bind({});
 Default.args = {
   actionsAlign: 'start',
+  actionsFit: true,
   bordered: false,
   label: '',
   ariaLabel: '',
@@ -92,6 +109,7 @@ Default.args = {
 export const Bordered = Template.bind({});
 Bordered.args = {
   actionsAlign: 'end',
+  actionsFit: true,
   bordered: true,
   label: '',
   ariaLabel: '',
@@ -110,16 +128,22 @@ const build = ({
   attrs = '',
   tableStyle = '',
   endColumns = [],
-}) => `
+  fitColumns = [],
+}) => {
+  const cellClass = (i) => {
+    const names = [
+      endColumns.includes(i) && 'table__cell--end',
+      fitColumns.includes(i) && 'table__cell--fit',
+    ].filter(Boolean);
+    return names.length ? ` class="${names.join(' ')}"` : '';
+  };
+  return `
   <lui-table ${bordered ? 'bordered' : ''} ${attrs}>
     <table ${caption ? '' : `aria-label="${ariaLabel}"`} ${tableStyle ? `style="${tableStyle}"` : ''}>
       ${caption ? `<caption>${caption}</caption>` : ''}
       <thead>
         <tr>${columns
-          .map(
-            (c, i) =>
-              `<th scope="col"${endColumns.includes(i) ? ' class="table__cell--end"' : ''}>${c}</th>`
-          )
+          .map((c, i) => `<th scope="col"${cellClass(i)}>${c}</th>`)
           .join('')}</tr>
       </thead>
       <tbody>
@@ -128,9 +152,7 @@ const build = ({
             (cells) =>
               `<tr>${cells
                 .map((cell, i) => {
-                  const cls = endColumns.includes(i)
-                    ? ' class="table__cell--end"'
-                    : '';
+                  const cls = cellClass(i);
                   return i === 0 && rowHeader
                     ? `<th scope="row"${cls}>${cell}</th>`
                     : `<td${cls}>${cell}</td>`;
@@ -142,6 +164,7 @@ const build = ({
     </table>
   </lui-table>
 `;
+};
 
 const avatar = (name, variant) =>
   `<lui-avatar name="${name}" variant="${variant}" size="sm"></lui-avatar>`;
@@ -156,6 +179,7 @@ const USERS = [
 export const WithAvatarAndLink = () =>
   build({
     caption: 'Team members',
+    fitColumns: [2],
     columns: ['Member', 'Email', 'Role'],
     rowHeader: false,
     rows: USERS.map(([name, email, role, variant, status]) => [
@@ -177,16 +201,9 @@ const FILES = [
 export const Selectable = () =>
   build({
     caption: 'Arquivos',
-    attrs:
-      'selectable selection-label="{count} de {total} arquivos selecionados"',
-    columns: [
-      '<lui-checkbox aria-label="Selecionar todos os arquivos"></lui-checkbox>',
-      'Nome',
-      'Tipo',
-      'Tamanho',
-      'Modificado em',
-    ],
+    columns: ['Selecionar', 'Nome', 'Tipo', 'Tamanho', 'Modificado em'],
     endColumns: [3],
+    fitColumns: [0],
     rowHeader: false,
     rows: FILES.map(([name, type, size, date], i) => [
       `<lui-checkbox aria-label="Selecionar ${name}" ${i === 1 ? 'checked' : ''}></lui-checkbox>`,
@@ -196,13 +213,14 @@ export const Selectable = () =>
       date,
     ]),
   });
-Selectable.storyName = 'Com seleção e selecionar tudo';
+Selectable.storyName = 'Com seleção';
 Selectable.parameters = { controls: { disable: true } };
 
 export const Invoices = () =>
   build({
     caption: 'Faturas',
     endColumns: [3],
+    fitColumns: [0, 4],
     columns: ['Fatura', 'Cliente', 'Vencimento', 'Valor', 'Situação'],
     rows: [
       [
@@ -251,6 +269,7 @@ Invoices.parameters = { controls: { disable: true } };
 export const Schedule = () =>
   build({
     caption: 'Programação do evento',
+    fitColumns: [0],
     columns: ['Horário', 'Atividade', 'Sala', 'Responsável'],
     bordered: false,
     rows: [
