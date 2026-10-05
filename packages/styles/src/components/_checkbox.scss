@@ -46,11 +46,27 @@ input[type='checkbox'] {
       @include selection.focus;
     }
 
-    &:checked {
+    &:checked,
+    &:indeterminate {
       @include selection.checked-base;
 
       border: none;
+    }
 
+    // The mixed state of a parent control (select all with some rows chosen).
+    &:indeterminate::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      border-bottom: 2px solid currentcolor;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    // Both can be true at once (a checked box that was set indeterminate); the
+    // dash wins, as it does in the native control.
+    &:checked:not(:indeterminate) {
       &::after {
         content: '';
         position: absolute;
