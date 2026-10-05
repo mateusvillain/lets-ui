@@ -440,3 +440,136 @@ describe('scoping', () => {
     ).toBe('0px');
   });
 });
+
+describe('sortable columns', () => {
+  const SORTABLE = `
+    <table aria-label="People">
+      <thead>
+        <tr>
+          <th scope="col" data-column="name"><button type="button" class="table__sort">Name</button></th>
+          <th scope="col"><button type="button" class="table__sort">Age</button></th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Bruno</th><td>31</td><td>-</td></tr>
+        <tr><th scope="row">Ana</th><td>28</td><td>-</td></tr>
+      </tbody>
+    </table>`;
+
+  const headers = (el) => [...el.querySelectorAll('thead th')];
+  const sortOf = (el) => headers(el).map((th) => th.getAttribute('aria-sort'));
+  const press = (el, index) =>
+    el.querySelectorAll('.table__sort')[index].click();
+
+  it('gives every sortable header an aria-sort of none and leaves the others alone', async () => {
+    const el = await mount('', SORTABLE);
+    await el.updateComplete;
+    expect(sortOf(el)).toEqual(['none', 'none', null]);
+  });
+
+  it('keeps an aria-sort the author already set', async () => {
+    const el = await mount(
+      '',
+      SORTABLE.replace(
+        'data-column="name"',
+        'data-column="name" aria-sort="descending"'
+      )
+    );
+    await el.updateComplete;
+    expect(sortOf(el)).toEqual(['descending', 'none', null]);
+  });
+
+  it('goes ascending, descending, then back to none', async () => {
+    const el = await mount('', SORTABLE);
+    await el.updateComplete;
+    press(el, 0);
+    expect(sortOf(el)[0]).toBe('ascending');
+    press(el, 0);
+    expect(sortOf(el)[0]).toBe('descending');
+    press(el, 0);
+    expect(sortOf(el)[0]).toBe('none');
+  });
+
+  it('sorts one column at a time', async () => {
+    const el = await mount('', SORTABLE);
+    await el.updateComplete;
+    press(el, 0);
+    press(el, 1);
+    expect(sortOf(el)).toEqual(['none', 'ascending', null]);
+  });
+
+  it('emits lui-sort with the column and the direction', async () => {
+    const el = await mount('', SORTABLE);
+    await el.updateComplete;
+    const events = [];
+    el.addEventListener('lui-sort', (e) => events.push(e.detail));
+    press(el, 0);
+    press(el, 0);
+    press(el, 1);
+    expect(events).toEqual([
+      { column: 'name', direction: 'ascending' },
+      { column: 'name', direction: 'descending' },
+      { column: 'Age', direction: 'ascending' },
+    ]);
+  });
+
+  it('does not reorder the rows itself', async () => {
+    const el = await mount('', SORTABLE);
+    await el.updateComplete;
+    press(el, 0);
+    const names = [...el.querySelectorAll('tbody th')].map(
+      (th) => th.textContent
+    );
+    expect(names).toEqual(['Bruno', 'Ana']);
+  });
+
+  it('ignores the sort buttons of a table nested in a cell', async () => {
+    const nested = SORTABLE.replace(
+      '<td>31</td>',
+      `<td><table id="inner"><thead><tr><th><button type="button" class="table__sort">Inner</button></th></tr></thead></table></td>`
+    );
+    const el = await mount('', nested);
+    await el.updateComplete;
+    let fired = false;
+    el.addEventListener('lui-sort', () => (fired = true));
+    el.querySelector('#inner .table__sort').click();
+    expect(fired).toBe(false);
+    expect(el.querySelector('#inner th').hasAttribute('aria-sort')).toBe(false);
+  });
+
+  it('can be reached and used from the keyboard, because it is a button', async () => {
+    const el = await mount('', SORTABLE);
+    await el.updateComplete;
+    const button = el.querySelector('.table__sort');
+    expect(button.tagName).toBe('BUTTON');
+    button.focus();
+    expect(document.activeElement).toBe(button);
+  });
+
+  it('draws an arrow that follows aria-sort', async () => {
+    const el = await mount('', SORTABLE);
+    await new Promise((r) => setTimeout(r, 50));
+    const mask = (i) =>
+      getComputedStyle(el.querySelectorAll('.table__sort')[i], '::after')
+        .maskImage;
+    const idle = mask(0);
+    expect(idle).not.toBe('none');
+    press(el, 0);
+    const up = mask(0);
+    press(el, 0);
+    const down = mask(0);
+    expect(new Set([idle, up, down]).size).toBe(3);
+  });
+
+  it('shows the sorted column in the heading color and the others muted', async () => {
+    const el = await mount('', SORTABLE);
+    await new Promise((r) => setTimeout(r, 50));
+    const color = (i) =>
+      getComputedStyle(el.querySelectorAll('.table__sort')[i], '::after').color;
+    const idle = color(0);
+    press(el, 0);
+    expect(color(0)).not.toBe(idle);
+    expect(color(1)).toBe(idle);
+  });
+});
