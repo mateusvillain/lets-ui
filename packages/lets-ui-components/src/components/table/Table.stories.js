@@ -79,48 +79,218 @@ Default.args = { bordered: false, label: '', ariaLabel: '', caption: 'Orders' };
 export const Bordered = Template.bind({});
 Bordered.args = { bordered: true, label: '', ariaLabel: '', caption: 'Orders' };
 
-export const WithoutCaption = () => `
-  <lui-table bordered>
-    <table aria-label="Orders">
+// Monta uma tabela a partir de dados. A primeira coluna vira `<th scope="row">`
+// quando `rowHeader` é verdadeiro; as demais células são `<td>`.
+const build = ({
+  caption,
+  ariaLabel,
+  columns,
+  rows,
+  rowHeader = true,
+  bordered = true,
+  attrs = '',
+  tableStyle = '',
+}) => `
+  <lui-table ${bordered ? 'bordered' : ''} ${attrs}>
+    <table ${caption ? '' : `aria-label="${ariaLabel}"`} ${tableStyle ? `style="${tableStyle}"` : ''}>
+      ${caption ? `<caption>${caption}</caption>` : ''}
       <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Status</th>
-        </tr>
+        <tr>${columns.map((c) => `<th scope="col">${c}</th>`).join('')}</tr>
       </thead>
       <tbody>
-        <tr><th scope="row">Ana Souza</th><td>Completed</td></tr>
-        <tr><th scope="row">Bruno Lima</th><td>In Progress</td></tr>
+        ${rows
+          .map(
+            (cells) =>
+              `<tr>${cells
+                .map((cell, i) =>
+                  i === 0 && rowHeader
+                    ? `<th scope="row">${cell}</th>`
+                    : `<td>${cell}</td>`
+                )
+                .join('')}</tr>`
+          )
+          .join('')}
       </tbody>
     </table>
   </lui-table>
 `;
+
+const avatar = (name, variant) =>
+  `<lui-avatar name="${name}" variant="${variant}" size="sm"></lui-avatar>`;
+
+const USERS = [
+  ['Maria Villain', 'maria@example.com', 'Admin', 'violet', 'online'],
+  ['João Pereira', 'joao@example.com', 'Editor', 'blue', 'away'],
+  ['Larissa Costa', 'larissa@example.com', 'Viewer', 'green', 'offline'],
+  ['Pedro Alves', 'pedro@example.com', 'Editor', 'orange', 'busy'],
+];
+
+export const WithAvatarAndLink = () =>
+  build({
+    caption: 'Team members',
+    columns: ['Member', 'Email', 'Role'],
+    rowHeader: false,
+    rows: USERS.map(([name, email, role, variant, status]) => [
+      `<span style="display:inline-flex;align-items:center;gap:8px"><lui-avatar name="${name}" variant="${variant}" status="${status}" size="sm"></lui-avatar>${name}</span>`,
+      `<lui-link href="mailto:${email}" label="${email}"></lui-link>`,
+      `<lui-tag label="${role}" variant="neutral" size="sm"></lui-tag>`,
+    ]),
+  });
+WithAvatarAndLink.storyName = 'Com avatar e link';
+WithAvatarAndLink.parameters = { controls: { disable: true } };
+
+const FILES = [
+  ['Relatório trimestral.pdf', 'PDF', '2,4 MB', '12 mar 2026'],
+  ['Identidade visual.fig', 'Figma', '18,7 MB', '03 mar 2026'],
+  ['Contrato de serviço.docx', 'Documento', '86 KB', '27 fev 2026'],
+  ['Base de clientes.csv', 'Planilha', '1,1 MB', '19 fev 2026'],
+];
+
+export const Selectable = () =>
+  build({
+    caption: 'Arquivos',
+    columns: ['Selecionar', 'Nome', 'Tipo', 'Tamanho', 'Modificado em'],
+    rowHeader: false,
+    rows: FILES.map(([name, type, size, date], i) => [
+      `<lui-checkbox aria-label="Selecionar ${name}" ${i === 1 ? 'checked' : ''}></lui-checkbox>`,
+      name,
+      type,
+      size,
+      date,
+    ]),
+  });
+Selectable.storyName = 'Com seleção';
+Selectable.parameters = { controls: { disable: true } };
+
+export const Invoices = () =>
+  build({
+    caption: 'Faturas',
+    columns: ['Fatura', 'Cliente', 'Vencimento', 'Valor', 'Situação'],
+    rows: [
+      [
+        '#1042',
+        'Ateliê Horizonte',
+        '10 abr 2026',
+        'R$ 1.280,00',
+        'success',
+        'Paga',
+      ],
+      [
+        '#1043',
+        'Café Meridiano',
+        '15 abr 2026',
+        'R$ 460,50',
+        'caution',
+        'Pendente',
+      ],
+      [
+        '#1044',
+        'Studio Ponto Final',
+        '02 abr 2026',
+        'R$ 3.915,00',
+        'danger',
+        'Atrasada',
+      ],
+      [
+        '#1045',
+        'Livraria Sétimo Andar',
+        '28 abr 2026',
+        'R$ 720,00',
+        'neutral',
+        'Rascunho',
+      ],
+    ].map(([id, client, due, amount, variant, status]) => [
+      id,
+      client,
+      due,
+      amount,
+      `<lui-tag label="${status}" variant="${variant}" size="sm"></lui-tag>`,
+    ]),
+  });
+Invoices.storyName = 'Valores e situação';
+Invoices.parameters = { controls: { disable: true } };
+
+export const Schedule = () =>
+  build({
+    caption: 'Programação do evento',
+    columns: ['Horário', 'Atividade', 'Sala', 'Responsável'],
+    bordered: false,
+    rows: [
+      [
+        '09:00',
+        'Credenciamento e café',
+        'Hall de entrada',
+        'Equipe de recepção',
+      ],
+      [
+        '10:00',
+        'Abertura: o futuro dos design systems',
+        'Auditório A',
+        'Beatriz Nogueira',
+      ],
+      ['11:30', 'Acessibilidade na prática', 'Auditório B', 'Rafael Moreira'],
+      ['13:00', 'Almoço', 'Terraço', '—'],
+    ],
+  });
+Schedule.storyName = 'Só texto, sem borda';
+Schedule.parameters = { controls: { disable: true } };
+
+export const WithoutCaption = () =>
+  build({
+    ariaLabel: 'Inventário',
+    columns: ['Produto', 'Estoque', 'Disponibilidade'],
+    rows: [
+      [
+        'Caderno pautado',
+        '120',
+        '<lui-tag label="Em estoque" variant="success" size="sm"></lui-tag>',
+      ],
+      [
+        'Caneta gel azul',
+        '8',
+        '<lui-tag label="Estoque baixo" variant="caution" size="sm"></lui-tag>',
+      ],
+      [
+        'Marca-texto amarelo',
+        '0',
+        '<lui-tag label="Esgotado" variant="danger" size="sm"></lui-tag>',
+      ],
+    ],
+  });
 WithoutCaption.storyName = 'Sem caption';
 WithoutCaption.parameters = { controls: { disable: true } };
 
 export const Scrollable = () => `
-  <div style="max-width: 280px">
-    <lui-table bordered label="Orders, scrollable">
-      <table style="min-width: 560px">
-        <caption>Orders</caption>
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${ROWS.map(
-            (row) => `<tr>
-            <th scope="row">${row.name}</th>
-            <td>${row.name.split(' ')[0].toLowerCase()}@example.com</td>
-            <td>${tag(row)}</td>
-          </tr>`
-          ).join('')}
-        </tbody>
-      </table>
-    </lui-table>
+  <div style="max-width: 320px">
+    ${build({
+      caption: 'Projetos',
+      attrs: 'label="Projetos, rolável"',
+      tableStyle: 'min-width: 640px',
+      columns: ['Projeto', 'Responsável', 'Prazo', 'Orçamento', 'Etapa'],
+      rows: [
+        [
+          'Redesenho do app',
+          'Ana Souza',
+          '30 jun 2026',
+          'R$ 48.000',
+          'Prototipação',
+        ],
+        [
+          'Migração de dados',
+          'Bruno Lima',
+          '15 ago 2026',
+          'R$ 72.500',
+          'Planejamento',
+        ],
+        [
+          'Portal do cliente',
+          'Carla Dias',
+          '01 out 2026',
+          'R$ 95.000',
+          'Desenvolvimento',
+        ],
+      ],
+    })}
   </div>
 `;
 Scrollable.parameters = { controls: { disable: true } };
@@ -128,16 +298,18 @@ Scrollable.parameters = { controls: { disable: true } };
 export const CSSClass = () => `
   <div class="table-wrapper table-wrapper--bordered">
     <table class="table">
-      <caption>Orders</caption>
+      <caption>Linhas de transporte</caption>
       <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Status</th>
+          <th scope="col">Linha</th>
+          <th scope="col">Trajeto</th>
+          <th scope="col">Intervalo</th>
         </tr>
       </thead>
       <tbody>
-        <tr><th scope="row">Ana Souza</th><td>Completed</td></tr>
-        <tr><th scope="row">Bruno Lima</th><td>In Progress</td></tr>
+        <tr><th scope="row">101</th><td>Centro – Aeroporto</td><td>15 min</td></tr>
+        <tr><th scope="row">204</th><td>Terminal Norte – Praça da Sé</td><td>8 min</td></tr>
+        <tr><th scope="row">310</th><td>Circular Universitária</td><td>20 min</td></tr>
       </tbody>
     </table>
   </div>

@@ -16,6 +16,32 @@ Apresenta dados em linhas e colunas. O componente usa o `<table>` nativo, então
 
 <Canvas of={TableStories.Bordered} />
 
+## Exemplos
+
+### Avatar, link e tag nas células
+
+Células aceitam outros componentes. Cada um mantém o próprio nome acessível, e o texto do link já diz o destino.
+
+<Canvas of={TableStories.WithAvatarAndLink} />
+
+### Seleção
+
+Um `lui-checkbox` por linha, com `aria-label` que cita a linha ("Selecionar Base de clientes.csv"). A coluna da caixa precisa de um `<th scope="col">` com texto, nem que seja só para leitores de tela.
+
+<Canvas of={TableStories.Selectable} />
+
+### Valores e situação
+
+A situação vem em texto dentro da tag, não só em cor.
+
+<Canvas of={TableStories.Invoices} />
+
+### Só texto, sem borda
+
+Sem `bordered`, a tabela fica sem moldura e usa só os divisores de linha.
+
+<Canvas of={TableStories.Schedule} />
+
 ## Estrutura
 
 A tabela fica dentro de `<lui-table>`, na marcação de quem usa. O Web Component não gera linhas nem células: ele coloca a classe `.table` na tabela, cuida da rolagem horizontal e da borda.
