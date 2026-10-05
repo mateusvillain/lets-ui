@@ -38,6 +38,16 @@ function adopt(root: Document | ShadowRoot) {
   }
 }
 
+type SortDirection = 'none' | 'ascending' | 'descending';
+
+// A column goes ascending, then descending, then back to unsorted, so the
+// consumer can restore the original order.
+const NEXT_DIRECTION: Record<SortDirection, SortDirection> = {
+  none: 'ascending',
+  ascending: 'descending',
+  descending: 'none',
+};
+
 export class LuiTable extends LitElement {
   static styles = unsafeCSS(styles);
 
@@ -85,6 +95,7 @@ export class LuiTable extends LitElement {
     adopt(this.getRootNode() as Document | ShadowRoot);
     this._resizeObserver = new ResizeObserver(() => this._measure());
     this._mutationObserver = new MutationObserver(() => this._readName());
+    this.addEventListener('click', this._handleClick);
     this._observe();
     this._readName();
   }
@@ -93,6 +104,7 @@ export class LuiTable extends LitElement {
     super.disconnectedCallback();
     this._resizeObserver?.disconnect();
     this._mutationObserver?.disconnect();
+    this.removeEventListener('click', this._handleClick);
     this._resizeObserver = null;
     this._mutationObserver = null;
   }
@@ -152,6 +164,49 @@ export class LuiTable extends LitElement {
       '';
   }
 
+  // The header cells that hold a sort button, from this table only: a table
+  // nested in a cell has its own.
+  private get _sortableHeaders(): HTMLTableCellElement[] {
+    return [
+      ...(this._table?.querySelectorAll<HTMLTableCellElement>(
+        ':scope > thead > tr > th'
+      ) ?? []),
+    ].filter((th) => th.querySelector(':scope > .table__sort'));
+  }
+
+  // `aria-sort` has to be on every sortable header, or a column that was never
+  // sorted is announced as not sortable at all.
+  private _prepareSortable() {
+    this._sortableHeaders.forEach((th) => {
+      if (!th.hasAttribute('aria-sort')) th.setAttribute('aria-sort', 'none');
+    });
+  }
+
+  private _handleClick = (event: Event) => {
+    const button = (event.target as Element).closest('.table__sort');
+    const th = button?.closest('th');
+    if (!button || !th || !this._sortableHeaders.includes(th)) return;
+
+    const current = (th.getAttribute('aria-sort') ?? 'none') as SortDirection;
+    const direction = NEXT_DIRECTION[current] ?? 'ascending';
+
+    // One column at a time: sorting a column clears the others.
+    this._sortableHeaders.forEach((header) =>
+      header.setAttribute('aria-sort', header === th ? direction : 'none')
+    );
+
+    this.dispatchEvent(
+      new CustomEvent('lui-sort', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          column: th.dataset.column ?? button.textContent?.trim() ?? '',
+          direction,
+        },
+      })
+    );
+  };
+
   private _handleSlotChange() {
     const table = this._table;
     if (!table) return;
@@ -159,6 +214,7 @@ export class LuiTable extends LitElement {
     table.classList.toggle('table--sticky-header', this.stickyHeader);
     this._observe();
     this._readName();
+    this._prepareSortable();
     this._measure();
   }
 
