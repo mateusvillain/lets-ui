@@ -100,11 +100,11 @@ Textarea.args = {
   rows: 4,
   resize: 'vertical',
   optional: true,
-  optionalText: '(opcional)',
+  optionalText: '(optional)',
   maxlength: 200,
   hint: 'Hint text',
   error: false,
-  errorText: 'Campo obrigatório.',
+  errorText: 'This field is required.',
   disabled: false,
 };
 
