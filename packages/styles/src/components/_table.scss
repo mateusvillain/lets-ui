@@ -30,8 +30,11 @@
 
   @include font-scale(body--lg);
 
+  // Every rule below walks the table with child combinators, so a table nested
+  // inside a cell keeps its own look instead of picking these up.
+
   // Sits inside the wrapper's border, above the header, with its own gap to it.
-  caption {
+  > caption {
     padding: fluid(12);
     margin-block-end: fluid(8);
     color: text(heading);
@@ -41,27 +44,34 @@
     @include font-scale(subheadline);
   }
 
-  th,
-  td {
+  > :is(thead, tbody, tfoot) > tr > :is(th, td) {
     padding: fluid(12);
     text-align: start;
     vertical-align: middle;
     border-bottom: width(1) solid var(--lui-divider-color-border-default);
   }
 
-  th {
+  > :is(thead, tbody, tfoot) > tr > th {
     color: text(heading);
     font-weight: weight(bold);
   }
 
-  td {
+  > :is(thead, tbody, tfoot) > tr > td {
     color: text(body);
+  }
+
+  // The last row of the table closes it on its own, without a divider
+  // underneath. A body followed by another body or by a footer is not the end,
+  // so it keeps its divider and the footer's last row is the one that closes.
+  > tbody:not(:has(~ :is(tbody, tfoot))) > tr:last-child > *,
+  > tfoot:not(:has(~ tfoot)) > tr:last-child > * {
+    border-bottom: 0;
   }
 
   // Opt-in, per cell: put it on the header and on every cell of a column that
   // reads better flush to the end (actions, amounts). Logical, so it follows the
   // writing direction.
-  .table__cell--end {
+  > :is(thead, tbody, tfoot) > tr > .table__cell--end {
     text-align: end;
   }
 
@@ -70,17 +80,12 @@
   // a 1% width with no wrapping resolves to the widest cell's own width, so
   // there is no number to keep in sync with the content (an actions column, a
   // status tag, an id).
-  .table__cell--fit {
+  > :is(thead, tbody, tfoot) > tr > .table__cell--fit {
     width: 1%;
     white-space: nowrap;
   }
 
-  // The last row closes the table on its own, without a divider underneath.
-  tbody tr:last-child > * {
-    border-bottom: 0;
-  }
-
-  tbody tr {
+  > tbody > tr {
     @include state-layer;
 
     &:hover {
@@ -98,7 +103,7 @@
 // The modifier sits on the table itself, not the wrapper: in the Web Component
 // the wrapper is in the shadow tree and a descendant selector cannot reach the
 // light-DOM table from there.
-.table--sticky-header thead th {
+.table--sticky-header > thead > tr > th {
   position: sticky;
   top: 0;
   z-index: 1;

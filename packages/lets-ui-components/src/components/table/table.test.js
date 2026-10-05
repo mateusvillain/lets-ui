@@ -310,3 +310,133 @@ describe('sticky header', () => {
     expect(wrapper(el).style.scrollPaddingTop).toBe(`${height}px`);
   });
 });
+
+describe('accessible name of the scrolling region', () => {
+  const WIDE = (tableAttrs, caption = '') => `
+    <table ${tableAttrs} style="width: 800px; min-width: 800px">
+      ${caption}
+      <thead><tr><th scope="col">Name</th><th scope="col">Status</th></tr></thead>
+      <tbody><tr><th scope="row">Ana</th><td>Completed</td></tr></tbody>
+    </table>`;
+  const settle = async (el) => {
+    await new Promise((r) => setTimeout(r, 50));
+    await el.updateComplete;
+  };
+  const NARROW = 'display: block; width: 200px';
+
+  it('reads aria-labelledby from the page', async () => {
+    const heading = document.createElement('h2');
+    heading.id = 'orders-heading';
+    heading.textContent = 'Orders this month';
+    document.body.append(heading);
+    mounted.push(heading);
+    const el = await mount(
+      '',
+      WIDE('aria-labelledby="orders-heading"'),
+      NARROW
+    );
+    await settle(el);
+    expect(wrapper(el).getAttribute('role')).toBe('region');
+    expect(wrapper(el).getAttribute('aria-label')).toBe('Orders this month');
+  });
+
+  it('falls back to the caption when aria-label is empty', async () => {
+    const el = await mount(
+      '',
+      WIDE('aria-label=""', '<caption>Orders</caption>'),
+      NARROW
+    );
+    await settle(el);
+    expect(wrapper(el).getAttribute('aria-label')).toBe('Orders');
+  });
+
+  it('follows the name when it changes after the first render', async () => {
+    const el = await mount('', WIDE('aria-label="Orders"'), NARROW);
+    await settle(el);
+    el.querySelector('table').setAttribute('aria-label', 'Pedidos');
+    await settle(el);
+    expect(wrapper(el).getAttribute('aria-label')).toBe('Pedidos');
+  });
+
+  it('follows the caption text when it changes', async () => {
+    const el = await mount('', WIDE('', '<caption>Orders</caption>'), NARROW);
+    await settle(el);
+    el.querySelector('caption').textContent = 'Pedidos';
+    await settle(el);
+    expect(wrapper(el).getAttribute('aria-label')).toBe('Pedidos');
+  });
+});
+
+describe('moving the element', () => {
+  it('keeps watching the table after it is detached and attached again', async () => {
+    const el = await mount('', TABLE, 'display: block; width: 200px');
+    await new Promise((r) => setTimeout(r, 50));
+    const parent = el.parentElement;
+    el.remove();
+    parent.append(el);
+    await new Promise((r) => setTimeout(r, 50));
+    el.querySelector('table').style.cssText = 'width: 800px; min-width: 800px';
+    await new Promise((r) => setTimeout(r, 100));
+    await el.updateComplete;
+    expect(wrapper(el).getAttribute('role')).toBe('region');
+  });
+});
+
+describe('scoping', () => {
+  const NESTED = `
+    <table aria-label="Outer">
+      <thead><tr><th scope="col">Name</th><th scope="col">Details</th></tr></thead>
+      <tbody><tr><th scope="row">Ana</th><td>
+        <table id="inner"><thead><tr><th>Inner head</th></tr></thead>
+        <tbody><tr><td>Inner cell</td></tr></tbody></table>
+      </td></tr></tbody>
+    </table>`;
+
+  it('does not reach a table nested inside a cell', async () => {
+    const el = await mount('sticky-header max-height="200"', NESTED);
+    await new Promise((r) => setTimeout(r, 50));
+    const inner = el.querySelector('#inner');
+    expect(getComputedStyle(inner.querySelector('th')).position).toBe('static');
+    // Outer cells get the design padding; the nested ones keep the browser's.
+    const padding = (cell) => parseFloat(getComputedStyle(cell).paddingLeft);
+    expect(padding(inner.querySelector('td'))).toBeLessThan(
+      padding(el.querySelector('tbody > tr > th'))
+    );
+    expect(getComputedStyle(inner.querySelector('td')).borderBottomWidth).toBe(
+      '0px'
+    );
+  });
+
+  const FOOTED = `
+    <table aria-label="Totals">
+      <thead><tr><th scope="col">Item</th><th scope="col">Price</th></tr></thead>
+      <tbody><tr><th scope="row">A</th><td>1</td></tr><tr><th scope="row">B</th><td>2</td></tr></tbody>
+      <tfoot><tr><th scope="row">Total</th><td>3</td></tr></tfoot>
+    </table>`;
+
+  it('keeps the divider under the body when a footer follows, and closes on the footer', async () => {
+    const el = await mount('', FOOTED);
+    await new Promise((r) => setTimeout(r, 50));
+    const width = (selector) =>
+      getComputedStyle(el.querySelector(selector)).borderBottomWidth;
+    expect(width('tbody tr:last-child td')).not.toBe('0px');
+    expect(width('tfoot td')).toBe('0px');
+  });
+
+  it('keeps the divider under a body followed by another body', async () => {
+    const two = TABLE.replace(
+      '</tbody>',
+      '</tbody><tbody><tr><th scope="row">Carla</th><td>Canceled</td></tr></tbody>'
+    );
+    const el = await mount('', two);
+    await new Promise((r) => setTimeout(r, 50));
+    const bodies = el.querySelectorAll('tbody');
+    expect(
+      getComputedStyle(bodies[0].querySelector('tr:last-child td'))
+        .borderBottomWidth
+    ).not.toBe('0px');
+    expect(
+      getComputedStyle(bodies[1].querySelector('td')).borderBottomWidth
+    ).toBe('0px');
+  });
+});
