@@ -30,6 +30,17 @@
 
   @include font-scale(body--lg);
 
+  // Sits inside the wrapper's border, above the header, with its own gap to it.
+  caption {
+    padding: fluid(12);
+    margin-block-end: fluid(8);
+    color: text(heading);
+    text-align: start;
+    caption-side: top;
+
+    @include font-scale(subheadline);
+  }
+
   th,
   td {
     padding: fluid(12);

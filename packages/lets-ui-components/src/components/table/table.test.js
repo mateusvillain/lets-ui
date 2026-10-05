@@ -77,6 +77,25 @@ describe('accessible name', () => {
   });
 });
 
+describe('caption', () => {
+  it('sits inside the border, above the header, in the heading font', async () => {
+    const el = await mount('bordered');
+    await new Promise((r) => setTimeout(r, 50));
+    const caption = el.querySelector('caption');
+    const box = wrapper(el).getBoundingClientRect();
+    const cap = caption.getBoundingClientRect();
+    const head = el.querySelector('thead').getBoundingClientRect();
+    expect(cap.top).toBeGreaterThanOrEqual(box.top);
+    expect(cap.bottom).toBeLessThanOrEqual(head.top);
+    expect(head.top - cap.bottom).toBeGreaterThan(0);
+    const style = getComputedStyle(caption);
+    const th = getComputedStyle(el.querySelector('thead th'));
+    expect(parseFloat(style.fontSize)).toBeGreaterThan(parseFloat(th.fontSize));
+    expect(style.fontWeight).toBe('400');
+    expect(parseFloat(style.paddingLeft)).toBeGreaterThan(0);
+  });
+});
+
 describe('bordered', () => {
   it('is off by default', async () => {
     const el = await mount();
