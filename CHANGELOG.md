@@ -13,6 +13,7 @@
   - `bordered` adds an outer border with rounded corners, and a `<caption>` is styled as the title inside it. Row dividers (none under the last row), the bold header and the row hover come from existing tokens.
   - `.table__cell--end` aligns a column to the end and `.table__cell--fit` makes it only as wide as its content. Put either class on the header and on each cell of the column.
   - `sticky-header` with `max-height` keeps the header visible while the rows scroll. It also sets `scroll-padding-top`, so a focused row does not end up behind the header.
+  - Sortable columns: put a `<button class="table__sort">` in the `<th>`. `lui-table` keeps `aria-sort` on the headers, sorts one column at a time through ascending, descending and none, draws an arrow from `aria-sort`, and emits `lui-sort` with `{ column, direction }`. It does not reorder the rows.
   - Every table needs a name, from a `<caption>`, `aria-label` or `aria-labelledby`. When the table scrolls, its area becomes a `role="region"` with a name that can take focus. The name comes from `label` or from the table's own name.
 
 ## v1.10.0

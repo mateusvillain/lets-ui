@@ -76,6 +76,42 @@ Coloque a classe no cabeçalho e em cada célula da coluna. Ela também impede a
 
 Não use a classe em colunas de texto corrido, que precisam quebrar linha.
 
+## Colunas ordenáveis
+
+Para uma coluna ser ordenável, ponha um `<button class="table__sort">` dentro do `<th>`. O botão dá acesso por teclado e o nome da coluna. O `lui-table` cuida do resto: troca o `aria-sort` do `<th>`, mostra a seta e emite `lui-sort`.
+
+<Canvas of={TableStories.Sortable} />
+
+```html
+<lui-table>
+  <table aria-label="Equipe">
+    <thead>
+      <tr>
+        <th scope="col" data-column="name">
+          <button type="button" class="table__sort">Nome</button>
+        </th>
+        <th scope="col">Função</th>
+      </tr>
+    </thead>
+    …
+  </table>
+</lui-table>
+```
+
+```js
+table.addEventListener('lui-sort', ({ detail }) => {
+  // detail.column: o data-column do <th>, ou o texto do botão
+  // detail.direction: 'ascending', 'descending' ou 'none'
+});
+```
+
+- Cada clique avança a coluna: crescente, decrescente e sem ordem. Com `none`, o autor pode voltar à ordem original.
+- Só uma coluna fica ordenada por vez. Ao ordenar uma, as outras voltam para `none`.
+- O componente **não reordena as linhas**. Quem usa decide como: no navegador, como na story, ou pedindo os dados ao servidor.
+- O `aria-sort` é colocado como `none` em todo `<th>` que tem o botão, se o autor não tiver definido um valor. Um `aria-sort` já escrito é mantido, então dá para abrir a tabela já ordenada.
+- A seta vem do `aria-sort`: as duas setas esmaecidas sem ordem, e uma seta na cor do título quando a coluna está ordenada.
+- Em CSS puro, `.table__sort` já tem o visual, mas o `aria-sort` e o evento ficam por sua conta.
+
 ## Header fixo
 
 `sticky-header` mantém o cabeçalho visível enquanto as linhas rolam. Ele só funciona com `max-height`, que limita a altura da área. Sem altura limitada a tabela não rola na vertical. Um número vale como pixels (`280`), e qualquer medida CSS também serve (`20rem`).
@@ -174,10 +210,17 @@ Sem o Web Component, a região rolável fica por sua conta: se a tabela puder tr
 | `stickyHeader` | `sticky-header` | `boolean` | `false` | Mantém o cabeçalho visível na rolagem. Exige `max-height`. |
 | `maxHeight`    | `max-height`    | `string`  | `''`    | Altura máxima da área; acima dela, rola na vertical.       |
 
+## Eventos
+
+| Evento     | `detail`                                                               | Quando                              |
+| ---------- | ---------------------------------------------------------------------- | ----------------------------------- |
+| `lui-sort` | `{ column: string, direction: 'ascending' \| 'descending' \| 'none' }` | Um botão `.table__sort` é acionado. |
+
 ## Acessibilidade
 
 - A semântica é a do `<table>` nativo. Nenhum `role` é sobrescrito.
 - Dê sempre um nome à tabela, com `aria-label`, `aria-labelledby` ou `<caption>`.
+- Em colunas ordenáveis, o botão dá o nome e o foco, e o `aria-sort` do `<th>` informa o estado, no padrão do WAI-ARIA Authoring Practices. O leitor de tela lê a direção ao chegar no cabeçalho, mas o componente não faz um anúncio extra ao clicar.
 - Os estilos valem só para as células da própria tabela. Uma tabela dentro de uma célula não recebe padding, divisores nem header fixo.
 - Com `<tfoot>` ou vários `<tbody>`, só a última linha da tabela fica sem divisor.
 - O hover da linha só ajuda a enxergar a linha. Nenhuma informação depende dele.

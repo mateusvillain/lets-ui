@@ -316,6 +316,58 @@ export const WithoutCaption = () =>
 WithoutCaption.storyName = 'Sem caption';
 WithoutCaption.parameters = { controls: { disable: true } };
 
+const sortButton = (label) =>
+  `<button type="button" class="table__sort">${label}</button>`;
+
+// A tabela só avisa qual coluna e qual direção. Quem usa reordena as linhas, aqui
+// no navegador, mas o mesmo evento serviria para pedir os dados ordenados ao servidor.
+export const Sortable = () => {
+  const collator = new Intl.Collator('pt-BR', { numeric: true });
+  const page = document.createElement('div');
+  page.innerHTML = build({
+    caption: 'Equipe',
+    columns: [
+      sortButton('Nome'),
+      sortButton('Função'),
+      sortButton('Projetos'),
+      sortButton('Entrada'),
+    ],
+    endColumns: [2],
+    rows: [
+      ['Larissa Costa', 'Design', '4', '2021-03-08'],
+      ['Ana Souza', 'Engenharia', '7', '2019-11-25'],
+      ['Pedro Alves', 'Produto', '2', '2023-06-12'],
+      ['Bruno Lima', 'Engenharia', '9', '2020-01-20'],
+      ['Carla Dias', 'Design', '5', '2022-09-05'],
+    ],
+  });
+  const body = page.querySelector('tbody');
+  const original = [...body.rows];
+  const headers = [...page.querySelectorAll('thead th')];
+
+  page.addEventListener('lui-sort', ({ detail: { column, direction } }) => {
+    const index = headers.findIndex(
+      (th) => (th.dataset.column ?? th.textContent.trim()) === column
+    );
+    const sign = direction === 'descending' ? -1 : 1;
+    const rows =
+      direction === 'none'
+        ? original
+        : [...original].sort(
+            (a, b) =>
+              sign *
+              collator.compare(
+                a.cells[index].textContent,
+                b.cells[index].textContent
+              )
+          );
+    body.append(...rows);
+  });
+  return page;
+};
+Sortable.storyName = 'Ordenável';
+Sortable.parameters = { controls: { disable: true } };
+
 export const StickyHeader = () => `
   ${build({
     caption: 'Pedidos do mês',
