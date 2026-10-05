@@ -76,6 +76,26 @@ Coloque a classe no cabeçalho **e em cada célula** da coluna: ela também impe
 
 Fica de fora dessa classe qualquer coluna de texto corrido, que precisa quebrar linha.
 
+## Header fixo
+
+`sticky-header` mantém o cabeçalho visível enquanto as linhas rolam por baixo dele. Ele só tem efeito com `max-height`, que limita a altura da área: sem isso a tabela não rola na vertical e não há o que prender. Um número vale como pixels (`280`); qualquer medida CSS também serve (`20rem`).
+
+<Canvas of={TableStories.StickyHeader} />
+
+```html
+<lui-table sticky-header max-height="280">
+  <table>
+    …
+  </table>
+</lui-table>
+```
+
+- A área vira uma região rolável, com `role="region"`, `tabindex="0"` e nome, para que o teclado também role na vertical.
+- Ao navegar por teclado, a linha focada não fica escondida atrás do cabeçalho: o componente reserva a altura dele com `scroll-padding-top`.
+- O cabeçalho usa o fundo `surface` neutro, opaco, para as linhas não aparecerem através dele. Se a tabela ficar sobre outra cor, ela aparece no cabeçalho.
+- O `<caption>` rola junto com as linhas; só o cabeçalho fica.
+- Em CSS puro, use `.table--sticky-header` na tabela e defina o `max-height` no `.table-wrapper`.
+
 ## Estrutura
 
 A tabela fica dentro de `<lui-table>`, na marcação de quem usa. O Web Component não gera linhas nem células: ele coloca a classe `.table` na tabela, cuida da rolagem horizontal e da borda.
@@ -147,10 +167,12 @@ Sem o Web Component, a região rolável é responsabilidade de quem usa: adicion
 
 ## Propriedades
 
-| Propriedade | Atributo   | Tipo      | Padrão  | Descrição                                              |
-| ----------- | ---------- | --------- | ------- | ------------------------------------------------------ |
-| `bordered`  | `bordered` | `boolean` | `false` | Borda externa com cantos arredondados.                 |
-| `label`     | `label`    | `string`  | `''`    | Nome da região rolável. Sem ele, usa o nome da tabela. |
+| Propriedade    | Atributo        | Tipo      | Padrão  | Descrição                                                  |
+| -------------- | --------------- | --------- | ------- | ---------------------------------------------------------- |
+| `bordered`     | `bordered`      | `boolean` | `false` | Borda externa com cantos arredondados.                     |
+| `label`        | `label`         | `string`  | `''`    | Nome da região rolável. Sem ele, usa o nome da tabela.     |
+| `stickyHeader` | `sticky-header` | `boolean` | `false` | Mantém o cabeçalho visível na rolagem. Exige `max-height`. |
+| `maxHeight`    | `max-height`    | `string`  | `''`    | Altura máxima da área; acima dela, rola na vertical.       |
 
 ## Acessibilidade
 

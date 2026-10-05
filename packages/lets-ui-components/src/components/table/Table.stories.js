@@ -27,12 +27,12 @@ export default {
     ariaLabel: {
       control: 'text',
       description:
-        'aria-label do <table>. Nome acessível quando não há título visível; só é aplicado com o caption vazio.',
+        '`aria-label` do `<table>`. Nome acessível quando não há título visível; só é aplicado com o caption vazio.',
     },
     caption: {
       control: 'text',
       description:
-        'Texto do <caption>, o título visível da tabela, como no design. Quando preenchido, o aria-label não é aplicado.',
+        'Texto do `<caption>`, o título visível da tabela, como no design. Quando preenchido, o `aria-label` não é aplicado.',
     },
   },
 };
@@ -315,6 +315,24 @@ export const WithoutCaption = () =>
   });
 WithoutCaption.storyName = 'Sem caption';
 WithoutCaption.parameters = { controls: { disable: true } };
+
+export const StickyHeader = () => `
+  ${build({
+    caption: 'Pedidos do mês',
+    attrs: 'sticky-header max-height="280"',
+    columns: ['Pedido', 'Cliente', 'Valor', 'Situação'],
+    endColumns: [2],
+    fitColumns: [0],
+    rows: Array.from({ length: 14 }, (_, i) => [
+      `#${2001 + i}`,
+      ['Ateliê Horizonte', 'Café Meridiano', 'Studio Ponto Final'][i % 3],
+      `R$ ${(120 + i * 87.5).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+      `<lui-tag label="${['Paga', 'Pendente', 'Atrasada'][i % 3]}" variant="${['success', 'caution', 'danger'][i % 3]}" size="sm"></lui-tag>`,
+    ]),
+  })}
+`;
+StickyHeader.storyName = 'Header fixo';
+StickyHeader.parameters = { controls: { disable: true } };
 
 export const Scrollable = () => `
   <div style="max-width: 320px">

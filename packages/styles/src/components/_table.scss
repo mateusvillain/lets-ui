@@ -90,3 +90,17 @@
     }
   }
 }
+
+// The header stays put while the rows scroll under it. Sticky sticks to the
+// nearest scrolling ancestor, which is the wrapper, so it only does anything
+// once the wrapper has a height to scroll within: set `max-height` on it. The
+// header cells need an opaque background, or the rows show through them.
+// The modifier sits on the table itself, not the wrapper: in the Web Component
+// the wrapper is in the shadow tree and a descendant selector cannot reach the
+// light-DOM table from there.
+.table--sticky-header thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: bg(surface, neutral);
+}

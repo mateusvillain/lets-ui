@@ -238,3 +238,75 @@ describe('fit width', () => {
     expect(getComputedStyle(cell).whiteSpace).toBe('nowrap');
   });
 });
+
+describe('sticky header', () => {
+  const ROWS = Array.from(
+    { length: 14 },
+    (_, i) =>
+      `<tr><th scope="row">Row ${i + 1}</th><td>Value ${i + 1}</td></tr>`
+  ).join('');
+  const LONG = `
+    <table aria-label="Long">
+      <thead><tr><th scope="col">Name</th><th scope="col">Value</th></tr></thead>
+      <tbody>${ROWS}</tbody>
+    </table>`;
+  const headCell = (el) => el.querySelector('thead th');
+
+  it('is not sticky by default', async () => {
+    const el = await mount('max-height="150"', LONG);
+    await new Promise((r) => setTimeout(r, 50));
+    expect(getComputedStyle(headCell(el)).position).toBe('static');
+  });
+
+  it('keeps the header at the top of the area while the rows scroll', async () => {
+    const el = await mount('sticky-header max-height="150"', LONG);
+    await new Promise((r) => setTimeout(r, 50));
+    expect(getComputedStyle(headCell(el)).position).toBe('sticky');
+    const area = wrapper(el);
+    area.scrollTop = 120;
+    await new Promise((r) => setTimeout(r, 50));
+    expect(
+      Math.abs(
+        headCell(el).getBoundingClientRect().top -
+          area.getBoundingClientRect().top
+      )
+    ).toBeLessThan(1);
+  });
+
+  it('gives the header an opaque background', async () => {
+    const el = await mount('sticky-header max-height="150"', LONG);
+    await new Promise((r) => setTimeout(r, 50));
+    const bg = getComputedStyle(headCell(el)).backgroundColor;
+    expect(bg).not.toBe('rgba(0, 0, 0, 0)');
+    expect(bg).not.toBe('transparent');
+  });
+
+  it('limits the height, reading a bare number as pixels', async () => {
+    const el = await mount('max-height="150"', LONG);
+    await new Promise((r) => setTimeout(r, 50));
+    expect(wrapper(el).getBoundingClientRect().height).toBeLessThanOrEqual(150);
+    expect(wrapper(el).style.maxHeight).toBe('150px');
+  });
+
+  it('accepts any CSS length', async () => {
+    const el = await mount('max-height="10rem"', LONG);
+    expect(wrapper(el).style.maxHeight).toBe('10rem');
+  });
+
+  it('becomes a focusable, labelled region when it scrolls vertically', async () => {
+    const el = await mount('sticky-header max-height="150"', LONG);
+    await new Promise((r) => setTimeout(r, 50));
+    await el.updateComplete;
+    expect(wrapper(el).getAttribute('role')).toBe('region');
+    expect(wrapper(el).getAttribute('tabindex')).toBe('0');
+    expect(wrapper(el).getAttribute('aria-label')).toBe('Long');
+  });
+
+  it('keeps a focused row from sliding under the header', async () => {
+    const el = await mount('sticky-header max-height="150"', LONG);
+    await new Promise((r) => setTimeout(r, 50));
+    await el.updateComplete;
+    const height = headCell(el).closest('thead').offsetHeight;
+    expect(wrapper(el).style.scrollPaddingTop).toBe(`${height}px`);
+  });
+});
