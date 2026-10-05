@@ -11,6 +11,10 @@ export default {
       options: ['sm', 'md', 'lg', 'xl'],
     },
     triggerLabel: { control: 'text' },
+    closeLabel: {
+      control: 'text',
+      table: { defaultValue: { summary: 'Close drawer' } },
+    },
     closeOnBackdrop: { control: 'boolean' },
   },
   parameters: {
@@ -22,7 +26,7 @@ const Template = ({ title, size, triggerLabel, closeOnBackdrop }) => {
   const attrs = [
     `title="${title ?? 'Drawer title'}"`,
     `size="${size ?? 'md'}"`,
-    `trigger-label="${triggerLabel ?? 'Abrir drawer'}"`,
+    `trigger-label="${triggerLabel ?? 'Open drawer'}"`,
     closeOnBackdrop ? 'close-on-backdrop' : '',
   ]
     .filter(Boolean)
@@ -42,7 +46,7 @@ export const Drawer = Template.bind({});
 Drawer.args = {
   title: 'Título do drawer',
   size: 'md',
-  triggerLabel: 'Abrir drawer',
+  triggerLabel: 'Open drawer',
   closeOnBackdrop: true,
 };
 
@@ -61,7 +65,7 @@ Large.args = {
 };
 
 export const WithoutActions = () => `
-  <lui-drawer title="Drawer sem ações" trigger-label="Abrir drawer" close-on-backdrop>
+  <lui-drawer title="Drawer sem ações" trigger-label="Open drawer" close-on-backdrop>
     <p>Este drawer não possui botões de ação no rodapé.</p>
   </lui-drawer>
 `;

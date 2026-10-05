@@ -10,6 +10,7 @@ export class LuiModal extends LitElement {
   @property() size = 'md';
   @property({ type: Boolean, reflect: true }) open = false;
   @property({ attribute: 'trigger-label' }) triggerLabel = 'Open modal';
+  @property({ attribute: 'close-label' }) closeLabel = 'Close modal';
   @property({ attribute: 'hide-trigger', type: Boolean }) hideTrigger = false;
 
   @query('[data-modal-dialog]') private _dialog!: HTMLElement;
@@ -207,7 +208,7 @@ export class LuiModal extends LitElement {
             >
             <lui-close-button
               size="lg"
-              label="Fechar modal"
+              label="${this.closeLabel}"
               @click="${this.closeModal}"
             ></lui-close-button>
           </div>

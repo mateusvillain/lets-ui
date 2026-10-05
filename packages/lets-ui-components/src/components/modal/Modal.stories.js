@@ -11,6 +11,10 @@ export default {
       options: ['sm', 'md', 'lg'],
     },
     'trigger-label': { control: 'text' },
+    'close-label': {
+      control: 'text',
+      table: { defaultValue: { summary: 'Close modal' } },
+    },
   },
   parameters: {
     docs: {

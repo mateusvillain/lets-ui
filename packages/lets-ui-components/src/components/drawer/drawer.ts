@@ -9,7 +9,8 @@ export class LuiDrawer extends LitElement {
   @property() title = 'Drawer title';
   @property() size = 'md';
   @property({ type: Boolean, reflect: true }) open = false;
-  @property({ attribute: 'trigger-label' }) triggerLabel = 'Abrir drawer';
+  @property({ attribute: 'trigger-label' }) triggerLabel = 'Open drawer';
+  @property({ attribute: 'close-label' }) closeLabel = 'Close drawer';
   @property({ attribute: 'hide-trigger', type: Boolean }) hideTrigger = false;
   @property({ attribute: 'close-on-backdrop', type: Boolean }) closeOnBackdrop =
     false;
@@ -232,7 +233,7 @@ export class LuiDrawer extends LitElement {
           >
           <lui-close-button
             size="lg"
-            label="Fechar drawer"
+            label="${this.closeLabel}"
             @click="${this.closeDrawer}"
           ></lui-close-button>
         </div>

@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.11.0
+
+### Added
+
+- `close-label` on `lui-modal` and `lui-drawer`, the `aria-label` of the close button (defaults `Close modal` and `Close drawer`).
+- `show-password-label`, `hide-password-label`, `increment-label` and `decrement-label` on `lui-input`, the `aria-label` of the password toggle and the number steppers.
+
+### Changed
+
+- The strings the components generate are now English by default. They were hardcoded and split between Portuguese and English, so a screen reader announced `Fechar modal` in an English page, and no project was consistent out of the box. Every one is a prop, so a project sets its own language per component instead of inheriting ours.
+  - Portuguese defaults that move to English: `Campo obrigatório.` → `This field is required.` (`lui-input`, `lui-textarea`, `lui-select`, `lui-checkbox`, `lui-switch`), `(opcional)` → `(optional)` (`lui-input`, `lui-textarea`, `lui-select`), `Selecione uma opção.` → `Select an option.` (`lui-radio-group`), `Mostrar tooltip` → `Show tooltip` (`lui-tooltip`), `Abrir drawer` → `Open drawer` (`lui-drawer` trigger), and the password and stepper labels of `lui-input`.
+  - Projects that relied on the Portuguese text must now pass it explicitly.
+
+### Fixed
+
+- `lui-checkbox` and `lui-switch` reported a fixed `Campo obrigatório.` as their validation message and ignored `error-text`. They now use `error-text`.
+
 ## v1.10.0
 
 ### Added
