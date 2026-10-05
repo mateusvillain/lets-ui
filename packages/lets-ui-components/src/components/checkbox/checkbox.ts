@@ -14,13 +14,6 @@ export class LuiCheckbox extends LitElement {
   @property(nameProperty) name = '';
   @property() value = 'on';
   @property({ type: Boolean }) checked = false;
-
-  /**
-   * Estado misto de um checkbox que resume outros (selecionar tudo com parte
-   * marcada). É visual e semântico — anunciado como "parcialmente marcado" —
-   * e some assim que o usuário alterna o checkbox.
-   */
-  @property({ type: Boolean, reflect: true }) indeterminate = false;
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property() size = 'lg';
@@ -60,7 +53,6 @@ export class LuiCheckbox extends LitElement {
 
   formResetCallback() {
     this.checked = false;
-    this.indeterminate = false;
     this.error = false;
   }
 
@@ -85,7 +77,6 @@ export class LuiCheckbox extends LitElement {
   private _handleChange = (e: Event) => {
     const input = e.target as HTMLInputElement;
     this.checked = input.checked;
-    this.indeterminate = false;
     if (this.checked) this.error = false;
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   };
@@ -102,7 +93,6 @@ export class LuiCheckbox extends LitElement {
             .value="${this.value}"
             aria-label="${ariaLabel}"
             .checked="${this.checked}"
-            .indeterminate="${this.indeterminate}"
             ?disabled="${this.disabled}"
             ?required="${this.required}"
             ?aria-disabled="${this.disabled}"
