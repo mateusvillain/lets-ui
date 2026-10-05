@@ -285,7 +285,7 @@ export const Schedule = () =>
         'Beatriz Nogueira',
       ],
       ['11:30', 'Acessibilidade na prática', 'Auditório B', 'Rafael Moreira'],
-      ['13:00', 'Almoço', 'Terraço', '—'],
+      ['13:00', 'Almoço', 'Terraço', 'Sem responsável'],
     ],
   });
 Schedule.storyName = 'Só texto, sem borda';
@@ -381,8 +381,8 @@ export const CSSClass = () => `
         </tr>
       </thead>
       <tbody>
-        <tr><th scope="row">101</th><td>Centro – Aeroporto</td><td>15 min</td></tr>
-        <tr><th scope="row">204</th><td>Terminal Norte – Praça da Sé</td><td>8 min</td></tr>
+        <tr><th scope="row">101</th><td>Centro / Aeroporto</td><td>15 min</td></tr>
+        <tr><th scope="row">204</th><td>Terminal Norte / Praça da Sé</td><td>8 min</td></tr>
         <tr><th scope="row">310</th><td>Circular Universitária</td><td>20 min</td></tr>
       </tbody>
     </table>
