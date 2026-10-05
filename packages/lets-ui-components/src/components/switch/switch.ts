@@ -42,7 +42,7 @@ export class LuiSwitch extends LitElement {
   }
 
   protected updated(changed: PropertyValues) {
-    if (changed.has('checked')) {
+    if (changed.has('checked') || changed.has('errorText')) {
       this._syncFormValue();
     }
   }
