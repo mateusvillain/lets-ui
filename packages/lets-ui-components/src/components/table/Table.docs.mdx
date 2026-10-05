@@ -118,7 +118,7 @@ Toda tabela de dados precisa de um nome acessível, para que o leitor de tela an
 
 ## Rolagem horizontal
 
-Quando a tabela é mais larga que o espaço disponível, a área vira uma região rolável. Ela ganha `role="region"`, `tabindex="0"` e um nome, para que o teclado consiga rolar. O nome vem de `label` ou, sem ele, do nome da própria tabela (`aria-label` ou `<caption>`). Com `aria-labelledby` na tabela, passe também o `label`.
+Quando a tabela é mais larga que o espaço disponível, a área vira uma região rolável. Ela ganha `role="region"`, `tabindex="0"` e um nome, para que o teclado consiga rolar. O nome vem de `label` ou, sem ele, do nome da própria tabela, na ordem do navegador: `aria-labelledby`, `aria-label` e `<caption>`. Um `aria-label` vazio conta como ausente. O componente acompanha mudanças nesses atributos e no texto do caption.
 
 <Canvas of={TableStories.Scrollable} />
 
@@ -178,5 +178,7 @@ Sem o Web Component, a região rolável é responsabilidade de quem usa: adicion
 
 - A semântica é a do `<table>` nativo: nenhum `role` é sobrescrito.
 - Dê sempre um nome à tabela: `aria-label`, `aria-labelledby` ou `<caption>`.
+- Os estilos olham só as células da própria tabela: uma tabela dentro de uma célula não herda padding, divisores nem o header fixo.
+- Com `<tfoot>` ou vários `<tbody>`, só a última linha da tabela fica sem divisor.
 - O hover da linha é só um apoio visual; não carrega informação.
 - Status dentro das células deve ter texto, não só cor.
