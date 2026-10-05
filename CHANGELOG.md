@@ -16,6 +16,7 @@
 ### Fixed
 
 - `lui-checkbox` and `lui-switch` reported a fixed `Campo obrigatório.` as their validation message and ignored `error-text`. They now use `error-text`.
+- Focus rings were invisible on light backgrounds. The `focus-ring` colour tokens pointed at the lightest steps of their scales (`primary.1`, `secondary.2`, `red.1`, `green.1`, `gray.3`), which measure between 1.1:1 and 1.8:1 against white, well under the 3:1 that WCAG 2.4.11 asks of a focus indicator. All five now point at step 5 of their scale: 3.65:1 for primary on a light background, and above 5:1 for the other variants in both themes. Step 4 was not enough for the default brand, where `primary.4` measures 2.96:1.
 
 ## v1.10.0
 
