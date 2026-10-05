@@ -58,6 +58,13 @@
     color: text(body);
   }
 
+  // Opt-in, per cell: put it on the header and on every cell of a column that
+  // reads better flush to the end (actions, amounts). Logical, so it follows the
+  // writing direction.
+  .table__cell--end {
+    text-align: end;
+  }
+
   // The last row closes the table on its own, without a divider underneath.
   tbody tr:last-child > * {
     border-bottom: 0;

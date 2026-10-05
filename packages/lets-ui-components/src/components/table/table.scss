@@ -1,5 +1,11 @@
 @use 'packages/styles/src/components/table' as *;
+@use 'packages/styles/src/utilities/mixins' as *;
 
 :host {
   display: block;
+}
+
+// Announces the selection to screen readers without showing it.
+.table-status {
+  @include sr-only;
 }
