@@ -17,12 +17,12 @@ export default {
     ariaLabel: {
       control: 'text',
       description:
-        'aria-label do <table>. Nome acessível quando não há título visível.',
+        'aria-label do <table>. Nome acessível quando não há título visível; só é aplicado com o caption vazio.',
     },
     caption: {
       control: 'text',
       description:
-        'Texto do <caption>. Use com título visível; quando preenchido, o aria-label não é aplicado.',
+        'Texto do <caption>, o título visível da tabela, como no design. Quando preenchido, o aria-label não é aplicado.',
     },
   },
 };
@@ -74,15 +74,14 @@ const Template = ({ bordered, label, ariaLabel, caption }) => {
 };
 
 export const Default = Template.bind({});
-Default.args = { bordered: false, label: '', ariaLabel: 'Orders', caption: '' };
+Default.args = { bordered: false, label: '', ariaLabel: '', caption: 'Orders' };
 
 export const Bordered = Template.bind({});
-Bordered.args = { bordered: true, label: '', ariaLabel: 'Orders', caption: '' };
+Bordered.args = { bordered: true, label: '', ariaLabel: '', caption: 'Orders' };
 
-export const WithCaption = () => `
+export const WithoutCaption = () => `
   <lui-table bordered>
-    <table>
-      <caption>Orders</caption>
+    <table aria-label="Orders">
       <thead>
         <tr>
           <th scope="col">Name</th>
@@ -96,13 +95,14 @@ export const WithCaption = () => `
     </table>
   </lui-table>
 `;
-WithCaption.storyName = 'Com caption';
-WithCaption.parameters = { controls: { disable: true } };
+WithoutCaption.storyName = 'Sem caption';
+WithoutCaption.parameters = { controls: { disable: true } };
 
 export const Scrollable = () => `
   <div style="max-width: 280px">
     <lui-table bordered label="Orders, scrollable">
-      <table aria-label="Orders" style="min-width: 560px">
+      <table style="min-width: 560px">
+        <caption>Orders</caption>
         <thead>
           <tr>
             <th scope="col">Name</th>
@@ -127,7 +127,8 @@ Scrollable.parameters = { controls: { disable: true } };
 
 export const CSSClass = () => `
   <div class="table-wrapper table-wrapper--bordered">
-    <table class="table" aria-label="Orders">
+    <table class="table">
+      <caption>Orders</caption>
       <thead>
         <tr>
           <th scope="col">Name</th>

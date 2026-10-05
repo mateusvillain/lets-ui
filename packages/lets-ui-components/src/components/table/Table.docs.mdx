@@ -27,14 +27,14 @@ A tabela fica dentro de `<lui-table>`, na marcação de quem usa. O Web Componen
 
 ## Nome da tabela
 
-O design da Table não tem título visível, então o `<caption>` **não é obrigatório** e o componente **não o estiliza**. Mas toda tabela de dados precisa de um nome acessível, para que o leitor de tela anuncie "tabela, Pedidos" e não apenas "tabela". A regra:
+Toda tabela de dados precisa de um nome acessível, para que o leitor de tela anuncie "tabela, Pedidos" e não apenas "tabela". O `<caption>` é opcional, e o Let's UI o estiliza como no design: título à esquerda, dentro da borda, acima do cabeçalho. A regra:
 
-- **Sem título visível (padrão):** use `aria-label` no `<table>`. É o caso do design.
-- **Com título visível:** use `<caption>`. Ele aparece com o estilo do navegador, sem estilo do Let's UI; estilize no seu projeto, se precisar.
-- Se o título já existe fora da tabela (um heading, por exemplo), use `aria-labelledby` no `<table>` apontando para ele.
-- Não use `aria-label` e `<caption>` juntos: o `aria-label` prevalece e o caption passa a ser redundante.
+- **Com título visível (como no design):** use `<caption>`. Ele é o título e também o nome acessível.
+- **Sem título visível:** use `aria-label` no `<table>`.
+- **Título já existente fora da tabela** (um heading, por exemplo): use `aria-labelledby` no `<table>` apontando para ele.
+- **Não use `aria-label` e `<caption>` juntos:** o `aria-label` prevalece e o caption passa a ser redundante.
 
-<Canvas of={TableStories.WithCaption} />
+<Canvas of={TableStories.WithoutCaption} />
 
 ## Rolagem horizontal
 
@@ -48,7 +48,10 @@ Quando a tabela é mais larga que o espaço disponível, a área vira uma regiã
 
 ```html
 <lui-table bordered>
-  <table aria-label="Pedidos">
+  <table>
+    <caption>
+      Pedidos
+    </caption>
     <thead>
       <tr>
         <th scope="col">Nome</th>
@@ -71,7 +74,10 @@ Quando a tabela é mais larga que o espaço disponível, a área vira uma regiã
 
 ```html
 <div class="table-wrapper table-wrapper--bordered">
-  <table class="table" aria-label="Pedidos">
+  <table class="table">
+    <caption>
+      Pedidos
+    </caption>
     …
   </table>
 </div>
@@ -81,9 +87,9 @@ Sem o Web Component, a região rolável é responsabilidade de quem usa: adicion
 
 ## Propriedades
 
-| Propriedade | Atributo   | Tipo      | Padrão  | Descrição                                           |
-| ----------- | ---------- | --------- | ------- | --------------------------------------------------- |
-| `bordered`  | `bordered` | `boolean` | `false` | Borda externa com cantos arredondados.              |
+| Propriedade | Atributo   | Tipo      | Padrão  | Descrição                                              |
+| ----------- | ---------- | --------- | ------- | ------------------------------------------------------ |
+| `bordered`  | `bordered` | `boolean` | `false` | Borda externa com cantos arredondados.                 |
 | `label`     | `label`    | `string`  | `''`    | Nome da região rolável. Sem ele, usa o nome da tabela. |
 
 ## Acessibilidade
