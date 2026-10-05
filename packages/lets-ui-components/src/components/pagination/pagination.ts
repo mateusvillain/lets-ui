@@ -112,7 +112,7 @@ export class LuiPagination extends LitElement {
   // `compact-sibling-count`. The value lives here because a media query cannot
   // reach into a Lit property; keep it in step with the grid breakpoint token.
   private _compact = false;
-  private _mql = window.matchMedia('(width < 768px)');
+  private _mql?: MediaQueryList;
   private _onMediaChange = (e: MediaQueryListEvent) => {
     this._compact = e.matches;
     this.requestUpdate();
@@ -120,12 +120,15 @@ export class LuiPagination extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this._compact = this._mql.matches;
-    this._mql.addEventListener('change', this._onMediaChange);
+    // Created on connect, not as a field initializer: constructing the element
+    // must not need `matchMedia`, which a Node or jsdom import does not have.
+    this._mql = window.matchMedia?.('(width < 768px)');
+    this._compact = this._mql?.matches ?? false;
+    this._mql?.addEventListener('change', this._onMediaChange);
   }
 
   disconnectedCallback() {
-    this._mql.removeEventListener('change', this._onMediaChange);
+    this._mql?.removeEventListener('change', this._onMediaChange);
     super.disconnectedCallback();
   }
 
