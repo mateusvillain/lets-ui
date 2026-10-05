@@ -239,6 +239,25 @@ describe('fit width', () => {
   });
 });
 
+describe('inside a flex parent', () => {
+  it('scrolls inside its wrapper instead of stretching the parent', async () => {
+    const host = document.createElement('div');
+    host.style.cssText = 'display: flex; width: 300px';
+    host.innerHTML = `<lui-table>${TABLE.replace(
+      '<table>',
+      '<table style="width: 800px; min-width: 800px">'
+    )}</lui-table>`;
+    document.body.append(host);
+    mounted.push(host);
+    const el = host.querySelector('lui-table');
+    await el.updateComplete;
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(el.getBoundingClientRect().width).toBeLessThanOrEqual(300);
+    expect(wrapper(el).getAttribute('role')).toBe('region');
+  });
+});
+
 describe('sticky header', () => {
   const ROWS = Array.from(
     { length: 14 },
@@ -466,6 +485,19 @@ describe('sortable columns', () => {
     const el = await mount('', SORTABLE);
     await el.updateComplete;
     expect(sortOf(el)).toEqual(['none', 'none', null]);
+  });
+
+  it('prepares headers that are rendered after the table is slotted', async () => {
+    const el = await mount(
+      '',
+      '<table aria-label="People"><tbody></tbody></table>'
+    );
+    el.querySelector('table').insertAdjacentHTML(
+      'afterbegin',
+      '<thead><tr><th scope="col"><button type="button" class="table__sort">Name</button></th></tr></thead>'
+    );
+    await new Promise((r) => setTimeout(r, 0));
+    expect(sortOf(el)).toEqual(['none']);
   });
 
   it('keeps an aria-sort the author already set', async () => {

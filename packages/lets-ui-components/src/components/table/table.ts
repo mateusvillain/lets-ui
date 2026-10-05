@@ -94,7 +94,12 @@ export class LuiTable extends LitElement {
     super.connectedCallback();
     adopt(this.getRootNode() as Document | ShadowRoot);
     this._resizeObserver = new ResizeObserver(() => this._measure());
-    this._mutationObserver = new MutationObserver(() => this._readName());
+    this._mutationObserver = new MutationObserver(() => {
+      this._readName();
+      // A framework can render the header or its sort buttons after the
+      // table is slotted, which `slotchange` does not report.
+      this._prepareSortable();
+    });
     this.addEventListener('click', this._handleClick);
     this._observe();
     this._readName();

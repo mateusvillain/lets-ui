@@ -2,4 +2,9 @@
 
 :host {
   display: block;
+
+  // Without this a flex or grid parent gives the host its table's min-content
+  // width, so a wide table stretches the page instead of scrolling inside the
+  // wrapper.
+  min-width: 0;
 }
