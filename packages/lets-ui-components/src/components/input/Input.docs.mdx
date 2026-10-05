@@ -79,6 +79,19 @@ dados enquanto a regex valida o valor final, útil para campos como CPF/CNPJ sem
 | `pattern`   | `string`  | `''`   | Regex para validar o valor final; reporta `patternMismatch` via `ElementInternals`          |
 | `inputmode` | `string`  | `''`   | Dica de teclado virtual em dispositivos touch (`text`, `numeric`, `decimal`, `tel`, `email`, `url`, `search`, `none`) |
 
+## Textos padrão
+
+Os textos que o componente gera são em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
+
+| Atributo              | Tipo     | Padrão                      | Descrição                                          |
+| --------------------- | -------- | --------------------------- | -------------------------------------------------- |
+| `optional-text`       | `string` | `'(optional)'`              | Marcador exibido quando `optional` está ativo      |
+| `error-text`          | `string` | `'This field is required.'` | Mensagem exibida quando `error` está ativo         |
+| `show-password-label` | `string` | `'Show password'`           | `aria-label` do botão que revela a senha           |
+| `hide-password-label` | `string` | `'Hide password'`           | `aria-label` do botão que oculta a senha           |
+| `increment-label`     | `string` | `'Increase value'`          | `aria-label` do botão de incremento (`type=number`) |
+| `decrement-label`     | `string` | `'Decrease value'`          | `aria-label` do botão de decremento (`type=number`) |
+
 ## Classe CSS (sem Web Component)
 
 <Canvas of={InputStories.CSSClass} />

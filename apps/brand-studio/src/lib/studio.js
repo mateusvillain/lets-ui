@@ -416,6 +416,8 @@ export function mountStudio({ root, templates, meta }) {
       const input = el('lui-input', {
         size: 'md',
         type: 'number',
+        'increment-label': 'Aumentar valor',
+        'decrement-label': 'Diminuir valor',
         step: '0.001',
         min: '0.1',
         label,
@@ -498,6 +500,8 @@ export function mountStudio({ root, templates, meta }) {
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
+      'increment-label': 'Aumentar valor',
+      'decrement-label': 'Diminuir valor',
       label: `${item.label} (${value.unit ?? 'px'})`,
       min: String(bounds.min),
       max: String(bounds.max),
@@ -532,6 +536,8 @@ export function mountStudio({ root, templates, meta }) {
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
+      'increment-label': 'Aumentar valor',
+      'decrement-label': 'Diminuir valor',
       label: item.label,
       min: String(item.min ?? 0),
       max: String(item.max ?? 100),

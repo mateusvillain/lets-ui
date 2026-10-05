@@ -19,7 +19,7 @@ export class LuiCheckbox extends LitElement {
   @property() size = 'lg';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'Campo obrigatório.';
+  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
 
   private _baseId: string;
 
@@ -42,7 +42,7 @@ export class LuiCheckbox extends LitElement {
   }
 
   protected updated(changed: PropertyValues) {
-    if (changed.has('checked')) {
+    if (changed.has('checked') || changed.has('errorText')) {
       this._syncFormValue();
     }
   }
@@ -68,7 +68,7 @@ export class LuiCheckbox extends LitElement {
   private _syncFormValue() {
     this._internals.setFormValue(this.checked ? this.value : null);
     if (this.required && !this.checked) {
-      this._internals.setValidity({ valueMissing: true }, 'Campo obrigatório.');
+      this._internals.setValidity({ valueMissing: true }, this.errorText);
     } else {
       this._internals.setValidity({});
     }
