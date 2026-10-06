@@ -57,10 +57,16 @@ export class LuiInput extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;
-  @property({ attribute: 'optional-text' }) optionalText = '(opcional)';
+  @property({ attribute: 'optional-text' }) optionalText = '(optional)';
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'Campo obrigatório.';
+  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
+  @property({ attribute: 'show-password-label' }) showPasswordLabel =
+    'Show password';
+  @property({ attribute: 'hide-password-label' }) hidePasswordLabel =
+    'Hide password';
+  @property({ attribute: 'increment-label' }) incrementLabel = 'Increase value';
+  @property({ attribute: 'decrement-label' }) decrementLabel = 'Decrease value';
   @property() maxlength = '';
   @property() prefix = '';
   @property() suffix = '';
@@ -254,8 +260,8 @@ export class LuiInput extends LitElement {
                 type="button"
                 class="input-field__action"
                 aria-label="${this._passwordVisible
-                  ? 'Ocultar senha'
-                  : 'Mostrar senha'}"
+                  ? this.hidePasswordLabel
+                  : this.showPasswordLabel}"
                 ?disabled="${this.disabled}"
                 @click="${this._togglePassword}"
               >
@@ -282,7 +288,7 @@ export class LuiInput extends LitElement {
         <button
           type="button"
           class="input-field__step"
-          aria-label="Diminuir valor"
+          aria-label="${this.decrementLabel}"
           ?disabled="${this.disabled}"
           @click="${() => this._applyStep(-1)}"
         >
@@ -311,7 +317,7 @@ export class LuiInput extends LitElement {
         <button
           type="button"
           class="input-field__step"
-          aria-label="Aumentar valor"
+          aria-label="${this.incrementLabel}"
           ?disabled="${this.disabled}"
           @click="${() => this._applyStep(1)}"
         >

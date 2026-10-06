@@ -92,10 +92,10 @@ NativeSelect.args = {
   form: '',
   required: false,
   optional: true,
-  optionalText: '(opcional)',
+  optionalText: '(optional)',
   hint: 'Hint text',
   error: false,
-  errorText: 'Campo obrigatório.',
+  errorText: 'This field is required.',
   disabled: false,
   size: 'lg',
 };

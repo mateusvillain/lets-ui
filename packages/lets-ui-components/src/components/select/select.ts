@@ -18,10 +18,10 @@ export class LuiSelect extends LitElement {
   @property({ type: Boolean }) required = false;
   @property() size = 'lg';
   @property({ type: Boolean }) optional = false;
-  @property({ attribute: 'optional-text' }) optionalText = '(opcional)';
+  @property({ attribute: 'optional-text' }) optionalText = '(optional)';
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'Campo obrigatório.';
+  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
   @property() placeholder = 'Select an option';
   @property({ attribute: 'force-state' }) forceState = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';

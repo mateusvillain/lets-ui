@@ -22,7 +22,10 @@ import { FAMILIES, FONT_STACKS, STEPS, THEMES } from './schema.js';
 const random = (min, max) => min + Math.random() * (max - min);
 const randomInt = (min, max) => Math.floor(random(min, max + 1));
 const pick = (list) => list[randomInt(0, list.length - 1)];
-const roundTo = (value, step) => Math.round(value / step) * step;
+const roundTo = (value, step) => {
+  const decimals = String(step).split('.')[1]?.length ?? 0;
+  return Number((Math.round(value / step) * step).toFixed(decimals));
+};
 
 /* ── Color ───────────────────────────────────────────────────── */
 
@@ -75,6 +78,9 @@ const FONT_SIZE_STEPS = [
   '3xl',
 ];
 
+/** The steps held at a single size — the brand's three smallest. */
+const FIXED_FONT_SIZE_COUNT = 3;
+
 /** `1xs` is the body-copy step: the scale grows and shrinks out from it. */
 const BODY_STEP = FONT_SIZE_STEPS.indexOf('1xs');
 
@@ -99,19 +105,42 @@ function randomFontSizes() {
   const bodyMax = bodyMin * Math.max(random(1.08, 1.2), minimumSpread * 1.01);
   const displayJump = random(1.15, 1.35);
 
-  return Object.fromEntries(
-    FONT_SIZE_STEPS.map((step, index) => {
-      const distance = index - BODY_STEP;
-      const last = index === FONT_SIZE_STEPS.length - 1;
-      const min = bodyMin * ratioMin ** distance * (last ? displayJump : 1);
-      const max = bodyMax * ratioMax ** distance * (last ? displayJump : 1);
+  const sizes = {};
 
-      return [
-        `typography.font-size.${step}`,
-        buildClamp(min, Math.max(min, max)),
-      ];
-    })
-  );
+  // The fixed steps take the size the ladder reaches at its widest and hold it
+  // everywhere: they are already at the floor of the readable range, and the
+  // minimum end would put them below it.
+  let previous = 0;
+
+  FONT_SIZE_STEPS.forEach((step, index) => {
+    const distance = index - BODY_STEP;
+    const last = index === FONT_SIZE_STEPS.length - 1;
+    const max = bodyMax * ratioMax ** distance * (last ? displayJump : 1);
+    const path = `typography.font-size.${step}`;
+
+    if (index < FIXED_FONT_SIZE_COUNT) {
+      previous = roundTo(max, 0.001);
+      sizes[path] = { value: previous, unit: 'rem' };
+      return;
+    }
+
+    // A minimum below the step under it inverts the scale on narrow screens,
+    // where the fixed steps no longer move out of the way: the first fluid
+    // step has to clear the fixed one below it, and each one after that the
+    // minimum of its own predecessor.
+    const min = Math.min(
+      Math.max(
+        bodyMin * ratioMin ** distance * (last ? displayJump : 1),
+        previous * ratioMin
+      ),
+      max
+    );
+
+    previous = min;
+    sizes[path] = buildClamp(min, max);
+  });
+
+  return sizes;
 }
 
 const weight = (name) => `{lui.typography.weight.${name}}`;
