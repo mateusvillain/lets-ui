@@ -8,6 +8,8 @@ order: 6
 
 ## Quando usar
 
+<DosDonts variant="do" title="Use quando">
+
 Use o Empty State quando uma área da interface **não tem nada para mostrar**:
 
 - a pessoa usa uma funcionalidade pela primeira vez;
@@ -16,11 +18,17 @@ Use o Empty State quando uma área da interface **não tem nada para mostrar**:
 - uma fila foi zerada;
 - os dados não podem ser exibidos por permissão ou configuração.
 
+</DosDonts>
+
 ## Quando não usar
+
+<DosDonts variant="dont" title="Evite quando">
 
 - **Carregamento.** Use um indicador de carregamento ou skeleton.
 - **Páginas de erro do servidor** (404, 500). Elas pedem uma página própria.
 - **Como decoração.** O Empty State precisa explicar e orientar.
+
+</DosDonts>
 
 <Callout variant="warning">
   O Empty State deve **substituir por inteiro** o componente vazio. Não deixe cabeçalho de tabela, rodapé ou paginação "fantasma" ao lado dele.
