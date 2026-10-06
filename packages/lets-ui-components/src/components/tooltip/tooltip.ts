@@ -11,7 +11,7 @@ export class LuiTooltip extends LitElement {
 
   @property() text = 'Tooltip';
   @property() position = 'top';
-  @property() label = 'Mostrar tooltip';
+  @property() label = 'Show tooltip';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
   @state() private _hasCustomTrigger = false;

@@ -1,0 +1,224 @@
+---
+// Banco de prova do header fixo da Table.
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+
+const STATUS = [
+  { label: 'Paga', variant: 'success' },
+  { label: 'Pendente', variant: 'caution' },
+  { label: 'Atrasada', variant: 'danger' },
+  { label: 'Rascunho', variant: 'neutral' },
+];
+const CLIENTS = [
+  'Ateliê Horizonte',
+  'Café Meridiano',
+  'Studio Ponto Final',
+  'Livraria Sétimo Andar',
+  'Oficina da Praça',
+];
+
+const rows = Array.from({ length: 40 }, (_, i) => ({
+  id: 2001 + i,
+  client: CLIENTS[i % CLIENTS.length],
+  amount: (120 + i * 87.5).toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+  }),
+  status: STATUS[i % STATUS.length],
+}));
+---
+
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table: header fixo (temporário)</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+        font-family: var(--lui-brand-typography-font-family-body);
+      }
+      h1,
+      h2 {
+        margin: 0 0 8px;
+      }
+      section {
+        margin-block: 32px;
+        max-width: 760px;
+      }
+      p {
+        margin: 0 0 12px;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Table: header fixo</h1>
+    <div class="controls">
+      <lui-button id="theme" size="md">Alternar tema (light/dark)</lui-button>
+    </div>
+
+    <section>
+      <h2>1. sticky-header + max-height="320" + bordered</h2>
+      <p>
+        40 linhas. Role dentro da tabela: o header deve ficar no topo, com o
+        divisor. Use Tab para focar a área e as setas para rolar.
+      </p>
+      <lui-table bordered sticky-header max-height="320">
+        <table>
+          <caption>
+            Faturas
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col" class="table__cell--fit">Fatura</th>
+              <th scope="col">Cliente</th>
+              <th scope="col" class="table__cell--end">Valor</th>
+              <th scope="col" class="table__cell--fit">Situação</th>
+              <th scope="col" class="table__cell--fit table__cell--end">
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.map((row) => (
+                <tr>
+                  <th scope="row" class="table__cell--fit">
+                    #{row.id}
+                  </th>
+                  <td>{row.client}</td>
+                  <td class="table__cell--end">R$ {row.amount}</td>
+                  <td class="table__cell--fit">
+                    <lui-tag
+                      label={row.status.label}
+                      variant={row.status.variant}
+                      size="sm"
+                    />
+                  </td>
+                  <td class="table__cell--fit table__cell--end">
+                    <lui-icon-button
+                      size="md"
+                      aria-label={`Ações da fatura ${row.id}`}
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="5" r="2" />
+                        <circle cx="12" cy="12" r="2" />
+                        <circle cx="12" cy="19" r="2" />
+                      </svg>
+                    </lui-icon-button>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </lui-table>
+    </section>
+
+    <section>
+      <h2>2. sem borda, max-height="12rem" (medida CSS)</h2>
+      <lui-table sticky-header max-height="12rem">
+        <table aria-label="Faturas sem borda">
+          <thead>
+            <tr>
+              <th scope="col">Fatura</th>
+              <th scope="col">Cliente</th>
+              <th scope="col" class="table__cell--end">Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.slice(0, 15).map((row) => (
+                <tr>
+                  <th scope="row">#{row.id}</th>
+                  <td>{row.client}</td>
+                  <td class="table__cell--end">R$ {row.amount}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </lui-table>
+    </section>
+
+    <section>
+      <h2>3. Controle: max-height sem sticky-header</h2>
+      <p>Rola na vertical, mas o header rola junto.</p>
+      <lui-table bordered max-height="200">
+        <table aria-label="Controle sem header fixo">
+          <thead>
+            <tr>
+              <th scope="col">Fatura</th>
+              <th scope="col">Cliente</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.slice(0, 15).map((row) => (
+                <tr>
+                  <th scope="row">#{row.id}</th>
+                  <td>{row.client}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </lui-table>
+    </section>
+
+    <section>
+      <h2>4. Só CSS (sem Web Component)</h2>
+      <div
+        class="table-wrapper table-wrapper--bordered"
+        style="max-height: 200px"
+        role="region"
+        aria-label="Faturas, só CSS"
+        tabindex="0"
+      >
+        <table class="table table--sticky-header">
+          <caption>
+            Faturas
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Fatura</th>
+              <th scope="col">Cliente</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.slice(0, 15).map((row) => (
+                <tr>
+                  <th scope="row">#{row.id}</th>
+                  <td>{row.client}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <script>
+      import '@lets-ui/components';
+
+      document.getElementById('theme')?.addEventListener('click', () => {
+        const root = document.documentElement;
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      });
+    </script>
+  </body>
+</html>

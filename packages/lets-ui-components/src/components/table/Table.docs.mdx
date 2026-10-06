@@ -1,0 +1,227 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TableStories from './Table.stories';
+
+<Meta of={TableStories} />
+
+# Table
+
+Mostra dados em linhas e colunas. Usa o `<table>` nativo, então o leitor de tela entende a estrutura pela marcação: `<thead>`, `<tbody>` e `<th scope>`.
+
+<Canvas of={TableStories.Default} />
+<Controls of={TableStories.Default} />
+
+## Com borda
+
+`bordered` desenha a borda externa com cantos arredondados.
+
+<Canvas of={TableStories.Bordered} />
+
+## Exemplos
+
+### Avatar, link e tag nas células
+
+As células aceitam outros componentes. Cada um continua com o próprio nome acessível, e o texto do link já diz para onde ele leva.
+
+<Canvas of={TableStories.WithAvatarAndLink} />
+
+### Seleção
+
+Um `lui-checkbox` por linha, com `aria-label` que cita a linha ("Selecionar Base de clientes.csv"). A coluna da caixa precisa de um `<th scope="col">` com texto, nem que seja só para leitores de tela.
+
+<Canvas of={TableStories.Selectable} />
+
+### Valores e situação
+
+A situação vem em texto dentro da tag, não só em cor.
+
+<Canvas of={TableStories.Invoices} />
+
+### Só texto, sem borda
+
+Sem `bordered`, a tabela fica sem moldura e usa só os divisores de linha.
+
+<Canvas of={TableStories.Schedule} />
+
+## Alinhamento à direita
+
+Colunas de ações ou de valores podem ficar alinhadas ao fim. Coloque `.table__cell--end` no cabeçalho e em cada célula da coluna, para o título acompanhar o conteúdo. Ela serve para ações e valores numéricos. Texto corrido fica à esquerda.
+
+<Canvas of={TableStories.Bordered} />
+
+```html
+<th scope="col" class="table__cell--end">Ações</th>
+…
+<td class="table__cell--end">
+  <lui-icon-button aria-label="Ações de Ana Souza">…</lui-icon-button>
+</td>
+```
+
+A classe usa `text-align: end`, então segue a direção de escrita. Em idiomas escritos da direita para a esquerda, o fim é o lado esquerdo.
+
+## Coluna só do tamanho do conteúdo
+
+Por padrão as colunas dividem a largura da tabela. Uma coluna que não precisa de espaço, como ações, ids, tags de status ou caixa de seleção, pode usar `.table__cell--fit`. Ela fica com a largura do conteúdo mais largo, e as outras colunas dividem o resto. Como a medida vem do conteúdo, não há valor para atualizar quando o texto muda.
+
+Coloque a classe no cabeçalho e em cada célula da coluna. Ela também impede a quebra de linha, então o conteúdo precisa ser curto. Pode ser usada junto com `.table__cell--end`.
+
+<Canvas of={TableStories.Bordered} />
+
+```html
+<th scope="col" class="table__cell--fit table__cell--end">Ações</th>
+…
+<td class="table__cell--fit table__cell--end">
+  <lui-icon-button aria-label="Ações de Ana Souza">…</lui-icon-button>
+</td>
+```
+
+Não use a classe em colunas de texto corrido, que precisam quebrar linha.
+
+## Colunas ordenáveis
+
+Para uma coluna ser ordenável, ponha um `<button class="table__sort">` dentro do `<th>`. O botão dá acesso por teclado e o nome da coluna. O `lui-table` cuida do resto: troca o `aria-sort` do `<th>`, mostra a seta e emite `lui-sort`.
+
+<Canvas of={TableStories.Sortable} />
+
+```html
+<lui-table>
+  <table aria-label="Equipe">
+    <thead>
+      <tr>
+        <th scope="col" data-column="name">
+          <button type="button" class="table__sort">Nome</button>
+        </th>
+        <th scope="col">Função</th>
+      </tr>
+    </thead>
+    …
+  </table>
+</lui-table>
+```
+
+```js
+table.addEventListener('lui-sort', ({ detail }) => {
+  // detail.column: o data-column do <th>, ou o texto do botão
+  // detail.direction: 'ascending', 'descending' ou 'none'
+});
+```
+
+- Cada clique avança a coluna: crescente, decrescente e sem ordem. Com `none`, o autor pode voltar à ordem original.
+- Só uma coluna fica ordenada por vez. Ao ordenar uma, as outras voltam para `none`.
+- O componente **não reordena as linhas**. Quem usa decide como: no navegador, como na story, ou pedindo os dados ao servidor.
+- O `aria-sort` é colocado como `none` em todo `<th>` que tem o botão, se o autor não tiver definido um valor. Um `aria-sort` já escrito é mantido, então dá para abrir a tabela já ordenada.
+- A seta vem do `aria-sort`: as duas setas esmaecidas sem ordem, e uma seta na cor do título quando a coluna está ordenada.
+- Em CSS puro, `.table__sort` já tem o visual, mas o `aria-sort` e o evento ficam por sua conta.
+
+## Header fixo
+
+`sticky-header` mantém o cabeçalho visível enquanto as linhas rolam. Ele só funciona com `max-height`, que limita a altura da área. Sem altura limitada a tabela não rola na vertical. Um número vale como pixels (`280`), e qualquer medida CSS também serve (`20rem`).
+
+<Canvas of={TableStories.StickyHeader} />
+
+```html
+<lui-table sticky-header max-height="280">
+  <table>
+    …
+  </table>
+</lui-table>
+```
+
+- A área vira uma região com `role="region"`, `tabindex="0"` e nome, para o teclado conseguir rolar na vertical.
+- Ao navegar por teclado, a linha com foco não fica atrás do cabeçalho. O componente define `scroll-padding-top` com a altura dele.
+- O cabeçalho usa o fundo `surface` neutro e opaco, para as linhas não aparecerem por trás. Em uma página com outra cor de fundo, o cabeçalho vai destoar.
+- O `<caption>` rola junto com as linhas; só o cabeçalho fica.
+- Em CSS puro, use `.table--sticky-header` na tabela e defina o `max-height` no `.table-wrapper`.
+
+## Estrutura
+
+Você escreve o `<table>` dentro de `<lui-table>`. O Web Component não cria linhas nem células. Ele só coloca a classe `.table` na tabela e cuida da borda e da rolagem.
+
+- A tabela precisa de um nome acessível. Veja [Nome da tabela](#nome-da-tabela).
+- `<th scope="col">` no cabeçalho de cada coluna.
+- `<th scope="row">` na primeira célula de cada linha, quando ela identifica a linha. Dados comuns ficam em `<td>`.
+- Ações dentro das células precisam de nome próprio que diga a qual linha pertencem ("Ações de Ana Souza").
+
+## Nome da tabela
+
+Toda tabela de dados precisa de um nome, para o leitor de tela anunciar "tabela, Pedidos" e não só "tabela". O `<caption>` é opcional. Quando usado, ele aparece como no design: título à esquerda, dentro da borda, acima do cabeçalho. Como nomear:
+
+- Com título visível, como no design: use `<caption>`. Ele é o título e também o nome.
+- Sem título visível: use `aria-label` no `<table>`.
+- Com um título em outro lugar da página, como um heading: use `aria-labelledby` no `<table>`, apontando para ele.
+- Não use `aria-label` e `<caption>` juntos. O `aria-label` vale e o caption fica repetido.
+
+<Canvas of={TableStories.WithoutCaption} />
+
+## Rolagem horizontal
+
+Quando a tabela é mais larga que o espaço disponível, a área ganha `role="region"`, `tabindex="0"` e um nome, para o teclado conseguir rolar. O nome vem de `label` ou, sem ele, do nome da própria tabela, na ordem `aria-labelledby`, `aria-label` e `<caption>`. Um `aria-label` vazio é ignorado. Se esses atributos ou o texto do caption mudarem, o nome acompanha.
+
+<Canvas of={TableStories.Scrollable} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-table bordered>
+  <table>
+    <caption>
+      Pedidos
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Ana Souza</th>
+        <td>Concluído</td>
+      </tr>
+    </tbody>
+  </table>
+</lui-table>
+```
+
+### Classe CSS
+
+<Canvas of={TableStories.CSSClass} />
+
+```html
+<div class="table-wrapper table-wrapper--bordered">
+  <table class="table">
+    <caption>
+      Pedidos
+    </caption>
+    …
+  </table>
+</div>
+```
+
+Sem o Web Component, a região rolável fica por sua conta: se a tabela puder transbordar, adicione `role="region"`, `tabindex="0"` e `aria-label` ao `.table-wrapper`.
+
+## Propriedades
+
+| Propriedade    | Atributo        | Tipo      | Padrão  | Descrição                                                  |
+| -------------- | --------------- | --------- | ------- | ---------------------------------------------------------- |
+| `bordered`     | `bordered`      | `boolean` | `false` | Borda externa com cantos arredondados.                     |
+| `label`        | `label`         | `string`  | `''`    | Nome da região rolável. Sem ele, usa o nome da tabela.     |
+| `stickyHeader` | `sticky-header` | `boolean` | `false` | Mantém o cabeçalho visível na rolagem. Exige `max-height`. |
+| `maxHeight`    | `max-height`    | `string`  | `''`    | Altura máxima da área; acima dela, rola na vertical.       |
+
+## Eventos
+
+| Evento     | `detail`                                                               | Quando                              |
+| ---------- | ---------------------------------------------------------------------- | ----------------------------------- |
+| `lui-sort` | `{ column: string, direction: 'ascending' \| 'descending' \| 'none' }` | Um botão `.table__sort` é acionado. |
+
+## Acessibilidade
+
+- A semântica é a do `<table>` nativo. Nenhum `role` é sobrescrito.
+- Dê sempre um nome à tabela, com `aria-label`, `aria-labelledby` ou `<caption>`.
+- Em colunas ordenáveis, o botão dá o nome e o foco, e o `aria-sort` do `<th>` informa o estado, no padrão do WAI-ARIA Authoring Practices. O leitor de tela lê a direção ao chegar no cabeçalho, mas o componente não faz um anúncio extra ao clicar.
+- Os estilos valem só para as células da própria tabela. Uma tabela dentro de uma célula não recebe padding, divisores nem header fixo.
+- Com `<tfoot>` ou vários `<tbody>`, só a última linha da tabela fica sem divisor.
+- O hover da linha só ajuda a enxergar a linha. Nenhuma informação depende dele.
+- Status dentro das células deve ter texto, não só cor.

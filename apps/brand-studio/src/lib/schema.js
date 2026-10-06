@@ -65,17 +65,13 @@ export const FONT_STACKS = [
   },
 ];
 
-const FONT_SIZE_STEPS = [
-  '3xs',
-  '2xs',
-  '1xs',
-  'sm',
-  'md',
-  'lg',
-  '1xl',
-  '2xl',
-  '3xl',
-];
+/**
+ * The three smallest steps are a single fixed size: they already sit at the
+ * floor of the readable range, so interpolating them down on narrow screens
+ * only costs legibility. Everything from `sm` up stays fluid.
+ */
+const FIXED_FONT_SIZE_STEPS = ['3xs', '2xs', '1xs'];
+const FLUID_FONT_SIZE_STEPS = ['sm', 'md', 'lg', '1xl', '2xl', '3xl'];
 const RADIUS_STEPS = ['xs', 'sm', 'md', 'lg', 'xl'];
 /** Smallest to largest: the order the breakpoints must respect. */
 export const BREAKPOINTS = ['1xs', 'sm', 'md', 'lg', '1xl'];
@@ -104,9 +100,23 @@ export const SECTIONS = [
         ],
       },
       {
+        label: 'Fixed scale',
+        hint: 'The smallest steps hold one size in rem at every viewport width.',
+        fields: FIXED_FONT_SIZE_STEPS.map((step) =>
+          field(`typography.font-size.${step}`, step, 'dimension', {
+            min: 0.5,
+            max: 2,
+            // The tokens and the random draw both carry thousandths (0.694,
+            // 0.833); a coarser step would round them away on the first edit.
+            step: 0.001,
+            unit: 'rem',
+          })
+        ),
+      },
+      {
         label: 'Fluid scale',
         hint: 'Minimum and maximum in rem. The value in between is recomputed as clamp().',
-        fields: FONT_SIZE_STEPS.map((step) =>
+        fields: FLUID_FONT_SIZE_STEPS.map((step) =>
           field(`typography.font-size.${step}`, step, 'clamp')
         ),
       },

@@ -20,7 +20,7 @@ export class LuiRadioGroup extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'Selecione uma opção.';
+  @property({ attribute: 'error-text' }) errorText = 'Select an option.';
 
   constructor() {
     super();

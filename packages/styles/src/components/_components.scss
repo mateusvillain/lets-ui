@@ -1,6 +1,8 @@
 // JS-driven components (float, scroll-area, …) are intentionally absent.
 // See CLAUDE.md § "SCSS split rule" for the rationale.
 @use 'alert';
+@use 'avatar';
+@use 'avatar-group';
 @use 'box';
 @use 'center';
 @use 'container';
@@ -37,3 +39,4 @@
 @use 'sidebar';
 @use 'stack';
 @use 'switcher';
+@use 'table';

@@ -38,11 +38,19 @@ Por padrão o backdrop não fecha o drawer. Ative `close-on-backdrop` quando o f
 ### Web Component
 
 ```html
-<lui-drawer title="Título" size="md" trigger-label="Abrir drawer" close-on-backdrop>
+<lui-drawer title="Título" size="md" trigger-label="Open drawer" close-on-backdrop>
   <p>Conteúdo do drawer</p>
   <button slot="actions" data-drawer-close class="btn btn--secondary btn--lg">Cancelar</button>
   <button slot="actions" class="btn btn--primary btn--lg">Confirmar</button>
 </lui-drawer>
+```
+
+### Textos acessíveis
+
+O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close drawer"`). Troque-o para o idioma do projeto.
+
+```html
+<lui-drawer title="Título" close-label="Fechar drawer"></lui-drawer>
 ```
 
 ### Classe CSS

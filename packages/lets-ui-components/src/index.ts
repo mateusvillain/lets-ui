@@ -1,4 +1,6 @@
 import { LuiAlert } from './components/alert/alert.js';
+import { LuiAvatar } from './components/avatar/avatar.js';
+import { LuiAvatarGroup } from './components/avatar/avatar-group.js';
 import { LuiBox } from './components/box/box.js';
 import { LuiCenter } from './components/center/center.js';
 import { LuiContainer } from './components/container/container.js';
@@ -37,6 +39,7 @@ import { LuiModal } from './components/modal/modal.js';
 import { LuiPagination } from './components/pagination/pagination.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
+import { LuiTable } from './components/table/table.js';
 import { LuiTag } from './components/tag/tag.js';
 import { LuiTextarea } from './components/textarea/textarea.js';
 import { LuiToast } from './components/toast/toast.js';
@@ -62,6 +65,8 @@ define('lui-stack', LuiStack);
 define('lui-switcher', LuiSwitcher);
 define('lui-float', LuiFloat);
 define('lui-alert', LuiAlert);
+define('lui-avatar', LuiAvatar);
+define('lui-avatar-group', LuiAvatarGroup);
 define('lui-body', LuiBody);
 define('lui-heading', LuiHeading);
 define('lui-image', LuiImage);
@@ -90,6 +95,7 @@ define('lui-pagination', LuiPagination);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
 define('lui-shortcut', LuiShortcut);
+define('lui-table', LuiTable);
 define('lui-tag', LuiTag);
 define('lui-textarea', LuiTextarea);
 define('lui-toast', LuiToast);
@@ -110,6 +116,8 @@ export {
   LuiSwitcher,
   LuiFloat,
   LuiAlert,
+  LuiAvatar,
+  LuiAvatarGroup,
   LuiBody,
   LuiHeading,
   LuiImage,
@@ -138,6 +146,7 @@ export {
   LuiNativeSelect,
   LuiSelect,
   LuiShortcut,
+  LuiTable,
   LuiTag,
   LuiTextarea,
   LuiToast,
