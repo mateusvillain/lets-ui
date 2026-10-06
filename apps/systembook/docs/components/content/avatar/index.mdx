@@ -1,0 +1,63 @@
+---
+title: "Avatar"
+subtitle: "Representa uma pessoa ou uma entidade com uma foto ou com as iniciais do nome."
+order: 3
+---
+
+<ComponentEmbed component="Avatar" variant="initials" />
+
+## Quando usar
+
+Use o Avatar para **identificar quem fez algo ou a quem algo pertence**: autoria de um comentário, dono de um item, membro de uma equipe, conta no menu do usuário.
+
+## Quando não usar
+
+- **Ícones e ilustrações em geral.** Use [Image](../image/index.mdx) ou ícones.
+- **Para abrir um perfil ou menu.** O Avatar não é interativo. Envolva-o em um botão ou link, ou use um [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
+- **Para mostrar estado de um item que não é pessoa.** Use uma [Tag](../tag/index.mdx).
+
+## Anatomia
+
+1. **Container**: define o tamanho e o formato.
+2. **Conteúdo**: a foto, as iniciais ou o ícone de pessoa.
+3. **Indicador de status** (opcional): um ponto no canto, com forma própria para cada estado.
+
+## Tamanhos
+
+| Tamanho | Medida |
+| --- | --- |
+| `lg` (padrão) | 40px |
+| `md` | 32px |
+| `sm` | 24px |
+
+## Formatos
+
+| Formato | Quando usar |
+| --- | --- |
+| **Circle** (padrão) | Pessoas. |
+| **Rounded** | Organizações, projetos e equipes. |
+| **Square** | Entidades com logotipo ou marca. |
+
+## Conteúdo
+
+O Avatar escolhe o conteúdo pela ordem: **foto**, depois **iniciais**, depois o **ícone de pessoa**. Se a foto falhar ao carregar, as iniciais entram no lugar.
+
+## Cores
+
+`gray` (padrão), `blue`, `green`, `orange`, `red` e `violet`. A cor só distingue um avatar do outro. **Não carrega significado.**
+
+## Status
+
+`online`, `away`, `busy` e `offline`, cada um com cor e forma próprias, para que quem não distingue cores também distinga os estados.
+
+<ComponentEmbed component="Avatar" variant="status" />
+
+## Grupo
+
+O Avatar Group empilha vários avatares com sobreposição e anel na cor da superfície. É a forma de mostrar equipes e participantes sem ocupar muito espaço.
+
+## Relacionados
+
+- [Image](../image/index.mdx)
+- [Tag](../tag/index.mdx)
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx)

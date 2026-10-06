@@ -1,0 +1,66 @@
+---
+title: "Code"
+order: 4
+---
+
+## Aspect Ratios
+
+Use the `aspect-ratio` attribute to lock the space before the image loads and prevent CLS.
+
+## With Caption
+
+When `caption` is provided, the component wraps everything in a semantic `<figure>` / `<figcaption>` pair.
+
+## Fallback Color
+
+Show a branded background while the image loads or when it fails.
+
+## Fallback Source
+
+Provide an alternative image to display when the primary `src` fails to load.
+
+## As Picture
+
+Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<source>` elements).
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `as` | `string` | `image` |
+| `src` | `string` | `''` |
+| `src-set` | `string` | `''` |
+| `alt` | `string` | `''` |
+| `width` | `string` | `''` |
+| `height` | `string` | `''` |
+| `aspect-ratio` | `string` | `''` |
+| `radius` | `string` | `''` |
+| `fit` | `string` | `cover` |
+| `fill` | `string` | `''` |
+| `loading` | `string` | `lazy` |
+| `fallback-color` | `string` | `''` |
+| `fallback-src` | `string` | `''` |
+| `caption` | `string` | `''` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-image
+  src="..."
+  alt="Descrição"
+  width="400px"
+  aspect-ratio="16 / 9"
+  radius="md"
+  fit="cover"
+></lui-image>
+```
+
+### Classe CSS
+
+```html
+<div class="img" style="width: 400px; aspect-ratio: 16 / 9; border-radius: 8px;">
+  <img class="img__element" src="..." alt="Descrição">
+</div>
+```

@@ -1,0 +1,49 @@
+---
+title: "Dropdown Menu"
+subtitle: "Menu flutuante que reúne ações relacionadas atrás de um único gatilho."
+order: 4
+---
+
+<ComponentEmbed component="DropdownMenu" variant="closed" />
+
+## Quando usar
+
+Use o Dropdown Menu quando há **várias ações relacionadas** e mostrar todas ocuparia espaço demais: menu de conta, "Mais opções" de uma linha de tabela, ações de um documento.
+
+O gatilho é livre: pode ser um [Button](../button/index.mdx), um [Icon Button](../icon-button/index.mdx) ou um link.
+
+## Quando não usar
+
+- **Duas ou menos ações.** Mostre os botões diretamente.
+- **Navegação principal do site.** Use uma barra de navegação ou [Tabs](../../navigation/tabs/index.mdx).
+- **Escolher um valor em um formulário.** Use o [Select](../../form-and-options/select/index.mdx).
+- **Conteúdo rico ou formulários.** Menus são para ações curtas; para mais, use um Modal ou Drawer.
+
+## Anatomia
+
+1. **Gatilho**: o elemento que abre e fecha o menu.
+2. **Painel**: a superfície flutuante com elevação.
+3. **Item**: uma ação, com rótulo e, se quiser, atalho.
+4. **Divisor**: separa grupos de ações.
+5. **Submenu** (opcional): um segundo nível, indicado por uma seta.
+
+## Elementos
+
+| Elemento | Descrição |
+| --- | --- |
+| **Item** | Executa uma ação e fecha o menu. |
+| **Item com atalho** | Mostra o atalho de teclado alinhado à direita. |
+| **Item perigoso** | Ação destrutiva, destacada em vermelho. |
+| **Item desabilitado** | Ação indisponível agora, mas que continua visível. |
+| **Divisor** | Separa grupos com propósitos diferentes. |
+| **Submenu** | Agrupa ações relacionadas em um segundo nível. |
+
+## Estados do menu
+
+Fechado e aberto. Ao abrir, o foco vai para o primeiro item disponível. Ao fechar com `Esc`, o foco volta para o gatilho.
+
+## Relacionados
+
+- [Button](../button/index.mdx) e [Icon Button](../icon-button/index.mdx): gatilhos comuns.
+- [Select](../../form-and-options/select/index.mdx): escolha de valor.
+- [Shortcut](../../typography/shortcut/index.mdx): exibe teclas de atalho.

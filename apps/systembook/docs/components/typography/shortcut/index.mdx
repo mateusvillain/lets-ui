@@ -1,0 +1,41 @@
+---
+title: "Shortcut"
+subtitle: "Mostra atalhos de teclado, uma tecla ou uma combinação, de forma clara e acessível."
+order: 3
+---
+
+<ComponentEmbed component="Shortcut" variant="single" />
+
+## Quando usar
+
+Use o Shortcut para **mostrar um atalho de teclado disponível**: em itens de menu, tooltips, listas de comandos e telas de ajuda.
+
+## Quando não usar
+
+- **Para ensinar um fluxo inteiro.** Escreva o passo a passo em texto.
+- **Para teclas que não existem no teclado do usuário**, como em telas de toque.
+- **Como botão.** O Shortcut só exibe, não aciona nada.
+
+## Anatomia
+
+1. **Tecla**: cada tecla aparece em uma peça própria.
+2. **Combinação**: várias teclas lado a lado, na ordem em que são pressionadas.
+
+## Tipos
+
+| Tipo | Quando usar | Exemplo |
+| --- | --- | --- |
+| **Tecla única** | Teclas de ação. | `Enter`, `Esc`, `Tab` |
+| **Combinação** | Atalhos com modificadores. | `Ctrl` + `K` |
+
+<ComponentEmbed component="Shortcut" variant="combo" />
+
+## Em contexto
+
+Combine com listas de ações e menus, com o atalho alinhado ao fim da linha. É o uso do [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
+
+## Relacionados
+
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx)
+- [Tooltip](../../content/tooltip/index.mdx)
+- [Body](../body/index.mdx)

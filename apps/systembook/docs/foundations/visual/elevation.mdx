@@ -1,0 +1,61 @@
+---
+title: "Elevation"
+subtitle: "Tokens de sombra que comunicam a altura de cada superfície na hierarquia visual. Use a função SCSS `elevation($layer)` para aplicar nos componentes."
+order: 5
+---
+
+## Como a elevação funciona
+
+A elevação usa **sombras** para mostrar a altura de cada superfície na hierarquia: o que está no mesmo plano da página, e o que flutua acima dela.
+
+## Princípios
+
+- **Altura comunica prioridade.** Quanto mais alto, mais atenção e mais temporário (modais, menus).
+- **Menos é mais.** Sombra em tudo é igual a sombra em nada. Use poucos níveis por tela.
+- **Coerência.** Um elemento sobe de nível apenas por um motivo: está flutuando, ou reagiu à interação.
+- **Sombra não é a única pista.** Borda e fundo também ajudam a separar superfícies.
+
+## Qual nível usar?
+
+| Nível | Para... |
+| --- | --- |
+| `base` | Superfícies em repouso: cards e painéis. |
+| `hovered` | Estado de hover de cards interativos. |
+| `floating` | Elementos que flutuam: menus, popovers, tooltips. |
+| `overlay` | A camada mais alta: modais e drawers. |
+
+<DosDonts variant="do" title="Elevação com significado">
+  Um menu aberto com `floating`, e o modal com `overlay`. A pessoa sente a camada em que está.
+</DosDonts>
+
+<DosDonts variant="dont" title="Sombras em tudo">
+  Cards, botões, campos e rótulos, todos com sombra. A tela fica pesada, e a hierarquia desaparece.
+</DosDonts>
+
+## Níveis de Elevação
+
+| name | token | value | use |
+| --- | --- | --- | --- |
+| base | --lui-elevation-base | 0 0 8px 0 rgb(0% 0% 0% / 2%), 0 4px 12px 0 rgb(0% 0% 0% / 4%) | Superfícies em repouso: cards, painéis, dropdowns fechados. |
+| hovered | --lui-elevation-hovered | 0 0 8px 0 rgb(0% 0% 0% / 4%), 0 8px 16px 0 rgb(0% 0% 0% / 8%) | Estado de hover de cards interativos e superfícies elevadas. |
+| floating | --lui-elevation-floating | 0 0 8px 0 rgb(0% 0% 0% / 8%), 0 12px 20px 0 rgb(0% 0% 0% / 12%) | Elementos flutuantes: dropdowns, popovers, tooltips. |
+| overlay | --lui-elevation-overlay | 0 1px 8px 0 rgb(0% 0% 0% / 4%), 0 16px 24px 0 rgb(0% 0% 0% / 16%) | Camada mais alta: modais, drawers, bandejas laterais. |
+
+## Focus Ring
+
+Sombras de contorno aplicadas em estados de foco de acessibilidade. Use a função SCSS `focus-ring($variant)` para aplicá-las nos componentes.
+
+| variant | token | colorToken | desc |
+| --- | --- | --- | --- |
+| primary | --lui-focus-ring-primary | --lui-color-primary-focus-ring | Foco primário — ações e controles padrão |
+| secondary | --lui-focus-ring-secondary | --lui-color-secondary-focus-ring | Foco secundário — controles neutros |
+| danger | --lui-focus-ring-danger | --lui-color-danger-focus-ring | Foco de perigo — campos com erro |
+| success | --lui-focus-ring-success | --lui-color-success-focus-ring | Foco de sucesso — campos validados |
+| neutral | --lui-focus-ring-neutral | --lui-color-neutral-focus-ring | Foco neutro — elementos sem contexto semântico |
+
+## Boas práticas
+
+- Mantenha a **ordem**: elementos mais altos sempre ficam acima dos mais baixos.
+- Combine elevação com um **backdrop** em sobreposições que bloqueiam a página (modais, drawers).
+- No tema escuro, sombras são menos visíveis: apoie a separação com bordas e fundos.
+- O **anel de foco** é uma sombra de contorno que precisa de **3 : 1** de contraste. Nunca o remova.

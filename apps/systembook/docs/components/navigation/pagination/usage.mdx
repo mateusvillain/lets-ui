@@ -1,0 +1,38 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Posição
+
+Coloque a Pagination **abaixo** da lista ou tabela, alinhada ao conteúdo. Em listas muito longas, repita-a também acima para evitar uma rolagem desnecessária.
+
+## Dê contexto
+
+A pessoa precisa saber **quantos itens existem**. Combine a paginação com um texto como "Mostrando 21 a 40 de 312 resultados" e, quando fizer sentido, com um controle de itens por página.
+
+<DosDonts variant="do" title="Total e posição visíveis">
+  "21–40 de 312 resultados" junto da paginação. A pessoa entende o tamanho do conjunto e onde está.
+</DosDonts>
+
+<DosDonts variant="dont" title="Paginar sem contexto">
+  Só os números, sem total e sem indicar o que mudou ao trocar de página. A pessoa se sente perdida.
+</DosDonts>
+
+## Comportamento ao trocar de página
+
+- **Volte ao topo da lista** ao mudar de página.
+- Mantenha **filtros e ordenação** ao navegar entre páginas.
+- Atualize a URL com a página atual, para que seja possível compartilhar e voltar com o botão do navegador.
+- Se a lista ficar vazia depois de uma exclusão, vá para a página anterior.
+
+## Quantidade de itens
+
+- Escolha um tamanho de página que equilibre desempenho e leitura, geralmente entre 10 e 50 itens.
+- Evite menos de 10 itens por página, pois obriga a pessoa a clicar demais.
+
+## Boas práticas
+
+- Não mostre a paginação quando houver só uma página.
+- Mantenha os botões de anterior e próxima no mesmo lugar o tempo todo.
+- Personalize os textos acessíveis no idioma do produto ("Página anterior", "Próxima página").

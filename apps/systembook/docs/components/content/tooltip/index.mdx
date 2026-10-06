@@ -1,0 +1,39 @@
+---
+title: "Tooltip"
+subtitle: "Dica curta que aparece ao passar o mouse ou focar em um elemento, para explicá-lo."
+order: 12
+---
+
+<ComponentEmbed component="Tooltip" variant="top" />
+
+## Quando usar
+
+Use o Tooltip para **esclarecer rapidamente** um elemento: dar nome a um [Icon Button](../../actionable/icon-button/index.mdx), explicar uma abreviação ou mostrar um atalho.
+
+## Quando não usar
+
+- **Informação essencial.** Se a pessoa precisa dela para continuar, mostre na página.
+- **Conteúdo longo, formatado ou com links.** Use um Modal, um Drawer ou texto na própria tela.
+- **Em telas de toque.** Não há hover, e o toque pode acionar o elemento em vez de mostrar a dica.
+- **Mensagens de erro ou validação.** Mostre junto ao campo.
+
+## Anatomia
+
+1. **Gatilho**: o elemento que a dica explica.
+2. **Balão**: a caixa de texto.
+3. **Seta**: aponta para o gatilho.
+
+## Posição
+
+O balão aparece em `top` (padrão), `bottom`, `left` ou `right` do gatilho. Escolha a posição que **não cubra** informação importante.
+
+<ComponentEmbed component="Tooltip" variant="bottom" />
+
+## Gatilho
+
+O gatilho pode ser qualquer elemento focável. Se você não colocar nenhum, o Tooltip cria um botão com o texto de `label`.
+
+## Relacionados
+
+- [Icon Button](../../actionable/icon-button/index.mdx): o parceiro mais comum.
+- [Modal](../modal/index.mdx), [Drawer](../drawer/index.mdx): conteúdo mais longo.

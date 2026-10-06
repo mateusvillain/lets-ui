@@ -1,0 +1,31 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+O Avatar **não é interativo**: não recebe foco nem responde ao teclado. Para abrir um perfil ou um menu, envolva-o em um botão ou link, com nome acessível e anel de foco próprios.
+
+## Leitor de tela
+
+- Com `name` ou `status`, o Avatar é anunciado como **imagem**, com o nome inteiro e o status ("Mateus Villain, Online"), e não as iniciais letra por letra.
+- Sem nome e sem status, é **decorativo** e fica escondido da tecnologia assistiva. É o caso do avatar ao lado do nome escrito.
+- Iniciais, foto e ponto de status ficam fora da árvore de acessibilidade, porque o nome já está no avatar.
+- Os textos padrão de status são em inglês. Troque-os com `status-label`.
+
+## Visual
+
+- As iniciais têm contraste de pelo menos 4,5:1 sobre o fundo em todas as cores.
+- O status tem **forma própria** além da cor: online cheio, away com ponteiros, busy com barra, offline com centro vazio.
+- Em modo de alto contraste, o avatar ganha uma borda.
+
+## Limitação conhecida
+
+O ponto de status não atinge 3:1 de contraste com o anel ao redor (de 1,6:1 a 2,6:1), abaixo do que o WCAG 1.4.11 pede para elementos gráficos que carregam informação. O texto no nome acessível compensa para leitores de tela, mas não para a leitura visual. A solução é usar um tom mais escuro nas cores do status.
+
+## Para designers
+
+- Sempre defina o nome quando o avatar for a única identificação da pessoa.
+- Não use a cor do avatar para comunicar nada.
+- Dê um nome acessível aos grupos de avatares.

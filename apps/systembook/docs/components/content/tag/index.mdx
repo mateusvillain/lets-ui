@@ -1,0 +1,54 @@
+---
+title: "Tag"
+subtitle: "Rótulo curto que classifica ou dá status a um item, como \"Ativo\", \"Beta\" ou \"Falhou\"."
+order: 10
+---
+
+<ComponentEmbed component="Tag" variant="surface" />
+
+## Quando usar
+
+Use a Tag para **categorizar ou indicar o status** de algo: situação de um pedido, tipo de conteúdo, etiqueta de um item, estágio de um recurso.
+
+## Quando não usar
+
+- **Ações clicáveis.** A Tag não é um botão. Use [Button](../../actionable/button/index.mdx).
+- **Mensagens longas.** Use um [Alert](../alert/index.mdx).
+- **Contadores e notificações.** Use um indicador numérico próprio.
+- **Frases.** A Tag é para uma ou duas palavras.
+
+## Anatomia
+
+1. **Container**: define a cor, o raio e o espaçamento.
+2. **Rótulo**: o texto curto.
+
+## Estilos
+
+| Estilo | Descrição | Quando usar |
+| --- | --- | --- |
+| **Surface** (padrão) | Fundo suave. | A maioria dos casos, incluindo tabelas e listas. |
+| **Container** | Fundo de destaque. | Quando a tag precisa de mais ênfase. |
+
+<ComponentEmbed component="Tag" variant="container" />
+
+## Variantes
+
+A cor segue o significado:
+
+| Variante | Significado | Exemplo |
+| --- | --- | --- |
+| **Primary** | Destaque da marca ou categoria principal. | "Novo" |
+| **Success** | Algo positivo ou concluído. | "Ativo", "Pago" |
+| **Caution** | Atenção ou algo pendente. | "Pendente", "Expira em breve" |
+| **Danger** | Problema ou algo negativo. | "Falhou", "Recusado" |
+| **Neutral** | Informação sem carga de significado. | "Rascunho", "Arquivado" |
+
+## Tamanhos e formato
+
+`sm`, `md` (padrão), `lg` e `xl`. Com `circle`, a Tag fica totalmente arredondada, como uma pílula.
+
+## Relacionados
+
+- [Table](../table/index.mdx): onde Tags indicam status.
+- [Avatar](../avatar/index.mdx): status de presença.
+- [Alert](../alert/index.mdx): mensagens com mais contexto.

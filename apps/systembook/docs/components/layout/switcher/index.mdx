@@ -1,0 +1,35 @@
+---
+title: "Switcher"
+subtitle: "Alterna entre colunas e linha única, conforme o espaço do contêiner, sem breakpoints."
+order: 12
+---
+
+<ComponentEmbed component="Switcher" variant="default" />
+
+## Quando usar
+
+Use o Switcher para **elementos de mesmo peso que ficam lado a lado quando há espaço** e empilham quando não há: cards de recursos, métricas, planos de preços, passos de um processo.
+
+Ele reage ao **espaço do contêiner**, não ao tamanho da tela. O mesmo componente funciona em uma coluna estreita ou em uma página larga.
+
+## Quando não usar
+
+- **Uma lateral fixa e um conteúdo flexível.** Use [Sidebar](../sidebar/index.mdx).
+- **Estrutura de página em colunas.** Use [Grid](../grid/index.mdx).
+- **Itens que devem ficar sempre em coluna.** Use [Stack](../stack/index.mdx).
+
+## Opções
+
+| Opção | O que controla | Padrão |
+| --- | --- | --- |
+| `threshold` | Largura do contêiner abaixo da qual os itens empilham. | 320px |
+| `gap` | Espaço entre os itens. | 16 |
+| `limit` | Quantidade máxima de itens lado a lado. Acima disso, empilha. | Sem limite |
+
+<ComponentEmbed component="Switcher" variant="limited" />
+
+## Relacionados
+
+- [Sidebar](../sidebar/index.mdx): duas áreas, uma fixa.
+- [Grid](../grid/index.mdx): grade de página.
+- [Stack](../stack/index.mdx), [Inline](../inline/index.mdx).

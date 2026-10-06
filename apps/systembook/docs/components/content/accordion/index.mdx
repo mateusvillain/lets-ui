@@ -1,0 +1,52 @@
+---
+title: "Accordion"
+subtitle: "Lista de seções que se expandem e recolhem, para mostrar conteúdo aos poucos."
+order: 1
+---
+
+<ComponentEmbed component="Accordion" variant="default" />
+
+## Quando usar
+
+Use o Accordion para **organizar conteúdo longo em seções** que a pessoa lê uma de cada vez: perguntas frequentes, blocos de configuração, detalhes de um produto, termos e políticas.
+
+## Quando não usar
+
+- **Informação essencial.** Se quase todo mundo precisa ler, deixe visível.
+- **Navegar entre áreas diferentes.** Use [Tabs](../../navigation/tabs/index.mdx).
+- **Conteúdo curto.** Se cabe na tela, não precisa esconder.
+- **Passos de um fluxo.** Use um indicador de passos.
+
+## Anatomia
+
+1. **Cabeçalho**: toda a faixa é clicável e funciona como um botão.
+2. **Ícone** (opcional): decorativo, à esquerda do título.
+3. **Título**: nomeia a seção.
+4. **Subtítulo** (opcional): texto de apoio abaixo do título.
+5. **Seta**: gira para indicar aberto ou fechado.
+6. **Painel**: o conteúdo revelado.
+
+## Variantes
+
+| Variante | Descrição | Quando usar |
+| --- | --- | --- |
+| **Default** | Itens separados por divisores. | Páginas de conteúdo, FAQs. |
+| **Bordered** | A lista inteira dentro de uma borda arredondada. | Contextos que pedem moldura, como cards. |
+| **Highlighted** | Contorna o item aberto. | Quando é importante localizar o item ativo. |
+
+<ComponentEmbed component="Accordion" variant="bordered" />
+
+<ComponentEmbed component="Accordion" variant="highlighted" />
+
+## Comportamento
+
+- Por padrão, **um item aberto por vez**: abrir um fecha o anterior.
+- Com `multiple`, a pessoa pode abrir vários ao mesmo tempo.
+- Itens desabilitados não alternam e saem da ordem de foco.
+
+<ComponentEmbed component="Accordion" variant="multiple" />
+
+## Relacionados
+
+- [Tabs](../../navigation/tabs/index.mdx): alternar entre visões.
+- [Card](../card/index.mdx): agrupar conteúdo.

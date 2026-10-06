@@ -29,7 +29,10 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish",
-    "playground": "pnpm --prefix playground dev"
+    "playground": "pnpm --prefix playground dev",
+    "systembook": "pnpm --prefix apps/systembook docs:dev",
+    "systembook:check": "pnpm --prefix apps/systembook docs:check",
+    "systembook:build": "pnpm --prefix apps/systembook docs:build"
   },
   "lint-staged": {
     "*.{js,ts,css,scss,json,md}": [

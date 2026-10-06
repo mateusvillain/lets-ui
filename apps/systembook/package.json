@@ -1,0 +1,25 @@
+{
+  "name": "systembook-docs",
+  "private": true,
+  "type": "module",
+  "description": "Let's UI documentation, written as MDX and built by SystemBook",
+  "devDependencies": {
+    "@systembook/cli": "^0.3.1",
+    "@systembook/schema": "^0.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "scripts": {
+    "docs:dev": "systembook dev",
+    "docs:check": "systembook check",
+    "docs:build": "systembook build"
+  }
+}

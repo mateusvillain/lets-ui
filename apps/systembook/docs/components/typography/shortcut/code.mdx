@@ -1,0 +1,41 @@
+---
+title: "Code"
+order: 4
+---
+
+## Tecla única
+
+Use quando o atalho corresponde a uma única tecla — como teclas de ação (`Enter`, `Esc`, `Tab`). Ideal para indicar confirmação ou cancelamento em formulários e modais.
+
+## Múltiplas teclas
+
+Use quando o atalho exige uma combinação de teclas simultâneas. Passe as teclas separadas por vírgula no atributo `keys` (ex.: `keys="Ctrl,K"`). A ordem deve seguir a convenção da plataforma: modificadores primeiro (`Ctrl`, `Shift`, `Cmd`, `Alt`), depois a tecla principal.
+
+## Em contexto
+
+Combine com listas de ações ou menus para documentar atalhos disponíveis na interface. O componente se alinha naturalmente em layouts `flex` com `justify-content: space-between`.
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `keys` | `string` | `''` |
+| `aria-label` | `string` | `''` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-shortcut keys="⌘,K"></lui-shortcut>
+```
+
+### Classe CSS
+
+```html
+<span class="shortcut">
+  <kbd class="shortcut__key">⌘</kbd>
+  <span class="shortcut__sep">+</span>
+  <kbd class="shortcut__key">K</kbd>
+</span>
+```

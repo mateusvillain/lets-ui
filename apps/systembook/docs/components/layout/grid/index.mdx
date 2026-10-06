@@ -1,0 +1,47 @@
+---
+title: "Grid"
+subtitle: "Grade de colunas responsiva, que estrutura a página inteira."
+order: 4
+---
+
+<ComponentEmbed component="Grid" variant="default" />
+
+## Quando usar
+
+Use o Grid para **estruturar a página** em colunas: layouts de conteúdo, galerias, listagens de cards, painéis. O número de colunas, o espaço entre elas e a margem lateral mudam sozinhos conforme o tamanho da tela.
+
+## Quando não usar
+
+- **Alinhar poucos elementos em uma linha.** Use [Flex](../flex/index.mdx) ou [Inline](../inline/index.mdx).
+- **Uma coluna simples.** Use [Stack](../stack/index.mdx).
+- **Duas áreas, uma fixa e outra flexível.** Use [Sidebar](../sidebar/index.mdx).
+
+## A grade
+
+A grade é **mobile-first**. A quantidade de colunas e o espaço entre elas variam por breakpoint:
+
+| Breakpoint | Tela | Colunas | Gap | Margem lateral |
+| --- | --- | --- | --- | --- |
+| base | até 767px | 4 | 16px | 16px |
+| `sm` | a partir de 768px | 8 | 16px | 32px |
+| `md` | a partir de 1024px | 8 | 16px | 40px |
+| `lg` | a partir de 1280px | 12 | 24px | 40px |
+| `1xl` | a partir de 1440px | 12 | 24px | Contêiner de 1360px, centralizado |
+
+Esses valores vêm dos tokens da marca, então uma marca pode redefinir a grade inteira.
+
+## Itens
+
+Cada `lui-grid-item` escolhe **quantas colunas ocupa** em cada breakpoint (`col`, `col-sm`, `col-md`, `col-lg` e `col-1xl`). Um valor declarado vale dali para cima, até outro substituí-lo.
+
+## Grid aninhado
+
+Um Grid dentro de um item recebe `flush` automaticamente, para não repetir a margem lateral.
+
+<ComponentEmbed component="Grid" variant="flush" />
+
+## Relacionados
+
+- [Container](../container/index.mdx): largura máxima do conteúdo.
+- [Stack](../stack/index.mdx), [Flex](../flex/index.mdx): layouts dentro de cada coluna.
+- [Spacing](../../../foundations/visual/spacing.mdx).

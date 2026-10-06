@@ -1,0 +1,51 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Colunas
+
+- Mostre **só as colunas essenciais**. Muitas colunas pedem rolagem e tornam a leitura difícil.
+- Ordene as colunas pela **importância**, com o identificador (nome, título) primeiro.
+- Escreva cabeçalhos **curtos** e específicos: "Valor" em vez de "Valor total da compra em reais".
+
+## Alinhamento
+
+- Texto e datas à **esquerda**.
+- Números e valores à **direita**, para facilitar a comparação.
+- Ações no fim, alinhadas à direita e com largura justa.
+
+<DosDonts variant="do" title="Números alinhados ao fim">
+  Valores com o mesmo número de casas, alinhados à direita, permitem comparar de relance.
+</DosDonts>
+
+<DosDonts variant="dont" title="Números alinhados ao início">
+  Centenas e milhares desalinhados dificultam ler a magnitude.
+</DosDonts>
+
+## Status e ações
+
+- Mostre o status com uma [Tag](../tag/index.mdx) **com texto**, não só com cor.
+- Para ações por linha, use um [Icon Button](../../actionable/icon-button/index.mdx) ou um [Dropdown Menu](../../actionable/dropdown-menu/index.mdx). Dê nome que cite a linha: "Ações de Ana Souza".
+
+## Ordenação
+
+- Torne ordenável **só o que faz sentido** (nome, data, valor).
+- Mostre claramente qual coluna está ordenada e em qual direção.
+- A tabela não reordena sozinha: defina se a ordenação acontece no navegador ou no servidor.
+
+## Muitos dados
+
+- Use [Pagination](../../navigation/pagination/index.mdx) ou rolagem com **cabeçalho fixo** para listas longas.
+- Dê um tamanho de página razoável, como de 10 a 50 linhas.
+- Quando a tabela fica vazia, substitua-a inteira por um [Empty State](../empty-state/index.mdx).
+
+## Seleção
+
+Para ações em lote, coloque um [Checkbox](../../form-and-options/checkbox/index.mdx) por linha e outro no cabeçalho, para "selecionar tudo". Mostre uma barra de ações quando houver itens selecionados.
+
+## Boas práticas
+
+- Mantenha a altura das linhas consistente.
+- Dê um nome à tabela, seja por uma legenda visível ou por um `aria-label`.
+- Evite quebrar linhas dentro das células, exceto em colunas de texto corrido.

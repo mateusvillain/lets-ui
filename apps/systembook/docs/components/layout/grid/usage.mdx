@@ -1,0 +1,32 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Pense em colunas
+
+Planeje o layout em **colunas**, não em larguras. Um card pode ocupar 4 de 4 colunas no celular, 4 de 8 no tablet e 4 de 12 no desktop.
+
+<DosDonts variant="do" title="Declarar cada breakpoint">
+  Defina quantas colunas o item ocupa em cada tela, e verifique o salto de 8 para 12 colunas no `lg`.
+</DosDonts>
+
+<DosDonts variant="dont" title="Esquecer o salto de 8 para 12">
+  Um `col-sm-4` é **metade** da linha em `sm`, mas vira **um terço** em `lg` se não for redeclarado. Revise cada breakpoint.
+</DosDonts>
+
+## Distribuição de conteúdo
+
+- Alinhe o conteúdo principal e o secundário à mesma grade em todas as páginas.
+- Use **colunas vazias** para dar respiro, em vez de aumentar margens avulsas.
+- Em textos longos, limite a largura a uma faixa de leitura confortável (uns 8 de 12 colunas).
+
+## Aninhar
+
+Dentro de um item, use outro Grid para subdividir. Ele ocupa a largura do item e usa a mesma grade.
+
+## Boas práticas
+
+- Respeite os espaços e margens da grade. Não crie margens extras fora dela.
+- Use o Grid para a **estrutura da página** e Stack, Inline e Flex dentro de cada área.
+- Teste em todos os breakpoints, não só no desktop.

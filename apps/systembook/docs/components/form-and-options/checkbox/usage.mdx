@@ -1,0 +1,45 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Checkbox, Radio ou Switch?
+
+| Situação | Use |
+| --- | --- |
+| Marcar **vários** itens independentes | Checkbox |
+| Escolher **uma só** opção entre várias | Radio Group |
+| Ligar ou desligar algo **na hora** | Switch |
+| Aceitar termos ao enviar um formulário | Checkbox |
+
+## Labels
+
+- A label deve ser **afirmativa** e descrever a opção: "Receber atualizações por e-mail".
+- Evite negativas e dupla negação: "Não desejo não receber…".
+- Mantenha a label curta. Se precisar explicar, adicione um texto de apoio abaixo.
+- Toda a label é clicável. Não coloque links dentro dela, a não ser que seja indispensável (como "Li os [termos]").
+
+<DosDonts variant="do" title="Label afirmativa e específica">
+  "Receber resumo semanal por e-mail". A pessoa sabe o que acontece ao marcar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Label negativa ou ambígua">
+  "Não enviar e-mails promocionais". Marcar significa o contrário do que parece desejável, e confunde.
+</DosDonts>
+
+## Listas de checkboxes
+
+- Alinhe as caixas **verticalmente**, uma por linha. Lado a lado, o limite entre as opções fica difícil de entender.
+- Ordene de forma lógica: pelo uso mais comum, por ordem alfabética ou por sequência natural.
+- Use um título para o grupo (como um `<fieldset>` com `<legend>`), explicando o que a pessoa está escolhendo.
+- Para marcar todos, ofereça uma caixa "Selecionar tudo" no topo.
+
+## Quando a escolha é obrigatória
+
+Use `required` para opções que precisam ser marcadas (como aceitar os termos). Mostre a mensagem de erro **perto da caixa**, dizendo o que fazer: "Aceite os termos para continuar."
+
+## Boas práticas
+
+- Não marque opções por padrão quando elas beneficiam a empresa (como receber promoções). Deixe a pessoa decidir.
+- Não use checkbox para ações imediatas: ele sugere "salvar depois".
+- Mantenha área de toque confortável: o clique deve funcionar também na label.

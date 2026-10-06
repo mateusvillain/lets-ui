@@ -1,0 +1,111 @@
+---
+title: "Overview"
+subtitle: "Um produto acessível funciona para todas as pessoas, com mouse, teclado, toque ou leitor de tela. Este é o contrato de acessibilidade do sistema."
+order: 1
+---
+
+## O padrão
+
+Todos os componentes e fundamentos seguem o **WCAG 2.1 nível AA**. Isso significa que cada decisão de design precisa passar por estes critérios.
+
+| Padrão | Nível | Escopo |
+| --- | --- | --- |
+| WCAG 2.1 | AA | Todos os componentes e fundamentos. |
+| HTML | n/a | Elementos semânticos e uso correto de ARIA. |
+| WAI-ARIA 1.2 | n/a | Papéis, propriedades e estados. |
+
+## Contraste de cor
+
+| O que | Contraste mínimo |
+| --- | --- |
+| Texto normal sobre o fundo | **4,5 : 1** |
+| Texto grande (a partir de 18 pt, ou 14 pt em negrito) | **3 : 1** |
+| Componentes de interface e ícones que carregam informação | **3 : 1** |
+| Anel de foco contra as cores vizinhas | **3 : 1** |
+
+Ao criar ou alterar um token, **verifique todos os pares** de texto e fundo e de ícone e superfície.
+
+<Callout variant="warning">
+  O significado **nunca** pode depender só da cor. Combine sempre a cor com um texto, um ícone ou uma forma. Veja como o [Avatar](../../components/content/avatar/index.mdx) dá uma forma própria a cada status.
+</Callout>
+
+## Foco visível
+
+- Todo elemento interativo tem um **indicador de foco** visível ao navegar por teclado.
+- O foco aparece com o teclado (`:focus-visible`), não ao clicar com o mouse.
+- Nunca remova o contorno de foco sem trocá-lo por outro equivalente.
+- O foco precisa de contraste de 3 : 1.
+
+## Teclado
+
+Tudo o que se faz com o mouse deve ser possível **só com o teclado**. Os padrões de cada tipo de componente:
+
+| Componente | Teclas principais |
+| --- | --- |
+| [Button](../../components/actionable/button/index.mdx) | `Enter` e `Espaço` ativam. |
+| [Tabs](../../components/navigation/tabs/index.mdx) | `Setas`, `Home` e `End` trocam de aba. |
+| [Accordion](../../components/content/accordion/index.mdx) | `Enter` e `Espaço` abrem, `Setas` movem entre cabeçalhos. |
+| [Dropdown Menu](../../components/actionable/dropdown-menu/index.mdx) | `Setas` navegam, `Esc` fecha. |
+| [Radio Group](../../components/form-and-options/radio-group/index.mdx) | `Setas` movem e selecionam. |
+| [Modal](../../components/content/modal/index.mdx), [Drawer](../../components/content/drawer/index.mdx) | `Esc` fecha, e o foco fica preso na janela. |
+
+## Estados desabilitados
+
+Um controle desabilitado precisa ser **anunciado como indisponível** e **sair da navegação** por teclado. O sistema usa os dois mecanismos (`disabled` e `aria-disabled`) para garantir isso.
+
+<Callout variant="tip">
+  Prefira não desabilitar. Um botão desabilitado não explica o motivo. Muitas vezes é melhor deixá-lo ativo e mostrar o erro quando a pessoa tentar avançar.
+</Callout>
+
+## Nomes acessíveis
+
+Todo elemento interativo precisa de um **nome** que o leitor de tela possa anunciar.
+
+- Se há texto visível, ele é o nome.
+- Se **não há texto** (um [Icon Button](../../components/actionable/icon-button/index.mdx)), o `aria-label` é obrigatório.
+- Quando houver texto visível em outro lugar, o nome acessível deve **conter** esse texto.
+
+## Formulários
+
+- Todo campo tem uma **label visível**, associada a ele.
+- Dicas e mensagens de erro são ligadas ao campo, e o leitor de tela as lê junto.
+- Em erro, o campo é marcado como inválido, e a mensagem de texto é visível.
+- Campos obrigatórios são anunciados como obrigatórios.
+
+Veja [Input](../../components/form-and-options/input/accessibility.mdx) como exemplo.
+
+## Movimento
+
+O sistema respeita a preferência **"reduzir movimento"** do sistema operacional: transições e animações são suprimidas ou reduzidas.
+
+## Imagens e ícones
+
+- Imagens que carregam informação precisam de **texto alternativo**.
+- Imagens e ícones decorativos ficam **escondidos** da tecnologia assistiva.
+
+## Mensagens dinâmicas
+
+Quando algo muda na tela sem a pessoa pedir (um erro, uma confirmação), o leitor de tela precisa ser avisado. O sistema usa regiões "vivas":
+
+| Componente | Anúncio |
+| --- | --- |
+| [Alert](../../components/content/alert/index.mdx) de erro ou atenção | Assertivo: interrompe a leitura. |
+| Alert de sucesso ou informação | Educado: espera a leitura atual terminar. |
+| [Toast](../../components/content/toast/index.mdx) | Educado. O de erro é assertivo e não some sozinho. |
+
+## Como testar
+
+Antes de considerar uma tela pronta:
+
+1. **Teclado**: navegue só com `Tab`, `Setas`, `Enter`, `Espaço` e `Esc`. Dá para fazer tudo? O foco está sempre visível?
+2. **Leitor de tela**: ouça o componente com VoiceOver, NVDA ou TalkBack. O papel, o nome e o estado fazem sentido?
+3. **Zoom**: amplie o texto em 200%. O conteúdo continua legível, sem rolagem horizontal?
+4. **Contraste**: confira os pares de cor com uma ferramenta de contraste.
+5. **Sem cor**: olhe em escala de cinza. A informação ainda é compreensível?
+
+## Limitações conhecidas
+
+O sistema registra o que ainda está pendente, em vez de escondê-lo:
+
+- O **indicador de status do Avatar** não atinge 3 : 1 contra o anel ao redor. Veja [Avatar](../../components/content/avatar/accessibility.mdx).
+- O **Tooltip** ainda não fecha com `Esc`. Veja [Tooltip](../../components/content/tooltip/accessibility.mdx).

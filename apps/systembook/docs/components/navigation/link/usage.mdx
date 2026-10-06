@@ -1,0 +1,42 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escreva textos que descrevem o destino
+
+O texto do link deve fazer sentido **fora do contexto**, porque leitores de tela listam todos os links da página.
+
+<DosDonts variant="do" title="Texto descritivo">
+  "Leia as diretrizes de acessibilidade" ou "Baixar o guia de marca (PDF, 2 MB)". A pessoa sabe para onde vai.
+</DosDonts>
+
+<DosDonts variant="dont" title="Textos genéricos">
+  "Clique aqui", "Saiba mais" e "Leia mais" repetidos. Não dizem nada sozinhos. Se for inevitável, complemente com `aria-label`.
+</DosDonts>
+
+## Links dentro do texto
+
+- Mantenha o link reconhecível: não use só a cor para diferenciá-lo, por isso o sublinhado aparece no hover e no foco.
+- Evite parágrafos cheios de links. Muitos links competem entre si e cansam a leitura.
+- Coloque o link na **parte do texto que descreve o destino**, não na frase inteira.
+
+## Links externos e downloads
+
+- Use `external` quando o link sair do produto. O ícone avisa a pessoa antes do clique.
+- Abra em nova aba apenas quando houver motivo claro, como não perder um formulário preenchido. Por padrão, navegue na mesma aba.
+- Em downloads, diga o formato e o tamanho no texto: "Baixar relatório (PDF, 1,2 MB)".
+
+## Link ou botão?
+
+| Se o clique... | Use |
+| --- | --- |
+| leva a outra URL | Link |
+| executa uma ação ou envia dados | Button |
+| precisa chamar atenção como CTA | Button com `href` |
+
+## Boas práticas
+
+- Não desabilite links sem explicar o motivo. Se a pessoa não pode acessar, diga por quê.
+- Mantenha o mesmo texto para o mesmo destino em todo o produto.
+- Não use "https://..." como texto do link, a não ser que a URL seja a informação.

@@ -1,0 +1,32 @@
+---
+title: "Code"
+order: 4
+---
+
+## Estilos
+
+`tag-style` escolhe entre `surface` (fundo suave, o padrão) e `container` (fundo de destaque).
+
+<ComponentEmbed component="Tag" variant="container" />
+
+## Formato circular
+
+Com `circle`, a tag fica totalmente arredondada, no formato de pílula.
+
+## Propriedades
+
+| Atributo    | Tipo      | Padrão    | Descrição                                                      |
+| ----------- | --------- | --------- | -------------------------------------------------------------- |
+| `label`     | `string`  | `Tag`     | Texto exibido.                                                 |
+| `tag-style` | `string`  | `surface` | `surface` ou `container`.                                      |
+| `variant`   | `string`  | `primary` | `primary`, `caution`, `danger`, `success` ou `neutral`.        |
+| `size`      | `string`  | `md`      | `sm`, `md`, `lg` ou `xl`.                                      |
+| `circle`    | `boolean` | `false`   | Arredonda completamente os cantos.                             |
+
+## Uso
+
+```html
+<lui-tag label="Active" variant="success"></lui-tag>
+
+<lui-tag label="Beta" tag-style="container" variant="caution" size="sm"></lui-tag>
+```

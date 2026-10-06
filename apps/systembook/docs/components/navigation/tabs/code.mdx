@@ -1,0 +1,35 @@
+---
+title: "Code"
+order: 4
+---
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `variant` | `string` | `line` |
+| `expand` | `boolean` | `false` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-tabs variant="line">
+  <lui-tab label="Geral" active><p>Conteúdo da aba Geral.</p></lui-tab>
+  <lui-tab label="Segurança"><p>Conteúdo da aba Segurança.</p></lui-tab>
+</lui-tabs>
+```
+
+### Classe CSS
+
+```html
+<div class="tabs tabs--line">
+  <div class="tabs__list">
+    <button class="tab" role="tab" aria-selected="true">Geral</button>
+    <button class="tab" role="tab" aria-selected="false">Segurança</button>
+  </div>
+  <div class="tabs__panel" role="tabpanel">Conteúdo da tab Geral</div>
+  <div class="tabs__panel" role="tabpanel" hidden>Conteúdo da tab Segurança</div>
+</div>
+```

@@ -1,0 +1,46 @@
+---
+title: "Radio Group"
+subtitle: "Reúne os Radios de uma escolha exclusiva, com título, dica e mensagem de erro."
+order: 4
+---
+
+<ComponentEmbed component="RadioGroup" variant="default" />
+
+## Quando usar
+
+Use o Radio Group quando a pessoa precisa escolher **uma única opção** entre duas a sete, e é importante ver todas lado a lado: método de pagamento, tamanho, frequência, plano.
+
+## Quando não usar
+
+- **Escolher várias opções.** Use o [Checkbox](../checkbox/index.mdx).
+- **Mais de sete opções.** Use o [Select](../select/index.mdx).
+- **Ligar ou desligar.** Use o [Switch](../switch/index.mdx).
+- **Escolha com efeito imediato e só duas opções**, como "Ativar notificações". Considere um Switch.
+
+## Anatomia
+
+1. **Título do grupo**: a pergunta que as opções respondem.
+2. **Opções** (Radios): as escolhas possíveis.
+3. **Hint** (opcional): texto de apoio abaixo das opções.
+4. **Mensagem de erro**: substitui o hint quando falta escolha obrigatória.
+
+## Variações
+
+| Variação | Quando usar |
+| --- | --- |
+| **Padrão** | Escolha simples com título. |
+| **Com hint** | A pessoa precisa de uma orientação adicional. |
+| **Obrigatório** | A escolha precisa ser feita para continuar. |
+| **Desabilitado** | A escolha não está disponível agora. |
+
+Os tamanhos `lg` (padrão) e `md` seguem o [Input](../input/index.mdx).
+
+<ComponentEmbed component="RadioGroup" variant="hint" />
+
+<ComponentEmbed component="RadioGroup" variant="error" />
+
+## Relacionados
+
+- [Radio](../radio/index.mdx): cada opção.
+- [Checkbox](../checkbox/index.mdx): várias escolhas.
+- [Select](../select/index.mdx): lista longa de opções.

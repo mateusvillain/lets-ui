@@ -1,0 +1,42 @@
+---
+title: "Principles"
+subtitle: "As ideias que orientam cada decisão do sistema, dos tokens aos componentes."
+order: 2
+---
+
+## Decisões vêm de tokens
+
+Cores, espaçamentos, raios e sombras **não são valores soltos**: são tokens com nome e papel. Quando uma marca ou um tema muda, os tokens mudam, e todos os componentes acompanham sem retrabalho.
+
+O que **nunca varia** (como o tempo de uma transição) fica no código, e não vira token. Um token existe para o que **pode mudar**.
+
+## Acessível por padrão
+
+A acessibilidade não é uma etapa final: faz parte da definição de pronto.
+
+- Todos os componentes seguem o **WCAG 2.1 nível AA**.
+- Tudo o que é interativo funciona **só com teclado** e tem foco visível.
+- O significado **nunca depende só da cor**.
+- Respeitamos a preferência por **menos movimento**.
+
+Veja os detalhes em [Accessibility](../../foundations/accessibility/overview.mdx).
+
+## Simples antes de complexo
+
+Cada componente faz **uma coisa bem feita**. Quando a necessidade é maior, combinamos componentes em vez de inflar um só: um [Card](../../components/content/card/index.mdx) com um [Stack](../../components/layout/stack/index.mdx) e dois [Buttons](../../components/actionable/button/index.mdx).
+
+## Hierarquia clara
+
+O sistema ajuda a deixar óbvio **o que é mais importante** em cada tela: uma ação primária por contexto, uma escala tipográfica que organiza o conteúdo e espaços que agrupam o que está relacionado.
+
+## Conteúdo é parte do design
+
+Um botão com o rótulo errado falha, mesmo com o visual perfeito. Por isso cada componente traz orientação de **escrita**, e há um guia completo em [Content](../../foundations/content/writing.mdx).
+
+## Funciona em qualquer lugar
+
+Os componentes são **Web Components** nativos, e a maior parte também funciona só com **CSS**. O sistema não depende de framework e se integra ao que o seu produto já usa.
+
+## Evolui com o uso
+
+O sistema cresce a partir de necessidades reais, e as páginas registram as **limitações conhecidas** com honestidade, como o contraste do indicador de status do [Avatar](../../components/content/avatar/accessibility.mdx), para que o próximo passo seja claro.

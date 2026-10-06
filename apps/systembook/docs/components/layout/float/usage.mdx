@@ -1,0 +1,33 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Casos comuns
+
+| Caso | Posição sugerida |
+| --- | --- |
+| Ponto de notificação em um ícone | `top-end` |
+| Contador sobre um ícone | `top-end`, com deslocamento |
+| Status em um avatar | `bottom-end` |
+| Selo "Novo" em uma imagem | `top-start` |
+
+<DosDonts variant="do" title="Elementos pequenos nos cantos">
+  Um ponto ou contador curto no canto de um ícone. Ele chama atenção sem esconder o conteúdo.
+</DosDonts>
+
+<DosDonts variant="dont" title="Cobrir conteúdo importante">
+  Um selo grande no meio de uma imagem, escondendo o assunto. O Float deve acompanhar, não competir.
+</DosDonts>
+
+## Tamanho do elemento flutuante
+
+- Mantenha-o **pequeno** em relação ao alvo.
+- Garanta que ele não seja cortado pelos limites do contêiner.
+- Dê a ele contraste suficiente com o que está embaixo, e um anel na cor do fundo costuma ajudar.
+
+## Boas práticas
+
+- Não use o Float para informação que só ele comunica. Complemente com texto.
+- Evite vários Floats no mesmo elemento.
+- Teste com textos e tamanhos diferentes: a posição precisa se manter.

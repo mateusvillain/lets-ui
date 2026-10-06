@@ -1,0 +1,41 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escreva mensagens curtas
+
+- Diga **o que aconteceu**, em até seis ou sete palavras: "Alterações salvas".
+- Use o tempo verbal que descreve o resultado: "Arquivo excluído", e não "Excluindo arquivo".
+- Evite pontuação final no título e jargão técnico.
+
+<DosDonts variant="do" title="Confirmação objetiva">
+  "Convite enviado para ana@empresa.com". A pessoa vê o resultado sem parar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Mensagem longa que some">
+  Um parágrafo explicando um erro em um Toast de 5 segundos. A pessoa não consegue ler a tempo.
+</DosDonts>
+
+## Ação no Toast
+
+Ofereça uma ação só quando ela **ajuda a desfazer ou a continuar**: "Desfazer", "Ver arquivo". Quando há ação, o botão de fechar não aparece, e clicar na ação também dispensa o Toast.
+
+Use no máximo **uma ação**. Se a pessoa precisa decidir algo, use um Modal.
+
+## Duração
+
+- Mensagens simples: mantenha os **5 segundos** padrão.
+- Mensagens com ação ou mais texto: **dê mais tempo** (8 a 10 segundos) ou use `duration="0"`.
+- Erros: o Toast `danger` fica até ser fechado.
+
+## Quantidade
+
+Evite mostrar vários Toasts ao mesmo tempo. Eles se empilham, mas muitos mensagens competem entre si. Agrupe mensagens parecidas ("3 arquivos enviados").
+
+## Boas práticas
+
+- Dispare o Toast **depois** que a ação foi concluída, não antes.
+- Use o mesmo lugar e o mesmo estilo em todo o produto.
+- Não use o Toast como único aviso de um erro importante.
+- O conteúdo é tratado como texto simples: não funciona com HTML.

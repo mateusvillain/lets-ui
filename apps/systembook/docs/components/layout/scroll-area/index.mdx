@@ -1,0 +1,43 @@
+---
+title: "Scroll Area"
+subtitle: "Região com rolagem, com indicadores de conteúdo oculto e acessível por teclado."
+order: 10
+---
+
+<ComponentEmbed component="ScrollArea" variant="vertical" />
+
+## Quando usar
+
+Use a Scroll Area quando um trecho de conteúdo precisa **rolar dentro de um espaço fixo**: listas longas em painéis, trechos de código, carrosséis, áreas laterais.
+
+## Quando não usar
+
+- **A página inteira.** Deixe a rolagem do navegador cuidar.
+- **Evitar rolagem horizontal em tabelas.** A [Table](../../content/table/index.mdx) já cuida da rolagem dela.
+- **Esconder conteúdo importante.** Conteúdo que exige rolagem pode passar despercebido.
+
+## Opções
+
+| Opção | O que controla |
+| --- | --- |
+| `orientation` | Eixo da rolagem: vertical (padrão) ou horizontal. |
+| `scrollbar-visibility` | Quando a barra aparece: `auto`, `always`, `hover` ou `hidden`. |
+| `fade` | Gradiente nas bordas, na cor do fundo, que indica conteúdo oculto. |
+| `scroll-shadow` | Sombra nas bordas, que funciona sobre qualquer fundo. |
+| `snap` | A rolagem "encaixa" nos itens, bom para carrosséis. |
+| `overscroll` | Impede que a rolagem passe para a página ao chegar ao limite. |
+| `height`, `max-height`, `max-width` | O tamanho da região. |
+
+## Indicadores de rolagem
+
+Os indicadores mostram que há **mais conteúdo** além da borda visível. Eles aparecem e somem sozinhos conforme a rolagem.
+
+<ComponentEmbed component="ScrollArea" variant="faded" />
+
+<ComponentEmbed component="ScrollArea" variant="shadow" />
+
+## Relacionados
+
+- [Table](../../content/table/index.mdx): rolagem de tabelas.
+- [Sidebar](../sidebar/index.mdx): painéis laterais com rolagem.
+- [Drawer](../../content/drawer/index.mdx).

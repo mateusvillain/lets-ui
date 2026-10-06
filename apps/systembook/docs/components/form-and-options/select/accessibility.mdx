@@ -1,0 +1,29 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+O Select usa o elemento nativo do navegador e herda o teclado dele, em cada sistema.
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Entra e sai do campo. |
+| `Espaço`, `Enter` ou `Seta para baixo` | Abre a lista. |
+| `Setas` | Percorrem as opções. |
+| Letras | Pulam para a opção que começa com a letra digitada. |
+| `Esc` | Fecha a lista sem mudar o valor. |
+
+## Leitor de tela
+
+- A label é associada ao campo e anunciada ao entrar.
+- Hint e erro são lidos junto do campo. Em erro, o campo é anunciado como inválido, e se for obrigatório, também.
+- O placeholder não é uma opção válida: é escondido e desabilitado na lista.
+- A seta do campo é decorativa.
+
+## Para designers
+
+- Não substitua o Select nativo por uma lista customizada sem recursos equivalentes de acessibilidade.
+- Garanta contraste de 4,5:1 no texto e 3:1 na borda do campo.
+- Em erros, escreva a mensagem dizendo o que escolher.

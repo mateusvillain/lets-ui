@@ -1,0 +1,19 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+O Card em si não recebe foco. O foco vai para os **elementos interativos dentro dele**, como links e botões, na ordem do conteúdo.
+
+## Leitor de tela
+
+- O Card tem um nome acessível (`aria-label`, padrão "Card"). Troque por um nome que descreva o conteúdo ("Resumo da conta") quando ele representar uma região importante.
+- A estrutura interna depende do conteúdo que você coloca. Use títulos reais (`h2`, `h3`) para o título do Card, respeitando a hierarquia da página.
+
+## Para designers
+
+- Garanta que o texto dentro do Card tenha contraste de 4,5:1 com a superfície.
+- Se o Card inteiro é clicável, o alvo precisa ter um link com texto descritivo, e não apenas "Saiba mais".
+- Não dependa só de cor ou sombra para separar Cards: o espaçamento e a borda ajudam.

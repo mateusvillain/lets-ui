@@ -36,9 +36,10 @@ This is a **pnpm monorepo** (`pnpm-workspace.yaml`) for an open-source, framewor
 - **`packages/styles`** — Component SCSS files, plus the shared SCSS utilities they build on in `src/utilities/`: `_functions.scss` (semantic accessor functions), `_mixins.scss`, `_tokens.map.scss` (bridges Terrazzo output to component SCSS), `_grid.map.scss`, `_flex.scss`. Built with Sass → PostCSS/cssnano → `/dist/letsui.min.css`.
 - **`packages/lets-ui-components`** — Web Components built on [Lit](https://lit.dev/), in TypeScript. Built with Vite.
 
-Two apps live outside the pnpm workspace, each with its own lockfile, so a browser app never enters the published packages' dependency graph:
+Three apps live outside the pnpm workspace, each with its own lockfile, so a browser app never enters the published packages' dependency graph:
 
 - **`apps/brand-studio`** — visual editor for the brand tokens, deployed to `studio.lets-ui.com` from Vercel (`vercel.json` at the root). It reaches the packages by relative path, so their `dist/` must be built before it.
+- **`apps/systembook`** — the documentation site, written as `.md`/`.mdx` under `docs/` and built into a static site by [SystemBook](https://github.com/mateusvillain/systembook)'s CLI (`systembook.config.ts`). It also holds one `*.preview.tsx` per component, which the docs embed with `<ComponentEmbed>`. Reaches the packages by relative path, so their `dist/` must be built first. See its `README.md`.
 - **`playground/`** — raw pages for manual testing. No CI; it is a test surface, not a deliverable.
 
 ### SCSS split rule
@@ -50,7 +51,7 @@ Components whose core behavior is **pure CSS** (layout primitives like `stack`, 
 
 Components whose core behavior is **JS-driven** (`float`, `scroll-area`) live only in the component package. Their overflow settings, positioning coordinates, and visual indicators are applied by JavaScript — a global CSS stub would be non-functional without the Web Component and adds no value. Do not add these to `packages/styles/src/components/_components.scss`.
 
-Documentation and interactive testing live in `docs/` (Storybook stories + MDX) and `playground/` (raw HTML files).
+Documentation and interactive testing live in `docs/` (Storybook stories + MDX), `apps/systembook/docs/` (SystemBook site) and `playground/` (raw HTML files).
 
 ## Token & Styling System
 

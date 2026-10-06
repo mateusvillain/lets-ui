@@ -1,0 +1,218 @@
+---
+title: "Mixins"
+subtitle: "Mixins SCSS definidos em `packages/styles/src/utilities/_mixins.scss`. Encapsulam padrões recorrentes de CSS para reduzir repetição e garantir consistência entre componentes."
+order: 2
+---
+
+## flex
+
+Shorthand para configurar um container flexbox em uma única linha.
+
+```scss
+@include flex($direction, $align, $justify, $gap, $wrap)
+```
+
+| Parâmetro | Padrão | Valores |
+| --- | --- | --- |
+| `$direction` | `row` | row \| row-reverse \| column \| column-reverse |
+| `$align` | `center` | flex-start \| center \| flex-end \| stretch \| baseline |
+| `$justify` | `flex-start` | flex-start \| center \| flex-end \| space-between \| space-around |
+| `$gap` | `0` | qualquer valor de espaçamento |
+| `$wrap` | `nowrap` | nowrap \| wrap \| wrap-reverse |
+
+```scss
+@include flex(row, center, space-between, fluid(16));
+```
+
+## center
+
+Centraliza o conteúdo via flexbox no eixo indicado.
+
+```scss
+@include center($axis)
+```
+
+| Parâmetro | Padrão | Valores |
+| --- | --- | --- |
+| `$axis` | `both` | both \| x \| y |
+
+```scss
+// Centralizar em ambos os eixos
+@include center;
+
+// Apenas horizontalmente
+@include center(x);
+
+// Apenas verticalmente
+@include center(y);
+```
+
+## center-absolute
+
+Centraliza absolutamente um elemento em relação ao seu pai com position: absolute.
+
+```scss
+@include center-absolute
+```
+
+```scss
+.overlay__spinner {
+  position: relative; // no pai
+
+  .spinner {
+    @include center-absolute;
+  }
+}
+```
+
+## media-up
+
+Aplica estilos a partir de um breakpoint mínimo (mobile-first).
+
+```scss
+@include media-up($breakpoint)
+```
+
+| Parâmetro | Padrão | Valores |
+| --- | --- | --- |
+| `$breakpoint` | `—` | sm \| md \| lg \| 1xl |
+
+```scss
+.sidebar {
+  display: none;
+
+  @include media-up(md) {
+    display: block;
+  }
+}
+```
+
+## media-down
+
+Aplica estilos abaixo de um breakpoint máximo.
+
+```scss
+@include media-down($breakpoint)
+```
+
+| Parâmetro | Padrão | Valores |
+| --- | --- | --- |
+| `$breakpoint` | `—` | 1xs \| sm \| md \| lg \| 1xl |
+
+```scss
+.nav__menu {
+  @include media-down(sm) {
+    display: none;
+  }
+}
+```
+
+## states
+
+Aplica estados interativos completos: disabled, hover, active e focus-visible. Ideal para botões e controles interativos.
+
+```scss
+@include states($variant, $focus-visible, $focus?)
+```
+
+| Parâmetro | Padrão | Valores |
+| --- | --- | --- |
+| `$variant` | `—` | primary \| secondary \| danger \| success \| neutral |
+| `$focus-visible` | `—` | primary \| secondary \| danger \| success \| neutral |
+| `$focus` | `null` | primary \| secondary \| danger \| success \| neutral |
+
+```scss
+.btn--primary {
+  @include states(primary, primary);
+}
+
+.btn--danger {
+  @include states(danger, danger);
+}
+```
+
+## disabled
+
+Aplica apenas os estilos de estado desabilitado (cursor, opacidade, text-decoration). Use quando não precisar dos outros estados do mixin states().
+
+```scss
+@include disabled
+```
+
+```scss
+.link {
+  @include disabled;
+}
+```
+
+## focus-ring
+
+Aplica o box-shadow de foco visível ao :focus-visible do elemento.
+
+```scss
+@include focus-ring($variant)
+```
+
+| Parâmetro | Padrão | Valores |
+| --- | --- | --- |
+| `$variant` | `—` | primary \| secondary \| danger \| success \| neutral |
+
+```scss
+.input {
+  @include focus-ring(primary);
+}
+```
+
+## sr-only
+
+Esconde visualmente o elemento mas mantém acessível para leitores de tela. Equivalente ao utilitário sr-only do Tailwind.
+
+```scss
+@include sr-only
+```
+
+```scss
+.label--hidden {
+  @include sr-only;
+}
+```
+
+## no-select
+
+Desabilita a seleção de texto com user-select: none.
+
+```scss
+@include no-select
+```
+
+```scss
+.btn {
+  @include no-select;
+}
+```
+
+## font-scale
+
+Aplica uma escala tipográfica completa (font, size, weight, line-height, case) em uma única chamada.
+
+```scss
+@include font-scale($scale-name)
+```
+
+| Parâmetro | Padrão | Valores |
+| --- | --- | --- |
+| `$scale-name` | `—` | display \| title \| headline \| subtitle \| block-title \| subheadline \| overtitle \| body--lg \| body--md \| body--sm |
+
+```scss
+.page-title {
+  @include font-scale(title);
+}
+
+.section-header {
+  @include font-scale(headline);
+}
+
+.caption {
+  @include font-scale(body--sm);
+}
+```

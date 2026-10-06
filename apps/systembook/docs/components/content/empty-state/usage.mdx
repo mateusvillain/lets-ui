@@ -1,0 +1,44 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escreva o conteúdo
+
+- **Título**: diz o que está acontecendo, em poucas palavras. "Nenhum projeto ainda."
+- **Descrição**: explica o motivo e orienta. "Crie seu primeiro projeto para começar."
+- **Ação**: um verbo claro. "Criar projeto".
+
+<DosDonts variant="do" title="Explica e convida">
+  "Nenhum resultado para 'camisa azul'. Tente outro termo ou remova os filtros."
+</DosDonts>
+
+<DosDonts variant="dont" title="Só constata o vazio">
+  "Sem dados." Não explica o motivo nem diz o que fazer.
+</DosDonts>
+
+## Uma única ação primária
+
+Ofereça **uma só ação principal**. Se não há nada que a pessoa possa fazer (por exemplo, aguardando um processo externo), **não invente um botão**.
+
+## Capa
+
+- Use capa em espaços grandes e em primeiros usos.
+- **Omita** em espaços pequenos e quando vários Empty States aparecem juntos, como vários widgets sem dados. Repetir a mesma ilustração reduz o impacto.
+- A capa é decorativa: tudo o que importa precisa estar no texto.
+
+## Tom
+
+Ajuste o tom à situação. Seja positivo em primeiros usos, neutro quando algo não foi encontrado, e sério em erros. Evite humor em erros e perdas de dados.
+
+## Comportamento dinâmico
+
+- Quando o Empty State aparece **como resultado de uma ação** (busca, filtro, exclusão), anuncie-o para leitores de tela.
+- Em buscas, espere a pessoa terminar de digitar antes de trocar para o Empty State, para não piscar a cada tecla.
+- Se o foco estava no item excluído, mova-o para um lugar previsível, como o campo de busca.
+
+## Boas práticas
+
+- Use hierarquia de títulos coerente com a página (`title-level`).
+- Traduza textos longos sem medo: o bloco cresce em altura sem truncar.
+- Em telas pequenas, os botões ocupam a largura toda.

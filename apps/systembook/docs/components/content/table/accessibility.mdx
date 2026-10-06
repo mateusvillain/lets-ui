@@ -1,0 +1,36 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Percorre os controles dentro das células (links, botões, caixas) em ordem de leitura. |
+| `Enter` ou `Espaço` | Ativa o botão de ordenação ou o controle em foco. |
+| `Setas` | Quando a tabela rola, a região recebe foco e as setas rolam o conteúdo. |
+
+## Leitor de tela
+
+- A Table usa o `<table>` nativo, então o leitor anuncia linhas, colunas e cabeçalhos como em qualquer tabela.
+- Use `<th scope="col">` nos cabeçalhos de coluna e `<th scope="row">` na célula que identifica a linha.
+- Toda tabela precisa de um **nome**: a legenda (`<caption>`), quando o título é visível, ou `aria-label`, quando não é.
+- Colunas ordenáveis informam a ordem atual (`aria-sort`) e têm o nome da coluna.
+- Controles dentro das células precisam de nomes que citem a linha ("Selecionar Base de clientes.csv").
+
+## Rolagem
+
+Quando a tabela é maior que o espaço, a região rolável é anunciada com nome e pode receber foco, para que quem usa teclado também consiga rolar.
+
+## Visual
+
+- As setas de ordenação têm contraste acima de 3:1.
+- O destaque da linha no hover é só um auxílio: nenhuma informação depende dele.
+- O status nunca depende só da cor: use texto na tag.
+
+## Para designers
+
+- Defina o título da tabela e o cabeçalho de cada coluna durante o design.
+- Decida qual célula identifica cada linha (o nome, normalmente).
+- Evite células vazias sem explicação. Use um traço ("—") ou "Sem dados".

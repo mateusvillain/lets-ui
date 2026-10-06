@@ -1,0 +1,42 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escreva rótulos curtos
+
+- Use **uma ou duas palavras**: "Ativo", "Em revisão".
+- Capitalização de frase e sem pontuação.
+- Use **substantivos ou adjetivos** que descrevem o estado, não verbos de ação.
+
+<DosDonts variant="do" title="Status claros e curtos">
+  "Pago", "Pendente" e "Recusado" em uma tabela de pedidos. A pessoa escaneia a coluna e entende.
+</DosDonts>
+
+<DosDonts variant="dont" title="Cor sem texto ou frases longas">
+  Uma Tag só com cor, ou "Aguardando a aprovação do gerente responsável". Texto longo quebra o layout e perde a função.
+</DosDonts>
+
+## Escolha a variante pelo significado
+
+- Use `success`, `caution` e `danger` para **status com significado** compartilhado.
+- Use `neutral` quando o rótulo é só uma classificação.
+- Use `primary` com parcimônia, para destacar.
+
+Mantenha o mesmo significado para a mesma cor em todo o produto.
+
+## Cor nunca é a única informação
+
+O texto da Tag deve sempre dizer o status. Quem não distingue cores, ou usa leitor de tela, depende do texto.
+
+## Posição
+
+- Em tabelas, coloque as Tags em uma coluna de status, alinhadas ao início.
+- Em cards, coloque junto do título ou no canto superior.
+- Mantenha o mesmo tamanho dentro do mesmo conjunto.
+
+## Boas práticas
+
+- Não use muitas Tags por item. Duas ou três já competem com o conteúdo.
+- Não use a Tag como botão. Se precisa ser clicável ou removível, use um componente próprio para isso.
+- Use o tamanho `sm` em tabelas e listas densas, e `md` em cards e formulários.

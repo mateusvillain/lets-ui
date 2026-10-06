@@ -1,0 +1,31 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Move o foco para o botão de fechar ou para a ação. |
+| `Enter` ou `Espaço` | Ativa o botão em foco. |
+
+Mover o foco para dentro do Toast **pausa a contagem** do tempo, que retoma quando o foco sai.
+
+## Leitor de tela
+
+- O Toast é anunciado quando aparece, sem tirar o foco da pessoa.
+- Toasts informativos e de sucesso são anunciados de forma educada (`status`). O Toast de erro (`danger`) é anunciado de forma assertiva (`alert`).
+- O ícone é decorativo.
+- O botão de fechar tem nome acessível (`close-label`). Traduza para o idioma do produto.
+
+## Tempo
+
+- Passar o mouse ou focar pausa a contagem.
+- O Toast `danger` **nunca some sozinho**: quem lê devagar ou usa tecnologia assistiva precisa de tempo para entender o erro.
+
+## Para designers
+
+- Nunca use um Toast como único canal de informação essencial.
+- Dê tempo suficiente para ler: cerca de uma palavra a cada 200 ms mais um tempo extra.
+- Evite posicioná-lo sobre elementos importantes da tela.

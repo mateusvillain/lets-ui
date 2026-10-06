@@ -1,0 +1,31 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Enter` ou `Espaço` | Abre o menu no gatilho e ativa o item em foco. |
+| `Seta para baixo` | Vai para o próximo item (volta ao primeiro no fim). |
+| `Seta para cima` | Vai para o item anterior (vai ao último no começo). |
+| `Seta para direita` | Abre o submenu e foca o primeiro item dele. |
+| `Seta para esquerda` | Fecha o submenu e devolve o foco ao item pai. |
+| `Esc` | Fecha o menu e devolve o foco ao gatilho. |
+| `Tab` | Fecha o menu e segue a navegação. |
+
+Itens desabilitados são pulados na navegação.
+
+## Leitor de tela
+
+- O gatilho informa que abre um menu (`aria-haspopup`) e se está aberto (`aria-expanded`).
+- O painel é anunciado como `menu`, e cada ação como `menuitem`.
+- Itens com submenu informam que abrem outro menu e seu estado.
+- Divisores são anunciados como separadores.
+
+## Para designers
+
+- Dê um nome claro ao gatilho. Se for só um ícone, ele precisa de um nome acessível ("Mais opções").
+- Não dependa só de hover para abrir submenus: o teclado e o toque também precisam abrir.
+- Itens perigosos devem ser claros pelo **texto**, não só pela cor vermelha.

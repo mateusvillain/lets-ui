@@ -1,0 +1,28 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Foca o gatilho, e o Tooltip aparece. |
+
+O Tooltip aparece tanto no hover quanto no foco por teclado, e some quando o foco sai.
+
+### Limitação conhecida
+
+O Tooltip ainda **não fecha com `Esc`**, e o WCAG 1.4.13 pede que conteúdo exibido por hover ou foco possa ser dispensado sem mover o ponteiro ou o foco. Enquanto isso não é resolvido, mantenha os textos curtos e que não cubram conteúdo importante.
+
+## Leitor de tela
+
+- O balão é anunciado como **dica** (`tooltip`) e está ligado ao gatilho com `aria-describedby`, então o texto é lido como **descrição** do elemento.
+- O gatilho precisa ser **focável**. Se o conteúdo que você colocar não for, o Tooltip torna o contêiner focável.
+- O Tooltip não substitui o nome acessível do elemento. Um Icon Button continua precisando de `aria-label`.
+
+## Para designers
+
+- Garanta contraste de 4,5:1 entre o texto do balão e o fundo.
+- Não use o Tooltip como único meio de transmitir informação.
+- Pense na alternativa para quem usa toque: onde o texto aparece?

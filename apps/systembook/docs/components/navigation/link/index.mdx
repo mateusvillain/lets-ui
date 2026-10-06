@@ -1,0 +1,48 @@
+---
+title: "Link"
+subtitle: "Leva a outra página, seção ou recurso. É o elemento de navegação em texto."
+order: 2
+---
+
+<ComponentEmbed component="Link" variant="default" />
+
+## Quando usar
+
+Use o Link quando o resultado do clique é **navegar**: para outra página, para uma âncora na mesma página, para um recurso externo ou para baixar um arquivo. Ele funciona dentro de um parágrafo e como chamada textual isolada.
+
+## Quando não usar
+
+- **Para executar uma ação** (salvar, enviar, excluir). Use um [Button](../../actionable/button/index.mdx).
+- **Para escolher entre opções.** Use controles de formulário.
+- **Em barras de navegação com muitos itens e estado ativo.** Use [Tabs](../tabs/index.mdx) ou um menu.
+
+## Anatomia
+
+1. **Texto**: descreve o destino.
+2. **Sublinhado**: aparece ao passar o mouse e ao focar.
+3. **Ícone de link externo** (opcional): indica que o destino sai do produto.
+
+## Tipos
+
+| Tipo | Quando usar |
+| --- | --- |
+| **Padrão** | Navegação interna, na mesma aba. |
+| **Externo** (`external`) | Destino fora do produto. Abre em nova aba e mostra um ícone. |
+| **Download** (`download`) | O clique baixa um arquivo em vez de navegar. |
+| **Desabilitado** (`disabled`) | O destino existe, mas não está disponível agora. |
+
+## Tamanhos
+
+`lg`, `md` e `sm` seguem a escala do [Body](../../typography/body/index.mdx). Sem `size`, o link herda o tamanho do texto ao redor, que é o comportamento certo dentro de um parágrafo.
+
+## Estados
+
+Padrão, hover (sublinhado), foco (anel visível), visitado e desabilitado. O estilo de **visitado** vem desligado por padrão e pode ser ativado com `track-visited`, útil em listas de artigos e resultados de busca.
+
+<ComponentEmbed component="Link" variant="disabled" />
+
+## Relacionados
+
+- [Button](../../actionable/button/index.mdx): executar ações.
+- [Breadcrumb](../breadcrumb/index.mdx): links de hierarquia.
+- [Body](../../typography/body/index.mdx): o texto onde o link vive.

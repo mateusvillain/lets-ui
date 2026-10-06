@@ -1,0 +1,30 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Itens de mesmo peso
+
+O Switcher distribui os itens em **partes iguais**. Use-o quando todos têm a mesma importância e a mesma largura aproximada.
+
+<DosDonts variant="do" title="Cards equivalentes">
+  Três planos de preços que dividem a largura e empilham juntos em telas pequenas.
+</DosDonts>
+
+<DosDonts variant="dont" title="Itens de pesos diferentes">
+  Um conteúdo principal com uma lateral menor não é o caso do Switcher. Use o Sidebar.
+</DosDonts>
+
+## Defina o ponto de troca
+
+O `threshold` é a largura em que a mudança acontece. Escolha-a pelo **tamanho mínimo confortável** de cada item: se cada card precisa de uns 240px, ajuste o `threshold` para cerca de três vezes isso quando quiser três colunas.
+
+## Limite de itens
+
+Com `limit`, os itens empilham quando passam de certa quantidade. É útil para não ter muitas colunas apertadas. Com três itens e `limit="3"`, um quarto item faz todos empilharem.
+
+## Boas práticas
+
+- Mantenha o conteúdo dos itens com **estrutura parecida**.
+- Teste o Switcher em contêineres de larguras variadas, como em laterais e em painéis.
+- Combine com um [Stack](../stack/index.mdx) dentro de cada item para organizar o conteúdo.

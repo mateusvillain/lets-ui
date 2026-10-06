@@ -1,0 +1,28 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Entra no grupo, na opção selecionada ou na primeira disponível. Uma segunda vez sai dele. |
+| `Seta para baixo` ou `direita` | Move para a próxima opção e a seleciona. |
+| `Seta para cima` ou `esquerda` | Move para a opção anterior e a seleciona. |
+| `Espaço` | Seleciona a opção em foco. |
+
+Opções desabilitadas são puladas.
+
+## Leitor de tela
+
+- O grupo é anunciado como **grupo de opções**, com o título como nome.
+- O hint e a mensagem de erro são lidos junto do grupo.
+- Em erro, o grupo é anunciado como inválido. Se obrigatório, também é anunciado.
+- Desabilitar o grupo desabilita todas as opções.
+
+## Para designers
+
+- O título do grupo é obrigatório. É ele que dá sentido às opções.
+- Traduza a mensagem de erro padrão (em inglês) para o idioma do produto.
+- Não comunique o erro só com cor: a mensagem de texto precisa aparecer.

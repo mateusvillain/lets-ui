@@ -1,0 +1,5 @@
+# Generated entrypoints and the static preview artifact.
+.systembook/
+
+# The built documentation site.
+systembook-dist/

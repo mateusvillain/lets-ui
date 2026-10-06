@@ -1,0 +1,41 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escolha a variante pelo significado
+
+A cor segue o significado, não o gosto. A pessoa aprende o código e reconhece rápido a gravidade da mensagem.
+
+<DosDonts variant="do" title="Variante coerente com a mensagem">
+  Use `danger` para falhas, `caution` para riscos, `success` para confirmações e `info` para o resto.
+</DosDonts>
+
+<DosDonts variant="dont" title="Variante só pela estética">
+  Usar `success` para uma mensagem neutra, ou `danger` para chamar atenção a uma promoção. Isso enfraquece o significado das cores.
+</DosDonts>
+
+## Escreva a mensagem
+
+- **Título curto e direto**, com até cerca de seis palavras: "Pagamento recusado".
+- **Conteúdo** que explica o motivo e **o que fazer**: "Verifique os dados do cartão ou use outra forma de pagamento."
+- Use tom humano e neutro. Não culpe a pessoa.
+- Evite jargão técnico e códigos de erro como única informação.
+
+## Posição
+
+Coloque o Alert **perto do contexto que ele descreve**: no topo do formulário com erro, acima da tabela afetada, no início da página para avisos globais. Nunca cubra o conteúdo.
+
+## Ações
+
+Se a pessoa pode resolver o problema agora, inclua uma ação clara ("Atualizar pagamento"). Limite-se a uma ou duas ações.
+
+## Quantidade
+
+Evite mostrar vários Alerts ao mesmo tempo. Eles competem entre si e perdem o efeito. Priorize o mais importante, ou agrupe as mensagens em uma só.
+
+## Boas práticas
+
+- Não use o Alert para mensagens que duram só um instante: use o Toast.
+- Não esconda um Alert importante depois de um tempo. Ele deve permanecer até ser resolvido ou dispensado.
+- Garanta que o alerta esteja no DOM quando o problema ocorrer, para que leitores de tela o anunciem.

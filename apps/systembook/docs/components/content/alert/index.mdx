@@ -1,0 +1,46 @@
+---
+title: "Alert"
+subtitle: "Mensagem destacada que informa sobre o estado de uma tela, um formulário ou uma ação."
+order: 2
+---
+
+<ComponentEmbed component="Alert" variant="success" />
+
+## Quando usar
+
+Use o Alert para **mensagens que ficam na página** e se relacionam com o contexto: sucesso depois de salvar, erro em um formulário, aviso sobre uma limitação, informação importante.
+
+## Quando não usar
+
+- **Feedback passageiro de uma ação** que some sozinho. Use o [Toast](../toast/index.mdx).
+- **Decisões que bloqueiam a tarefa.** Use um [Modal](../modal/index.mdx).
+- **Texto de apoio em um campo.** Use o hint do campo.
+- **Mensagens decorativas ou promocionais.** O Alert é para informação relevante.
+
+## Anatomia
+
+1. **Ícone**: reforça a variante. É decorativo.
+2. **Título**: resume a mensagem em poucas palavras.
+3. **Conteúdo**: explica e orienta o que fazer.
+4. **Botão de fechar** (opcional): dispensa o alerta.
+
+## Variantes
+
+| Variante | Significado | Exemplo |
+| --- | --- | --- |
+| **Info** | Informação neutra e útil. | "Novos recursos disponíveis." |
+| **Success** | Algo deu certo. | "Alterações salvas." |
+| **Caution** | Atenção: pode haver um problema. | "Seu plano termina em 3 dias." |
+| **Danger** | Algo deu errado ou precisa de ação urgente. | "Não foi possível processar o pagamento." |
+
+<ComponentEmbed component="Alert" variant="danger" />
+
+## Dispensável
+
+Com `dismissible`, o Alert ganha um botão de fechar. Use quando a mensagem pode ser ignorada com segurança. Mensagens de erro que bloqueiam a tarefa não devem poder ser fechadas até serem resolvidas.
+
+## Relacionados
+
+- [Toast](../toast/index.mdx): feedback temporário.
+- [Modal](../modal/index.mdx): decisões que exigem atenção total.
+- [Close Button](../../actionable/close-button/index.mdx): o botão de fechar.

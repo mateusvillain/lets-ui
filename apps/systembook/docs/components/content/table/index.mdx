@@ -1,0 +1,48 @@
+---
+title: "Table"
+subtitle: "Organiza dados em linhas e colunas, para comparar e consultar informações."
+order: 9
+---
+
+<ComponentEmbed component="Table" variant="default" />
+
+## Quando usar
+
+Use a Table para **dados comparáveis**, em que cada linha é um item e cada coluna um atributo: usuários, pedidos, arquivos, transações.
+
+## Quando não usar
+
+- **Layout de página.** Tabelas são para dados, não para posicionar elementos. Use [Grid](../../layout/grid/index.mdx) ou [Flex](../../layout/flex/index.mdx).
+- **Poucos dados sem comparação.** Uma lista simples ou um [Card](../card/index.mdx) comunica melhor.
+- **Conteúdo muito heterogêneo.** Quando as linhas têm estruturas diferentes, prefira cards.
+
+## Anatomia
+
+1. **Legenda** (opcional): o título visível da tabela.
+2. **Cabeçalho**: o nome de cada coluna.
+3. **Linhas**: um item por linha.
+4. **Células**: os dados. Podem conter texto, [Tags](../tag/index.mdx), [Avatars](../avatar/index.mdx), links e ações.
+5. **Borda e divisores**: organizam a leitura.
+
+<ComponentEmbed component="Table" variant="bordered" />
+
+## Recursos
+
+| Recurso | O que faz |
+| --- | --- |
+| **Borda** (`bordered`) | Desenha a borda externa com cantos arredondados. |
+| **Alinhamento ao fim** | Alinha colunas de valores e ações à direita. |
+| **Coluna justa** | Reduz uma coluna à largura do seu conteúdo (ações, status, ids). |
+| **Colunas ordenáveis** | Botões no cabeçalho, com seta indicando a ordem. |
+| **Cabeçalho fixo** | Mantém o cabeçalho visível ao rolar as linhas. |
+| **Rolagem horizontal** | Quando a tabela é mais larga que o espaço, rola dentro de uma região. |
+
+## Conteúdo das células
+
+As células aceitam outros componentes, e cada um mantém seu comportamento: [Avatar](../avatar/index.mdx) com nome, [Link](../../navigation/link/index.mdx), [Tag](../tag/index.mdx) de status e [Checkbox](../../form-and-options/checkbox/index.mdx) de seleção.
+
+## Relacionados
+
+- [Pagination](../../navigation/pagination/index.mdx): navegar entre páginas de dados.
+- [Empty State](../empty-state/index.mdx): quando não há linhas.
+- [Tag](../tag/index.mdx), [Avatar](../avatar/index.mdx).

@@ -1,0 +1,34 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Posição
+
+Coloque o Close Button no **canto superior direito** do elemento que ele fecha, onde as pessoas esperam encontrá-lo. Em idiomas escritos da direita para a esquerda, ele vai para o canto superior esquerdo.
+
+<DosDonts variant="do" title="Sempre no mesmo lugar">
+  Mantenha o botão fixo no canto, alinhado ao título. A posição previsível dispensa a pessoa de procurar a saída.
+</DosDonts>
+
+<DosDonts variant="dont" title="Escondido ou fora do canto">
+  Um X pequeno no meio do conteúdo, ou sem contraste, faz a pessoa se sentir presa no diálogo.
+</DosDonts>
+
+## Ele não é a única saída
+
+Em diálogos, o Close Button convive com os botões de ação ("Cancelar", "Salvar"). Ele deve fechar **sem salvar**, e a tecla `Esc` faz o mesmo.
+
+<Callout variant="warning">
+  Se fechar pode descartar trabalho não salvo, avise antes com um diálogo de confirmação. Não perca o que a pessoa digitou em silêncio.
+</Callout>
+
+## Dê contexto ao nome
+
+O nome acessível padrão é "Close". Ao usar o botão dentro de outro componente, descreva o que será fechado: "Fechar modal", "Fechar alerta", "Remover filtro Ativos". Defina isso com a propriedade `label`, no idioma da interface.
+
+## Boas práticas
+
+- Use o tamanho proporcional ao contêiner: `lg` em cabeçalhos grandes e `sm` em alerts e tags.
+- Não use o Close Button para ações que não fecham nada.
+- Em alertas importantes (erros), não ofereça a opção de fechar se a pessoa precisa agir antes.

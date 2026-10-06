@@ -1,0 +1,33 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escolha o fundo pelo significado
+
+- `neutral/surface` e `neutral/container` para áreas comuns.
+- `primary` e `secondary` para destaques da marca.
+- `info`, `success`, `caution` e `danger` para conteúdo com **estado**, como um aviso de rodapé de formulário.
+
+<DosDonts variant="do" title="Tokens, não cores avulsas">
+  Use `background="neutral/surface"`. A cor acompanha o tema escuro e as marcas sem retrabalho.
+</DosDonts>
+
+<DosDonts variant="dont" title="Valores soltos de cor e espaço">
+  Digitar um hexadecimal ou um espaçamento fora da escala. O Box deixa de acompanhar tema e marca.
+</DosDonts>
+
+## Espaçamento
+
+Use o `padding` da escala: **16** para blocos compactos, **24** ou **32** para áreas de destaque. Mantenha o mesmo espaçamento em blocos do mesmo tipo.
+
+## Borda e raio
+
+- Prefira **fundo ou borda**, não os dois fortes ao mesmo tempo.
+- Use o raio `md` para blocos de conteúdo e `lg` para áreas maiores, mantendo consistência com Cards.
+
+## Boas práticas
+
+- Não aninhe muitos Boxes. Se o conteúdo precisa de várias camadas, repense a hierarquia.
+- Use o Box para **agrupar**, não para decorar.
+- Garanta contraste do texto sobre o fundo escolhido (4,5:1).

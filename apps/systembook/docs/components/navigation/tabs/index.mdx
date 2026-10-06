@@ -1,0 +1,46 @@
+---
+title: "Tabs"
+subtitle: "Divide o conteúdo de uma mesma página em painéis, e mostra um por vez."
+order: 3
+---
+
+<ComponentEmbed component="Tabs" variant="line" />
+
+## Quando usar
+
+Use Tabs para **organizar conteúdo relacionado em uma mesma página** quando a pessoa só precisa ver um painel por vez: configurações de um perfil, visões de um mesmo objeto, seções de uma documentação.
+
+## Quando não usar
+
+- **Navegar entre páginas diferentes.** Use links, menus ou [Breadcrumb](../breadcrumb/index.mdx).
+- **Etapas sequenciais.** Use um indicador de passos.
+- **Conteúdo que a pessoa precisa comparar lado a lado.** Mostre tudo na página, ou use uma [Table](../../content/table/index.mdx).
+- **Mais de sete abas.** Reveja a organização.
+
+## Anatomia
+
+1. **Lista de abas**: o conjunto de rótulos.
+2. **Aba**: um rótulo clicável. A ativa se destaca.
+3. **Indicador**: marca a aba ativa (linha ou segmento).
+4. **Painel**: o conteúdo da aba ativa.
+
+## Estilos
+
+| Estilo | Descrição | Quando usar |
+| --- | --- | --- |
+| **Line** | Linha abaixo da aba ativa. | Padrão para páginas e seções de conteúdo. |
+| **Card** | Abas em um segmento fechado. | Alternar visões dentro de um cartão ou componente menor. |
+
+Com `expand`, as abas ocupam toda a largura do contêiner, bom para telas pequenas.
+
+<ComponentEmbed component="Tabs" variant="expand" />
+
+## Estados
+
+Cada aba pode estar inativa, ativa, em hover, em foco ou desabilitada. Apenas **uma** aba fica ativa por vez, e uma aba sempre vem selecionada.
+
+## Relacionados
+
+- [Accordion](../../content/accordion/index.mdx): seções que expandem e permitem vários abertos.
+- [Breadcrumb](../breadcrumb/index.mdx): hierarquia entre páginas.
+- [Link](../link/index.mdx): navegação entre páginas.

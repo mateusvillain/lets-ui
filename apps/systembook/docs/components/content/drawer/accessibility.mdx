@@ -1,0 +1,29 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Esc` | Fecha o Drawer e devolve o foco a quem o abriu. |
+| `Tab` / `Shift+Tab` | Percorre os elementos do painel. O foco fica **preso** dentro dele. |
+| `Enter` ou `Espaço` | Ativa o botão em foco. |
+
+## Leitor de tela
+
+- O painel é anunciado como **diálogo modal**, com o título como nome.
+- A página atrás é inacessível enquanto o Drawer está aberto, e o foco não escapa dele.
+- O botão de fechar tem nome acessível (`close-label`, padrão "Close drawer"). Traduza para o idioma do produto.
+- Quando fechado, o painel fica fora da árvore de acessibilidade.
+
+## Foco
+
+Ao abrir, o foco vai para dentro do painel. Ao fechar, volta ao elemento que o abriu, sem perder a posição.
+
+## Para designers
+
+- Dê sempre um título ao Drawer: é o nome que o leitor de tela anuncia.
+- Garanta que o painel funcione só com teclado, incluindo formulários e ações.
+- Não dependa só do backdrop para fechar: sempre ofereça um botão de fechar.

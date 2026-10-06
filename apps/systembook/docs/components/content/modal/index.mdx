@@ -1,0 +1,57 @@
+---
+title: "Modal"
+subtitle: "Janela que se abre sobre a página e concentra a atenção em uma única tarefa ou informação."
+order: 8
+---
+
+<ComponentEmbed component="Modal" variant="closed" />
+
+## Quando usar
+
+Use o Modal quando a pessoa precisa **parar e decidir** algo antes de continuar:
+
+- confirmar uma ação importante ou destrutiva;
+- completar uma tarefa curta e focada, como renomear ou convidar alguém;
+- ler uma informação que bloqueia o fluxo.
+
+## Quando não usar
+
+- **Mensagens que não exigem decisão.** Use [Alert](../alert/index.mdx) ou [Toast](../toast/index.mdx).
+- **Conteúdo longo ou fluxos com vários passos.** Use uma página própria ou um [Drawer](../drawer/index.mdx).
+- **Consultar a página enquanto trabalha.** Use um Drawer.
+- **Dicas e ajuda contextual.** Use um [Tooltip](../tooltip/index.mdx).
+
+## Anatomia
+
+1. **Backdrop**: escurece a página atrás.
+2. **Janela**: a superfície centralizada.
+3. **Cabeçalho**: título e botão de fechar.
+4. **Corpo**: o conteúdo.
+5. **Rodapé** (opcional): botões de ação, alinhados ao fim.
+
+## Tamanhos
+
+| Tamanho | Quando usar |
+| --- | --- |
+| `sm` | Confirmações curtas. |
+| `md` (padrão) | A maioria dos casos. |
+| `lg` | Conteúdo com mais informação, como formulários pequenos. |
+
+## Comportamento
+
+- Abre no centro da tela, com um backdrop.
+- O foco entra na janela, e a página atrás fica inacessível.
+- Fecha com o botão de fechar, com `Esc` e com os botões de ação.
+- Ao fechar, o foco volta ao elemento que abriu o Modal.
+
+## Sem ações
+
+Se o Modal for só informativo, omita o rodapé. O botão de fechar basta.
+
+<ComponentEmbed component="Modal" variant="open" />
+
+## Relacionados
+
+- [Drawer](../drawer/index.mdx): painel lateral para tarefas mais longas.
+- [Alert](../alert/index.mdx), [Toast](../toast/index.mdx): mensagens sem bloqueio.
+- [Button](../../actionable/button/index.mdx): ações do rodapé.

@@ -1,0 +1,28 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Move o foco para o botão. |
+| `Enter` ou `Espaço` | Ativa a ação. |
+
+## Leitor de tela
+
+- O `aria-label` é **obrigatório**: sem texto visível, ele é o único nome do botão. Um `aria-label` ausente ou vazio é uma falha.
+- O ícone SVG é decorativo e fica fora da árvore de acessibilidade, para não ser lido duas vezes.
+- Um botão desabilitado é anunciado como indisponível e sai da ordem de tabulação.
+
+## Visual
+
+- Ícone e fundo precisam de contraste de pelo menos 3:1 (WCAG 2.1 AA para componentes de interface).
+- O anel de foco aparece ao navegar por teclado.
+- A área de toque de 32px (`md`) e 40px (`lg`) é maior que o mínimo de 24px do WCAG 2.2.
+
+## Para designers
+
+- Nunca entregue um Icon Button sem definir o texto do `aria-label`. Faça isso parte da especificação do componente.
+- Não confie só no ícone: um tooltip ajuda quem tem dificuldade de reconhecer símbolos.

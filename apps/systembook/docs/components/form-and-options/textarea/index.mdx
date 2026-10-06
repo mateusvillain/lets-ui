@@ -1,0 +1,46 @@
+---
+title: "Textarea"
+subtitle: "Campo de texto de várias linhas para respostas longas: comentários, descrições, observações."
+order: 7
+---
+
+<ComponentEmbed component="Textarea" variant="default" />
+
+## Quando usar
+
+Use o Textarea quando a resposta pode ter **mais de uma linha**: mensagens, biografia, feedback, justificativas, descrições.
+
+## Quando não usar
+
+- **Respostas curtas.** Use o [Input](../input/index.mdx).
+- **Texto formatado** (negrito, listas, links). Use um editor de texto rico.
+- **Escolhas entre opções.** Use [Select](../select/index.mdx) ou [Radio Group](../radio-group/index.mdx).
+
+## Anatomia
+
+1. **Label**: nomeia o campo.
+2. **Campo**: área de várias linhas, com alça de redimensionamento.
+3. **Hint**: texto de ajuda.
+4. **Contador**: caracteres usados, quando há limite.
+5. **Mensagem de erro**: substitui o hint quando o valor é inválido.
+
+## Variações
+
+| Variação | Quando usar |
+| --- | --- |
+| **Padrão** | Resposta aberta, sem limite definido. |
+| **Com contador** (`maxlength`) | Há um limite explícito, como uma bio de 160 caracteres. |
+| **Sem redimensionar** (`resize="none"`) | Quando o layout não pode mudar, como em caixas de mensagem fixas. |
+
+`rows` define a altura inicial. Escolha uma altura que sugira o tamanho esperado da resposta.
+
+## Estados
+
+Padrão, hover, foco, erro e desabilitado, como no [Input](../input/index.mdx).
+
+<ComponentEmbed component="Textarea" variant="error" />
+
+## Relacionados
+
+- [Input](../input/index.mdx): uma linha.
+- [Select](../select/index.mdx), [Checkbox](../checkbox/index.mdx): escolhas.

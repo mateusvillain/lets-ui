@@ -1,0 +1,73 @@
+---
+title: "Button"
+subtitle: "Dispara uma ação na interface: salvar, enviar, confirmar, excluir. É o principal ponto de decisão de uma tela."
+order: 1
+---
+
+<ComponentEmbed component="Button" variant="primary" />
+
+## Quando usar
+
+Use o Button quando a pessoa precisa **executar algo**: enviar um formulário, confirmar uma decisão, iniciar um fluxo, abrir um diálogo ou desfazer uma operação.
+
+Se o controle apenas leva a outra página, ele é um link, não uma ação. O Button aceita `href` para esse caso e mantém a aparência de botão, mas vale perguntar antes se um [Link](../../navigation/link/index.mdx) em texto não comunica melhor.
+
+## Quando não usar
+
+- **Navegação entre páginas ou seções.** Use [Link](../../navigation/link/index.mdx) ou [Tabs](../../navigation/tabs/index.mdx).
+- **Ação em espaço apertado, reconhecível só pelo ícone** (fechar, editar, mais opções). Use [Icon Button](../icon-button/index.mdx).
+- **Escolher entre opções.** Use [Checkbox](../../form-and-options/checkbox/index.mdx), [Radio](../../form-and-options/radio/index.mdx) ou [Switch](../../form-and-options/switch/index.mdx).
+
+## Anatomia
+
+1. **Container**: define a cor, o raio e a área de toque.
+2. **Rótulo**: o verbo que descreve o resultado da ação.
+3. **Spinner** (opcional): aparece no estado de carregamento, no lugar do rótulo ou junto dele.
+
+## Variantes
+
+A variante comunica o **peso e o significado** da ação. Escolha pela hierarquia da tela, não pela cor que combina com o layout.
+
+| Variante | Peso | Quando usar |
+| --- | --- | --- |
+| **Primary** | Alto | A ação mais importante do contexto. Deve existir **uma só** por tela ou diálogo. |
+| **Secondary** | Médio | Alternativa à ação principal, como "Cancelar" ao lado de "Salvar". |
+| **Neutral** | Baixo | Ações utilitárias sem carga semântica: filtrar, exportar, ver detalhes. |
+| **Danger** | Alto | Ações destrutivas ou irreversíveis: excluir, remover, encerrar conta. |
+| **Success** | Alto | Conclusão positiva de um fluxo: concluir, publicar, aprovar. |
+
+<ComponentEmbed component="Button" variant="secondary" />
+
+<ComponentEmbed component="Button" variant="danger" />
+
+## Tamanhos
+
+| Tamanho | Altura | Uso |
+| --- | --- | --- |
+| `lg` (padrão) | 40px | Formulários, diálogos e páginas, onde o botão é o foco. |
+| `md` | 32px | Interfaces densas: tabelas, barras de ferramentas, cards compactos. |
+
+Dentro de um mesmo grupo de ações, use sempre o mesmo tamanho.
+
+## Estados
+
+| Estado | Como se comporta |
+| --- | --- |
+| **Padrão** | Pronto para uso. |
+| **Hover** | Uma camada translúcida escurece ou clareia o fundo. |
+| **Foco** | Anel de foco visível, só ao navegar por teclado. |
+| **Pressed** | A camada fica mais intensa durante o clique. |
+| **Disabled** | Indisponível: não responde a clique nem recebe foco. |
+| **Loading** | Mostra um spinner e ignora novos cliques, mas permanece visualmente ativo. |
+
+<ComponentEmbed component="Button" variant="loading" />
+
+## Largura total
+
+Com `block`, o botão ocupa toda a largura do container. Funciona bem em telas pequenas e em formulários de uma coluna. Em telas largas, prefira o botão com largura do conteúdo.
+
+## Relacionados
+
+- [Icon Button](../icon-button/index.mdx): ação só com ícone.
+- [Dropdown Menu](../dropdown-menu/index.mdx): várias ações agrupadas em um único gatilho.
+- [Link](../../navigation/link/index.mdx): navegação em texto.

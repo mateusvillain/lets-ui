@@ -1,0 +1,61 @@
+---
+title: "Code"
+order: 4
+---
+
+## Sem ações
+
+Omita `primary-button` e `secondary-button` quando o drawer for apenas informativo ou quando as ações forem parte do conteúdo interno (slot).
+
+## close-on-backdrop: false
+
+Por padrão o backdrop não fecha o drawer. Ative `close-on-backdrop` quando o fluxo permitir descarte acidental. Desative em formulários ou fluxos onde o usuário deve tomar uma decisão explícita.
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `title` | `string` | `Drawer title` |
+| `size` | `string` | `md` |
+| `open` | `boolean` | `false` |
+| `trigger-label` | `string` | `Open drawer` |
+| `close-label` | `string` | `Close drawer` |
+| `hide-trigger` | `boolean` | `false` |
+| `close-on-backdrop` | `boolean` | `false` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-drawer title="Título" size="md" trigger-label="Open drawer" close-on-backdrop>
+  <p>Conteúdo do drawer</p>
+  <button slot="actions" data-drawer-close class="btn btn--secondary btn--lg">Cancelar</button>
+  <button slot="actions" class="btn btn--primary btn--lg">Confirmar</button>
+</lui-drawer>
+```
+
+### Textos acessíveis
+
+O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close drawer"`). Troque-o para o idioma do projeto.
+
+```html
+<lui-drawer title="Título" close-label="Fechar drawer"></lui-drawer>
+```
+
+### Classe CSS
+
+```html
+<div class="drawer-backdrop is-open"></div>
+<div class="drawer drawer--md is-open" role="dialog" aria-modal="true">
+  <div class="drawer__header">
+    <span class="drawer__title">Título</span>
+    <button class="drawer__close" aria-label="Fechar">×</button>
+  </div>
+  <div class="drawer__body">Conteúdo do drawer</div>
+  <div class="drawer__footer">
+    <button class="btn btn--secondary btn--lg">Cancelar</button>
+    <button class="btn btn--primary btn--lg">Confirmar</button>
+  </div>
+</div>
+```

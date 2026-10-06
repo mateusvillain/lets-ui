@@ -1,0 +1,198 @@
+---
+title: "Color"
+subtitle: "Tokens de cor do sistema de design. As cores estão organizadas em três camadas: **primitivas** (escalas brutas), **marca** (paleta da marca) e **semânticas** (papéis de uso)."
+order: 1
+---
+
+## Como a cor funciona
+
+A cor do sistema tem **três camadas**. Entender a diferença evita a maior parte dos erros.
+
+| Camada | O que é | Quem usa |
+| --- | --- | --- |
+| **Primitivas** | Escalas brutas de 8 tons (azul, cinza, verde...). | Só os tokens. Quase nunca direto. |
+| **Marca** | As cores primária e secundária, que variam por marca. | Tokens semânticos. |
+| **Semânticas** | Cores com **papel** definido: fundo, borda, texto, ícone, foco. | Componentes e telas. |
+
+**Use sempre a camada semântica.** Em vez de "azul 5", pense "fundo de destaque primário". É assim que uma tela muda de marca e de tema, claro ou escuro, sem ser refeita.
+
+## O significado das cores
+
+| Família | Significado | Exemplos de uso |
+| --- | --- | --- |
+| **Primary** | A ação principal e a identidade da marca. | Botão primário, links, foco. |
+| **Secondary** | Apoio à primária, com menos destaque. | Botão secundário, elementos de apoio. |
+| **Neutral** | Estrutura e conteúdo, sem carga de significado. | Texto, fundos, bordas, divisores. |
+| **Success** | Algo deu certo ou está ativo. | Confirmações, status positivos. |
+| **Caution** | Atenção: pode haver um problema. | Avisos, prazos próximos. |
+| **Danger** | Erro ou ação destrutiva. | Falhas, exclusões, campos inválidos. |
+| **Info** | Informação útil e neutra. | Dicas, novidades. |
+
+## Princípios
+
+- **A cor comunica, não decora.** Cada cor tem um significado, e esse significado precisa ser o mesmo em todo o produto.
+- **Nunca só a cor.** Combine com texto, ícone ou forma, para quem não distingue cores.
+- **Contraste primeiro.** Texto precisa de 4,5 : 1 e elementos de interface de 3 : 1. Veja [Accessibility](../accessibility/overview.mdx).
+- **Menos é mais.** Uma tela com poucas cores de destaque guia melhor o olhar.
+- **Tema e marca vêm de graça** quando você usa tokens semânticos.
+
+<DosDonts variant="do" title="Token semântico">
+  Use "fundo de destaque primário" para um botão. Ele muda com a marca e com o tema escuro.
+</DosDonts>
+
+<DosDonts variant="dont" title="Cor avulsa">
+  Escolher um hexadecimal "parecido". Ele não acompanha o tema escuro nem a troca de marca, e pode falhar no contraste.
+</DosDonts>
+
+## Cores Primitivas
+
+Escalas de 8 tons, do mais claro ao mais escuro. Use a função SCSS `color($palette, $scale)` para acessá-las.
+
+| Escala | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `blue` | `#ebf7ff` | `#b3defd` | `#7ec5fb` | `#339bf0` | `#1c89e4` | `#0c70c6` | `#03437b` | `#001b33` |
+| `gray` | `#ffffff` | `#eeecf1` | `#c7cad4` | `#6c7081` | `#545867` | `#3d414d` | `#282b33` | `#131519` |
+| `green` | `#ddf8e1` | `#a8e8b2` | `#72d483` | `#23963b` | `#1b6e2e` | `#145523` | `#0e3b18` | `#08240f` |
+| `orange` | `#fff2e2` | `#ffd9b0` | `#ffb35f` | `#c86900` | `#994b00` | `#733800` | `#4f2600` | `#2e1600` |
+| `red` | `#ffdbdb` | `#fda9a9` | `#fc7979` | `#d43332` | `#ae201e` | `#891412` | `#630d0b` | `#3d0806` |
+| `violet` | `#edd6ff` | `#d9adff` | `#c184ff` | `#8733ff` | `#6825db` | `#4d19b7` | `#351093` | `#25097a` |
+
+### Black Alpha
+
+Sobreposições em preto com opacidade crescente (invertidas para branco nos temas escuros).
+
+| Token | Opacidade |
+| --- | --- |
+| `black-alpha-1` | 2% |
+| `black-alpha-2` | 4% |
+| `black-alpha-3` | 8% |
+| `black-alpha-4` | 12% |
+| `black-alpha-5` | 16% |
+| `black-alpha-6` | 20% |
+| `black-alpha-7` | 24% |
+| `black-alpha-8` | 28% |
+
+### Estado de Interação
+
+Hover e pressed não têm cor própria — nem por marca, nem por variante, nem por
+tema. São uma única camada translúcida em 8% e 16% misturada ao background de
+repouso do componente, e a tinta dessa camada é a **cor de conteúdo do próprio
+componente** (`currentColor`), a on-color do seu fundo. Use a função SCSS
+`state($state)` ou o mixin `state-layer($bg)`.
+
+Como conteúdo e fundo já precisam ter contraste entre si, a camada clareia o que
+é escuro e escurece o que é claro sem medir nada — e sem precisar saber sobre
+que superfície um componente transparente está apoiado. Não há token aqui: as
+duas quantidades não variam por tema nem por marca, então vivem como constantes
+em `_functions.scss`, junto da lógica que as usa.
+
+| Tema | Fundo | Tinta | Resultado |
+| --- | --- | --- | --- |
+| claro | var(--lui-color-neutral-background-surface) | var(--lui-color-neutral-text-body) | Fundo claro · tinta escura |
+| escuro | var(--lui-color-neutral-background-overlay) | var(--lui-color-neutral-text-inverse) | Fundo escuro · tinta clara |
+
+## Cores da Marca
+
+As cores primária e secundária são definidas por arquivo de tema e podem variar por marca (`data-brand`). O tema padrão (`lets-ui`) usa azul como primária e cinza como secundária.
+
+## Cores Semânticas
+
+Cores com papel de uso definido. Use as funções SCSS `bg()`, `text()`, `stroke()`, `icon()` para acessá-las nos componentes.
+
+### Primary
+
+| Token | Uso |
+| --- | --- |
+| `--lui-color-primary-background-surface` | Fundo suave |
+| `--lui-color-primary-background-container` | Fundo de destaque |
+| `--lui-color-primary-border-default` | Borda |
+| `--lui-color-primary-text-body` | Texto |
+| `--lui-color-primary-icon-default` | Ícone |
+| `--lui-color-primary-focus-ring` | Cor do anel de foco |
+
+### Secondary
+
+| Token | Uso |
+| --- | --- |
+| `--lui-color-secondary-background-surface` | Fundo suave |
+| `--lui-color-secondary-background-container` | Fundo de destaque |
+| `--lui-color-secondary-border-default` | Borda |
+| `--lui-color-secondary-icon-default` | Ícone |
+| `--lui-color-secondary-focus-ring` | Cor do anel de foco |
+
+### Danger
+
+| Token | Uso |
+| --- | --- |
+| `--lui-color-danger-background-surface` | Fundo suave |
+| `--lui-color-danger-background-container` | Fundo de destaque |
+| `--lui-color-danger-border-default` | Borda |
+| `--lui-color-danger-border-hover` | Borda hover |
+| `--lui-color-danger-border-pressed` | Borda pressed |
+| `--lui-color-danger-text-error` | Texto de erro |
+| `--lui-color-danger-icon-default` | Ícone |
+| `--lui-color-danger-focus-ring` | Cor do anel de foco |
+
+### Success
+
+| Token | Uso |
+| --- | --- |
+| `--lui-color-success-background-surface` | Fundo suave |
+| `--lui-color-success-background-container` | Fundo de destaque |
+| `--lui-color-success-border-default` | Borda |
+| `--lui-color-success-icon-default` | Ícone |
+| `--lui-color-success-focus-ring` | Cor do anel de foco |
+
+### Caution
+
+| Token | Uso |
+| --- | --- |
+| `--lui-color-caution-background-surface` | Fundo suave |
+| `--lui-color-caution-background-container` | Fundo de destaque |
+| `--lui-color-caution-border-default` | Borda |
+| `--lui-color-caution-icon-default` | Ícone |
+
+### Info
+
+| Token | Uso |
+| --- | --- |
+| `--lui-color-info-background-surface` | Fundo suave |
+| `--lui-color-info-background-container` | Fundo de destaque |
+| `--lui-color-info-border-default` | Borda |
+| `--lui-color-info-icon-default` | Ícone |
+
+### Neutral
+
+| Token | Uso |
+| --- | --- |
+| `--lui-color-neutral-background-surface` | Fundo padrão |
+| `--lui-color-neutral-background-container` | Fundo de destaque |
+| `--lui-color-neutral-background-overlay` | Overlay |
+| `--lui-color-neutral-border-subtle` | Borda suave |
+| `--lui-color-neutral-border-default` | Borda padrão |
+| `--lui-color-neutral-border-hover` | Borda hover |
+| `--lui-color-neutral-border-pressed` | Borda pressed |
+| `--lui-color-neutral-text-heading` | Título |
+| `--lui-color-neutral-text-body` | Texto |
+| `--lui-color-neutral-text-caption` | Legenda |
+| `--lui-color-neutral-text-inverse` | Texto inverso |
+| `--lui-color-neutral-icon-default` | Ícone |
+| `--lui-color-neutral-icon-inverse` | Ícone inverso |
+| `--lui-color-neutral-focus-ring` | Cor do anel de foco |
+
+## Link
+
+Cores para elementos de link. Herdam da cor primária da marca e mudam por tema.
+
+| Token | Uso |
+| --- | --- |
+| --lui-color-link-default | Link padrão |
+| --lui-color-link-visited | Link visitado |
+
+## Boas práticas
+
+- Escolha a cor pelo **papel** (fundo, texto, borda), depois pela família (primária, perigo...).
+- Use **Danger** só para erro e destruição. Se tudo for vermelho, nada chama atenção.
+- Não use `success` e `danger` como único diferencial entre dois estados: acrescente texto ou ícone.
+- Confira cada combinação nos **dois temas**, claro e escuro.
+- Estados de hover e pressed **não têm cor própria**: são uma camada translúcida sobre o fundo do componente, e funcionam em qualquer cor.

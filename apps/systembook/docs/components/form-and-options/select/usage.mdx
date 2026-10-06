@@ -1,0 +1,43 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Quantas opções?
+
+| Quantidade | Use |
+| --- | --- |
+| 2 a 7 | [Radio Group](../radio-group/index.mdx) |
+| 8 ou mais | Select |
+| Centenas, com busca | Um campo de busca com sugestões |
+
+## Organize as opções
+
+- Ordene de forma previsível: **alfabética** para listas longas e conhecidas, ou por **frequência de uso**.
+- Quando houver opções muito comuns (como o seu país), pode colocá-las no topo.
+- Mantenha as labels curtas e do mesmo estilo.
+
+<DosDonts variant="do" title="Placeholder como convite">
+  "Selecione um estado" indica que há uma escolha a fazer, e o campo só é válido depois dela.
+</DosDonts>
+
+<DosDonts variant="dont" title="Opção inicial que vira resposta">
+  Começar com "Brasil" selecionado em um cadastro internacional. Muita gente envia sem perceber.
+</DosDonts>
+
+## Label e hint
+
+- A label descreve **o que escolher**: "Estado", "Fuso horário".
+- Use o hint para explicar o impacto da escolha ou limitar o formato.
+- Marque o campo como **(opcional)** quando for o caso, em vez de usar asterisco.
+
+## Erros
+
+Se a escolha for obrigatória, mostre: "Selecione um estado." perto do campo. Combine com o estado de erro visual.
+
+## Boas práticas
+
+- Não use o Select para navegação ou ações.
+- Evite listas com opções muito parecidas ou muito longas, que dificultam a leitura.
+- Não use Select com uma só opção. Se há uma só, mostre como texto.
+- Para escolher uma data, use um seletor próprio ou três campos, não um Select enorme.

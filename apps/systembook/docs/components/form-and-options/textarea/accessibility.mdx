@@ -1,0 +1,27 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Entra e sai do campo. |
+| `Enter` | Insere uma nova linha. |
+
+O `Tab` sai do campo e não insere tabulação, para não prender quem navega por teclado.
+
+## Leitor de tela
+
+- A label é associada ao campo, e o leitor anuncia o nome ao entrar.
+- O hint e a mensagem de erro são lidos com o campo (`aria-describedby`).
+- Em erro, o campo é anunciado como inválido. Se obrigatório, também é anunciado.
+- Troque o texto padrão de erro, em inglês, para o idioma do produto.
+
+## Para designers
+
+- Não use só o placeholder como label.
+- Se houver limite de caracteres, avise de forma que não dependa só de cor.
+- Garanta contraste de 4,5:1 no texto e 3:1 na borda do campo.
+- Deixe a alça de redimensionamento com área de toque suficiente em telas sensíveis ao toque.

@@ -1,0 +1,44 @@
+---
+title: "Close Button"
+subtitle: "Botão com um X, pronto para dispensar ou fechar elementos como modais, drawers, alerts e tags."
+order: 3
+---
+
+<ComponentEmbed component="CloseButton" variant="md" />
+
+## Quando usar
+
+Use o Close Button para **fechar ou dispensar** algo que foi aberto ou exibido: um diálogo, um painel lateral, uma notificação, um filtro aplicado.
+
+Ao contrário do [Icon Button](../icon-button/index.mdx), ele já vem com o ícone X e um nome acessível padrão. Isso garante o mesmo visual e o mesmo comportamento em todo o sistema.
+
+## Quando não usar
+
+- **Para qualquer outra ação com ícone.** Use o [Icon Button](../icon-button/index.mdx).
+- **Para cancelar um fluxo com consequências** (descartar alterações, por exemplo). Nesse caso use um [Button](../button/index.mdx) com texto, como "Descartar".
+
+## Anatomia
+
+1. **Container**: define a área de toque.
+2. **Ícone X**: fixo, herda a cor do texto.
+
+## Tamanhos
+
+| Tamanho | Medida | Uso |
+| --- | --- | --- |
+| `sm` | 24px | Espaços compactos: tags, alerts. |
+| `md` (padrão) | 32px | Uso geral. |
+| `lg` | 40px | Cabeçalhos de modal e drawer. |
+
+## Onde aparece
+
+- No **Alert**, com o atributo `dismissible`, que adiciona o botão e emite `lui-dismiss`.
+- No cabeçalho do **Modal** e do **Drawer**, em tamanho `lg`.
+- Em **Tags** removíveis e outros elementos descartáveis.
+
+## Relacionados
+
+- [Icon Button](../icon-button/index.mdx)
+- [Modal](../../content/modal/index.mdx)
+- [Drawer](../../content/drawer/index.mdx)
+- [Alert](../../content/alert/index.mdx)

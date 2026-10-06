@@ -1,0 +1,42 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Título do grupo
+
+Todo grupo precisa de um título que **faça a pergunta**, como "Forma de pagamento" ou "Com que frequência?". Sem ele, a pessoa vê opções soltas e quem usa leitor de tela não sabe o que está escolhendo.
+
+## Opções
+
+- De **duas a sete** opções. Acima disso, um [Select](../select/index.mdx) é mais leve.
+- Ordene de forma lógica: pela mais comum, por ordem natural (pequeno, médio, grande) ou alfabética.
+- As opções devem ser **exclusivas e completas**: toda resposta possível cabe em uma delas.
+- Mantenha as labels **paralelas** em estrutura e comprimento.
+
+<DosDonts variant="do" title="Opções paralelas e exclusivas">
+  "Mensal", "Trimestral" e "Anual". Cada uma é clara e nenhuma se sobrepõe.
+</DosDonts>
+
+<DosDonts variant="dont" title="Opções que se sobrepõem">
+  "Até 10 usuários", "10 a 50" e "Mais de 10". Quem tem 10 usuários não sabe qual escolher.
+</DosDonts>
+
+## Valor padrão
+
+Pré-selecione uma opção apenas quando existir um **padrão razoável e seguro**. Escolhas que afetam dinheiro, privacidade ou dados devem ser **ativas**: a pessoa decide.
+
+## Hint e erro
+
+- Use o hint para explicar diferenças entre as opções ou consequências da escolha.
+- Quando a escolha é obrigatória, a mensagem de erro aparece abaixo das opções: "Escolha uma forma de pagamento." Ela substitui o hint.
+
+## Posição
+
+Coloque as opções em **coluna**. Em linha, só com duas ou três opções muito curtas. Mantenha um espaçamento consistente entre as opções.
+
+## Boas práticas
+
+- Não use Radio Group para escolhas com efeito imediato, nem para navegar.
+- Se a pessoa pode não querer nenhuma, inclua uma opção "Nenhum".
+- Mantenha a mesma ordem das opções entre telas.

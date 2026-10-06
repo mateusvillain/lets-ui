@@ -1,0 +1,27 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Percorre os botões da paginação. |
+| `Enter` ou `Espaço` | Vai para a página escolhida. |
+
+Depois de navegar, o foco permanece no controle usado. Se ele ficar desabilitado ou sumir (como "Próxima" na última página), o foco vai para a página atual.
+
+## Leitor de tela
+
+- A paginação é um landmark de navegação com um nome, definido por `label`.
+- A página atual é anunciada como atual (`aria-current="page"`).
+- Cada página tem um nome como "Página 3", e os botões de anterior e próxima têm nomes próprios.
+- Depois de cada troca, uma região invisível anuncia "Página 3 de 20".
+- As reticências são decorativas e ficam fora da árvore de acessibilidade.
+
+## Para designers
+
+- Traduza os textos acessíveis (`previous-label`, `next-label`, `page-label` e `status-label`) para o idioma do produto.
+- Garanta que a página atual se destaque por mais do que a cor.
+- Mantenha área de toque confortável: os botões são pequenos e ficam próximos.

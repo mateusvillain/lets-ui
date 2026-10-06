@@ -1,0 +1,48 @@
+---
+title: "Checkbox"
+subtitle: "Permite marcar uma ou mais opções independentes, ou ativar uma opção única de sim ou não."
+order: 1
+---
+
+<ComponentEmbed component="Checkbox" variant="unchecked" />
+
+## Quando usar
+
+- **Selecionar vários itens** de uma lista: interesses, permissões, filtros.
+- **Confirmar uma opção** de sim ou não que só vale depois de enviar o formulário: "Li e aceito os termos".
+
+## Quando não usar
+
+- **Escolha de apenas uma opção.** Use o [Radio Group](../radio-group/index.mdx).
+- **Efeito imediato** ao alternar, como ligar notificações. Use o [Switch](../switch/index.mdx).
+- **Escolher entre muitas opções** (mais de sete). Use um [Select](../select/index.mdx) ou uma lista com busca.
+
+## Anatomia
+
+1. **Caixa**: mostra o estado marcado ou desmarcado.
+2. **Label**: descreve a opção. Clicar nela também alterna a caixa.
+3. **Mensagem de erro** (opcional): aparece quando a escolha é obrigatória e está faltando.
+
+## Estados
+
+| Estado | Descrição |
+| --- | --- |
+| **Desmarcado** | A opção não está escolhida. |
+| **Marcado** | A opção está escolhida. |
+| **Foco** | A caixa tem anel de foco ao navegar por teclado. |
+| **Erro** | A escolha é obrigatória e não foi feita. |
+| **Desabilitado** | Não pode ser alterado agora. |
+
+<ComponentEmbed component="Checkbox" variant="checked" />
+
+<ComponentEmbed component="Checkbox" variant="error" />
+
+## Tamanhos
+
+`lg` (padrão) e `md`. Use o mesmo tamanho dentro de um grupo.
+
+## Relacionados
+
+- [Radio Group](../radio-group/index.mdx): uma única escolha.
+- [Switch](../switch/index.mdx): ligar e desligar com efeito imediato.
+- [Select](../select/index.mdx): uma opção de uma lista longa.

@@ -1,0 +1,30 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Espaço entre elementos
+
+Use a **escala de espaçamento** do sistema. O espaço comunica relação: itens **próximos** pertencem juntos, itens **distantes** são grupos diferentes.
+
+<DosDonts variant="do" title="Espaços proporcionais à relação">
+  Gap pequeno entre uma label e seu campo, gap médio entre campos, gap grande entre seções.
+</DosDonts>
+
+<DosDonts variant="dont" title="Espaço igual para tudo">
+  O mesmo gap entre todos os elementos faz tudo parecer um bloco só, e a hierarquia some.
+</DosDonts>
+
+## Aninhe Stacks
+
+Combine Stacks para espaços diferentes: um Stack **externo** com gap grande separa seções, e Stacks **internos** com gap pequeno agrupam o conteúdo de cada seção.
+
+## Alinhamento
+
+Por padrão, os itens **esticam** na largura do Stack. Use `align="center"` para centralizar elementos de largura própria, como botões ou imagens.
+
+## Boas práticas
+
+- Prefira o `gap` do Stack a margens individuais nos filhos.
+- Use valores da escala (8, 16, 24, 32...), não valores avulsos.
+- Em telas pequenas, o mesmo Stack funciona bem sem mudanças.

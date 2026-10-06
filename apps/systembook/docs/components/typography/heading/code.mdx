@@ -1,0 +1,38 @@
+---
+title: "Code"
+order: 4
+---
+
+## Alinhamento
+
+Use `align` com `left`, `center`, `right` ou `justify`.
+
+## Line Clamp
+
+O atributo `line-clamp` recebe um número inteiro e limita a exibição do texto.
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `label` | `string` | `''` |
+| `variant` | `string` | `title` |
+| `as` | `string` | `''` |
+| `align` | `string` | `''` |
+| `line-clamp` | `string` | `''` |
+| `transform` | `string` | `''` |
+| `color` | `string` | `heading` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-heading variant="title" color="heading" label="Título da página"></lui-heading>
+```
+
+### Classe CSS
+
+```html
+<h1 class="title text--color-heading">Título da página</h1>
+```

@@ -1,0 +1,32 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Entra e sai do campo. |
+| `Seta para cima/baixo` | Em campos numéricos, aumenta e diminui o valor. |
+| `Enter` | Envia o formulário, quando há um. |
+
+## Leitor de tela
+
+- A label é associada ao campo, e o leitor anuncia o nome ao entrar nele.
+- O hint e a mensagem de erro são lidos junto do campo (`aria-describedby`).
+- Em erro, o campo é anunciado como inválido (`aria-invalid`). Campos obrigatórios são anunciados como obrigatórios.
+- Os botões de mostrar senha e de aumentar e diminuir têm nomes próprios. Troque os textos padrão (em inglês) para o idioma do produto.
+
+## Visual
+
+- O texto digitado e a label têm contraste mínimo de 4,5:1, e a borda do campo, de 3:1.
+- O estado de erro usa texto e ícone além da cor.
+- O foco é visível com um anel ao redor do campo.
+
+## Para designers
+
+- Nunca use só o placeholder como label.
+- Escreva mensagens de erro que expliquem como corrigir.
+- Use os atributos `type` e `inputmode` certos: eles melhoram a experiência de quem usa teclado virtual ou tecnologia assistiva.
+- Permita que gerenciadores de senha e preenchimento automático funcionem.

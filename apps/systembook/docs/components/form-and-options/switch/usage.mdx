@@ -1,0 +1,34 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Efeito imediato
+
+O que define o Switch é o **efeito na hora**. Ao alternar, o sistema já aplica a mudança, sem outra confirmação.
+
+<DosDonts variant="do" title="Aplicar a mudança ao alternar">
+  Ligar "Notificações por e-mail" já salva a preferência. A pessoa vê o resultado sem passos extras.
+</DosDonts>
+
+<DosDonts variant="dont" title="Switch dentro de um formulário com Salvar">
+  Se a mudança só vale depois de clicar em "Salvar", a pessoa espera efeito imediato e fica confusa. Use um Checkbox.
+</DosDonts>
+
+## Labels
+
+- Descreva **o recurso**, não a ação: "Notificações por e-mail", não "Ativar notificações".
+- Use **substantivos**, que funcionam nos dois estados.
+- Se o estado atual não for óbvio, mostre texto de apoio: "Ligado" ou "Desligado".
+- Posicione a label ao lado do Switch, preferencialmente à direita.
+
+## Estado visual
+
+O estado precisa ser claro sem depender de cor: a posição do marcador (esquerda ou direita) comunica ligado e desligado. Evite usar o vermelho para "desligado": desligado não é um erro.
+
+## Boas práticas
+
+- Use Switches em **listas de configurações**, com uma label e uma breve descrição.
+- Não use um Switch para confirmar uma ação perigosa.
+- Se a mudança demorar a ser aplicada, mostre um indicador de progresso e trate falhas, revertendo o Switch com uma mensagem.
+- Mantenha o tamanho consistente em uma mesma lista.

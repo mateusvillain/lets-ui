@@ -1,0 +1,29 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+O Empty State em si não é interativo. As ações dentro dele seguem o teclado do [Button](../../actionable/button/index.mdx): `Tab` para chegar e `Enter` ou `Espaço` para ativar.
+
+## Leitor de tela
+
+- O título é um **título real** (`h1` a `h6`). Ajuste o nível com `title-level` (padrão 2) para respeitar a hierarquia da página.
+- A capa é **decorativa** e fica escondida do leitor de tela. Nada pode depender exclusivamente dela.
+- Quando o Empty State aparece depois de uma ação, o leitor precisa ser avisado:
+
+| `announce` | Efeito | Quando usar |
+| --- | --- | --- |
+| `off` (padrão) | Sem anúncio. | Já estava na página ao carregar. |
+| `polite` | Anuncia ao fim da leitura atual. | Busca sem resultado, filtro aplicado, último item excluído. |
+| `assertive` | Interrompe a leitura. | Só para erros que exigem atenção imediata. |
+
+## Foco
+
+Se o Empty State substituiu o elemento que tinha foco (como o item recém-excluído), leve o foco para um lugar previsível. Nunca deixe o foco "perdido" no documento.
+
+## Para designers
+
+- Escreva o texto de modo que ele sirva sozinho, sem a ilustração.
+- Defina quando o Empty State deve ser anunciado, e qual o próximo foco.
