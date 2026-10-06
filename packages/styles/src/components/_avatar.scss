@@ -1,0 +1,188 @@
+@use 'sass:map';
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+// Without the Web Component the markup is yours to write. The wrapper carries
+// the accessible name — `role="img"` plus `aria-label` — and everything inside
+// it is presentational, so keep `aria-hidden="true"` on the initials and on the
+// status dot, and `alt=""` on the photo. A decorative avatar, next to the
+// person's name in text, takes `aria-hidden="true"` on the wrapper instead.
+
+// The status dot is 10, 12 and 16px. Fixed values, not tokens: they are the same
+// in every brand and theme, and no step of the spacing scale matches 10.
+$sizes: (
+  sm: (
+    size: fixed(24),
+    status: 10px,
+  ),
+  md: (
+    size: fixed(32),
+    status: 12px,
+  ),
+  lg: (
+    size: fixed(40),
+    status: 16px,
+  ),
+);
+$radii: (
+  circle: radius(circle),
+  rounded: radius(md),
+  square: radius(none),
+);
+$statuses: (
+  online: color(green, 3),
+  away: color(orange, 3),
+  busy: color(red, 3),
+  offline: color(gray, 3),
+);
+
+// The initials scale from the avatar's own size: 30% of it, a proportion of the
+// design rather than a design value.
+$size: var(--lui-avatar-size, #{fixed(40)});
+$status-size: var(--lui-avatar-status-size, 16px);
+
+.avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: $size;
+  block-size: $size;
+  font-family: font(body);
+  font-size: calc(#{$size} * 0.3);
+  font-weight: weight(regular);
+  line-height: line-height(body);
+  color: text(body);
+  background-color: color(gray, 2);
+  border-radius: radius(circle);
+
+  // The group draws a ring around each avatar through this property, so an
+  // avatar on its own has none.
+  box-shadow: var(--lui-avatar-ring, none);
+
+  @include no-select;
+
+  // A forced-colors theme repaints the background, which is all that separates
+  // an avatar from the page.
+  @media (forced-colors: active) {
+    border: width(1) solid CanvasText;
+  }
+}
+
+@each $name, $value in $sizes {
+  .avatar--#{$name} {
+    --lui-avatar-size: #{map.get($value, size)};
+    --lui-avatar-status-size: #{map.get($value, status)};
+  }
+}
+
+@each $name, $value in $radii {
+  .avatar--#{$name} {
+    border-radius: $value;
+  }
+}
+
+// Each hue pairs its 2 step as the background with its 8 step as the initials.
+// The primitive scales are keyed by colour names, which Sass reads as colours
+// rather than strings, so the hue goes in as an argument instead of through a
+// loop that would have to interpolate it.
+@mixin avatar-hue($name, $scale) {
+  .avatar--#{$name} {
+    color: color($scale, 8);
+    background-color: color($scale, 2);
+  }
+}
+
+@include avatar-hue('gray', gray);
+@include avatar-hue('blue', blue);
+@include avatar-hue('green', green);
+@include avatar-hue('orange', orange);
+@include avatar-hue('red', red);
+@include avatar-hue('violet', violet);
+
+.avatar__initials {
+  text-transform: uppercase;
+}
+
+// The placeholder when there is no photo and no initials. It paints with the
+// avatar's text colour, so each variant colours it like its initials, and takes
+// 60% of the avatar, a proportion of the design rather than a design value.
+.avatar__icon {
+  display: block;
+  inline-size: 60%;
+  block-size: 60%;
+  fill: currentcolor;
+}
+
+// The photo takes the avatar's corners so the shape does not depend on an
+// `overflow: hidden` that would also clip the status dot.
+.avatar__image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+// Sits on the bottom-right corner and overhangs it by the ring's width, which
+// is what the ring is for: it separates the dot from the avatar underneath.
+// A group moves it to the bottom-left through the two custom properties, since
+// the next avatar in the stack covers the right-hand corner.
+.avatar__status {
+  position: absolute;
+  inset-block-end: calc(#{width(2)} * -1);
+  inset-inline: var(--lui-avatar-status-start, auto)
+    var(--lui-avatar-status-end, calc(#{width(2)} * -1));
+  box-sizing: border-box;
+  inline-size: $status-size;
+  block-size: $status-size;
+  background-color: var(--lui-avatar-status, #{color(gray, 3)});
+  border: width(2) solid bg(surface, neutral);
+  border-radius: radius(circle);
+
+  // The dot's colour is the information, so a forced-colors theme must not
+  // repaint it.
+  forced-color-adjust: none;
+}
+
+@each $name, $value in $statuses {
+  .avatar__status--#{$name} {
+    --lui-avatar-status: #{$value};
+  }
+}
+
+// Each status also has a shape of its own inside the dot, so it does not rest
+// on colour alone: online stays solid, away shows clock hands, busy a bar and
+// offline a hollow centre. The shapes are measured against the area inside the
+// dot's ring (12px at the largest size) and scale with it.
+.avatar__status--away::after,
+.avatar__status--busy::after,
+.avatar__status--offline::after {
+  position: absolute;
+  content: '';
+}
+
+.avatar__status--away::after {
+  inset-block-end: 45.83%;
+  inset-inline-start: 45.83%;
+  inline-size: 29.17%;
+  block-size: 37.5%;
+  border-block-end: width(1) solid icon(neutral);
+  border-inline-start: width(1) solid icon(neutral);
+}
+
+.avatar__status--busy::after {
+  inset-block-start: 50%;
+  inset-inline: 25%;
+  block-size: width(1);
+  background-color: icon(neutral);
+  transform: translateY(-50%);
+}
+
+.avatar__status--offline::after {
+  inset: 25%;
+  background-color: bg(surface, neutral);
+  border-radius: radius(circle);
+}
