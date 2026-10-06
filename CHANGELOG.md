@@ -36,6 +36,10 @@
 - The strings the components generate are now English by default. They were hardcoded and split between Portuguese and English, so a screen reader announced `Fechar modal` in an English page, and no project was consistent out of the box. Every one is a prop, so a project sets its own language per component instead of inheriting ours.
   - Portuguese defaults that move to English: `Campo obrigatório.` → `This field is required.` (`lui-input`, `lui-textarea`, `lui-select`, `lui-checkbox`, `lui-switch`), `(opcional)` → `(optional)` (`lui-input`, `lui-textarea`, `lui-select`), `Selecione uma opção.` → `Select an option.` (`lui-radio-group`), `Mostrar tooltip` → `Show tooltip` (`lui-tooltip`), `Abrir drawer` → `Open drawer` (`lui-drawer` trigger), and the password and stepper labels of `lui-input`.
   - Projects that relied on the Portuguese text must now pass it explicitly.
+- The `3xs`, `2xs` and `1xs` font sizes are fixed rem values instead of fluid `clamp()`. They sit at the floor of the readable range, so a clamp only shrank them further on narrow screens. They are now `0.694rem`, `0.833rem` and `1rem`, the widest end of the old ranges, which dipped as low as `0.691rem`, `0.778rem` and `0.875rem`.
+  - The three tokens move from `$type: string` to `dimension`, with `{ value, unit }` values. A brand that overrides them with a `clamp()` string must switch to a dimension.
+  - The `sm` minimum rises from `0.984rem` to `1.05rem`, so the step stays clearly above the new `1xs`.
+  - Brand Studio edits the three steps as a single value, and the randomizer rolls them as fixed sizes.
 
 ### Fixed
 
