@@ -24,6 +24,7 @@ Usar este mapa para decidir se o componente já existe e em qual formato.
 | link          | `_link.scss`          | `link.js`          | cobertura completa                                            |
 | modal         | `_modal.scss`         | `modal.js`         | cobertura completa                                            |
 | navbar        | `_navbar.scss`        | não existe         | formato web component ausente                                 |
+| pagination    | `_pagination.scss`    | `pagination.js`    | cobertura completa; truncamento com reticências               |
 | radio         | `_radio.scss`         | `radio.js`         | cobertura completa                                            |
 | switch        | `_switch.scss`        | `switch.js`        | cobertura completa; tamanhos lg e md; role="switch"           |
 | select        | `_select.scss`        | `select.js`        | cobertura completa                                            |

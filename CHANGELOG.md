@@ -17,6 +17,12 @@
   - Every table needs a name, from a `<caption>`, `aria-label` or `aria-labelledby`. When the table scrolls, its area becomes a `role="region"` with a name that can take focus. The name comes from `label` or from the table's own name.
 - `close-label` on `lui-modal` and `lui-drawer`, the `aria-label` of the close button (defaults `Close modal` and `Close drawer`).
 - `show-password-label`, `hide-password-label`, `increment-label` and `decrement-label` on `lui-input`, the `aria-label` of the password toggle and the number steppers.
+- New `lui-pagination` Web Component and CSS-only `.pagination` styles for moving between the pages of a long set of content. The first and last pages are always shown, the current page keeps its siblings on each side, and an ellipsis stands in for every gap. Once the list truncates it keeps the same length, so the row does not change width while paging.
+  - `current-page` and `total-pages` drive the list; `sibling-count` sets how many neighbours show beside the current page. Below the `sm` breakpoint (768px) `compact-sibling-count` takes over, `0` by default, so the row shrinks without hiding the first, last or current page.
+  - Navigating fires `lui-page-change` with the new page in `detail.page`.
+  - Rendered as a `<nav>` holding a list of native buttons. The current page carries `aria-current="page"`, each page is named `"{page-label} N"`, the ellipses are decorative, and previous and next are disabled at the bounds. After a change, focus stays on the control that was used, or moves to the current page when that control disappears or becomes disabled. A visually hidden `role="status"` region announces the new page.
+  - Every string is a prop, so the component can be translated: `label` (the `<nav>` name), `previous-label`, `next-label`, `page-label` and `status-label`, where `status-label` takes `{current}` and `{total}` placeholders (`"Page {current} of {total}"` by default).
+  - The `<nav>` name is `label` rather than `aria-label`, so a consumer's attribute does not stay on the host element, which has no role, and the same name is not exposed twice.
 
 ### Changed
 
