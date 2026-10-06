@@ -9,6 +9,19 @@
   - `status` (`online`, `away`, `busy`, `offline`) adds a dot with a shape of its own inside — solid, clock hands, a bar, a hollow centre — so it does not rest on colour alone.
   - `lui-avatar-group` stacks avatars with a 30% overlap and a surface-coloured ring, passes its `size` down, and moves the status dot to the bottom-left. `label` names the group.
   - With a `name` or `status` the avatar is `role="img"` with an `aria-label` that reads both ("Maria Villain, Online"); `status-label` overrides the English text. With neither it is decorative and hidden from the accessibility tree.
+- `close-label` on `lui-modal` and `lui-drawer`, the `aria-label` of the close button (defaults `Close modal` and `Close drawer`).
+- `show-password-label`, `hide-password-label`, `increment-label` and `decrement-label` on `lui-input`, the `aria-label` of the password toggle and the number steppers.
+
+### Changed
+
+- The strings the components generate are now English by default. They were hardcoded and split between Portuguese and English, so a screen reader announced `Fechar modal` in an English page, and no project was consistent out of the box. Every one is a prop, so a project sets its own language per component instead of inheriting ours.
+  - Portuguese defaults that move to English: `Campo obrigatório.` → `This field is required.` (`lui-input`, `lui-textarea`, `lui-select`, `lui-checkbox`, `lui-switch`), `(opcional)` → `(optional)` (`lui-input`, `lui-textarea`, `lui-select`), `Selecione uma opção.` → `Select an option.` (`lui-radio-group`), `Mostrar tooltip` → `Show tooltip` (`lui-tooltip`), `Abrir drawer` → `Open drawer` (`lui-drawer` trigger), and the password and stepper labels of `lui-input`.
+  - Projects that relied on the Portuguese text must now pass it explicitly.
+
+### Fixed
+
+- `lui-checkbox` and `lui-switch` reported a fixed `Campo obrigatório.` as their validation message and ignored `error-text`. They now use `error-text`.
+- Focus rings were invisible on light backgrounds. The `focus-ring` colour tokens pointed at the lightest steps of their scales (`primary.1`, `secondary.2`, `red.1`, `green.1`, `gray.3`), which measure between 1.1:1 and 1.8:1 against white, well under the 3:1 that WCAG 2.4.11 asks of a focus indicator. All five now point at step 5 of their scale: 3.65:1 for primary on a light background, and above 5:1 for the other variants in both themes. Step 4 was not enough for the default brand, where `primary.4` measures 2.96:1.
 
 ## v1.10.0
 

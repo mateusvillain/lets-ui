@@ -65,7 +65,7 @@ InsideAlert.storyName = 'Dentro do Alert (dismissible)';
 InsideAlert.parameters = { controls: { disable: true } };
 
 export const InsideModal = () => `
-  <lui-modal title="Modal title" trigger-label="Abrir modal">
+  <lui-modal title="Modal title" trigger-label="Open modal">
     <p>O botão X no cabeçalho é um componente close-button.</p>
   </lui-modal>
 `;

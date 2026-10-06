@@ -19,10 +19,10 @@ export class LuiTextarea extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;
-  @property({ attribute: 'optional-text' }) optionalText = '(opcional)';
+  @property({ attribute: 'optional-text' }) optionalText = '(optional)';
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'Campo obrigatório.';
+  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
   @property() maxlength = '';
   @property() rows = '4';
   @property() resize = 'vertical';
