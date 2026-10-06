@@ -1,0 +1,42 @@
+---
+title: "Box"
+subtitle: "Contêiner genérico com espaçamento interno, fundo, borda e raio, todos vindos dos tokens do sistema."
+order: 7
+---
+
+<ComponentEmbed component="Box" variant="surface" />
+
+## Quando usar
+
+Use o Box para **criar uma superfície simples**: um bloco com fundo, borda e espaçamento interno, sem comportamento próprio. Ele é a base de áreas de destaque, painéis e faixas de conteúdo.
+
+## Quando não usar
+
+- **Conteúdo sobre um item com título e ações.** Use o [Card](../../content/card/index.mdx).
+- **Mensagens de estado.** Use o [Alert](../../content/alert/index.mdx).
+- **Limitar a largura do conteúdo.** Use o [Container](../container/index.mdx).
+- **Organizar elementos.** Use [Stack](../stack/index.mdx) ou [Flex](../flex/index.mdx) **dentro** do Box.
+
+## O que o Box controla
+
+| Opção | O que controla |
+| --- | --- |
+| `padding`, `padding-x`, `padding-y` | Espaçamento interno, pela escala do sistema. |
+| `background` | Fundo, por um nome semântico como `neutral/surface` ou `primary/container`. |
+| `border-radius` | Arredondamento: `none`, `xs`, `sm`, `md`, `lg`, `xl` ou `circle`. |
+| `border-width`, `border-color` | Espessura (0, 1, 2 ou 4) e cor da borda. |
+| `overflow` | Como o conteúdo que passa do limite é tratado. |
+
+Como usam tokens, o Box muda sozinho com o **tema** (claro e escuro) e a **marca**.
+
+<ComponentEmbed component="Box" variant="outlined" />
+
+## Fundos semânticos
+
+Os fundos seguem papéis: **surface** (suave) e **container** (destaque) para as famílias `neutral`, `primary`, `secondary`, `info`, `success`, `caution` e `danger`. Escolha pelo **significado** do conteúdo.
+
+## Relacionados
+
+- [Card](../../content/card/index.mdx): superfície com estrutura.
+- [Stack](../stack/index.mdx): organiza o conteúdo do Box.
+- [Color](../../../foundations/visual/color.mdx), [Spacing](../../../foundations/visual/spacing.mdx), [Border](../../../foundations/visual/border.mdx): os tokens.

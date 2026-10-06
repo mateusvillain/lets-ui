@@ -1,0 +1,14 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+O Sidebar é só layout e **não adiciona semântica**. Use elementos semânticos nas áreas:
+
+- Para navegação, coloque um `nav` com nome na lateral.
+- Para conteúdo complementar, use `aside`.
+- Para o conteúdo principal, use `main`.
+
+**Ordem de leitura**: a lateral vem na ordem do código, antes ou depois do conteúdo. Se ela estiver no fim visual (`side="end"`), confira se a ordem do código faz sentido para leitores de tela.
+
+**Reflow**: ao empilhar em telas pequenas, as áreas seguem a ordem do código, sem rolagem horizontal.

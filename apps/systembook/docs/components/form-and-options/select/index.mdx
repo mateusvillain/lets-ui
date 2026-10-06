@@ -1,0 +1,46 @@
+---
+title: "Select"
+subtitle: "Lista suspensa para escolher uma opção entre várias, usando o seletor nativo do navegador."
+order: 5
+---
+
+<ComponentEmbed component="Select" variant="default" />
+
+## Quando usar
+
+Use o Select quando a pessoa precisa escolher **uma opção entre muitas** (mais de sete) e mostrá-las todas ocuparia espaço demais: país, estado, fuso horário, ano.
+
+Como usa o seletor nativo, funciona bem em celulares, com rolagem e busca por digitação.
+
+## Quando não usar
+
+- **Poucas opções (até sete).** Use o [Radio Group](../radio-group/index.mdx), que mostra todas de uma vez.
+- **Várias seleções.** Use [Checkboxes](../checkbox/index.mdx).
+- **Lista com busca, tags ou conteúdo rico.** O Select nativo não faz isso.
+- **Ações em vez de valores.** Use o [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
+
+## Anatomia
+
+1. **Label**: nomeia o campo.
+2. **Marcador de opcional** (opcional).
+3. **Campo**: mostra a opção atual ou o placeholder, com uma seta.
+4. **Hint**: texto de apoio.
+5. **Mensagem de erro**: substitui o hint quando falta uma escolha.
+
+## Estados
+
+Padrão, hover, foco, aberto, erro e desabilitado. O **placeholder** ("Selecione uma opção") não é uma escolha válida: com o campo obrigatório, ele precisa ser trocado por uma opção real.
+
+<ComponentEmbed component="Select" variant="hint" />
+
+<ComponentEmbed component="Select" variant="error" />
+
+## Tamanhos
+
+`lg` (padrão) e `md`, como no [Input](../input/index.mdx).
+
+## Relacionados
+
+- [Radio Group](../radio-group/index.mdx): poucas opções visíveis.
+- [Input](../input/index.mdx): resposta livre.
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx): ações em vez de valores.

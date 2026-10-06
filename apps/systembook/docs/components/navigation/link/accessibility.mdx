@@ -1,0 +1,32 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Move o foco para o link. |
+| `Enter` | Segue o link. |
+
+Um link desabilitado continua focável, para que quem usa teclado ou leitor de tela saiba que ele existe e está indisponível.
+
+## Leitor de tela
+
+- O link é anunciado como **link**, com o texto como nome.
+- Se o texto não descreve o destino ("Leia mais"), use `aria-label` com uma descrição completa, como "Leia mais sobre acessibilidade".
+- Links desabilitados são anunciados como indisponíveis (`aria-disabled`).
+- Ao abrir em nova aba, o link recebe `rel="noopener noreferrer"` automaticamente, por segurança.
+
+## Visual
+
+- O texto do link tem contraste mínimo de 4,5:1 com o fundo.
+- O sublinhado e o anel de foco aparecem no hover e no foco por teclado.
+- A cor do link visitado também respeita o contraste.
+
+## Para designers
+
+- Não dependa só da cor para identificar links dentro de texto.
+- Evite vários links com o mesmo texto e destinos diferentes na mesma página.
+- Informe quando o link abre em outra aba ou baixa um arquivo.

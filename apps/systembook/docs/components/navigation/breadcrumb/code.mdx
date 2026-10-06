@@ -1,0 +1,34 @@
+---
+title: "Code"
+order: 4
+---
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `aria-label` | `string` | `Breadcrumb` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-breadcrumb aria-label="Breadcrumb">
+  <lui-breadcrumb-item href="#">Home</lui-breadcrumb-item>
+  <lui-breadcrumb-item href="#">Categoria</lui-breadcrumb-item>
+  <lui-breadcrumb-item active>Página atual</lui-breadcrumb-item>
+</lui-breadcrumb>
+```
+
+### Classe CSS
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol class="breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Categoria</a></li>
+    <li aria-current="page">Página atual</li>
+  </ol>
+</nav>
+```

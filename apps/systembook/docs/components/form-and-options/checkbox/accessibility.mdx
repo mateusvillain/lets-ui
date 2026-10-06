@@ -1,0 +1,29 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Move o foco entre as caixas. |
+| `Espaço` | Marca ou desmarca a caixa em foco. |
+
+## Leitor de tela
+
+- A caixa é anunciada como **caixa de seleção**, com o nome da label e o estado marcado ou desmarcado.
+- Em erro, ela é anunciada como inválida, e a mensagem é lida junto. Se for obrigatória, também é anunciada como tal.
+- Quando desabilitada, é anunciada como indisponível.
+
+## Visual
+
+- O estado marcado se diferencia por mais do que a cor: aparece um símbolo de marcação.
+- A caixa tem contraste de pelo menos 3:1 com o fundo.
+- O anel de foco é visível ao navegar por teclado.
+
+## Para designers
+
+- Sempre mostre uma label visível. Só use `aria-label` quando não houver espaço para texto.
+- Em grupos, dê um título que explique a pergunta.
+- A área clicável inclui a label, o que ajuda quem tem dificuldade de precisão no toque.

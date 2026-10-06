@@ -80,3 +80,49 @@ jobs:
 
       - name: Assert the build emitted a site
         run: test -f apps/brand-studio/dist/index.html
+
+  systembook:
+    name: SystemBook docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # The previews import the packages' `dist/` output by relative path
+      # (see `apps/systembook/previews/runtime.ts`), so the workspace has to be
+      # built before the docs are.
+      - name: Build the packages the previews consume
+        run: |
+          pnpm install
+          pnpm build
+
+      # Outside the pnpm workspace, like the Brand Studio: React and the
+      # SystemBook CLI must never enter the dependency graph of the published
+      # packages. That is why it installs from its own lockfile.
+      - name: Install dependencies
+        run: pnpm install --ignore-workspace
+        working-directory: apps/systembook
+
+      - name: Typecheck the previews
+        run: pnpm exec tsc --noEmit
+        working-directory: apps/systembook
+
+      # Content, links, images and previews. Every error is listed at once.
+      - name: Check the content
+        run: pnpm docs:check
+        working-directory: apps/systembook
+
+      - name: Build the site
+        run: pnpm docs:build
+        working-directory: apps/systembook
+
+      - name: Assert the build emitted a site
+        run: test -f apps/systembook/systembook-dist/index.html

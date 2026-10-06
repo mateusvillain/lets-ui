@@ -1,0 +1,40 @@
+---
+title: "Container"
+subtitle: "Limita a largura do conteúdo e o centraliza na tela, para manter o texto confortável de ler."
+order: 5
+---
+
+<ComponentEmbed component="Container" variant="lg" />
+
+## Quando usar
+
+Use o Container para **controlar a largura legível** do conteúdo de uma página: o texto não se estica por telas largas, e o conteúdo fica centralizado.
+
+## Quando não usar
+
+- **Estruturar colunas.** Use [Grid](../grid/index.mdx).
+- **Uma superfície com fundo ou borda.** Use [Box](../box/index.mdx) ou [Card](../../content/card/index.mdx).
+- **Conteúdo que deve ocupar a tela toda**, como mapas e editores. Use a variante de largura total.
+
+## Tamanhos
+
+| Tamanho | Quando usar |
+| --- | --- |
+| `sm` | Conteúdo de leitura e formulários estreitos. |
+| `md` | Páginas de conteúdo intermediárias. |
+| `lg` (padrão) | Páginas de conteúdo e painéis. |
+| `full` | Largura total, sem limite. |
+
+<ComponentEmbed component="Container" variant="sm" />
+
+<ComponentEmbed component="Container" variant="full" />
+
+## Opções
+
+O `padding` define o respiro lateral (padrão 32) e `center` controla a centralização.
+
+## Relacionados
+
+- [Grid](../grid/index.mdx): colunas dentro do Container.
+- [Center](../center/index.mdx): centralização de um item.
+- [Box](../box/index.mdx).

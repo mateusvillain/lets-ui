@@ -1,0 +1,45 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escolha boas imagens
+
+- Use imagens que **agregam informação**, não só enfeite.
+- Mantenha a mesma proporção em imagens do mesmo conjunto (todas 16:9, por exemplo).
+- Garanta qualidade em telas de alta densidade, com versões em duas vezes o tamanho exibido.
+
+<DosDonts variant="do" title="Reservar o espaço">
+  Defina a proporção para que a página não "pule" quando a imagem carregar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Esticar ou distorcer">
+  Mudar a proporção da imagem para caber no espaço. Use `fit="cover"` para recortar com cuidado, ou ajuste o enquadramento da imagem.
+</DosDonts>
+
+## Texto alternativo
+
+Toda imagem de conteúdo precisa de `alt`: uma descrição curta do que ela **comunica**, não do que ela é.
+
+| Imagem | Alt ruim | Alt bom |
+| --- | --- | --- |
+| Gráfico de vendas | "Gráfico" | "Vendas subiram 20% em março" |
+| Foto de produto | "Imagem" | "Tênis de corrida azul, de lado" |
+| Imagem puramente decorativa | "Fundo azul" | (vazio: `alt=""`) |
+
+## Legenda
+
+Use legenda quando houver informação complementar: autoria, local, data, descrição. Evite legendas que repetem o `alt`.
+
+## Carregamento
+
+- Imagens **abaixo da dobra** carregam de forma preguiçosa (padrão).
+- A imagem **principal** da página, que aparece logo no topo, deve carregar de imediato (`loading="eager"`).
+- Escolha uma **cor de fallback** próxima da imagem, para o espaço não parecer vazio.
+- Ofereça uma imagem alternativa (`fallback-src`) para casos importantes.
+
+## Boas práticas
+
+- Otimize o peso dos arquivos e use formatos modernos.
+- Use `as="picture"` quando precisar de versões diferentes para tamanhos de tela distintos.
+- Não coloque texto importante dentro da imagem. Ele não é lido por leitores de tela nem se adapta ao idioma.

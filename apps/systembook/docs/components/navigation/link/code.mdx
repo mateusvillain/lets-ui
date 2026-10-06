@@ -1,0 +1,105 @@
+---
+title: "Code"
+order: 4
+---
+
+Aplica a cor semântica `text(link)`, remove o sublinhado padrão e o restaura no hover. No estado `:visited` usa `text(link-visited)`. O foco é gerenciado via `@include focus-ring(primary)`, garantindo conformidade com WCAG 2.1 AA.
+
+## Nova aba
+
+Use `target="_blank"` para abrir o link em uma nova aba. O atributo `rel` é automaticamente definido como `noopener noreferrer` neste caso, por segurança.
+
+## Link externo
+
+Use o atributo booleano `external` para exibir um ícone indicativo de link externo ao lado do texto. Ao aplicá-lo, `target="_blank"` e `rel="noopener noreferrer"` são definidos automaticamente — não é necessário declará-los.
+
+## Download
+
+Use `download` para que o navegador baixe o arquivo ao invés de navegar para ele. O valor do atributo define o nome sugerido para o arquivo baixado.
+
+## Desabilitado
+
+Use `disabled` para impedir a navegação. O `href` é removido, `aria-disabled="true"` é adicionado e o elemento permanece focável via teclado (`tabindex="0"`).
+
+<ComponentEmbed component="Link" variant="disabled" />
+
+## Rastreamento de visita
+
+Por padrão, o estilo `:visited` não é aplicado — evitando que o histórico de navegação do usuário altere a aparência do link sem intenção explícita. Use `track-visited` para habilitar a mudança de cor após o link ter sido visitado.
+
+Isso é útil em contextos como listas de artigos, resultados de busca ou menus de navegação, onde sinalizar visualmente o que já foi acessado melhora a orientação do usuário.
+
+## Com aria-label
+
+Use `aria-label` quando o texto visível do link não descreve o destino com clareza para tecnologias assistivas. Casos comuns:
+
+- Textos genéricos como "saiba mais", "clique aqui" ou "leia mais" que só fazem sentido com o contexto visual ao redor
+- Links com apenas ícone ou imagem como conteúdo, sem texto legível
+- Múltiplos links com o mesmo texto em uma mesma página, mas com destinos diferentes
+
+O valor deve descrever o destino ou a ação, não repetir o texto visível. Prefira "Leia mais sobre acessibilidade" a "Leia mais".
+
+## Classe CSS (sem Web Component)
+
+A estilização de link está disponível diretamente via classe CSS `.link` em qualquer tag `<a>`, sem necessidade de usar o web component `<lui-link>`.
+
+## Uso
+
+### Web Component
+
+```html
+<!-- Link padrão -->
+<lui-link label="Saiba mais" href="/sobre"></lui-link>
+
+<!-- Abrir em nova aba (rel adicionado automaticamente) -->
+<lui-link href="https://example.com" target="_blank">
+  Documentação
+</lui-link>
+
+<!-- Link externo com ícone -->
+<lui-link href="https://example.com" target="_blank" external>
+  Documentação externa
+</lui-link>
+
+<!-- Download -->
+<lui-link href="/assets/guia.pdf" download="guia-design-system.pdf">
+  Baixar guia
+</lui-link>
+
+<!-- Com aria-label personalizado -->
+<lui-link
+  label="Leia mais"
+  href="/acessibilidade"
+  aria-label="Leia mais sobre acessibilidade"
+></lui-link>
+
+<!-- Desabilitado -->
+<lui-link href="/sobre" disabled>Link desabilitado</lui-link>
+```
+
+### Classe CSS
+
+```html
+<!-- Link inline em texto -->
+<p>
+  Acesse a
+  <a class="link" href="/termos">política de privacidade</a>.
+</p>
+```
+
+## Atributos
+
+| Atributo         | Tipo      | Default  | Descrição |
+|------------------|-----------|----------|-----------|
+| `href`           | `string`  | `#`      | URL de destino |
+| `label`          | `string`  | —        | Texto do link (alternativa ao slot) |
+| `size`           | `string`  | —        | Tamanho do texto: `lg`, `md`, `sm`. Herda o `font-size` do contexto quando omitido |
+| `target`         | `string`  | `_self`  | Contexto de abertura (`_self`, `_blank`, `_parent`, `_top`) |
+| `rel`            | `string`  | —        | Relação do link. Quando `target="_blank"`, assume `noopener noreferrer` automaticamente |
+| `download`       | `string`  | —        | Nome sugerido do arquivo ao baixar |
+| `hreflang`       | `string`  | —        | Idioma do documento de destino |
+| `referrerpolicy` | `string`  | —        | Política de referrer enviada na requisição |
+| `external`       | `boolean` | `false`  | Exibe ícone de link externo ao lado do texto. Implica `target="_blank"` e `rel="noopener noreferrer"` automaticamente |
+| `visited`        | `boolean` | `false`  | Habilita o estilo `:visited` após o link ser clicado |
+| `disabled`       | `boolean` | `false`  | Desabilita a navegação: remove `href`, adiciona `aria-disabled="true"` e mantém o elemento focável |
+| `aria-label`     | `string`  | —        | Label acessível para leitores de tela |

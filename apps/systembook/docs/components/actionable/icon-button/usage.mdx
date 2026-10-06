@@ -1,0 +1,39 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Escolha ícones reconhecíveis
+
+Use as metáforas que as pessoas já conhecem: lixeira para excluir, lápis para editar, lupa para buscar, três pontos para mais opções.
+
+<DosDonts variant="do" title="Um ícone, um significado">
+  Use o mesmo ícone para a mesma ação em todo o produto. Quem aprendeu o lápis para "Editar" não precisa reaprender na tela seguinte.
+</DosDonts>
+
+<DosDonts variant="dont" title="Ícones ambíguos ou inventados">
+  Um ícone sem convenção obriga a pessoa a clicar para descobrir o que ele faz. Se há dúvida, use texto.
+</DosDonts>
+
+## Sempre dê um nome
+
+Sem texto visível, o nome da ação só existe para leitores de tela, e vem do `aria-label`. Ele é **obrigatório**.
+
+- Descreva a **ação**, não a imagem: "Excluir", não "Lixeira".
+- Em listas, inclua o alvo: "Excluir arquivo relatorio.pdf".
+
+## Ajude com um tooltip
+
+Em ações menos óbvias, combine o Icon Button com um [Tooltip](../../content/tooltip/index.mdx). O tooltip revela o nome ao passar o mouse e ao focar pelo teclado, e ajuda quem está aprendendo a interface.
+
+## Espaçamento e agrupamento
+
+- Mantenha pelo menos 8px entre Icon Buttons vizinhos para evitar toques errados.
+- Agrupe ações relacionadas e separe grupos diferentes com um [Divider](../../layout/divider/index.mdx).
+- Se houver mais de três ou quatro ações, agrupe as menos usadas em um [Dropdown Menu](../dropdown-menu/index.mdx).
+
+## Boas práticas
+
+- Use ícones do mesmo estilo, espessura e tamanho em toda a interface.
+- Não misture Icon Buttons e Buttons com texto na mesma linha de ações sem necessidade.
+- Evite ações destrutivas só com ícone: peça confirmação ou ofereça "Desfazer".

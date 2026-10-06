@@ -1,0 +1,31 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Lateral no início ou no fim
+
+- **Início** para navegação e filtros, que a pessoa usa antes de ler o conteúdo.
+- **Fim** para informações de apoio: resumo, metadados, ajuda.
+
+<DosDonts variant="do" title="Lateral para apoio e navegação">
+  Filtros à esquerda e resultados à direita. O conteúdo principal ocupa o espaço restante.
+</DosDonts>
+
+<DosDonts variant="dont" title="Lateral competindo com o conteúdo">
+  Uma lateral muito larga ou cheia de informação. O conteúdo principal fica espremido.
+</DosDonts>
+
+## Largura
+
+Escolha `side-width` pelo **conteúdo da lateral**: de 200 a 320px atende à maioria. Garanta que os textos mais longos caibam sem quebrar demais.
+
+## Comportamento em telas pequenas
+
+Quando o conteúdo não tem espaço mínimo (`content-min-width`), as áreas **empilham**. Pense na ordem: no celular, a lateral vem **antes** do conteúdo (se `side="start"`). Se a lateral for longa, considere escondê-la atrás de um botão.
+
+## Boas práticas
+
+- Dê rolagem independente a laterais longas com uma [Scroll Area](../scroll-area/index.mdx).
+- Mantenha a lateral consistente entre as páginas do produto.
+- Em laterais de navegação, destaque a página atual.

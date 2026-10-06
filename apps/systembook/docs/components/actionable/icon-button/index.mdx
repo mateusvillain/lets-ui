@@ -1,0 +1,41 @@
+---
+title: "Icon Button"
+subtitle: "Botão compacto que mostra só um ícone. Economiza espaço quando a ação é reconhecível sem texto."
+order: 2
+---
+
+<ComponentEmbed component="IconButton" variant="md" />
+
+## Quando usar
+
+Use o Icon Button em ações **universalmente reconhecíveis**, em espaços onde um botão com texto não cabe: barras de ferramentas, linhas de tabela, cabeçalhos de cards e controles de mídia.
+
+Bons candidatos: fechar, editar, excluir, copiar, mais opções, buscar, voltar.
+
+## Quando não usar
+
+- **Ações que o ícone não explica sozinho.** Se a pessoa precisa adivinhar o que o ícone faz, use um [Button](../button/index.mdx) com texto.
+- **A ação principal da tela.** Ações importantes merecem rótulo visível.
+- **Fechar um modal, drawer ou alert.** O [Close Button](../close-button/index.mdx) já traz o ícone e o nome acessível prontos.
+
+## Anatomia
+
+1. **Container**: define a área de toque e o estado visual.
+2. **Ícone**: SVG de 24px, que herda a cor do texto.
+
+## Tamanhos
+
+| Tamanho | Medida | Uso |
+| --- | --- | --- |
+| `lg` | 40px | Áreas com espaço, cabeçalhos, controles principais. |
+| `md` (padrão) | 32px | Toolbars, tabelas e layouts compactos. |
+
+## Estados
+
+Padrão, hover, foco, pressed e disabled, com o mesmo comportamento do [Button](../button/index.mdx). O estado desabilitado indica que a ação não está disponível agora.
+
+## Relacionados
+
+- [Button](../button/index.mdx): ação com rótulo.
+- [Close Button](../close-button/index.mdx): fechar e dispensar.
+- [Tooltip](../../content/tooltip/index.mdx): explica o ícone ao passar o mouse ou focar.

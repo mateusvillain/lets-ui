@@ -1,0 +1,41 @@
+---
+title: "Pagination"
+subtitle: "Divide um conjunto grande de itens em páginas e permite navegar entre elas."
+order: 4
+---
+
+<ComponentEmbed component="Pagination" variant="default" />
+
+## Quando usar
+
+Use a Pagination para **listas e tabelas longas** em que a pessoa precisa localizar ou voltar a um ponto específico: resultados de busca, tabelas de dados, listagens administrativas.
+
+## Quando não usar
+
+- **Feeds contínuos** de rolagem, como redes sociais. Use rolagem infinita ou um botão "Carregar mais".
+- **Poucos itens.** Se cabem em uma tela, mostre todos.
+- **Conteúdo sequencial**, como as etapas de um fluxo. Use um indicador de passos.
+
+## Anatomia
+
+1. **Página anterior**: botão com seta.
+2. **Números de página**: cada um leva a uma página.
+3. **Página atual**: destacada visualmente.
+4. **Reticências**: indicam páginas omitidas.
+5. **Próxima página**: botão com seta.
+
+## Comportamento
+
+- A **primeira** e a **última** página ficam sempre visíveis.
+- A página atual mantém algumas vizinhas de cada lado, e cada lacuna vira reticências.
+- A lista mantém sempre o **mesmo número de itens**, para que os botões não mudem de lugar enquanto a pessoa navega.
+- Os botões de anterior e próxima ficam desabilitados na primeira e na última página.
+- Em telas estreitas, a quantidade de vizinhas é reduzida.
+
+<ComponentEmbed component="Pagination" variant="few-pages" />
+
+## Relacionados
+
+- [Table](../../content/table/index.mdx): o lugar mais comum para paginar.
+- [Select](../../form-and-options/select/index.mdx): controla quantos itens aparecem por página.
+- [Button](../../actionable/button/index.mdx): "Carregar mais".

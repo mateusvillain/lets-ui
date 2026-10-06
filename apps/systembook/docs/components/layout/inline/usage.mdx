@@ -1,0 +1,30 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Grupos de ações
+
+Em um grupo de botões, use `gap` de 8 ou 16 para que cada botão tenha área própria. Alinhe ao fim em formulários e diálogos, com `justify="end"`.
+
+## Grupos de tags e filtros
+
+O Inline é a escolha certa para tags e filtros porque **quebra de linha** sozinho quando o espaço acaba, sem estourar o contêiner.
+
+<DosDonts variant="do" title="Deixar quebrar">
+  Tags que passam para a linha de baixo quando faltam espaço. Nada fica cortado.
+</DosDonts>
+
+<DosDonts variant="dont" title="Forçar uma linha só sem rolagem">
+  Desligar a quebra com muitos itens cortaria conteúdo ou geraria rolagem horizontal inesperada.
+</DosDonts>
+
+## Espaço entre linhas
+
+Quando os itens quebram, use `gap-y` menor que `gap-x` para as linhas ficarem coesas, mas sem encostar.
+
+## Boas práticas
+
+- Mantenha os itens com a mesma altura sempre que possível.
+- Em barras de ações, deixe a ação primária por último.
+- Para elementos de largura muito diferente, teste com os textos mais longos.

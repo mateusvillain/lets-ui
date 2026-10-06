@@ -1,0 +1,107 @@
+---
+title: "Typography"
+subtitle: "Sistema tipográfico do design system. As escalas compostas combinam família, tamanho, peso e capitalização — use a função SCSS `font-scale($name)` ou a classe CSS `.{name}`."
+order: 2
+---
+
+## Como a tipografia funciona
+
+A tipografia organiza o conteúdo em **níveis de importância**. Cada escala junta família, tamanho, peso e capitalização em um papel único: "título", "corpo", "legenda".
+
+Use as escalas pelos componentes [Heading](../../components/typography/heading/index.mdx) e [Body](../../components/typography/body/index.mdx), ou pelas classes e funções do sistema. Não monte combinações novas de tamanho e peso.
+
+## Princípios
+
+- **Hierarquia clara.** O tamanho e o peso dizem o que é mais importante. Poucos níveis por tela já bastam.
+- **Legibilidade em primeiro lugar.** Linhas de 45 a 75 caracteres, espaço entre linhas confortável e contraste suficiente.
+- **Consistência.** O mesmo papel usa sempre a mesma escala.
+- **Fluida.** Os tamanhos se adaptam entre telas pequenas e grandes, sem breakpoints a mais.
+
+## Qual escala usar?
+
+| Para... | Use |
+| --- | --- |
+| Destaque de marketing, primeira dobra | `display` |
+| Título da página | `title` |
+| Introdução, subtítulo | `subtitle` |
+| Título de seção | `headline` |
+| Título de bloco ou card | `block-title` |
+| Rótulo acima do título | `overtitle` |
+| Texto corrido | `body--lg` ou `body--md` |
+| Legenda, nota, texto auxiliar | `body--sm` |
+
+<DosDonts variant="do" title="Hierarquia com poucos níveis">
+  Um título, um subtítulo e o corpo. A pessoa sabe por onde começar a ler.
+</DosDonts>
+
+<DosDonts variant="dont" title="Muitos tamanhos e pesos">
+  Misturar cinco tamanhos e três pesos em um mesmo bloco. A hierarquia some, e a leitura cansa.
+</DosDonts>
+
+## Escalas Compostas
+
+Cada escala define um papel tipográfico completo. A classe CSS correspondente pode ser aplicada diretamente no HTML.
+
+| name | className | weight | size | use |
+| --- | --- | --- | --- | --- |
+| display | display | Light | 3xl | Herói, banners de destaque |
+| title | title | Bold | 2xl | Título de página |
+| headline | headline | Semibold | 1xl | Cabeçalho de seção |
+| subtitle | subtitle | Regular | lg | Subtítulo, lead |
+| block-title | block-title | Medium | md | Título de bloco ou card |
+| subheadline | subheadline | Regular | sm | Cabeçalho de grupo menor |
+| overtitle | overtitle | Medium | 3xs | Rótulo acima do título (UPPERCASE) |
+| body--lg | body--lg | Regular | 1xs | Corpo de texto padrão |
+| body--md | body--md | Regular | 2xs | Texto secundário |
+| body--sm | body--sm | Regular | 3xs | Legenda, auxiliar |
+
+## Tamanhos de Fonte
+
+Escala fluida com `clamp()` — os tamanhos se adaptam proporcionalmente entre os breakpoints mínimo e máximo.
+
+| token | var | min | max |
+| --- | --- | --- | --- |
+| 3xs | --lui-brand-typography-font-size-3xs | 0.691rem | 0.694rem |
+| 2xs | --lui-brand-typography-font-size-2xs | 0.778rem | 0.833rem |
+| 1xs | --lui-brand-typography-font-size-1xs | 0.875rem | 1rem |
+| sm | --lui-brand-typography-font-size-sm | 0.984rem | 1.2rem |
+| md | --lui-brand-typography-font-size-md | 1.107rem | 1.44rem |
+| lg | --lui-brand-typography-font-size-lg | 1.246rem | 1.728rem |
+| 1xl | --lui-brand-typography-font-size-1xl | 1.402rem | 2.074rem |
+| 2xl | --lui-brand-typography-font-size-2xl | 1.577rem | 2.488rem |
+| 3xl | --lui-brand-typography-font-size-3xl | 2.245rem | 4.3rem |
+
+## Pesos Tipográficos
+
+| label | token | value |
+| --- | --- | --- |
+| Light | --lui-typography-weight-light | 300 |
+| Regular | --lui-typography-weight-regular | 400 |
+| Medium | --lui-typography-weight-medium | 500 |
+| Semibold | --lui-typography-weight-semibold | 600 |
+| Bold | --lui-typography-weight-bold | 700 |
+
+## Alturas de Linha
+
+| Token | Valor | Uso |
+| --- | --- | --- |
+| `--lui-brand-typography-line-height-heading` | 1.2 | Heading |
+| `--lui-brand-typography-line-height-body` | 1.5 | Body |
+
+## Famílias Tipográficas
+
+Ambas as famílias utilizam a pilha de fontes do sistema operacional (`system font stack`), garantindo leitura nativa e sem dependências externas.
+
+| Token | Uso |
+| --- | --- |
+| `--lui-brand-typography-font-family-heading` | Títulos |
+| `--lui-brand-typography-font-family-body` | Texto corrido |
+
+## Boas práticas
+
+- Use **um** título principal (`title`) por página, e não pule níveis de título.
+- Prefira **peso** a **caixa alta** para dar ênfase. Caixa alta fica restrita ao `overtitle`.
+- **Alinhe à esquerda** (em idiomas da esquerda para a direita) em textos longos.
+- Evite textos menores que `body--sm` e use o `sm` só para conteúdo secundário.
+- Teste com o texto **ampliado em 200%**: nada pode ser cortado.
+- Os pesos são `light` a `bold`. Use `regular` para leitura e `semibold` ou `bold` para ênfase.

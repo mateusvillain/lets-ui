@@ -1,0 +1,44 @@
+---
+title: "Switch"
+subtitle: "Liga ou desliga uma configuração, com efeito imediato."
+order: 6
+---
+
+<ComponentEmbed component="Switch" variant="off" />
+
+## Quando usar
+
+Use o Switch para **ativar ou desativar** algo que passa a valer **na hora**, sem precisar de um botão "Salvar": notificações, modo escuro, recursos opcionais.
+
+## Quando não usar
+
+- **Escolhas que só valem ao enviar um formulário.** Use o [Checkbox](../checkbox/index.mdx).
+- **Escolher entre duas opções com nomes diferentes** (como "Mensal" ou "Anual"). Use o [Radio Group](../radio-group/index.mdx).
+- **Selecionar vários itens de uma lista.** Use Checkboxes.
+
+## Anatomia
+
+1. **Trilho**: a base do controle.
+2. **Marcador**: o círculo que desliza. Sua posição mostra o estado.
+3. **Label**: descreve o que o Switch controla.
+
+## Estados
+
+| Estado | Descrição |
+| --- | --- |
+| **Desligado** | O recurso está desativado. |
+| **Ligado** | O recurso está ativo. |
+| **Foco** | Anel de foco ao navegar por teclado. |
+| **Erro** | O estado ligado é obrigatório e não foi ativado. |
+| **Desabilitado** | O controle não pode ser alterado agora. |
+
+<ComponentEmbed component="Switch" variant="on" />
+
+## Tamanhos
+
+`lg` (padrão) e `md`.
+
+## Relacionados
+
+- [Checkbox](../checkbox/index.mdx): opção que só vale ao enviar o formulário.
+- [Radio Group](../radio-group/index.mdx): escolher entre opções nomeadas.

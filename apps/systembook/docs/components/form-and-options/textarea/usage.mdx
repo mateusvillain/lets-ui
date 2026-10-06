@@ -1,0 +1,36 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Tamanho e altura
+
+- Defina a altura inicial pelo tamanho esperado: **2 a 3 linhas** para um comentário curto, **5 ou mais** para um texto longo.
+- Mantenha `resize` vertical (padrão), para que a pessoa possa ampliar sem quebrar a largura do layout.
+- Use `resize="none"` apenas quando o contêiner exigir tamanho fixo.
+
+## Contador de caracteres
+
+Ative `maxlength` apenas quando houver um **limite real** de armazenamento ou de exibição. O contador mostra quanto resta e evita surpresas.
+
+<DosDonts variant="do" title="Limite claro e visível">
+  O contador "42/160" aparece enquanto a pessoa digita. Ela sabe quanto ainda pode escrever.
+</DosDonts>
+
+<DosDonts variant="dont" title="Cortar o texto em silêncio">
+  Impedir a digitação sem avisar, ou truncar o texto depois do envio, faz a pessoa perder o que escreveu.
+</DosDonts>
+
+## Label, hint e erros
+
+As regras são as do [Input](../input/index.mdx): label sempre visível, hint para formato e limites, e mensagem de erro específica que diz como corrigir.
+
+- Em campos longos, use o hint para sugerir **o que escrever**: "Descreva o problema e o que você esperava que acontecesse."
+- Evite placeholders longos. Eles somem quando a pessoa começa a digitar.
+
+## Boas práticas
+
+- Não limite o tamanho sem necessidade. Limites curtos frustram.
+- Preserve o que a pessoa digitou se houver erro no envio.
+- Não valide a cada tecla. Valide ao sair do campo ou ao enviar.
+- Para texto muito longo, considere salvar rascunhos automaticamente.

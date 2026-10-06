@@ -1,0 +1,31 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Padrões comuns
+
+| Necessidade | Combinação |
+| --- | --- |
+| Título à esquerda e ações à direita | `justify="space-between"`, `align="center"` |
+| Centralizar um item nos dois eixos | `justify="center"`, `align="center"` |
+| Um item que ocupa o espaço que sobra | `grow="1"` no item |
+| Rodapé empurrado para o fim | Coluna com `grow="1"` no corpo |
+
+<DosDonts variant="do" title="Deixar um item crescer">
+  Em uma linha com um campo de busca e um botão, dê `grow` ao campo. Ele ocupa o espaço que sobrar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Larguras fixas em pixels">
+  Definir larguras fixas para os itens quebra em telas menores. Use `basis` e `grow` para se adaptar.
+</DosDonts>
+
+## Responsividade
+
+O Flex não muda sozinho conforme a tela. Para alternar entre linha e coluna de acordo com o espaço, use o [Switcher](../switcher/index.mdx).
+
+## Boas práticas
+
+- Não use margens para espaçar. Use `gap`.
+- Evite aninhar muitos Flex: se precisar de mais de dois níveis, reveja a estrutura.
+- Teste com textos longos e curtos para ver como o alinhamento reage.

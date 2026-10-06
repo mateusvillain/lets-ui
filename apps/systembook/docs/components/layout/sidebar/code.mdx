@@ -1,0 +1,38 @@
+---
+title: "Code"
+order: 4
+---
+
+## Sidebar on End
+
+<ComponentEmbed component="Sidebar" variant="end" />
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `side` | `string` | `start` |
+| `side-width` | `string` | `240px` |
+| `content-min-width` | `string` | `50%` |
+| `gap` | `string` | `24` |
+| `align` | `string` | `stretch` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-sidebar side="start" side-width="240px" content-min-width="50%" gap="lg" align="stretch">
+  <div slot="sidebar">Navegação ou metadados</div>
+  <div slot="content">Conteúdo principal</div>
+</lui-sidebar>
+```
+
+### Classe CSS
+
+```html
+<div class="sidebar sidebar--gap-md">
+  <div class="sidebar__side">Sidebar (240px)</div>
+  <div class="sidebar__content">Conteúdo principal</div>
+</div>
+```

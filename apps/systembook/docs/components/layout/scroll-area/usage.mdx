@@ -1,0 +1,40 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Sinalize que há mais conteúdo
+
+Uma região rolável precisa **parecer rolável**. Use `fade` ou `scroll-shadow`, ou mantenha a barra visível (`scrollbar-visibility="always"`).
+
+<DosDonts variant="do" title="Indicar o conteúdo oculto">
+  Um gradiente no fim da lista mostra que há mais itens abaixo.
+</DosDonts>
+
+<DosDonts variant="dont" title="Esconder a barra sem pistas">
+  Barra oculta e sem indicadores: a pessoa não percebe que pode rolar e perde conteúdo.
+</DosDonts>
+
+## Fade ou sombra?
+
+- Use `fade` quando o fundo é a cor da superfície do sistema.
+- Use `scroll-shadow` em fundos diferentes, porque funciona sobre qualquer cor.
+- Se precisar mudar a cor do fade, use a propriedade de cor própria do componente.
+
+## Encaixe (snap)
+
+Em carrosséis, use `snap` para a rolagem parar no início de cada item. Defina o alinhamento (`snap-align`): início, centro ou fim.
+
+## Rolagem encadeada
+
+Em painéis e menus flutuantes, use `overscroll="contain"` para que a rolagem **não passe** para a página ao chegar ao limite.
+
+## Altura
+
+Defina a altura (`height` ou `max-height`) para a região rolar. Prefira `max-height` quando o conteúdo pode ser curto, para o espaço se ajustar.
+
+## Boas práticas
+
+- Evite rolagem aninhada (rolagem dentro de rolagem).
+- Não use rolagem horizontal para conteúdo essencial, como botões principais.
+- Nomeie a região para leitores de tela quando ela tiver um significado próprio.

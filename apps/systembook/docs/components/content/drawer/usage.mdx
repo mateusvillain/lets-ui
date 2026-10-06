@@ -1,0 +1,43 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Drawer ou Modal?
+
+| Se... | Use |
+| --- | --- |
+| a pessoa precisa **consultar a página** enquanto trabalha | Drawer |
+| o conteúdo é mais **longo** (formulário, detalhes) | Drawer |
+| é uma **confirmação ou decisão curta** | Modal |
+| a tarefa **bloqueia** todo o resto | Modal |
+
+## Título e ações
+
+- O título descreve **o conteúdo ou a tarefa**: "Detalhes do pedido", "Editar perfil".
+- Posicione a ação principal no **rodapé**, à direita, e a secundária ("Cancelar") ao lado.
+- Use verbos no rótulo dos botões: "Salvar alterações", em vez de "OK".
+
+<DosDonts variant="do" title="Contexto preservado">
+  Abra o Drawer a partir de uma linha da tabela. A pessoa edita sem perder o lugar na lista.
+</DosDonts>
+
+<DosDonts variant="dont" title="Drawer dentro de Drawer">
+  Abrir um painel sobre outro painel desorienta. Reorganize o fluxo ou use uma página própria.
+</DosDonts>
+
+## Fechar pelo backdrop
+
+Por padrão, clicar fora do painel **não fecha**. Habilite `close-on-backdrop` apenas quando o descarte acidental não tiver custo, como em um painel só de leitura. Em formulários, deixe o fechamento explícito, para a pessoa não perder o que digitou.
+
+## Conteúdo
+
+- Mantenha o conteúdo **focado em uma tarefa**.
+- Deixe o corpo rolar, e o cabeçalho e o rodapé fixos.
+- Se houver alterações não salvas, confirme antes de fechar.
+
+## Boas práticas
+
+- Não abra o Drawer automaticamente ao carregar a página.
+- Use o mesmo tamanho para Drawers parecidos.
+- Em telas pequenas, o Drawer ocupa a largura toda: pense na versão mobile.

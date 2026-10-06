@@ -1,0 +1,39 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Conteúdo
+
+- **Curto**: uma frase ou, melhor, poucas palavras.
+- **Só texto**: sem links, botões ou formatação.
+- **Complementar**: o Tooltip ajuda, mas a interface precisa funcionar sem ele.
+
+<DosDonts variant="do" title="Nome da ação em um ícone">
+  Um Icon Button de lixeira com o tooltip "Excluir". A pessoa confirma o que o ícone faz.
+</DosDonts>
+
+<DosDonts variant="dont" title="Esconder informação essencial">
+  Colocar regras de preenchimento ou avisos importantes só em um Tooltip. Quem usa toque ou teclado pode nunca vê-los.
+</DosDonts>
+
+## Quando ele aparece
+
+- Ao **passar o mouse** e ao **focar com o teclado**.
+- Desaparece quando o mouse ou o foco saem do elemento.
+
+## Posição
+
+- Prefira `top` ou `bottom`.
+- Garanta que o balão **caiba na tela**, sem cortar nas bordas.
+- Não cubra o próprio gatilho nem controles vizinhos.
+
+## Tooltip e mobile
+
+Em telas de toque, **não dependa do Tooltip**. Mostre o texto direto na interface, ou use um rótulo visível.
+
+## Boas práticas
+
+- Não coloque um Tooltip em elementos que já têm texto claro.
+- Mantenha o mesmo estilo de texto em todos os Tooltips: sem pontuação final em frases curtas.
+- Não use Tooltips em elementos desabilitados sem explicar o motivo de outra forma.

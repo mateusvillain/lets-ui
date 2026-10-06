@@ -1,0 +1,19 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+O Shortcut apenas **exibe** o atalho: não recebe foco e não aciona nada. O atalho precisa ser implementado na aplicação.
+
+## Leitor de tela
+
+- Cada tecla é marcada como tecla de teclado (`kbd`), e a combinação forma um grupo com nome, como "Ctrl + K", lido de uma vez.
+- Use `aria-label` para trocar o nome lido quando os símbolos (como `⌘`) forem pronunciados mal.
+
+## Para designers
+
+- Atalhos de uma só tecla (sem modificador) podem ser **desligados ou remapeados** pelas pessoas, conforme o WCAG 2.1.4. Planeje essa opção.
+- Mostre o atalho junto da ação no texto, para quem usa leitor de tela encontrá-lo.
+- Não dependa de atalhos como única forma de realizar uma ação.

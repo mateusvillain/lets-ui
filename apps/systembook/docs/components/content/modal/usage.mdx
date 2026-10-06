@@ -1,0 +1,45 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Use com moderação
+
+O Modal **interrompe** a pessoa. Cada uso custa atenção. Antes de criar um, pergunte se a informação poderia aparecer na própria página.
+
+## Título e conteúdo
+
+- O título diz **o que está sendo pedido**, em forma de pergunta ou ação: "Excluir este projeto?"
+- O corpo explica a consequência em poucas linhas.
+- Evite rolar. Se o conteúdo é longo, use uma página ou um Drawer.
+
+<DosDonts variant="do" title="Consequência clara">
+  "Excluir o projeto 'Site novo'? Isso remove 24 arquivos e não pode ser desfeito."
+</DosDonts>
+
+<DosDonts variant="dont" title="Pergunta vaga">
+  "Tem certeza?" Sem dizer do quê, a pessoa precisa adivinhar o efeito do botão.
+</DosDonts>
+
+## Botões
+
+- Coloque a **ação principal à direita** e a secundária ("Cancelar") ao lado.
+- Use **verbos específicos** nos botões: "Excluir projeto" e "Cancelar", em vez de "Sim" e "Não".
+- Em ações destrutivas, use o botão `danger` e não o deixe em foco inicial por engano.
+- Sempre ofereça uma saída clara.
+
+## Abrir e fechar
+
+- Abra o Modal **só a partir de uma ação da pessoa**, nunca ao carregar a página.
+- Ofereça sempre o botão de fechar e permita `Esc`.
+- Não empilhe um Modal sobre outro.
+
+## Conteúdo e formulários
+
+Em formulários curtos, deixe o foco no primeiro campo. Valide ao enviar e mantenha o Modal aberto se houver erro, mostrando as mensagens.
+
+## Boas práticas
+
+- Dê ao Modal um título sempre. Ele é o nome que leitores de tela anunciam.
+- Mantenha o tamanho consistente em Modais parecidos.
+- Nunca use Modal para publicidade ou avisos que não exigem decisão.

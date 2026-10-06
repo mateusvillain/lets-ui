@@ -1,0 +1,59 @@
+---
+title: "Code"
+order: 4
+---
+
+## Without Actions
+
+Omit the `actions` slot to render a modal with no footer.
+
+## Custom Trigger
+
+Slot any element with `slot="trigger"` to replace the default trigger button.
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `title` | `string` | `Modal title` |
+| `size` | `string` | `md` |
+| `open` | `boolean` | `false` |
+| `trigger-label` | `string` | `Open modal` |
+| `close-label` | `string` | `Close modal` |
+| `hide-trigger` | `boolean` | `false` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-modal title="Título" size="md" trigger-label="Open modal">
+  <p>Conteúdo do modal</p>
+  <lui-button slot="actions" variant="secondary" label="Cancelar" data-modal-close></lui-button>
+  <lui-button slot="actions" label="Confirmar"></lui-button>
+</lui-modal>
+```
+
+### Textos acessíveis
+
+O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close modal"`). Troque-o para o idioma do projeto.
+
+```html
+<lui-modal title="Título" close-label="Fechar modal"></lui-modal>
+```
+
+### Classe CSS
+
+```html
+<div class="modal modal--md" role="dialog" aria-modal="true">
+  <div class="modal__header">
+    <span class="modal__title">Título</span>
+    <button class="modal__close" aria-label="Fechar">×</button>
+  </div>
+  <div class="modal__body">Conteúdo do modal</div>
+  <div class="modal__footer">
+    <button class="btn btn--secondary btn--lg">Cancelar</button>
+    <button class="btn btn--primary btn--lg">Confirmar</button>
+  </div>
+</div>
+```

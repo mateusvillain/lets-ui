@@ -1,0 +1,60 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Labels
+
+Todo campo precisa de uma **label visível**. Ela diz o que digitar e continua visível enquanto a pessoa escreve.
+
+<DosDonts variant="do" title="Label acima do campo, sempre visível">
+  "E-mail" fica no lugar o tempo todo. A pessoa nunca esquece o que o campo pede.
+</DosDonts>
+
+<DosDonts variant="dont" title="Placeholder no lugar da label">
+  O placeholder some ao digitar, tem pouco contraste e não é um nome confiável para leitores de tela. Use-o, no máximo, como exemplo de formato.
+</DosDonts>
+
+- Escreva labels **curtas**, com substantivos: "Nome completo", "CEP".
+- Capitalização de frase e sem dois-pontos no fim.
+
+## Hints
+
+Use o hint para dizer **o que a pessoa precisa saber antes de errar**: formato, limites, por que você pede o dado. Exemplo: "Use 8 caracteres ou mais, com letras e números."
+
+Prefira o hint a instruções dentro do placeholder.
+
+## Obrigatório ou opcional
+
+Marque o que é **opcional** com "(opcional)", em vez de marcar o que é obrigatório com asterisco. Na maior parte dos formulários, a maioria dos campos é obrigatória, e o aviso só precisa aparecer na exceção.
+
+## Mensagens de erro
+
+Uma boa mensagem diz **o que aconteceu e como corrigir**, em tom neutro e sem culpar a pessoa.
+
+<DosDonts variant="do" title="Específica e acionável">
+  "Digite um e-mail válido, como nome@empresa.com."
+</DosDonts>
+
+<DosDonts variant="dont" title="Vaga ou acusatória">
+  "Entrada inválida." ou "Você errou o e-mail." Não explicam o que corrigir.
+</DosDonts>
+
+- Mostre o erro **junto ao campo**, depois que a pessoa sair dele ou tentar enviar. Não antes de ela terminar de digitar.
+- A cor vermelha nunca deve ser o único sinal: a mensagem de texto é essencial.
+- Se houver vários erros, liste um resumo no topo do formulário e mantenha cada mensagem no seu campo.
+
+## Largura do campo
+
+Ajuste a largura ao conteúdo esperado. Um CEP não precisa ocupar a largura de um endereço. Isso ajuda a pessoa a antecipar o tamanho da resposta.
+
+## Prefixo e sufixo
+
+Use para unidades e símbolos fixos ("R$", "kg", "@"). Assim a pessoa não precisa digitá-los, e o valor continua limpo.
+
+## Boas práticas
+
+- Use o **tipo certo** (`email`, `tel`, `number`): o teclado do celular se adapta e a validação melhora.
+- Não bloqueie colar em campos, especialmente senhas.
+- Aceite formatos variados (espaços, pontos, hifens) e normalize depois, em vez de rejeitar.
+- Um formulário por vez: agrupe campos relacionados e mantenha uma coluna.

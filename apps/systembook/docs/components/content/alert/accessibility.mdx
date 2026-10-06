@@ -1,0 +1,34 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Leitor de tela
+
+O Alert é anunciado automaticamente quando aparece na página, sem exigir foco. O nível de urgência depende da variante:
+
+| Variante | Anúncio | Efeito |
+| --- | --- | --- |
+| `danger`, `caution` | **Assertivo** | Interrompe a leitura atual. |
+| `success`, `info` | **Educado** | Espera a leitura atual terminar. |
+
+- O título e o conteúdo são lidos juntos, como uma única mensagem.
+- O ícone é decorativo.
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Move o foco para o botão de fechar e para ações dentro do alerta. |
+| `Enter` ou `Espaço` | Ativa o botão em foco. |
+
+## Visual
+
+- O significado nunca depende só da cor: o ícone e o texto da mensagem reforçam a variante.
+- O texto tem contraste mínimo de 4,5:1 com o fundo do alerta.
+
+## Para designers
+
+- Escreva o título e o conteúdo de modo que façam sentido **lidos em voz alta**.
+- Defina o texto do botão de fechar no idioma do produto (`close-label`).
+- Use `danger` e `caution` somente para o que exige atenção, porque eles interrompem a leitura.

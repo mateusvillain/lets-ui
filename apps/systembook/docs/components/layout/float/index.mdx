@@ -1,0 +1,33 @@
+---
+title: "Float"
+subtitle: "Posiciona um elemento sobre outro, em um canto ou borda, como uma insígnia ou um indicador."
+order: 9
+---
+
+<ComponentEmbed component="Float" variant="top-end" />
+
+## Quando usar
+
+Use o Float para **sobrepor um elemento pequeno a outro**: um ponto de notificação sobre um ícone, uma insígnia de contagem sobre um avatar, um selo sobre uma imagem.
+
+## Quando não usar
+
+- **Organizar conteúdo em fluxo.** Use [Stack](../stack/index.mdx), [Inline](../inline/index.mdx) ou [Flex](../flex/index.mdx).
+- **Janelas e painéis flutuantes.** Use [Modal](../../content/modal/index.mdx), [Drawer](../../content/drawer/index.mdx) ou [Tooltip](../../content/tooltip/index.mdx).
+- **Conteúdo importante que não pode ser coberto.** O Float sobrepõe, então pode esconder o que está embaixo.
+
+## Posições
+
+Nove posições, combinando **topo, meio e base** com **início, centro e fim** (`placement`). O padrão é `bottom-end`.
+
+<ComponentEmbed component="Float" variant="bottom-end" />
+
+## Deslocamento
+
+`offset-x` e `offset-y` movem o elemento a partir da posição escolhida, em pixels. Use valores negativos para que ele "saia" do canto, como uma insígnia que ultrapassa o ícone.
+
+## Relacionados
+
+- [Avatar](../../content/avatar/index.mdx): indicador de status.
+- [Tag](../../content/tag/index.mdx): rótulos.
+- [Icon Button](../../actionable/icon-button/index.mdx): insígnias de contagem.

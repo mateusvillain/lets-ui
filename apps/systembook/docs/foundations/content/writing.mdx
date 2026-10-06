@@ -1,0 +1,94 @@
+---
+title: "Writing"
+subtitle: "As palavras são parte da interface. Estas orientações ajudam a escrever textos claros, consistentes e humanos."
+order: 1
+---
+
+## Voz e tom
+
+A **voz** do produto é constante: clara, direta e respeitosa. O **tom** muda conforme o momento.
+
+| Momento | Tom | Exemplo |
+| --- | --- | --- |
+| Tarefa comum | Neutro e objetivo | "Projeto criado." |
+| Primeiro uso | Acolhedor | "Crie seu primeiro projeto para começar." |
+| Sucesso | Positivo, sem exagero | "Alterações salvas." |
+| Erro | Sério, útil, sem culpa | "Não foi possível salvar. Verifique sua conexão e tente de novo." |
+| Ação destrutiva | Claro e direto | "Excluir 3 arquivos? Isso não pode ser desfeito." |
+
+Evite humor em erros e em perdas de dados.
+
+## Princípios
+
+- **Seja claro**: use palavras simples e frases curtas.
+- **Seja específico**: diga o que aconteceu e o que fazer.
+- **Seja breve**: corte tudo o que não ajuda a pessoa a decidir ou agir.
+- **Seja consistente**: use sempre o mesmo termo para a mesma coisa.
+- **Fale com a pessoa**: use a segunda pessoa ("você") e a voz ativa.
+- **Seja inclusivo**: use linguagem neutra e evite jargão, gírias e metáforas que não se traduzem.
+
+## Capitalização e pontuação
+
+- **Capitalização de frase** em tudo: títulos, botões, labels e menus ("Criar conta", não "Criar Conta").
+- **Sem ponto final** em títulos, labels, botões e itens de menu.
+- **Ponto final** em frases completas e em descrições de mais de uma frase.
+- Evite pontos de exclamação. Reserve-os para momentos realmente especiais.
+- Evite caixa alta em frases. O `overtitle` do [Heading](../../components/typography/heading/index.mdx) é a exceção de projeto.
+
+## Botões e ações
+
+O rótulo é um **verbo no infinitivo** que diz o resultado: "Salvar alterações", "Excluir projeto", "Enviar convite".
+
+- Use **até três palavras**.
+- Nomeie o que será afetado em ações destrutivas ("Excluir 3 arquivos").
+- Evite "OK", "Sim", "Não" e "Clique aqui".
+
+Veja [Button](../../components/actionable/button/usage.mdx).
+
+## Labels, hints e placeholders
+
+- **Label**: um substantivo curto que nomeia o campo ("Nome completo"). Sempre visível.
+- **Hint**: orientação que previne o erro ("Use 8 caracteres ou mais").
+- **Placeholder**: no máximo um exemplo de formato, nunca a label.
+
+Veja [Input](../../components/form-and-options/input/usage.mdx).
+
+## Mensagens de erro
+
+Uma boa mensagem de erro responde a três perguntas: **o que aconteceu**, **por quê** e **como resolver**.
+
+| Evite | Prefira |
+| --- | --- |
+| "Entrada inválida." | "Digite um e-mail válido, como nome@empresa.com." |
+| "Erro 500." | "Não foi possível carregar os dados. Tente de novo em instantes." |
+| "Você errou a senha." | "A senha está incorreta. Tente de novo ou redefina sua senha." |
+
+Não culpe a pessoa e não use termos técnicos como única explicação.
+
+## Estados vazios
+
+Explique **por que está vazio** e **o que fazer a seguir**. Veja [Empty State](../../components/content/empty-state/usage.mdx).
+
+## Confirmações e notificações
+
+- Diga o **resultado** depois da ação: "Convite enviado para ana@empresa.com".
+- Use o tempo verbal do resultado: "Arquivo excluído", não "Excluindo arquivo".
+- Mantenha mensagens temporárias curtas (veja [Toast](../../components/content/toast/usage.mdx)).
+
+## Números, datas e unidades
+
+- Siga o formato do **idioma e da região** da pessoa.
+- Mostre **unidades** junto do valor ("12 MB", "R$ 29,90") ou use prefixos e sufixos no campo.
+- Prefira datas por extenso em contextos que podem confundir ("5 de outubro de 2026").
+
+## Idiomas
+
+Os textos que os componentes geram por conta própria, como "Close", "Show password" ou "Page 3 of 20", são **em inglês por padrão**. Todos podem ser trocados por atributo. Defina esses textos no idioma do produto e verifique cada um deles ao usar o componente.
+
+Deixe espaço para textos mais longos: traduções costumam ocupar de 30% a 50% mais espaço.
+
+## Linguagem inclusiva
+
+- Use termos neutros quando o gênero da pessoa não importa.
+- Evite expressões que excluem ou estereotipam.
+- Descreva o que a imagem comunica no texto alternativo, sem presumir a aparência das pessoas.

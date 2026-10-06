@@ -1,0 +1,38 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Move o foco para o botão. |
+| `Enter` ou `Espaço` | Ativa o botão. |
+
+Botões desabilitados saem da ordem de tabulação. Em carregamento, o foco é mantido onde estava.
+
+## Leitor de tela
+
+- O nome acessível vem do rótulo. Se o rótulo for curto demais para dar contexto (como "Editar" em uma lista), complemente com `aria-label`: "Editar perfil de Ana Lima".
+- Durante o carregamento o botão é anunciado como ocupado (`aria-busy`).
+- Um botão com `href` é anunciado como **link**, porque é isso que ele é.
+
+## Cor e contraste
+
+- O sistema segue o WCAG 2.1 AA: texto com contraste de pelo menos 4,5:1 com o fundo, em todas as variantes e nos dois temas.
+- O significado nunca depende só da cor: o rótulo do botão `danger` continua dizendo "Excluir".
+
+## Foco
+
+O anel de foco aparece ao navegar com o teclado e deve ter contraste mínimo de 3:1 com o fundo. Nunca remova o contorno de foco.
+
+## Para designers
+
+- Escreva rótulos que façam sentido fora de contexto, porque leitores de tela listam todos os botões da página.
+- Mantenha a área de toque de pelo menos 24 × 24px, mesmo no tamanho `md`.
+- Não use botões apenas para navegar: use links.
+
+## Detalhes técnicos
+
+Detalhes de implementação, como `role="link"` em links desabilitados, estão na aba [Code](./code.mdx).

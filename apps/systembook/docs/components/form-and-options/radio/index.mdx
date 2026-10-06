@@ -1,0 +1,44 @@
+---
+title: "Radio"
+subtitle: "Opção individual de uma escolha exclusiva. Sempre usado dentro de um Radio Group."
+order: 3
+---
+
+<ComponentEmbed component="Radio" variant="unselected" />
+
+## Quando usar
+
+Use o Radio como parte de um [Radio Group](../radio-group/index.mdx), quando a pessoa precisa escolher **exatamente uma** opção entre duas a sete, e quer ver todas ao mesmo tempo.
+
+<Callout variant="info">
+  O Radio não vive sozinho. Para montar uma escolha completa, com título, dica e erro, use o [Radio Group](../radio-group/index.mdx), que organiza os Radios.
+</Callout>
+
+## Quando não usar
+
+- **Várias opções ao mesmo tempo.** Use o [Checkbox](../checkbox/index.mdx).
+- **Ligar ou desligar.** Use o [Switch](../switch/index.mdx).
+- **Mais de sete opções.** Use um [Select](../select/index.mdx).
+
+## Anatomia
+
+1. **Círculo**: mostra se a opção está escolhida.
+2. **Label**: descreve a opção. Clicar nela também escolhe o Radio.
+
+## Estados
+
+| Estado | Descrição |
+| --- | --- |
+| **Não selecionado** | A opção não foi escolhida. |
+| **Selecionado** | A opção está escolhida. Só uma por grupo. |
+| **Foco** | Anel de foco ao navegar por teclado. |
+| **Erro** | O grupo exige uma escolha e ela não foi feita. |
+| **Desabilitado** | A opção não está disponível. |
+
+<ComponentEmbed component="Radio" variant="selected" />
+
+## Relacionados
+
+- [Radio Group](../radio-group/index.mdx): o contêiner das opções.
+- [Checkbox](../checkbox/index.mdx): várias escolhas.
+- [Select](../select/index.mdx): escolha em uma lista longa.

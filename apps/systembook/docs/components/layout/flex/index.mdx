@@ -1,0 +1,42 @@
+---
+title: "Flex"
+subtitle: "Controle completo de flexbox, para alinhamentos que Stack e Inline não cobrem."
+order: 3
+---
+
+<ComponentEmbed component="Flex" variant="row" />
+
+## Quando usar
+
+Use o Flex quando precisa de **controle fino** sobre direção, alinhamento, distribuição e crescimento dos itens: cabeçalhos com título à esquerda e ações à direita, barras de ferramentas, cartões com rodapé fixo.
+
+Se [Stack](../stack/index.mdx) ou [Inline](../inline/index.mdx) resolvem, prefira-os: são mais simples e expressam melhor a intenção.
+
+## Quando não usar
+
+- **Colunas de uma grade de página.** Use [Grid](../grid/index.mdx).
+- **Coluna simples com espaço uniforme.** Use [Stack](../stack/index.mdx).
+- **Fileira simples que quebra de linha.** Use [Inline](../inline/index.mdx).
+
+## Opções do contêiner
+
+| Opção | O que controla |
+| --- | --- |
+| `direction` | Linha ou coluna, normal ou reversa. |
+| `wrap` | Se os itens quebram de linha. |
+| `gap` (`gap-x`, `gap-y`) | Espaço entre os itens. |
+| `align` | Alinhamento no eixo transversal. |
+| `justify` | Distribuição no eixo principal. |
+| `inline` | Contêiner em linha, não em bloco. |
+
+## Flex Item
+
+O `lui-flex-item` controla um item individual: quanto cresce (`grow`), encolhe (`shrink`), sua base de tamanho (`basis`), o alinhamento próprio (`align`) e a ordem (`order`).
+
+<ComponentEmbed component="Flex" variant="column" />
+
+## Relacionados
+
+- [Stack](../stack/index.mdx), [Inline](../inline/index.mdx): atalhos mais simples.
+- [Grid](../grid/index.mdx): grade de colunas.
+- [Flex utilities](../../../utilities/scss/flex.mdx): as classes utilitárias.

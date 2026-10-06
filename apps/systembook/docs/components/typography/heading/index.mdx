@@ -1,0 +1,45 @@
+---
+title: "Heading"
+subtitle: "Títulos que organizam o conteúdo em níveis de importância, com a tipografia e o elemento HTML certos."
+order: 1
+---
+
+<ComponentEmbed component="Heading" variant="title" />
+
+## Quando usar
+
+Use o Heading para **qualquer título**: de página, de seção, de bloco ou de card. Ele junta a escala tipográfica com o elemento HTML correto (`h1` a `h6`), o que garante hierarquia visual e semântica ao mesmo tempo.
+
+## Quando não usar
+
+- **Texto corrido ou legendas.** Use o [Body](../body/index.mdx).
+- **Estilizar texto sem ser título.** Se o texto não nomeia uma seção, não é um Heading.
+- **Rótulos de campos.** Use a label do campo.
+
+## Escalas
+
+Cada variante usa uma escala tipográfica e um elemento padrão:
+
+| Variante | Elemento | Quando usar |
+| --- | --- | --- |
+| `display` | `div` | Destaques de marketing e heróis. Não é um título semântico. |
+| `title` | `h1` | Título da página. Um por página. |
+| `subtitle` | `h2` | Subtítulo, introdução da página. |
+| `headline` | `h3` | Título de seção. |
+| `subheadline` | `h4` | Título de subseção. |
+| `block-title` | `h5` | Título de bloco ou card. |
+| `overtitle` | `h6` | Rótulo acima do título, em caixa alta. |
+
+<ComponentEmbed component="Heading" variant="display" />
+
+<ComponentEmbed component="Heading" variant="overtitle" />
+
+## Alinhamento e truncamento
+
+O texto pode ser alinhado à esquerda (padrão), ao centro, à direita ou justificado. Com `line-clamp`, o título é limitado a um número de linhas e termina com reticências.
+
+## Relacionados
+
+- [Body](../body/index.mdx): texto de conteúdo.
+- [Shortcut](../shortcut/index.mdx): teclas de atalho.
+- [Typography](../../../foundations/visual/typography.mdx): as escalas e os tokens.

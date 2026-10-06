@@ -1,0 +1,71 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Hierarquia das ações
+
+A tela deve deixar claro, em um relance, qual é o próximo passo. Isso é a hierarquia: **uma ação primária**, quantas secundárias forem necessárias e, no máximo, uma ação destrutiva por vez.
+
+<DosDonts variant="do" title="Uma ação primária por contexto">
+  Combine um botão Primary com um Secondary. A pessoa vê de imediato qual é o caminho recomendado e qual é a saída.
+</DosDonts>
+
+<DosDonts variant="dont" title="Várias ações primárias lado a lado">
+  Dois botões com o mesmo peso competem pela atenção, e ninguém sabe qual é o principal. Rebaixe uma delas para Secondary ou Neutral.
+</DosDonts>
+
+## Posição e ordem
+
+- Em formulários e diálogos, alinhe os botões ao **fim** do conteúdo (à direita em idiomas da esquerda para a direita).
+- Coloque a ação primária **por último** na ordem de leitura, depois da secundária: "Cancelar" e então "Salvar".
+- Em telas pequenas, empilhe os botões com `block` e deixe a ação primária no topo.
+- Mantenha 8px ou 16px de espaço entre botões do mesmo grupo, nunca botões colados.
+
+## Escrevendo o rótulo
+
+O rótulo é um **verbo no infinitivo** que diz o que vai acontecer.
+
+<DosDonts variant="do" title="Verbo + objeto">
+  "Salvar alterações", "Excluir projeto", "Enviar convite". A pessoa sabe o resultado antes de clicar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Rótulos genéricos">
+  "OK", "Sim", "Enviar" sem contexto, ou "Clique aqui". Forçam a pessoa a reler a pergunta para entender o efeito.
+</DosDonts>
+
+Mais orientações:
+
+- Use até **três palavras** e capitalização de frase ("Criar conta", não "Criar Conta").
+- Não use pontuação final.
+- Em ações destrutivas, nomeie o que será perdido: "Excluir 3 arquivos" é melhor que "Excluir".
+- Use o mesmo verbo para a mesma ação em todo o produto.
+
+## Ações destrutivas
+
+Use `danger` apenas quando a ação **não pode ser desfeita** ou causa perda de dados. Para ações reversíveis, prefira oferecer "Desfazer" depois, em vez de pedir confirmação antes.
+
+<Callout variant="warning">
+  Quando a ação for irreversível, confirme em um [Modal](../../content/modal/index.mdx), nomeando o que será excluído. O botão de confirmação repete o verbo: "Excluir projeto".
+</Callout>
+
+## Carregamento
+
+Ao iniciar uma operação que leva mais de um instante, ative `loading`. O botão mantém o tamanho, mostra o progresso e bloqueia cliques repetidos, evitando envios duplicados.
+
+- Troque o rótulo com `loading-text` quando ajudar: "Salvando…".
+- Não desabilite o botão para indicar carregamento. Desabilitado significa "indisponível", não "em andamento".
+
+## Botão desabilitado
+
+Use `disabled` com moderação. Um botão desabilitado não explica por que está indisponível.
+
+- Prefira manter o botão ativo e mostrar o erro de validação quando a pessoa tentar avançar.
+- Se desabilitar for necessário, explique o motivo no texto próximo ou em um [Tooltip](../../content/tooltip/index.mdx).
+
+## Boas práticas
+
+- Um botão **faz algo**; se leva a outro lugar, use um link.
+- Dê ao botão área de toque de pelo menos 40px em telas sensíveis ao toque, que é o `lg`.
+- Não use dois estilos diferentes para a mesma ação em telas diferentes.
+- Não coloque ícones só para decorar. Se o ícone não adiciona significado, deixe o texto sozinho.

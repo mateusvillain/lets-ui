@@ -1,0 +1,73 @@
+---
+title: "Spacing"
+subtitle: "Tokens de espaçamento do sistema de design. Existem duas escalas: **fixo** (valores absolutos em px) e **fluido** (valores responsivos com `clamp()` que se adaptam entre breakpoints). Use as funções SCSS `fixed($size)` e `fluid($size)` para acessá-los nos componentes."
+order: 3
+---
+
+## Como o espaçamento funciona
+
+O espaço **comunica relação**: elementos relacionados ficam próximos, e grupos diferentes ficam distantes. Por isso o sistema oferece uma **escala** de valores, e não números livres.
+
+## Princípios
+
+- **Proximidade agrupa.** Menos espaço entre itens de um mesmo grupo, mais espaço entre grupos.
+- **Ritmo consistente.** Use sempre valores da escala. O olhar reconhece o padrão, e a tela fica organizada.
+- **Respiro.** Espaço em branco não é desperdício: ele dá foco ao conteúdo.
+- **Adaptação.** Em telas grandes o conteúdo ganha mais respiro, em telas pequenas, menos.
+
+## Fixo ou fluido?
+
+| Escala | Como se comporta | Quando usar |
+| --- | --- | --- |
+| **Fixa** | Valor absoluto em pixels. | **Dentro de componentes**: padding de botões, espaço entre ícone e texto. |
+| **Fluida** | Cresce e diminui suavemente com a largura da tela. | **Entre blocos de layout**: margens, gaps de seções, padding de páginas. |
+
+<DosDonts variant="do" title="Espaços da escala, proporcionais à relação">
+  Um espaço pequeno entre a label e o campo, médio entre campos, grande entre seções.
+</DosDonts>
+
+<DosDonts variant="dont" title="Valores avulsos">
+  Usar 13px aqui e 22px ali. A tela perde o ritmo, e fica difícil de manter.
+</DosDonts>
+
+## Espaçamento Fixo
+
+Valores absolutos em pixels — ideais para espaçamentos internos de componentes que não devem mudar com o viewport.
+
+| name | token | value |
+| --- | --- | --- |
+| 0 | --lui-spacing-fixed-0 | 0 |
+| 8 | --lui-spacing-fixed-8 | 8px |
+| 16 | --lui-spacing-fixed-16 | 16px |
+| 24 | --lui-spacing-fixed-24 | 24px |
+| 32 | --lui-spacing-fixed-32 | 32px |
+| 40 | --lui-spacing-fixed-40 | 40px |
+
+## Espaçamento Fluido
+
+Valores responsivos com `clamp()` — escalam proporcionalmente entre o breakpoint mínimo (320 px) e máximo (1440 px). Ideais para padding de seções, gaps de layout e margens entre blocos.
+
+| name | token | clamp | min | max |
+| --- | --- | --- | --- | --- |
+| 2 | --lui-spacing-fluid-2 | clamp(0.1125rem, 0.109rem + 0.001vw, 0.125rem) | 1.8px | 2px |
+| 4 | --lui-spacing-fluid-4 | clamp(0.225rem, 0.218rem + 0.002vw, 0.25rem) | 3.6px | 4px |
+| 8 | --lui-spacing-fluid-8 | clamp(0.45rem, 0.436rem + 0.004vw, 0.5rem) | 7.2px | 8px |
+| 12 | --lui-spacing-fluid-12 | clamp(0.675rem, 0.655rem + 0.006vw, 0.75rem) | 10.8px | 12px |
+| 16 | --lui-spacing-fluid-16 | clamp(0.9rem, 0.874rem + 0.008vw, 1rem) | 14.4px | 16px |
+| 20 | --lui-spacing-fluid-20 | clamp(1.125rem, 1.093rem + 0.01vw, 1.25rem) | 18px | 20px |
+| 24 | --lui-spacing-fluid-24 | clamp(1.35rem, 1.311rem + 0.012vw, 1.5rem) | 21.6px | 24px |
+| 32 | --lui-spacing-fluid-32 | clamp(1.8rem, 1.748rem + 0.016vw, 2rem) | 28.8px | 32px |
+| 40 | --lui-spacing-fluid-40 | clamp(2.25rem, 2.186rem + 0.02vw, 2.5rem) | 36px | 40px |
+| 48 | --lui-spacing-fluid-48 | clamp(2.7rem, 2.623rem + 0.024vw, 3rem) | 43.2px | 48px |
+| 56 | --lui-spacing-fluid-56 | clamp(3.15rem, 3.061rem + 0.028vw, 3.5rem) | 50.4px | 56px |
+| 64 | --lui-spacing-fluid-64 | clamp(3.6rem, 3.498rem + 0.032vw, 4rem) | 57.6px | 64px |
+| 72 | --lui-spacing-fluid-72 | clamp(4.05rem, 3.936rem + 0.036vw, 4.5rem) | 64.8px | 72px |
+| 80 | --lui-spacing-fluid-80 | clamp(4.5rem, 4.374rem + 0.04vw, 5rem) | 72px | 80px |
+
+## Boas práticas
+
+- Use os **primitivos de layout** ([Stack](../../components/layout/stack/index.mdx), [Inline](../../components/layout/inline/index.mdx), [Grid](../../components/layout/grid/index.mdx)) para aplicar o espaço, em vez de margens soltas.
+- Prefira o `gap` do contêiner às margens individuais dos itens.
+- Dobre o espaço quando quiser marcar **uma separação clara** entre grupos.
+- Garanta áreas de toque de pelo menos **24 × 24px**, e prefira 40px em controles principais.
+- Use espaçamento **fixo** nos componentes, e **fluido** na estrutura da página.

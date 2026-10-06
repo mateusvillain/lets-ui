@@ -1,0 +1,64 @@
+---
+title: "Code"
+order: 4
+---
+
+## Com contador
+
+Use o atributo `maxlength` para ativar o contador de caracteres. Ideal quando há um limite explícito de entrada, como bio de perfil ou campo de descrição.
+
+## Error
+
+Use o estado de erro para indicar que o campo não passou na validação. O `error-text` substitui o hint e é lido por leitores de tela via `aria-describedby`.
+
+<ComponentEmbed component="Textarea" variant="error" />
+
+## Disabled
+
+Use quando o conteúdo deve ser exibido mas não editado no contexto atual.
+
+## Resize: None
+
+Use `resize="none"` quando o layout não deve ser perturbado pelo redimensionamento — como em caixas de mensagem embutidas em formulários fixos.
+
+## Integração com formulários
+
+O `lui-textarea` é form-associated — seu valor é capturado automaticamente pelo `FormData` do form pai através do atributo `name`. O atributo `form` permite associá-lo a um form por ID mesmo estando fora do elemento `<form>`.
+
+### Required
+
+Com `required`, o campo bloqueia a submissão quando está vazio via `ElementInternals.setValidity()`.
+
+## Atributos de formulário
+
+| Atributo   | Tipo      | Padrão | Descrição                                                                     |
+| ---------- | --------- | ------ | ----------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`    |
+| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o textarea fora do elemento form       |
+| `required` | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-textarea
+  label="Mensagem"
+  placeholder="Digite..."
+  size="lg"
+  rows="4"
+></lui-textarea>
+```
+
+### Classe CSS
+
+```html
+<div class="textarea-field textarea-field--lg">
+  <div class="textarea-field__head">
+    <label class="textarea-field__label">Mensagem</label>
+  </div>
+  <div class="textarea-field__control">
+    <textarea class="textarea-field__input" rows="4" placeholder="Digite..."></textarea>
+  </div>
+</div>
+```

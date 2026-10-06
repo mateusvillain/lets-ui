@@ -1,0 +1,51 @@
+---
+title: "Flex Utilities"
+subtitle: "Classes utilitárias de flexbox geradas em `packages/styles/src/utilities/_flex.scss` e incluídas no bundle `letsui.css`. Cobrem display, direção, wrap, alinhamento e grow/shrink."
+order: 3
+---
+
+```html
+<!-- Exemplo de uso direto no HTML -->
+<div class="flex flex-col items-center justify-between" style="gap: 16px">
+  <div>Item A</div>
+  <div>Item B</div>
+</div>
+```
+
+## Referência rápida
+
+| Classe              | Propriedade CSS                     |
+|---------------------|-------------------------------------|
+| `.flex`             | `display: flex`                     |
+| `.inline-flex`      | `display: inline-flex`              |
+| `.flex-row`         | `flex-direction: row`               |
+| `.flex-row-reverse` | `flex-direction: row-reverse`       |
+| `.flex-col`         | `flex-direction: column`            |
+| `.flex-col-reverse` | `flex-direction: column-reverse`    |
+| `.flex-wrap`        | `flex-wrap: wrap`                   |
+| `.flex-nowrap`      | `flex-wrap: nowrap`                 |
+| `.flex-wrap-reverse`| `flex-wrap: wrap-reverse`           |
+| `.justify-start`    | `justify-content: flex-start`       |
+| `.justify-center`   | `justify-content: center`           |
+| `.justify-end`      | `justify-content: flex-end`         |
+| `.justify-between`  | `justify-content: space-between`    |
+| `.justify-around`   | `justify-content: space-around`     |
+| `.justify-evenly`   | `justify-content: space-evenly`     |
+| `.items-start`      | `align-items: flex-start`           |
+| `.items-center`     | `align-items: center`               |
+| `.items-end`        | `align-items: flex-end`             |
+| `.items-stretch`    | `align-items: stretch`              |
+| `.items-baseline`   | `align-items: baseline`             |
+| `.content-start`    | `align-content: flex-start`         |
+| `.content-center`   | `align-content: center`             |
+| `.content-end`      | `align-content: flex-end`           |
+| `.content-between`  | `align-content: space-between`      |
+| `.content-around`   | `align-content: space-around`       |
+| `.self-start`       | `align-self: flex-start`            |
+| `.self-center`      | `align-self: center`                |
+| `.self-end`         | `align-self: flex-end`              |
+| `.self-stretch`     | `align-self: stretch`               |
+| `.flex-grow-0`      | `flex-grow: 0`                      |
+| `.flex-grow-1`      | `flex-grow: 1`                      |
+| `.flex-shrink-0`    | `flex-shrink: 0`                    |
+| `.flex-shrink-1`    | `flex-shrink: 1`                    |

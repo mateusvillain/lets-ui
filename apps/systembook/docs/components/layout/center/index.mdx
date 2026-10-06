@@ -1,0 +1,35 @@
+---
+title: "Center"
+subtitle: "Centraliza o conteúdo em um ou nos dois eixos."
+order: 6
+---
+
+<ComponentEmbed component="Center" variant="both" />
+
+## Quando usar
+
+Use o Center para **centralizar um bloco** dentro de um espaço: telas de estado vazio, seções de destaque, carregamento, mensagens de página inteira.
+
+## Quando não usar
+
+- **Texto corrido.** Centralizar parágrafos longos prejudica a leitura. Use alinhamento à esquerda.
+- **Largura de página.** Use [Container](../container/index.mdx).
+- **Distribuir vários itens.** Use [Flex](../flex/index.mdx).
+
+## Eixos
+
+| Eixo | Efeito |
+| --- | --- |
+| `both` (padrão) | Centraliza horizontal e verticalmente. |
+| `horizontal` | Centraliza só na horizontal. |
+| `vertical` | Centraliza só na vertical. |
+
+<ComponentEmbed component="Center" variant="horizontal" />
+
+Use `min-height` para dar altura ao espaço e `max-width` para limitar a largura do conteúdo.
+
+## Relacionados
+
+- [Empty State](../../content/empty-state/index.mdx): já vem centralizado.
+- [Container](../container/index.mdx)
+- [Stack](../stack/index.mdx)

@@ -1,0 +1,38 @@
+---
+title: "Card"
+subtitle: "Agrupa informações e ações relacionadas a um mesmo assunto, em uma superfície delimitada."
+order: 4
+---
+
+<ComponentEmbed component="Card" variant="default" />
+
+## Quando usar
+
+Use o Card para **reunir conteúdo sobre um item** e separá-lo visualmente do resto: um produto, um projeto, um resumo, um bloco de configurações.
+
+## Quando não usar
+
+- **Conteúdo corrido** que forma a página principal. Deixe direto na página.
+- **Dados em colunas comparáveis.** Use a [Table](../table/index.mdx).
+- **Mensagens de estado.** Use o [Alert](../alert/index.mdx).
+- **Cards dentro de cards.** Aninhar superfícies cria ruído visual.
+
+## Anatomia
+
+1. **Superfície**: o fundo com borda e elevação sutil.
+2. **Conteúdo**: título, texto, mídia e o que mais fizer sentido.
+3. **Ações** (opcional): botões ou links, alinhados ao fim.
+
+## Comportamento
+
+O Card é um contêiner flexível. O conteúdo é livre, então o Card **não impõe** estrutura. O espaçamento interno e o raio seguem os tokens do sistema.
+
+## Cards clicáveis
+
+Quando o Card inteiro leva a algum lugar, **um único link** dentro dele deve ser o alvo principal. Evite vários elementos clicáveis competindo dentro do mesmo Card.
+
+## Relacionados
+
+- [Table](../table/index.mdx): dados comparáveis.
+- [Alert](../alert/index.mdx): mensagens.
+- [Stack](../../layout/stack/index.mdx) e [Grid](../../layout/grid/index.mdx): organizar vários cards.

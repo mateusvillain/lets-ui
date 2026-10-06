@@ -1,0 +1,52 @@
+---
+title: "Toast"
+subtitle: "Mensagem curta e temporária que confirma uma ação, sem interromper a tarefa."
+order: 11
+---
+
+<ComponentEmbed component="Toast" variant="default" />
+
+## Quando usar
+
+Use o Toast para **dar retorno rápido a uma ação** da pessoa, sem tirá-la do que está fazendo: "Link copiado", "Alterações salvas", "Convite enviado".
+
+## Quando não usar
+
+- **Mensagens que precisam ser lidas com calma** ou que exigem decisão. Use um [Alert](../alert/index.mdx) ou um [Modal](../modal/index.mdx).
+- **Erros que a pessoa precisa corrigir.** Mostre perto do campo ou em um Alert.
+- **Informação essencial.** Como o Toast some, ela pode ser perdida.
+- **Notificações do sistema ou histórico.** Use uma central de notificações.
+
+## Anatomia
+
+1. **Ícone**: reforça a variante. Pode ser trocado.
+2. **Título**: a mensagem principal.
+3. **Descrição** (opcional): detalhe de apoio.
+4. **Ação** (opcional): um botão, como "Desfazer".
+5. **Botão de fechar**: aparece quando não há ação.
+
+## Variantes
+
+| Variante | Quando usar | Comportamento |
+| --- | --- | --- |
+| **Default** | Informação neutra. | Some sozinho. |
+| **Success** | Uma ação foi concluída. | Some sozinho. |
+| **Danger** | Algo falhou. | **Não some sozinho.** |
+
+<ComponentEmbed component="Toast" variant="success" />
+
+<ComponentEmbed component="Toast" variant="danger" />
+
+## Duração
+
+Por padrão, o Toast some após **5 segundos**. Passar o mouse ou focar nele **pausa** a contagem. Com `duration="0"`, ele fica até ser fechado. O Toast `danger` nunca some sozinho, por uma decisão de acessibilidade.
+
+## Posição
+
+Aparece na parte inferior central da tela. Outras posições (cantos e topo) estão disponíveis. Em telas pequenas, ocupa a largura toda. Vários Toasts se empilham.
+
+## Relacionados
+
+- [Alert](../alert/index.mdx): mensagens que ficam na página.
+- [Modal](../modal/index.mdx): decisões que exigem atenção.
+- [Button](../../actionable/button/index.mdx): a ação do Toast.

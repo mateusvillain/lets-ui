@@ -1,0 +1,61 @@
+---
+title: "Code"
+order: 4
+---
+
+## Danger
+<ComponentEmbed component="Alert" variant="danger" />
+
+## Dismissible
+
+Adicione o atributo `dismissible` para exibir um botão de fechar no canto do alert. Ao ser clicado, o componente emite o evento `lui-dismiss` — use-o para remover o alert do DOM ou atualizar o estado da aplicação.
+
+O label acessível do botão pode ser customizado com o atributo `close-label` (padrão: `"Close"`).
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `variant` | `string` | `success` |
+| `title` | `string` | `''` |
+| `content` | `string` | `''` |
+| `dismissible` | `boolean` | `false` |
+| `close-label` | `string` | `Close` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-alert variant="info" title="Título" content="Informação importante"></lui-alert>
+```
+
+### Dismissible
+
+```html
+<lui-alert
+  variant="caution"
+  title="Atenção"
+  content="Esta ação não pode ser desfeita."
+  dismissible
+  close-label="Fechar alerta"
+></lui-alert>
+
+<script>
+  document.querySelector('lui-alert').addEventListener('lui-dismiss', (e) => {
+    e.target.remove();
+  });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="alert alert--info">
+  <div class="alert__content">
+    <div class="alert__text">
+      <p>Informação importante</p>
+    </div>
+  </div>
+</div>
+```

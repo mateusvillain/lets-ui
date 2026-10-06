@@ -1,0 +1,37 @@
+---
+title: "Stack"
+subtitle: "Empilha elementos na vertical, com espaçamento consistente entre eles."
+order: 1
+---
+
+<ComponentEmbed component="Stack" variant="default" />
+
+## Quando usar
+
+Use o Stack para **organizar elementos em coluna** com um espaço uniforme: campos de um formulário, blocos de uma página, itens de um card, parágrafos.
+
+É o primitivo de layout mais usado. Em vez de dar margem a cada elemento, você define o espaço **uma vez**, no Stack.
+
+## Quando não usar
+
+- **Elementos lado a lado.** Use [Inline](../inline/index.mdx) ou [Flex](../flex/index.mdx).
+- **Colunas de uma grade de página.** Use [Grid](../grid/index.mdx).
+- **Alternar entre coluna e linha conforme o espaço.** Use [Switcher](../switcher/index.mdx).
+
+## Opções
+
+| Opção | O que controla | Padrão |
+| --- | --- | --- |
+| `gap` | Espaço entre os itens. | 16 |
+| `align` | Alinhamento horizontal dos itens. | Esticar |
+| `justify` | Distribuição vertical dentro do espaço. | Início |
+
+<ComponentEmbed component="Stack" variant="tight" />
+
+<ComponentEmbed component="Stack" variant="centered" />
+
+## Relacionados
+
+- [Inline](../inline/index.mdx): na horizontal.
+- [Box](../box/index.mdx): superfície com espaçamento.
+- [Spacing](../../../foundations/visual/spacing.mdx): a escala de espaços.

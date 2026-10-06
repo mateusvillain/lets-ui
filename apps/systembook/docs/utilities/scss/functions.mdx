@@ -1,0 +1,157 @@
+---
+title: "Functions"
+subtitle: "Funções SCSS definidas em `packages/styles/src/utilities/_functions.scss`. Use-as nos componentes para acessar tokens de design de forma segura — cada função valida o argumento e lança um erro de compilação se o valor não existir no mapa de tokens."
+order: 1
+---
+
+```scss
+// No arquivo de componente
+@use '../utilities/functions' as *;
+
+.my-component {
+  background-color: bg(surface, primary);
+  color: text(body);
+  border-radius: radius(sm);
+  padding: fluid(16);
+}
+```
+
+## Cores
+
+| fn | desc | params | note |
+| --- | --- | --- | --- |
+| bg($category, $variant) | Cor de fundo semântica | [object Object],[object Object] | * overlay disponível apenas em container |
+| text($variant) | Cor de texto semântica | [object Object] |  |
+| stroke($variant, $category?) | Cor de borda semântica | [object Object],[object Object] |  |
+| icon($variant) | Cor de ícone semântica | [object Object] |  |
+| color($category, $scale) | Cor primitiva da paleta | [object Object],[object Object] |  |
+| state($state, $bg?) | Background do componente no estado: a cor de conteúdo dele (currentColor) misturada ao fundo de repouso | [object Object] |  |
+| state-amount($state) | Quanto da tinta misturar | [object Object] |  |
+
+### Exemplo de uso — cores
+
+```scss
+.alert--danger {
+  background-color: bg(container, danger);
+  border-color: stroke(danger);
+  color: text(body);
+
+  .alert__icon { color: icon(danger); }
+}
+
+.btn--primary {
+  color: text(inverse);
+
+  // A camada de estado é a mesma para toda variante e marca: o fundo de
+  // repouso entra pelo mixin e as regras de estado misturam nele a cor de
+  // conteúdo declarada acima — clareando fundos escuros e escurecendo os
+  // claros sem medir nada. `states()` já embute tudo isso.
+  @include state-layer(bg(container, primary));
+
+  &:hover {
+    background-color: state(hover);
+    @include state-timing(hover);
+  }
+
+  &:active {
+    background-color: state(pressed);
+    @include state-timing(pressed);
+  }
+}
+```
+
+## Borda
+
+| fn | desc | rows |
+| --- | --- | --- |
+| radius($size) | Border radius | [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] |
+| width($size) | Border width | [object Object],[object Object],[object Object] |
+
+```scss
+.card    { border-radius: radius(md); border-width: width(1); }
+.avatar  { border-radius: radius(circle); }
+.focused { border-width: width(2); }
+```
+
+## Espaçamento
+
+| fn | desc | values |
+| --- | --- | --- |
+| fixed($size) | Espaçamento fixo em px | 0,8,16,24,32,40 |
+| fluid($size) | Espaçamento fluido com clamp() | 2,4,8,12,16,20,24,32,40,48,56,64,72,80 |
+
+```scss
+.section { padding: fluid(40); }
+.card    { padding: fluid(24); gap: fixed(16); }
+```
+
+<Callout variant="tip">
+Use `fluid()` para espaçamentos de layout (margens, gaps entre blocos) e `fixed()` para espaçamentos internos de componentes que não devem mudar com o viewport.
+</Callout>
+
+## Tipografia
+
+| fn | prop | values |
+| --- | --- | --- |
+| font($font) | font-family | heading,body |
+| size($size) | font-size | 3xl,2xl,1xl,lg,md,sm,1xs,2xs,3xs |
+| weight($weight) | font-weight | regular,medium,semibold,bold |
+| line-height($lh) | line-height | heading,body |
+| case($case) | text-transform | none,lowercase,uppercase |
+| decoration($decoration) | text-decoration | none,underline,line-through |
+
+```scss
+.heading--title {
+  font-family: font(heading);
+  font-size: size(2xl);
+  font-weight: weight(bold);
+  line-height: line-height(heading);
+}
+```
+
+<Callout variant="tip">
+Para aplicar escalas tipográficas completas, prefira o mixin `font-scale($scale-name)`.
+</Callout>
+
+## Estados e elevação
+
+| fn | desc | values |
+| --- | --- | --- |
+| focus-ring($variant) | Box-shadow de foco | primary,secondary,danger,success,neutral |
+| elevation($layer) | Box-shadow de elevação | base,hovered,floating,overlay |
+| opacity($category) | Opacidade semântica | disabled,hidden,visible |
+| breakpoint($name) | Valor de breakpoint responsivo | 1xs (767px, teto),sm (768px),md (1024px),lg (1280px),1xl (1440px) |
+| step-above($name) | Próximo step da escala de breakpoints | 1xs,sm,md,lg |
+| grid($category, $name) | Valor da tabela do grid | columns,gap,margin,container |
+
+```scss
+.modal   { box-shadow: elevation(overlay); }
+.tooltip { box-shadow: elevation(floating); }
+
+.btn:focus-visible { box-shadow: focus-ring(primary); }
+.btn:disabled      { opacity: opacity(disabled); }
+
+@media (min-width: breakpoint(md)) {
+  .sidebar { display: block; }
+}
+```
+
+<Callout variant="tip">
+Para responsividade, prefira os mixins `media-up()` e `media-down()` em vez de chamar `breakpoint()` diretamente.
+</Callout>
+<Callout variant="tip">
+Eles são complementos exatos um do outro — `media-down()` para estritamente
+</Callout>
+<Callout variant="tip">
+abaixo do piso do step —, enquanto um `max-width` escrito à mão costuma deixar
+</Callout>
+<Callout variant="tip">
+uma fresta em larguras fracionárias.
+</Callout>
+
+`breakpoint()` e `grid(columns, …)` são as duas únicas funções que devolvem um
+valor literal em vez de um `var()`. Elas são lidas em tempo de compilação — por
+um prelúdio de media query e pelo `@for` que gera as classes `.col-*` — e nenhum
+dos dois consegue ler uma custom property. As demais categorias de `grid()`
+(`gap`, `margin`, `container`) devolvem `var()` e continuam acompanhando
+`data-brand` em runtime.

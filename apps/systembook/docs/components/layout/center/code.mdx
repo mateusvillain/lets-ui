@@ -1,0 +1,35 @@
+---
+title: "Code"
+order: 4
+---
+
+## Horizontal Only
+
+<ComponentEmbed component="Center" variant="horizontal" />
+
+## Propriedades
+
+| Atributo | Tipo | Padrão |
+| --- | --- | --- |
+| `axis` | `string` | `both` |
+| `min-height` | `string` | `''` |
+| `max-width` | `string` | `''` |
+| `as` | `string` | `div` |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-center axis="both" style="height: 300px;">
+  <div>Conteúdo centralizado</div>
+</lui-center>
+```
+
+### Classe CSS
+
+```html
+<div class="center center--horizontal">
+  <div class="center__inner" style="max-width: 400px;">Conteúdo centralizado</div>
+</div>
+```

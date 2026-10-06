@@ -1,0 +1,34 @@
+---
+title: "Inline"
+subtitle: "Dispõe elementos lado a lado e quebra para a linha seguinte quando falta espaço."
+order: 2
+---
+
+<ComponentEmbed component="Inline" variant="default" />
+
+## Quando usar
+
+Use o Inline para **elementos pequenos em fila** que podem quebrar de linha: grupos de [Tags](../../content/tag/index.mdx), botões de ação, filtros aplicados, ícones.
+
+## Quando não usar
+
+- **Elementos que devem ficar sempre em coluna.** Use [Stack](../stack/index.mdx).
+- **Alinhar conteúdo em colunas de largura definida.** Use [Grid](../grid/index.mdx).
+- **Alternar entre coluna e linha conforme o espaço.** Use [Switcher](../switcher/index.mdx).
+
+## Opções
+
+| Opção | O que controla | Padrão |
+| --- | --- | --- |
+| `gap` (`gap-x`, `gap-y`) | Espaço entre os itens. | 8 |
+| `align` | Alinhamento vertical. | Centro |
+| `justify` | Distribuição horizontal. | Início |
+| `wrap` | Se os itens quebram de linha. | Quebra |
+
+<ComponentEmbed component="Inline" variant="spread" />
+
+## Relacionados
+
+- [Stack](../stack/index.mdx): na vertical.
+- [Flex](../flex/index.mdx): controle total de flexbox.
+- [Button](../../actionable/button/index.mdx), [Tag](../../content/tag/index.mdx): o que costuma ficar dentro.

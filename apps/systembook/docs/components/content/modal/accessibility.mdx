@@ -1,0 +1,29 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Esc` | Fecha o Modal e devolve o foco a quem o abriu. |
+| `Tab` / `Shift+Tab` | Percorre os elementos da janela. O foco fica **preso** dentro dela. |
+| `Enter` ou `Espaço` | Ativa o botão em foco. |
+
+## Leitor de tela
+
+- A janela é anunciada como **diálogo modal**, com o título como nome.
+- O conteúdo atrás do Modal fica inacessível enquanto ele está aberto.
+- O botão de fechar tem nome acessível (`close-label`, padrão "Close modal"). Traduza para o idioma do produto.
+- Quando fechado, o Modal fica fora da árvore de acessibilidade.
+
+## Foco
+
+Ao abrir, o foco vai para dentro da janela. Ao fechar, volta ao elemento que o abriu.
+
+## Para designers
+
+- Todo Modal precisa de um título.
+- Garanta que a tarefa seja possível só com teclado.
+- Defina o foco inicial: em confirmações destrutivas, evite deixá-lo no botão perigoso.

@@ -1,0 +1,41 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Hierarquia
+
+Os títulos formam o **esqueleto** da página. A pessoa e o leitor de tela navegam por eles.
+
+- Use **um `title` (h1)** por página.
+- **Não pule níveis**: depois de um h2 vem um h3, não um h5.
+- Escolha o nível pela **estrutura**, e a aparência pela escala. Se o tamanho visual não combinar com o nível, ajuste o elemento (`as`), não a hierarquia.
+
+<DosDonts variant="do" title="Níveis em ordem">
+  h1 para a página, h2 para as seções, h3 para as subseções. A estrutura fica clara visualmente e para leitores de tela.
+</DosDonts>
+
+<DosDonts variant="dont" title="Escolher o nível pelo tamanho">
+  Usar um h4 só porque a fonte é menor, ou um h1 em vários lugares para ficar grande. Isso embaralha a navegação por títulos.
+</DosDonts>
+
+## Escreva títulos
+
+- **Descritivos e curtos**: a pessoa entende o assunto da seção só pelo título.
+- Capitalização de frase.
+- Sem ponto final.
+- Evite títulos iguais em seções diferentes.
+
+## Display
+
+O `display` é para momentos de destaque, como a primeira dobra de uma página de produto. Por não ser um título semântico, não substitui o `title`.
+
+## Truncamento
+
+Use `line-clamp` em cards e listas, onde o espaço é fixo. Em títulos de página, evite truncar.
+
+## Boas práticas
+
+- Mantenha o mesmo estilo de título para o mesmo tipo de conteúdo.
+- Use o `overtitle` acima de um título, para categoria ou contexto, com poucas palavras.
+- Garanta contraste de 4,5:1 (3:1 em textos grandes).

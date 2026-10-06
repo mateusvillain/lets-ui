@@ -1,0 +1,69 @@
+---
+title: "Border"
+subtitle: "Tokens de borda do sistema de design. Controlam o arredondamento e a espessura das bordas — use as funções SCSS `radius($size)` e `width($size)` para acessá-los nos componentes."
+order: 4
+---
+
+## Como as bordas funcionam
+
+Borda e arredondamento dão **forma** aos elementos e ajudam a distinguir tipos de componentes: controles, superfícies e elementos pequenos.
+
+## Princípios
+
+- **Arredondamento comunica personalidade.** Cantos retos soam sérios, cantos redondos soam amigáveis. A marca define o valor de cada degrau.
+- **Consistência por tipo.** Componentes parecidos usam o mesmo raio.
+- **A borda delimita.** Use borda para separar superfícies e indicar campos, e não para decorar.
+- **Uma borda mais forte significa ênfase**: foco, seleção ou estado.
+
+## Qual raio usar?
+
+| Raio | Para... |
+| --- | --- |
+| `none` | Elementos que encostam em outros, como linhas de tabela. |
+| `xs` | Itens pequenos: tags, chips. |
+| `sm` | Controles: botões, campos, seletores. |
+| `md` | Superfícies: cards, painéis, modais. |
+| `lg` | Superfícies maiores: drawers. |
+| `xl` | Contêineres de destaque. |
+| `circle` | Avatares e ícones circulares. |
+
+<DosDonts variant="do" title="Raio coerente com o tipo">
+  Botões e campos com `sm`, cards e modais com `md`. As famílias de componentes se reconhecem.
+</DosDonts>
+
+<DosDonts variant="dont" title="Raios diferentes para a mesma família">
+  Um botão com cantos retos ao lado de outro bem arredondado. A interface parece desencontrada.
+</DosDonts>
+
+## Border Radius
+
+Escala de arredondamento, do reto ao completamente circular. Aplicado via `radius($size)`.
+
+| name | token | value | use |
+| --- | --- | --- | --- |
+| none | --lui-border-radius-none | 0 | Sem arredondamento |
+| xs | --lui-border-radius-xs | 2px | Tags, badges, chips |
+| sm | --lui-border-radius-sm | 4px | Botões, inputs, selects |
+| md | --lui-border-radius-md | 8px | Cards, painéis, modais |
+| lg | --lui-border-radius-lg | 12px | Superfícies maiores, drawers |
+| xl | --lui-border-radius-xl | 16px | Contêineres de destaque |
+| circle | --lui-border-radius-circle | 1000000px | Avatares, ícones circulares |
+
+## Border Width
+
+Espessuras de borda disponíveis. Aplicado via `width($size)`.
+
+| name | token | value | use |
+| --- | --- | --- | --- |
+| 0 | --lui-border-width-0 | 0 | Sem borda |
+| 1 | --lui-border-width-1 | 1px | Borda padrão — inputs, cards, dividers |
+| 2 | --lui-border-width-2 | 2px | Borda de ênfase — foco, seleção |
+| 4 | --lui-border-width-4 | 4px | Borda forte — indicadores, destacados |
+
+## Boas práticas
+
+- Use a espessura `1` como padrão para campos, cards e divisores.
+- Reserve `2` para foco e seleção, e `4` para indicadores fortes.
+- Em elementos aninhados, **reduza o raio** do interno para acompanhar o do externo.
+- Não dependa só da borda para indicar um estado: acrescente texto, ícone ou forma.
+- Bordas de campos de formulário precisam de **3 : 1** de contraste com o fundo.
