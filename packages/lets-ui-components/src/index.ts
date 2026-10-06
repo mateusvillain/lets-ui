@@ -1,3 +1,5 @@
+import { LuiAccordion } from './components/accordion/accordion.js';
+import { LuiAccordionItem } from './components/accordion/accordion-item.js';
 import { LuiAlert } from './components/alert/alert.js';
 import { LuiAvatar } from './components/avatar/avatar.js';
 import { LuiAvatarGroup } from './components/avatar/avatar-group.js';
@@ -52,6 +54,8 @@ function define(name: string, elementClass: CustomElementConstructor) {
   }
 }
 
+define('lui-accordion', LuiAccordion);
+define('lui-accordion-item', LuiAccordionItem);
 define('lui-box', LuiBox);
 define('lui-center', LuiCenter);
 define('lui-container', LuiContainer);
@@ -103,6 +107,8 @@ define('lui-tooltip', LuiTooltip);
 define('lui-scroll-area', LuiScrollArea);
 
 export {
+  LuiAccordion,
+  LuiAccordionItem,
   LuiBox,
   LuiCenter,
   LuiContainer,

@@ -1,0 +1,197 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+// Without the Web Component the markup is yours to drive: toggle
+// `aria-expanded` on the trigger and `accordion__item--open` on the item by
+// hand.
+
+// The row is one flex line — leading icon, text, chevron — so the trigger keeps
+// the same height with or without an icon or a subtitle.
+.accordion__trigger {
+  @include flex($gap: fluid(8));
+
+  box-sizing: border-box;
+  width: 100%;
+  padding: fluid(16);
+  border: 0;
+  color: text(heading);
+  text-align: start;
+  cursor: pointer;
+
+  // Set by the group so the first and last triggers follow its rounded corners.
+  // The group cannot clip them with `overflow: hidden` — that would cut off the
+  // focus ring at the edges.
+  border-radius: var(--lui-accordion-radius, 0);
+
+  @include states(neutral, null, bg(surface, secondary));
+  @include disabled;
+}
+
+// The extra 8px on the icon's trailing side is part of the prototype: icon to
+// text reads as 16px, text to chevron as 8px.
+.accordion__icon {
+  display: flex;
+  flex-shrink: 0;
+  margin-inline-end: fluid(8);
+  color: icon(neutral);
+
+  &[hidden] {
+    display: none;
+  }
+
+  svg {
+    display: block;
+    width: fluid(24);
+    height: fluid(24);
+  }
+}
+
+.accordion__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.accordion__title {
+  @include font-scale(body--lg);
+
+  font-weight: weight(bold);
+  color: text(heading);
+}
+
+.accordion__subtitle {
+  @include font-scale(body--md);
+
+  color: text(caption);
+}
+
+// The heading wrapper only carries the semantics: it must not add the margins
+// or the type of a page heading to the trigger inside it.
+.accordion__heading {
+  margin: fixed(0);
+  font: inherit;
+}
+
+.accordion__chevron {
+  flex-shrink: 0;
+  width: fluid(24);
+  height: fluid(24);
+  color: icon(neutral);
+  transition: transform 200ms ease;
+}
+
+// A closed panel is `visibility: hidden`, not `display: none`, so the height
+// can animate. `visibility` also takes its content out of the tab order and
+// the accessibility tree, which is what keeps collapsed content unreachable.
+// It flips only after the height has finished closing (the delay) and
+// immediately when opening (no delay), so the content is never hidden mid-way.
+.accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 200ms ease,
+    visibility 0s linear 200ms;
+}
+
+.accordion__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.accordion__description {
+  padding: fixed(0) fluid(16) fluid(16);
+  color: text(body);
+
+  @include font-scale(body--lg);
+}
+
+// With an icon the description lines up with the title text rather than with
+// the icon: the trigger's padding, the icon, its trailing space and the row gap
+// — the same four measures that place the title.
+.accordion__item--with-icon .accordion__description {
+  padding-inline-start: calc(fluid(16) + fluid(24) + fluid(8) + fluid(8));
+}
+
+.accordion__item--open {
+  > .accordion__heading .accordion__chevron {
+    transform: rotate(180deg);
+  }
+
+  > .accordion__panel {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion__chevron,
+  .accordion__panel {
+    transition: none;
+  }
+}
+
+// --- Group ---
+.accordion {
+  display: block;
+}
+
+// Every item after the first starts with a divider.
+.accordion__item + .accordion__item {
+  border-top: width(1) solid var(--lui-divider-color-border-default);
+}
+
+// Same reason as the `::slotted()` reset in the Web Component: the radius
+// inherits, so a nested accordion must start square rather than take the
+// corners of the item that holds it. The variants below are more specific.
+// Scoped to the group's children: the Web Component's shadow DOM reuses the
+// `.accordion__item` class on its own wrapper, which would reset the radius
+// the group sets on the host.
+.accordion > .accordion__item {
+  --lui-accordion-radius: 0;
+}
+
+$radius-top: #{radius(md)} #{radius(md)} 0 0;
+$radius-bottom: 0 0 #{radius(md)} #{radius(md)};
+
+// No dividers: every item keeps a transparent border of the same width and the
+// open one shows it. A real border rather than an inset shadow, because a
+// shadow sits underneath the trigger's opaque background and the outline would
+// disappear behind it; the border sits outside the item's padding box.
+// Keeping the border on closed items means opening one does not shift the rest.
+.accordion--highlighted {
+  border-radius: radius(md);
+
+  .accordion__item,
+  .accordion__item + .accordion__item {
+    --lui-accordion-radius: #{radius(md)};
+
+    border: width(1) solid transparent;
+    border-radius: radius(md);
+  }
+
+  .accordion__item--open {
+    --lui-accordion-radius: #{$radius-top};
+
+    border-color: stroke(neutral, subtle);
+  }
+}
+
+.accordion--bordered {
+  border: width(1) solid stroke(neutral, subtle);
+  border-radius: radius(md);
+
+  > .accordion__item:first-child {
+    --lui-accordion-radius: #{$radius-top};
+  }
+
+  > .accordion__item:last-child:not(.accordion__item--open) {
+    --lui-accordion-radius: #{$radius-bottom};
+  }
+
+  > .accordion__item:only-child:not(.accordion__item--open) {
+    --lui-accordion-radius: #{radius(md)};
+  }
+}

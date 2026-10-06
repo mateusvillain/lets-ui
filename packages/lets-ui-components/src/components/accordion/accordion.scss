@@ -1,0 +1,53 @@
+@use 'packages/styles/src/components/accordion' as *;
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: block;
+}
+
+// The radius is an inherited custom property: an accordion nested in a panel
+// would otherwise pick up the corners of the item that holds it. Every item
+// starts square and the variants below opt in with a more specific selector.
+::slotted(lui-accordion-item) {
+  --lui-accordion-radius: 0;
+}
+
+// The items sit in this component's light DOM, so the group rules that the CSS
+// class API writes against `.accordion__item` reach them through `::slotted()`.
+.accordion--default,
+.accordion--bordered {
+  ::slotted(lui-accordion-item:not(:first-child)) {
+    border-top: fn.width(1) solid var(--lui-divider-color-border-default);
+  }
+}
+
+.accordion--bordered {
+  ::slotted(lui-accordion-item:first-child) {
+    --lui-accordion-radius: #{$radius-top};
+  }
+
+  ::slotted(lui-accordion-item:last-child:not([open])) {
+    --lui-accordion-radius: #{$radius-bottom};
+  }
+
+  ::slotted(lui-accordion-item:only-child:not([open])) {
+    --lui-accordion-radius: #{fn.radius(md)};
+  }
+}
+
+// See the same variant in the CSS class API: no dividers, and a border that is
+// transparent on closed items so opening one shifts nothing.
+.accordion--highlighted {
+  ::slotted(lui-accordion-item) {
+    --lui-accordion-radius: #{fn.radius(md)};
+
+    border: fn.width(1) solid transparent;
+    border-radius: fn.radius(md);
+  }
+
+  ::slotted(lui-accordion-item[open]) {
+    --lui-accordion-radius: #{$radius-top};
+
+    border-color: fn.stroke(neutral, subtle);
+  }
+}

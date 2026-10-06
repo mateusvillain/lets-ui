@@ -1,0 +1,14 @@
+@use 'packages/styles/src/components/accordion' as *;
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: block;
+}
+
+// The icon lives in the light DOM, so the sizing the CSS class API writes
+// against `.accordion__icon svg` cannot reach it.
+::slotted([slot='icon']) {
+  display: block;
+  width: fn.fluid(24);
+  height: fn.fluid(24);
+}

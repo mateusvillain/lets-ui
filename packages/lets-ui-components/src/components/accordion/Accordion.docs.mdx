@@ -1,0 +1,169 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as AccordionStories from './Accordion.stories';
+
+<Meta of={AccordionStories} />
+
+# Accordion
+
+Lista de seções recolhíveis. Cada item tem um cabeçalho acionável que mostra ou esconde o painel de conteúdo, e a seta ao lado do título gira quando o item abre. Funciona no modo de um aberto por vez, que é o padrão, ou com vários abertos.
+
+<Canvas of={AccordionStories.Default} />
+<Controls of={AccordionStories.Default} />
+
+## Quando usar
+
+Use o Accordion para revelar conteúdo relacionado, em seções que a pessoa pode querer ler uma de cada vez, como perguntas frequentes ou blocos de configuração.
+
+- Não esconda informação essencial. Se quase todo mundo precisa ler o conteúdo, deixe-o visível ou comece com o item `open`.
+- Escreva títulos que descrevam o conteúdo que será revelado. "Prazos de entrega" diz mais do que "Saiba mais", e o título é o nome que o leitor de tela anuncia.
+- Quando só uma seção puder ficar aberta, mantenha o modo padrão. A regra é previsível: abrir um item fecha o que estava aberto.
+
+## Um aberto por vez
+
+Por padrão, abrir um item fecha o que estava aberto. Se mais de um item começar com `open`, só o primeiro fica aberto.
+
+<Canvas of={AccordionStories.SingleOpen} />
+
+## Múltiplos abertos
+
+O atributo `multiple` deixa vários itens abertos ao mesmo tempo.
+
+<Canvas of={AccordionStories.Multiple} />
+
+## Variantes
+
+`default` separa os itens por divisores. `bordered` envolve a lista em uma borda arredondada. `highlighted` contorna o item aberto.
+
+<Canvas of={AccordionStories.Bordered} />
+
+<Canvas of={AccordionStories.Highlighted} />
+
+## Item aberto por padrão
+
+<Canvas of={AccordionStories.DefaultOpen} />
+
+## Item desabilitado
+
+Um item com `disabled` não alterna e sai da ordem de foco.
+
+<Canvas of={AccordionStories.Disabled} />
+
+## Slots
+
+O ícone à esquerda é o slot `icon`, e a área de descrição é o slot padrão do item. Os dois aceitam qualquer conteúdo. Sem ícone, o espaço dele some. Com ícone, a descrição se alinha à esquerda com o texto do título, e não com o ícone. Na classe CSS, adicione `accordion__item--with-icon` ao item.
+
+<Canvas of={AccordionStories.RichDescription} />
+
+<Canvas of={AccordionStories.WithoutIcon} />
+
+<Canvas of={AccordionStories.WithoutSubtitle} />
+
+## Evento `lui-toggle`
+
+Cada item emite `lui-toggle` com `{ open }` em `event.detail` quando abre ou fecha, seja por clique, porque outro item abriu ou por script. O evento borbulha e atravessa o shadow DOM. O estado inicial vindo do atributo `open` não emite o evento.
+
+<Canvas of={AccordionStories.ToggleEvent} />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a marcação e o estado ficam a cargo de quem usa: alterne `aria-expanded` no botão e a classe `accordion__item--open` no item.
+
+<Canvas of={AccordionStories.CSSClass} />
+
+## Propriedades
+
+### `lui-accordion`
+
+| Atributo        | Tipo      | Padrão    | Descrição                                                  |
+| --------------- | --------- | --------- | ---------------------------------------------------------- |
+| `variant`       | `string`  | `default` | `default`, `bordered` ou `highlighted`.                    |
+| `multiple`      | `boolean` | `false`   | Permite vários itens abertos ao mesmo tempo.               |
+| `heading-level` | `number`  | `3`       | Nível do heading que envolve o botão de cada item (1 a 6). |
+
+### `lui-accordion-item`
+
+| Atributo        | Tipo      | Padrão  | Descrição                                                                           |
+| --------------- | --------- | ------- | ----------------------------------------------------------------------------------- |
+| `label`         | `string`  | `''`    | Título do item, dentro do botão.                                                    |
+| `subtitle`      | `string`  | `''`    | Texto secundário abaixo do título.                                                  |
+| `open`          | `boolean` | `false` | Item aberto.                                                                        |
+| `disabled`      | `boolean` | `false` | Impede o item de alternar.                                                          |
+| `heading-level` | `number`  | —       | Nível do heading deste item. Se omitido, vale o `heading-level` do `lui-accordion`. |
+
+| Slot     | Descrição                               |
+| -------- | --------------------------------------- |
+| (padrão) | Descrição: o conteúdo do painel.        |
+| `icon`   | Ícone à esquerda do título. Decorativo. |
+
+### Eventos
+
+| Evento       | Detalhe             | Descrição                           |
+| ------------ | ------------------- | ----------------------------------- |
+| `lui-toggle` | `{ open: boolean }` | Emitido por item ao abrir e fechar. |
+
+## Acessibilidade
+
+- Cada cabeçalho é um `<button>` dentro de um elemento com `role="heading"`. `Tab` e `Shift + Tab` percorrem os botões, e `Enter` ou `Espaço` abrem e fecham a seção.
+- O botão expõe `aria-expanded` e `aria-controls`, que aponta para o painel.
+- O painel não recebe `role="region"`: o padrão ARIA recomenda evitar o papel em accordions com muitos painéis, porque cada região vira um landmark e polui a navegação. A relação entre botão e painel fica por conta de `aria-controls`.
+- Um painel fechado fica com `visibility: hidden`: o conteúdo não recebe foco nem é lido por leitor de tela.
+- O foco visível usa o anel de foco do sistema, e o cabeçalho tem feedback de hover e de pressionado.
+- A animação de altura e a rotação da seta são desligadas com `prefers-reduced-motion: reduce`.
+- Item desabilitado recebe `disabled` e `aria-disabled="true"`.
+- O ícone é decorativo: coloque `aria-hidden="true"` no SVG. A seta já é escondida do leitor de tela.
+- `Seta para baixo` e `Seta para cima` movem o foco entre os cabeçalhos, voltando ao primeiro ou ao último nas pontas. `Home` e `End` vão para o primeiro e o último. Itens desabilitados são pulados, e as teclas só valem quando o foco está em um cabeçalho, não no conteúdo do painel.
+- Essa navegação vem do Web Component. Na classe CSS, só `Tab` funciona.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-accordion variant="bordered" heading-level="3">
+  <lui-accordion-item label="Shipping" subtitle="Delivery times" open>
+    <svg slot="icon" aria-hidden="true"><!-- ícone --></svg>
+    Orders ship in two business days.
+  </lui-accordion-item>
+  <lui-accordion-item label="Returns">
+    Returns are accepted within 30 days.
+  </lui-accordion-item>
+</lui-accordion>
+
+<script>
+  document
+    .querySelector('lui-accordion')
+    .addEventListener('lui-toggle', (event) => {
+      console.log(event.target, event.detail.open);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="accordion accordion--bordered">
+  <div class="accordion__item accordion__item--open">
+    <div class="accordion__heading" role="heading" aria-level="3">
+      <button
+        id="a1-trigger"
+        class="accordion__trigger"
+        type="button"
+        aria-expanded="true"
+        aria-controls="a1-panel"
+      >
+        <span class="accordion__text">
+          <span class="accordion__title">Shipping</span>
+        </span>
+        <!-- svg.accordion__chevron -->
+      </button>
+    </div>
+    <div id="a1-panel" class="accordion__panel">
+      <div class="accordion__panel-inner">
+        <div class="accordion__description">
+          Orders ship in two business days.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+```

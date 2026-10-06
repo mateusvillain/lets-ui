@@ -39,3 +39,7 @@ coverage/
 
 *storybook.log
 storybook-static
+
+# Vitest browser mode artifacts from failed runs
+.vitest-attachments/
+__screenshots__/

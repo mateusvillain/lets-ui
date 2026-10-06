@@ -27,6 +27,23 @@ export default defineConfig({
         },
       },
       {
+        // Web Components behave through the real DOM — shadow roots, focus,
+        // computed styles — so they run in a browser rather than a simulated
+        // one. The components' own Vite config supplies the Sass load paths
+        // and the Terrazzo importer the `?inline` stylesheets need.
+        extends: './packages/lets-ui-components/vite.config.ts',
+        test: {
+          name: 'components',
+          include: ['packages/lets-ui-components/src/**/*.test.js'],
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [{ browser: 'chromium' }],
+          },
+        },
+      },
+      {
         extends: true,
         plugins: [
           // The plugin will run tests for the stories defined in your Storybook config
