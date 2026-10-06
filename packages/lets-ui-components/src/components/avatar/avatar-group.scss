@@ -1,0 +1,13 @@
+@use 'packages/styles/src/components/avatar-group' as *;
+@use 'packages/styles/src/utilities/functions' as *;
+
+:host {
+  display: inline-flex;
+}
+
+// The avatars are slotted, so the group's own `> :not(:first-child)` rule does
+// not reach them. Each one overlaps by its own size, which it carries on the
+// host (see avatar.scss) or inherits from the group.
+::slotted(:not(:first-child)) {
+  margin-inline-start: calc(var(--lui-avatar-size, #{fixed(40)}) * -0.3);
+}

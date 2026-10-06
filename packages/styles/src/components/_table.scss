@@ -1,0 +1,164 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+// Native <table>: the semantics (caption, th[scope], row/column headers) come
+// from the markup, this file only paints it. `border-collapse: separate` so the
+// row dividers live on the cells and the outer border can sit on the wrapper,
+// where `overflow` can clip it to the radius.
+
+.table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+
+  &--bordered {
+    border: width(1) solid stroke(neutral, subtle);
+    border-radius: radius(md);
+  }
+
+  // A scrollable region has to be reachable by keyboard (WCAG 2.1.1).
+  &:focus-visible {
+    box-shadow: focus-ring(primary);
+    outline: none;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: start;
+
+  @include font-scale(body--lg);
+
+  // Every rule below walks the table with child combinators, so a table nested
+  // inside a cell keeps its own look instead of picking these up.
+
+  // Sits inside the wrapper's border, above the header, with its own gap to it.
+  > caption {
+    padding: fluid(12);
+    margin-block-end: fluid(8);
+    color: text(heading);
+    text-align: start;
+    caption-side: top;
+
+    @include font-scale(subheadline);
+  }
+
+  > :is(thead, tbody, tfoot) > tr > :is(th, td) {
+    padding: fluid(12);
+    text-align: start;
+    vertical-align: middle;
+    border-bottom: width(1) solid var(--lui-divider-color-border-default);
+  }
+
+  > :is(thead, tbody, tfoot) > tr > th {
+    color: text(heading);
+    font-weight: weight(bold);
+  }
+
+  > :is(thead, tbody, tfoot) > tr > td {
+    color: text(body);
+  }
+
+  // The last row of the table closes it on its own, without a divider
+  // underneath. A body followed by another body or by a footer is not the end,
+  // so it keeps its divider and the footer's last row is the one that closes.
+  > tbody:not(:has(~ :is(tbody, tfoot))) > tr:last-child > *,
+  > tfoot:not(:has(~ tfoot)) > tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  // Opt-in, per cell: put it on the header and on every cell of a column that
+  // reads better flush to the end (actions, amounts). Logical, so it follows the
+  // writing direction.
+  > :is(thead, tbody, tfoot) > tr > .table__cell--end {
+    text-align: end;
+  }
+
+  // Opt-in, per cell, like the one above: the column takes only the width its
+  // content needs and the other columns share the rest. In an auto-layout table
+  // a 1% width with no wrapping resolves to the widest cell's own width, so
+  // there is no number to keep in sync with the content (an actions column, a
+  // status tag, an id).
+  > :is(thead, tbody, tfoot) > tr > .table__cell--fit {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  > tbody > tr {
+    @include state-layer;
+
+    &:hover {
+      background-color: state(hover);
+
+      @include state-timing(hover);
+    }
+  }
+}
+
+// A sortable column header: a <button> inside the <th>, with `aria-sort` on the
+// <th> itself. The button gives keyboard access and a name; `aria-sort` tells
+// assistive technology the state, and the same attribute draws the indicator,
+// so what is shown and what is announced cannot drift apart. Sorting the rows
+// is not done here.
+// The arrows are masks, so they take the text colour. The shapes are the
+// arrow-up-down, arrow-up and arrow-down icons of the design, on a 24px grid;
+// the size and colours come from the functions.
+$sort-arrow-up: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M11.25,19.5L11.25,6.3106L7.2803,10.2803C6.9873,10.5732,6.5126,10.5732,6.2197,10.2803C5.9268,9.9874,5.9268,9.5126,6.2197,9.2198L11.4697,3.9698L11.5264,3.918C11.8209,3.6777,12.2556,3.6951,12.5303,3.9698L17.7803,9.2198C18.0731,9.5126,18.0731,9.9874,17.7803,10.2803C17.4873,10.5732,17.0126,10.5732,16.7197,10.2803L12.75,6.3106L12.75,19.5C12.75,19.9142,12.4142,20.25,12,20.25C11.5857,20.25,11.25,19.9142,11.25,19.5Z'/%3E%3C/svg%3E";
+$sort-arrow-down: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M11.25,4.5C11.25,4.0858,11.5857,3.75,12,3.75C12.4142,3.75,12.75,4.0858,12.75,4.5L12.75,17.6895L16.7197,13.7197C17.0126,13.4268,17.4873,13.4268,17.7803,13.7197C18.0731,14.0126,18.0731,14.4874,17.7803,14.7803L12.5303,20.0303C12.2373,20.3232,11.7626,20.3232,11.4697,20.0303L6.2197,14.7803C5.9268,14.4874,5.9268,14.0126,6.2197,13.7197C6.5126,13.4268,6.9873,13.4268,7.2803,13.7197L11.25,17.6895L11.25,4.5Z'/%3E%3C/svg%3E";
+$sort-arrow-both: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M7.5,20.25L7.5,5.5605L5.0303,8.0303C4.7373,8.3232,4.2626,8.3232,3.9697,8.0303C3.6768,7.7374,3.6768,7.2626,3.9697,6.9697L7.7197,3.2197L7.7764,3.168C8.0709,2.9277,8.5056,2.9451,8.7803,3.2197L12.5303,6.9697C12.8231,7.2626,12.8231,7.7374,12.5303,8.0303C12.2373,8.3232,11.7626,8.3232,11.4697,8.0303L9,5.5605L9,20.25C9,20.6642,8.6642,21,8.25,21C7.8357,21,7.5,20.6642,7.5,20.25ZM15,3.75C15,3.3358,15.3357,3,15.75,3C16.1642,3,16.5,3.3358,16.5,3.75L16.5,18.4394L18.9697,15.9697C19.2626,15.6768,19.7373,15.6768,20.0303,15.9697C20.3231,16.2626,20.3231,16.7374,20.0303,17.0303L16.2803,20.7803C15.9873,21.0732,15.5126,21.0732,15.2197,20.7803L11.4697,17.0303C11.1768,16.7374,11.1768,16.2626,11.4697,15.9697C11.7626,15.6768,12.2373,15.6768,12.5303,15.9697L15,18.4394L15,3.75Z'/%3E%3C/svg%3E";
+
+.table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: fluid(4);
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: radius(xs);
+
+  @include focus-ring(primary);
+
+  font: inherit;
+
+  &::after {
+    content: '';
+    flex-shrink: 0;
+    width: fixed(16);
+    height: fixed(16);
+    color: text(caption);
+    background-color: currentcolor;
+    mask: url($sort-arrow-both) center / contain no-repeat;
+  }
+}
+
+th[aria-sort='ascending'] > .table__sort::after,
+th[aria-sort='descending'] > .table__sort::after {
+  color: text(heading);
+}
+
+th[aria-sort='ascending'] > .table__sort::after {
+  mask-image: url($sort-arrow-up);
+}
+
+th[aria-sort='descending'] > .table__sort::after {
+  mask-image: url($sort-arrow-down);
+}
+
+// The header stays put while the rows scroll under it. Sticky sticks to the
+// nearest scrolling ancestor, which is the wrapper, so it only does anything
+// once the wrapper has a height to scroll within: set `max-height` on it. The
+// header cells need an opaque background, or the rows show through them.
+// The modifier sits on the table itself, not the wrapper: in the Web Component
+// the wrapper is in the shadow tree and a descendant selector cannot reach the
+// light-DOM table from there.
+.table--sticky-header > thead > tr > th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: bg(surface, neutral);
+}

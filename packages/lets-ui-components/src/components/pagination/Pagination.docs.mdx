@@ -1,0 +1,113 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as PaginationStories from './Pagination.stories';
+
+<Meta of={PaginationStories} />
+
+# Pagination
+
+Componente de navegação entre páginas de um conteúdo paginado. Renderiza os botões de página anterior e próxima e os números de página, destacando a página atual com `aria-current="page"`. Quando há mais páginas do que cabem no intervalo visível, as lacunas são substituídas por reticências (`…`), mantendo sempre a primeira e a última página.
+
+<Canvas of={PaginationStories.Default} />
+<Controls of={PaginationStories.Default} />
+
+## Poucas páginas
+
+Quando o total cabe no intervalo visível, todas as páginas aparecem sem truncamento.
+
+<Canvas of={PaginationStories.FewPages} />
+
+## Muitas páginas
+
+<Canvas of={PaginationStories.ManyPages} />
+
+## Truncamento com reticências
+
+A primeira e a última página ficam sempre visíveis; a página atual mantém `sibling-count` vizinhas de cada lado, e cada lacuna vira uma reticência. Depois de truncada, a lista tem sempre o mesmo número de itens, então a largura não muda durante a navegação.
+
+<Canvas of={PaginationStories.Truncation} />
+
+## Quantidade de vizinhas
+
+<Canvas of={PaginationStories.SiblingCount} />
+
+## Evento `lui-page-change`
+
+Ao navegar, o componente atualiza `current-page` e emite `lui-page-change` com a nova página em `event.detail.page`. O evento borbulha e atravessa o shadow DOM.
+
+<Canvas of={PaginationStories.PageChangeEvent} />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com links para uma paginação do lado do servidor.
+
+<Canvas of={PaginationStories.CSSClass} />
+
+## Propriedades
+
+| Atributo                | Tipo     | Padrão                      | Descrição                                                                                                         |
+| ----------------------- | -------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `current-page`          | `number` | `1`                         | Página atual. Refletido no atributo ao navegar.                                                                   |
+| `total-pages`           | `number` | `1`                         | Total de páginas.                                                                                                 |
+| `sibling-count`         | `number` | `1`                         | Páginas vizinhas exibidas de cada lado da atual.                                                                  |
+| `compact-sibling-count` | `number` | `0`                         | Vizinhas de cada lado abaixo de 768px (limitado a `sibling-count`). Primeira, última e atual permanecem visíveis. |
+| `label`                 | `string` | `Pagination`                | Nome acessível do landmark `<nav>`.                                                                               |
+| `previous-label`        | `string` | `Previous page`             | Nome acessível do botão de página anterior.                                                                       |
+| `next-label`            | `string` | `Next page`                 | Nome acessível do botão de próxima página.                                                                        |
+| `page-label`            | `string` | `Page`                      | Prefixo do nome acessível de cada página ("Page 3").                                                              |
+| `status-label`          | `string` | `Page {current} of {total}` | Texto anunciado por leitores de tela após a troca de página.                                                      |
+
+## Acessibilidade
+
+- Renderizado como `<nav>` com uma lista (`<ul>`) de botões nativos: navegável com `Tab`, e `Enter` ou `Espaço` ativam a página.
+- A página atual recebe `aria-current="page"`.
+- O botão de página anterior fica desabilitado (`disabled` e `aria-disabled="true"`) na primeira página, e o de próxima página, na última.
+- As reticências são decorativas (`aria-hidden="true"`).
+- Depois de navegar, o foco permanece no controle usado; se ele ficar desabilitado ou deixar de existir, o foco vai para a página atual.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-pagination current-page="1" total-pages="20"></lui-pagination>
+
+<script>
+  document
+    .querySelector('lui-pagination')
+    .addEventListener('lui-page-change', (event) => {
+      console.log(event.detail.page);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<nav class="pagination" aria-label="Pagination">
+  <ul class="pagination__list">
+    <li>
+      <a
+        class="pagination__item pagination__item--direction"
+        href="?page=1"
+        aria-label="Previous page"
+      >
+        <!-- ícone -->
+      </a>
+    </li>
+    <li><a class="pagination__item" href="?page=1">1</a></li>
+    <li>
+      <a class="pagination__item" href="?page=2" aria-current="page">2</a>
+    </li>
+    <li><a class="pagination__item" href="?page=3">3</a></li>
+    <li>
+      <a
+        class="pagination__item pagination__item--direction"
+        href="?page=3"
+        aria-label="Next page"
+      >
+        <!-- ícone -->
+      </a>
+    </li>
+  </ul>
+</nav>
+```

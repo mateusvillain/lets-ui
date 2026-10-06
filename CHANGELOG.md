@@ -4,6 +4,25 @@
 
 ### Added
 
+- New `lui-avatar` and `lui-avatar-group` Web Components, plus CSS-only `.avatar` / `.avatar-group` styles, for representing a person or entity with a photo or initials. A photo that fails to load falls back to the initials, which come from `name` (first letter of the first and last word) unless `initials` sets them. With neither, a person icon in the initials colour takes their place.
+  - `size` (`sm`, `md`, `lg`), `radius` (`circle`, `rounded`, `square`) and `variant` (`gray`, `blue`, `green`, `orange`, `red`, `violet`), each variant keeping 4.5 : 1 contrast for the initials.
+  - `status` (`online`, `away`, `busy`, `offline`) adds a dot with a shape of its own inside — solid, clock hands, a bar, a hollow centre — so it does not rest on colour alone.
+  - `lui-avatar-group` stacks avatars with a 30% overlap and a surface-coloured ring, passes its `size` down, and moves the status dot to the bottom-left. `label` names the group.
+  - With a `name` or `status` the avatar is `role="img"` with an `aria-label` that reads both ("Maria Villain, Online"); `status-label` overrides the English text. With neither it is decorative and hidden from the accessibility tree.
+- New `lui-table` Web Component, plus CSS-only `.table` / `.table-wrapper` styles, for data in rows and columns. The author writes a native `<table>` and the component does not add markup of its own.
+  - `bordered` adds an outer border with rounded corners, and a `<caption>` is styled as the title inside it. Row dividers (none under the last row), the bold header and the row hover come from existing tokens.
+  - `.table__cell--end` aligns a column to the end and `.table__cell--fit` makes it only as wide as its content. Put either class on the header and on each cell of the column.
+  - `sticky-header` with `max-height` keeps the header visible while the rows scroll. It also sets `scroll-padding-top`, so a focused row does not end up behind the header.
+  - Sortable columns: put a `<button class="table__sort">` in the `<th>`. `lui-table` keeps `aria-sort` on the headers, sorts one column at a time through ascending, descending and none, draws an arrow from `aria-sort`, and emits `lui-sort` with `{ column, direction }`. It does not reorder the rows.
+  - Every table needs a name, from a `<caption>`, `aria-label` or `aria-labelledby`. When the table scrolls, its area becomes a `role="region"` with a name that can take focus. The name comes from `label` or from the table's own name.
+- `close-label` on `lui-modal` and `lui-drawer`, the `aria-label` of the close button (defaults `Close modal` and `Close drawer`).
+- `show-password-label`, `hide-password-label`, `increment-label` and `decrement-label` on `lui-input`, the `aria-label` of the password toggle and the number steppers.
+- New `lui-pagination` Web Component and CSS-only `.pagination` styles for moving between the pages of a long set of content. The first and last pages are always shown, the current page keeps its siblings on each side, and an ellipsis stands in for every gap. Once the list truncates it keeps the same length, so the row does not change width while paging.
+  - `current-page` and `total-pages` drive the list; `sibling-count` sets how many neighbours show beside the current page. Below the `sm` breakpoint (768px) `compact-sibling-count` takes over, `0` by default, so the row shrinks without hiding the first, last or current page.
+  - Navigating fires `lui-page-change` with the new page in `detail.page`.
+  - Rendered as a `<nav>` holding a list of native buttons. The current page carries `aria-current="page"`, each page is named `"{page-label} N"`, the ellipses are decorative, and previous and next are disabled at the bounds. After a change, focus stays on the control that was used, or moves to the current page when that control disappears or becomes disabled. A visually hidden `role="status"` region announces the new page.
+  - Every string is a prop, so the component can be translated: `label` (the `<nav>` name), `previous-label`, `next-label`, `page-label` and `status-label`, where `status-label` takes `{current}` and `{total}` placeholders (`"Page {current} of {total}"` by default).
+  - The `<nav>` name is `label` rather than `aria-label`, so a consumer's attribute does not stay on the host element, which has no role, and the same name is not exposed twice.
 - New `lui-accordion` and `lui-accordion-item` Web Components and CSS-only `.accordion` styles for a list of collapsible sections. The chevron turns when an item opens, and the animation is removed under `prefers-reduced-motion`.
   - Opening an item closes the one that was open; `multiple` lets several stay open. `lui-accordion-item` takes `label`, `subtitle`, `open` and `disabled`, an `icon` slot, and a default slot for the description.
   - `variant` is `default` (dividers), `bordered` (the list wrapped in a rounded border) or `highlighted` (no dividers; the open item is outlined).
@@ -11,6 +30,17 @@
   - Every header is a native `<button>` with `aria-expanded` and `aria-controls`, inside an element with `role="heading"` whose level `heading-level` sets (1–6, default 3). Enter and Space toggle it, and Arrow keys, `Home` and `End` move focus between headers, skipping disabled ones.
   - A closed panel is `visibility: hidden`, so its content leaves the tab order and the accessibility tree. The panel has no `role="region"`, which the ARIA pattern advises against for accordions with many panels.
 - Browser tests for the Web Components: a `components` project in the Vitest config runs `*.test.js` files in Chromium through Playwright, starting with the Accordion. `pnpm test` runs it, and CI installs Chromium first.
+
+### Changed
+
+- The strings the components generate are now English by default. They were hardcoded and split between Portuguese and English, so a screen reader announced `Fechar modal` in an English page, and no project was consistent out of the box. Every one is a prop, so a project sets its own language per component instead of inheriting ours.
+  - Portuguese defaults that move to English: `Campo obrigatório.` → `This field is required.` (`lui-input`, `lui-textarea`, `lui-select`, `lui-checkbox`, `lui-switch`), `(opcional)` → `(optional)` (`lui-input`, `lui-textarea`, `lui-select`), `Selecione uma opção.` → `Select an option.` (`lui-radio-group`), `Mostrar tooltip` → `Show tooltip` (`lui-tooltip`), `Abrir drawer` → `Open drawer` (`lui-drawer` trigger), and the password and stepper labels of `lui-input`.
+  - Projects that relied on the Portuguese text must now pass it explicitly.
+
+### Fixed
+
+- `lui-checkbox` and `lui-switch` reported a fixed `Campo obrigatório.` as their validation message and ignored `error-text`. They now use `error-text`.
+- Focus rings were invisible on light backgrounds. The `focus-ring` colour tokens pointed at the lightest steps of their scales (`primary.1`, `secondary.2`, `red.1`, `green.1`, `gray.3`), which measure between 1.1:1 and 1.8:1 against white, well under the 3:1 that WCAG 2.4.11 asks of a focus indicator. All five now point at step 5 of their scale: 3.65:1 for primary on a light background, and above 5:1 for the other variants in both themes. Step 4 was not enough for the default brand, where `primary.4` measures 2.96:1.
 
 ## v1.10.0
 

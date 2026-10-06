@@ -2,6 +2,8 @@
 // See CLAUDE.md § "SCSS split rule" for the rationale.
 @use 'accordion';
 @use 'alert';
+@use 'avatar';
+@use 'avatar-group';
 @use 'box';
 @use 'center';
 @use 'container';
@@ -27,6 +29,7 @@
 @use 'link';
 @use 'modal';
 @use 'navbar';
+@use 'pagination';
 @use 'select';
 @use 'shortcut';
 @use 'tabs';
@@ -37,3 +40,4 @@
 @use 'sidebar';
 @use 'stack';
 @use 'switcher';
+@use 'table';

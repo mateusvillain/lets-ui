@@ -36,6 +36,7 @@
     "./input": "./dist/components/input.js",
     "./link": "./dist/components/link.js",
     "./modal": "./dist/components/modal.js",
+    "./pagination": "./dist/components/pagination.js",
     "./radio": "./dist/components/radio.js",
     "./select": "./dist/components/select.js",
     "./shortcut": "./dist/components/shortcut.js",

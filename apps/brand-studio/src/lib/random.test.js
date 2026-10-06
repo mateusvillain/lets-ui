@@ -28,6 +28,8 @@ const FONT_SIZE_STEPS = [
   '2xl',
   '3xl',
 ];
+/** The steps held at a single size instead of a clamp(). */
+const FIXED_FONT_SIZE_STEPS = ['3xs', '2xs', '1xs'];
 /** Steps that carry both a margin and a gutter, so the two can be compared. */
 const MARGIN_STEPS = ['1xs', 'sm', 'md', 'lg'];
 
@@ -135,10 +137,19 @@ describe('randomBrand', () => {
 
   it('draws a geometric, non-inverted type scale', () => {
     for (const brand of draws) {
+      // A fixed step is the same number at both ends of the viewport range,
+      // which is what lets it be compared against a fluid one.
       const scale = FONT_SIZE_STEPS.map((step) => {
-        const parsed = parseClamp(
-          brand.foundation[`typography.font-size.${step}`]
-        );
+        const value = brand.foundation[`typography.font-size.${step}`];
+
+        if (FIXED_FONT_SIZE_STEPS.includes(step)) {
+          expect(value.unit).toBe('rem');
+          // Three decimals at most: no float noise like 0.8330000000000001.
+          expect(value.value).toBe(Number(value.value.toFixed(3)));
+          return { min: value.value, max: value.value };
+        }
+
+        const parsed = parseClamp(value);
         expect(parsed).not.toBeNull();
         return parsed;
       });
@@ -149,7 +160,9 @@ describe('randomBrand', () => {
         expect(min).toBeGreaterThan(0);
       }
 
-      // Monotonic in both ends: every step is larger than the one below it.
+      // Monotonic in both ends: every step is larger than the one below it —
+      // including across the boundary, where a fluid minimum that dipped under
+      // the fixed step below it would invert the scale on narrow screens.
       for (let i = 1; i < scale.length; i += 1) {
         expect(scale[i].min).toBeGreaterThan(scale[i - 1].min);
         expect(scale[i].max).toBeGreaterThan(scale[i - 1].max);
