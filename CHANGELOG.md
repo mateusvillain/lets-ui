@@ -9,6 +9,12 @@
   - `status` (`online`, `away`, `busy`, `offline`) adds a dot with a shape of its own inside — solid, clock hands, a bar, a hollow centre — so it does not rest on colour alone.
   - `lui-avatar-group` stacks avatars with a 30% overlap and a surface-coloured ring, passes its `size` down, and moves the status dot to the bottom-left. `label` names the group.
   - With a `name` or `status` the avatar is `role="img"` with an `aria-label` that reads both ("Maria Villain, Online"); `status-label` overrides the English text. With neither it is decorative and hidden from the accessibility tree.
+- New `lui-table` Web Component, plus CSS-only `.table` / `.table-wrapper` styles, for data in rows and columns. The author writes a native `<table>` and the component does not add markup of its own.
+  - `bordered` adds an outer border with rounded corners, and a `<caption>` is styled as the title inside it. Row dividers (none under the last row), the bold header and the row hover come from existing tokens.
+  - `.table__cell--end` aligns a column to the end and `.table__cell--fit` makes it only as wide as its content. Put either class on the header and on each cell of the column.
+  - `sticky-header` with `max-height` keeps the header visible while the rows scroll. It also sets `scroll-padding-top`, so a focused row does not end up behind the header.
+  - Sortable columns: put a `<button class="table__sort">` in the `<th>`. `lui-table` keeps `aria-sort` on the headers, sorts one column at a time through ascending, descending and none, draws an arrow from `aria-sort`, and emits `lui-sort` with `{ column, direction }`. It does not reorder the rows.
+  - Every table needs a name, from a `<caption>`, `aria-label` or `aria-labelledby`. When the table scrolls, its area becomes a `role="region"` with a name that can take focus. The name comes from `label` or from the table's own name.
 - `close-label` on `lui-modal` and `lui-drawer`, the `aria-label` of the close button (defaults `Close modal` and `Close drawer`).
 - `show-password-label`, `hide-password-label`, `increment-label` and `decrement-label` on `lui-input`, the `aria-label` of the password toggle and the number steppers.
 
