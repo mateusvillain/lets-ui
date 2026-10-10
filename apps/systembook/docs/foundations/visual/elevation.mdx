@@ -34,24 +34,15 @@ A elevação usa **sombras** para mostrar a altura de cada superfície na hierar
 
 ## Níveis de Elevação
 
-| name | token | value | use |
-| --- | --- | --- | --- |
-| base | --lui-elevation-base | 0 0 8px 0 rgb(0% 0% 0% / 2%), 0 4px 12px 0 rgb(0% 0% 0% / 4%) | Superfícies em repouso: cards, painéis, dropdowns fechados. |
-| hovered | --lui-elevation-hovered | 0 0 8px 0 rgb(0% 0% 0% / 4%), 0 8px 16px 0 rgb(0% 0% 0% / 8%) | Estado de hover de cards interativos e superfícies elevadas. |
-| floating | --lui-elevation-floating | 0 0 8px 0 rgb(0% 0% 0% / 8%), 0 12px 20px 0 rgb(0% 0% 0% / 12%) | Elementos flutuantes: dropdowns, popovers, tooltips. |
-| overlay | --lui-elevation-overlay | 0 1px 8px 0 rgb(0% 0% 0% / 4%), 0 16px 24px 0 rgb(0% 0% 0% / 16%) | Camada mais alta: modais, drawers, bandejas laterais. |
+Quanto mais alta a superfície, mais difusa e distante a sombra. Aplicado via `elevation($layer)`.
+
+<TokenTable group="lui.elevation" />
 
 ## Focus Ring
 
-Sombras de contorno aplicadas em estados de foco de acessibilidade. Use a função SCSS `focus-ring($variant)` para aplicá-las nos componentes.
+Sombras de contorno aplicadas em estados de foco de acessibilidade. Cada variante herda a cor de foco da sua família semântica. Use a função SCSS `focus-ring($variant)` para aplicá-las nos componentes.
 
-| variant | token | colorToken | desc |
-| --- | --- | --- | --- |
-| primary | --lui-focus-ring-primary | --lui-color-primary-focus-ring | Foco primário — ações e controles padrão |
-| secondary | --lui-focus-ring-secondary | --lui-color-secondary-focus-ring | Foco secundário — controles neutros |
-| danger | --lui-focus-ring-danger | --lui-color-danger-focus-ring | Foco de perigo — campos com erro |
-| success | --lui-focus-ring-success | --lui-color-success-focus-ring | Foco de sucesso — campos validados |
-| neutral | --lui-focus-ring-neutral | --lui-color-neutral-focus-ring | Foco neutro — elementos sem contexto semântico |
+<TokenTable group="lui.focus-ring" />
 
 ## Boas práticas
 

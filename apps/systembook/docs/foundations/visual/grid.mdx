@@ -1,0 +1,66 @@
+---
+title: "Grid"
+subtitle: "A grade responsiva que estrutura a página. Colunas, espaços entre colunas e margens laterais mudam por breakpoint — todos definidos por tokens da marca e aplicados pelo componente [Grid](../../components/layout/grid/index.mdx)."
+order: 6
+---
+
+## Como a grade funciona
+
+A grade divide a largura disponível em **colunas** iguais, separadas por um **gap**, dentro de uma **margem** lateral. É o esqueleto invisível que mantém o conteúdo alinhado de uma tela a outra.
+
+O sistema é **mobile-first**: a grade começa com poucas colunas em telas pequenas e ganha colunas conforme a largura cresce. Você não escolhe pixels — escolhe quantas colunas um bloco ocupa, e a grade cuida do resto.
+
+## Princípios
+
+- **Alinhamento acima de tudo.** Tudo se apoia nas mesmas colunas, então nada fica torto de uma seção para outra.
+- **Responsiva por padrão.** O número de colunas, o gap e a margem são decididos pelo breakpoint, não escritos à mão.
+- **Conteúdo primeiro.** A grade existe para servir o conteúdo, não para forçá-lo a caber em caixas.
+- **Largura máxima.** Em telas muito largas, o conteúdo para de crescer e centraliza, para as linhas não ficarem longas demais.
+
+## Breakpoints
+
+Os limites onde o layout muda. Cada breakpoint marca a largura mínima a partir da qual a grade passa a usar a contagem de colunas daquela faixa.
+
+<TokenTable group="lui.brand.grid.breakpoint" />
+
+| Breakpoint | Faixa | Alvo típico |
+| --- | --- | --- |
+| `1xs` | até 767px | Celular |
+| `sm` | 768px e acima | Tablet em pé |
+| `md` | 1024px e acima | Tablet deitado, notebook pequeno |
+| `lg` | 1280px e acima | Desktop |
+| `1xl` | 1440px e acima | Telas largas |
+
+## Colunas
+
+Quantas colunas a grade oferece em cada faixa. Blocos de conteúdo ocupam um número inteiro dessas colunas.
+
+<TokenTable group="lui.brand.grid.column" />
+
+A contagem cresce com a tela: **4** colunas no celular, **8** no tablet e **12** no desktop. Doze divide-se bem (em 2, 3, 4 e 6), o que dá flexibilidade para dividir a página.
+
+## Espaço entre colunas
+
+O gap (goteira) separa as colunas sem encostar o conteúdo. Ele aponta para a escala de [espaçamento fixo](spacing.mdx).
+
+<TokenTable group="lui.brand.grid.gap" />
+
+## Margem
+
+O respiro entre a grade e a borda da tela. Cresce com o viewport para o conteúdo não colar nas laterais.
+
+<TokenTable group="lui.brand.grid.margin" />
+
+## Largura do contêiner
+
+A partir da maior faixa, o conteúdo para de esticar e fica com uma largura máxima, centralizado na tela.
+
+<TokenTable group="lui.brand.grid.container" />
+
+## Boas práticas
+
+- Deixe o componente [Grid](../../components/layout/grid/index.mdx) aplicar colunas, gap e margem — não reproduza esses valores à mão.
+- Pense em **quantas colunas** um bloco ocupa, e deixe a grade converter isso em largura.
+- Para alinhar poucos elementos numa linha, use [Flex](../../components/layout/flex/index.mdx) ou [Inline](../../components/layout/inline/index.mdx); a grade é para estruturar a página.
+- Teste o layout **nos limites** dos breakpoints: logo antes e logo depois de cada um é onde ele quebra.
+- Mantenha o conteúdo dentro da margem: nada de texto ou controle colado na borda da tela.

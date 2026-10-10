@@ -3,3 +3,6 @@
 
 # The built documentation site.
 systembook-dist/
+
+# Design tokens mirrored from packages/lets-ui-tokens by scripts/sync-tokens.mjs.
+tokens/

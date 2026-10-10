@@ -73,29 +73,25 @@ Escala fluida com `clamp()` — os tamanhos se adaptam proporcionalmente entre o
 
 ## Pesos Tipográficos
 
-| label | token | value |
-| --- | --- | --- |
-| Light | --lui-typography-weight-light | 300 |
-| Regular | --lui-typography-weight-regular | 400 |
-| Medium | --lui-typography-weight-medium | 500 |
-| Semibold | --lui-typography-weight-semibold | 600 |
-| Bold | --lui-typography-weight-bold | 700 |
+A escala de pesos vai de `light` a `bold`. Use `regular` para leitura e `semibold` ou `bold` para ênfase.
+
+<TokenTable group="lui.typography.weight" />
+
+Cada escala composta já aponta para o peso certo pela marca:
+
+<TokenTable group="lui.brand.typography.weight" />
 
 ## Alturas de Linha
 
-| Token | Valor | Uso |
-| --- | --- | --- |
-| `--lui-brand-typography-line-height-heading` | 1.2 | Heading |
-| `--lui-brand-typography-line-height-body` | 1.5 | Body |
+Títulos respiram menos que o corpo de texto.
+
+<TokenTable group="lui.brand.typography.line-height" />
 
 ## Famílias Tipográficas
 
 Ambas as famílias utilizam a pilha de fontes do sistema operacional (`system font stack`), garantindo leitura nativa e sem dependências externas.
 
-| Token | Uso |
-| --- | --- |
-| `--lui-brand-typography-font-family-heading` | Títulos |
-| `--lui-brand-typography-font-family-body` | Texto corrido |
+<TokenTable group="lui.brand.typography.font-family" />
 
 ## Boas práticas
 
