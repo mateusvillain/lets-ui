@@ -26,7 +26,7 @@
               "Segoe UI Emoji",
               "Segoe UI Symbol"
             ],
-            "description": "Default font for heading texts"
+            "$description": "Default font for heading texts"
           },
           "body": {
             "$value": [
@@ -44,7 +44,7 @@
               "Segoe UI Emoji",
               "Segoe UI Symbol"
             ],
-            "description": "Default font for body texts"
+            "$description": "Default font for body texts"
           },
           "code": {
             "$value": [
@@ -55,7 +55,7 @@
               "Liberation Mono",
               "monospace"
             ],
-            "description": "Default font for code"
+            "$description": "Default font for code"
           }
         },
         "font-size": {
