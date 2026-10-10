@@ -32,20 +32,13 @@ O espaço **comunica relação**: elementos relacionados ficam próximos, e grup
 
 ## Espaçamento Fixo
 
-Valores absolutos em pixels — ideais para espaçamentos internos de componentes que não devem mudar com o viewport.
+Valores absolutos em pixels — ideais para espaçamentos internos de componentes que não devem mudar com o viewport. Aplicado via `fixed($size)`.
 
-| name | token | value |
-| --- | --- | --- |
-| 0 | --lui-spacing-fixed-0 | 0 |
-| 8 | --lui-spacing-fixed-8 | 8px |
-| 16 | --lui-spacing-fixed-16 | 16px |
-| 24 | --lui-spacing-fixed-24 | 24px |
-| 32 | --lui-spacing-fixed-32 | 32px |
-| 40 | --lui-spacing-fixed-40 | 40px |
+<TokenTable group="lui.spacing.fixed" />
 
 ## Espaçamento Fluido
 
-Valores responsivos com `clamp()` — escalam proporcionalmente entre o breakpoint mínimo (320 px) e máximo (1440 px). Ideais para padding de seções, gaps de layout e margens entre blocos.
+Valores responsivos com `clamp()` — escalam proporcionalmente entre o breakpoint mínimo (320 px) e máximo (1440 px). Ideais para padding de seções, gaps de layout e margens entre blocos. Aplicado via `fluid($size)`.
 
 | name | token | clamp | min | max |
 | --- | --- | --- | --- | --- |

@@ -4,8 +4,8 @@
   "type": "module",
   "description": "Let's UI documentation, written as MDX and built by SystemBook",
   "devDependencies": {
-    "@systembook/cli": "^0.3.1",
-    "@systembook/schema": "^0.3.1",
+    "@systembook/cli": "^0.5.0",
+    "@systembook/schema": "^0.5.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
@@ -18,8 +18,9 @@
     ]
   },
   "scripts": {
-    "docs:dev": "systembook dev",
-    "docs:check": "systembook check",
-    "docs:build": "systembook build"
+    "sync:tokens": "node scripts/sync-tokens.mjs",
+    "docs:dev": "pnpm sync:tokens && systembook dev",
+    "docs:check": "pnpm sync:tokens && systembook check",
+    "docs:build": "pnpm sync:tokens && systembook build"
   }
 }

@@ -12,14 +12,22 @@ content is reviewed in the same pull request as the code.
   variant into an isolated iframe, and the docs embed it with
   `<ComponentEmbed component="Button" variant="primary" />`, so a page shows
   the component this repository actually builds.
-- **`systembook.config.ts`** — site name and the closed list of `status` tags.
+- **`systembook.config.ts`** — site name, the closed list of `status` tags, and
+  the `tokens` globs that feed the `/tokens` page and the `<TokenTable>` block.
+- **`scripts/sync-tokens.mjs`** — mirrors the design tokens from
+  `packages/lets-ui-tokens/tokens/` into a git-ignored `tokens/` folder here.
+  SystemBook reads token globs relative to this project and refuses `..`, so the
+  files have to live inside it; the `docs:*` scripts run the sync first. Tokens
+  typed `"string"` (the `clamp()` fluid scales and CSS keywords) are dropped on
+  the way in, because they are not a W3C DTCG type SystemBook can render — those
+  scales stay documented with tables in the Foundations pages.
 
 ## Layout
 
 | Menu | Section | Source |
 | --- | --- | --- |
 | Get started | Overview, Developers | Introduction, Principles, Installation |
-| Foundations | Visual, Accessibility, Content | Color, Typography, Spacing, Border, Elevation; the accessibility contract; the writing guide |
+| Foundations | Visual, Accessibility, Content | Color, Typography, Spacing, Border, Elevation, Grid; the accessibility contract; the writing guide |
 | Components | Actionable, Navigation, Form and options, Content, Typography, Layout | one folder per component, with four tabs |
 | Utilities | SCSS | Functions, Mixins, Flex |
 
@@ -86,9 +94,10 @@ structure, and controls only change props.
 
 The format accepts only what the SystemBook editor can represent, and fails the
 build otherwise: headings up to `###`, no blockquotes (use `<Callout>`), no raw
-HTML, no horizontal rules, and only `<Callout>`, `<ComponentEmbed>` and
-`<DosDonts>` as components. `<ComponentEmbed>` needs a variant that exists in a
-`*.preview.tsx`.
+HTML beyond inline `<u>`, no horizontal rules, and only `<Callout>`,
+`<ComponentEmbed>`, `<DosDonts>` and `<TokenTable>` as components.
+`<ComponentEmbed>` needs a variant that exists in a `*.preview.tsx`, and
+`<TokenTable group="…" />` a group that exists in the configured `tokens`.
 
 ## Publishing
 
