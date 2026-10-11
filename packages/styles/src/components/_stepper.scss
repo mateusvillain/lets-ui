@@ -231,6 +231,63 @@ $indicator-size: calc(#{fluid(20)} + #{fluid(4)} * 4);
   }
 }
 
+// --- Forced colors ---
+// A forced-colors theme repaints every background with `Canvas`, and the
+// backgrounds are where the stepper keeps its progress: the filled circles and
+// the connectors would vanish, leaving completed steps identical to upcoming
+// ones. Those parts opt out of the repaint and take system colours instead —
+// `Highlight` for what is done or current, `GrayText` for what is still ahead —
+// so the user's palette still decides the actual colours.
+// The focus ring is a `box-shadow`, which forced colours drop, and the
+// `focus-ring` mixin clears the outline; a real outline takes its place.
+@media (forced-colors: active) {
+  .stepper__circle,
+  .stepper__connector {
+    forced-color-adjust: none;
+  }
+
+  // Through `--lui-bg`, like the resting colours above, so the hover and
+  // press tints still mix against it.
+  .stepper__circle {
+    @include state-base(Canvas);
+
+    border-color: CanvasText;
+    color: CanvasText;
+  }
+
+  .stepper__item--completed,
+  .stepper__item--active {
+    .stepper__circle {
+      @include state-base(Highlight);
+
+      border-color: Highlight;
+      color: HighlightText;
+    }
+  }
+
+  .stepper__connector {
+    background-color: GrayText;
+  }
+
+  .stepper__item--completed .stepper__connector {
+    background-color: Highlight;
+  }
+
+  .stepper__trigger:focus-visible {
+    outline: width(2) solid Highlight;
+    outline-offset: width(2);
+  }
+
+  .stepper__trigger:disabled {
+    color: GrayText;
+
+    .stepper__circle {
+      border-color: GrayText;
+      color: GrayText;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .stepper__spinner {
     animation-duration: 2s;

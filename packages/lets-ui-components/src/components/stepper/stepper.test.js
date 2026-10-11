@@ -1,6 +1,6 @@
 import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
 import { afterEach, describe, expect, it } from 'vitest';
-import { userEvent } from 'vitest/browser';
+import { cdp, userEvent } from 'vitest/browser';
 import { LuiStepper } from './stepper.ts';
 import { LuiStep } from './step.ts';
 
@@ -384,5 +384,44 @@ describe('lui-stepper reflow', () => {
     await nextFrame();
     await settle(stepper, steps);
     expect(steps.map(orientationOf)).toEqual(Array(3).fill('horizontal'));
+  });
+});
+
+describe('lui-stepper forced colors', () => {
+  const emulate = (value) =>
+    cdp().send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'forced-colors', value }],
+    });
+
+  afterEach(() => emulate(''));
+
+  it('keeps the progress visible when the theme repaints backgrounds', async () => {
+    const { steps } = await mount(FOUR('current-step="2"'));
+    await emulate('active');
+    // Past the 220ms colour transition of the state layer.
+    await new Promise((r) => setTimeout(r, 300));
+
+    const circle = (s) =>
+      getComputedStyle(s.shadowRoot.querySelector('.stepper__circle'))
+        .backgroundColor;
+    const line = (s) => getComputedStyle(connector(s)).backgroundColor;
+    const page = getComputedStyle(document.body).backgroundColor;
+
+    // Completed and current share one fill; upcoming takes the page colour.
+    expect(circle(steps[0])).toBe(circle(steps[1]));
+    expect(circle(steps[0])).not.toBe(circle(steps[2]));
+    // Both connectors are drawn, and the completed one stands apart.
+    expect(line(steps[0])).not.toBe(page);
+    expect(line(steps[1])).not.toBe(page);
+    expect(line(steps[0])).not.toBe(line(steps[1]));
+  });
+
+  it('draws a focus outline in place of the dropped box-shadow', async () => {
+    const { steps } = await mount(FOUR());
+    await emulate('active');
+    await userEvent.tab();
+    const style = getComputedStyle(trigger(steps[0]));
+    expect(style.outlineStyle).toBe('solid');
+    expect(parseFloat(style.outlineWidth)).toBeGreaterThan(0);
   });
 });
