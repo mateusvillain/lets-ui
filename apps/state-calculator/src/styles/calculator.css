@@ -1,0 +1,295 @@
+/*
+ * The calculator's own chrome reads the Let's UI tokens, so it follows the
+ * theme select. The sample and the swatches take the colours under test from
+ * custom properties set by the script, never from tokens.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--lui-color-neutral-background-surface);
+  color: var(--lui-color-neutral-text-body);
+  font-family:
+    var(--lui-brand-typography-font-family-body), system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+.sc {
+  display: grid;
+  gap: var(--lui-spacing-fixed-24);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--lui-spacing-fixed-40) var(--lui-spacing-fixed-24);
+}
+
+.sc-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lui-spacing-fixed-16);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.sc-title {
+  margin: 0;
+  color: var(--lui-color-neutral-text-heading);
+  font-family:
+    var(--lui-brand-typography-font-family-heading), system-ui, sans-serif;
+  font-size: 2rem;
+}
+
+.sc-subtitle {
+  margin: 0;
+  color: var(--lui-color-neutral-text-heading);
+  font-size: 1.25rem;
+}
+
+.sc-lead,
+.sc-note {
+  max-width: 60ch;
+  margin: var(--lui-spacing-fixed-8) 0 0;
+}
+
+.sc-panel {
+  display: grid;
+  gap: var(--lui-spacing-fixed-16);
+  padding: var(--lui-spacing-fixed-24);
+  border: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-default);
+  border-radius: var(--lui-border-radius-lg);
+}
+
+.sc-label {
+  color: var(--lui-color-neutral-text-heading);
+  font-size: 0.875rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+}
+
+.sc-field {
+  display: grid;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.sc-field[hidden] {
+  display: none;
+}
+
+.sc-field--inline {
+  grid-auto-flow: column;
+  align-items: center;
+}
+
+.sc-select,
+.sc-hex {
+  min-height: 40px;
+  padding: 0 var(--lui-spacing-fixed-8);
+  border: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-default);
+  border-radius: var(--lui-border-radius-md);
+  background: var(--lui-color-neutral-background-surface);
+  color: inherit;
+  font: inherit;
+}
+
+.sc-hex {
+  width: 9ch;
+  font-family: ui-monospace, monospace;
+}
+
+.sc-hex[aria-invalid='true'] {
+  border-color: var(--lui-color-danger-border-default);
+}
+
+.sc-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lui-spacing-fixed-8) var(--lui-spacing-fixed-24);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sc-modes legend {
+  margin-bottom: var(--lui-spacing-fixed-8);
+}
+
+.sc-mode {
+  display: flex;
+  gap: var(--lui-spacing-fixed-8);
+  align-items: center;
+  cursor: pointer;
+}
+
+.sc-mode small {
+  color: var(--lui-color-neutral-text-caption);
+}
+
+.sc-colours {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--lui-spacing-fixed-16);
+}
+
+.sc-colour {
+  display: flex;
+  gap: var(--lui-spacing-fixed-8);
+  align-items: center;
+}
+
+.sc-colour input[type='color'] {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-default);
+  border-radius: var(--lui-border-radius-md);
+  background: none;
+  cursor: pointer;
+}
+
+.sc-select:focus-visible,
+.sc-hex:focus-visible,
+.sc-mode input:focus-visible,
+.sc-colour input[type='color']:focus-visible {
+  outline: none;
+  box-shadow: var(--lui-focus-ring-primary);
+}
+
+.sc-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--lui-spacing-fixed-16);
+}
+
+.sc-card {
+  display: grid;
+  gap: 4px;
+  padding: var(--lui-spacing-fixed-16);
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-border-radius-lg);
+}
+
+.sc-card__name {
+  margin: var(--lui-spacing-fixed-8) 0 0;
+  color: var(--lui-color-neutral-text-heading);
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+.sc-card__hex {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+}
+
+.sc-card__meta {
+  margin: 0;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.875rem;
+}
+
+.sc-swatch {
+  display: grid;
+  place-items: center;
+  height: 88px;
+  border-radius: var(--lui-border-radius-md);
+  font-size: 1.5rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+}
+
+.sc-swatch--background {
+  background: var(--swatch);
+  color: var(--tint);
+}
+
+/* A border swatch is the line on its surface, thick enough to read the colour. */
+.sc-swatch--border {
+  border: 4px solid var(--swatch);
+  background: var(--surface);
+}
+
+.sc-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: var(--lui-border-radius-sm);
+  background: var(--lui-color-success-background-surface);
+  color: var(--lui-color-neutral-text-heading);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.sc-badge[data-pass='false'] {
+  background: var(--lui-color-danger-background-surface);
+}
+
+.sc-stage {
+  display: grid;
+  place-items: center;
+  padding: var(--lui-spacing-fixed-32);
+  border-radius: var(--lui-border-radius-md);
+  background: var(--lui-color-neutral-border-subtle);
+}
+
+.sc-stage[data-mode='border'] {
+  background: var(--surface);
+}
+
+/* Same mix and timings as `state()` / `state-border()` and `state-timing()`. */
+.sc-sample {
+  min-width: 200px;
+  min-height: 44px;
+  padding: 0 var(--lui-spacing-fixed-24);
+  border: var(--lui-border-width-1) solid transparent;
+  border-radius: var(--lui-border-radius-md);
+  background: var(--base);
+  color: var(--tint);
+  font: inherit;
+  font-weight: var(--lui-typography-font-weight-semibold);
+  cursor: pointer;
+  transition:
+    background-color 220ms ease-out,
+    border-color 220ms ease-out;
+}
+
+.sc-sample:hover {
+  background-color: color-mix(in srgb, var(--tint) var(--hover), var(--base));
+  transition-duration: 140ms;
+}
+
+.sc-sample:active {
+  background-color: color-mix(in srgb, var(--tint) var(--pressed), var(--base));
+  transition-duration: 40ms;
+  transition-timing-function: linear;
+}
+
+.sc-sample:focus-visible {
+  outline: none;
+  box-shadow: var(--lui-focus-ring-primary);
+}
+
+.sc-stage[data-mode='border'] .sc-sample {
+  border-color: var(--base);
+  background: var(--surface);
+}
+
+.sc-stage[data-mode='border'] .sc-sample:hover {
+  border-color: color-mix(in srgb, var(--tint) var(--hover), var(--base));
+  background: var(--surface);
+}
+
+.sc-stage[data-mode='border'] .sc-sample:active {
+  border-color: color-mix(in srgb, var(--tint) var(--pressed), var(--base));
+  background: var(--surface);
+}
+
+.sc-code {
+  overflow-x: auto;
+  margin: 0;
+  padding: var(--lui-spacing-fixed-16);
+  border-radius: var(--lui-border-radius-md);
+  background: var(--lui-color-neutral-border-subtle);
+  font-size: 0.8125rem;
+}

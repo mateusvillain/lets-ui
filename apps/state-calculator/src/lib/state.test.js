@@ -1,0 +1,86 @@
+import { describe, expect, it } from 'vitest';
+
+import {
+  contrast,
+  computeStates,
+  cssColorToHex,
+  mix,
+  normalizeHex,
+} from './state.js';
+
+describe('normalizeHex', () => {
+  it('expands short hex and lowercases', () => {
+    expect(normalizeHex('#ABC')).toBe('#aabbcc');
+    expect(normalizeHex('EEECF1')).toBe('#eeecf1');
+  });
+
+  it('rejects anything that is not hex', () => {
+    expect(normalizeHex('red')).toBeNull();
+    expect(normalizeHex('#12345')).toBeNull();
+  });
+});
+
+describe('cssColorToHex', () => {
+  it('reads the formats getComputedStyle returns', () => {
+    expect(cssColorToHex('rgb(212, 51, 50)')).toBe('#d43332');
+    expect(cssColorToHex('rgba(212, 51, 50, 1)')).toBe('#d43332');
+    expect(cssColorToHex('color(srgb 1 1 1)')).toBe('#ffffff');
+    expect(cssColorToHex('rgb(100% 0% 0%)')).toBe('#ff0000');
+  });
+});
+
+describe('mix', () => {
+  it('matches what Chromium resolves for the field border', () => {
+    // Measured from the compiled CSS: 40% of text(body) into the subtle border.
+    expect(mix('#282b33', '#eeecf1', 40)).toBe('#9f9fa5');
+    expect(mix('#c8ced9', '#353946', 40)).toBe('#707581');
+  });
+
+  it('returns the base at 0% and the tint at 100%', () => {
+    expect(mix('#000000', '#ffffff', 0)).toBe('#ffffff');
+    expect(mix('#000000', '#ffffff', 100)).toBe('#000000');
+  });
+});
+
+describe('contrast', () => {
+  it('is 21:1 for black on white, symmetric', () => {
+    expect(contrast('#000000', '#ffffff')).toBeCloseTo(21);
+    expect(contrast('#ffffff', '#000000')).toBeCloseTo(21);
+  });
+});
+
+describe('computeStates', () => {
+  it('uses the background amounts and measures against the tint', () => {
+    const [rest, hover, pressed] = computeStates({
+      mode: 'background',
+      base: '#ffffff',
+      tint: '#000000',
+      surface: '#ffffff',
+    });
+    expect(rest).toMatchObject({ name: 'rest', amount: 0, color: '#ffffff' });
+    expect(hover).toMatchObject({
+      amount: 8,
+      color: mix('#000000', '#ffffff', 8),
+    });
+    expect(pressed.amount).toBe(16);
+    expect(rest.contrast).toBeCloseTo(21);
+  });
+
+  it('uses the border amounts and measures against the surface', () => {
+    const [rest, hover, pressed] = computeStates({
+      mode: 'border',
+      base: '#eeecf1',
+      tint: '#282b33',
+      surface: '#ffffff',
+    });
+    expect(hover).toMatchObject({ amount: 40, color: '#9f9fa5' });
+    expect(pressed.amount).toBe(56);
+    expect(rest.contrast).toBeCloseTo(contrast('#eeecf1', '#ffffff'));
+  });
+
+  it('throws on an unknown mode', () => {
+    expect(() =>
+      computeStates({ mode: 'outline', base: '#fff', tint: '#000' })
+    ).toThrow();
+  });
+});
