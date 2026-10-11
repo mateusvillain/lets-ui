@@ -26,6 +26,7 @@ Usar este mapa para decidir se o componente já existe e em qual formato.
 | navbar        | `_navbar.scss`        | não existe         | formato web component ausente                                 |
 | pagination    | `_pagination.scss`    | `pagination.js`    | cobertura completa; truncamento com reticências               |
 | radio         | `_radio.scss`         | `radio.js`         | cobertura completa                                            |
+| stepper       | `_stepper.scss`       | `stepper.js`       | inclui `lui-step`; horizontal, vertical e rótulos abaixo      |
 | switch        | `_switch.scss`        | `switch.js`        | cobertura completa; tamanhos lg e md; role="switch"           |
 | select        | `_select.scss`        | `select.js`        | cobertura completa                                            |
 | shortcut      | `_shortcut.scss`      | `shortcut.js`      | cobertura completa                                            |
