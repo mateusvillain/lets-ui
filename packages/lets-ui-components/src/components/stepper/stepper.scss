@@ -1,0 +1,20 @@
+@use 'packages/styles/src/components/stepper' as *;
+
+:host {
+  display: block;
+}
+
+// Lets the vertical connectors stretch when the stepper is given a height.
+.stepper {
+  block-size: 100%;
+}
+
+// The steps sit in this component's light DOM, so the item rules that the CSS
+// class API writes against `.stepper__item` reach them through `::slotted()`.
+::slotted(lui-step) {
+  flex: 1 1 auto;
+}
+
+::slotted(lui-step:last-child) {
+  flex: none;
+}

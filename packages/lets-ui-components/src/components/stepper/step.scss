@@ -1,0 +1,18 @@
+@use 'packages/styles/src/components/stepper' as *;
+
+:host {
+  display: flex;
+}
+
+// The host takes the item's place in the stepper, so the wrapper and the item
+// inside it only have to fill the host. The item is always the last child of
+// the wrapper, which is why the `:last-child` reset of the class API is undone
+// here — the host already carries it from the stepper.
+.stepper {
+  flex: 1 1 auto;
+}
+
+// `:host` lifts this to the specificity of the vertical `:last-child` rule.
+:host .stepper > .stepper__item {
+  flex: 1 1 auto;
+}

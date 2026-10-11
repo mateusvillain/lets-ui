@@ -1,0 +1,238 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+// Without the Web Component the markup is yours to drive: move
+// `stepper__item--completed` / `stepper__item--active` and `aria-current="step"`
+// by hand, and leave the connector out of the last item.
+
+// The number sits on a 28px circle, and the circle inside a 36px slot: the
+// active step fills the 4px around it with a 2px ring and a 2px gap, the
+// others with plain padding, so every indicator is the same size and the row
+// never shifts when the current step moves.
+$circle-size: calc(#{fluid(20)} + #{fluid(4)} * 2);
+$indicator-size: calc(#{fluid(20)} + #{fluid(4)} * 4);
+
+@keyframes lui-stepper-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.stepper {
+  @include flex($gap: fluid(8));
+
+  padding: fixed(0);
+  margin: fixed(0);
+  list-style: none;
+}
+
+// The steps keep their natural width and the free space goes to the
+// connectors: every item grows by the same amount, and only its connector can
+// take it.
+.stepper__item {
+  @include flex($gap: fluid(8));
+
+  flex: 1 1 auto;
+
+  &:last-child {
+    flex: none;
+  }
+}
+
+.stepper__trigger {
+  @include flex($gap: fluid(4));
+
+  flex-shrink: 0;
+  padding: fixed(0);
+  border: 0;
+  border-radius: radius(md);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+
+  @include focus-ring(primary);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: opacity(disabled);
+  }
+
+  // A step the user cannot jump to yet in a linear stepper. It is not disabled
+  // — it is simply not there yet — so it keeps its full colour.
+  &[aria-disabled='true'] {
+    cursor: default;
+  }
+}
+
+.stepper__indicator {
+  display: flex;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: fluid(4);
+  border-radius: radius(circle);
+}
+
+// Upcoming by default; the modifiers below fill it. The border is kept on every
+// variant — transparent on the filled ones — so the circle measures the same.
+.stepper__circle {
+  @include center;
+  @include font-scale(body--md);
+  @include state-layer(bg(surface, neutral));
+
+  box-sizing: border-box;
+  inline-size: $circle-size;
+  block-size: $circle-size;
+  border: width(1) solid stroke(neutral, subtle);
+  border-radius: radius(circle);
+  color: text(caption);
+}
+
+.stepper__number {
+  min-inline-size: fluid(20);
+  text-align: center;
+}
+
+.stepper__spinner {
+  display: block;
+  inline-size: fluid(20);
+  block-size: fluid(20);
+  animation: lui-stepper-spin 0.7s linear infinite;
+}
+
+.stepper__item--completed,
+.stepper__item--active {
+  .stepper__circle {
+    @include state-base(bg(container, primary));
+
+    border-color: transparent;
+    color: text(inverse);
+  }
+}
+
+// The ring comes out of the padding rather than being added to it: `fluid()`
+// scales with the viewport and the border width does not, so a fixed 2px gap
+// would leave the active indicator a fraction of a pixel off its neighbours.
+.stepper__item--active .stepper__indicator {
+  padding: calc(#{fluid(4)} - #{width(2)});
+  border: width(2) solid stroke(primary);
+}
+
+// The hover and press tint the circle, not the whole row: the text beside it
+// has no surface to tint. After the status modifiers, which set the resting
+// colour these mix against.
+.stepper__trigger:not(:disabled, [aria-disabled='true']) {
+  &:hover .stepper__circle {
+    background-color: state(hover);
+
+    @include state-timing(hover);
+  }
+
+  &:active .stepper__circle {
+    background-color: state(pressed);
+
+    @include state-timing(pressed);
+  }
+}
+
+.stepper__text {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
+.stepper__label {
+  @include font-scale(body--md);
+
+  color: text(body);
+}
+
+.stepper__description {
+  @include font-scale(body--sm);
+
+  color: text(caption);
+}
+
+// Text for assistive technology only: the position with the total, what the
+// colour of the circle shows (completed, loading), and the live region that
+// announces a change of step.
+.stepper__position,
+.stepper__status,
+.stepper__announcement {
+  @include sr-only;
+}
+
+// The connector after a step is filled once that step is done, so the line
+// reads as progress up to the current step.
+.stepper__connector {
+  flex: 1 1 auto;
+  min-inline-size: fluid(16);
+  block-size: width(1);
+  border-radius: radius(circle);
+  background-color: stroke(neutral, subtle);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.stepper__item--completed .stepper__connector {
+  background-color: stroke(primary);
+}
+
+// --- Vertical ---
+// Steps stack and the connector runs down from the centre of the indicator.
+// It stretches when the stepper is given a height, and keeps a minimum length
+// when it is not.
+.stepper--vertical {
+  flex-direction: column;
+  align-items: stretch;
+
+  .stepper__item {
+    flex-direction: column;
+    align-items: flex-start;
+
+    &:last-child {
+      flex: none;
+    }
+  }
+
+  .stepper__connector {
+    min-inline-size: 0;
+    min-block-size: fluid(40);
+    inline-size: width(1);
+    block-size: auto;
+    margin-inline-start: calc((#{$indicator-size} - #{width(1)}) / 2);
+  }
+}
+
+// --- Labels below the indicator (horizontal only) ---
+// The connector drops to the centre line of the indicator, since the row is
+// now as tall as the indicator plus its text.
+.stepper--labels-bottom:not(.stepper--vertical) {
+  align-items: flex-start;
+
+  .stepper__item {
+    align-items: flex-start;
+  }
+
+  .stepper__trigger {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stepper__text {
+    align-items: center;
+  }
+
+  .stepper__connector {
+    margin-block-start: calc((#{$indicator-size} - #{width(1)}) / 2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepper__spinner {
+    animation-duration: 2s;
+  }
+}

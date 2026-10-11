@@ -41,6 +41,8 @@ import { LuiModal } from './components/modal/modal.js';
 import { LuiPagination } from './components/pagination/pagination.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
+import { LuiStepper } from './components/stepper/stepper.js';
+import { LuiStep } from './components/stepper/step.js';
 import { LuiTable } from './components/table/table.js';
 import { LuiTag } from './components/tag/tag.js';
 import { LuiTextarea } from './components/textarea/textarea.js';
@@ -99,6 +101,8 @@ define('lui-pagination', LuiPagination);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
 define('lui-shortcut', LuiShortcut);
+define('lui-stepper', LuiStepper);
+define('lui-step', LuiStep);
 define('lui-table', LuiTable);
 define('lui-tag', LuiTag);
 define('lui-textarea', LuiTextarea);
@@ -152,6 +156,8 @@ export {
   LuiNativeSelect,
   LuiSelect,
   LuiShortcut,
+  LuiStepper,
+  LuiStep,
   LuiTable,
   LuiTag,
   LuiTextarea,
