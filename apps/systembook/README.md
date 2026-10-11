@@ -27,7 +27,7 @@ content is reviewed in the same pull request as the code.
 | Menu | Section | Source |
 | --- | --- | --- |
 | Get started | Overview, Developers | Introduction, Principles, Installation |
-| Foundations | Visual, Accessibility, Content | Color, Typography, Spacing, Border, Elevation, Grid; the accessibility contract; the writing guide |
+| Foundations | Properties, Accessibility, Tokens, Content | Color, Spacing, Typography, Grid, Elevation, Border; the accessibility commitment and debts; Design tokens, Themes; the writing guide |
 | Components | Actionable, Navigation, Form and options, Content, Typography, Layout | one folder per component, with four tabs |
 | Utilities | SCSS | Functions, Mixins, Flex |
 

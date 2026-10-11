@@ -1,0 +1,144 @@
+---
+title: "Border"
+subtitle: "Espessura, raio e cor de borda dão forma aos elementos, delimitam superfícies e sinalizam estado. Três escalas curtas, e um anel de foco que é coisa separada."
+order: 6
+---
+
+## Propósito
+
+A borda faz três trabalhos:
+
+- **Delimitar.** Mostrar onde um campo, um card ou uma tabela começa e termina.
+- **Sinalizar estado.** Mudar de cor quando um campo recebe foco, tem erro ou está selecionado.
+- **Dar forma.** O raio dos cantos ajuda a reconhecer famílias de componentes e carrega parte da personalidade da marca.
+
+## Princípios
+
+- **A borda delimita, não decora.** Se o espaço e o fundo já separam dois elementos, a borda sobra.
+- **Uma borda mais forte significa algo.** Mais espessura ou mais contraste é foco, seleção ou erro.
+- **O raio acompanha o tamanho.** Controles maiores têm cantos maiores; famílias parecidas usam o mesmo raio.
+- **O raio é da marca.** Cantos retos soam sérios; cantos redondos, amigáveis. A marca decide o valor de cada degrau.
+- **Foco não é borda.** O anel de foco é um indicador próprio, que não substitui nem é substituído pela borda de estado.
+
+## Espessura
+
+<TokenTable group="lui.border.width" />
+
+| Token | Uso |
+| --- | --- |
+| `0` | Remove a borda em uma variante que, por padrão, a tem. |
+| `1` | O padrão: campos, cards, tabelas, menus, divisores. |
+| `2` | Ênfase: borda de Alert, linha da aba selecionada (reservada em transparente nas outras abas), anel em volta do Avatar, foco do Select nativo. |
+| `4` | Indicadores fortes. Existe como token e custom property, mas ainda não está na função `width()`. |
+
+Aplique com a função SCSS `width($n)` ou com as classes `.border-0`, `.border-1` e `.border-2`.
+
+## Raio
+
+<TokenTable group="lui.border.radius" />
+
+`none` e `circle` são globais. `xs` a `xl` são definidos pela marca, e na marca `lets-ui` seguem uma progressão de 2, 4, 8, 12 e 16px.
+
+### Qual raio usar
+
+O raio é escolhido pelo **tipo** e pelo **tamanho** do elemento. Esta é a regra que os componentes do sistema seguem:
+
+| Raio | Para | Componentes |
+| --- | --- | --- |
+| `none` | Elementos que encostam em outros ou na borda da tela. | Drawer em tela cheia, Avatar `square`. |
+| `xs` (2px) | Elementos muito pequenos. | Checkbox, botão de ordenação da Table. |
+| `sm` (4px) | Elementos compactos e informativos. | Tooltip, Shortcut, Tag `sm`. |
+| `md` (8px) | Controles de tamanho padrão. | Button `md`, Input `md`, Icon Button, Tabs, Pagination, Accordion, Table, itens de menu. |
+| `lg` (12px) | Controles grandes e superfícies flutuantes. | Button `lg`, Input `lg`, Modal, Dropdown Menu, Alert. |
+| `xl` (16px) | Superfícies de conteúdo. | Card, Toast, Drawer. |
+| `circle` | Formas circulares e pílulas. | Avatar, Radio, Switch, Tag `circle`. |
+
+<DosDonts variant="do" title="Raio coerente com tipo e tamanho">
+  Um botão `md` e um campo `md` lado a lado, os dois com `md`. Um card com `xl`. As famílias se reconhecem.
+</DosDonts>
+
+<DosDonts variant="dont" title="Raios diferentes para a mesma família">
+  Um botão com cantos retos ao lado de outro em pílula, na mesma barra. A interface parece montada com peças de lugares diferentes.
+</DosDonts>
+
+### Raios aninhados
+
+Quando uma superfície arredondada fica dentro de outra, o raio de dentro deve ser **menor**: o raio externo menos o espaço entre elas. Um card `xl` (16px) com 8px de padding pede um elemento interno com `md` (8px). Raios iguais, aninhados, parecem desalinhados nos cantos.
+
+## Cor de borda
+
+As cores vêm da camada semântica, pela função `stroke($família, $categoria)`. Veja [Color](color.mdx).
+
+| Token | Função | Uso |
+| --- | --- | --- |
+| `neutral.border.subtle` | `stroke(neutral, subtle)` | Borda em repouso de cards, campos, tabelas, toasts e divisores. |
+| `neutral.border.default` | `stroke(neutral)` | Hover de campos; borda de Checkbox, Radio e Switch desmarcados. |
+| `neutral.border.pressed` | `stroke(neutral, pressed)` | Borda neutra pressionada. |
+| `primary.border.default` | `stroke(primary)` | Campo com foco, aba selecionada. |
+| `danger.border.default` | `stroke(danger)` | Campo com erro. |
+| `danger.border.hover` / `pressed` | `stroke(danger, hover)` | Interação em controles de erro. |
+| `{success, caution, info}.border.default` | `stroke(success)` | Borda de Alert e de mensagens de status. |
+| `lui.divider.color.border.default` | `var(--lui-divider-color-border-default)` | Token de componente do [Divider](../../components/layout/divider/index.mdx), também usado nas linhas de Table e Accordion. |
+
+## Estados
+
+As bordas de estado mudam a **cor**, e o elemento não pode se mover nem mudar de tamanho ao trocar de estado. Quando a espessura muda, como no foco do Select nativo (de `1` para `2`), o padding diminui na mesma medida. A aba `line` reserva a linha de 2px em transparente em todas as abas, e só a cor muda na selecionada. O exemplo de referência é o campo de formulário:
+
+| Estado | Borda | Anel de foco | Outros sinais |
+| --- | --- | --- | --- |
+| **Default** | `neutral.border.subtle` | — | Label visível. |
+| **Hover** | `neutral.border.default` | — | Cursor de texto. |
+| **Focus** | `primary.border.default` | `focus-ring(primary)` | Cursor no campo. |
+| **Erro** | `danger.border.default` | `focus-ring(danger)` ao focar | Mensagem de erro em texto e `aria-invalid`. |
+| **Selected** | `primary.border.default` (linha de 2px da aba) | — | `aria-selected`, texto em cor primária. |
+| **Disabled** | Mantém a borda do repouso | — | Opacidade de 40% sobre o componente e cursor `not-allowed`. |
+
+## Anel de foco
+
+O anel de foco é um **indicador de foco de teclado**, separado da borda de estado. Ele aparece em `:focus-visible` (navegação por teclado), e não ao clicar com o mouse.
+
+<TokenTable group="lui.focus-ring" />
+
+| Característica | Valor |
+| --- | --- |
+| Forma | `box-shadow: 0 0 0 3px`, por fora do elemento. Não ocupa espaço no layout. |
+| Cor | A cor `focus-ring` da família do componente: `primary`, `secondary`, `danger`, `success` ou `neutral`. |
+| Raio | Acompanha o `border-radius` do elemento. |
+| Contraste | Mínimo de 3 : 1 contra o fundo. Todas as variantes passam nos dois temas. |
+| Aplicação | `focus-ring($família)` ou o mixin `focus-ring($família)`; o mixin `states()` já inclui. |
+
+### Borda de estado × anel de foco
+
+| | Borda de estado | Anel de foco |
+| --- | --- | --- |
+| **Comunica** | Como o componente está: com erro, selecionado, ativo. | Onde está o foco do teclado agora. |
+| **Aparece** | Enquanto o estado durar, com mouse ou teclado. | Só durante a navegação por teclado. |
+| **Implementação** | `border-color` | `box-shadow` |
+| **Pode coexistir?** | Sim. Um campo com erro e com foco mostra a borda `danger` **e** o anel `danger`. | |
+
+<Callout variant="warning">
+  Nunca remova o anel de foco sem colocar outro indicador equivalente no lugar. Um `outline: none` sem substituto deixa quem navega por teclado sem saber onde está.
+</Callout>
+
+## Acessibilidade
+
+- **Limites de controles.** A borda que identifica um campo precisa de **3 : 1** contra o fundo (WCAG 1.4.11). Hoje o campo em repouso usa `neutral.border.subtle` (1,17 : 1 no tema claro), e por isso essa é uma dívida registrada em [Accessibility](../accessibility/overview.mdx). Até ela ser resolvida, mantenha a label sempre visível e o campo sobre a superfície neutra.
+- **Foco visível.** O anel de foco tem 3px e passa em 3 : 1 em todas as variantes, nos dois temas (WCAG 2.4.7).
+- **Estado nunca só pela borda.** Erro tem mensagem; seleção tem `aria-selected` e mudança de texto; nada depende só da cor da borda.
+- **Alto contraste.** O modo de cores forçadas do sistema remove `box-shadow`. Bordas sólidas continuam visíveis; sombras e anéis feitos de sombra, não.
+
+## Boas práticas
+
+- Use espessura `1` como padrão; `2` só para ênfase.
+- Escolha o raio pelo tamanho do controle (`md` com `md`, `lg` com `lg`).
+- Reduza o raio de elementos aninhados.
+- Mude a cor da borda nos estados. Se mudar a espessura, compense no padding.
+- Prefira espaço e fundo a bordas para separar áreas grandes.
+
+## Anti-patterns
+
+- **Raios arbitrários.** `border-radius: 6px` ou `10px` misturados aos tokens. Use só a escala.
+- **Borda grossa para chamar atenção.** Uma borda de 4px em volta de um card "importante" compete com o foco e com o erro.
+- **Engrossar a borda sem compensar.** O elemento cresce e empurra os vizinhos. Mude a cor, ou desconte a diferença no padding.
+- **Bordas em tudo.** Cards com borda, dentro de seções com borda, dentro de painéis com borda. Deixe o espaço separar.
+- **Anel de foco feito com `border`.** Ele some quando o estado muda a cor da borda, e as duas informações se confundem.
