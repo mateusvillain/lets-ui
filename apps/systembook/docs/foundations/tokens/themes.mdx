@@ -1,0 +1,203 @@
+---
+title: "Themes"
+subtitle: "Temas e marcas mudam os valores dos tokens, nunca a intenção dos componentes. Um botão primário continua sendo a ação principal no tema escuro e em qualquer marca."
+order: 2
+---
+
+## Princípio
+
+O Let's UI tem dois eixos de variação, controlados por dois atributos no elemento `<html>`:
+
+| Eixo | Atributo | Valores | O que muda |
+| --- | --- | --- | --- |
+| **Tema** | `data-theme` | `light`, `dark` ou ausente (segue o sistema) | As paletas de cor. |
+| **Marca** | `data-brand` | `lets-ui` (e as marcas que você criar) | Cor de marca, tipografia, raios, opacidade, grade. |
+
+```html
+<html data-brand="lets-ui" data-theme="dark">
+```
+
+Nos dois eixos vale a mesma regra: **o tema altera valores, não intenções**. A camada semântica é idêntica em todos os temas e marcas. `lui.color.danger.text.error` sempre significa "texto de erro"; o que muda é o tom que ele assume.
+
+## Como funciona
+
+Os tokens semânticos **não têm valor próprio**: são apelidos (`var()`) para primitivas e decisões de marca. Um tema troca só a camada de baixo, e todo o resto acompanha.
+
+| Camada | Tema claro | Tema escuro |
+| --- | --- | --- |
+| Semântica: `lui.color.neutral.text.body` | `var(--lui-color-gray-7)` | `var(--lui-color-gray-7)` |
+| Primitiva: `lui.color.gray.7` | `#282b33` | `#c8ced9` |
+
+As rampas de cor do tema escuro são **invertidas**: o degrau `1` é sempre o mais próximo da superfície, e o `8` o de maior contraste contra ela. Por isso nenhum componente precisa de regras próprias para o tema escuro. Veja [Color](../properties/color.mdx).
+
+### Ordem de resolução
+
+O CSS gerado aplica as camadas nesta ordem, da mais fraca para a mais forte:
+
+1. `:root` — todos os tokens, com os valores do tema claro e da marca padrão. É o **fallback**.
+2. `@media (prefers-color-scheme: dark)` — troca as primitivas pelas do tema escuro quando o sistema operacional está no escuro.
+3. `[data-brand="…"]` — aplica as decisões da marca. As cores da marca também seguem a preferência do sistema.
+4. `[data-theme="light"]` / `[data-theme="dark"]` — força o tema, ignorando a preferência do sistema.
+5. `[data-brand="…"][data-theme="…"]` — força o tema também nas cores da marca.
+
+No código-fonte, essa ordem é o `letsui.resolver.json`: o conjunto global, depois o modificador de tema (`mode`), depois a fundação da marca (`brandFoundation`) e por fim as cores da marca (`brandColor`).
+
+## Light e dark
+
+### Pares por papel
+
+Cada papel tem um par claro/escuro desenhado para manter a mesma relação de contraste:
+
+| Papel | Token | Claro | Escuro |
+| --- | --- | --- | --- |
+| Superfície | `neutral.background.surface` | `#ffffff` | `#181a20` |
+| Contêiner neutro | `neutral.background.container` | `#c7cad4` | `#464e5d` |
+| Sobreposição | `neutral.background.overlay` | `#131519` | `#f4f6fa` |
+| Título | `neutral.text.heading` | `#131519` | `#f4f6fa` |
+| Corpo | `neutral.text.body` | `#282b33` | `#c8ced9` |
+| Legenda | `neutral.text.caption` | `#6c7081` | `#7a8296` |
+| Borda sutil | `neutral.border.subtle` | `#eeecf1` | `#353946` |
+| Borda | `neutral.border.default` | `#6c7081` | `#7a8296` |
+| Foco primário | `primary.focus-ring` | `#1c89e4` | `#58a8f5` |
+
+### Contraste por tema
+
+O contraste é medido **separadamente em cada tema**, porque um par que passa no escuro pode reprovar no claro. No estado atual, o tema escuro passa em AA em todos os pares de texto; o claro tem débitos no degrau `4` da marca. As tabelas completas estão em [Color](../properties/color.mdx).
+
+### Preferência do sistema e escolha persistente
+
+- **Sem `data-theme`**, o tema segue a preferência do sistema operacional (`prefers-color-scheme`), e muda sozinho se a pessoa trocar a preferência.
+- **Com `data-theme`**, o tema fica fixo no valor escolhido.
+- A escolha da pessoa deve ser **salva** e aplicada **antes da primeira pintura**, para a tela não piscar no tema errado.
+
+```html
+<head>
+  <script>
+    const tema = localStorage.getItem('tema');
+    if (tema) document.documentElement.dataset.theme = tema;
+  </script>
+  <link rel="stylesheet" href="letsui.min.css" />
+</head>
+```
+
+```js
+function escolherTema(tema) {
+  if (tema === 'sistema') {
+    localStorage.removeItem('tema');
+    delete document.documentElement.dataset.theme;
+  } else {
+    localStorage.setItem('tema', tema);
+    document.documentElement.dataset.theme = tema;
+  }
+}
+```
+
+Ofereça três opções: **Claro**, **Escuro** e **Sistema**, com Sistema como padrão.
+
+### O que o tema escuro não faz
+
+- **Não inverte cores automaticamente.** Cada valor escuro foi escolhido, não calculado. Filtros como `invert()` quebram imagens, marcas e contrastes.
+- **Não reduz sombras sozinho.** As sombras são iguais nos dois temas e quase somem sobre o escuro. A separação entre camadas vem de superfície e borda. Veja [Elevation](../properties/elevation.mdx).
+- **Não troca imagens.** Ilustrações e logos que não funcionam sobre fundo escuro precisam de uma versão própria, escolhida com `prefers-color-scheme` ou com o atributo do tema.
+
+## Multi-brand
+
+### O que é compartilhado e o que é da marca
+
+| Compartilhado por todas as marcas (core) | Definido por cada marca |
+| --- | --- |
+| Paletas neutra e semânticas (`gray`, `green`, `orange`, `red`, `blue`, `violet`) | Cores `primary` e `secondary`, com 8 degraus por tema |
+| Escalas de espaçamento fixa e fluida | Famílias tipográficas de título e de corpo |
+| Pesos, entrelinhas primitivas, tracking | Tamanhos de fonte e peso de cada escala de título |
+| Espessuras de borda, `none` e `circle` | Raios `xs` a `xl` |
+| Elevação e anéis de foco (a forma; a cor vem da família) | Opacidade de desabilitado |
+| Comportamento, acessibilidade e anatomia dos componentes | Breakpoints, colunas, gutter, margem e largura máxima da grade |
+
+Ilustração e tom de voz também são da marca, mas ficam fora dos tokens: são decisões de conteúdo.
+
+### Componentes não conhecem marcas
+
+Um componente usa `bg(container, primary)`, nunca "o azul da Let's UI". Nenhum seletor de componente menciona `data-brand`. É isso que permite acrescentar uma marca sem tocar em nenhum componente.
+
+<DosDonts variant="do" title="Token semântico">
+  `background-color: bg(container, primary)`. Na marca A é azul, na marca B é verde, e o componente não sabe disso.
+</DosDonts>
+
+<DosDonts variant="dont" title="Regra por marca no componente">
+  `[data-brand="b"] .btn { background: green }`. Cada marca nova vira uma regra a mais em cada componente.
+</DosDonts>
+
+### Criar uma marca
+
+1. Crie `tokens/brand/<marca>/` com três arquivos: `foundation.json` (tipografia, raios, opacidade, grade) e `colors.light.json` e `colors.dark.json` (rampas `primary` e `secondary`).
+2. Registre a marca no `letsui.resolver.json`, como novos contextos de `brandFoundation` e `brandColor`.
+3. Acrescente ao `terrazzo.config.mjs` as permutações com o seletor `[data-brand="<marca>"]`, seguindo as da `lets-ui`.
+4. Confira o contraste de todos os pares que usam `primary` e `secondary`, nos dois temas.
+5. Se a marca mudar breakpoints ou número de colunas, compile o CSS a partir do código-fonte: esses dois valores são fixados na compilação. Veja [Grid](../properties/grid.mdx).
+
+O **Brand Studio** (`studio.lets-ui.com`) é o editor visual desses arquivos, com prévia dos componentes.
+
+## Arquitetura recomendada
+
+```text
+Primitivas  →  Semânticas  →  Componente  →  Tema / marca
+blue.4         primary.background.container   link.color.text   data-theme, data-brand
+```
+
+- **Primitivas** guardam os valores brutos e são as únicas que o **tema** troca.
+- **Marca** é uma camada paralela às primitivas: decisões que cada marca toma, também trocadas pelo tema no caso das cores.
+- **Semânticas** dão papel aos valores e são a API de componentes e telas.
+- **Tokens de componente** existem só quando um componente precisa de um valor que nenhum papel semântico descreve.
+- **Tema e marca** são seletores que trocam as camadas de baixo. Eles nunca redefinem tokens semânticos.
+
+Veja a arquitetura completa em [Design tokens](design-tokens.mdx).
+
+## Matriz de cobertura
+
+Cada combinação de **tema × marca × componente × estado** precisa ser verificada. A matriz atual:
+
+| Marca | Tema | Componentes | Estados | Como é verificado |
+| --- | --- | --- | --- | --- |
+| `lets-ui` | Claro | Todos | Repouso, hover, pressed, foco, desabilitado, erro, selecionado | Storybook (seletor de tema e marca) e prévias desta documentação |
+| `lets-ui` | Escuro | Todos | Os mesmos | Storybook, com o tema escuro selecionado |
+
+Ao criar uma marca, acrescente uma linha por tema e passe por todos os componentes. Os estados são os mesmos para todas as marcas, porque hover e pressed são calculados a partir das cores de cada componente, e foco e desabilitado usam tokens que toda marca define.
+
+## Fallback
+
+| Situação | O que acontece |
+| --- | --- |
+| Sem `data-theme` | O tema segue o sistema operacional. Se o navegador não informar a preferência, vale o claro. |
+| Sem `data-brand` | As decisões de fundação usam os valores da `lets-ui`, que estão no `:root`. As **cores da marca**, porém, ficam no tema claro mesmo com o sistema no escuro. |
+| Marca desconhecida em `data-brand` | Nenhuma regra de marca se aplica; o resultado é o mesmo que sem `data-brand`. |
+| Token ausente numa marca nova | O valor do `:root` (da `lets-ui`) continua valendo. |
+
+<Callout variant="warning">
+  Declare **sempre** `data-brand` no `<html>`. Sem ele, a fundação funciona, mas as cores `primary` e `secondary` não acompanham o tema escuro do sistema.
+</Callout>
+
+### Onde declarar os atributos
+
+Declare `data-theme` e `data-brand` **no elemento `<html>`**. Os tokens semânticos são resolvidos no `:root`; um atributo de tema em uma `<section>` troca as primitivas daquela seção, mas não os tokens semânticos que os componentes usam. Temas por região da página não são suportados.
+
+## Prévia de temas na documentação
+
+- No **Storybook**, a barra de ferramentas tem seletores de **tema** e de **marca**, que aplicam `data-theme` e `data-brand` no documento de cada história.
+- Nesta documentação, as tabelas de tokens mostram o valor de cada token **nos dois temas**, lado a lado.
+- As prévias de componentes rodam com o mesmo CSS publicado no pacote, então refletem exatamente o que o produto recebe.
+
+## Boas práticas
+
+- Use só tokens semânticos em componentes e telas. O tema vem de graça.
+- Teste cada tela nos dois temas antes de considerar pronta.
+- Salve a escolha de tema da pessoa e aplique antes da primeira pintura.
+- Ofereça "Sistema" como opção padrão.
+- Ao criar uma marca, comece pelo contraste: uma cor primária bonita que não passa em 4,5 : 1 com texto branco não serve para botões.
+
+## Anti-patterns
+
+- **Regras de tema em componentes.** `[data-theme="dark"] .card { … }` é sinal de token errado ou faltando.
+- **`filter: invert()` como tema escuro.** Inverte fotos, logos e contrastes.
+- **Hexadecimal fixo.** Uma cor literal não muda com o tema nem com a marca.
+- **Nome de marca no componente.** `.btn--lets-ui` amarra o componente a uma marca.
+- **Tema por seção.** `data-theme="dark"` em um bloco da página, esperando que os componentes dentro dele mudem.

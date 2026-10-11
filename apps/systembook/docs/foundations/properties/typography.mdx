@@ -1,0 +1,186 @@
+---
+title: "Typography"
+subtitle: "A tipografia organiza o conteúdo em níveis de importância. Cada escala do Let's UI junta família, tamanho, peso, entrelinha e caixa em um papel único, e se adapta ao tamanho da tela sem breakpoints."
+order: 3
+---
+
+## Propósito
+
+A maior parte de uma interface é texto. A tipografia decide **o que a pessoa lê primeiro**, quanto esforço a leitura custa e se a tela parece do mesmo produto que a anterior.
+
+Por isso o sistema não oferece tamanhos e pesos soltos para combinar: oferece **escalas compostas**, cada uma com um papel. Você escolhe o papel ("título de seção"), e a escala traz o resto.
+
+## Princípios
+
+- **Hierarquia clara.** Tamanho e peso dizem o que é mais importante. Três ou quatro níveis por tela bastam.
+- **Legibilidade em primeiro lugar.** Linhas de 45 a 75 caracteres, entrelinha confortável e contraste suficiente.
+- **Um papel, uma escala.** O mesmo tipo de conteúdo usa sempre a mesma escala, em qualquer tela.
+- **Fluida por padrão.** Os títulos crescem com a tela de forma contínua, sem saltos em breakpoints.
+- **Nativa.** A família padrão é a fonte do sistema operacional: zero download, leitura familiar.
+
+## Família
+
+O sistema tem dois papéis de família, **heading** e **body**, definidos pela marca. Na marca `lets-ui`, os dois usam a **pilha de fontes do sistema**: San Francisco no macOS e iOS, Segoe UI no Windows, Roboto no Android e as fontes nativas do Linux.
+
+| Papel | Usado por | Fallback |
+| --- | --- | --- |
+| `heading` | `display`, `title`, `headline`, `subtitle`, `block-title`, `subheadline`, `overtitle` | `Helvetica Neue`, `Arial`, `sans-serif` e as fontes de emoji |
+| `body` | `body--lg`, `body--md`, `body--sm` | O mesmo |
+
+Uma marca pode trocar a família de títulos sem tocar na de corpo, e vice-versa. A pilha termina sempre em uma família genérica (`sans-serif`), para que nenhum texto fique sem fonte.
+
+<TokenTable group="lui.brand.typography.font-family" />
+
+<Callout variant="info">
+  O sistema não tem uma família monoespaçada nem uma escala de **código** ainda. Para trechos de código, use a pilha `monospace` do navegador com a escala `body--md`. Atalhos de teclado têm um componente próprio, o [Shortcut](../../components/typography/shortcut/index.mdx).
+</Callout>
+
+## Escala tipográfica
+
+| Papel | Escala | Família | Tamanho | Peso | Entrelinha | Caixa | Uso |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Display | `display` | heading | `3xl` | Light (300) | 1,2 | — | Herói, destaque de marketing. |
+| Heading | `title` | heading | `2xl` | Semibold (600) | 1,2 | — | Título da página. Um por página. |
+| Heading | `headline` | heading | `1xl` | Semibold (600) | 1,2 | — | Título de seção. |
+| Heading | `subtitle` | heading | `lg` | Regular (400) | 1,2 | — | Subtítulo, parágrafo de introdução. |
+| Title | `block-title` | heading | `md` | Medium (500) | 1,2 | — | Título de card, modal, bloco. |
+| Title | `subheadline` | heading | `sm` | Regular (400) | 1,2 | — | Título de grupo menor. |
+| Label | `overtitle` | heading | `3xs` | Semibold (600) | 1,2 | MAIÚSCULAS | Rótulo acima de um título. |
+| Body | `body--lg` | body | `1xs` | Regular (400) | 1,5 | — | Texto corrido padrão. |
+| Body / Label | `body--md` | body | `2xs` | Regular (400) | 1,5 | — | Texto secundário, labels de campos `md`. |
+| Caption | `body--sm` | body | `3xs` | Regular (400) | 1,5 | — | Legenda, nota, texto auxiliar. |
+
+Cada escala é aplicada pela classe de mesmo nome (`.headline`), pelo mixin `font-scale(headline)` nos componentes, ou pelos componentes [Heading](../../components/typography/heading/index.mdx) e [Body](../../components/typography/body/index.mdx).
+
+```html
+<lui-heading variant="title" label="Configurações da conta"></lui-heading>
+<p class="body--lg">Atualize seus dados e preferências.</p>
+```
+
+```scss
+.painel__titulo {
+  @include font-scale(block-title);
+  color: text(heading);
+}
+```
+
+### Pesos por escala
+
+O peso de cada escala de título é um token de **marca**: uma marca mais expressiva pode usar `display` em Bold sem mudar o resto. As escalas de corpo usam sempre o peso Regular global.
+
+<TokenTable group="lui.brand.typography.weight" />
+
+## Tamanhos
+
+Até o `2xl`, a escala segue uma razão de **1,2** (terça menor) a partir de 16px, medida nos valores máximos; o `3xl` dá um salto maior, reservado ao display. Os três menores são fixos; do `sm` para cima, os tamanhos são **fluidos**: crescem de forma contínua entre um viewport de **320px** e um de **1440px**, e param nos extremos.
+
+| Token | CSS | Em 320px | Em 1440px |
+| --- | --- | --- | --- |
+| `3xs` | `--lui-brand-typography-font-size-3xs` | 11,1px | 11,1px |
+| `2xs` | `--lui-brand-typography-font-size-2xs` | 13,3px | 13,3px |
+| `1xs` | `--lui-brand-typography-font-size-1xs` | 16px | 16px |
+| `sm` | `--lui-brand-typography-font-size-sm` | 16,8px | 19,2px |
+| `md` | `--lui-brand-typography-font-size-md` | 17,7px | 23px |
+| `lg` | `--lui-brand-typography-font-size-lg` | 19,9px | 27,6px |
+| `1xl` | `--lui-brand-typography-font-size-1xl` | 22,4px | 33,2px |
+| `2xl` | `--lui-brand-typography-font-size-2xl` | 25,2px | 39,8px |
+| `3xl` | `--lui-brand-typography-font-size-3xl` | 35,9px | 68,8px |
+
+Os valores em pixels consideram o tamanho de fonte padrão do navegador (16px). Como os extremos estão em `rem`, **tudo cresce** quando a pessoa aumenta a fonte do navegador.
+
+## Entrelinha, peso e espaçamento
+
+### Entrelinha
+
+Títulos usam **1,2**: linhas curtas, em tamanhos grandes, ficam soltas com mais. Corpo usa **1,5**, o mínimo confortável para parágrafos.
+
+<TokenTable group="lui.brand.typography.line-height" />
+
+### Pesos disponíveis
+
+Cinco pesos, de Light a Bold. Use Regular para leitura; Medium e Semibold para ênfase e títulos; Light só em tamanhos de display; Bold com moderação.
+
+<TokenTable group="lui.typography.weight" />
+
+### Espaçamento entre letras
+
+Os tokens de tracking existem para ajustes pontuais, mas **nenhuma escala os aplica hoje**: todas usam o espaçamento natural da fonte.
+
+<TokenTable group="lui.typography.tracking" />
+
+## Hierarquia
+
+Uma página precisa de um **caminho de leitura** claro: o olho deve saber onde começar, onde continuar e o que pode pular.
+
+1. **Um** `title` por página, que diz onde a pessoa está.
+2. `headline` para cada seção, e `block-title` para blocos e cards dentro dela.
+3. `body--lg` para o conteúdo, `body--md` e `body--sm` para o que apoia.
+4. `overtitle` e `subtitle` são acessórios do título: aparecem acima ou abaixo dele, nunca sozinhos.
+
+A ordem visual precisa coincidir com a ordem dos elementos de título no HTML (`h1`, `h2`, `h3`). A escala é visual; o nível semântico é escolhido à parte, pelo atributo `as` do Heading.
+
+<DosDonts variant="do" title="Poucos níveis, bem separados">
+  Um título, um subtítulo e o corpo. A diferença entre cada nível é óbvia, e a pessoa sabe por onde começar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Muitos tamanhos e pesos parecidos">
+  Cinco tamanhos e três pesos em um mesmo card. A hierarquia some, e tudo parece igualmente importante.
+</DosDonts>
+
+## Regras de conteúdo
+
+### Textos longos
+
+- Limite a linha a **45–75 caracteres** (cerca de `65ch`). Linhas mais longas fazem o olho se perder ao voltar.
+- Alinhe à esquerda em idiomas da esquerda para a direita. Texto justificado cria buracos entre palavras.
+- Separe parágrafos com espaço, não com recuo.
+
+### Rótulos
+
+- Rótulos de campos e botões usam `body--md` ou `body--lg`, conforme o tamanho do componente.
+- Capitalização de frase, sem ponto final. Veja [Writing](../content/writing.mdx).
+- Caixa alta fica restrita ao `overtitle`.
+
+### Números
+
+- Em tabelas e valores que se comparam, use algarismos de largura fixa (`font-variant-numeric: tabular-nums`) e alinhe a coluna à direita.
+- Mostre a unidade junto do valor e siga o formato do idioma da pessoa.
+
+### Conteúdo truncado
+
+- Prefira **quebrar** a linha a truncar. Texto cortado esconde informação.
+- Quando truncar for inevitável, use o atributo `line-clamp` do Heading ou do Body e garanta que o texto completo esteja disponível em outro lugar (um tooltip, uma página de detalhe).
+- Nunca trunque rótulos de botões, mensagens de erro ou o nome de algo que a pessoa precisa identificar.
+
+## Responsividade
+
+O sistema usa **tamanhos fluidos** em vez de variantes por breakpoint. Do `sm` ao `3xl`, cada token é um `clamp()` que cresce linearmente entre 320px e 1440px de largura. O resultado:
+
+- Títulos grandes encolhem bastante no celular (o `3xl` vai de 68,8px para 35,9px), e o corpo quase não muda.
+- Não existe um salto de tamanho ao cruzar um breakpoint.
+- Você não precisa escrever nenhuma media query para tipografia.
+
+## Acessibilidade
+
+- **Tamanho mínimo.** O corpo padrão é 16px. `body--sm` (11,1px) e `overtitle` são para textos curtos e secundários, nunca para conteúdo que a pessoa precisa ler para concluir uma tarefa.
+- **Zoom de 200%.** Os tamanhos são em `rem` e respeitam a fonte escolhida no navegador. O componente fluido em `vw` é pequeno o bastante para não impedir o zoom (WCAG 1.4.4). Teste: nada pode ser cortado nem sobrepor.
+- **Entrelinha.** O corpo usa 1,5, o valor que o WCAG 1.4.12 pede que o layout suporte. Não reduza.
+- **Contraste.** `text.body` e `text.heading` passam em AAA nos dois temas. `text.caption` passa em AA, com pouca folga: não o use sobre fundos coloridos. Veja [Color](color.mdx).
+- **Estrutura.** Use elementos de título de verdade (`h1`–`h6`), na ordem, sem pular níveis. Leitores de tela navegam por eles.
+- **Caixa alta** dificulta a leitura e alguns leitores de tela soletram palavras curtas em maiúsculas. Restrinja ao `overtitle` e escreva o texto em caixa normal: a transformação é feita pelo CSS.
+
+## Boas práticas
+
+- Escolha a escala pelo **papel** do texto, não pelo tamanho que "fica bom".
+- Mantenha o nível semântico (`h2`) e a escala visual (`headline`) coerentes ao longo do produto.
+- Prefira **peso** a **cor** ou **caixa alta** para dar ênfase dentro de um parágrafo.
+- Use `text.caption` para informação de apoio e `text.body` para o resto.
+- Teste os títulos com o texto mais longo possível, e em outros idiomas: traduções ocupam de 30% a 50% mais espaço.
+
+## Anti-patterns
+
+- **Tamanho e peso avulsos.** `font-size: 18px; font-weight: 600` cria uma escala paralela que não acompanha a marca nem a fluidez.
+- **Escolher o `h1`–`h6` pelo tamanho.** Um `h4` porque "o `h2` é grande demais" quebra a navegação por títulos. Escolha o nível certo e troque a escala.
+- **Texto em imagem.** Não escala, não traduz e não é lido por leitores de tela.
+- **Parágrafos em `body--sm`.** Texto pequeno para "caber mais" troca legibilidade por densidade.
+- **Caixa alta digitada.** "SALVAR" no conteúdo é lido letra a letra por alguns leitores de tela. Use a escala `overtitle`, que transforma o texto pelo CSS.

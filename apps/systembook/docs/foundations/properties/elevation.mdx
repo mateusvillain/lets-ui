@@ -1,0 +1,116 @@
+---
+title: "Elevation"
+subtitle: "A elevação comunica em que camada uma superfície está: no plano da página ou flutuando acima dela. Cada nível combina sombra, superfície e borda, e tem um significado."
+order: 5
+---
+
+## Propósito
+
+Elevação **comunica camada, não decora**. Ela responde a uma pergunta da pessoa: "isto faz parte da página, ou está temporariamente por cima dela?". Um menu que flutua, um modal que bloqueia a tela e um card em repouso precisam parecer coisas diferentes, porque se comportam de formas diferentes.
+
+## Princípios
+
+- **Altura é prioridade e temporariedade.** Quanto mais alto, mais atenção pede e mais passageiro é: um menu fecha, um modal se dispensa.
+- **Sombra sozinha raramente basta.** Cada nível combina sombra, cor de superfície e, quando preciso, borda.
+- **Poucos níveis por tela.** Sombra em tudo é igual a sombra em nada.
+- **Subir de nível tem motivo.** Um elemento só sobe porque está flutuando, bloqueando a página ou reagindo à interação.
+- **A ordem é fixa.** Um nível mais alto sempre fica por cima de um mais baixo.
+
+## Os níveis
+
+| Nível | Significado | Superfície | Borda | Exemplos |
+| --- | --- | --- | --- | --- |
+| **Plano** (sem sombra) | Parte da página. | `neutral.background.surface` ou `container` | Opcional, `border.subtle` | Seções, tabelas, campos. |
+| `base` | Superfície em repouso, destacada da página. | `neutral.background.surface` | `border.subtle` no tema escuro | [Card](../../components/content/card/index.mdx) com elevação. |
+| `hovered` | Uma superfície em repouso que reagiu ao ponteiro. | A mesma do repouso | A mesma do repouso | Card interativo no hover. |
+| `floating` | Flutua sobre a página, ligada a um gatilho. Não bloqueia o resto. | `neutral.background.surface` ou `overlay` | `border.subtle` | [Dropdown Menu](../../components/actionable/dropdown-menu/index.mdx), [Tooltip](../../components/content/tooltip/index.mdx), [Toast](../../components/content/toast/index.mdx). |
+| `overlay` | A camada mais alta: bloqueia a página até ser dispensada. | `neutral.background.surface` | Nenhuma | [Modal](../../components/content/modal/index.mdx), [Drawer](../../components/content/drawer/index.mdx). |
+
+## Tokens
+
+Cada nível é uma sombra de **duas camadas**: uma difusa, sem deslocamento, que contorna a superfície, e uma deslocada para baixo, que dá a sensação de altura. Quanto mais alto o nível, maior o deslocamento, o desfoque e a opacidade.
+
+| Nível | Camada de contorno | Camada de altura |
+| --- | --- | --- |
+| `base` | `0 0 8px`, 2% | `0 4px 12px`, 4% |
+| `hovered` | `0 0 8px`, 4% | `0 8px 16px`, 8% |
+| `floating` | `0 0 8px`, 8% | `0 12px 20px`, 12% |
+| `overlay` | `0 1px 8px`, 4% | `0 16px 24px`, 16% |
+
+<TokenTable group="lui.elevation" />
+
+Aplique com a função SCSS `elevation($nível)`, com a classe utilitária `.elevation-{nível}` ou com a custom property `var(--lui-elevation-{nível})`.
+
+```scss
+.painel-flutuante {
+  background-color: bg(surface, neutral);
+  border: width(1) solid stroke(neutral, subtle);
+  border-radius: radius(lg);
+  box-shadow: elevation(floating);
+}
+```
+
+## Empilhamento
+
+A ordem de empilhamento acompanha os níveis. Os valores de `z-index` **não são tokens**: são iguais em toda marca e todo tema, então ficam nos componentes. Esta é a escada que eles seguem:
+
+| Camada | `z-index` | Componentes |
+| --- | --- | --- |
+| Conteúdo da página | `auto` a `1` | Tooltip (ancorado ao gatilho), cabeçalho fixo de Table, Float |
+| Menus | `100` | Dropdown Menu |
+| Backdrop | `1040` | Fundo escurecido do Drawer e do Modal |
+| Sobreposições | `1050` | Modal, Drawer |
+| Notificações | `1060` | Toast |
+
+Na prática: **conteúdo < menus < backdrop < modal e drawer < toast**. Um toast aparece por cima de um modal aberto, porque a notificação pode ser sobre a ação que acabou de acontecer dentro dele.
+
+<Callout variant="tip">
+  Um elemento novo que precisa flutuar entra **em um dos degraus da escada**, nunca entre eles. Se nenhum degrau serve, o problema provavelmente é de camada, não de número.
+</Callout>
+
+## Tema escuro
+
+As sombras são pretas e **iguais nos dois temas**. Sobre uma superfície escura, uma sombra preta quase não aparece, então no tema escuro a separação entre camadas vem de **superfície e borda**:
+
+- Use `neutral.border.subtle` em superfícies `base` e `floating` que precisam se destacar do fundo, como o Card com a opção de borda.
+- O Tooltip já usa `neutral.background.overlay`, que é claro no tema escuro e escuro no claro: ele se destaca nos dois sem depender da sombra.
+- Sobreposições de nível `overlay` usam um **backdrop**, que separa a camada mesmo quando a sombra some.
+
+<Callout variant="info">
+  O sistema ainda não tem superfícies elevadas próprias para o tema escuro (um tom mais claro por nível). Até lá, a borda sutil é o reforço recomendado.
+</Callout>
+
+## Interação
+
+- `hovered` é o único nível de **estado**: um card interativo passa de `base` para `hovered` no hover, com transição.
+- Um elemento não muda de nível ao ser clicado ou focado. O foco tem indicador próprio, o anel de foco. Veja [Border](border.mdx).
+- Superfícies que entram na tela (menu, modal, toast) aparecem já no seu nível. A animação de entrada é de opacidade e posição, não de sombra.
+
+## Acessibilidade
+
+- **A elevação não pode ser a única pista.** Muitas pessoas não percebem sombras sutis, e elas somem no modo de alto contraste. Combine com borda, mudança de fundo ou backdrop.
+- **Camadas que bloqueiam prendem o foco.** Um elemento `overlay` move o foco para dentro, mantém o foco preso enquanto está aberto, fecha com `Esc` e devolve o foco ao gatilho.
+- **Nada importante embaixo de algo fixo.** Um cabeçalho fixo ou um toast não podem esconder o elemento que está com foco (WCAG 2.4.11).
+- **Toasts** ficam por cima de tudo, mas não roubam o foco.
+
+## Boas práticas
+
+- Use **um** nível flutuante e **um** de sobreposição por vez. Um menu aberto dentro de um modal é o limite.
+- Prefira **borda** a **sombra** para separar áreas de uma mesma camada.
+- Combine `overlay` com backdrop sempre que a camada bloquear a página.
+- No tema escuro, confira se cada superfície elevada ainda se distingue do fundo.
+
+## Anti-patterns
+
+<DosDonts variant="do" title="Elevação com significado">
+  O menu aberto em `floating`, o modal em `overlay`, o resto plano. A pessoa sente em que camada está.
+</DosDonts>
+
+<DosDonts variant="dont" title="Sombras em tudo">
+  Cards, botões, campos e tags, todos com sombra. A tela fica pesada, e a hierarquia desaparece.
+</DosDonts>
+
+- **Sombra como decoração.** Uma sombra num botão para "dar profundidade" sugere que ele flutua.
+- **Níveis intermediários.** Uma sombra "entre `base` e `floating`" é um nível que ninguém mais entende.
+- **`z-index: 9999`.** Uma corrida de números que o próximo componente vai perder. Use a escada.
+- **Contar com a sombra no tema escuro.** Sem borda ou mudança de superfície, a camada desaparece.

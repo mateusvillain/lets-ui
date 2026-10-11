@@ -1,0 +1,310 @@
+---
+title: "Color"
+subtitle: "A cor comunica hierarquia, estado, ação e identidade. No Let's UI ela vem sempre de um token com papel definido, e por isso acompanha a marca e o tema sem retrabalho."
+order: 1
+---
+
+## Propósito
+
+A cor tem quatro trabalhos na interface, e cada token existe para um deles:
+
+| Trabalho | O que a cor faz | Exemplo |
+| --- | --- | --- |
+| **Hierarquia** | Separa o que é título, corpo e informação de apoio. | `text.heading` mais forte que `text.caption`. |
+| **Estado** | Mostra se algo deu certo, precisa de atenção ou falhou. | Alert de sucesso, campo inválido. |
+| **Ação** | Indica o que é clicável e qual é a ação principal. | Botão primário, links, anel de foco. |
+| **Identidade** | Faz o produto parecer da marca. | A família `primary`, que muda por `data-brand`. |
+
+Se uma cor não está fazendo um desses trabalhos, ela provavelmente não precisa estar na tela.
+
+## Princípios
+
+- **A cor comunica, não decora.** Cada família tem um significado, e esse significado é o mesmo em todo o produto.
+- **Papel antes de matiz.** Pense em "texto de corpo" ou "fundo de erro", nunca em "cinza 7" ou "vermelho 4".
+- **Nunca só a cor.** Todo significado transmitido pela cor também aparece em texto, ícone ou forma.
+- **Contraste primeiro.** Uma combinação que não passa no contraste não entra na tela, por mais bonita que seja.
+- **Pouca cor de destaque.** Uma tela com uma única cor forte guia o olhar. Várias cores fortes competem entre si.
+
+## Como a cor está organizada
+
+A cor passa por **quatro camadas**. Cada uma só aponta para a camada de baixo, e é isso que permite trocar marca e tema sem tocar nos componentes.
+
+| Camada | Tokens | Muda com | Quem usa |
+| --- | --- | --- | --- |
+| **Primitivas** | `lui.color.{blue, gray, green, orange, red, violet}.1–8` e `lui.color.black.alpha.1–8` | Tema (`data-theme`) | Só outros tokens. |
+| **Marca** | `lui.brand.color.{primary, secondary}.1–8` | Marca (`data-brand`) e tema | Só outros tokens. |
+| **Semânticas** | `lui.color.{família}.{propriedade}.{variante}` | Nada: são apelidos | Componentes e telas. |
+| **Componente** | `lui.link.color.*`, `lui.divider.color.*` | Nada: são apelidos | Um único componente. |
+
+O token semântico **não tem valor próprio**: ele aponta para uma primitiva ou para uma cor de marca. `lui.color.neutral.text.body` aponta para `lui.color.gray.7`, e é o `gray.7` que muda quando o tema escuro entra. Por isso a camada semântica é idêntica nos dois temas, e um componente escrito uma vez funciona em todos.
+
+<Callout variant="info">
+  Componentes consomem a camada **semântica**. Primitivas e cores de marca são a matéria-prima dos tokens, não uma API para telas. Veja [Design tokens](../tokens/design-tokens.mdx) para a arquitetura completa.
+</Callout>
+
+## Paletas
+
+| Paleta | Famílias | Papel |
+| --- | --- | --- |
+| **Marca** | `primary`, `secondary` | Identidade e ação principal. Os valores vêm de cada marca. |
+| **Neutra** | `neutral` (sobre `gray`) | Estrutura: texto, fundos, bordas e divisores. A maior parte da tela. |
+| **Semântica** | `success`, `caution`, `danger`, `info` | Estado e feedback. Cada uma tem um significado fixo. |
+| **Suporte** | `violet` e `black.alpha` | Sem papel semântico. `violet` serve a dados categóricos e ilustrações; `black.alpha` a sobreposições translúcidas. |
+
+### O significado de cada família
+
+| Família | Significado | Use em | Não use em |
+| --- | --- | --- | --- |
+| **Primary** | Ação principal e identidade. | Botão primário, links, aba selecionada, foco. | Texto longo, fundos grandes. |
+| **Secondary** | Apoio à primária, com menos peso. | Botão secundário, ações de apoio. | Para sinalizar estado. |
+| **Neutral** | Conteúdo e estrutura, sem carga de significado. | Texto, superfícies, bordas, ícones. | Para chamar atenção. |
+| **Success** | Algo deu certo ou está ativo. | Confirmações, status positivos. | Decoração "verde da marca". |
+| **Caution** | Atenção: pode haver um problema. | Avisos, prazos próximos, limites. | Erros que já aconteceram. |
+| **Danger** | Erro ou ação destrutiva. | Falhas, exclusões, campos inválidos. | Destaque comum, promoções. |
+| **Info** | Informação útil e neutra. | Dicas, novidades, contexto. | Ações. |
+
+## Escalas
+
+Cada família primitiva é uma rampa de **8 degraus**. O número do degrau não é "claro para escuro": é a **distância da superfície**. O degrau `1` fica perto do fundo da página e o `8` tem o contraste máximo contra ele, **nos dois temas**.
+
+| Tema | `gray.1` | `gray.4` | `gray.8` |
+| --- | --- | --- | --- |
+| Claro | `#ffffff` | `#6c7081` | `#131519` |
+| Escuro | `#181a20` | `#7a8296` | `#f4f6fa` |
+
+No tema escuro a rampa se inverte por inteiro. É por isso que `text.heading → gray.8` é escuro no tema claro e claro no tema escuro, sem que ninguém precise escrever uma regra para o tema escuro.
+
+### O papel de cada degrau
+
+| Degrau | Papel típico | Tokens semânticos que apontam para ele |
+| --- | --- | --- |
+| `1` | Superfície e tinta suave de fundo. | `background.surface` de todas as famílias, `text.inverse` |
+| `2` | Bordas sutis e divisores. | `neutral.border.subtle` |
+| `3` | Preenchimentos neutros de contêiner. | `neutral.background.container` |
+| `4` | A cor "cheia" da família. | `background.container`, `border.default`, `icon.default` |
+| `5` | Hover de borda e anel de foco. | `focus-ring`, `danger.border.hover`, `neutral.border.pressed` |
+| `6` | Pressed de borda e link visitado. | `danger.border.pressed`, `link.visited` |
+| `7` | Texto de corpo. | `neutral.text.body` |
+| `8` | Títulos, ícones e a superfície mais forte. | `neutral.text.heading`, `neutral.icon.default`, `neutral.background.overlay` |
+
+## Primitivas
+
+Use a função SCSS `color($família, $degrau)` só quando não houver papel semântico, como em gráficos.
+
+### Blue
+
+<TokenTable group="lui.color.blue" />
+
+### Gray
+
+<TokenTable group="lui.color.gray" />
+
+### Green
+
+<TokenTable group="lui.color.green" />
+
+### Orange
+
+<TokenTable group="lui.color.orange" />
+
+### Red
+
+<TokenTable group="lui.color.red" />
+
+### Violet
+
+<TokenTable group="lui.color.violet" />
+
+### Black Alpha
+
+Sobreposições translúcidas, de 2% a 28% de opacidade. São pretas no tema claro e brancas no tema escuro, então escurecem ou clareiam a superfície na direção certa.
+
+<TokenTable group="lui.color.black.alpha" />
+
+## Cores da marca
+
+`primary` e `secondary` são definidas por marca, em um arquivo por tema. Na marca padrão (`lets-ui`), a primária é azul e a secundária é cinza.
+
+### Primary
+
+<TokenTable group="lui.brand.color.primary" />
+
+### Secondary
+
+<TokenTable group="lui.brand.color.secondary" />
+
+## Tokens semânticos
+
+O nome de um token semântico diz **para que** ele serve: `lui.color.{família}.{propriedade}.{variante}`.
+
+| Propriedade | Variantes | Função SCSS | Exemplo de CSS |
+| --- | --- | --- | --- |
+| `background` | `surface` (tinta suave), `container` (cor cheia), `overlay` (só `neutral`) | `bg($categoria, $família)` | `var(--lui-color-danger-background-surface)` |
+| `border` | `default`, `subtle`, `hover`, `pressed` | `stroke($família, $categoria)` | `var(--lui-color-neutral-border-subtle)` |
+| `text` | `heading`, `body`, `caption`, `inverse`, `error` | `text($variante)` | `var(--lui-color-neutral-text-body)` |
+| `icon` | `default`, `inverse` | `icon($família)` | `var(--lui-color-success-icon-default)` |
+| `focus-ring` | uma cor por família | `focus-ring($família)` | `var(--lui-focus-ring-primary)` |
+
+Nem toda família tem todas as propriedades: o sistema só cria o token que algum componente usa. `danger` e `neutral` têm `border.hover` e `border.pressed` porque os campos de formulário reagem à interação pela borda; `caution` e `info` não têm `focus-ring` porque nenhum componente interativo usa essas famílias.
+
+### Surface ou container?
+
+| Variante | Aparência | Texto por cima | Exemplo |
+| --- | --- | --- | --- |
+| `background.surface` | Tinta suave, perto do fundo da página. | `text.body` ou `text.heading` | Alert, Tag `surface`. |
+| `background.container` | A cor cheia da família. | `text.inverse` | Botão primário, Tag `container`. |
+
+<DosDonts variant="do" title="Par de fundo e texto do mesmo nível">
+  `background.container` com `text.inverse`, ou `background.surface` com `text.body`. Os pares foram desenhados para andar juntos.
+</DosDonts>
+
+<DosDonts variant="dont" title="Texto colorido sobre fundo da mesma família">
+  `primary.text.body` sobre `primary.background.surface`. Os dois saem da mesma rampa e não passam no contraste.
+</DosDonts>
+
+### Primary
+
+<TokenTable group="lui.color.primary" />
+
+### Secondary
+
+<TokenTable group="lui.color.secondary" />
+
+### Neutral
+
+<TokenTable group="lui.color.neutral" />
+
+### Success
+
+<TokenTable group="lui.color.success" />
+
+### Caution
+
+<TokenTable group="lui.color.caution" />
+
+### Danger
+
+<TokenTable group="lui.color.danger" />
+
+### Info
+
+<TokenTable group="lui.color.info" />
+
+### Link
+
+<TokenTable group="lui.color.link" />
+
+## Estados
+
+Os estados de interação **não têm cor própria por variante**. O sistema resolve cada um com um mecanismo único, que funciona em qualquer família, marca ou tema.
+
+| Estado | Como é resolvido | Onde |
+| --- | --- | --- |
+| **Hover** | Uma camada de 8% da cor de conteúdo do componente, misturada ao fundo de repouso. | `state(hover)`, mixin `state-layer()` |
+| **Pressed** | A mesma camada, em 16%. | `state(pressed)` |
+| **Focus** | Um anel de 3px na cor `focus-ring` da família. | `focus-ring($família)` em `:focus-visible` |
+| **Selected** | O componente troca o fundo de repouso (`--lui-bg`) para `background.container` e o texto para `text.inverse`. Hover e pressed continuam funcionando por cima. | Tabs `card` |
+| **Disabled** | Opacidade de marca (`lui.opacity.disabled`, 40%) sobre o componente inteiro, e cursor `not-allowed`. | `opacity(disabled)` |
+| **Loading** | As cores da variante não mudam: o conteúdo dá lugar a um indicador e a interação é bloqueada. | Button `loading` |
+| **Erro** | A borda passa para `danger.border.default` e a mensagem usa `danger.text.error`. | Input, Select, Textarea |
+
+### A camada de interação
+
+A tinta do hover é a **cor de conteúdo do próprio componente** (`currentColor`). Como conteúdo e fundo já precisam ter contraste entre si, misturar o conteúdo ao fundo clareia o que é escuro e escurece o que é claro, sem medir nada e sem saber sobre que superfície um componente transparente está apoiado.
+
+As quantidades (8% e 16%) não variam por tema nem por marca, então **não são tokens**: vivem como constantes em `_functions.scss`, junto da lógica que as usa.
+
+```scss
+.meu-controle {
+  color: text(inverse);
+  @include states(primary, null, bg(container, primary));
+}
+```
+
+<Callout variant="tip">
+  Defina o fundo de repouso com o mixin `state-layer($bg)` ou `state-base($bg)`, nunca com `background-color` direto. Assim as regras de hover e pressed continuam valendo.
+</Callout>
+
+## Contraste
+
+Os valores abaixo foram calculados a partir dos tokens, com a fórmula do WCAG. **AA** pede 4,5 : 1 para texto, 3 : 1 para texto grande e para elementos de interface. **AAA** pede 7 : 1 para texto.
+
+### Texto sobre superfícies neutras
+
+| Par | Claro | Escuro | Nível |
+| --- | --- | --- | --- |
+| `text.heading` sobre `neutral.background.surface` | 18,28 | 16,07 | AAA |
+| `text.body` sobre `neutral.background.surface` | 14,15 | 11,00 | AAA |
+| `text.caption` sobre `neutral.background.surface` | 4,92 | 4,52 | AA |
+| `text.error` sobre `neutral.background.surface` | 4,86 | 5,07 | AA |
+| `text.body` sobre `neutral.background.container` | 8,65 | 5,30 | AA (AAA no claro) |
+| `text.inverse` sobre `neutral.background.overlay` | 18,28 | 16,07 | AAA |
+| `text.body` sobre `{success, caution, danger, info}.background.surface` | 11,06 a 13,00 | 9,43 a 10,85 | AAA |
+
+### Texto inverso sobre contêineres
+
+| Par | Claro | Escuro | Nível |
+| --- | --- | --- | --- |
+| `text.inverse` sobre `secondary.background.container` | 4,92 | 4,52 | AA |
+| `text.inverse` sobre `danger.background.container` | 4,86 | 5,07 | AA |
+| `text.inverse` sobre `success.background.container` | 3,82 | 5,69 | Claro: só texto grande |
+| `text.inverse` sobre `caution.background.container` | 3,83 | 5,38 | Claro: só texto grande |
+| `text.inverse` sobre `primary.background.container` | 2,96 | 5,29 | Claro: **reprova** |
+| `text.inverse` sobre `info.background.container` | 2,96 | 5,29 | Claro: **reprova** |
+
+### Elementos de interface (mínimo 3 : 1)
+
+| Par | Claro | Escuro | Resultado |
+| --- | --- | --- | --- |
+| `neutral.border.default` sobre a superfície | 4,92 | 4,52 | Aprova |
+| `danger.border.default` sobre a superfície | 4,86 | 5,07 | Aprova |
+| `primary.border.default` sobre a superfície | 2,96 | 5,29 | Claro: reprova |
+| `neutral.border.subtle` sobre a superfície | 1,17 | 1,51 | Só decorativa |
+| Anel de foco `primary` | 3,65 | 6,90 | Aprova |
+| Anel de foco `neutral`, `danger`, `success` | 6,33 a 7,07 | 4,59 a 7,54 | Aprova |
+| Ícones `success`, `caution`, `danger` sobre a superfície | 3,82 a 4,86 | 5,07 a 5,69 | Aprova |
+| Ícone `info` sobre a superfície | 2,96 | 5,29 | Claro: reprova |
+| Link (`link.default`) sobre a superfície | 2,96 | 5,29 | Claro: reprova |
+
+<Callout variant="warning">
+  No tema claro, o degrau `4` da marca `lets-ui` (`#339bf0`) fica abaixo de 3 : 1 contra o branco. Isso afeta o botão primário, o link, a borda e o ícone `primary` e `info`. Enquanto a rampa não for ajustada, não use `primary.background.container` com texto pequeno em telas novas sem conferir, e prefira `secondary` ou `neutral` quando o contraste for crítico. A dívida está registrada em [Accessibility](../accessibility/overview.mdx).
+</Callout>
+
+## Gráficos, tags, status e dados categóricos
+
+- **Status** usa as famílias semânticas: `success`, `caution`, `danger` e `info`. Sempre com rótulo ou ícone ao lado.
+- **Tags** têm duas intensidades: `surface` (tinta suave, texto `body`) para a maior parte dos casos, e `container` (cor cheia, texto `inverse`) para pouco e importante.
+- **Dados categóricos** (séries de um gráfico, categorias de uma legenda) não têm tokens próprios ainda. Use as primitivas no degrau `4` na ordem `blue`, `orange`, `green`, `violet`, `red` e `gray`, e limite o gráfico a essas seis séries.
+- **Dados sequenciais** (de menos para mais) usam os degraus de uma **única** família, do `2` ao `7`.
+- Em gráficos, `red` e `green` lado a lado são indistinguíveis para muitas pessoas. Separe-os por posição, padrão ou rótulo direto.
+- Não reaproveite uma cor semântica como categoria: uma série vermelha sugere erro.
+
+## Acessibilidade
+
+- O **significado nunca depende só da cor** (WCAG 1.4.1). Um campo inválido tem borda vermelha **e** mensagem de texto. Um status tem cor **e** rótulo ou forma.
+- Texto precisa de **4,5 : 1**; texto grande (a partir de 24px, ou 18,66px em negrito) e elementos de interface, de **3 : 1** (WCAG 1.4.3 e 1.4.11).
+- Confira cada par **nos dois temas**: o que passa no escuro pode reprovar no claro, como mostram as tabelas acima.
+- No modo de alto contraste do sistema operacional (`forced-colors`), os componentes caem nas cores do sistema. Não codifique informação em `background-image` ou em sombras, que somem nesse modo.
+
+## Boas práticas
+
+- Escolha primeiro o **papel** (fundo, texto, borda, ícone) e depois a **família** (primária, perigo...).
+- Use `danger` só para erro e destruição. Se tudo for vermelho, nada chama atenção.
+- Reserve `background.container` para elementos pequenos e importantes. Para áreas grandes, use `background.surface`.
+- Em textos, use `text.caption` só para informação secundária: ele está perto do limite de 4,5 : 1.
+- Ao criar um token novo, verifique o contraste de **todos** os pares em que ele vai aparecer.
+
+## Anti-patterns
+
+<DosDonts variant="do" title="Token semântico">
+  `background-color: bg(container, primary)` em um botão. Ele muda com a marca e com o tema escuro.
+</DosDonts>
+
+<DosDonts variant="dont" title="Hexadecimal ou primitiva no componente">
+  `background-color: #339bf0` ou `color(blue, 4)`. Não acompanha a troca de marca, e a próxima revisão de cor não chega nele.
+</DosDonts>
+
+- **Cor própria para hover.** Criar `primary.background.hover` duplica o que a camada de interação já resolve para todas as famílias.
+- **Inverter cores na mão para o tema escuro.** A rampa já se inverte. Uma regra `[data-theme="dark"]` em um componente quase sempre é um sinal de token errado.
+- **Cor semântica como decoração.** Um cabeçalho verde "porque combina" ensina a pessoa a ignorar o verde quando ele significar sucesso.
+- **Cor como único sinal.** Duas linhas de tabela que diferem só pela cor do texto.

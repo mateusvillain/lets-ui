@@ -1,0 +1,163 @@
+---
+title: "Spacing"
+subtitle: "O espaço diz o que está relacionado e o que está separado. O Let's UI oferece duas escalas fechadas, uma fixa e uma fluida, e nenhum valor fora delas."
+order: 2
+---
+
+## Propósito
+
+O espaço é a forma mais barata de organizar uma tela. Antes de uma borda, uma cor de fundo ou um título, a **distância** entre dois elementos já diz se eles pertencem ao mesmo grupo.
+
+Uma escala fechada garante que essa linguagem seja a mesma em todo o produto: o espaço entre a label e o campo é sempre o mesmo, e o olho aprende a ler o padrão.
+
+## Princípios
+
+- **Proximidade agrupa.** Itens de um mesmo grupo ficam mais próximos entre si do que de qualquer outro grupo.
+- **Ritmo vem da repetição.** Poucos valores, usados sempre do mesmo jeito, criam ritmo. Muitos valores parecidos criam ruído.
+- **Espaço em branco é conteúdo.** Ele dá foco, separa decisões e deixa a tela respirar.
+- **Densidade é uma escolha.** Telas de trabalho intenso pedem menos espaço; telas de leitura e de decisão pedem mais. A escolha é por tela, não por elemento.
+- **Só valores da escala.** Se a escala não tem o valor que você quer, o problema provavelmente é outro.
+
+## Densidade, legibilidade e ritmo
+
+As três forças puxam em direções diferentes, e o espaço é onde elas se equilibram:
+
+| Força | Pede | Risco quando exagerada |
+| --- | --- | --- |
+| **Densidade** | Menos espaço, mais informação por tela. | Grupos se confundem e a leitura cansa. |
+| **Legibilidade** | Mais espaço em volta do texto e entre blocos. | A pessoa rola demais e perde o contexto. |
+| **Ritmo** | Os mesmos intervalos repetidos. | Uma tela monótona, sem hierarquia. |
+
+Uma regra prática: **dobre** o espaço a cada nível de agrupamento. Se itens de uma lista estão a `8`, os grupos ficam a `16` e as seções a `32`.
+
+## As duas escalas
+
+| Escala | Valores | Comportamento | Função SCSS |
+| --- | --- | --- | --- |
+| **Fixa** | `0`, `8`, `16`, `24`, `32`, `40` | Valor absoluto em pixels, sobre uma base de 8. | `fixed($n)` |
+| **Fluida** | `2`, `4`, `8`, `12`, `16`, `20`, `24`, `32`, `40`, `48`, `56`, `64`, `72`, `80` | `clamp()` entre 90% e 100% do valor nominal, em `rem`. | `fluid($n)` |
+
+O número do token é o **valor nominal em pixels**. `fluid(16)` é "o 16 da escala fluida" e `fixed(16)` é "16px exatos".
+
+### Quando usar cada uma
+
+| Use | Quando | Exemplos |
+| --- | --- | --- |
+| **Fluida** | É a escala padrão para padding e gap de componentes e de layout. É mais fina (14 degraus) e acompanha o tamanho de fonte da pessoa, porque é escrita em `rem`. | Padding do botão, gap do Stack, padding do Card. |
+| **Fixa** | O valor precisa ser exato, ou é uma medida estrutural que não deve ceder. | Tamanho do Icon Button (40px), gap e margem da [Grid](grid.mdx), distâncias de posicionamento do Tooltip. |
+
+### Espaçamento fixo
+
+<TokenTable group="lui.spacing.fixed" />
+
+### Espaçamento fluido
+
+Os valores fluidos são expressões `clamp()`, e por isso ficam fora do `TokenTable`. O mínimo é 90% do nominal; o máximo é o nominal.
+
+| Token | CSS | Mínimo | Máximo |
+| --- | --- | --- | --- |
+| `2` | `--lui-spacing-fluid-2` | 1,8px | 2px |
+| `4` | `--lui-spacing-fluid-4` | 3,6px | 4px |
+| `8` | `--lui-spacing-fluid-8` | 7,2px | 8px |
+| `12` | `--lui-spacing-fluid-12` | 10,8px | 12px |
+| `16` | `--lui-spacing-fluid-16` | 14,4px | 16px |
+| `20` | `--lui-spacing-fluid-20` | 18px | 20px |
+| `24` | `--lui-spacing-fluid-24` | 21,6px | 24px |
+| `32` | `--lui-spacing-fluid-32` | 28,8px | 32px |
+| `40` | `--lui-spacing-fluid-40` | 36px | 40px |
+| `48` | `--lui-spacing-fluid-48` | 43,2px | 48px |
+| `56` | `--lui-spacing-fluid-56` | 50,4px | 56px |
+| `64` | `--lui-spacing-fluid-64` | 57,6px | 64px |
+| `72` | `--lui-spacing-fluid-72` | 64,8px | 72px |
+| `80` | `--lui-spacing-fluid-80` | 72px | 80px |
+
+<Callout variant="warning">
+  **Limitação conhecida.** O coeficiente de `vw` dos tokens fluidos é pequeno demais para levar o valor do mínimo ao máximo dentro de larguras reais de tela. Na prática, hoje todo token fluido resolve no **mínimo** (90% do nominal) em qualquer viewport: `fluid(16)` vale 14,4px tanto no celular quanto no desktop. O comportamento é estável e previsível, mas ainda não é fluido. Os valores de mínimo e máximo da tabela continuam valendo como contrato.
+</Callout>
+
+## Regras por contexto
+
+O Let's UI não tem tokens de composição (como `padding.component.md`): o contexto é decidido pelos componentes e pelos primitivos de layout, sempre com valores da escala. A tabela abaixo é a referência para o que você montar.
+
+| Contexto | Faixa | O que os componentes usam |
+| --- | --- | --- |
+| **Dentro de um controle** (ícone e texto, prefixo e valor) | `fluid(4)` a `fluid(8)` | Gap do Button e do Dropdown Menu: `fluid(8)`. Gap da Tag: `fluid(4)`. |
+| **Padding de controles** | `fluid(8)` a `fluid(16)` | Button `md`: `fluid(8)` × `fluid(12)`. Button `lg`: `fluid(12)` × `fluid(16)`. |
+| **Padding de superfícies** | `fluid(16)` a `fluid(24)` | Card, Alert e Toast: `fluid(16)`. Modal: `fluid(24)`. |
+| **Entre elementos relacionados** (título e texto, label e campo) | `fluid(8)` | Corpo do Card: `fluid(8)`. |
+| **Entre grupos** (ações de um card, campos de seções diferentes) | `fluid(16)` a `fluid(24)` | Ações do Card e do Modal: `fluid(16)`. Stack padrão: `fluid(16)`. |
+| **Entre seções de uma página** | `fluid(32)` a `fluid(80)` | Use um Stack com gap `32` ou mais. |
+| **Layout** (margem de página, gutter) | Escala fixa | Margem da Grid: 16 / 32 / 40px. Gap da Grid: 16 / 24px. Padding do Container: `fluid(32)`. |
+
+## Como aplicar
+
+A forma preferida é deixar o **contêiner** controlar o espaço, com `gap`, em vez de margens soltas nos filhos.
+
+| Ferramenta | Para | Exemplo |
+| --- | --- | --- |
+| [Stack](../../components/layout/stack/index.mdx) | Itens empilhados na vertical. | `<lui-stack gap="24">` ou `.stack--gap-24` |
+| [Inline](../../components/layout/inline/index.mdx) | Itens em linha, que quebram. | `<lui-inline gap="8">` ou `.inline--gap-8` |
+| [Grid](../../components/layout/grid/index.mdx) | Estrutura de página em colunas. | Gap e margem vêm dos tokens da marca. |
+| Classes utilitárias | Ajustes pontuais em HTML. | `.gap-fluid-16`, `.p--fluid-24`, `.m-t-fixed-16` |
+| Funções SCSS | Componentes. | `padding: fluid(16);` |
+
+```scss
+.resumo {
+  display: flex;
+  flex-direction: column;
+  gap: fluid(8);
+  padding: fluid(24);
+}
+```
+
+## Exemplos
+
+### Card
+
+Padding de `fluid(16)` no corpo, `fluid(8)` entre título e texto, e `fluid(16)` antes e entre as ações. O salto de 8 para 16 separa o conteúdo das ações.
+
+### Formulário
+
+`fluid(8)` entre a label, o campo e a mensagem de ajuda; `fluid(16)` a `fluid(24)` entre campos; `fluid(32)` entre grupos de campos com título próprio; `fluid(24)` entre o último campo e os botões.
+
+### Lista
+
+`fluid(8)` a `fluid(12)` entre itens simples; `fluid(16)` entre itens com título e descrição. Em listas densas, use [Divider](../../components/layout/divider/index.mdx) em vez de mais espaço.
+
+### Modal
+
+`fluid(24)` de padding nas bordas, `fluid(8)` entre o cabeçalho e o corpo, e `fluid(16)` entre os botões do rodapé.
+
+### Página
+
+Margem lateral e gutter vêm da [Grid](grid.mdx). Entre seções, `fluid(48)` a `fluid(80)`, com o maior valor separando o topo da página do resto.
+
+## Acessibilidade
+
+- **Alvo de toque.** Todo controle interativo tem pelo menos **24 × 24px** de área (WCAG 2.5.8), ou espaço livre suficiente em volta para completar 24px. Os controles principais do sistema usam 40px.
+- **Espaço entre alvos.** Dois controles pequenos lado a lado precisam de distância suficiente para não serem acionados por engano. Prefira `fluid(8)` ou mais.
+- **Zoom e texto ampliado.** A escala fluida é escrita em `rem` e cresce junto com o tamanho de fonte escolhido pela pessoa. Teste com o texto ampliado em 200%: nada pode sobrepor ou cortar.
+- **Espaçamento de texto.** O layout precisa aguentar o aumento de entrelinha e de espaço entre letras e palavras que a pessoa aplicar (WCAG 1.4.12). Não fixe alturas em contêineres de texto.
+
+## Boas práticas
+
+- Use os primitivos de layout para aplicar espaço. Eles já usam a escala.
+- Prefira `gap` no contêiner a `margin` nos filhos: o espaço fica num lugar só, e não sobra no último item.
+- Dobre o espaço a cada nível de agrupamento.
+- Em telas densas, reduza o espaço **de forma uniforme**, um degrau por contexto, em vez de apertar só um lugar.
+- Use a escala fixa para medidas estruturais e a fluida para o resto.
+
+## Anti-patterns
+
+<DosDonts variant="do" title="Espaço proporcional à relação">
+  Label colada no campo (`fluid(8)`), campos entre si a `fluid(16)`, seções a `fluid(32)`. A pessoa lê os grupos sem nenhuma borda.
+</DosDonts>
+
+<DosDonts variant="dont" title="Valores fora da escala">
+  `margin-top: 13px` aqui e `22px` ali. A tela perde o ritmo, e o próximo ajuste vira um palpite.
+</DosDonts>
+
+- **Espaço igual para tudo.** Se tudo está a 16px, nada está agrupado.
+- **Margem para "corrigir" alinhamento.** Um `margin-left: 3px` para alinhar um ícone esconde um problema de estrutura. Corrija o contêiner.
+- **Somar tokens para chegar a um valor.** `calc(fluid(16) + fluid(4))` é um valor arbitrário com outro nome.
+- **Altura fixa em blocos de texto.** O texto cresce com zoom, tradução e espaçamento do usuário; a caixa não.

@@ -1,0 +1,188 @@
+---
+title: "Grid"
+subtitle: "A grade é o esqueleto invisível que alinha a página. Colunas, gutters, margens e largura máxima mudam por breakpoint, todos definidos por tokens da marca e aplicados pelo componente Grid."
+order: 4
+---
+
+## Propósito
+
+A grade divide a largura disponível em **colunas** iguais, separadas por um **gutter**, dentro de uma **margem** lateral. Ela mantém o conteúdo alinhado de uma seção a outra e de uma tela a outra, e transforma "quanto de largura este bloco ocupa" em uma decisão simples: **quantas colunas**.
+
+## Princípios
+
+- **Alinhamento acima de tudo.** Tudo se apoia nas mesmas colunas, então nada fica torto entre seções.
+- **Comportamento antes de largura.** Um layout responsivo não é o mesmo layout encolhido: no celular, o que estava lado a lado passa a empilhar.
+- **Mobile-first.** A grade começa com 4 colunas e ganha colunas conforme a tela cresce.
+- **Conteúdo primeiro.** A grade serve o conteúdo, não o força a caber em caixas.
+- **Largura máxima.** Em telas muito largas, o conteúdo para de crescer e centraliza, para que as linhas de texto não fiquem longas demais.
+
+## Estrutura
+
+| Peça | O que é | Token |
+| --- | --- | --- |
+| **Colunas** | Faixas de largura igual em que os blocos se apoiam. | `lui.brand.grid.column.*` |
+| **Gutter** | O espaço entre colunas (o `gap`). | `lui.brand.grid.gap.*` |
+| **Margem** | O respiro entre a grade e a borda da tela. | `lui.brand.grid.margin.*` |
+| **Largura máxima** | Onde o conteúdo para de crescer e centraliza. | `lui.brand.grid.container.1xl` |
+| **Breakpoints** | As larguras em que colunas, gutter e margem mudam. | `lui.brand.grid.breakpoint.*` |
+
+### A tabela completa
+
+| Breakpoint | Viewport | Colunas | Gutter | Margem lateral | Alvo típico |
+| --- | --- | --- | --- | --- | --- |
+| `1xs` (base) | até 767px | 4 | 16px | 16px | Celular |
+| `sm` | a partir de 768px | 8 | 16px | 32px | Tablet em pé |
+| `md` | a partir de 1024px | 8 | 16px | 40px | Tablet deitado, notebook pequeno |
+| `lg` | a partir de 1280px | 12 | 24px | 40px | Desktop |
+| `1xl` | a partir de 1440px | 12 | 24px | Centralizado em 1360px | Telas largas |
+
+Doze colunas dividem-se em 2, 3, 4 e 6; oito, em 2 e 4; quatro, em 2. Isso dá flexibilidade para dividir a página em qualquer faixa.
+
+## Tokens
+
+### Breakpoints
+
+Cada breakpoint é a **largura mínima** a partir da qual sua faixa vale. A exceção é `1xs`, que é o **teto** da faixa de celular: ela é a base da grade e não tem media query.
+
+<TokenTable group="lui.brand.grid.breakpoint" />
+
+### Colunas
+
+<TokenTable group="lui.brand.grid.column" />
+
+### Gutter
+
+O gutter aponta para a [escala fixa de espaçamento](spacing.mdx): a responsividade vem do breakpoint, que troca o valor, e não de uma rampa contínua.
+
+<TokenTable group="lui.brand.grid.gap" />
+
+### Margem
+
+Não existe margem no `1xl`. A partir dele, a grade deixa de ter margem e passa a ter largura máxima centralizada. É a ausência do token que faz essa troca.
+
+<TokenTable group="lui.brand.grid.margin" />
+
+### Largura máxima
+
+<TokenTable group="lui.brand.grid.container" />
+
+<Callout variant="info">
+  Gutter, margem e largura máxima viram custom properties e mudam com `data-brand` em tempo real. Breakpoints e número de colunas são **fixados na compilação**, porque uma media query e o laço que gera as classes `.col-*` não leem `var()`. Uma marca que mude esses dois precisa compilar o CSS a partir do código-fonte. Veja [Themes](../tokens/themes.mdx).
+</Callout>
+
+## Como usar
+
+Você escolhe quantas colunas cada bloco ocupa em cada faixa, e a grade converte isso em largura. Um valor declarado em um breakpoint vale **dali para cima**, até outro substituí-lo.
+
+```html
+<lui-grid>
+  <lui-grid-item col="full">Cabeçalho</lui-grid-item>
+  <lui-grid-item col="4" col-sm="4" col-lg="8">Conteúdo</lui-grid-item>
+  <lui-grid-item col="4" col-sm="4" col-lg="4">Lateral</lui-grid-item>
+</lui-grid>
+```
+
+```html
+<div class="grid">
+  <div class="col-full">Cabeçalho</div>
+  <div class="col-4 col-sm-4 col-lg-8">Conteúdo</div>
+  <div class="col-4 col-sm-4 col-lg-4">Lateral</div>
+</div>
+```
+
+Em SCSS, use os mixins `media-up($bp)` e `media-down($bp)`. Eles são complementos exatos: nenhuma largura, nem fracionada por zoom, fica sem regra.
+
+```scss
+.painel {
+  display: block;
+
+  @include media-up(md) {
+    display: flex;
+  }
+}
+```
+
+<Callout variant="warning">
+  Atenção ao salto de 8 para 12 colunas no `lg`: um bloco `col-sm-4`, que era metade da linha em `sm` e `md`, vira um terço no `lg` se não for redeclarado.
+</Callout>
+
+## Layouts padrão
+
+### Página de conteúdo
+
+Texto longo, como um artigo ou uma página de ajuda. O texto ocupa **8 das 12 colunas** no desktop, centralizado (ou com um índice nas 4 restantes), para manter a linha perto de 75 caracteres. No celular, ocupa as 4 colunas.
+
+| Faixa | Conteúdo | Índice |
+| --- | --- | --- |
+| Celular | 4 | Acima do conteúdo ou recolhido |
+| Tablet | 8 | Acima do conteúdo |
+| Desktop | 8 | 4 |
+
+### Dashboard
+
+Cartões de métricas e gráficos. Métricas em **3 ou 4 por linha** no desktop (`col-lg-3` ou `col-lg-4`), **2 por linha** no tablet (`col-sm-4`) e **1 por linha** no celular (`col-4`). Gráficos largos ocupam a linha inteira ou 8 colunas.
+
+### Formulário
+
+Formulários são lidos de cima para baixo, em **uma coluna**. Use no máximo 6 a 8 colunas do desktop, e ponha dois campos lado a lado só quando eles formam uma unidade (cidade e estado, data de início e fim). Os botões ficam alinhados à borda do formulário, não da página.
+
+### Detalhe
+
+A página de um item: o conteúdo principal em **8 colunas** e um painel de metadados ou ações em **4**. No tablet e no celular, o painel vai para **cima** do conteúdo se tiver ações, ou para baixo se for só informação.
+
+### Navegação lateral
+
+O app shell com menu fixo à esquerda. A navegação **não faz parte** da grade da página: use o [Sidebar](../../components/layout/sidebar/index.mdx) (lateral de 240px e conteúdo flexível) ou o shell do produto, e coloque a Grid **dentro** da área de conteúdo. Abaixo de `lg`, a navegação vira um menu recolhível.
+
+## Alinhamento e aninhamento
+
+- Todo bloco começa e termina **na borda de uma coluna**. Nada fica a "meia coluna".
+- Elementos dentro de um bloco se alinham pela borda interna do bloco, não pela grade.
+- Uma Grid dentro de outra **não reaplica** margem nem largura máxima: ela divide a largura da célula do pai. No Web Component isso é automático (`flush`).
+- Evite mais de **dois níveis** de grade aninhada. Para alinhar poucos itens dentro de um bloco, use um primitivo de layout.
+- Use `grid--flush` para faixas que vão de borda a borda (um banner com fundo), mantendo as colunas por dentro.
+
+## Grid, Flexbox ou Stack?
+
+| Precisa de | Use | Por quê |
+| --- | --- | --- |
+| Estruturar a página em colunas alinhadas | [Grid](../../components/layout/grid/index.mdx) | Duas dimensões, ligada aos tokens da marca. |
+| Limitar a largura e centralizar | [Container](../../components/layout/container/index.mdx) | Largura máxima pelos breakpoints, sem colunas. |
+| Empilhar itens na vertical com espaço uniforme | [Stack](../../components/layout/stack/index.mdx) | Uma dimensão, espaço pela escala. |
+| Itens em linha que quebram (tags, botões) | [Inline](../../components/layout/inline/index.mdx) | Quebra natural, sem breakpoint. |
+| Lateral fixa e conteúdo flexível | [Sidebar](../../components/layout/sidebar/index.mdx) | Empilha sozinho quando falta espaço. |
+| Itens lado a lado que empilham abaixo de uma largura | [Switcher](../../components/layout/switcher/index.mdx) | Responsivo pelo espaço do contêiner, não do viewport. |
+| Alinhar um item no centro | [Center](../../components/layout/center/index.mdx) | Uma tarefa, uma ferramenta. |
+| Controle fino de eixo, ordem e alinhamento | [Flex](../../components/layout/flex/index.mdx) | Flexbox com a escala de espaço. |
+
+Regra geral: **Grid para a página, primitivos para os componentes.** Se um card está usando a grade da página para alinhar seu ícone ao texto, a ferramenta está errada.
+
+## Acessibilidade
+
+- **Ordem visual = ordem do DOM.** Não use `order` nem posicionamento de grade para reordenar conteúdo: o teclado e o leitor de tela seguem o HTML (WCAG 1.3.2 e 2.4.3).
+- **Reflow.** Em 320px de largura (ou 1280px com zoom de 400%), o conteúdo cabe sem rolagem horizontal (WCAG 1.4.10). A grade de 4 colunas existe para isso.
+- **Zoom.** O zoom do navegador reduz a largura útil e ativa breakpoints menores. Teste o layout com zoom de 200%.
+- **Áreas de referência.** Use `header`, `nav`, `main` e `aside` nas regiões do layout; a grade não substitui a estrutura semântica.
+
+## Boas práticas
+
+- Deixe a Grid aplicar colunas, gutter e margem. Não reproduza esses valores à mão.
+- Pense em colunas, não em pixels.
+- Teste nos **limites** de cada breakpoint: logo antes e logo depois é onde o layout quebra.
+- Mantenha todo texto e controle dentro da margem: nada colado na borda da tela.
+- Prefira layouts que se adaptam ao conteúdo (Switcher, Sidebar, Inline) a regras por breakpoint.
+
+## Anti-patterns
+
+<DosDonts variant="do" title="Estrutura que se adapta">
+  Dois cards em um Switcher: lado a lado quando há espaço, empilhados quando não há, sem nenhuma media query.
+</DosDonts>
+
+<DosDonts variant="dont" title="Breakpoint para consertar conteúdo">
+  Uma media query em 900px só para um título que estoura. O problema é o título (ou o contêiner), e ele vai estourar de novo em outra largura.
+</DosDonts>
+
+- **Larguras fixas em pixels** em blocos da página. Elas ignoram as colunas e quebram em telas menores.
+- **Grade dentro de grade dentro de grade.** Três níveis de colunas para posicionar um botão.
+- **Reordenar com CSS.** Uma lateral que aparece primeiro na tela, mas por último no leitor de tela.
+- **Breakpoints próprios.** Uma media query em 900px cria uma faixa que nenhuma outra parte do sistema conhece.
