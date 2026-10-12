@@ -1,0 +1,164 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CodeBlockStories from './CodeBlock.stories';
+
+<Meta of={CodeBlockStories} />
+
+# Code Block
+
+Mostra um trecho de código em fonte monoespaçada, com botão de copiar, um rótulo opcional e numeração de linhas. Pensado para páginas de documentação.
+
+<Canvas of={CodeBlockStories.Default} />
+<Controls of={CodeBlockStories.Default} />
+
+## Quando usar
+
+Use o Code Block para código que a pessoa vai ler ou copiar: comandos de instalação, exemplos de uso, arquivos de configuração.
+
+- Para um termo de código no meio de uma frase, use `<code>` direto no texto. O Code Block é um bloco, não um trecho em linha.
+- Dê um rótulo quando o contexto não for óbvio: o nome do arquivo na variante `default`, a linguagem ou o shell na `snippet`.
+- Ligue a numeração quando o texto em volta citar linhas específicas. Em comandos de uma linha, ela só ocupa espaço.
+
+## Variantes
+
+`default` mostra um cabeçalho com ícone de arquivo e o rótulo, separado do código por um divisor. `snippet` troca o cabeçalho por um rótulo curto em fonte monoespaçada logo acima do código, sem divisor e sem ícone.
+
+<Canvas of={CodeBlockStories.Snippet} />
+
+Sem `label`, o cabeçalho some nas duas variantes.
+
+<Canvas of={CodeBlockStories.SingleLine} />
+
+## Conteúdo
+
+O código vem do conteúdo do elemento. O componente remove as linhas em branco do início e do fim e a indentação comum a todas as linhas, então o código pode seguir a indentação do HTML em volta.
+
+<Canvas of={CodeBlockStories.MultiLine} />
+
+Texto solto é interpretado como HTML pelo navegador: `<` abriria uma tag. Para mostrar marcação, envolva o código em um `<script type="text/plain">`. O navegador não interpreta nem executa esse conteúdo, e o componente o lê exatamente como foi escrito.
+
+```html
+<lui-code-block label="Component.jsx">
+  <script type="text/plain">
+    <lui-button variant="primary" disabled>Save</lui-button>
+  </script>
+</lui-code-block>
+```
+
+A única coisa que não cabe nele é um `</script>`. Para código que contém essa tag, use um `<template>`. O template também é lido como texto, mas o navegador interpreta a marcação e a reescreve: quebras de linha dentro de uma tag somem e atributos booleanos viram `disabled=""`.
+
+O componente acompanha mudanças no conteúdo feitas por script.
+
+## Numeração de linhas
+
+`show-line-numbers` mostra o número de cada linha à esquerda, alinhado à direita.
+
+<Canvas of={CodeBlockStories.LineNumbers} />
+
+## Linhas longas
+
+Linhas que não cabem rolam na horizontal, sem quebrar o layout em volta. A numeração fica fixa enquanto o código rola.
+
+<Canvas of={CodeBlockStories.LongLines} />
+
+## Botão de copiar
+
+O botão no canto superior direito copia o código para a área de transferência, exatamente como aparece. Depois de copiar, a dica do botão mostra "Copied!" por dois segundos. `copy="false"` remove o botão.
+
+<Canvas of={CodeBlockStories.NoCopyButton} />
+
+A área de transferência só está disponível em contexto seguro (HTTPS ou `localhost`). Se o navegador recusar a escrita, nada é confirmado e o evento não é emitido.
+
+## Ícone personalizado
+
+O ícone de arquivo é o conteúdo padrão do slot `icon`. Passe outro SVG nesse slot para trocá-lo, ou use `show-icon="false"` para escondê-lo.
+
+<Canvas of={CodeBlockStories.CustomIcon} />
+
+## Evento `lui-copy`
+
+Emitido depois que o código é copiado, com o texto em `event.detail.code`. O evento borbulha e atravessa o shadow DOM.
+
+<Canvas of={CodeBlockStories.CopyEvent} />
+
+## Classe CSS (sem Web Component)
+
+A classe CSS reproduz o visual, mas o conteúdo fica todo a cargo de quem usa: escape `<` e `&` no código, escreva os números de linha à mão e deixe a indentação do código colada à margem dentro do `<pre>`. Copiar depende de JavaScript, então o botão não existe nessa versão.
+
+<Canvas of={CodeBlockStories.CSSClass} />
+
+## Propriedades
+
+| Atributo            | Tipo      | Padrão         | Descrição                                                    |
+| ------------------- | --------- | -------------- | ------------------------------------------------------------ |
+| `variant`           | `string`  | `default`      | `default` ou `snippet`.                                      |
+| `label`             | `string`  | `''`           | Texto do cabeçalho: nome do arquivo, linguagem ou shell.     |
+| `show-line-numbers` | `boolean` | `false`        | Numera as linhas.                                            |
+| `show-icon`         | `boolean` | `true`         | Ícone do cabeçalho na variante `default`. `"false"` esconde. |
+| `copy`              | `boolean` | `true`         | Botão de copiar. `"false"` remove.                           |
+| `copy-label`        | `string`  | `Copy code`    | Nome acessível e dica do botão de copiar.                    |
+| `copied-label`      | `string`  | `Copied!`      | Confirmação mostrada na dica e anunciada depois de copiar.   |
+| `aria-label`        | `string`  | `Code snippet` | Nome da região do código.                                    |
+
+| Slot     | Descrição                                                      |
+| -------- | -------------------------------------------------------------- |
+| (padrão) | O código: texto, `<script type="text/plain">` ou `<template>`. |
+| `icon`   | Ícone do cabeçalho na variante `default`. Decorativo.          |
+
+| Propriedade | Tipo     | Descrição                                            |
+| ----------- | -------- | ---------------------------------------------------- |
+| `code`      | `string` | Somente leitura. O código como é mostrado e copiado. |
+
+### Eventos
+
+| Evento     | Detalhe            | Descrição                 |
+| ---------- | ------------------ | ------------------------- |
+| `lui-copy` | `{ code: string }` | Emitido depois de copiar. |
+
+## Acessibilidade
+
+- O código fica em um `<pre>` com `role="region"` e `aria-label="Code snippet"`, que o leitor de tela anuncia como uma região nomeada. Troque o nome com `aria-label` quando houver mais de um bloco na página.
+- Quando as linhas não cabem, a região entra na ordem de foco: com o foco nela, as setas rolam o código. Sem rolagem, ela não ocupa uma parada de `Tab`.
+- O botão de copiar é um `<button>` com nome acessível vindo de `copy-label`. A confirmação é anunciada por uma região `role="status"`, já que a dica visual não é lida.
+- Os números de linha têm `aria-hidden="true"` e não são selecionáveis: o leitor de tela lê só o código, e selecionar o texto não arrasta os números junto.
+- O ícone do cabeçalho é decorativo. Se trocar pelo slot, coloque `aria-hidden="true"` no SVG.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-code-block label="Component.jsx" show-line-numbers>
+  <script type="text/plain">
+    <lui-button variant="primary" size="lg">Save</lui-button>
+  </script>
+</lui-code-block>
+
+<lui-code-block variant="snippet" label="bash">
+  npm install @lets-ui/styles @lets-ui/components
+</lui-code-block>
+
+<script>
+  document
+    .querySelector('lui-code-block')
+    .addEventListener('lui-copy', (event) => {
+      console.log(event.detail.code);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="code-block code-block--snippet">
+  <div class="code-block__header">
+    <p class="code-block__label">bash</p>
+  </div>
+  <div class="code-block__body">
+    <pre
+      class="code-block__pre"
+      role="region"
+      aria-label="Code snippet"
+    ><code>npm install @lets-ui/styles</code></pre>
+  </div>
+</div>
+```

@@ -1,0 +1,8 @@
+// Tooltip goes first: `.tooltip` sets `position: relative`, and the copy
+// button's `position: absolute` has to come after it to win.
+@use 'packages/styles/src/components/tooltip' as *;
+@use 'packages/styles/src/components/code-block' as *;
+
+:host {
+  display: block;
+}
