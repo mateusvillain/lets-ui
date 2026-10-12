@@ -1,0 +1,87 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+@use 'field';
+
+.otp-input {
+  @include flex(column, stretch, flex-start, fluid(8), nowrap);
+
+  &__group {
+    @include flex(row, center, flex-start, fluid(8), nowrap);
+  }
+
+  // Each box is square: one line of `body--lg` plus the same padding as the
+  // `lg` field, so a character sits where it would in `lui-input`.
+  &__field {
+    @include font-scale(body--lg);
+
+    box-sizing: border-box;
+    inline-size: calc(1lh + fluid(12) * 2);
+    aspect-ratio: 1;
+    padding: 0;
+    margin: 0;
+    border: width(1) solid stroke(neutral, subtle);
+    border-radius: radius(lg);
+    background-color: bg(surface, neutral);
+    color: text(body);
+    text-align: center;
+    outline: 0;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &::placeholder {
+      color: text(caption);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      border-width: width(2);
+      border-color: stroke(primary);
+      box-shadow: focus-ring(primary);
+    }
+  }
+
+  &__separator {
+    flex: none;
+    inline-size: fluid(12);
+    border-block-start: width(1) solid stroke(neutral);
+  }
+
+  &__message {
+    @include field.secondary-text;
+
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+  }
+
+  &--error .otp-input__field {
+    border-color: stroke(danger);
+  }
+
+  &--error .otp-input__field:focus {
+    box-shadow: focus-ring(danger);
+  }
+
+  &--error .otp-input__message {
+    color: text(error);
+  }
+
+  // Hover leaves a focused box alone, so the focus border holds under the
+  // pointer.
+  &--error .otp-input__field:hover:not(:disabled, :focus) {
+    border-color: stroke(danger, hover);
+  }
+
+  &:not(.otp-input--error) .otp-input__field:hover:not(:disabled, :focus) {
+    border-color: stroke(neutral);
+  }
+
+  &:has(.otp-input__field:disabled) {
+    opacity: opacity(disabled);
+    cursor: not-allowed;
+  }
+}
