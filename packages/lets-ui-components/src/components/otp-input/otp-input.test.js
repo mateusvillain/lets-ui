@@ -201,10 +201,69 @@ describe('typing', () => {
     expect(focused(el)).toBe(0);
   });
 
+  it('clears a box on Delete without moving', async () => {
+    const el = await mount('value="123"');
+    await userEvent.click(fields(el)[1]);
+    await userEvent.keyboard('{Delete}');
+    expect(values(el).slice(0, 3)).toEqual(['1', '', '3']);
+    expect(focused(el)).toBe(1);
+  });
+
+  it('reverses the arrows in a right-to-left layout', async () => {
+    const el = await mount('dir="rtl"');
+    await userEvent.click(fields(el)[2]);
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(focused(el)).toBe(3);
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}');
+    expect(focused(el)).toBe(1);
+  });
+
   it('focuses the first empty box through focus()', async () => {
     const el = await mount('value="12"');
     el.focus();
     expect(focused(el)).toBe(2);
+  });
+});
+
+describe('tab order', () => {
+  const between = (html) =>
+    `<button id="before">before</button>${html}<button id="after">after</button>`;
+
+  it('is a single Tab stop, entered at the first empty box', async () => {
+    const el = await mount('value="12"', between);
+    document.getElementById('before').focus();
+    await userEvent.tab();
+    expect(focused(el)).toBe(2);
+    await userEvent.tab();
+    expect(document.activeElement.id).toBe('after');
+  });
+
+  it('enters at the last box once the code is complete', async () => {
+    const el = await mount('value="123456"', between);
+    document.getElementById('before').focus();
+    await userEvent.tab();
+    expect(focused(el)).toBe(5);
+  });
+
+  it('leaves from any box with Tab and Shift+Tab', async () => {
+    const el = await mount('value="123456"', between);
+    await userEvent.click(fields(el)[1]);
+    await el.updateComplete;
+    await userEvent.tab();
+    expect(document.activeElement.id).toBe('after');
+    await userEvent.click(fields(el)[3]);
+    await el.updateComplete;
+    await userEvent.tab({ shift: true });
+    expect(document.activeElement.id).toBe('before');
+  });
+
+  it('keeps one box tabbable at a time', async () => {
+    const el = await mount();
+    const tabbable = () => fields(el).filter((f) => f.tabIndex === 0);
+    expect(tabbable()).toHaveLength(1);
+    await userEvent.click(fields(el)[4]);
+    await el.updateComplete;
+    expect(tabbable()).toEqual([fields(el)[4]]);
   });
 });
 
@@ -286,6 +345,18 @@ describe('forms', () => {
     el.value = '123456';
     await el.updateComplete;
     expect(form.checkValidity()).toBe(true);
+  });
+
+  it('submits the form on Enter', async () => {
+    const el = await mount('name="code" value="123456"', inForm);
+    let submitted = null;
+    el.closest('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitted = new FormData(e.target).get('code');
+    });
+    await userEvent.click(fields(el)[5]);
+    await userEvent.keyboard('{Enter}');
+    expect(submitted).toBe('123456');
   });
 
   it('empties on form reset', async () => {

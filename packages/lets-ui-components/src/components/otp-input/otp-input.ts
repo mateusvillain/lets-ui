@@ -35,6 +35,11 @@ export class LuiOtpInput extends LitElement {
   // middle leaves a gap that a plain string cannot hold.
   @state() private _chars: string[] = [];
 
+  // The box holding focus, or null when focus is outside the field. Only one
+  // box is a Tab stop, so Tab enters and leaves the field as a whole and the
+  // arrows move between boxes.
+  @state() private _focusedIndex: number | null = null;
+
   private _baseId: string;
 
   constructor() {
@@ -105,10 +110,15 @@ export class LuiOtpInput extends LitElement {
     }
   }
 
+  // Where focus lands when the field is entered: the first empty box, or the
+  // last one once the code is complete.
+  get _entryIndex(): number {
+    const firstEmpty = this._chars.indexOf('');
+    return firstEmpty === -1 ? this._length - 1 : firstEmpty;
+  }
+
   focus(options?: FocusOptions) {
-    const fields = this._fields;
-    const firstEmpty = this._chars.findIndex((ch) => !ch);
-    (fields[firstEmpty] ?? fields[fields.length - 1])?.focus(options);
+    this._fields[this._entryIndex]?.focus(options);
   }
 
   formDisabledCallback(disabled: boolean) {
@@ -198,12 +208,19 @@ export class LuiOtpInput extends LitElement {
         this._focusField(index - 1);
         return;
       case 'ArrowLeft':
+      case 'ArrowRight': {
         e.preventDefault();
-        this._focusField(index - 1);
+        // In a right-to-left layout the first box sits on the right.
+        const rtl = getComputedStyle(this).direction === 'rtl';
+        const forward = (e.key === 'ArrowRight') !== rtl;
+        this._focusField(index + (forward ? 1 : -1));
         return;
-      case 'ArrowRight':
+      }
+      // The boxes live in the shadow root, out of reach of the browser's
+      // implicit submission, so Enter submits the form by hand.
+      case 'Enter':
         e.preventDefault();
-        this._focusField(index + 1);
+        this._internals.form?.requestSubmit();
         return;
       case 'Home':
         e.preventDefault();
@@ -224,6 +241,17 @@ export class LuiOtpInput extends LitElement {
 
   // Selecting the box makes the next keystroke replace its character instead
   // of appending to it.
+  private _handleFocus(e: FocusEvent, index: number) {
+    this._focusedIndex = index;
+    (e.target as HTMLInputElement).select();
+  }
+
+  private _handleBlur(e: FocusEvent) {
+    if (!this._fields.includes(e.relatedTarget as HTMLInputElement)) {
+      this._focusedIndex = null;
+    }
+  }
+
   private _select(e: Event) {
     (e.target as HTMLInputElement).select();
   }
@@ -234,6 +262,7 @@ export class LuiOtpInput extends LitElement {
     separators: Set<number>
   ) {
     const length = this._length;
+    const tabStop = this._focusedIndex ?? this._entryIndex;
 
     return html`
       <input
@@ -252,12 +281,14 @@ export class LuiOtpInput extends LitElement {
         aria-describedby="${ifDefined(describedBy)}"
         aria-invalid="${this.error ? 'true' : 'false'}"
         aria-required="${this.required ? 'true' : 'false'}"
+        tabindex="${index === tabStop ? 0 : -1}"
         ?disabled="${this.disabled}"
         .value="${live(this._chars[index] ?? '')}"
         @input="${(e: InputEvent) => this._handleInput(e, index)}"
         @keydown="${(e: KeyboardEvent) => this._handleKeydown(e, index)}"
         @paste="${(e: ClipboardEvent) => this._handlePaste(e, index)}"
-        @focus="${this._select}"
+        @focus="${(e: FocusEvent) => this._handleFocus(e, index)}"
+        @blur="${this._handleBlur}"
         @click="${this._select}"
       />
       ${separators.has(index + 1)
