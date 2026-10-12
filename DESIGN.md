@@ -281,7 +281,7 @@ Core behavior is achievable with CSS alone (layout primitives and most UI elemen
 1. `packages/styles/src/components/_name.scss` — Standalone implementation. Registered in `_components.scss`. Works without the Web Component.
 2. `packages/lets-ui-components/src/components/name/name.scss` — Shadow DOM implementation. Uses `:host` and `::slotted()`. Imports utilities directly; does **not** re-import the global file to avoid duplication.
 
-List: `alert`, `body`, `box`, `breadcrumb`, `button`, `card`, `center`, `checkbox`, `container`, `divider`, `drawer`, `dropdown-menu`, `field`, `flex`, `grid`, `heading`, `icon-button`, `image`, `inline`, `input`, `link`, `modal`, `navbar`, `pagination`, `radio`, `radio-group`, `select`, `shortcut`, `sidebar`, `stack`, `switch`, `switcher`, `tabs`, `tag`, `textarea`, `tooltip`.
+List: `alert`, `body`, `box`, `breadcrumb`, `button`, `card`, `center`, `checkbox`, `container`, `divider`, `drawer`, `dropdown-menu`, `field`, `flex`, `grid`, `heading`, `icon-button`, `image`, `inline`, `input`, `link`, `modal`, `navbar`, `otp-input`, `pagination`, `radio`, `radio-group`, `select`, `shortcut`, `sidebar`, `stack`, `switch`, `switcher`, `tabs`, `tag`, `textarea`, `tooltip`.
 
 ### JS-driven components
 
@@ -371,6 +371,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 | Icon Button           | `lui-icon-button`                 | Yes             |
 | Checkbox              | `lui-checkbox`                    | Yes             |
 | Input                 | `lui-input`                       | Yes             |
+| OTP Input             | `lui-otp-input`                   | Yes             |
 | Radio / RadioGroup    | `lui-radio`, `lui-radio-group`    | Yes             |
 | Select / NativeSelect | `lui-select`, `lui-native-select` | Yes             |
 | Switch                | `lui-switch`                      | Yes             |
@@ -412,7 +413,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 2. Foundations — Color, Spacing, Border, Typography, Elevation
 3. Actionable — Buttons, Icon Buttons
 4. Navigation — Links, Breadcrumb, Pagination, Tabs, Dropdown Menu
-5. Form and options — Input, Textarea, Checkbox, Radio, Select, Switch
+5. Form and options — Input, OTP Input, Textarea, Checkbox, Radio, Select, Switch
 6. Content — Card, Alert, Tag, Divider, Heading, Image, Body
 7. Layout — Container, Flex, Grid, Stack, Sidebar, Box, Center, Inline, Switcher, Float
 8. Miscellaneous — Modal, Drawer, Tooltip, Shortcut

@@ -1,0 +1,154 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as OtpInputStories from './OtpInput.stories';
+
+<Meta of={OtpInputStories} />
+
+# OTP Input
+
+Campo para códigos de uso único (OTP) e códigos de verificação. Renderiza uma caixa por caractere: ao digitar, o foco avança para a próxima; `Backspace` numa caixa vazia volta para a anterior e a limpa; colar um código o distribui pelas caixas.
+
+<Canvas of={OtpInputStories.Default} />
+<Controls of={OtpInputStories.Default} />
+
+## Numérico
+
+Com `type="number"`, só dígitos são aceitos e o teclado virtual numérico é sugerido (`inputmode="numeric"`). As caixas continuam sendo `type="text"`, sem as setas de incremento do campo numérico nativo.
+
+<Canvas of={OtpInputStories.Numeric} />
+
+## Erro
+
+`error` aplica o estado de erro a todas as caixas e exibe `error-text` abaixo delas. A mensagem fica ligada a cada caixa por `aria-describedby`. O estado é limpo assim que a pessoa volta a digitar.
+
+<Canvas of={OtpInputStories.Error} />
+
+## Disabled
+
+<Canvas of={OtpInputStories.Disabled} />
+
+## Comprimentos
+
+`length` define a quantidade de caixas (padrão `6`). Um comprimento par é dividido ao meio por um separador (6 → 3 + 3); um ímpar fica numa linha só. `group-size` define quantas caixas ficam entre separadores, e `group-size="0"` os remove.
+
+<Canvas of={OtpInputStories.Lengths} />
+
+## Evento `lui-complete`
+
+Quando todas as caixas são preenchidas, o componente emite `lui-complete` com o código em `event.detail.value`. O evento borbulha e atravessa o shadow DOM. A cada alteração também é emitido `input`.
+
+<Canvas of={OtpInputStories.CompleteEvent} />
+
+## Colar e preencher automaticamente
+
+Colar um código completo preenche todas as caixas a partir da primeira, qualquer que seja a caixa em foco. Um trecho menor é colado a partir da caixa em foco. Caracteres que o `type` não aceita são descartados.
+
+A primeira caixa tem `autocomplete="one-time-code"`, então o código recebido por SMS pode ser sugerido pelo sistema e é distribuído da mesma forma.
+
+## Integração com formulários
+
+O `lui-otp-input` é um form-associated custom element: o código é enviado no `FormData` sob o atributo `name`. Com `required`, o formulário não é submetido enquanto o campo estiver vazio; um código incompleto também é inválido.
+
+<Canvas of={OtpInputStories.FormIntegration} />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, o estilo fica disponível, mas o avanço de foco, a colagem e o `Backspace` ficam a cargo de quem usa.
+
+<Canvas of={OtpInputStories.CSSClass} />
+
+## Propriedades
+
+| Atributo      | Tipo                 | Padrão                     | Descrição                                                    |
+| ------------- | -------------------- | -------------------------- | ------------------------------------------------------------ |
+| `length`      | `number`             | `6`                        | Quantidade de caixas.                                        |
+| `type`        | `'text' \| 'number'` | `'text'`                   | `number` aceita só dígitos e sugere o teclado numérico.      |
+| `group-size`  | `number`             | metade de `length`, se par | Caixas entre separadores; `0` remove o separador.            |
+| `value`       | `string`             | `''`                       | Código atual.                                                |
+| `placeholder` | `string`             | `''`                       | Caractere exibido em cada caixa vazia.                       |
+| `name`        | `string`             | `''`                       | Nome do campo no `FormData`.                                 |
+| `required`    | `boolean`            | `false`                    | Bloqueia a submissão enquanto o campo estiver vazio.         |
+| `disabled`    | `boolean`            | `false`                    | Desabilita todas as caixas.                                  |
+| `error`       | `boolean`            | `false`                    | Aplica o estado de erro e exibe `error-text`.                |
+| `hint`        | `string`             | `''`                       | Texto de ajuda exibido abaixo das caixas quando não há erro. |
+
+## Textos padrão
+
+Os textos que o componente gera são em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
+
+| Atributo      | Tipo     | Padrão                            | Descrição                                                            |
+| ------------- | -------- | --------------------------------- | -------------------------------------------------------------------- |
+| `label`       | `string` | `'Verification code'`             | `aria-label` do grupo de caixas.                                     |
+| `field-label` | `string` | `'Character {index} of {length}'` | `aria-label` de cada caixa; `{index}` e `{length}` são substituídos. |
+| `error-text`  | `string` | `'This field is required.'`       | Mensagem exibida quando `error` está ativo.                          |
+
+## Acessibilidade
+
+- As caixas ficam num elemento com `role="group"` nomeado por `label`.
+- Cada caixa é um `<input>` nativo com `aria-label` indicando sua posição ("Character 2 of 6").
+- O separador é decorativo (`aria-hidden="true"`).
+- Com `error`, as caixas recebem `aria-invalid="true"`, e a mensagem de erro ou de ajuda fica ligada a elas por `aria-describedby`.
+- Setas, `Home` e `End` movem o foco entre as caixas. Ao receber o foco, o conteúdo da caixa é selecionado, então a próxima tecla o substitui.
+- `focus()` no elemento leva o foco à primeira caixa vazia.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-otp-input type="number" name="code" required></lui-otp-input>
+
+<script>
+  document
+    .querySelector('lui-otp-input')
+    .addEventListener('lui-complete', (event) => {
+      console.log(event.detail.value);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="otp-input">
+  <div class="otp-input__group" role="group" aria-label="Verification code">
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      autocomplete="one-time-code"
+      aria-label="Character 1 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 2 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 3 of 6"
+    />
+    <span class="otp-input__separator" aria-hidden="true"></span>
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 4 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 5 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 6 of 6"
+    />
+  </div>
+</div>
+```
