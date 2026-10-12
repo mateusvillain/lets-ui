@@ -11,7 +11,15 @@ export default {
       options: ['text', 'number'],
       table: { defaultValue: { summary: 'text' } },
     },
-    separator: { control: 'text' },
+    separator: {
+      control: 'text',
+      description:
+        'Posições das caixas após as quais aparece um separador, separadas por vírgula ("3", "2,4"). Vazio, não há separador.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" },
+      },
+    },
     value: { control: 'text' },
     placeholder: { control: 'text' },
     error: { control: 'boolean' },
