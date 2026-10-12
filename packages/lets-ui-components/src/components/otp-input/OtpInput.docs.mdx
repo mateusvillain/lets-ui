@@ -93,8 +93,18 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 - Cada caixa é um `<input>` nativo com `aria-label` indicando sua posição ("Character 2 of 6").
 - O separador é decorativo (`aria-hidden="true"`).
 - Com `error`, as caixas recebem `aria-invalid="true"`, e a mensagem de erro ou de ajuda fica ligada a elas por `aria-describedby`.
-- Setas, `Home` e `End` movem o foco entre as caixas. Ao receber o foco, o conteúdo da caixa é selecionado, então a próxima tecla o substitui.
+- O campo é uma única parada de `Tab`: ao entrar, o foco vai para a primeira caixa vazia (ou para a última, com o código completo), e `Tab` ou `Shift+Tab` a partir de qualquer caixa saem do campo.
+- Setas, `Home` e `End` movem o foco entre as caixas; em `dir="rtl"`, as setas seguem a direção de leitura. `Delete` limpa a caixa sem mover o foco. Ao receber o foco, o conteúdo da caixa é selecionado, então a próxima tecla o substitui.
+- `Enter` envia o formulário associado.
+- Colar nunca é bloqueado, e a primeira caixa tem `autocomplete="one-time-code"`, para que o sistema ou um gerenciador de senhas preencha o código. Assim ninguém precisa transcrever o código à mão (WCAG 3.3.8, Autenticação Acessível).
+- O código aparece em texto claro, sem máscara.
 - `focus()` no elemento leva o foco à primeira caixa vazia.
+
+### Responsabilidades de quem usa
+
+- Informe o tamanho e o formato do código em texto visível, por exemplo com `hint="Digite o código de 6 dígitos enviado por SMS."`. O `label` nomeia o grupo apenas para tecnologias assistivas.
+- Se o formulário for enviado automaticamente em `lui-complete`, mantenha também um botão de envio.
+- Depois de uma validação que falhou, não limpe o código: a pessoa pode corrigir só o caractere errado.
 
 ## Uso
 
