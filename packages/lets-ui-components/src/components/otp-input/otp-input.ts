@@ -27,9 +27,9 @@ export class LuiOtpInput extends LitElement {
   @property() label = 'Verification code';
   @property({ attribute: 'field-label' }) fieldLabel =
     'Character {index} of {length}';
-  // Boxes per group, split by a separator. Left unset, an even length splits
-  // in half (6 → 3 + 3) and an odd one stays a single row; `0` removes it.
-  @property({ type: Number, attribute: 'group-size' }) groupSize?: number;
+  // Box positions a separator follows, comma-separated: `separator="3"` draws
+  // one after the third box. Unset, the boxes form a single row.
+  @property() separator = '';
 
   // One slot per box. Kept apart from `value` because clearing a box in the
   // middle leaves a gap that a plain string cannot hold.
@@ -58,11 +58,13 @@ export class LuiOtpInput extends LitElement {
     return this.type.toLowerCase() === 'number';
   }
 
-  get _groupSize(): number {
-    if (this.groupSize === undefined || this.groupSize === null) {
-      return this._length % 2 === 0 ? this._length / 2 : 0;
-    }
-    return Math.max(0, Math.floor(this.groupSize) || 0);
+  get _separators(): Set<number> {
+    return new Set(
+      this.separator
+        .split(',')
+        .map((part) => Number(part.trim()))
+        .filter((n) => Number.isInteger(n) && n > 0 && n < this._length)
+    );
   }
 
   get _fields(): HTMLInputElement[] {
@@ -226,11 +228,12 @@ export class LuiOtpInput extends LitElement {
     (e.target as HTMLInputElement).select();
   }
 
-  private _renderField(index: number, describedBy: string | undefined) {
+  private _renderField(
+    index: number,
+    describedBy: string | undefined,
+    separators: Set<number>
+  ) {
     const length = this._length;
-    const group = this._groupSize;
-    const separator =
-      group > 0 && (index + 1) % group === 0 && index < length - 1;
 
     return html`
       <input
@@ -257,7 +260,7 @@ export class LuiOtpInput extends LitElement {
         @focus="${this._select}"
         @click="${this._select}"
       />
-      ${separator
+      ${separators.has(index + 1)
         ? html`<span class="otp-input__separator" aria-hidden="true"></span>`
         : ''}
     `;
@@ -266,6 +269,7 @@ export class LuiOtpInput extends LitElement {
   render() {
     const message = this.error ? this.errorText : this.hint;
     const describedBy = message ? `${this._baseId}-message` : undefined;
+    const separators = this._separators;
 
     return html`
       <div
@@ -275,7 +279,7 @@ export class LuiOtpInput extends LitElement {
       >
         <div class="otp-input__group" role="group" aria-label="${this.label}">
           ${Array.from({ length: this._length }, (_, i) =>
-            this._renderField(i, describedBy)
+            this._renderField(i, describedBy, separators)
           )}
         </div>
         ${message

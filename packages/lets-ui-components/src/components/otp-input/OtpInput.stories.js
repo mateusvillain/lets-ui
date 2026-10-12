@@ -11,7 +11,7 @@ export default {
       options: ['text', 'number'],
       table: { defaultValue: { summary: 'text' } },
     },
-    groupSize: { control: { type: 'number', min: 0 } },
+    separator: { control: 'text' },
     value: { control: 'text' },
     placeholder: { control: 'text' },
     error: { control: 'boolean' },
@@ -26,7 +26,7 @@ export default {
 const Template = ({
   length,
   type,
-  groupSize,
+  separator,
   value,
   placeholder,
   error,
@@ -39,7 +39,7 @@ const Template = ({
   <lui-otp-input
     length="${length}"
     type="${type}"
-    ${groupSize !== undefined && groupSize !== '' ? `group-size="${groupSize}"` : ''}
+    separator="${separator}"
     value="${value}"
     placeholder="${placeholder}"
     ${error ? 'error' : ''}
@@ -55,6 +55,7 @@ export const Default = Template.bind({});
 Default.args = {
   length: 6,
   type: 'text',
+  separator: '3',
   value: '',
   placeholder: '',
   error: false,
@@ -72,7 +73,7 @@ Numeric.storyName = 'Numérico';
 Numeric.parameters = { controls: { disable: true } };
 
 export const Error = () => `
-  <lui-otp-input type="number" value="123456" error error-text="Código inválido."></lui-otp-input>
+  <lui-otp-input type="number" value="123456" separator="3" error error-text="Código inválido."></lui-otp-input>
 `;
 Error.storyName = 'Erro';
 Error.parameters = { controls: { disable: true } };
@@ -86,12 +87,22 @@ export const Lengths = () => `
   <div style="display: flex; flex-direction: column; gap: 24px;">
     <lui-otp-input length="4" type="number"></lui-otp-input>
     <lui-otp-input length="6" type="number"></lui-otp-input>
-    <lui-otp-input length="8" group-size="4"></lui-otp-input>
-    <lui-otp-input length="5" type="number"></lui-otp-input>
+    <lui-otp-input length="8" type="number"></lui-otp-input>
   </div>
 `;
 Lengths.storyName = 'Comprimentos';
 Lengths.parameters = { controls: { disable: true } };
+
+export const Separator = () => `
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <lui-otp-input type="number"></lui-otp-input>
+    <lui-otp-input type="number" separator="3"></lui-otp-input>
+    <lui-otp-input type="number" separator="2,4"></lui-otp-input>
+    <lui-otp-input length="8" separator="4"></lui-otp-input>
+  </div>
+`;
+Separator.storyName = 'Separador';
+Separator.parameters = { controls: { disable: true } };
 
 export const CompleteEvent = () => {
   const wrapper = document.createElement('div');

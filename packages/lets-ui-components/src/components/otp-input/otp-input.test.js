@@ -40,24 +40,42 @@ function paste(field, text) {
 }
 
 describe('rendering', () => {
-  it('renders six boxes split three and three by default', async () => {
+  // Index of each separator among the group's children, boxes included.
+  const separatorSlots = (el) => {
+    const children = [
+      ...el.shadowRoot.querySelector('.otp-input__group').children,
+    ];
+    return children
+      .map((child, i) =>
+        child.classList.contains('otp-input__separator') ? i : -1
+      )
+      .filter((i) => i >= 0);
+  };
+
+  it('renders six boxes in a single row by default', async () => {
     const el = await mount();
     expect(fields(el)).toHaveLength(6);
-    const group = el.shadowRoot.querySelector('.otp-input__group');
-    const separators = group.querySelectorAll('.otp-input__separator');
-    expect(separators).toHaveLength(1);
-    expect([...group.children].indexOf(separators[0])).toBe(3);
+    expect(separatorSlots(el)).toEqual([]);
   });
 
-  it('follows length and group-size', async () => {
-    const el = await mount('length="4" group-size="0"');
+  it('follows length', async () => {
+    const el = await mount('length="4"');
     expect(fields(el)).toHaveLength(4);
-    expect(el.shadowRoot.querySelector('.otp-input__separator')).toBeNull();
   });
 
-  it('leaves an odd length in a single row', async () => {
-    const el = await mount('length="5"');
-    expect(el.shadowRoot.querySelector('.otp-input__separator')).toBeNull();
+  it('draws a separator after the box separator names', async () => {
+    const el = await mount('separator="3"');
+    expect(separatorSlots(el)).toEqual([3]);
+  });
+
+  it('draws one separator per listed position', async () => {
+    const el = await mount('length="8" separator="2, 4,6"');
+    expect(separatorSlots(el)).toEqual([2, 5, 8]);
+  });
+
+  it('ignores positions outside the row', async () => {
+    const el = await mount('separator="0,6,9,x"');
+    expect(separatorSlots(el)).toEqual([]);
   });
 
   it('draws square boxes', async () => {
@@ -122,7 +140,7 @@ describe('accessibility', () => {
   });
 
   it('hides the separator from assistive technology', async () => {
-    const el = await mount();
+    const el = await mount('separator="3"');
     const separator = el.shadowRoot.querySelector('.otp-input__separator');
     expect(separator.getAttribute('aria-hidden')).toBe('true');
   });

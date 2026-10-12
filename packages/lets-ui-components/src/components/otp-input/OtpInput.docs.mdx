@@ -28,9 +28,15 @@ Com `type="number"`, só dígitos são aceitos e o teclado virtual numérico é 
 
 ## Comprimentos
 
-`length` define a quantidade de caixas (padrão `6`). Um comprimento par é dividido ao meio por um separador (6 → 3 + 3); um ímpar fica numa linha só. `group-size` define quantas caixas ficam entre separadores, e `group-size="0"` os remove.
+`length` define a quantidade de caixas (padrão `6`).
 
 <Canvas of={OtpInputStories.Lengths} />
+
+## Separador
+
+O separador é opcional: sem `separator`, as caixas ficam numa linha só. O atributo recebe a posição da caixa após a qual o separador aparece — `separator="3"` divide seis caixas em 3 + 3. Para mais de um separador, liste as posições separadas por vírgula (`separator="2,4"`). Posições fora do intervalo entre a primeira e a última caixa são ignoradas.
+
+<Canvas of={OtpInputStories.Separator} />
 
 ## Evento `lui-complete`
 
@@ -58,18 +64,18 @@ Sem o Web Component, o estilo fica disponível, mas o avanço de foco, a colagem
 
 ## Propriedades
 
-| Atributo      | Tipo                 | Padrão                     | Descrição                                                    |
-| ------------- | -------------------- | -------------------------- | ------------------------------------------------------------ |
-| `length`      | `number`             | `6`                        | Quantidade de caixas.                                        |
-| `type`        | `'text' \| 'number'` | `'text'`                   | `number` aceita só dígitos e sugere o teclado numérico.      |
-| `group-size`  | `number`             | metade de `length`, se par | Caixas entre separadores; `0` remove o separador.            |
-| `value`       | `string`             | `''`                       | Código atual.                                                |
-| `placeholder` | `string`             | `''`                       | Caractere exibido em cada caixa vazia.                       |
-| `name`        | `string`             | `''`                       | Nome do campo no `FormData`.                                 |
-| `required`    | `boolean`            | `false`                    | Bloqueia a submissão enquanto o campo estiver vazio.         |
-| `disabled`    | `boolean`            | `false`                    | Desabilita todas as caixas.                                  |
-| `error`       | `boolean`            | `false`                    | Aplica o estado de erro e exibe `error-text`.                |
-| `hint`        | `string`             | `''`                       | Texto de ajuda exibido abaixo das caixas quando não há erro. |
+| Atributo      | Tipo                 | Padrão   | Descrição                                                                                                                |
+| ------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `length`      | `number`             | `6`      | Quantidade de caixas.                                                                                                    |
+| `type`        | `'text' \| 'number'` | `'text'` | `number` aceita só dígitos e sugere o teclado numérico.                                                                  |
+| `separator`   | `string`             | `''`     | Posições das caixas após as quais aparece um separador, separadas por vírgula (`"3"`, `"2,4"`). Vazio, não há separador. |
+| `value`       | `string`             | `''`     | Código atual.                                                                                                            |
+| `placeholder` | `string`             | `''`     | Caractere exibido em cada caixa vazia.                                                                                   |
+| `name`        | `string`             | `''`     | Nome do campo no `FormData`.                                                                                             |
+| `required`    | `boolean`            | `false`  | Bloqueia a submissão enquanto o campo estiver vazio.                                                                     |
+| `disabled`    | `boolean`            | `false`  | Desabilita todas as caixas.                                                                                              |
+| `error`       | `boolean`            | `false`  | Aplica o estado de erro e exibe `error-text`.                                                                            |
+| `hint`        | `string`             | `''`     | Texto de ajuda exibido abaixo das caixas quando não há erro.                                                             |
 
 ## Textos padrão
 
