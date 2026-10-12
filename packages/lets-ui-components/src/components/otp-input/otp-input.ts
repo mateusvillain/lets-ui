@@ -25,6 +25,9 @@ export class LuiOtpInput extends LitElement {
   @property({ attribute: 'error-text' }) errorText = 'This field is required.';
   @property() hint = '';
   @property() label = 'Verification code';
+  // Many OTP screens explain the code in their own heading, so the label only
+  // names the group for assistive technology unless this asks to show it.
+  @property({ type: Boolean, attribute: 'show-label' }) showLabel = false;
   @property({ attribute: 'field-label' }) fieldLabel =
     'Character {index} of {length}';
   // Box positions a separator follows, comma-separated: `separator="3"` draws
@@ -308,7 +311,22 @@ export class LuiOtpInput extends LitElement {
           ? ' otp-input--disabled'
           : ''}"
       >
-        <div class="otp-input__group" role="group" aria-label="${this.label}">
+        ${this.showLabel
+          ? html`<span
+              id="${this._baseId}-label"
+              class="otp-input__label"
+              @click="${() => this.focus()}"
+              >${this.label}</span
+            >`
+          : ''}
+        <div
+          class="otp-input__group"
+          role="group"
+          aria-label="${ifDefined(this.showLabel ? undefined : this.label)}"
+          aria-labelledby="${ifDefined(
+            this.showLabel ? `${this._baseId}-label` : undefined
+          )}"
+        >
           ${Array.from({ length: this._length }, (_, i) =>
             this._renderField(i, describedBy, separators)
           )}

@@ -5,6 +5,13 @@
 .otp-input {
   @include flex(column, stretch, flex-start, fluid(8), nowrap);
 
+  // Same type and colour as the `lg` label of `lui-input`.
+  &__label {
+    @include font-scale(body--lg);
+
+    color: text(body);
+  }
+
   &__group {
     @include flex(row, center, flex-start, fluid(8), nowrap);
   }
@@ -83,5 +90,9 @@
   &:has(.otp-input__field:disabled) {
     opacity: opacity(disabled);
     cursor: not-allowed;
+
+    .otp-input__label {
+      cursor: not-allowed;
+    }
   }
 }

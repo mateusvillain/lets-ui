@@ -10,6 +10,14 @@ Campo para códigos de uso único (OTP) e códigos de verificação. Renderiza u
 <Canvas of={OtpInputStories.Default} />
 <Controls of={OtpInputStories.Default} />
 
+## Rótulo visível
+
+Em muitas telas de verificação, o título da página já explica o código, então o rótulo fica oculto por padrão: `label` nomeia o grupo apenas para tecnologias assistivas. Com `show-label`, o mesmo texto aparece acima das caixas, no estilo do rótulo do `lui-input`, e passa a nomear o grupo por `aria-labelledby`. Clicar nele leva o foco à primeira caixa vazia.
+
+Abaixo, o mesmo campo com e sem `show-label`.
+
+<Canvas of={OtpInputStories.VisibleLabel} />
+
 ## Numérico
 
 Com `type="number"`, só dígitos são aceitos e o teclado virtual numérico é sugerido (`inputmode="numeric"`). As caixas continuam sendo `type="text"`, sem as setas de incremento do campo numérico nativo.
@@ -73,6 +81,7 @@ Sem o Web Component, o estilo fica disponível, mas o avanço de foco, a colagem
 | `placeholder` | `string`             | `''`     | Caractere exibido em cada caixa vazia.                                                                                   |
 | `name`        | `string`             | `''`     | Nome do campo no `FormData`.                                                                                             |
 | `required`    | `boolean`            | `false`  | Bloqueia a submissão enquanto o campo estiver vazio.                                                                     |
+| `show-label`  | `boolean`            | `false`  | Exibe `label` acima das caixas. Desligado, `label` só nomeia o grupo para tecnologias assistivas.                        |
 | `disabled`    | `boolean`            | `false`  | Desabilita todas as caixas.                                                                                              |
 | `error`       | `boolean`            | `false`  | Aplica o estado de erro e exibe `error-text`.                                                                            |
 | `hint`        | `string`             | `''`     | Texto de ajuda exibido abaixo das caixas quando não há erro.                                                             |
@@ -89,7 +98,7 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 
 ## Acessibilidade
 
-- As caixas ficam num elemento com `role="group"` nomeado por `label`.
+- As caixas ficam num elemento com `role="group"` nomeado por `label`: por `aria-label` quando o rótulo está oculto, e por `aria-labelledby` apontando para o rótulo visível com `show-label`.
 - Cada caixa é um `<input>` nativo com `aria-label` indicando sua posição ("Character 2 of 6").
 - O separador é decorativo (`aria-hidden="true"`).
 - Com `error`, as caixas recebem `aria-invalid="true"`, e a mensagem de erro ou de ajuda fica ligada a elas por `aria-describedby`.
@@ -102,7 +111,7 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 
 ### Responsabilidades de quem usa
 
-- Informe o tamanho e o formato do código em texto visível, por exemplo com `hint="Digite o código de 6 dígitos enviado por SMS."`. O `label` nomeia o grupo apenas para tecnologias assistivas.
+- Com o rótulo oculto, garanta que a tela explique o campo em texto visível, por exemplo num título, ou use `show-label`. Informe também o tamanho e o formato do código, por exemplo com `hint="Digite o código de 6 dígitos enviado por SMS."`.
 - Se o formulário for enviado automaticamente em `lui-complete`, mantenha também um botão de envio.
 - Depois de uma validação que falhou, não limpe o código: a pessoa pode corrigir só o caractere errado.
 
@@ -126,7 +135,9 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 
 ```html
 <div class="otp-input">
-  <div class="otp-input__group" role="group" aria-label="Verification code">
+  <!-- Opcional: sem rótulo visível, use aria-label no grupo -->
+  <span class="otp-input__label" id="otp-label">Verification code</span>
+  <div class="otp-input__group" role="group" aria-labelledby="otp-label">
     <input
       class="otp-input__field"
       type="text"

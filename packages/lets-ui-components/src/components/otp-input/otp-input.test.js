@@ -105,6 +105,29 @@ describe('accessibility', () => {
     expect(group.getAttribute('aria-label')).toBe('Código de verificação');
   });
 
+  it('keeps the label off screen by default', async () => {
+    const el = await mount('label="Código de verificação"');
+    expect(el.shadowRoot.querySelector('.otp-input__label')).toBeNull();
+    const group = el.shadowRoot.querySelector('[role="group"]');
+    expect(group.hasAttribute('aria-labelledby')).toBe(false);
+  });
+
+  it('shows the label with show-label and names the group by it', async () => {
+    const el = await mount('show-label label="Código de verificação"');
+    const label = el.shadowRoot.querySelector('.otp-input__label');
+    const group = el.shadowRoot.querySelector('[role="group"]');
+    expect(label.textContent.trim()).toBe('Código de verificação');
+    expect(label.checkVisibility()).toBe(true);
+    expect(group.getAttribute('aria-labelledby')).toBe(label.id);
+    expect(group.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('focuses the first empty box when the visible label is clicked', async () => {
+    const el = await mount('show-label value="12"');
+    await userEvent.click(el.shadowRoot.querySelector('.otp-input__label'));
+    expect(focused(el)).toBe(2);
+  });
+
   it('names each box by its position', async () => {
     const el = await mount(
       'length="4" field-label="Dígito {index} de {length}"'

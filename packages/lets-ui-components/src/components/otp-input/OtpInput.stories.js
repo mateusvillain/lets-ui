@@ -27,6 +27,12 @@ export default {
     hint: { control: 'text' },
     disabled: { control: 'boolean' },
     label: { control: 'text' },
+    showLabel: {
+      control: 'boolean',
+      description:
+        'Exibe o label acima das caixas. Desligado, o label só nomeia o grupo para tecnologias assistivas.',
+      table: { defaultValue: { summary: 'false' } },
+    },
     fieldLabel: { control: 'text' },
   },
 };
@@ -42,6 +48,7 @@ const Template = ({
   hint,
   disabled,
   label,
+  showLabel,
   fieldLabel,
 }) => `
   <lui-otp-input
@@ -55,6 +62,7 @@ const Template = ({
     hint="${hint}"
     ${disabled ? 'disabled' : ''}
     label="${label}"
+    ${showLabel ? 'show-label' : ''}
     field-label="${fieldLabel}"
   ></lui-otp-input>
 `;
@@ -71,8 +79,29 @@ Default.args = {
   hint: '',
   disabled: false,
   label: 'Verification code',
+  showLabel: false,
   fieldLabel: 'Character {index} of {length}',
 };
+
+export const VisibleLabel = () => `
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <lui-otp-input
+      type="number"
+      separator="3"
+      show-label
+      label="Código de verificação"
+      hint="Digite o código de 6 dígitos enviado por SMS."
+    ></lui-otp-input>
+    <lui-otp-input
+      type="number"
+      separator="3"
+      label="Código de verificação"
+      hint="Digite o código de 6 dígitos enviado por SMS."
+    ></lui-otp-input>
+  </div>
+`;
+VisibleLabel.storyName = 'Rótulo visível';
+VisibleLabel.parameters = { controls: { disable: true } };
 
 export const Numeric = () => `
   <lui-otp-input type="number" hint="Digite o código enviado por SMS."></lui-otp-input>
@@ -153,7 +182,8 @@ const cssField = (n, extra = '') =>
 export const CSSClass = () => `
   <div style="display: flex; flex-direction: column; gap: 24px;">
     <div class="otp-input">
-      <div class="otp-input__group" role="group" aria-label="Verification code">
+      <span class="otp-input__label" id="otp-css-label">Verification code</span>
+      <div class="otp-input__group" role="group" aria-labelledby="otp-css-label">
         ${cssField(1, ' autocomplete="one-time-code"')}${cssField(2)}${cssField(3)}
         <span class="otp-input__separator" aria-hidden="true"></span>
         ${cssField(4)}${cssField(5)}${cssField(6)}
