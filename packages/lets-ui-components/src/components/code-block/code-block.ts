@@ -49,7 +49,7 @@ function unescapeSerialized(source: string) {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
-    .replace(/&nbsp;/g, ' ')
+    .replace(/&nbsp;/g, '\u00a0')
     .replace(/&amp;/g, '&');
 }
 
@@ -93,6 +93,15 @@ export class LuiCodeBlock extends LitElement {
     instances.forEach((block) => block.requestUpdate());
   }
 
+  // The tooltip covers code below the button, so Escape has to put it away
+  // without the reader moving the pointer or the focus (WCAG 1.4.13). The
+  // listener sits on the document because a hovering pointer leaves the focus
+  // wherever it was. One listener serves every block on the page.
+  private static _handleEscape = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape') return;
+    instances.forEach((block) => block._dismissTooltip());
+  };
+
   @property() variant = 'default';
   @property() label = '';
   @property() language = '';
@@ -110,8 +119,16 @@ export class LuiCodeBlock extends LitElement {
   @state() private _code = '';
   @state() private _copyState: 'idle' | 'copied' | 'failed' = 'idle';
   @state() private _status = '';
-  @state() private _scrollable = false;
   @state() private _tooltipDismissed = false;
+
+  // Highlighting re-tokenises the whole code, so it runs only when the code,
+  // the language or the highlighter changes — not on every copy or hover.
+  private _highlighted: string | null = null;
+  private _highlightedFrom?: {
+    code: string;
+    language: string;
+    highlighter: CodeHighlighter | null;
+  };
 
   private _mutationObserver = new MutationObserver(() => this._readSource());
   private _resizeObserver = new ResizeObserver(() => this._measure());
@@ -128,8 +145,10 @@ export class LuiCodeBlock extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    if (!instances.size) {
+      document.addEventListener('keydown', LuiCodeBlock._handleEscape);
+    }
     instances.add(this);
-    document.addEventListener('keydown', this._handleKeydown);
     this._readSource();
     this._mutationObserver.observe(this, {
       childList: true,
@@ -141,7 +160,9 @@ export class LuiCodeBlock extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     instances.delete(this);
-    document.removeEventListener('keydown', this._handleKeydown);
+    if (!instances.size) {
+      document.removeEventListener('keydown', LuiCodeBlock._handleEscape);
+    }
     this._mutationObserver.disconnect();
     this._resizeObserver.disconnect();
     clearTimeout(this._copyTimer);
@@ -150,6 +171,22 @@ export class LuiCodeBlock extends LitElement {
   firstUpdated() {
     const pre = this.shadowRoot?.querySelector('pre');
     if (pre) this._resizeObserver.observe(pre);
+  }
+
+  willUpdate() {
+    const from = this._highlightedFrom;
+    if (
+      from?.code !== this._code ||
+      from.language !== this.language ||
+      from.highlighter !== highlighter
+    ) {
+      this._highlighted = this._highlight();
+      this._highlightedFrom = {
+        code: this._code,
+        language: this.language,
+        highlighter,
+      };
+    }
   }
 
   updated(changed: Map<string, unknown>) {
@@ -161,21 +198,36 @@ export class LuiCodeBlock extends LitElement {
   // A `<script type="text/plain">` is never parsed, so its text is the source
   // byte for byte. A `<template>` is parsed and serialised back, which loses
   // line breaks inside tags but lets the code itself contain a `</script>`.
+  // Plain text skips slotted children, so an icon's text never ends up in the
+  // code.
   private _readSource() {
     const script = this.querySelector(':scope > script[type="text/plain"]');
     const template = this.querySelector(':scope > template');
-    let source = this.textContent ?? '';
+    let source: string;
     if (script) source = script.textContent ?? '';
     else if (template) source = unescapeSerialized(template.innerHTML);
+    else {
+      source = Array.from(this.childNodes)
+        .filter(
+          (node) =>
+            node.nodeType === Node.TEXT_NODE ||
+            (node instanceof Element && !node.hasAttribute('slot'))
+        )
+        .map((node) => node.textContent ?? '')
+        .join('');
+    }
     this._code = normalizeCode(source);
   }
 
   // A region the keyboard cannot reach cannot be scrolled from the keyboard,
-  // so the code takes a tab stop only while its lines overflow.
+  // so the code takes a tab stop only while its lines overflow. The attribute
+  // is set here rather than through a reactive property: measuring happens
+  // after a render, and a property would ask for a second one.
   private _measure() {
     const pre = this.shadowRoot?.querySelector('pre');
     if (!pre) return;
-    this._scrollable = pre.scrollWidth > pre.clientWidth;
+    if (pre.scrollWidth > pre.clientWidth) pre.setAttribute('tabindex', '0');
+    else pre.removeAttribute('tabindex');
   }
 
   // Without a highlighter or a language there is nothing to colour. A
@@ -190,15 +242,10 @@ export class LuiCodeBlock extends LitElement {
     }
   }
 
-  // The tooltip covers code below the button, so Escape has to put it away
-  // without the reader moving the pointer or the focus (WCAG 1.4.13). The
-  // listener sits on the document because a hovering pointer leaves the focus
-  // wherever it was.
-  private _handleKeydown = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape') return;
+  private _dismissTooltip() {
     const copy = this.shadowRoot?.querySelector('.code-block__copy');
     if (copy?.matches(':hover, :focus-within')) this._tooltipDismissed = true;
-  };
+  }
 
   private _restoreTooltip() {
     this._tooltipDismissed = false;
@@ -233,6 +280,9 @@ export class LuiCodeBlock extends LitElement {
   }
 
   private async _showCopyFeedback(state: 'copied' | 'failed') {
+    // Cleared before the await below: an earlier copy's timer firing during
+    // it would otherwise reset the state this copy is about to show.
+    clearTimeout(this._copyTimer);
     this._copyState = state;
     this._tooltipDismissed = false;
 
@@ -242,7 +292,6 @@ export class LuiCodeBlock extends LitElement {
     await this.updateComplete;
     this._status = state === 'copied' ? this.copiedLabel : this.copyFailedLabel;
 
-    clearTimeout(this._copyTimer);
     this._copyTimer = setTimeout(() => {
       this._copyState = 'idle';
       this._status = '';
@@ -299,7 +348,7 @@ export class LuiCodeBlock extends LitElement {
 
   render() {
     const lineCount = this._code ? this._code.split('\n').length : 0;
-    const highlighted = this._highlight();
+    const highlighted = this._highlighted;
     const content = highlighted !== null ? unsafeHTML(highlighted) : this._code;
     const codeClass = this.language ? `language-${this.language}` : undefined;
     // Every block is a region, so each needs its own name: the label tells
@@ -335,7 +384,6 @@ export class LuiCodeBlock extends LitElement {
             role="region"
             aria-label="${regionName}"
             translate="no"
-            tabindex="${ifDefined(this._scrollable ? '0' : undefined)}"
           ><code class="${ifDefined(codeClass)}">${content}</code></pre>
           ${this._renderCopy()}
         </div>

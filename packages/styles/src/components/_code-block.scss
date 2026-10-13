@@ -1,10 +1,7 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
-// There is no code font-family token yet, so the code reaches for the
-// platform's monospace stack instead of a brand font. Swap this for
-// `font(code)` once that token exists.
-$code-font: ui-monospace, 'SFMono-Regular', menlo, consolas, monospace;
+$code-font: font(code);
 
 // The copy button is 40px and sits 8px in from the edge; the body pads 12px.
 // The code reserves the difference on its right so a short line never runs
@@ -102,22 +99,40 @@ $copy-room: fixed(40);
     padding-inline-end: $copy-room;
   }
 
-  &__copy {
+  // The copy button wears the tooltip classes, which set `position: relative`
+  // and, in the global bundle, come after this file. Nesting under the block
+  // outranks them whatever the import order.
+  & &__copy {
     position: absolute;
     top: fixed(8);
     right: fixed(8);
   }
 
-  // The tooltip covers the code below the button, so WCAG 1.4.13 asks that the
-  // pointer can move onto it without it vanishing, and that Escape can put it
-  // away. The bridge spans the gap between button and tooltip, so crossing it
-  // does not count as leaving.
-  &__copy:hover .tooltip__content,
-  &__copy:focus-within .tooltip__content {
+  // The button sits at the right edge, so a tooltip centred under it would
+  // spill past the block — off-screen on a phone. It hangs from the button's
+  // right edge instead, with the arrow kept under the icon.
+  & &__copy .tooltip__content {
+    left: auto;
+    right: fixed(0);
+    transform: translateY(calc(fixed(8) * -1));
+  }
+
+  & &__copy .tooltip__content::after {
+    left: auto;
+    right: calc(fixed(40) / 2);
+    transform: translateX(50%);
+  }
+
+  // WCAG 1.4.13 asks that the pointer can move onto the tooltip without it
+  // vanishing, and that Escape can put it away. The bridge spans the gap
+  // between button and tooltip, so crossing it does not count as leaving.
+  & &__copy:hover .tooltip__content,
+  & &__copy:focus-within .tooltip__content {
+    transform: none;
     pointer-events: auto;
   }
 
-  &__copy .tooltip__content::before {
+  & &__copy .tooltip__content::before {
     content: '';
     position: absolute;
     bottom: 100%;
@@ -126,7 +141,7 @@ $copy-room: fixed(40);
     height: fixed(8);
   }
 
-  &__copy#{&}__copy--dismissed .tooltip__content {
+  & &__copy#{&}__copy--dismissed .tooltip__content {
     opacity: opacity(hidden);
     visibility: hidden;
     pointer-events: none;
@@ -227,6 +242,12 @@ $copy-room: fixed(40);
   &--snippet &__header {
     padding: fluid(12) fluid(12) fluid(2);
     border-bottom: none;
+  }
+
+  // In a labelled snippet the button hangs over the header, so a long label
+  // stops short of it instead of running underneath.
+  &--snippet#{&}--copy &__header {
+    padding-inline-end: calc(fixed(40) + fixed(16));
   }
 
   &--snippet &__label {

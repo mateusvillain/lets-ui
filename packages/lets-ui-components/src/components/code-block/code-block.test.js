@@ -85,6 +85,23 @@ describe('lui-code-block content', () => {
     );
   });
 
+  it('leaves the text of a slotted icon out of the code', async () => {
+    const block = await mount(`
+      <lui-code-block label="a.ts">
+        <span slot="icon">description</span>
+        npm install x
+      </lui-code-block>
+    `);
+    expect(block.code).toBe('npm install x');
+  });
+
+  it('keeps a non-breaking space from a template', async () => {
+    const block = await mount(
+      '<lui-code-block><template>a&nbsp;b</template></lui-code-block>'
+    );
+    expect(block.code).toBe('a\u00a0b');
+  });
+
   it('follows changes to the slotted text', async () => {
     const block = await mount('<lui-code-block>one</lui-code-block>');
     block.textContent = 'two';
@@ -327,6 +344,29 @@ describe('lui-code-block tooltip', () => {
     expect(copy(block).classList).not.toContain('code-block__copy--dismissed');
   });
 
+  it('puts away only the tooltip that is showing', async () => {
+    const first = await mount('<lui-code-block>a</lui-code-block>');
+    const second = await mount('<lui-code-block>b</lui-code-block>');
+    copyButton(first).shadowRoot.querySelector('button').focus();
+
+    await userEvent.keyboard('{Escape}');
+    await Promise.all([first.updateComplete, second.updateComplete]);
+
+    expect(copy(first).classList).toContain('code-block__copy--dismissed');
+    expect(copy(second).classList).not.toContain('code-block__copy--dismissed');
+  });
+
+  it('keeps the tooltip inside the block', async () => {
+    const block = await mount(
+      '<lui-code-block copied-label="A much longer confirmation message">x</lui-code-block>'
+    );
+    copyButton(block).shadowRoot.querySelector('button').focus();
+    await block.updateComplete;
+    const tip = tooltip(block).getBoundingClientRect();
+    const host = block.getBoundingClientRect();
+    expect(tip.right).toBeLessThanOrEqual(host.right);
+  });
+
   it('ignores Escape while the tooltip is not showing', async () => {
     const block = await mount('<lui-code-block>x</lui-code-block>');
     await userEvent.keyboard('{Escape}');
@@ -391,6 +431,27 @@ describe('lui-code-block highlighting', () => {
     expect(code(block).className).toBe('language-js');
     expect(isHighlighted(block)).toBe(true);
     expect(block.code).toBe('const a < b');
+  });
+
+  it('highlights once, not on every copy or hover', async () => {
+    vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
+    const highlighter = vi.fn(fake);
+    LuiCodeBlock.highlighter = highlighter;
+    const block = await mount(
+      '<lui-code-block language="js">const a</lui-code-block>'
+    );
+    const calls = highlighter.mock.calls.length;
+
+    copyButton(block).click();
+    await vi.waitFor(() =>
+      expect(
+        block.shadowRoot.querySelector('[role="status"]').textContent
+      ).toBe('Copied!')
+    );
+    await userEvent.hover(copyButton(block));
+    await block.updateComplete;
+
+    expect(highlighter.mock.calls.length).toBe(calls);
   });
 
   it('re-renders blocks already on the page when the highlighter is set', async () => {
