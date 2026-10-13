@@ -82,7 +82,7 @@ Emitido depois que o código é copiado, com o texto em `event.detail.code`. O e
 
 ## Classe CSS (sem Web Component)
 
-A classe CSS reproduz o visual, mas o conteúdo fica todo a cargo de quem usa: escape `<` e `&` no código, escreva os números de linha à mão e deixe a indentação do código colada à margem dentro do `<pre>`. Copiar depende de JavaScript, então o botão não existe nessa versão.
+A classe CSS reproduz o visual, mas o conteúdo fica todo a cargo de quem usa: escape `<` e `&` no código, escreva os números de linha à mão e deixe a indentação do código colada à margem dentro do `<pre>`. Copiar depende de JavaScript, então o botão não existe nessa versão. Se você montar o botão por conta própria, adicione `code-block--copy` ao bloco e, quando o código tiver uma linha só, `code-block--single-line`: o corpo cresce para caber o botão e centraliza os dois. O Web Component aplica essas classes sozinho.
 
 <Canvas of={CodeBlockStories.CSSClass} />
 

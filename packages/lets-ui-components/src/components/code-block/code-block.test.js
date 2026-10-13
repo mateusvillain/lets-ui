@@ -151,6 +151,43 @@ describe('lui-code-block markup', () => {
     expect(lines(block).getAttribute('aria-hidden')).toBe('true');
   });
 
+  it('marks a single line, except in a labelled snippet', async () => {
+    const root = (block) => block.shadowRoot.querySelector('.code-block');
+
+    const single = await mount(
+      '<lui-code-block>npm run build</lui-code-block>'
+    );
+    expect(root(single).classList.contains('code-block--single-line')).toBe(
+      true
+    );
+
+    const multi = await mount('<lui-code-block>a\nb</lui-code-block>');
+    expect(root(multi).classList.contains('code-block--single-line')).toBe(
+      false
+    );
+
+    const snippet = await mount(
+      '<lui-code-block variant="snippet" label="bash">x</lui-code-block>'
+    );
+    expect(root(snippet).classList.contains('code-block--single-line')).toBe(
+      false
+    );
+  });
+
+  it('centres the copy button inside a single line', async () => {
+    const block = await mount('<lui-code-block>npm run build</lui-code-block>');
+    const body = block.shadowRoot
+      .querySelector('.code-block__body')
+      .getBoundingClientRect();
+    const button = copyButton(block).getBoundingClientRect();
+
+    expect(button.top).toBeGreaterThanOrEqual(body.top);
+    expect(button.bottom).toBeLessThanOrEqual(body.bottom);
+    expect(
+      Math.abs(button.top + button.height / 2 - (body.top + body.height / 2))
+    ).toBeLessThan(1);
+  });
+
   it('has no line numbers by default', async () => {
     const block = await mount('<lui-code-block>a</lui-code-block>');
     expect(lines(block)).toBeNull();

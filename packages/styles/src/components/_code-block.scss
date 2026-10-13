@@ -102,6 +102,20 @@ $copy-room: fixed(40);
     right: fixed(8);
   }
 
+  // One line of code is shorter than the button and its 8px inset, so the body
+  // grows to hold both and centres them. Without this the button hangs past
+  // the bottom edge and sits off the line it belongs to.
+  &--copy#{&}--single-line &__body {
+    align-items: center;
+    min-height: calc(fixed(40) + fixed(16));
+    padding-block: fixed(0);
+  }
+
+  &--copy#{&}--single-line &__copy {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   &__status {
     @include sr-only;
   }

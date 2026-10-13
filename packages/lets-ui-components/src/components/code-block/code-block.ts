@@ -202,10 +202,15 @@ export class LuiCodeBlock extends LitElement {
 
   render() {
     const lineCount = this._code ? this._code.split('\n').length : 0;
+    // A labelled snippet aligns the button to the whole block, label
+    // included, which already leaves room for it.
+    const singleLine =
+      lineCount <= 1 && !(this._variant === 'snippet' && this.label);
     const classes = [
       'code-block',
       `code-block--${this._variant}`,
       this.copy ? 'code-block--copy' : '',
+      singleLine ? 'code-block--single-line' : '',
     ].join(' ');
 
     return html`
