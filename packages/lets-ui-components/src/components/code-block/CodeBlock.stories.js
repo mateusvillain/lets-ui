@@ -1,6 +1,22 @@
 import '../../../../../packages/lets-ui-tokens/dist/letsui.tokens.css';
 import '../../../../../packages/styles/dist/letsui.css';
-import '../../index.js';
+import { LuiCodeBlock } from '../../index.js';
+import hljs from 'highlight.js/lib/core';
+import bash from 'highlight.js/lib/languages/bash';
+import css from 'highlight.js/lib/languages/css';
+import javascript from 'highlight.js/lib/languages/javascript';
+import json from 'highlight.js/lib/languages/json';
+import xml from 'highlight.js/lib/languages/xml';
+
+// Only the languages the stories use: the full build registers ~190 of them.
+hljs.registerLanguage('bash', bash);
+hljs.registerLanguage('css', css);
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('json', json);
+hljs.registerLanguage('xml', xml);
+
+LuiCodeBlock.highlighter = (code, language) =>
+  hljs.getLanguage(language) ? hljs.highlight(code, { language }).value : null;
 
 const BUTTON = `
   <script type="text/plain">
@@ -121,6 +137,42 @@ export const CopyEvent = () => {
     <p id="copy-event-output" style="margin-top: 16px;">Clique em copiar.</p>
   `;
 };
+
+export const SyntaxHighlighting = () => `
+  <div style="display: grid; gap: 16px; max-width: 520px;">
+    <lui-code-block label="Component.html" language="html" show-line-numbers>
+      <script type="text/plain">
+        <!-- Primary action -->
+        <lui-button variant="primary" size="lg" disabled>
+          Save
+        </lui-button>
+      </script>
+    </lui-code-block>
+    <lui-code-block label="main.js" language="javascript" show-line-numbers>
+      import { LuiCodeBlock } from '@lets-ui/components';
+
+      // Registered once, for every block on the page.
+      LuiCodeBlock.highlighter = (code, language) =>
+        hljs.getLanguage(language)
+          ? hljs.highlight(code, { language }).value
+          : null;
+
+      const retries = 3;
+      export function load(url) {
+        return fetch(url, { cache: 'no-store' });
+      }
+    </lui-code-block>
+    <lui-code-block label="theme.css" language="css">
+      .card:hover {
+        border-radius: 8px;
+        color: var(--lui-color-neutral-text-body);
+      }
+    </lui-code-block>
+    <lui-code-block variant="snippet" label="bash" language="bash">
+      npm install @lets-ui/styles @lets-ui/components
+    </lui-code-block>
+  </div>
+`;
 
 export const CSSClass = () => `
   <div class="code-block code-block--default" style="max-width: 452px;">

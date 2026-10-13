@@ -35,6 +35,7 @@ import { LuiRadioGroup } from './components/radio-group/radio-group.js';
 import { LuiSwitch } from './components/switch/switch.js';
 import { LuiCloseButton } from './components/close-button/close-button.js';
 import { LuiCodeBlock } from './components/code-block/code-block.js';
+export type { CodeHighlighter } from './components/code-block/code-block.js';
 import { LuiIconButton } from './components/icon-button/icon-button.js';
 import { LuiInput } from './components/input/input.js';
 import { LuiLink } from './components/link/link.js';

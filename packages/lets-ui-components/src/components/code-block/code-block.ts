@@ -1,9 +1,12 @@
 import { LitElement, html, nothing, unsafeCSS } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property, state } from 'lit/decorators.js';
 import styles from './code-block.scss?inline';
 
-const COPIED_RESET_MS = 2000;
+// A failure asks the reader to do something, so it stays up longer than a
+// confirmation that only reports.
+const COPY_FEEDBACK_MS = { copied: 2000, failed: 5000 };
 
 const fileIcon = html`<svg
   xmlns="http://www.w3.org/2000/svg"
@@ -65,11 +68,34 @@ export function normalizeCode(source: string) {
   return lines.map((line) => line.slice(indent)).join('\n');
 }
 
+/**
+ * Turns code into HTML whose spans carry highlight.js class names
+ * (`hljs-keyword`, `hljs-string`, …). The returned HTML is rendered as is, so
+ * it must escape the code it was given, as highlight.js does. Returning `null`
+ * leaves the block plain — for a language the highlighter does not know.
+ */
+export type CodeHighlighter = (code: string, language: string) => string | null;
+
+let highlighter: CodeHighlighter | null = null;
+const instances = new Set<LuiCodeBlock>();
+
 export class LuiCodeBlock extends LitElement {
   static styles = unsafeCSS(styles);
 
+  // One highlighter for the whole page, so the package carries no parser of
+  // its own. Setting it re-renders the blocks already on the page.
+  static get highlighter(): CodeHighlighter | null {
+    return highlighter;
+  }
+
+  static set highlighter(value: CodeHighlighter | null) {
+    highlighter = value;
+    instances.forEach((block) => block.requestUpdate());
+  }
+
   @property() variant = 'default';
   @property() label = '';
+  @property() language = '';
   @property({ type: Boolean, attribute: 'show-line-numbers' })
   showLineNumbers = false;
   @property({ attribute: 'show-icon', converter: defaultTrue })
@@ -77,15 +103,19 @@ export class LuiCodeBlock extends LitElement {
   @property({ converter: defaultTrue }) copy = true;
   @property({ attribute: 'copy-label' }) copyLabel = 'Copy code';
   @property({ attribute: 'copied-label' }) copiedLabel = 'Copied!';
+  @property({ attribute: 'copy-failed-label' })
+  copyFailedLabel = 'Press Ctrl+C or ⌘C to copy';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
   @state() private _code = '';
-  @state() private _copied = false;
+  @state() private _copyState: 'idle' | 'copied' | 'failed' = 'idle';
+  @state() private _status = '';
   @state() private _scrollable = false;
+  @state() private _tooltipDismissed = false;
 
   private _mutationObserver = new MutationObserver(() => this._readSource());
   private _resizeObserver = new ResizeObserver(() => this._measure());
-  private _copiedTimer?: ReturnType<typeof setTimeout>;
+  private _copyTimer?: ReturnType<typeof setTimeout>;
 
   get _variant(): 'default' | 'snippet' {
     return this.variant === 'snippet' ? 'snippet' : 'default';
@@ -98,6 +128,8 @@ export class LuiCodeBlock extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    instances.add(this);
+    document.addEventListener('keydown', this._handleKeydown);
     this._readSource();
     this._mutationObserver.observe(this, {
       childList: true,
@@ -108,9 +140,11 @@ export class LuiCodeBlock extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    instances.delete(this);
+    document.removeEventListener('keydown', this._handleKeydown);
     this._mutationObserver.disconnect();
     this._resizeObserver.disconnect();
-    clearTimeout(this._copiedTimer);
+    clearTimeout(this._copyTimer);
   }
 
   firstUpdated() {
@@ -144,19 +178,51 @@ export class LuiCodeBlock extends LitElement {
     this._scrollable = pre.scrollWidth > pre.clientWidth;
   }
 
+  // Without a highlighter or a language there is nothing to colour. A
+  // highlighter that throws — an unregistered language, say — leaves the code
+  // plain rather than leaving the block empty.
+  private _highlight(): string | null {
+    if (!highlighter || !this.language || !this._code) return null;
+    try {
+      return highlighter(this._code, this.language);
+    } catch {
+      return null;
+    }
+  }
+
+  // The tooltip covers code below the button, so Escape has to put it away
+  // without the reader moving the pointer or the focus (WCAG 1.4.13). The
+  // listener sits on the document because a hovering pointer leaves the focus
+  // wherever it was.
+  private _handleKeydown = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape') return;
+    const copy = this.shadowRoot?.querySelector('.code-block__copy');
+    if (copy?.matches(':hover, :focus-within')) this._tooltipDismissed = true;
+  };
+
+  private _restoreTooltip() {
+    this._tooltipDismissed = false;
+  }
+
   private async _handleCopy() {
     try {
       await navigator.clipboard.writeText(this._code);
-    } catch {
+    } catch (error) {
+      // Selecting the code makes the shortcut the message asks for work.
+      const code = this.shadowRoot?.querySelector('code');
+      if (code) window.getSelection()?.selectAllChildren(code);
+      this._showCopyFeedback('failed');
+      this.dispatchEvent(
+        new CustomEvent('lui-copy-error', {
+          bubbles: true,
+          composed: true,
+          detail: { error },
+        })
+      );
       return;
     }
 
-    this._copied = true;
-    clearTimeout(this._copiedTimer);
-    this._copiedTimer = setTimeout(() => {
-      this._copied = false;
-    }, COPIED_RESET_MS);
-
+    this._showCopyFeedback('copied');
     this.dispatchEvent(
       new CustomEvent('lui-copy', {
         bubbles: true,
@@ -164,6 +230,23 @@ export class LuiCodeBlock extends LitElement {
         detail: { code: this._code },
       })
     );
+  }
+
+  private async _showCopyFeedback(state: 'copied' | 'failed') {
+    this._copyState = state;
+    this._tooltipDismissed = false;
+
+    // A live region speaks only when its text changes. Emptying it first lets
+    // a second copy in a row be announced like the first.
+    this._status = '';
+    await this.updateComplete;
+    this._status = state === 'copied' ? this.copiedLabel : this.copyFailedLabel;
+
+    clearTimeout(this._copyTimer);
+    this._copyTimer = setTimeout(() => {
+      this._copyState = 'idle';
+      this._status = '';
+    }, COPY_FEEDBACK_MS[state]);
   }
 
   private _renderHeader() {
@@ -184,13 +267,27 @@ export class LuiCodeBlock extends LitElement {
 
   private _renderCopy() {
     if (!this.copy) return nothing;
-    const tooltip = this._copied ? this.copiedLabel : this.copyLabel;
+    const tooltip = {
+      idle: this.copyLabel,
+      copied: this.copiedLabel,
+      failed: this.copyFailedLabel,
+    }[this._copyState];
+    // With several blocks on a page, the label tells their buttons apart.
+    const name = this.label
+      ? `${this.copyLabel}: ${this.label}`
+      : this.copyLabel;
 
     return html`
-      <span class="code-block__copy tooltip tooltip--bottom">
+      <span
+        class="code-block__copy tooltip tooltip--bottom ${this._tooltipDismissed
+          ? 'code-block__copy--dismissed'
+          : ''}"
+        @pointerleave="${this._restoreTooltip}"
+        @focusout="${this._restoreTooltip}"
+      >
         <lui-icon-button
           size="lg"
-          aria-label="${this.copyLabel}"
+          aria-label="${name}"
           @click="${this._handleCopy}"
         >
           ${copyIcon}
@@ -202,6 +299,14 @@ export class LuiCodeBlock extends LitElement {
 
   render() {
     const lineCount = this._code ? this._code.split('\n').length : 0;
+    const highlighted = this._highlight();
+    const content = highlighted !== null ? unsafeHTML(highlighted) : this._code;
+    const codeClass = this.language ? `language-${this.language}` : undefined;
+    // Every block is a region, so each needs its own name: the label tells
+    // them apart in a screen reader's list of landmarks.
+    const regionName =
+      this.ariaLabel ||
+      (this.label ? `Code snippet: ${this.label}` : 'Code snippet');
     // A labelled snippet aligns the button to the whole block, label
     // included, which already leaves room for it.
     const singleLine =
@@ -211,6 +316,7 @@ export class LuiCodeBlock extends LitElement {
       `code-block--${this._variant}`,
       this.copy ? 'code-block--copy' : '',
       singleLine ? 'code-block--single-line' : '',
+      highlighted !== null ? 'code-block--highlighted' : '',
     ].join(' ');
 
     return html`
@@ -227,14 +333,13 @@ export class LuiCodeBlock extends LitElement {
           <pre
             class="code-block__pre"
             role="region"
-            aria-label="${this.ariaLabel || 'Code snippet'}"
+            aria-label="${regionName}"
+            translate="no"
             tabindex="${ifDefined(this._scrollable ? '0' : undefined)}"
-          ><code>${this._code}</code></pre>
+          ><code class="${ifDefined(codeClass)}">${content}</code></pre>
           ${this._renderCopy()}
         </div>
-        <span class="code-block__status" role="status"
-          >${this._copied ? this.copiedLabel : ''}</span
-        >
+        <span class="code-block__status" role="status">${this._status}</span>
       </div>
     `;
   }
