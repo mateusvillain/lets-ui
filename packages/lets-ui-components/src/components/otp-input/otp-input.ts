@@ -8,6 +8,14 @@ import { nameProperty } from '../../utils/form.js';
 const DIGIT = /^\d$/;
 const VISIBLE = /^\S$/;
 
+// The English defaults of the text props. A removed attribute sets its property
+// to null, so the field reads each one through `||` against these.
+const DEFAULTS = {
+  errorText: 'This field is required.',
+  label: 'Verification code',
+  fieldLabel: 'Character {index} of {length}',
+};
+
 export class LuiOtpInput extends LitElement {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
@@ -22,14 +30,13 @@ export class LuiOtpInput extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
+  @property({ attribute: 'error-text' }) errorText = DEFAULTS.errorText;
   @property() hint = '';
-  @property() label = 'Verification code';
+  @property() label = DEFAULTS.label;
   // Many OTP screens explain the code in their own heading, so the label only
   // names the group for assistive technology unless this asks to show it.
   @property({ type: Boolean, attribute: 'show-label' }) showLabel = false;
-  @property({ attribute: 'field-label' }) fieldLabel =
-    'Character {index} of {length}';
+  @property({ attribute: 'field-label' }) fieldLabel = DEFAULTS.fieldLabel;
   // Box positions a separator follows, comma-separated: `separator="3"` draws
   // one after the third box. Unset, the boxes form a single row.
   @property() separator = '';
@@ -62,13 +69,17 @@ export class LuiOtpInput extends LitElement {
     return Math.max(1, Math.floor(this.length) || 6);
   }
 
+  get _errorText(): string {
+    return this.errorText || DEFAULTS.errorText;
+  }
+
   get _numeric(): boolean {
-    return this.type.toLowerCase() === 'number';
+    return (this.type ?? '').toLowerCase() === 'number';
   }
 
   get _separators(): Set<number> {
     return new Set(
-      this.separator
+      (this.separator ?? '')
         .split(',')
         .map((part) => Number(part.trim()))
         .filter((n) => Number.isInteger(n) && n > 0 && n < this._length)
@@ -140,11 +151,11 @@ export class LuiOtpInput extends LitElement {
     if (this.required && !val) {
       this._internals.setValidity(
         { valueMissing: true },
-        this.errorText,
+        this._errorText,
         anchor
       );
     } else if (val && this._chars.includes('')) {
-      this._internals.setValidity({ tooShort: true }, this.errorText, anchor);
+      this._internals.setValidity({ tooShort: true }, this._errorText, anchor);
     } else {
       this._internals.setValidity({});
     }
@@ -278,7 +289,7 @@ export class LuiOtpInput extends LitElement {
         autocapitalize="off"
         spellcheck="false"
         placeholder="${this.placeholder}"
-        aria-label="${this.fieldLabel
+        aria-label="${(this.fieldLabel || DEFAULTS.fieldLabel)
           .replace('{index}', String(index + 1))
           .replace('{length}', String(length))}"
         aria-describedby="${ifDefined(describedBy)}"
@@ -301,7 +312,7 @@ export class LuiOtpInput extends LitElement {
   }
 
   render() {
-    const message = this.error ? this.errorText : this.hint;
+    const message = this.error ? this._errorText : this.hint;
     const describedBy = message ? `${this._baseId}-message` : undefined;
     const separators = this._separators;
 
@@ -322,7 +333,9 @@ export class LuiOtpInput extends LitElement {
         <div
           class="otp-input__group"
           role="group"
-          aria-label="${ifDefined(this.showLabel ? undefined : this.label)}"
+          aria-label="${ifDefined(
+            this.showLabel ? undefined : this.label || DEFAULTS.label
+          )}"
           aria-labelledby="${ifDefined(
             this.showLabel ? `${this._baseId}-label` : undefined
           )}"

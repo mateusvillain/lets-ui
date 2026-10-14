@@ -96,6 +96,22 @@ describe('rendering', () => {
     expect(el.value).toBe('12');
     expect(fields(el)[0].inputMode).toBe('numeric');
   });
+
+  it('falls back to the defaults when attributes are removed', async () => {
+    const el = await mount(
+      'type="number" separator="3" label="Código" field-label="Dígito {index} de {length}"'
+    );
+    for (const attr of ['type', 'separator', 'label', 'field-label']) {
+      el.removeAttribute(attr);
+    }
+    await el.updateComplete;
+    const group = el.shadowRoot.querySelector('[role="group"]');
+
+    expect(fields(el)[0].inputMode).toBe('text');
+    expect(el.shadowRoot.querySelector('.otp-input__separator')).toBeNull();
+    expect(group.getAttribute('aria-label')).toBe('Verification code');
+    expect(fields(el)[1].getAttribute('aria-label')).toBe('Character 2 of 6');
+  });
 });
 
 describe('accessibility', () => {
