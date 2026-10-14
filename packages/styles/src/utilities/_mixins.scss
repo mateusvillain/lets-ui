@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use 'sass:map';
 @use './tokens.map' as *;
 @use './functions' as *;
@@ -68,6 +69,37 @@
 
 @mixin state-base($bg) {
   --lui-bg: #{$bg};
+}
+
+// The border counterpart of `--lui-bg`, registered for the same reasons.
+@property --lui-border {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
+// Border state layer
+//  @include state-border-layer($border);
+// For components whose affordance is their outline rather than their fill — a
+// text field, an unchecked checkbox. Hover and active mix the content colour
+// into the resting border through `state-border()`, exactly as `state()` does
+// for a background. The element must declare the `color` to tint with.
+// `$transitions` carries whatever else the element animates, since this owns
+// the `transition` declaration.
+@mixin state-border-base($border) {
+  --lui-border: #{$border};
+}
+
+@mixin state-border-layer($border, $transitions...) {
+  @include state-border-base($border);
+
+  border-color: var(--lui-border, transparent);
+  transition: list.append(
+    $transitions,
+    border-color var(--lui-state-duration, 220ms)
+      var(--lui-state-easing, ease-out),
+    $separator: comma
+  );
 }
 
 // The on-colour a component's states tint with, when that is not the element's

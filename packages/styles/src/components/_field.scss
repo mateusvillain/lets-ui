@@ -56,10 +56,13 @@ $size: (
   width: 100%;
   box-sizing: border-box;
   background-color: bg(surface, neutral);
-  border: width(1) solid stroke(neutral, subtle);
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  border: width(1) solid;
+
+  // The on-colour the border state tints with. Every child sets its own
+  // colour, so this reaches nothing but the state layer.
+  color: text(body);
+
+  @include state-border-layer(stroke(neutral, subtle), box-shadow 0.2s ease);
 }
 
 @mixin input-element {
@@ -91,8 +94,10 @@ $size: (
 // $block    = BEM block name (e.g. 'input-field', 'native-select')
 // $native-el = native form element selector (e.g. 'input', 'select')
 @mixin states($block, $native-el) {
+  // Only the resting border changes, so the hover below mixes into red the
+  // same way it mixes into the neutral border.
   &.#{$block}--error .#{$block}__control {
-    border-color: stroke(danger);
+    @include state-border-base(stroke(danger));
   }
 
   &.#{$block}--error .#{$block}__message {
@@ -112,10 +117,11 @@ $size: (
     }
   }
 
-  &:not(.#{$block}--disabled, .#{$block}--error):hover .#{$block}__control,
-  &.#{$block}--force-hover:not(.#{$block}--disabled, .#{$block}--error)
-    .#{$block}__control {
-    border-color: stroke(neutral);
+  &:not(.#{$block}--disabled):hover .#{$block}__control,
+  &.#{$block}--force-hover:not(.#{$block}--disabled) .#{$block}__control {
+    border-color: state-border(hover);
+
+    @include state-timing(hover);
   }
 
   &:not(.#{$block}--disabled) .#{$block}__control:focus-within,

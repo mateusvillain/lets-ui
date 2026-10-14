@@ -1,0 +1,15 @@
+{
+  "name": "state-calculator",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Preview the hover and pressed colours the Let's UI state layer derives from a colour pair",
+  "scripts": {
+    "dev": "astro dev --port 4324",
+    "build": "astro build",
+    "preview": "astro preview --port 4324"
+  },
+  "devDependencies": {
+    "astro": "^5.0.0"
+  }
+}

@@ -141,36 +141,39 @@ utilities/
 
 All SCSS must consume tokens through functions defined in `packages/utilities/src/_functions.scss`. Never reference a CSS custom property directly from a component file.
 
-| Function       | Signature                      | Example                  |
-| -------------- | ------------------------------ | ------------------------ |
-| `bg()`         | `bg($category, $variant?)`     | `bg(container, primary)` |
-| `text()`       | `text($variant)`               | `text(body)`             |
-| `color()`      | `color($category, $scale)`     | `color(brand, 5)`        |
-| `icon()`       | `icon($variant)`               | `icon(caution)`          |
-| `stroke()`     | `stroke($variant, $category?)` | `stroke(danger, hover)`  |
-| `state()`      | `state($state, $bg?)`          | `state(hover)`           |
-| `focus-ring()` | `focus-ring($variant)`         | `focus-ring(primary)`    |
-| `radius()`     | `radius($size)`                | `radius(md)`             |
-| `width()`      | `width($size)`                 | `width(1)`               |
-| `elevation()`  | `elevation($layer)`            | `elevation(floating)`    |
-| `opacity()`    | `opacity($category)`           | `opacity(disabled)`      |
-| `fixed()`      | `fixed($px)`                   | `fixed(16)`              |
-| `fluid()`      | `fluid($px)`                   | `fluid(24)`              |
-| `breakpoint()` | `breakpoint($name)`            | `breakpoint(md)`         |
+| Function         | Signature                        | Example                   |
+| ---------------- | -------------------------------- | ------------------------- |
+| `bg()`           | `bg($category, $variant?)`       | `bg(container, primary)`  |
+| `text()`         | `text($variant)`                 | `text(body)`              |
+| `color()`        | `color($category, $scale)`       | `color(brand, 5)`         |
+| `icon()`         | `icon($variant)`                 | `icon(caution)`           |
+| `stroke()`       | `stroke($variant, $category?)`   | `stroke(neutral, subtle)` |
+| `state()`        | `state($state, $bg?)`            | `state(hover)`            |
+| `state-border()` | `state-border($state, $border?)` | `state-border(hover)`     |
+| `focus-ring()`   | `focus-ring($variant)`           | `focus-ring(primary)`     |
+| `radius()`       | `radius($size)`                  | `radius(md)`              |
+| `width()`        | `width($size)`                   | `width(1)`                |
+| `elevation()`    | `elevation($layer)`              | `elevation(floating)`     |
+| `opacity()`      | `opacity($category)`             | `opacity(disabled)`       |
+| `fixed()`        | `fixed($px)`                     | `fixed(16)`               |
+| `fluid()`        | `fluid($px)`                     | `fluid(24)`               |
+| `breakpoint()`   | `breakpoint($name)`              | `breakpoint(md)`          |
 
 ### Mixins
 
-| Mixin               | Signature                                   | Purpose                                   |
-| ------------------- | ------------------------------------------- | ----------------------------------------- |
-| `flex()`            | `flex($dir, $align, $justify, $gap, $wrap)` | Flexbox shorthand                         |
-| `states()`          | `states($focus-visible, $focus?)`           | Hover / active / disabled / focus states  |
-| `state-layer()`     | `state-layer($bg?)`                         | Interaction overlay only, without focus   |
-| `state-base()`      | `state-base($bg)`                           | Resting background for a state layer      |
-| `state-timing()`    | `state-timing($state)`                      | Per-direction timing for the overlay      |
-| `state-tint()`      | `state-tint($tint)`                         | On-colour override for the overlay        |
-| `center()`          | `center($axis)`                             | `both` / `x` / `y` alignment              |
-| `center-absolute()` | —                                           | Absolute centering via transform          |
-| `sr-only()`         | —                                           | Visually hidden, screen-reader accessible |
+| Mixin                  | Signature                                      | Purpose                                   |
+| ---------------------- | ---------------------------------------------- | ----------------------------------------- |
+| `flex()`               | `flex($dir, $align, $justify, $gap, $wrap)`    | Flexbox shorthand                         |
+| `states()`             | `states($focus-visible, $focus?)`              | Hover / active / disabled / focus states  |
+| `state-layer()`        | `state-layer($bg?)`                            | Interaction overlay only, without focus   |
+| `state-base()`         | `state-base($bg)`                              | Resting background for a state layer      |
+| `state-timing()`       | `state-timing($state)`                         | Per-direction timing for the overlay      |
+| `state-tint()`         | `state-tint($tint)`                            | On-colour override for the overlay        |
+| `state-border-layer()` | `state-border-layer($border, $transitions...)` | Border counterpart of `state-layer()`     |
+| `state-border-base()`  | `state-border-base($border)`                   | Resting border for a border state layer   |
+| `center()`             | `center($axis)`                                | `both` / `x` / `y` alignment              |
+| `center-absolute()`    | —                                              | Absolute centering via transform          |
+| `sr-only()`            | —                                              | Visually hidden, screen-reader accessible |
 
 ### Interaction states
 
@@ -235,6 +238,38 @@ it with the `state-tint($tint)` mixin. Two cases exist today, both because the
 element paints no text of its own: a checked checkbox / radio / switch, whose
 mark colour is the real on-colour (declared once in `_selection.scss`), and
 `icon-button`, whose icon arrives through a slot.
+
+### Border states
+
+Components whose affordance is their outline rather than their fill — text
+fields, and checkbox / radio / switch while unchecked — apply the same model to
+the border. The resting border goes through `--lui-border`, and the state rules
+mix the content colour into it with `state-border()`:
+
+```scss
+.thing {
+  border: width(1) solid;
+  color: text(body);
+
+  @include state-border-layer(stroke(neutral, subtle));
+
+  &:hover {
+    border-color: state-border(hover);
+
+    @include state-timing(hover);
+  }
+}
+```
+
+The content colour is the opposite of the surface the border sits on, so the
+line always gains contrast against it, in either theme, with no per-state token.
+A 1px line moves far less visibly than a filled area, so the amounts are larger
+— 40% (hover) and 56% (active), in `$state-border-amounts` — and, like the
+background amounts, they are constants rather than tokens.
+
+`state-border-layer()` owns the `transition` declaration so the border can take
+the per-direction timing below; pass anything else the element animates as
+extra arguments: `state-border-layer(stroke(neutral, subtle), box-shadow 0.2s ease)`.
 
 ### Timing
 

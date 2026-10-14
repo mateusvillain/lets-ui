@@ -42,8 +42,6 @@ export const semanticGroups = [
       { role: 'background-surface',   desc: 'Fundo suave'           },
       { role: 'background-container', desc: 'Fundo de destaque'      },
       { role: 'border-default',       desc: 'Borda'                  },
-      { role: 'border-hover',         desc: 'Borda hover'            },
-      { role: 'border-pressed',       desc: 'Borda pressed'          },
       { role: 'text-error',           desc: 'Texto de erro'          },
       { role: 'icon-default',         desc: 'Ícone'                  },
       { role: 'focus-ring',           desc: 'Cor do anel de foco'    },
@@ -89,8 +87,6 @@ export const semanticGroups = [
       { role: 'background-overlay',   desc: 'Overlay'                },
       { role: 'border-subtle',        desc: 'Borda suave'            },
       { role: 'border-default',       desc: 'Borda padrão'           },
-      { role: 'border-hover',         desc: 'Borda hover'            },
-      { role: 'border-pressed',       desc: 'Borda pressed'          },
       { role: 'text-heading',         desc: 'Título'                 },
       { role: 'text-body',            desc: 'Texto'                  },
       { role: 'text-caption',         desc: 'Legenda'                },
@@ -135,33 +131,6 @@ Escalas de 8 tons, do mais claro ao mais escuro. Use a função SCSS `color($pal
     </div>
   </div>
 ))}
-
-### Black Alpha
-
-Sobreposições em preto com opacidade crescente (invertidas para branco nos temas escuros).
-
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '6px', marginBottom: '32px' }}>
-  {[
-    ['1','2%'],['2','4%'],['3','8%'],['4','12%'],
-    ['5','16%'],['6','20%'],['7','24%'],['8','28%'],
-  ].map(([n, alpha]) => (
-    <div key={n}>
-      <div style={{
-        height: '48px',
-        background: `var(--lui-color-black-alpha-${n})`,
-        borderRadius: '6px',
-        border: '1px solid rgba(0,0,0,0.08)',
-        backgroundColor: `rgba(0,0,0,${parseFloat(alpha)/100})`,
-      }} />
-      <code style={{ display: 'block', fontSize: '10px', marginTop: '4px', lineHeight: 1.3 }}>
-        {`--lui-color-black-alpha-${n}`}
-      </code>
-      <span style={{ display: 'block', fontSize: '10px', color: 'var(--lui-color-neutral-text-caption)' }}>
-        {alpha} opacidade
-      </span>
-    </div>
-  ))}
-</div>
 
 ### Estado de Interação
 

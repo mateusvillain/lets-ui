@@ -63,9 +63,7 @@ $sizes: (
       }
     }
 
-    &:not(:disabled, :checked):hover {
-      border-color: stroke(neutral, default);
-    }
+    @include selection.unchecked-states;
   }
 
   @each $key, $values in $sizes {
