@@ -97,6 +97,7 @@ export const SECTIONS = [
         fields: [
           field('typography.font-family.heading', 'Headings', 'font-family'),
           field('typography.font-family.body', 'Body', 'font-family'),
+          field('typography.font-family.code', 'Code', 'font-family'),
         ],
       },
       {
