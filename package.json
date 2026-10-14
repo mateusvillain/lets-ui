@@ -19,7 +19,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "lint": "pnpm run lint:css && pnpm run lint:md",
-    "test": "vitest run --project brand-studio --project components",
+    "test": "vitest run --project brand-studio --project state-calculator --project components",
     "lint:css": "stylelint \"**/*.{css,scss}\"",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" \"!storybook-static/**\"",
     "storybook": "storybook dev -p 6006",
@@ -29,7 +29,8 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish",
-    "playground": "pnpm --prefix playground dev"
+    "playground": "pnpm --prefix playground dev",
+    "state-calculator": "pnpm --prefix apps/state-calculator dev"
   },
   "lint-staged": {
     "*.{js,ts,css,scss,json,md}": [
@@ -68,6 +69,7 @@
     "eslint": "^9.39.2",
     "gh-pages": "^6.3.0",
     "globals": "^17.0.0",
+    "highlight.js": "^11.12.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "markdownlint-cli2": "^0.20.0",

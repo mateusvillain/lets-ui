@@ -1,0 +1,80 @@
+@use 'sass:map';
+@use '../utilities/functions' as *;
+
+// The social statuses — online, away, busy and offline — belong to Status. The
+// Avatar draws its corner dot through these same mixins, so the two never fall
+// out of step. Mixins only: this file emits no CSS of its own.
+
+$colors: (
+  online: color(green, 3),
+  away: color(orange, 3),
+  busy: color(red, 3),
+  offline: color(gray, 3),
+);
+
+// The dot is a disc of the status colour inside a ring of `width(2)`. The
+// shapes are measured against the area inside the ring, so they come out the
+// same whatever the ring is painted with: the Avatar paints it in the surface
+// colour to cut the dot out of the photo, Status paints it in the dot's own
+// colour so it reads as one solid disc.
+@mixin dot($ring: var(--lui-status-color)) {
+  box-sizing: border-box;
+  background-color: var(--lui-status-color, #{color(gray, 3)});
+  border: width(2) solid $ring;
+  border-radius: radius(circle);
+
+  // The dot's colour is the information, so a forced-colors theme must not
+  // repaint it.
+  forced-color-adjust: none;
+}
+
+// Each status also has a shape of its own inside the dot, so it does not rest
+// on colour alone: online stays solid, away shows clock hands, busy a bar and
+// offline a hollow centre. The shapes are measured against the area inside the
+// ring (12px on a 16px dot) and scale with it.
+@mixin variant($name) {
+  --lui-status-color: #{color-of($name)};
+
+  @include marker($name);
+}
+
+// The shape alone, for an element that takes its colour from an ancestor.
+@mixin marker($name) {
+  @if color-of($name) and $name != online {
+    &::after {
+      position: absolute;
+      content: '';
+
+      @include shape($name);
+    }
+  }
+}
+
+@function color-of($name) {
+  @if not map.has-key($colors, $name) {
+    @error 'Invalid social status: "#{$name}"';
+  }
+
+  @return map.get($colors, $name);
+}
+
+@mixin shape($name) {
+  @if $name == away {
+    inset-block-end: 45.83%;
+    inset-inline-start: 45.83%;
+    inline-size: 29.17%;
+    block-size: 37.5%;
+    border-block-end: width(1) solid icon(neutral);
+    border-inline-start: width(1) solid icon(neutral);
+  } @else if $name == busy {
+    inset-block-start: 50%;
+    inset-inline: 25%;
+    block-size: width(1);
+    background-color: icon(neutral);
+    transform: translateY(-50%);
+  } @else if $name == offline {
+    inset: 25%;
+    background-color: bg(surface, neutral);
+    border-radius: radius(circle);
+  }
+}

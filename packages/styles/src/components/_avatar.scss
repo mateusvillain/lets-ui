@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
+@use 'status-social';
 
 // Without the Web Component the markup is yours to write. The wrapper carries
 // the accessible name — `role="img"` plus `aria-label` — and everything inside
@@ -28,12 +29,6 @@ $radii: (
   circle: radius(circle),
   rounded: radius(md),
   square: radius(none),
-);
-$statuses: (
-  online: color(green, 3),
-  away: color(orange, 3),
-  busy: color(red, 3),
-  offline: color(gray, 3),
 );
 
 // The initials scale from the avatar's own size: 30% of it, a proportion of the
@@ -130,59 +125,22 @@ $status-size: var(--lui-avatar-status-size, 16px);
 // is what the ring is for: it separates the dot from the avatar underneath.
 // A group moves it to the bottom-left through the two custom properties, since
 // the next avatar in the stack covers the right-hand corner.
+// The dot, its colours and its shapes are Status's social statuses — see
+// `_status-social.scss`. The avatar only places it and paints the ring in the
+// surface colour.
 .avatar__status {
   position: absolute;
   inset-block-end: calc(#{width(2)} * -1);
   inset-inline: var(--lui-avatar-status-start, auto)
     var(--lui-avatar-status-end, calc(#{width(2)} * -1));
-  box-sizing: border-box;
   inline-size: $status-size;
   block-size: $status-size;
-  background-color: var(--lui-avatar-status, #{color(gray, 3)});
-  border: width(2) solid bg(surface, neutral);
-  border-radius: radius(circle);
 
-  // The dot's colour is the information, so a forced-colors theme must not
-  // repaint it.
-  forced-color-adjust: none;
+  @include status-social.dot(bg(surface, neutral));
 }
 
-@each $name, $value in $statuses {
+@each $name in map.keys(status-social.$colors) {
   .avatar__status--#{$name} {
-    --lui-avatar-status: #{$value};
+    @include status-social.variant($name);
   }
-}
-
-// Each status also has a shape of its own inside the dot, so it does not rest
-// on colour alone: online stays solid, away shows clock hands, busy a bar and
-// offline a hollow centre. The shapes are measured against the area inside the
-// dot's ring (12px at the largest size) and scale with it.
-.avatar__status--away::after,
-.avatar__status--busy::after,
-.avatar__status--offline::after {
-  position: absolute;
-  content: '';
-}
-
-.avatar__status--away::after {
-  inset-block-end: 45.83%;
-  inset-inline-start: 45.83%;
-  inline-size: 29.17%;
-  block-size: 37.5%;
-  border-block-end: width(1) solid icon(neutral);
-  border-inline-start: width(1) solid icon(neutral);
-}
-
-.avatar__status--busy::after {
-  inset-block-start: 50%;
-  inset-inline: 25%;
-  block-size: width(1);
-  background-color: icon(neutral);
-  transform: translateY(-50%);
-}
-
-.avatar__status--offline::after {
-  inset: 25%;
-  background-color: bg(surface, neutral);
-  border-radius: radius(circle);
 }

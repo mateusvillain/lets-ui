@@ -45,6 +45,17 @@
               "Segoe UI Symbol"
             ],
             "description": "Default font for body texts"
+          },
+          "code": {
+            "$value": [
+              "ui-monospace",
+              "SFMono-Regular",
+              "Menlo",
+              "Consolas",
+              "Liberation Mono",
+              "monospace"
+            ],
+            "description": "Default font for code"
           }
         },
         "font-size": {

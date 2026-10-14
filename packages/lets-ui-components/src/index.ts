@@ -34,13 +34,17 @@ import { LuiRadio } from './components/radio/radio.js';
 import { LuiRadioGroup } from './components/radio-group/radio-group.js';
 import { LuiSwitch } from './components/switch/switch.js';
 import { LuiCloseButton } from './components/close-button/close-button.js';
+import { LuiCodeBlock } from './components/code-block/code-block.js';
+export type { CodeHighlighter } from './components/code-block/code-block.js';
 import { LuiIconButton } from './components/icon-button/icon-button.js';
 import { LuiInput } from './components/input/input.js';
 import { LuiLink } from './components/link/link.js';
 import { LuiModal } from './components/modal/modal.js';
+import { LuiOtpInput } from './components/otp-input/otp-input.js';
 import { LuiPagination } from './components/pagination/pagination.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
+import { LuiStatus } from './components/status/status.js';
 import { LuiStepper } from './components/stepper/stepper.js';
 import { LuiStep } from './components/stepper/step.js';
 import { LuiTable } from './components/table/table.js';
@@ -93,14 +97,17 @@ define('lui-radio', LuiRadio);
 define('lui-radio-group', LuiRadioGroup);
 define('lui-switch', LuiSwitch);
 define('lui-close-button', LuiCloseButton);
+define('lui-code-block', LuiCodeBlock);
 define('lui-icon-button', LuiIconButton);
 define('lui-input', LuiInput);
 define('lui-link', LuiLink);
 define('lui-modal', LuiModal);
+define('lui-otp-input', LuiOtpInput);
 define('lui-pagination', LuiPagination);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
 define('lui-shortcut', LuiShortcut);
+define('lui-status', LuiStatus);
 define('lui-stepper', LuiStepper);
 define('lui-step', LuiStep);
 define('lui-table', LuiTable);
@@ -148,14 +155,17 @@ export {
   LuiRadioGroup,
   LuiSwitch,
   LuiCloseButton,
+  LuiCodeBlock,
   LuiIconButton,
   LuiInput,
   LuiLink,
   LuiModal,
+  LuiOtpInput,
   LuiPagination,
   LuiNativeSelect,
   LuiSelect,
   LuiShortcut,
+  LuiStatus,
   LuiStepper,
   LuiStep,
   LuiTable,

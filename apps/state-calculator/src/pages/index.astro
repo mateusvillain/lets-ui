@@ -1,0 +1,292 @@
+---
+/**
+ * State Calculator — what hover and pressed resolve to for a colour pair.
+ *
+ * Let's UI does not pick state colours: it mixes a component's content colour
+ * into its resting colour (8% / 16% for a background, 40% / 56% for a border).
+ * This page runs that mix for any pair, shows the contrast each state keeps,
+ * and renders a live sample driven by the same `color-mix()` the styles use.
+ */
+import '@lets-ui/tokens';
+import '@/styles/calculator.css';
+---
+
+<!doctype html>
+<html lang="en" data-brand="lets-ui" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>State Calculator — Let's UI</title>
+  </head>
+  <body>
+    <main class="sc">
+      <header class="sc-head">
+        <div>
+          <h1 class="sc-title">State Calculator</h1>
+          <p class="sc-lead">
+            Pick a resting colour and the content colour drawn on it. Hover and
+            pressed are that content colour mixed into the resting one.
+          </p>
+        </div>
+
+        <label class="sc-field sc-field--inline">
+          <span class="sc-label">Theme</span>
+          <select class="sc-select" data-theme-select>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+      </header>
+
+      <section class="sc-panel" aria-label="Inputs">
+        <fieldset class="sc-modes">
+          <legend class="sc-label">Applies to</legend>
+          <label class="sc-mode">
+            <input type="radio" name="mode" value="background" checked />
+            <span>Background <small>8% / 16%</small></span>
+          </label>
+          <label class="sc-mode">
+            <input type="radio" name="mode" value="border" />
+            <span>Border <small>40% / 56%</small></span>
+          </label>
+        </fieldset>
+
+        <label class="sc-field">
+          <span class="sc-label">Start from</span>
+          <select class="sc-select" data-preset>
+            <option value="custom">Custom colours</option>
+            <option value="button-primary">Button — primary</option>
+            <option value="button-neutral">Button — neutral</option>
+            <option value="button-danger">Button — danger</option>
+            <option value="field">Field border</option>
+            <option value="field-error">Field border — error</option>
+          </select>
+        </label>
+
+        <div class="sc-colours">
+          <label class="sc-field" data-colour="base">
+            <span class="sc-label" data-base-label>Resting background</span>
+            <span class="sc-colour">
+              <input type="color" aria-label="Resting colour picker" />
+              <input class="sc-hex" type="text" spellcheck="false" maxlength="7" aria-label="Resting colour hex" />
+            </span>
+          </label>
+
+          <label class="sc-field" data-colour="tint">
+            <span class="sc-label">Content colour (tint)</span>
+            <span class="sc-colour">
+              <input type="color" aria-label="Content colour picker" />
+              <input class="sc-hex" type="text" spellcheck="false" maxlength="7" aria-label="Content colour hex" />
+            </span>
+          </label>
+
+          <label class="sc-field" data-colour="surface" hidden>
+            <span class="sc-label">Surface behind the border</span>
+            <span class="sc-colour">
+              <input type="color" aria-label="Surface colour picker" />
+              <input class="sc-hex" type="text" spellcheck="false" maxlength="7" aria-label="Surface colour hex" />
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section class="sc-results" aria-label="Results" data-results></section>
+
+      <section class="sc-panel sc-live" aria-label="Live sample">
+        <h2 class="sc-subtitle">Try it</h2>
+        <p class="sc-note">
+          Hover and press the sample. It uses the same <code>color-mix()</code>
+          and the same timings as the components.
+        </p>
+        <div class="sc-stage" data-stage>
+          <button type="button" class="sc-sample" data-sample>Sample</button>
+        </div>
+        <pre class="sc-code" data-code></pre>
+      </section>
+    </main>
+
+    <script>
+      import {
+        AMOUNTS,
+        computeStates,
+        cssColorToHex,
+        normalizeHex,
+      } from '@/lib/state.js';
+
+      // Each preset names the tokens a real component reads, resolved in the
+      // current theme so the numbers match what ships.
+      const PRESETS = {
+        'button-primary': {
+          mode: 'background',
+          base: '--lui-color-primary-background-container',
+          tint: '--lui-color-neutral-text-inverse',
+        },
+        'button-neutral': {
+          mode: 'background',
+          base: '--lui-color-neutral-background-container',
+          tint: '--lui-color-neutral-text-body',
+        },
+        'button-danger': {
+          mode: 'background',
+          base: '--lui-color-danger-background-container',
+          tint: '--lui-color-neutral-text-inverse',
+        },
+        field: {
+          mode: 'border',
+          base: '--lui-color-neutral-border-subtle',
+          tint: '--lui-color-neutral-text-body',
+          surface: '--lui-color-neutral-background-surface',
+        },
+        'field-error': {
+          mode: 'border',
+          base: '--lui-color-danger-border-default',
+          tint: '--lui-color-neutral-text-body',
+          surface: '--lui-color-neutral-background-surface',
+        },
+      };
+
+      const THRESHOLDS = { background: 4.5, border: 3 };
+
+      const state = {
+        mode: 'background',
+        base: '#339bf0',
+        tint: '#ffffff',
+        surface: '#ffffff',
+      };
+
+      const root = document.documentElement;
+      const results = document.querySelector('[data-results]');
+      const stage = document.querySelector('[data-stage]');
+      const code = document.querySelector('[data-code]');
+      const presetSelect = document.querySelector('[data-preset]');
+      const themeSelect = document.querySelector('[data-theme-select]');
+      const baseLabel = document.querySelector('[data-base-label]');
+      const surfaceField = document.querySelector('[data-colour="surface"]');
+
+      const probe = document.createElement('span');
+      probe.hidden = true;
+      document.body.append(probe);
+
+      function resolveToken(name) {
+        probe.style.color = `var(${name})`;
+        return cssColorToHex(getComputedStyle(probe).color);
+      }
+
+      function applyPreset(key) {
+        const preset = PRESETS[key];
+        if (!preset) return;
+        state.mode = preset.mode;
+        for (const slot of ['base', 'tint', 'surface']) {
+          if (preset[slot]) state[slot] = resolveToken(preset[slot]);
+        }
+      }
+
+      function format(ratio) {
+        return `${ratio.toFixed(2)}:1`;
+      }
+
+      function render() {
+        const { mode } = state;
+        const amounts = AMOUNTS[mode];
+        const threshold = THRESHOLDS[mode];
+
+        document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
+        baseLabel.textContent =
+          mode === 'background' ? 'Resting background' : 'Resting border';
+        surfaceField.hidden = mode !== 'border';
+
+        for (const slot of ['base', 'tint', 'surface']) {
+          const field = document.querySelector(`[data-colour="${slot}"]`);
+          field.querySelector('input[type="color"]').value = state[slot];
+          const hex = field.querySelector('.sc-hex');
+          if (document.activeElement !== hex) hex.value = state[slot];
+        }
+
+        const against =
+          mode === 'background' ? 'content colour' : 'surface';
+        results.innerHTML = computeStates(state)
+          .map(
+            (s) => `
+              <article class="sc-card">
+                <div class="sc-swatch sc-swatch--${mode}" style="--swatch: ${s.color}; --tint: ${state.tint}; --surface: ${state.surface}">
+                  ${mode === 'background' ? 'Aa' : ''}
+                </div>
+                <h3 class="sc-card__name">${s.name}</h3>
+                <p class="sc-card__hex">${s.color}</p>
+                <p class="sc-card__meta">${s.amount ? `${s.amount}% of the tint` : 'No tint'}</p>
+                <p class="sc-card__meta">
+                  ${format(s.contrast)} against the ${against}
+                  <span class="sc-badge" data-pass="${s.contrast >= threshold}">
+                    ${s.contrast >= threshold ? 'Pass' : 'Below'} ${threshold}:1
+                  </span>
+                </p>
+              </article>`
+          )
+          .join('');
+
+        stage.dataset.mode = mode;
+        stage.style.setProperty('--base', state.base);
+        stage.style.setProperty('--tint', state.tint);
+        stage.style.setProperty('--surface', state.surface);
+        stage.style.setProperty('--hover', `${amounts.hover}%`);
+        stage.style.setProperty('--pressed', `${amounts.pressed}%`);
+
+        const property = mode === 'background' ? 'background-color' : 'border-color';
+        code.textContent = [
+          `/* rest */    ${property}: ${state.base};`,
+          `/* hover */   ${property}: color-mix(in srgb, ${state.tint} ${amounts.hover}%, ${state.base});`,
+          `/* pressed */ ${property}: color-mix(in srgb, ${state.tint} ${amounts.pressed}%, ${state.base});`,
+        ].join('\n');
+      }
+
+      for (const slot of ['base', 'tint', 'surface']) {
+        const field = document.querySelector(`[data-colour="${slot}"]`);
+        const picker = field.querySelector('input[type="color"]');
+        const hex = field.querySelector('.sc-hex');
+
+        picker.addEventListener('input', () => {
+          state[slot] = picker.value;
+          presetSelect.value = 'custom';
+          render();
+        });
+
+        hex.addEventListener('input', () => {
+          const value = normalizeHex(hex.value);
+          hex.setAttribute('aria-invalid', String(!value));
+          if (!value) return;
+          state[slot] = value;
+          presetSelect.value = 'custom';
+          render();
+        });
+
+        hex.addEventListener('blur', () => {
+          hex.value = state[slot];
+          hex.removeAttribute('aria-invalid');
+        });
+      }
+
+      for (const radio of document.querySelectorAll('input[name="mode"]')) {
+        radio.addEventListener('change', () => {
+          state.mode = radio.value;
+          presetSelect.value = 'custom';
+          render();
+        });
+      }
+
+      presetSelect.addEventListener('change', () => {
+        applyPreset(presetSelect.value);
+        render();
+      });
+
+      themeSelect.addEventListener('change', () => {
+        root.dataset.theme = themeSelect.value;
+        applyPreset(presetSelect.value);
+        render();
+      });
+
+      presetSelect.value = 'button-primary';
+      applyPreset('button-primary');
+      render();
+    </script>
+  </body>
+</html>

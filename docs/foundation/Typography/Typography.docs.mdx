@@ -173,7 +173,7 @@ Escala fluida com `clamp()` — os tamanhos se adaptam proporcionalmente entre o
 
 ## Famílias Tipográficas
 
-Ambas as famílias utilizam a pilha de fontes do sistema operacional (`system font stack`), garantindo leitura nativa e sem dependências externas.
+As três famílias utilizam pilhas de fontes do sistema operacional (`system font stack`), garantindo leitura nativa e sem dependências externas. A família `code` é monoespaçada, para trechos de código como o Code Block.
 
 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '16px' }}>
   <div style={{
@@ -196,6 +196,17 @@ Ambas as famílias utilizam a pilha de fontes do sistema operacional (`system fo
     <code style={{ fontSize: '12px', display: 'block', marginBottom: '8px' }}>--lui-brand-typography-font-family-body</code>
     <span style={{ fontFamily: 'var(--lui-brand-typography-font-family-body)', fontSize: '1rem', lineHeight: 1.5 }}>
       Body — The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+  <div style={{
+    padding: '16px',
+    background: 'var(--lui-color-neutral-background-surface)',
+    border: '1px solid var(--lui-color-neutral-border-subtle)',
+    borderRadius: '6px',
+  }}>
+    <code style={{ fontSize: '12px', display: 'block', marginBottom: '8px' }}>--lui-brand-typography-font-family-code</code>
+    <span style={{ fontFamily: 'var(--lui-brand-typography-font-family-code)', fontSize: '1rem', lineHeight: 1.5 }}>
+      Code — const fox = 'quick brown'; // 0O 1lI
     </span>
   </div>
 </div>
