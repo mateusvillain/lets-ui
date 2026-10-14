@@ -5,7 +5,9 @@
 // proportion is the same in every brand and theme, so it is not a token.
 // The sheen is a fixed fraction of white, for the same reason as the
 // interaction amounts: no token is "a little lighter than gray-2" in every
-// theme. It stays narrow and slow so the shape reads as a quiet placeholder.
+// theme. It stays narrow and slow so the shape reads as a quiet placeholder:
+// the gradient does not repeat, so each cycle is one sweep from just off the
+// start edge to just off the end edge, with the eased tails as the pause.
 .skeleton {
   position: relative;
   display: block;
@@ -28,6 +30,7 @@
       color-mix(in srgb, rgb(255 255 255) 22%, transparent) 50%,
       transparent 58%
     );
+    background-repeat: no-repeat;
     background-size: 200% 100%;
     animation: skeleton-shimmer 2.4s ease-in-out infinite;
   }
@@ -72,10 +75,10 @@
 
 @keyframes skeleton-shimmer {
   0% {
-    background-position: 200% 0;
+    background-position: 150% 0;
   }
 
   100% {
-    background-position: -200% 0;
+    background-position: -50% 0;
   }
 }
