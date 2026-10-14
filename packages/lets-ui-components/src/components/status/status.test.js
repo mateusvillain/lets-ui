@@ -154,6 +154,20 @@ describe('text', () => {
     expect(rect(label).width).toBeLessThanOrEqual(1);
   });
 
+  it('falls back to the variant name when the label and description are removed', async () => {
+    const status = await mount(
+      '<lui-status variant="info" label="Novo" description="Agora"></lui-status>'
+    );
+    status.removeAttribute('label');
+    status.removeAttribute('description');
+    await status.updateComplete;
+    const label = $(status, '.status__label');
+
+    expect(label.textContent).toBe('Info');
+    expect(isHidden(label)).toBe(true);
+    expect($(status, '.status__description')).toBeNull();
+  });
+
   it('lines the indicator up with the first line of the label', async () => {
     const status = await mount(
       '<lui-status label="Pago" description="Há 2 minutos"></lui-status>'

@@ -87,9 +87,11 @@ export class LuiStatus extends LitElement {
     // The indicator says the status in colour and shape only, so the text is
     // always there for assistive technology: the label when there is one, the
     // variant's name when there is not. Hidden, it stays out of the layout.
-    const label = this.label.trim() || LABELS[variant];
-    const hidden = this.hideLabel || !this.label.trim();
-    const description = this.description.trim();
+    // A removed attribute sets the property to null, hence the `?? ''`.
+    const ownLabel = (this.label ?? '').trim();
+    const label = ownLabel || LABELS[variant];
+    const hidden = this.hideLabel || !ownLabel;
+    const description = (this.description ?? '').trim();
     const labelEl = html`<span
       class="status__label ${hidden ? 'status__label--hidden' : ''}"
       >${label}</span
