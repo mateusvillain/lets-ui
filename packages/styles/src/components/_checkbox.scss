@@ -64,8 +64,6 @@ input[type='checkbox'] {
       }
     }
 
-    &:not(:disabled):hover {
-      border-color: stroke(neutral, default);
-    }
+    @include selection.unchecked-states;
   }
 }
