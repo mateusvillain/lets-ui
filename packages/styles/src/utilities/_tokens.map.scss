@@ -253,6 +253,7 @@ $typography: (
   font: (
     heading: token('lui.brand.typography.font-family.heading'),
     body: token('lui.brand.typography.font-family.body'),
+    code: token('lui.brand.typography.font-family.code'),
   ),
 
   // `weight` guarda o token já resolvido, não uma chave do mapa `weight`

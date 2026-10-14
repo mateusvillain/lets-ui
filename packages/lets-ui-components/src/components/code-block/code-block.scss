@@ -1,0 +1,6 @@
+@use 'packages/styles/src/components/tooltip' as *;
+@use 'packages/styles/src/components/code-block' as *;
+
+:host {
+  display: block;
+}

@@ -30,6 +30,7 @@ Usar este mapa para decidir se o componente já existe e em qual formato.
 | switch        | `_switch.scss`        | `switch.js`        | cobertura completa; tamanhos lg e md; role="switch"           |
 | select        | `_select.scss`        | `select.js`        | cobertura completa                                            |
 | shortcut      | `_shortcut.scss`      | `shortcut.js`      | cobertura completa                                            |
+| status        | `_status.scss`        | `status.js`        | inclui `_status-social.scss`, usado também pelo Avatar        |
 | tag           | `_tag.scss`           | `tag.js`           | cobertura completa                                            |
 | tabs          | `_tabs.scss`          | `tabs.js`          | inclui `lui-tab`; suporta Line, Card e prop expand            |
 | textarea      | `_textarea.scss`      | `textarea.js`      | cobertura completa                                            |

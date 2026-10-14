@@ -1,0 +1,326 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CodeBlockStories from './CodeBlock.stories';
+
+<Meta of={CodeBlockStories} />
+
+# Code Block
+
+Mostra um trecho de código em fonte monoespaçada, com botão de copiar, um rótulo opcional e numeração de linhas. Pensado para páginas de documentação. A fonte do código vem do token `lui.brand.typography.font-family.code`, que cada marca pode trocar.
+
+<Canvas of={CodeBlockStories.Default} />
+<Controls of={CodeBlockStories.Default} />
+
+## Quando usar
+
+Use o Code Block para código que a pessoa vai ler ou copiar: comandos de instalação, exemplos de uso, arquivos de configuração.
+
+- Para um termo de código no meio de uma frase, use `<code>` direto no texto. O Code Block é um bloco, não um trecho em linha.
+- Dê um rótulo quando o contexto não for óbvio: o nome do arquivo na variante `default`, a linguagem ou o shell na `snippet`.
+- Ligue a numeração quando o texto em volta citar linhas específicas. Em comandos de uma linha, ela só ocupa espaço.
+
+## Variantes
+
+`default` mostra um cabeçalho com ícone de arquivo e o rótulo, separado do código por um divisor. `snippet` troca o cabeçalho por um rótulo curto em fonte monoespaçada logo acima do código, sem divisor e sem ícone.
+
+<Canvas of={CodeBlockStories.Snippet} />
+
+Sem `label`, o cabeçalho some nas duas variantes.
+
+<Canvas of={CodeBlockStories.SingleLine} />
+
+## Conteúdo
+
+O código vem do conteúdo do elemento. O componente remove as linhas em branco do início e do fim e a indentação comum a todas as linhas, então o código pode seguir a indentação do HTML em volta.
+
+<Canvas of={CodeBlockStories.MultiLine} />
+
+Texto solto é interpretado como HTML pelo navegador: `<` abriria uma tag. Para mostrar marcação, envolva o código em um `<script type="text/plain">`. O navegador não interpreta nem executa esse conteúdo, e o componente o lê exatamente como foi escrito.
+
+```html
+<lui-code-block label="Component.jsx">
+  <script type="text/plain">
+    <lui-button variant="primary" disabled>Save</lui-button>
+  </script>
+</lui-code-block>
+```
+
+A única coisa que não cabe nele é um `</script>`. Para código que contém essa tag, use um `<template>`. O template também é lido como texto, mas o navegador interpreta a marcação e a reescreve: quebras de linha dentro de uma tag somem e atributos booleanos viram `disabled=""`.
+
+O componente acompanha mudanças no conteúdo feitas por script.
+
+## Numeração de linhas
+
+`show-line-numbers` mostra o número de cada linha à esquerda, alinhado à direita.
+
+<Canvas of={CodeBlockStories.LineNumbers} />
+
+## Linhas longas
+
+Linhas que não cabem rolam na horizontal, sem quebrar o layout em volta. A numeração fica fixa enquanto o código rola.
+
+<Canvas of={CodeBlockStories.LongLines} />
+
+## Botão de copiar
+
+O botão no canto superior direito copia o código para a área de transferência, exatamente como aparece. Depois de copiar, a dica do botão mostra "Copied!" por dois segundos. `copy="false"` remove o botão.
+
+<Canvas of={CodeBlockStories.NoCopyButton} />
+
+A área de transferência só está disponível em contexto seguro (HTTPS ou `localhost`). Se o navegador recusar a escrita, o componente seleciona o código e a dica passa a mostrar o atalho para copiar à mão (`copy-failed-label`, "Press Ctrl+C or ⌘C to copy"), por cinco segundos. A mensagem também é anunciada ao leitor de tela, e o evento `lui-copy-error` é emitido no lugar de `lui-copy`.
+
+A dica pode ser fechada com `Esc` sem tirar o ponteiro ou o foco do botão, e o ponteiro pode passar por cima dela sem que ela suma.
+
+## Ícone personalizado
+
+O ícone de arquivo é o conteúdo padrão do slot `icon`. Passe outro SVG nesse slot para trocá-lo, ou use `show-icon="false"` para escondê-lo.
+
+<Canvas of={CodeBlockStories.CustomIcon} />
+
+## Evento `lui-copy`
+
+Emitido depois que o código é copiado, com o texto em `event.detail.code`. O evento borbulha e atravessa o shadow DOM.
+
+<Canvas of={CodeBlockStories.CopyEvent} />
+
+## Realce de sintaxe
+
+O Code Block colore o código quando recebe uma biblioteca de realce. O pacote não traz nenhuma: cada linguagem pesa, e quem não usa realce não deveria carregar parser nenhum. Em vez disso, o componente oferece um encaixe, `LuiCodeBlock.highlighter`, onde você liga a biblioteca uma vez para a página inteira.
+
+<Canvas of={CodeBlockStories.SyntaxHighlighting} />
+
+### Biblioteca recomendada: highlight.js
+
+Recomendamos o [highlight.js](https://highlightjs.org/). Ele gera as classes `hljs-*` que o Code Block já sabe pintar, então as cores saem dos tokens do Let's UI e acompanham o tema claro e escuro sem configuração extra. Também suporta quase 200 linguagens, carregáveis uma a uma, e escapa o código antes de devolver o HTML.
+
+### 1. Instalar
+
+```bash
+npm install highlight.js
+# ou
+pnpm add highlight.js
+# ou
+yarn add highlight.js
+```
+
+Sem bundler, importe direto de uma CDN no lugar do pacote:
+
+```html
+<script type="module">
+  import hljs from 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/es/core.min.js';
+  import javascript from 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/es/languages/javascript.min.js';
+  // A partir daqui, igual ao passo 2: registerLanguage e LuiCodeBlock.highlighter.
+</script>
+```
+
+### 2. Conectar ao Code Block
+
+No arquivo de entrada da aplicação, o mesmo onde você importa `@lets-ui/components`:
+
+```js
+import '@lets-ui/components';
+import { LuiCodeBlock } from '@lets-ui/components';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import css from 'highlight.js/lib/languages/css';
+import xml from 'highlight.js/lib/languages/xml';
+import bash from 'highlight.js/lib/languages/bash';
+
+// Registre só as linguagens que a aplicação mostra.
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('css', css);
+hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('bash', bash);
+
+// Liga o highlight.js a todos os Code Blocks da página.
+LuiCodeBlock.highlighter = (code, language) =>
+  hljs.getLanguage(language) ? hljs.highlight(code, { language }).value : null;
+```
+
+- **`highlight.js/lib/core`** carrega só o motor, e cada `registerLanguage` adiciona uma linguagem. Para protótipos, `import hljs from 'highlight.js'` traz todas de uma vez, ao custo de um bundle bem maior.
+- **`hljs.getLanguage(language)`** confere se a linguagem foi registrada. Quando não foi, a função devolve `null` e o bloco aparece sem cor. Sem essa checagem, o highlight.js escreve um erro no console antes de falhar. O bloco também fica sem cor nesse caso, mas o console fica poluído.
+- **A ordem não importa.** Registrar o highlighter antes ou depois de os blocos aparecerem na página dá no mesmo: os que já estão na tela são recoloridos.
+
+### 3. Dizer a linguagem de cada bloco
+
+```html
+<lui-code-block label="main.js" language="javascript">
+  const retries = 3;
+</lui-code-block>
+
+<lui-code-block label="index.html" language="html">
+  <script type="text/plain">
+    <lui-button variant="primary">Save</lui-button>
+  </script>
+</lui-code-block>
+```
+
+O `language` aceita o nome ou qualquer apelido que o highlight.js conheça. Alguns que costumam confundir:
+
+| `language`                | Módulo a registrar                      |
+| ------------------------- | --------------------------------------- |
+| `html`, `xml`, `svg`      | `highlight.js/lib/languages/xml`        |
+| `js`, `javascript`, `jsx` | `highlight.js/lib/languages/javascript` |
+| `ts`, `typescript`, `tsx` | `highlight.js/lib/languages/typescript` |
+| `sh`, `bash`, `zsh`       | `highlight.js/lib/languages/bash`       |
+| `md`, `markdown`          | `highlight.js/lib/languages/markdown`   |
+| `css` / `scss` / `json`   | `css` / `scss` / `json`                 |
+
+### Não importe temas do highlight.js
+
+Os temas do highlight.js (`highlight.js/styles/github.css` e afins) não são necessários e não têm efeito: o código fica dentro do shadow DOM do componente, onde o CSS da página não entra. As cores já vêm do Code Block.
+
+### Cores
+
+Com realce, o texto base passa de `text(caption)` para `text(body)`, para que os comentários, em `text(caption)`, fiquem como a camada mais discreta.
+
+| Papel                | Classes do highlight.js                                                                       | Cor             |
+| -------------------- | --------------------------------------------------------------------------------------------- | --------------- |
+| Texto base           | (sem classe)                                                                                  | `text(body)`    |
+| Comentário           | `hljs-comment`, `hljs-quote`                                                                  | `text(caption)` |
+| Palavra-chave e meta | `hljs-keyword`, `hljs-meta`, `hljs-doctag`                                                    | `red-4`         |
+| String               | `hljs-string`, `hljs-regexp`                                                                  | `blue-7`        |
+| Número e literal     | `hljs-number`, `hljs-literal`, `hljs-symbol`                                                  | `blue-6`        |
+| Função e classe      | `hljs-title`, `hljs-section`, seletores de id, classe, atributo e pseudo                      | `violet-5`      |
+| Tag                  | `hljs-name`, `hljs-selector-tag`                                                              | `green-5`       |
+| Atributo e variável  | `hljs-attr`, `hljs-attribute`, `hljs-property`, `hljs-variable`, `hljs-type`, `hljs-built_in` | `orange-5`      |
+
+Todas as cores passam de 4,5:1 sobre o fundo do bloco, nos dois temas. Diffs (`hljs-addition` e `hljs-deletion`) ainda não têm cor: a paleta não tem fundos claros o bastante para manter o contraste do código por cima.
+
+### Comportamento
+
+- Sem highlighter registrado, sem `language`, ou quando o highlighter devolve `null` ou falha, o código aparece sem cor, como no protótipo.
+- O botão de copiar e a propriedade `code` sempre usam o texto puro, sem as marcações do realce.
+- O componente renderiza o HTML do highlighter como está. O highlight.js já escapa o código. Um highlighter próprio precisa escapar `<` e `&` antes de envolver os trechos.
+
+### Outras bibliotecas
+
+O encaixe aceita qualquer função que receba o código e a linguagem e devolva HTML. As cores, porém, só aparecem para as classes `hljs-*`.
+
+| Biblioteca   | Cores dos tokens | Observação                                                                                         |
+| ------------ | ---------------- | -------------------------------------------------------------------------------------------------- |
+| highlight.js | Sim              | Recomendada.                                                                                       |
+| lowlight     | Sim              | Usa o highlight.js por baixo. Devolve uma árvore: converta com `hast-util-to-html`.                |
+| Prism        | Não              | Gera classes próprias (`token keyword`). O código aparece sem cor.                                 |
+| starry-night | Não              | Gera classes `pl-*`. O código aparece sem cor.                                                     |
+| Shiki        | Não              | Escreve as cores do tema dele direto em cada trecho. Fica colorido, mas ignora os tokens e o tema. |
+
+### Na classe CSS
+
+Sem o Web Component, rode o highlight.js por conta própria (no build ou no navegador), coloque a saída dentro do `<code>` e adicione `code-block--highlighted` ao bloco.
+
+## Classe CSS (sem Web Component)
+
+A classe CSS reproduz o visual, mas o conteúdo fica todo a cargo de quem usa: escape `<` e `&` no código, escreva os números de linha à mão e deixe a indentação do código colada à margem dentro do `<pre>`. Copiar depende de JavaScript, então o botão não existe nessa versão. Se você montar o botão por conta própria, adicione `code-block--copy` ao bloco e, quando o código tiver uma linha só, `code-block--single-line`: o corpo cresce para caber o botão e centraliza os dois. O Web Component aplica essas classes sozinho.
+
+<Canvas of={CodeBlockStories.CSSClass} />
+
+## Propriedades
+
+| Atributo            | Tipo      | Padrão                       | Descrição                                                                                              |
+| ------------------- | --------- | ---------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `variant`           | `string`  | `default`                    | `default` ou `snippet`.                                                                                |
+| `label`             | `string`  | `''`                         | Texto do cabeçalho: nome do arquivo, linguagem ou shell.                                               |
+| `language`          | `string`  | `''`                         | Linguagem passada ao highlighter. Sem ela, não há realce.                                              |
+| `show-line-numbers` | `boolean` | `false`                      | Numera as linhas.                                                                                      |
+| `show-icon`         | `boolean` | `true`                       | Ícone do cabeçalho na variante `default`. `"false"` esconde.                                           |
+| `copy`              | `boolean` | `true`                       | Botão de copiar. `"false"` remove.                                                                     |
+| `copy-label`        | `string`  | `Copy code`                  | Dica do botão de copiar. Com `label`, o nome acessível vira `Copy code: <label>`.                      |
+| `copied-label`      | `string`  | `Copied!`                    | Confirmação mostrada na dica e anunciada depois de copiar.                                             |
+| `copy-failed-label` | `string`  | `Press Ctrl+C or ⌘C to copy` | Mensagem mostrada e anunciada quando o navegador recusa a cópia.                                       |
+| `aria-label`        | `string`  | `Code snippet`               | Nome da região do código. Sem ele, o nome é `Code snippet: <label>`, ou só `Code snippet` sem `label`. |
+
+| Slot     | Descrição                                                      |
+| -------- | -------------------------------------------------------------- |
+| (padrão) | O código: texto, `<script type="text/plain">` ou `<template>`. |
+| `icon`   | Ícone do cabeçalho na variante `default`. Decorativo.          |
+
+| Propriedade | Tipo     | Descrição                                            |
+| ----------- | -------- | ---------------------------------------------------- |
+| `code`      | `string` | Somente leitura. O código como é mostrado e copiado. |
+
+| Propriedade estática       | Tipo                                                 | Descrição                                                                                                   |
+| -------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `LuiCodeBlock.highlighter` | `(code: string, language: string) => string \| null` | Função de realce de toda a página. Devolver `null` deixa o bloco sem cor. Atribuir `null` desliga o realce. |
+
+### Eventos
+
+| Evento           | Detalhe              | Descrição                                  |
+| ---------------- | -------------------- | ------------------------------------------ |
+| `lui-copy`       | `{ code: string }`   | Emitido depois de copiar.                  |
+| `lui-copy-error` | `{ error: unknown }` | Emitido quando o navegador recusa a cópia. |
+
+## Acessibilidade
+
+### Região do código
+
+- O código fica em um `<pre>` com `role="region"`, que o leitor de tela anuncia como uma região nomeada. O nome vem do `label` (`Code snippet: main.js`), para que vários blocos na mesma página não apareçam com o mesmo nome na lista de regiões.
+- Sem `label`, todo bloco se chamaria `Code snippet`. Nesse caso, ou quando dois blocos têm o mesmo `label`, dê a cada um um `aria-label` próprio.
+- Quando as linhas não cabem, a região entra na ordem de foco: com o foco nela, as setas rolam o código (WCAG 2.1.1). Sem rolagem, ela não ocupa uma parada de `Tab`.
+- As linhas longas rolam na horizontal em vez de quebrar. A WCAG 1.4.10 (Reflow) não se aplica quando quebrar a linha muda o sentido do conteúdo, e a indentação de código é um dos exemplos que o W3C cita.
+- O código tem `translate="no"`: tradutores automáticos não traduzem palavras como `return` ou `class`, o que tornaria o código incorreto.
+
+### Botão de copiar
+
+- O botão é um `<button>` de 40×40px, acima do mínimo de 24×24px da WCAG 2.5.8. `Enter` e `Espaço` copiam.
+- O nome acessível inclui o `label` (`Copy code: main.js`), para que os botões de copiar de blocos diferentes sejam distinguíveis numa lista de botões.
+- A confirmação e o pedido de cópia manual são anunciados por uma região `role="status"` (WCAG 4.1.3), já que a dica visual não é lida. A região é esvaziada antes de cada mensagem, então uma segunda cópia seguida é anunciada como a primeira.
+- Se o navegador recusar a cópia, o código fica selecionado e a mensagem indica o atalho, para que a pessoa consiga copiar mesmo assim.
+- A dica segue a WCAG 1.4.13: `Esc` a fecha sem mover o ponteiro ou o foco, o ponteiro pode passar por cima dela sem que suma, e ela fica visível enquanto o botão está em foco ou sob o ponteiro.
+
+### Visual
+
+- Todas as cores, inclusive as do realce, passam de 4,5:1 sobre o fundo do bloco nos dois temas (WCAG 1.4.3). O realce é complementar: sem cor, o código é o mesmo (WCAG 1.4.1).
+- O foco é visível no código e no botão (WCAG 2.4.7). No modo de cores forçadas, onde o navegador remove o anel de foco feito com sombra, um contorno na cor de destaque do sistema toma o lugar.
+- Com `prefers-reduced-motion: reduce`, a dica aparece e some sem animação.
+- Os números de linha têm `aria-hidden="true"` e não são selecionáveis: o leitor de tela lê só o código, e selecionar o texto não arrasta os números junto. Eles continuam alinhados ao código com os espaçamentos de texto da WCAG 1.4.12.
+- O ícone do cabeçalho é decorativo. Se trocar pelo slot, coloque `aria-hidden="true"` no SVG.
+
+### Referências
+
+- [W3C — Understanding SC 1.4.10: Reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html)
+- [W3C — Understanding SC 1.4.13: Content on Hover or Focus](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html)
+- [Deque — Scrollable region must have keyboard access (axe)](https://dequeuniversity.com/rules/axe/4.9/scrollable-region-focusable)
+- [Rocket Validator — scrollable-region-focusable (axe 4.11)](https://rocketvalidator.com/accessibility-validation/axe/4.11/scrollable-region-focusable)
+- [Carbon Design System — Code snippet: accessibility](https://carbondesignsystem.com/components/code-snippet/accessibility/)
+- [Wayne UI — Code block](https://wayneui.apps.wayne.edu/docs/components/code-block)
+
+## Uso
+
+### Web Component
+
+```html
+<lui-code-block label="Component.jsx" show-line-numbers>
+  <script type="text/plain">
+    <lui-button variant="primary" size="lg">Save</lui-button>
+  </script>
+</lui-code-block>
+
+<lui-code-block variant="snippet" label="bash">
+  npm install @lets-ui/styles @lets-ui/components
+</lui-code-block>
+
+<script>
+  document
+    .querySelector('lui-code-block')
+    .addEventListener('lui-copy', (event) => {
+      console.log(event.detail.code);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="code-block code-block--snippet">
+  <div class="code-block__header">
+    <p class="code-block__label">bash</p>
+  </div>
+  <div class="code-block__body">
+    <pre
+      class="code-block__pre"
+      role="region"
+      aria-label="Code snippet"
+    ><code>npm install @lets-ui/styles</code></pre>
+  </div>
+</div>
+```
