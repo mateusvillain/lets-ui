@@ -141,36 +141,39 @@ utilities/
 
 All SCSS must consume tokens through functions defined in `packages/utilities/src/_functions.scss`. Never reference a CSS custom property directly from a component file.
 
-| Function       | Signature                      | Example                  |
-| -------------- | ------------------------------ | ------------------------ |
-| `bg()`         | `bg($category, $variant?)`     | `bg(container, primary)` |
-| `text()`       | `text($variant)`               | `text(body)`             |
-| `color()`      | `color($category, $scale)`     | `color(brand, 5)`        |
-| `icon()`       | `icon($variant)`               | `icon(caution)`          |
-| `stroke()`     | `stroke($variant, $category?)` | `stroke(danger, hover)`  |
-| `state()`      | `state($state, $bg?)`          | `state(hover)`           |
-| `focus-ring()` | `focus-ring($variant)`         | `focus-ring(primary)`    |
-| `radius()`     | `radius($size)`                | `radius(md)`             |
-| `width()`      | `width($size)`                 | `width(1)`               |
-| `elevation()`  | `elevation($layer)`            | `elevation(floating)`    |
-| `opacity()`    | `opacity($category)`           | `opacity(disabled)`      |
-| `fixed()`      | `fixed($px)`                   | `fixed(16)`              |
-| `fluid()`      | `fluid($px)`                   | `fluid(24)`              |
-| `breakpoint()` | `breakpoint($name)`            | `breakpoint(md)`         |
+| Function         | Signature                        | Example                   |
+| ---------------- | -------------------------------- | ------------------------- |
+| `bg()`           | `bg($category, $variant?)`       | `bg(container, primary)`  |
+| `text()`         | `text($variant)`                 | `text(body)`              |
+| `color()`        | `color($category, $scale)`       | `color(brand, 5)`         |
+| `icon()`         | `icon($variant)`                 | `icon(caution)`           |
+| `stroke()`       | `stroke($variant, $category?)`   | `stroke(neutral, subtle)` |
+| `state()`        | `state($state, $bg?)`            | `state(hover)`            |
+| `state-border()` | `state-border($state, $border?)` | `state-border(hover)`     |
+| `focus-ring()`   | `focus-ring($variant)`           | `focus-ring(primary)`     |
+| `radius()`       | `radius($size)`                  | `radius(md)`              |
+| `width()`        | `width($size)`                   | `width(1)`                |
+| `elevation()`    | `elevation($layer)`              | `elevation(floating)`     |
+| `opacity()`      | `opacity($category)`             | `opacity(disabled)`       |
+| `fixed()`        | `fixed($px)`                     | `fixed(16)`               |
+| `fluid()`        | `fluid($px)`                     | `fluid(24)`               |
+| `breakpoint()`   | `breakpoint($name)`              | `breakpoint(md)`          |
 
 ### Mixins
 
-| Mixin               | Signature                                   | Purpose                                   |
-| ------------------- | ------------------------------------------- | ----------------------------------------- |
-| `flex()`            | `flex($dir, $align, $justify, $gap, $wrap)` | Flexbox shorthand                         |
-| `states()`          | `states($focus-visible, $focus?)`           | Hover / active / disabled / focus states  |
-| `state-layer()`     | `state-layer($bg?)`                         | Interaction overlay only, without focus   |
-| `state-base()`      | `state-base($bg)`                           | Resting background for a state layer      |
-| `state-timing()`    | `state-timing($state)`                      | Per-direction timing for the overlay      |
-| `state-tint()`      | `state-tint($tint)`                         | On-colour override for the overlay        |
-| `center()`          | `center($axis)`                             | `both` / `x` / `y` alignment              |
-| `center-absolute()` | —                                           | Absolute centering via transform          |
-| `sr-only()`         | —                                           | Visually hidden, screen-reader accessible |
+| Mixin                  | Signature                                      | Purpose                                   |
+| ---------------------- | ---------------------------------------------- | ----------------------------------------- |
+| `flex()`               | `flex($dir, $align, $justify, $gap, $wrap)`    | Flexbox shorthand                         |
+| `states()`             | `states($focus-visible, $focus?)`              | Hover / active / disabled / focus states  |
+| `state-layer()`        | `state-layer($bg?)`                            | Interaction overlay only, without focus   |
+| `state-base()`         | `state-base($bg)`                              | Resting background for a state layer      |
+| `state-timing()`       | `state-timing($state)`                         | Per-direction timing for the overlay      |
+| `state-tint()`         | `state-tint($tint)`                            | On-colour override for the overlay        |
+| `state-border-layer()` | `state-border-layer($border, $transitions...)` | Border counterpart of `state-layer()`     |
+| `state-border-base()`  | `state-border-base($border)`                   | Resting border for a border state layer   |
+| `center()`             | `center($axis)`                                | `both` / `x` / `y` alignment              |
+| `center-absolute()`    | —                                              | Absolute centering via transform          |
+| `sr-only()`            | —                                              | Visually hidden, screen-reader accessible |
 
 ### Interaction states
 
@@ -236,6 +239,38 @@ element paints no text of its own: a checked checkbox / radio / switch, whose
 mark colour is the real on-colour (declared once in `_selection.scss`), and
 `icon-button`, whose icon arrives through a slot.
 
+### Border states
+
+Components whose affordance is their outline rather than their fill — text
+fields, and checkbox / radio / switch while unchecked — apply the same model to
+the border. The resting border goes through `--lui-border`, and the state rules
+mix the content colour into it with `state-border()`:
+
+```scss
+.thing {
+  border: width(1) solid;
+  color: text(body);
+
+  @include state-border-layer(stroke(neutral, subtle));
+
+  &:hover {
+    border-color: state-border(hover);
+
+    @include state-timing(hover);
+  }
+}
+```
+
+The content colour is the opposite of the surface the border sits on, so the
+line always gains contrast against it, in either theme, with no per-state token.
+A 1px line moves far less visibly than a filled area, so the amounts are larger
+— 40% (hover) and 56% (active), in `$state-border-amounts` — and, like the
+background amounts, they are constants rather than tokens.
+
+`state-border-layer()` owns the `transition` declaration so the border can take
+the per-direction timing below; pass anything else the element animates as
+extra arguments: `state-border-layer(stroke(neutral, subtle), box-shadow 0.2s ease)`.
+
 ### Timing
 
 A transition reads its timing from the state being entered, so `state-timing()`
@@ -281,7 +316,7 @@ Core behavior is achievable with CSS alone (layout primitives and most UI elemen
 1. `packages/styles/src/components/_name.scss` — Standalone implementation. Registered in `_components.scss`. Works without the Web Component.
 2. `packages/lets-ui-components/src/components/name/name.scss` — Shadow DOM implementation. Uses `:host` and `::slotted()`. Imports utilities directly; does **not** re-import the global file to avoid duplication.
 
-List: `alert`, `body`, `box`, `breadcrumb`, `button`, `card`, `center`, `checkbox`, `container`, `divider`, `drawer`, `dropdown-menu`, `field`, `flex`, `grid`, `heading`, `icon-button`, `image`, `inline`, `input`, `link`, `modal`, `navbar`, `pagination`, `radio`, `radio-group`, `select`, `shortcut`, `sidebar`, `stack`, `switch`, `switcher`, `tabs`, `tag`, `textarea`, `tooltip`.
+List: `alert`, `body`, `box`, `breadcrumb`, `button`, `card`, `center`, `checkbox`, `container`, `divider`, `drawer`, `dropdown-menu`, `field`, `flex`, `grid`, `heading`, `icon-button`, `image`, `inline`, `input`, `link`, `modal`, `navbar`, `otp-input`, `pagination`, `radio`, `radio-group`, `select`, `shortcut`, `sidebar`, `stack`, `switch`, `switcher`, `tabs`, `tag`, `textarea`, `tooltip`.
 
 ### JS-driven components
 
@@ -371,6 +406,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 | Icon Button           | `lui-icon-button`                 | Yes             |
 | Checkbox              | `lui-checkbox`                    | Yes             |
 | Input                 | `lui-input`                       | Yes             |
+| OTP Input             | `lui-otp-input`                   | Yes             |
 | Radio / RadioGroup    | `lui-radio`, `lui-radio-group`    | Yes             |
 | Select / NativeSelect | `lui-select`, `lui-native-select` | Yes             |
 | Switch                | `lui-switch`                      | Yes             |
@@ -389,6 +425,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 | Link              | `lui-link`                              |
 | Pagination        | `lui-pagination`                        |
 | Skeleton          | `lui-skeleton`                          |
+| Stepper / Step    | `lui-stepper`, `lui-step`               |
 | Tabs / Tab        | `lui-tabs`, `lui-tab`                   |
 
 ### Overlay & Utility
@@ -412,8 +449,8 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 1. Get started — Welcome, Designers, Developers, Changelog
 2. Foundations — Color, Spacing, Border, Typography, Elevation
 3. Actionable — Buttons, Icon Buttons
-4. Navigation — Links, Breadcrumb, Pagination, Tabs, Dropdown Menu
-5. Form and options — Input, Textarea, Checkbox, Radio, Select, Switch
+4. Navigation — Links, Breadcrumb, Pagination, Stepper, Tabs, Dropdown Menu
+5. Form and options — Input, OTP Input, Textarea, Checkbox, Radio, Select, Switch
 6. Content — Card, Alert, Tag, Divider, Heading, Image, Body, Skeleton
 7. Layout — Container, Flex, Grid, Stack, Sidebar, Box, Center, Inline, Switcher, Float
 8. Miscellaneous — Modal, Drawer, Tooltip, Shortcut

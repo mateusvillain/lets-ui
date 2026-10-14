@@ -13,12 +13,34 @@
 @mixin input-base {
   appearance: none;
   position: relative;
-  border: width(1) solid stroke(neutral, subtle);
-  transition: all 0.2s ease;
+  border: width(1) solid;
 
+  // The on-colour the unchecked border tints with. `checked-base` replaces it
+  // with the mark colour, which is what its background layer needs instead.
+  color: text(body);
+
+  @include state-border-layer(stroke(neutral, subtle), all 0.2s ease);
   @include state-base(bg(surface, neutral));
 
   background-color: var(--lui-bg);
+}
+
+// An unchecked control is all outline, so its states move the border. Checked,
+// the border is gone and `checked-base` moves the fill instead.
+@mixin unchecked-states {
+  &:not(:disabled, :checked) {
+    &:hover {
+      border-color: state-border(hover);
+
+      @include state-timing(hover);
+    }
+
+    &:active {
+      border-color: state-border(pressed);
+
+      @include state-timing(pressed);
+    }
+  }
 }
 
 @mixin focus {

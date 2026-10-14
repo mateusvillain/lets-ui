@@ -22,6 +22,7 @@
 @use 'checkbox';
 @use 'heading';
 @use 'close-button';
+@use 'code-block';
 @use 'icon-button';
 @use 'radio';
 @use 'switch';
@@ -29,10 +30,12 @@
 @use 'link';
 @use 'modal';
 @use 'navbar';
+@use 'otp-input';
 @use 'pagination';
 @use 'select';
 @use 'shortcut';
 @use 'skeleton';
+@use 'status';
 @use 'tabs';
 @use 'tag';
 @use 'textarea';
@@ -40,5 +43,6 @@
 @use 'tooltip';
 @use 'sidebar';
 @use 'stack';
+@use 'stepper';
 @use 'switcher';
 @use 'table';

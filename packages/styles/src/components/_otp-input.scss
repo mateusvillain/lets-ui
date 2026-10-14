@@ -1,0 +1,99 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+@use 'field';
+
+.otp-input {
+  @include flex(column, stretch, flex-start, fluid(8), nowrap);
+
+  // Same type and colour as the `lg` label of `lui-input`.
+  &__label {
+    @include font-scale(body--lg);
+
+    color: text(body);
+  }
+
+  &__group {
+    @include flex(row, center, flex-start, fluid(8), nowrap);
+  }
+
+  // Each box is square: one line of `body--lg` plus the same padding as the
+  // `lg` field, so a character sits where it would in `lui-input`.
+  &__field {
+    @include font-scale(body--lg);
+
+    box-sizing: border-box;
+    inline-size: calc(1lh + fluid(12) * 2);
+    aspect-ratio: 1;
+    padding: 0;
+    margin: 0;
+    border: width(1) solid;
+    border-radius: radius(lg);
+    background-color: bg(surface, neutral);
+    color: text(body);
+    text-align: center;
+    outline: 0;
+
+    // The hover tints the border with `color`, the text colour above.
+    @include state-border-layer(stroke(neutral, subtle), box-shadow 0.2s ease);
+
+    &::placeholder {
+      color: text(caption);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      border-width: width(2);
+      border-color: stroke(primary);
+      box-shadow: focus-ring(primary);
+    }
+  }
+
+  &__separator {
+    flex: none;
+    inline-size: fluid(12);
+    border-block-start: width(1) solid stroke(neutral);
+  }
+
+  &__message {
+    @include field.secondary-text;
+
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+  }
+
+  // Only the resting border changes, so the hover below mixes into red the
+  // same way it mixes into the neutral border.
+  &--error .otp-input__field {
+    @include state-border-base(stroke(danger));
+  }
+
+  &--error .otp-input__field:focus {
+    border-color: stroke(danger);
+    box-shadow: focus-ring(danger);
+  }
+
+  &--error .otp-input__message {
+    color: text(error);
+  }
+
+  // Hover leaves a focused box alone, so the focus border holds under the
+  // pointer.
+  & .otp-input__field:hover:not(:disabled, :focus) {
+    border-color: state-border(hover);
+
+    @include state-timing(hover);
+  }
+
+  &:has(.otp-input__field:disabled) {
+    opacity: opacity(disabled);
+    cursor: not-allowed;
+
+    .otp-input__label {
+      cursor: not-allowed;
+    }
+  }
+}

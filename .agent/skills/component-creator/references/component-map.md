@@ -24,12 +24,15 @@ Usar este mapa para decidir se o componente já existe e em qual formato.
 | link          | `_link.scss`          | `link.js`          | cobertura completa                                            |
 | modal         | `_modal.scss`         | `modal.js`         | cobertura completa                                            |
 | navbar        | `_navbar.scss`        | não existe         | formato web component ausente                                 |
+| otp-input     | `_otp-input.scss`     | `otp-input.js`     | cobertura completa; foco, colagem e Backspace no WC           |
 | pagination    | `_pagination.scss`    | `pagination.js`    | cobertura completa; truncamento com reticências               |
 | radio         | `_radio.scss`         | `radio.js`         | cobertura completa                                            |
+| stepper       | `_stepper.scss`       | `stepper.js`       | inclui `lui-step`; horizontal, vertical e rótulos abaixo      |
 | switch        | `_switch.scss`        | `switch.js`        | cobertura completa; tamanhos lg e md; role="switch"           |
 | select        | `_select.scss`        | `select.js`        | cobertura completa                                            |
 | shortcut      | `_shortcut.scss`      | `shortcut.js`      | cobertura completa                                            |
 | skeleton      | `_skeleton.scss`      | `skeleton.ts`      | cobertura completa; text, circle, rectangle; shimmer          |
+| status        | `_status.scss`        | `status.js`        | inclui `_status-social.scss`, usado também pelo Avatar        |
 | tag           | `_tag.scss`           | `tag.js`           | cobertura completa                                            |
 | tabs          | `_tabs.scss`          | `tabs.js`          | inclui `lui-tab`; suporta Line, Card e prop expand            |
 | textarea      | `_textarea.scss`      | `textarea.js`      | cobertura completa                                            |

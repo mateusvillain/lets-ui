@@ -1,0 +1,164 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as StepperStories from './Stepper.stories';
+
+<Meta of={StepperStories} />
+
+# Stepper
+
+Indica o progresso por um fluxo dividido em etapas — um checkout, um cadastro, um assistente de configuração. Cada etapa mostra um número e, opcionalmente, um rótulo e uma descrição; as etapas anteriores à atual aparecem como concluídas, e o conector entre elas é preenchido até a etapa atual.
+
+<Canvas of={StepperStories.Default} />
+<Controls of={StepperStories.Default} />
+
+## Quando usar
+
+- Fluxos com um número pequeno e conhecido de etapas (de 3 a 6), em que saber onde se está e quanto falta ajuda a concluir a tarefa.
+- Para navegar entre seções independentes, sem ordem, prefira [Tabs](?path=/docs/navigation-tabs--docs).
+- Para conteúdo paginado, prefira [Pagination](?path=/docs/navigation-pagination--docs).
+
+## Vertical
+
+Com `orientation="vertical"`, as etapas se empilham e o conector desce do centro do indicador. Quando o stepper recebe uma altura, os conectores se esticam para ocupá-la; sem altura, mantêm um comprimento mínimo.
+
+<Canvas of={StepperStories.Vertical} />
+
+## Telas estreitas
+
+Um stepper horizontal que não cabe no espaço disponível passa a ser exibido na vertical, em vez de criar rolagem horizontal (WCAG 1.4.10 Reflow). Quando o espaço volta a ser suficiente, ele retorna à horizontal. A decisão depende da largura real do contêiner, não da viewport, então também vale para um stepper dentro de uma coluna estreita. O atributo `orientation` não muda.
+
+## Rótulos abaixo do indicador
+
+Com `label-placement="bottom"`, o rótulo e a descrição ficam centralizados abaixo do número. Só se aplica à orientação horizontal.
+
+<Canvas of={StepperStories.LabelsBottom} />
+
+## Somente números
+
+Sem `label` e `description`, cada etapa mostra apenas o indicador. Nesse caso, dê ao stepper um `label` descritivo.
+
+<Canvas of={StepperStories.NumbersOnly} />
+
+## Carregando
+
+`loading` troca o número da etapa por um indicador de progresso — enquanto a etapa é salva ou validada, por exemplo. O botão recebe `aria-busy="true"` e o texto de `loading-label` é anunciado. A posição ("Step 2 of 4") continua no nome acessível, mesmo sem o número visível.
+
+<Canvas of={StepperStories.Loading} />
+
+## Linear
+
+Com `linear`, só é possível voltar para etapas concluídas: as etapas à frente da atual não respondem ao clique e recebem `aria-disabled="true"`, mas mantêm a cor normal — não estão desabilitadas, só ainda não foram alcançadas. Avance por código, alterando `current-step`.
+
+<Canvas of={StepperStories.Linear} />
+
+## Evento `lui-step-change`
+
+Ao clicar em uma etapa, o stepper emite `lui-step-change` com a etapa escolhida em `event.detail.step` e a anterior em `event.detail.previous`. O evento borbulha, atravessa o shadow DOM e é cancelável: chamar `event.preventDefault()` mantém a etapa atual — útil para impedir o avanço enquanto um formulário é inválido.
+
+<Canvas of={StepperStories.StepChangeEvent} />
+
+### Anúncio da troca
+
+Toda troca de etapa, seja pelo clique ou por código, é anunciada por uma região viva (`role="status"`) com a posição e o rótulo da nova etapa ("Step 3 of 4, Payment"). Uma troca cancelada não é anunciada.
+
+O stepper indica só a etapa. Quando a troca muda o conteúdo da página, atualize também o `<title>` (por exemplo, "Payment — Step 3 of 4 — Checkout") e leve o foco ao heading da nova etapa, como recomenda o [tutorial de formulários em várias etapas do W3C](https://www.w3.org/WAI/tutorials/forms/multi-page/).
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a marcação fica a cargo de quem usa: mova `stepper__item--completed`, `stepper__item--active` e `aria-current="step"` à mão e deixe o conector fora do último item. Use `stepper--vertical` e `stepper--labels-bottom` no `<ol>` para as outras disposições.
+
+Sem o Web Component, também ficam a cargo de quem usa:
+
+- o texto de posição (`stepper__position`), que é visualmente oculto;
+- o `aria-hidden="true"` no indicador;
+- a troca para `stepper--vertical` quando a linha não cabe.
+
+<Canvas of={StepperStories.CSSClass} />
+
+## Propriedades
+
+### `lui-stepper`
+
+| Atributo          | Tipo                         | Padrão                   | Descrição                                                              |
+| ----------------- | ---------------------------- | ------------------------ | ---------------------------------------------------------------------- |
+| `current-step`    | `number`                     | `1`                      | Etapa atual, a partir de 1. Refletido no atributo ao navegar.          |
+| `orientation`     | `'horizontal' \| 'vertical'` | `horizontal`             | Disposição das etapas.                                                 |
+| `label-placement` | `'end' \| 'bottom'`          | `end`                    | Rótulo ao lado ou abaixo do indicador. `bottom` vale só na horizontal. |
+| `linear`          | `boolean`                    | `false`                  | Impede pular para etapas à frente da atual.                            |
+| `label`           | `string`                     | `Progress`               | Nome acessível da lista de etapas.                                     |
+| `completed-label` | `string`                     | `Completed`              | Texto anunciado por leitores de tela nas etapas concluídas.            |
+| `loading-label`   | `string`                     | `Loading`                | Texto anunciado por leitores de tela nas etapas com `loading`.         |
+| `step-label`      | `string`                     | `Step {step} of {total}` | Posição anunciada em cada etapa e na troca de etapa.                   |
+
+### `lui-step`
+
+| Atributo      | Tipo      | Padrão  | Descrição                                        |
+| ------------- | --------- | ------- | ------------------------------------------------ |
+| `label`       | `string`  | `''`    | Título da etapa.                                 |
+| `description` | `string`  | `''`    | Texto de apoio abaixo do título.                 |
+| `loading`     | `boolean` | `false` | Troca o número por um indicador de carregamento. |
+| `disabled`    | `boolean` | `false` | Desabilita a etapa.                              |
+
+### Eventos
+
+| Evento            | `detail`                             | Descrição                                     |
+| ----------------- | ------------------------------------ | --------------------------------------------- |
+| `lui-step-change` | `{ step: number, previous: number }` | Emitido antes de trocar de etapa. Cancelável. |
+
+## Acessibilidade
+
+- As etapas formam uma lista (`role="list"` / `role="listitem"`) com o nome acessível de `label`.
+- Cada etapa é um botão nativo: navegável com `Tab`, e `Enter` ou `Espaço` a selecionam.
+- A etapa atual recebe `aria-current="step"`.
+- O nome de cada etapa começa pela posição e pelo total (`step-label`, por exemplo "Step 2 of 4 Address Shipping"). O número visível é `aria-hidden="true"`, para não ser lido duas vezes.
+- Uma região viva (`role="status"`) anuncia a nova etapa a cada troca.
+- Quando não cabe na largura disponível, o stepper horizontal passa para a vertical, sem rolagem horizontal.
+- O estado que a cor do indicador transmite também é anunciado: as etapas concluídas levam o texto de `completed-label`, e as que estão carregando, o de `loading-label`, além de `aria-busy="true"`.
+- Os conectores são decorativos (`aria-hidden="true"`).
+
+## Uso
+
+### Web Component
+
+```html
+<lui-stepper current-step="1" label="Checkout">
+  <lui-step label="Account" description="Your details"></lui-step>
+  <lui-step label="Address" description="Shipping"></lui-step>
+  <lui-step label="Payment" description="Card or PIX"></lui-step>
+</lui-stepper>
+
+<script>
+  document
+    .querySelector('lui-stepper')
+    .addEventListener('lui-step-change', (event) => {
+      console.log(event.detail.step, event.detail.previous);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<ol class="stepper" aria-label="Checkout">
+  <li class="stepper__item stepper__item--completed">
+    <button class="stepper__trigger" type="button">
+      <span class="stepper__position">Step 1 of 3</span>
+      <span class="stepper__indicator" aria-hidden="true">
+        <span class="stepper__circle">
+          <span class="stepper__number">1</span>
+        </span>
+      </span>
+      <span class="stepper__text">
+        <span class="stepper__label">Account</span>
+        <span class="stepper__description">Your details</span>
+      </span>
+      <span class="stepper__status">Completed</span>
+    </button>
+    <span class="stepper__connector" aria-hidden="true"></span>
+  </li>
+  <li class="stepper__item stepper__item--active">
+    <button class="stepper__trigger" type="button" aria-current="step">
+      <!-- indicador e texto -->
+    </button>
+  </li>
+</ol>
+```

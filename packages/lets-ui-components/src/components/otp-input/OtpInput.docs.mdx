@@ -1,0 +1,181 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as OtpInputStories from './OtpInput.stories';
+
+<Meta of={OtpInputStories} />
+
+# OTP Input
+
+Campo para códigos de uso único (OTP) e códigos de verificação. Renderiza uma caixa por caractere: ao digitar, o foco avança para a próxima; `Backspace` numa caixa vazia volta para a anterior e a limpa; colar um código o distribui pelas caixas.
+
+<Canvas of={OtpInputStories.Default} />
+<Controls of={OtpInputStories.Default} />
+
+## Rótulo visível
+
+Em muitas telas de verificação, o título da página já explica o código, então o rótulo fica oculto por padrão: `label` nomeia o grupo apenas para tecnologias assistivas. Com `show-label`, o mesmo texto aparece acima das caixas, no estilo do rótulo do `lui-input`, e passa a nomear o grupo por `aria-labelledby`. Clicar nele leva o foco à primeira caixa vazia.
+
+Abaixo, o mesmo campo com e sem `show-label`.
+
+<Canvas of={OtpInputStories.VisibleLabel} />
+
+## Numérico
+
+Com `type="number"`, só dígitos são aceitos e o teclado virtual numérico é sugerido (`inputmode="numeric"`). As caixas continuam sendo `type="text"`, sem as setas de incremento do campo numérico nativo.
+
+<Canvas of={OtpInputStories.Numeric} />
+
+## Erro
+
+`error` aplica o estado de erro a todas as caixas e exibe `error-text` abaixo delas. A mensagem fica ligada a cada caixa por `aria-describedby`. O estado é limpo assim que a pessoa volta a digitar.
+
+<Canvas of={OtpInputStories.Error} />
+
+## Disabled
+
+<Canvas of={OtpInputStories.Disabled} />
+
+## Comprimentos
+
+`length` define a quantidade de caixas (padrão `6`).
+
+<Canvas of={OtpInputStories.Lengths} />
+
+## Separador
+
+O separador é opcional: sem `separator`, as caixas ficam numa linha só. O atributo recebe a posição da caixa após a qual o separador aparece — `separator="3"` divide seis caixas em 3 + 3. Para mais de um separador, liste as posições separadas por vírgula (`separator="2,4"`). Posições fora do intervalo entre a primeira e a última caixa são ignoradas.
+
+<Canvas of={OtpInputStories.Separator} />
+
+## Evento `lui-complete`
+
+Quando todas as caixas são preenchidas, o componente emite `lui-complete` com o código em `event.detail.value`. O evento borbulha e atravessa o shadow DOM. A cada alteração também é emitido `input`.
+
+<Canvas of={OtpInputStories.CompleteEvent} />
+
+## Colar e preencher automaticamente
+
+Colar um código completo preenche todas as caixas a partir da primeira, qualquer que seja a caixa em foco. Um trecho menor é colado a partir da caixa em foco. Caracteres que o `type` não aceita são descartados.
+
+A primeira caixa tem `autocomplete="one-time-code"`, então o código recebido por SMS pode ser sugerido pelo sistema e é distribuído da mesma forma.
+
+## Integração com formulários
+
+O `lui-otp-input` é um form-associated custom element: o código é enviado no `FormData` sob o atributo `name`. Com `required`, o formulário não é submetido enquanto o campo estiver vazio; um código incompleto também é inválido.
+
+<Canvas of={OtpInputStories.FormIntegration} />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, o estilo fica disponível, mas o avanço de foco, a colagem e o `Backspace` ficam a cargo de quem usa.
+
+<Canvas of={OtpInputStories.CSSClass} />
+
+## Propriedades
+
+| Atributo      | Tipo                 | Padrão   | Descrição                                                                                                                |
+| ------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `length`      | `number`             | `6`      | Quantidade de caixas.                                                                                                    |
+| `type`        | `'text' \| 'number'` | `'text'` | `number` aceita só dígitos e sugere o teclado numérico.                                                                  |
+| `separator`   | `string`             | `''`     | Posições das caixas após as quais aparece um separador, separadas por vírgula (`"3"`, `"2,4"`). Vazio, não há separador. |
+| `value`       | `string`             | `''`     | Código atual.                                                                                                            |
+| `placeholder` | `string`             | `''`     | Caractere exibido em cada caixa vazia.                                                                                   |
+| `name`        | `string`             | `''`     | Nome do campo no `FormData`.                                                                                             |
+| `required`    | `boolean`            | `false`  | Bloqueia a submissão enquanto o campo estiver vazio.                                                                     |
+| `show-label`  | `boolean`            | `false`  | Exibe `label` acima das caixas. Desligado, `label` só nomeia o grupo para tecnologias assistivas.                        |
+| `disabled`    | `boolean`            | `false`  | Desabilita todas as caixas.                                                                                              |
+| `error`       | `boolean`            | `false`  | Aplica o estado de erro e exibe `error-text`.                                                                            |
+| `hint`        | `string`             | `''`     | Texto de ajuda exibido abaixo das caixas quando não há erro.                                                             |
+
+## Textos padrão
+
+Os textos que o componente gera são em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
+
+| Atributo      | Tipo     | Padrão                            | Descrição                                                            |
+| ------------- | -------- | --------------------------------- | -------------------------------------------------------------------- |
+| `label`       | `string` | `'Verification code'`             | `aria-label` do grupo de caixas.                                     |
+| `field-label` | `string` | `'Character {index} of {length}'` | `aria-label` de cada caixa; `{index}` e `{length}` são substituídos. |
+| `error-text`  | `string` | `'This field is required.'`       | Mensagem exibida quando `error` está ativo.                          |
+
+## Acessibilidade
+
+- As caixas ficam num elemento com `role="group"` nomeado por `label`: por `aria-label` quando o rótulo está oculto, e por `aria-labelledby` apontando para o rótulo visível com `show-label`.
+- Cada caixa é um `<input>` nativo com `aria-label` indicando sua posição ("Character 2 of 6").
+- O separador é decorativo (`aria-hidden="true"`).
+- Com `error`, as caixas recebem `aria-invalid="true"`, e a mensagem de erro ou de ajuda fica ligada a elas por `aria-describedby`.
+- O campo é uma única parada de `Tab`: ao entrar, o foco vai para a primeira caixa vazia (ou para a última, com o código completo), e `Tab` ou `Shift+Tab` a partir de qualquer caixa saem do campo.
+- Setas, `Home` e `End` movem o foco entre as caixas; em `dir="rtl"`, as setas seguem a direção de leitura. `Delete` limpa a caixa sem mover o foco. Ao receber o foco, o conteúdo da caixa é selecionado, então a próxima tecla o substitui.
+- `Enter` envia o formulário associado.
+- Colar nunca é bloqueado, e a primeira caixa tem `autocomplete="one-time-code"`, para que o sistema ou um gerenciador de senhas preencha o código. Assim ninguém precisa transcrever o código à mão (WCAG 3.3.8, Autenticação Acessível).
+- O código aparece em texto claro, sem máscara.
+- `focus()` no elemento leva o foco à primeira caixa vazia.
+
+### Responsabilidades de quem usa
+
+- Com o rótulo oculto, garanta que a tela explique o campo em texto visível, por exemplo num título, ou use `show-label`. Informe também o tamanho e o formato do código, por exemplo com `hint="Digite o código de 6 dígitos enviado por SMS."`.
+- Se o formulário for enviado automaticamente em `lui-complete`, mantenha também um botão de envio.
+- Depois de uma validação que falhou, não limpe o código: a pessoa pode corrigir só o caractere errado.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-otp-input type="number" name="code" required></lui-otp-input>
+
+<script>
+  document
+    .querySelector('lui-otp-input')
+    .addEventListener('lui-complete', (event) => {
+      console.log(event.detail.value);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="otp-input">
+  <!-- Opcional: sem rótulo visível, use aria-label no grupo -->
+  <span class="otp-input__label" id="otp-label">Verification code</span>
+  <div class="otp-input__group" role="group" aria-labelledby="otp-label">
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      autocomplete="one-time-code"
+      aria-label="Character 1 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 2 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 3 of 6"
+    />
+    <span class="otp-input__separator" aria-hidden="true"></span>
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 4 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 5 of 6"
+    />
+    <input
+      class="otp-input__field"
+      type="text"
+      inputmode="numeric"
+      aria-label="Character 6 of 6"
+    />
+  </div>
+</div>
+```

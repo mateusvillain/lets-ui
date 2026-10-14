@@ -1,0 +1,477 @@
+---
+// Banco de prova do Code Block: variantes, numeração, cópia e realce de
+// sintaxe com highlight.js. As amostras ficam aqui no frontmatter e entram
+// com `set:text`, porque o Astro leria as chaves do JavaScript como expressões.
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+import hljs from 'highlight.js/lib/core';
+import xml from 'highlight.js/lib/languages/xml';
+
+hljs.registerLanguage('xml', xml);
+
+const BUTTON = `<lui-button
+  variant="primary"
+  size="lg"
+>
+  Save
+</lui-button>`;
+
+const HTML = `<!doctype html>
+<html lang="pt-BR">
+  <!-- Ação principal do formulário -->
+  <body>
+    <lui-button variant="primary" size="lg" disabled>
+      Salvar
+    </lui-button>
+    <a href="/ajuda" target="_blank">Ajuda</a>
+  </body>
+</html>`;
+
+const JS = `import hljs from 'highlight.js/lib/core';
+import { LuiCodeBlock } from '@lets-ui/components';
+
+// Registrado uma vez, vale para todos os blocos da página.
+LuiCodeBlock.highlighter = (code, language) =>
+  hljs.highlight(code, { language }).value;
+
+const MAX_RETRIES = 3;
+
+export async function load(url, retries = MAX_RETRIES) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok && retries > 0) return load(url, retries - 1);
+  return response.json();
+}
+
+class Cache extends Map {
+  get size() {
+    return super.size ?? null;
+  }
+}`;
+
+const TS = `type Variant = 'default' | 'snippet';
+
+interface CodeBlockProps {
+  variant?: Variant;
+  showLineNumbers: boolean;
+}
+
+export function render(props: CodeBlockProps): string {
+  return \`<lui-code-block variant="\${props.variant}">\`;
+}`;
+
+const CSS = `@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  #main > .card::after {
+    transition: none;
+  }
+}
+
+.card[data-state='open'] {
+  border-radius: 8px;
+  color: var(--lui-color-neutral-text-body);
+  padding: 12px 16px !important;
+}`;
+
+const SCSS = `@use '../utilities/functions' as *;
+
+$copy-room: fixed(40);
+
+.code-block {
+  &__copy {
+    top: fixed(8);
+  }
+}`;
+
+const JSON_SAMPLE = `{
+  "name": "@lets-ui/components",
+  "version": "1.11.0",
+  "private": false,
+  "dependencies": {
+    "lit": "^3.0.0"
+  },
+  "keywords": ["design-system", "web-components"],
+  "downloads": null
+}`;
+
+const BASH = `#!/usr/bin/env bash
+# Instala e gera o build de todos os pacotes
+set -euo pipefail
+
+VERSION="1.11.0"
+pnpm install --frozen-lockfile
+pnpm build && echo "Build $VERSION ok"`;
+
+const MARKDOWN = `# Code Block
+
+Mostra código com **cópia** e _realce_.
+
+- Veja a [documentação](https://lets-ui.com)
+- Use \`language\` para escolher a gramática`;
+
+const LONG = `curl -fsSL https://example.com/install.sh | bash -s -- --prefix=/usr/local --with-components --with-tokens --verbose --no-telemetry
+echo "Done"`;
+
+// Saída do highlight.js gerada no build, para a versão só com classe CSS.
+const CSS_ONLY = hljs.highlight(
+  '<lui-button variant="primary">\n  Save\n</lui-button>',
+  { language: 'html' }
+).value;
+---
+
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Block (temporário)</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: var(--lui-color-neutral-background-container);
+        color: var(--lui-color-neutral-text-body);
+        font-family: var(--lui-brand-typography-font-family-body);
+      }
+      h1,
+      h2 {
+        margin: 0 0 8px;
+      }
+      p:not(.code-block__label) {
+        margin: 0 0 12px;
+        max-width: 64ch;
+      }
+      section {
+        margin-block: 40px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+        gap: 16px;
+        align-items: start;
+      }
+      .controls {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-block: 12px;
+        background: var(--lui-color-neutral-background-container);
+      }
+      .narrow {
+        max-width: 280px;
+      }
+      code.mono {
+        font-family: ui-monospace, monospace;
+      }
+      #log {
+        min-height: 1.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Code Block</h1>
+    <p>
+      Banco de prova do <code class="mono">lui-code-block</code>. Os controles
+      abaixo trocam o tema e ligam ou desligam o highlighter registrado na
+      página: os blocos com <code class="mono">language</code> recolorem na
+      hora.
+    </p>
+
+    <div class="controls">
+      <lui-button id="toggle-theme" variant="secondary">Alternar tema</lui-button>
+      <lui-button id="toggle-highlight" variant="secondary"
+        >Desligar realce</lui-button
+      >
+    </div>
+
+    <section>
+      <h2>Protótipo do Figma</h2>
+      <p>As duas variantes, como no protótipo: sem realce.</p>
+      <div class="grid">
+        <lui-code-block
+          label="Component.jsx"
+          show-line-numbers
+          set:text={BUTTON}
+        />
+        <lui-code-block
+          variant="snippet"
+          label="bash"
+          set:text="npm install @lets-ui/styles @lets-ui/components"
+        />
+      </div>
+    </section>
+
+    <section>
+      <h2>Realce de sintaxe</h2>
+      <p>
+        Uma linguagem por bloco. Comentários ficam no cinza mais discreto; o
+        texto base sobe para o cinza de corpo.
+      </p>
+      <div class="grid">
+        <lui-code-block
+          label="index.html"
+          language="html"
+          show-line-numbers
+          set:text={HTML}
+        />
+        <lui-code-block
+          label="load.js"
+          language="javascript"
+          show-line-numbers
+          set:text={JS}
+        />
+        <lui-code-block
+          label="render.ts"
+          language="typescript"
+          show-line-numbers
+          set:text={TS}
+        />
+        <lui-code-block label="card.css" language="css" set:text={CSS} />
+        <lui-code-block
+          label="_code-block.scss"
+          language="scss"
+          set:text={SCSS}
+        />
+        <lui-code-block
+          label="package.json"
+          language="json"
+          set:text={JSON_SAMPLE}
+        />
+        <lui-code-block
+          label="build.sh"
+          language="bash"
+          show-line-numbers
+          set:text={BASH}
+        />
+        <lui-code-block
+          label="README.md"
+          language="markdown"
+          set:text={MARKDOWN}
+        />
+      </div>
+    </section>
+
+    <section>
+      <h2>Snippet com realce</h2>
+      <div class="grid">
+        <lui-code-block
+          variant="snippet"
+          label="bash"
+          language="bash"
+          set:text="pnpm add @lets-ui/components highlight.js"
+        />
+        <lui-code-block
+          variant="snippet"
+          label="html"
+          language="html"
+          set:text={'<lui-code-block language="css">.a { color: red; }</lui-code-block>'}
+        />
+      </div>
+    </section>
+
+    <section>
+      <h2>Uma linha</h2>
+      <p>
+        O botão de copiar fica centralizado com a linha, com e sem cabeçalho,
+        com e sem numeração.
+      </p>
+      <div class="grid">
+        <lui-code-block aria-label="Build command" set:text="npm run build" />
+        <lui-code-block
+          aria-label="Build command, highlighted"
+          language="bash"
+          set:text="npm run build"
+        />
+        <lui-code-block
+          label="start.sh"
+          language="bash"
+          set:text="pnpm storybook"
+        />
+        <lui-code-block
+          aria-label="Answer export"
+          show-line-numbers
+          language="javascript"
+          set:text="export const answer = 42;"
+        />
+      </div>
+    </section>
+
+    <section>
+      <h2>Linhas longas e largura estreita</h2>
+      <p>
+        A linha rola na horizontal; a numeração fica parada. Com o foco na
+        região (Tab), as setas rolam o código.
+      </p>
+      <div class="grid">
+        <lui-code-block
+          label="install.sh"
+          language="bash"
+          show-line-numbers
+          set:text={LONG}
+        />
+        <div class="narrow">
+          <lui-code-block
+            label="um-nome-de-arquivo-bem-comprido-que-precisa-quebrar.config.js"
+            language="javascript"
+            set:text="export default { components: true, tokens: true };"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Casos de borda</h2>
+      <div class="grid">
+        <div>
+          <p>Linguagem que o highlight.js não conhece: aparece sem cor.</p>
+          <lui-code-block
+            label="Main.cobol"
+            language="cobol"
+            set:text="DISPLAY 'HELLO, WORLD'."
+          />
+        </div>
+        <div>
+          <p>
+            Conteúdo em <code class="mono">&lt;script type="text/plain"&gt;</code>,
+            lido byte a byte.
+          </p>
+          <lui-code-block label="Inline.html" language="html">
+            <script type="text/plain" is:inline>
+              <lui-switch
+                checked
+                disabled
+              ></lui-switch>
+            </script>
+          </lui-code-block>
+        </div>
+        <div>
+          <p>Sem botão de copiar.</p>
+          <lui-code-block
+            label="Component.jsx"
+            language="html"
+            copy="false"
+            set:text={BUTTON}
+          />
+        </div>
+        <div>
+          <p>Rótulos do botão em português.</p>
+          <lui-code-block
+            label="pt-BR"
+            language="bash"
+            copy-label="Copiar código"
+            copied-label="Copiado!"
+            set:text="pnpm test"
+          />
+        </div>
+        <div>
+          <p>Sem ícone no cabeçalho.</p>
+          <lui-code-block
+            label="Component.jsx"
+            language="html"
+            show-icon="false"
+            set:text={BUTTON}
+          />
+        </div>
+        <div>
+          <p>Conteúdo alterado por script depois de renderizado.</p>
+          <lui-code-block
+            id="mutable"
+            label="counter.js"
+            language="javascript"
+            set:text="let count = 0;"
+          />
+          <lui-button id="mutate" variant="secondary" style="margin-top: 8px;"
+            >Incrementar</lui-button
+          >
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Só com classe CSS</h2>
+      <p>
+        Sem Web Component: a saída do highlight.js foi gerada no build e colada
+        dentro do <code class="mono">&lt;code&gt;</code>, com
+        <code class="mono">code-block--highlighted</code> no bloco.
+      </p>
+      <div class="grid">
+        <div class="code-block code-block--default code-block--highlighted">
+          <div class="code-block__header">
+            <p class="code-block__label">Component.html</p>
+          </div>
+          <div class="code-block__body">
+            <span
+              class="code-block__lines"
+              aria-hidden="true"
+              set:text={'1\n2\n3'}
+            />
+            <pre
+              class="code-block__pre"
+              role="region"
+              aria-label="Code snippet"><code set:html={CSS_ONLY} /></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Evento lui-copy</h2>
+      <p id="log">Copie qualquer bloco.</p>
+    </section>
+
+    <script>
+      import '@lets-ui/components';
+      import { LuiCodeBlock } from '@lets-ui/components';
+      import hljs from 'highlight.js/lib/core';
+      import bash from 'highlight.js/lib/languages/bash';
+      import css from 'highlight.js/lib/languages/css';
+      import javascript from 'highlight.js/lib/languages/javascript';
+      import json from 'highlight.js/lib/languages/json';
+      import markdown from 'highlight.js/lib/languages/markdown';
+      import scss from 'highlight.js/lib/languages/scss';
+      import typescript from 'highlight.js/lib/languages/typescript';
+      import xml from 'highlight.js/lib/languages/xml';
+
+      hljs.registerLanguage('bash', bash);
+      hljs.registerLanguage('css', css);
+      hljs.registerLanguage('javascript', javascript);
+      hljs.registerLanguage('json', json);
+      hljs.registerLanguage('markdown', markdown);
+      hljs.registerLanguage('scss', scss);
+      hljs.registerLanguage('typescript', typescript);
+      hljs.registerLanguage('xml', xml);
+
+      const highlighter = (code: string, language: string) =>
+        hljs.getLanguage(language)
+          ? hljs.highlight(code, { language }).value
+          : null;
+      LuiCodeBlock.highlighter = highlighter;
+
+      const root = document.documentElement;
+      document.querySelector('#toggle-theme')?.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      });
+
+      const toggle = document.querySelector('#toggle-highlight');
+      toggle?.addEventListener('click', () => {
+        const on = LuiCodeBlock.highlighter !== null;
+        LuiCodeBlock.highlighter = on ? null : highlighter;
+        toggle.textContent = on ? 'Ligar realce' : 'Desligar realce';
+      });
+
+      let count = 0;
+      document.querySelector('#mutate')?.addEventListener('click', () => {
+        count += 1;
+        const block = document.querySelector('#mutable');
+        if (block) block.textContent = `let count = ${count};\n// clicado ${count}x`;
+      });
+
+      const log = document.querySelector('#log');
+      document.addEventListener('lui-copy', (event) => {
+        const { code } = (event as CustomEvent<{ code: string }>).detail;
+        if (log) log.textContent = `lui-copy: ${code.split('\n').length} linha(s), ${code.length} caracteres`;
+      });
+    </script>
+  </body>
+</html>

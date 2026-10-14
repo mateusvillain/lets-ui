@@ -1,0 +1,276 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+$code-font: font(code);
+
+// The copy button is 40px and sits 8px in from the edge; the body pads 12px.
+// The code reserves the difference on its right so a short line never runs
+// under the button.
+$copy-room: fixed(40);
+
+@mixin code-text {
+  @include font-scale(body--md);
+
+  font-family: $code-font;
+  color: text(caption);
+}
+
+.code-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: bg(surface, neutral);
+  border: width(1) solid stroke(neutral, subtle);
+  border-radius: radius(md);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: fluid(8);
+    padding: fluid(8) fluid(12);
+    border-bottom: width(1) solid stroke(neutral, subtle);
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: icon(neutral);
+
+    svg,
+    ::slotted(*) {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__label {
+    flex: 1 0 0;
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+
+    @include font-scale(body--md);
+
+    color: text(body);
+  }
+
+  &__body {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: fluid(16);
+    padding: fluid(12);
+  }
+
+  &__lines {
+    flex-shrink: 0;
+    text-align: right;
+    white-space: pre;
+
+    @include code-text;
+    @include no-select;
+  }
+
+  &__pre {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre;
+    tab-size: 2;
+
+    @include code-text;
+    @include focus-ring(neutral);
+
+    // The reset gives every `code` and `span` the body font. Highlighted code
+    // is a tree of spans, so the whole tree has to take the font back.
+    code,
+    code * {
+      font: inherit;
+    }
+
+    code {
+      color: inherit;
+    }
+  }
+
+  &--copy &__pre {
+    padding-inline-end: $copy-room;
+  }
+
+  // The copy button wears the tooltip classes, which set `position: relative`
+  // and, in the global bundle, come after this file. Nesting under the block
+  // outranks them whatever the import order.
+  & &__copy {
+    position: absolute;
+    top: fixed(8);
+    right: fixed(8);
+  }
+
+  // The button sits at the right edge, so a tooltip centred under it would
+  // spill past the block — off-screen on a phone. It hangs from the button's
+  // right edge instead, with the arrow kept under the icon.
+  & &__copy .tooltip__content {
+    left: auto;
+    right: fixed(0);
+    transform: translateY(calc(fixed(8) * -1));
+  }
+
+  & &__copy .tooltip__content::after {
+    left: auto;
+    right: calc(fixed(40) / 2);
+    transform: translateX(50%);
+  }
+
+  // WCAG 1.4.13 asks that the pointer can move onto the tooltip without it
+  // vanishing, and that Escape can put it away. The bridge spans the gap
+  // between button and tooltip, so crossing it does not count as leaving.
+  & &__copy:hover .tooltip__content,
+  & &__copy:focus-within .tooltip__content {
+    transform: none;
+    pointer-events: auto;
+  }
+
+  & &__copy .tooltip__content::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: fixed(8);
+  }
+
+  & &__copy#{&}__copy--dismissed .tooltip__content {
+    opacity: opacity(hidden);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  // One line of code is shorter than the button and its 8px inset, so the body
+  // grows to hold both and centres them. Without this the button hangs past
+  // the bottom edge and sits off the line it belongs to.
+  &--copy#{&}--single-line &__body {
+    align-items: center;
+    min-height: calc(fixed(40) + fixed(16));
+    padding-block: fixed(0);
+  }
+
+  &--copy#{&}--single-line &__copy {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Syntax colours, keyed to the class names highlight.js writes. Uncoloured
+  // code stays in the caption grey of the design; once it is highlighted the
+  // base text steps up to body so comments, in caption grey, read as the
+  // quieter layer. Each colour clears 4.5:1 on the surface in both themes —
+  // the primitive scales flip in dark mode, so one step serves both.
+  &--highlighted &__pre {
+    color: text(body);
+
+    .hljs-comment,
+    .hljs-quote {
+      color: text(caption);
+    }
+
+    .hljs-keyword,
+    .hljs-meta,
+    .hljs-doctag {
+      color: color(red, 4);
+    }
+
+    .hljs-string,
+    .hljs-regexp {
+      color: color(blue, 7);
+    }
+
+    .hljs-number,
+    .hljs-literal,
+    .hljs-symbol {
+      color: color(blue, 6);
+    }
+
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id,
+    .hljs-selector-class,
+    .hljs-selector-attr,
+    .hljs-selector-pseudo {
+      color: color(violet, 5);
+    }
+
+    .hljs-name,
+    .hljs-selector-tag {
+      color: color(green, 5);
+    }
+
+    .hljs-attr,
+    .hljs-attribute,
+    .hljs-property,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-built_in {
+      color: color(orange, 5);
+    }
+
+    // Inside a meta line (a doctype, a shebang) a string keeps its own colour.
+    .hljs-meta .hljs-string {
+      color: color(blue, 7);
+    }
+
+    .hljs-emphasis {
+      font-style: italic;
+    }
+
+    .hljs-strong {
+      font-weight: weight(bold);
+    }
+
+    .hljs-link {
+      text-decoration: decoration(underline);
+    }
+  }
+
+  &__status {
+    @include sr-only;
+  }
+
+  // The snippet trades the file header for a short label above the code: no
+  // divider, and the copy button aligns to the block rather than the body.
+  &--snippet &__header {
+    padding: fluid(12) fluid(12) fluid(2);
+    border-bottom: none;
+  }
+
+  // In a labelled snippet the button hangs over the header, so a long label
+  // stops short of it instead of running underneath.
+  &--snippet#{&}--copy &__header {
+    padding-inline-end: calc(fixed(40) + fixed(16));
+  }
+
+  &--snippet &__label {
+    @include code-text;
+  }
+
+  &--snippet &__body {
+    position: static;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__copy .tooltip__content {
+      transition: none;
+    }
+  }
+
+  // Forced colours drop box-shadow, which is all the focus ring is. An outline
+  // in a system colour takes its place.
+  @media (forced-colors: active) {
+    &__pre:focus-visible,
+    &__copy lui-icon-button:focus-within {
+      outline: width(2) solid Highlight;
+      outline-offset: width(2);
+    }
+  }
+}
