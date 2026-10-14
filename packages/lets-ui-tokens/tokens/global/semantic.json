@@ -121,12 +121,6 @@
           "$type": "color",
           "default": {
             "$value": "{lui.color.red.4}"
-          },
-          "hover": {
-            "$value": "{lui.color.red.5}"
-          },
-          "pressed": {
-            "$value": "{lui.color.red.6}"
           }
         },
         "text": {
@@ -191,12 +185,6 @@
           },
           "default": {
             "$value": "{lui.color.gray.4}"
-          },
-          "hover": {
-            "$value": "{lui.color.gray.4}"
-          },
-          "pressed": {
-            "$value": "{lui.color.gray.5}"
           }
         },
         "text": {
