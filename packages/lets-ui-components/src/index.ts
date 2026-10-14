@@ -40,6 +40,7 @@ import { LuiIconButton } from './components/icon-button/icon-button.js';
 import { LuiInput } from './components/input/input.js';
 import { LuiLink } from './components/link/link.js';
 import { LuiModal } from './components/modal/modal.js';
+import { LuiOtpInput } from './components/otp-input/otp-input.js';
 import { LuiPagination } from './components/pagination/pagination.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
@@ -99,6 +100,7 @@ define('lui-icon-button', LuiIconButton);
 define('lui-input', LuiInput);
 define('lui-link', LuiLink);
 define('lui-modal', LuiModal);
+define('lui-otp-input', LuiOtpInput);
 define('lui-pagination', LuiPagination);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
@@ -154,6 +156,7 @@ export {
   LuiInput,
   LuiLink,
   LuiModal,
+  LuiOtpInput,
   LuiPagination,
   LuiNativeSelect,
   LuiSelect,
