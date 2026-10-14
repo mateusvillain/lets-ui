@@ -27,6 +27,14 @@ export default defineConfig({
         },
       },
       {
+        // Same arrangement as the Brand Studio: outside the workspace, pure lib.
+        test: {
+          name: 'state-calculator',
+          environment: 'node',
+          include: ['apps/state-calculator/src/lib/**/*.test.js'],
+        },
+      },
+      {
         // Web Components behave through the real DOM — shadow roots, focus,
         // computed styles — so they run in a browser rather than a simulated
         // one. The components' own Vite config supplies the Sass load paths

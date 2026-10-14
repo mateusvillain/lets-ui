@@ -28,10 +28,19 @@ $state-amounts: (
   pressed: 16%,
 );
 
-// state-amount($state)
+// The same tint applied to a border instead of a background. A 1px line moves
+// far less visibly than a filled area, so it needs far more of the tint: 8%
+// took the subtle field border from 1.17:1 to 1.35:1 against the surface, which
+// reads as nothing. 40% lands near 2.6:1 in light and 3.8:1 in dark.
+$state-border-amounts: (
+  hover: 40%,
+  pressed: 56%,
+);
+
+// state-amount($state, $amounts)
 //  $state = hover, pressed
-@function state-amount($state) {
-  $value: map.get($state-amounts, $state);
+@function state-amount($state, $amounts: $state-amounts) {
+  $value: map.get($amounts, $state);
 
   @if not $value {
     @error 'Invalid interaction state: "#{$state}"';
@@ -53,6 +62,21 @@ $state-amounts: (
 // image once per style change, never per animation frame, so Safari would jump.
 @function state($state, $bg: var(--lui-bg, transparent)) {
   @return color-mix(in srgb, #{$state-tint} #{state-amount($state)}, #{$bg});
+}
+
+// state-border($state, $border)
+//  $state = hover, pressed
+// The border a component takes on in that state: the same content-colour tint
+// as `state()`, mixed into its resting border. The content colour is the
+// opposite of the surface the border sits on, so the line always gains contrast
+// against it — darker in light themes, lighter in dark ones — with no per-state
+// token to pick.
+@function state-border($state, $border: var(--lui-border, transparent)) {
+  @return color-mix(
+    in srgb,
+    #{$state-tint} #{state-amount($state, $state-border-amounts)},
+    #{$border}
+  );
 }
 
 // focus-ring($variant)
