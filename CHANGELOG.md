@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.12.0
+
+### Added
+
+- New `lui-status` Web Component and CSS-only `.status` styles for showing a state, with an optional label and description.
+  - `variant` is `success`, `caution`, `danger` or `info` (a 20px icon, or an 8px dot with `dot`), or `online`, `away`, `busy` or `offline` (a 16px dot with the Avatar's shapes inside).
+  - `size` (`md`, `lg`) sets the label size, and `pulse` adds an animated ring that stays still under `prefers-reduced-motion`.
+  - Without a `label`, screen readers hear the variant name. `hide-label` keeps the label for screen readers only.
+- New `lui-stepper` and `lui-step` Web Components and CSS-only `.stepper` styles for showing progress through a flow split into steps.
+  - `current-step`, `orientation` (`horizontal`, `vertical`) and `label-placement` (`end`, `bottom`). `linear` only lets the user go back to completed steps.
+  - `lui-step-change` fires with `{ step, previous }` before the step changes, and cancelling it keeps the current step. A horizontal stepper that does not fit its container switches to vertical.
+  - Each step is a native button whose name starts with its position ("Step 2 of 4"), and a live region announces every change of step.
+- New `lui-otp-input` Web Component and CSS-only `.otp-input` styles for one-time passwords and verification codes, with one box per character.
+  - `length`, `type` (`text`, `number`), `separator`, `hint`, `error` and `show-label`.
+  - Typing moves to the next box, and a pasted code fills every box. `lui-complete` fires once the code is complete.
+  - It is one Tab stop and offers `autocomplete="one-time-code"`. It is form-associated, and both `required` and a partly filled code block submission.
+- New `lui-code-block` Web Component and CSS-only `.code-block` styles for code snippets, in `default` and `snippet` variants.
+  - `show-line-numbers`, and a copy button with a tooltip that emits `lui-copy` (or `lui-copy-error` when the clipboard is refused).
+  - Optional syntax highlighting through `LuiCodeBlock.highlighter` and `language`. The package ships no parser.
+  - New brand token `lui.brand.typography.font-family.code`, read through `font(code)` and editable in Brand Studio.
+- New `lui-skeleton` Web Component and CSS-only `.skeleton` styles that hold the place of content while it loads. `shape` is `text`, `circle` or `rectangle`, with `width` and `height`. The shimmer stops under `prefers-reduced-motion`. A skeleton is decorative unless it has a `label`, which makes it `role="status"`.
+- **State Calculator** (`apps/state-calculator`), which shows the hover and pressed colours the state layer derives from a colour pair. It is a standalone app, and no published package changes.
+
+### Changed
+
+- The hover border of fields now comes from the content colour instead of a stroke token, the same model the Button uses for its background. On hover, Input, Select and Textarea mix 40% of the content colour into their resting border. Unchecked Checkbox, Radio and Switch do the same on hover, and mix 56% on press. Fields in an error state now react to hover too.
+- The Avatar's status dot now uses the colours and shapes of Status's social statuses. Its API and appearance are unchanged.
+
+### Removed
+
+- The unused `lui.color.black.alpha.1`–`8` tokens, left over from the old fixed-tint interaction model.
+- The `danger` and `neutral` `border.hover` and `border.pressed` tokens. The new `state-border()` function replaces them.
+
 ## v1.11.0
 
 ### Added
