@@ -1,0 +1,88 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SkeletonStories from './Skeleton.stories';
+
+<Meta of={SkeletonStories} />
+
+# Skeleton
+
+O Skeleton ocupa o lugar do conteúdo enquanto ele carrega. A forma segue o layout final, então a página não salta quando os dados chegam e a espera parece mais curta.
+
+Use no lugar de um spinner quando o formato do que vai aparecer já é conhecido: uma linha de texto, um avatar, uma capa, um item de lista. Não use quando não há dados para mostrar — isso é Empty State — nem para um erro.
+
+Cada osso é decorativo. Quem anuncia o carregamento é a região que será substituída (`role="status"`, `aria-busy="true"` e um `aria-label`). Passe `label` só quando um único Skeleton representa essa região sozinho.
+
+<Canvas of={SkeletonStories.Skeleton} />
+<Controls of={SkeletonStories.Skeleton} />
+
+## Text
+
+Use para parágrafos, títulos e metadados. A altura acompanha o tamanho da fonte do contexto (`1em`); a largura padrão preenche a linha. Encurte as últimas linhas com `width` para sugerir texto de verdade.
+
+<Canvas of={SkeletonStories.Text} />
+
+## Circle
+
+Use no lugar de um avatar ou de qualquer marca redonda. Sem medida, o círculo tem 40px, o mesmo tamanho do avatar grande. Se só um lado for informado, o outro acompanha e o círculo continua quadrado.
+
+<Canvas of={SkeletonStories.Circle} />
+
+## Rectangle
+
+Use para capas, mapas, gráficos e qualquer bloco que não seja uma linha de texto. A altura padrão é o maior passo fluido da escala; passe `height` quando o bloco final for mais alto.
+
+<Canvas of={SkeletonStories.Rectangle} />
+
+## Cartão
+
+Use várias formas juntas para antecipar um cartão: capa retangular e linhas de texto com larguras diferentes. A região inteira anuncia o carregamento uma vez.
+
+<Canvas of={SkeletonStories.Card} />
+
+## Item de lista
+
+Use a mesma composição repetida quando a lista ainda não chegou. O círculo fica no lugar do avatar e as duas linhas no lugar do nome e do detalhe.
+
+<Canvas of={SkeletonStories.ListItem} />
+
+## Perfil
+
+Use quando o cabeçalho de um perfil carrega antes do restante da página.
+
+<Canvas of={SkeletonStories.Profile} />
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={SkeletonStories.CSSClass} />
+
+## Acessibilidade
+
+- Sem `label`, o componente sai da árvore de acessibilidade (`aria-hidden="true"`). Vários ossos dentro de um layout não são lidos um a um.
+- Com `label`, ele vira `role="status"` e o nome acessível é lido uma vez.
+- A região que será trocada pelo conteúdo real deve ter `aria-busy="true"` enquanto os Skeletons estão visíveis, e perder o atributo quando o conteúdo entrar.
+- Com `prefers-reduced-motion: reduce`, o brilho para e resta só a forma estática.
+- Em `forced-colors`, a forma ganha um contorno do sistema para continuar visível.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-skeleton></lui-skeleton>
+<lui-skeleton width="64%"></lui-skeleton>
+<lui-skeleton shape="circle"></lui-skeleton>
+<lui-skeleton shape="rectangle" height="10rem"></lui-skeleton>
+
+<div role="status" aria-busy="true" aria-label="Carregando perfil">
+  <lui-skeleton shape="circle"></lui-skeleton>
+  <lui-skeleton width="48%"></lui-skeleton>
+</div>
+```
+
+### Classe CSS
+
+```html
+<span class="skeleton"></span>
+<span class="skeleton" style="--lui-skeleton-width: 64%"></span>
+<span class="skeleton skeleton--circle"></span>
+<span class="skeleton skeleton--rectangle"></span>
+```

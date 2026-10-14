@@ -1,0 +1,81 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+
+// A text line is 1em tall so it matches the font it stands in for. That
+// proportion is the same in every brand and theme, so it is not a token.
+// The sheen is a fixed fraction of white, for the same reason as the
+// interaction amounts: no token is "a little lighter than gray-2" in every
+// theme. It stays narrow and slow so the shape reads as a quiet placeholder.
+.skeleton {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  overflow: hidden;
+  inline-size: var(--lui-skeleton-width, 100%);
+  block-size: var(--lui-skeleton-height, 1em);
+  background-color: color(gray, 2);
+  border-radius: radius(md);
+
+  @include no-select;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 42%,
+      color-mix(in srgb, rgb(255 255 255) 22%, transparent) 50%,
+      transparent 58%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      content: none;
+      animation: none;
+    }
+  }
+
+  // A forced-colors theme repaints the background, which is the whole shape.
+  @media (forced-colors: active) {
+    border: width(1) solid CanvasText;
+    background: Canvas;
+
+    &::after {
+      content: none;
+    }
+  }
+
+  &--circle {
+    flex-shrink: 0;
+    aspect-ratio: 1;
+    inline-size: var(
+      --lui-skeleton-width,
+      var(--lui-skeleton-height, #{fixed(40)})
+    );
+
+    // auto lets aspect-ratio square a percentage width. A percentage height
+    // cannot resolve against a fit-content host, which is what collapsed the
+    // circle in the Storybook control.
+    block-size: var(--lui-skeleton-height, auto);
+    border-radius: radius(circle);
+  }
+
+  &--rectangle {
+    inline-size: var(--lui-skeleton-width, 100%);
+    block-size: var(--lui-skeleton-height, #{fluid(80)});
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
