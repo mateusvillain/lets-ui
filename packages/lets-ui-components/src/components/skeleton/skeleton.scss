@@ -1,0 +1,24 @@
+@use 'packages/styles/src/components/skeleton' as *;
+@use 'packages/styles/src/utilities/functions' as fn;
+
+:host {
+  display: block;
+  max-inline-size: 100%;
+}
+
+:host([shape='circle']) {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  aspect-ratio: 1;
+  inline-size: var(
+    --lui-skeleton-width,
+    var(--lui-skeleton-height, #{fn.fixed(40)})
+  );
+  block-size: var(--lui-skeleton-height, auto);
+}
+
+:host([shape='circle']) .skeleton {
+  inline-size: 100%;
+  block-size: 100%;
+}

@@ -44,6 +44,7 @@ import { LuiOtpInput } from './components/otp-input/otp-input.js';
 import { LuiPagination } from './components/pagination/pagination.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
+import { LuiSkeleton } from './components/skeleton/skeleton.js';
 import { LuiStatus } from './components/status/status.js';
 import { LuiStepper } from './components/stepper/stepper.js';
 import { LuiStep } from './components/stepper/step.js';
@@ -107,6 +108,7 @@ define('lui-pagination', LuiPagination);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
 define('lui-shortcut', LuiShortcut);
+define('lui-skeleton', LuiSkeleton);
 define('lui-status', LuiStatus);
 define('lui-stepper', LuiStepper);
 define('lui-step', LuiStep);
@@ -165,6 +167,7 @@ export {
   LuiNativeSelect,
   LuiSelect,
   LuiShortcut,
+  LuiSkeleton,
   LuiStatus,
   LuiStepper,
   LuiStep,
