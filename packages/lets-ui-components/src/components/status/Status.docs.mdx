@@ -1,0 +1,131 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as StatusStories from './Status.stories';
+
+<Meta of={StatusStories} />
+
+# Status
+
+Indicador pequeno do estado de um sistema, de uma pessoa ou de um item: um ícone ou um ponto colorido, com um rótulo e uma descrição opcionais.
+
+<Canvas of={StatusStories.Default} />
+<Controls of={StatusStories.Default} />
+
+## Quando usar
+
+Use o Status para mostrar um estado que alguém confere de relance: o resultado de uma operação numa lista, a saúde de um serviço numa tabela, a disponibilidade de uma pessoa.
+
+- Para uma mensagem que pede leitura ou ação, use o [Alert](?path=/docs/content-alert--docs). O Status só nomeia o estado.
+- Para uma etiqueta que classifica um item, use a [Tag](?path=/docs/content-tag--docs).
+- O Status não é interativo e não avisa quando muda. Se o estado muda na tela e a mudança precisa ser anunciada, coloque o Status dentro de uma região com `aria-live`.
+
+## Feedback
+
+`success`, `caution`, `danger` e `info` usam as cores semânticas do sistema. Por padrão mostram um ícone de 20px. Com `dot`, mostram um ponto de 8px, mais discreto, bom para listas e tabelas com muitas linhas.
+
+<Canvas of={StatusStories.Feedback} />
+
+## Social
+
+`online`, `away`, `busy` e `offline` são os status de presença de uma pessoa, os mesmos que o [Avatar](?path=/docs/content-avatar--docs) desenha no canto. O ponto mede 16px e tem uma forma própria além da cor, para que quem não distingue as cores ainda distinga os estados: `online` fica cheio, `away` mostra ponteiros de relógio, `busy` uma barra e `offline` um centro vazio.
+
+<Canvas of={StatusStories.Social} />
+
+### No Avatar
+
+O Avatar usa estes mesmos status pelo atributo `status`. As cores e as formas vêm do Status, então os dois nunca ficam diferentes. No Avatar o ponto ganha um anel na cor da superfície, que o separa da foto.
+
+<Canvas of={StatusStories.WithAvatar} />
+
+## Rótulo e descrição
+
+`label` é o texto do status e `description` uma segunda linha, em cor de legenda. O indicador fica centralizado nas letras maiúsculas da primeira linha do rótulo, e não no meio da caixa da linha: o texto não fica no centro da própria linha, e um indicador centralizado na caixa parece baixo demais.
+
+<Canvas of={StatusStories.WithDescription} />
+
+### Tamanhos
+
+`size` muda só o tamanho do rótulo: `md` (padrão) ou `lg`. A descrição, o ícone e os pontos mantêm o tamanho. O indicador continua centralizado nas maiúsculas da primeira linha nos dois tamanhos, e também quando o rótulo quebra em mais de uma linha.
+
+<Canvas of={StatusStories.Sizes} />
+
+Escreva o rótulo de forma que ele diga o estado sozinho ("Pagamento aprovado", "Em reunião"): o indicador fica fora da árvore de acessibilidade, e o rótulo é o que o leitor de tela anuncia.
+
+## Só o indicador
+
+Sem `label`, o Status mostra só o indicador e entrega ao leitor de tela o nome da variante, em inglês: "Success", "Caution", "Danger", "Info", "Online", "Away", "Busy" ou "Offline".
+
+<Canvas of={StatusStories.IndicatorOnly} />
+
+Para outro texto sem mostrá-lo, passe `label` com `hide-label`. O rótulo continua para o leitor de tela e sai da tela.
+
+<Canvas of={StatusStories.HiddenLabel} />
+
+## Pulso
+
+`pulse` faz um anel na cor do status crescer e sumir em volta do indicador. Use para um estado ao vivo: uma gravação, uma chamada, um serviço voltando. Com `prefers-reduced-motion: reduce`, o anel fica parado, como um halo, e a ênfase se mantém sem movimento.
+
+<Canvas of={StatusStories.Pulse} />
+
+Use o pulso com moderação: vários indicadores pulsando na mesma tela competem entre si e cansam.
+
+## Em tabela
+
+<Canvas of={StatusStories.InTable} />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a marcação fica a cargo de quem usa. O indicador leva `aria-hidden="true"`. Os ícones de feedback não fazem parte da folha de estilo: sem o Web Component, use o ponto (`status__dot`), ou traga o seu SVG com a classe `status__icon`. Um status sem rótulo visível precisa de um `status__label status__label--hidden` com o texto.
+
+<Canvas of={StatusStories.CSSClass} />
+
+## Propriedades
+
+| Atributo      | Tipo      | Padrão    | Descrição                                                                                       |
+| ------------- | --------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `variant`     | `string`  | `success` | `success`, `caution`, `danger`, `info`, `online`, `away`, `busy` ou `offline`.                  |
+| `label`       | `string`  | `''`      | Texto do status. Se omitido, o leitor de tela recebe o nome da variante e nada aparece na tela. |
+| `description` | `string`  | `''`      | Segunda linha, em cor de legenda.                                                               |
+| `size`        | `string`  | `md`      | Tamanho do rótulo: `md` ou `lg`. A descrição e o indicador não mudam.                           |
+| `dot`         | `boolean` | `false`   | Troca o ícone de feedback por um ponto de 8px. Os status sociais são sempre um ponto.           |
+| `pulse`       | `boolean` | `false`   | Anima um anel em volta do indicador. Parado com `prefers-reduced-motion`.                       |
+| `hide-label`  | `boolean` | `false`   | Tira o `label` da tela e o mantém para o leitor de tela.                                        |
+
+## Acessibilidade
+
+- O Status não tem comportamento, então não entra na ordem de foco e não responde a teclado.
+- O indicador (ícone ou ponto) leva `aria-hidden="true"`. O estado chega ao leitor de tela pelo texto: o `label`, ou o nome da variante quando não há `label`.
+- O estado não depende só da cor: os ícones de feedback têm formas diferentes, e os pontos sociais têm uma forma dentro. Os pontos de feedback (`dot`) se distinguem só pela cor, então ponha o rótulo visível quando eles carregarem a informação.
+- O Status não é `role="status"`. Esse papel é de uma região viva, que anuncia cada mudança, e um indicador estático numa tabela anunciaria ruído. Para anunciar uma mudança, envolva-o numa região com `aria-live="polite"`.
+- Em modo de alto contraste (`forced-colors`), o indicador mantém as cores, porque a cor é a informação.
+- O pulso respeita `prefers-reduced-motion`.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-status variant="success" label="Pagamento aprovado"></lui-status>
+
+<lui-status
+  variant="danger"
+  dot
+  label="Sincronização falhou"
+  description="Há 5 minutos"
+></lui-status>
+
+<lui-status variant="online" pulse label="Ao vivo"></lui-status>
+```
+
+### Classe CSS
+
+```html
+<span class="status status--success status--lg">
+  <span class="status__indicator" aria-hidden="true">
+    <span class="status__dot"></span>
+  </span>
+  <span class="status__text">
+    <span class="status__label">Pagamento aprovado</span>
+    <span class="status__description">Há 2 minutos</span>
+  </span>
+</span>
+```

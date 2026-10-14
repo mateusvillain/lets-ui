@@ -1,0 +1,221 @@
+@use 'sass:map';
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+@use 'status-social';
+
+// Without the Web Component the markup is yours to write. The indicator is
+// presentational — keep `aria-hidden="true"` on it — and the label is the text
+// that says the status. A status with no visible label still needs one: give it
+// `status__label--hidden` so only assistive technology reads it.
+
+// The feedback statuses come in two strengths: a 20px icon, the default, and a
+// quieter 8px dot. The dot takes the 3 step of the hue, the icon the semantic
+// icon colour.
+$feedback: (
+  success: (
+    dot: color(green, 3),
+    icon: icon(success),
+  ),
+  caution: (
+    dot: color(orange, 3),
+    icon: icon(caution),
+  ),
+  danger: (
+    dot: color(red, 3),
+    icon: icon(danger),
+  ),
+  info: (
+    dot: color(blue, 3),
+    icon: icon(info),
+  ),
+);
+
+// The icon is 20px, the feedback dot 8px and the social dot 16px. Fixed values,
+// not tokens: they are the same in every brand and theme, and no step of the
+// spacing scale matches 20.
+$indicator-size: 20px;
+$dot-size: 8px;
+$social-dot-size: 16px;
+
+// The label comes in two sizes; the description stays at `md`. Each carries the
+// font size of its scale, which the indicator needs to work out its height.
+$label-sizes: (
+  md: (
+    scale: body--md,
+    font-size: size(2xs),
+  ),
+  lg: (
+    scale: body--lg,
+    font-size: size(1xs),
+  ),
+);
+$label-size: var(
+  --lui-status-label-size,
+  #{map.get($label-sizes, md, font-size)}
+);
+
+// The pulse ring grows to 2.5× the mark it surrounds and fades out. Constants
+// of the animation, not design values.
+$pulse-duration: 2s;
+$pulse-spread: 0.75;
+$pulse-opacity: 60%;
+$pulse-halo-opacity: 30%;
+
+// The icon or the dot, centred on the capitals of the label's first line. The
+// indicator has the label's font and line-height, so its baseline lands where
+// the label's does, and the mark's centre rises half the cap height above it.
+// A box centred on the line misses: the text does not sit in the middle of its
+// line, and where it does sit depends on the font and on how the browser rounds
+// the baseline at each size.
+// Negative margins of half the mark fold its margin box to a point at its
+// centre. That point is what `vertical-align` places, and it adds no height to
+// the line, so a mark taller than the room above the baseline cannot push the
+// line, and the baseline with it, down.
+@mixin mark($size) {
+  // `cap` goes through a custom property because the minifier cannot parse it
+  // inside `calc()`. Unregistered, it still resolves against this element's
+  // font, which it inherits from the indicator.
+  --lui-status-cap: 1cap;
+  --lui-status-mark: #{$size};
+
+  display: inline-block;
+  inline-size: var(--lui-status-mark);
+  block-size: var(--lui-status-mark);
+  margin-block: calc(var(--lui-status-mark) / -2);
+  vertical-align: calc(var(--lui-status-cap) / 2);
+}
+
+.status {
+  display: inline-flex;
+  gap: fluid(8);
+  align-items: flex-start;
+  color: text(body);
+}
+
+// One line of the label's text, empty but for the mark: the font and the
+// line-height are the label's so the baseline lands where the label's does.
+.status__indicator {
+  display: block;
+  flex-shrink: 0;
+  inline-size: $indicator-size;
+  block-size: calc(#{$label-size} * #{line-height(body)});
+  font-family: font(body);
+  font-size: $label-size;
+  line-height: line-height(body);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.status__icon {
+  color: var(--lui-status-icon);
+  fill: currentcolor;
+
+  @include mark($indicator-size);
+
+  // The colour is the information, so a forced-colors theme must not repaint it.
+  forced-color-adjust: none;
+}
+
+.status__dot {
+  position: relative;
+  box-sizing: border-box;
+  background-color: var(--lui-status-color);
+  border-radius: radius(circle);
+
+  @include mark(var(--lui-status-dot-size, #{$dot-size}));
+
+  forced-color-adjust: none;
+}
+
+.status__text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+
+  @include font-scale(body--md);
+}
+
+.status__description {
+  color: text(caption);
+}
+
+@each $name, $value in $label-sizes {
+  .status--#{$name} {
+    --lui-status-label-size: #{map.get($value, font-size)};
+
+    .status__label {
+      @include font-scale(map.get($value, scale));
+    }
+  }
+}
+
+.status__label--hidden {
+  @include sr-only;
+}
+
+@each $name, $value in $feedback {
+  .status--#{$name} {
+    --lui-status-color: #{map.get($value, dot)};
+    --lui-status-icon: #{map.get($value, icon)};
+  }
+}
+
+// The social dot is the one the Avatar draws in its corner, at 16px and with
+// the ring painted in its own colour so it reads as one solid disc.
+@each $name in map.keys(status-social.$colors) {
+  .status--#{$name} {
+    --lui-status-color: #{status-social.color-of($name)};
+    --lui-status-dot-size: #{$social-dot-size};
+
+    .status__dot {
+      @include status-social.dot;
+      @include status-social.marker($name);
+    }
+  }
+}
+
+// A ring in the status colour that grows out of the mark and fades, for a
+// state that is live — a call in progress, a service coming back up. It is the
+// mark's own shadow, so it stays concentric with it wherever the mark sits.
+.status--pulse :is(.status__icon, .status__dot) {
+  border-radius: radius(circle);
+  animation: lui-status-pulse $pulse-duration ease-out infinite;
+
+  // Without motion the ring stays put, a halo at rest, so the emphasis is
+  // still there.
+  @media (prefers-reduced-motion: reduce) {
+    --lui-status-halo: color-mix(
+      in srgb,
+      var(--lui-status-color) #{$pulse-halo-opacity},
+      transparent
+    );
+
+    box-shadow: 0 0 0 calc(var(--lui-status-mark) * #{$pulse-spread} / 2)
+      var(--lui-status-halo);
+    animation: none;
+  }
+}
+
+// The icon does not fill its box the way a dot does, so the halo also fills
+// the box behind it — an inset shadow paints under the icon's content — or it
+// would read as a ring with a gap.
+.status--pulse .status__icon {
+  @media (prefers-reduced-motion: reduce) {
+    box-shadow:
+      0 0 0 calc(var(--lui-status-mark) * #{$pulse-spread} / 2)
+        var(--lui-status-halo),
+      inset 0 0 0 var(--lui-status-mark) var(--lui-status-halo);
+  }
+}
+
+@keyframes lui-status-pulse {
+  from {
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--lui-status-color) #{$pulse-opacity}, transparent);
+  }
+
+  to {
+    box-shadow: 0 0 0 calc(var(--lui-status-mark) * #{$pulse-spread})
+      color-mix(in srgb, var(--lui-status-color) 0%, transparent);
+  }
+}
