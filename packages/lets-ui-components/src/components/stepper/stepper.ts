@@ -3,6 +3,15 @@ import { property, state } from 'lit/decorators.js';
 import styles from './stepper.scss?inline';
 import type { LuiStep, StepStatus } from './step.js';
 
+// The English defaults of the text props. A removed attribute sets its property
+// to null, so the stepper reads each one through `||` against these.
+const DEFAULTS = {
+  label: 'Progress',
+  completedLabel: 'Completed',
+  loadingLabel: 'Loading',
+  stepLabel: 'Step {step} of {total}',
+};
+
 export class LuiStepper extends LitElement {
   static styles = unsafeCSS(styles);
 
@@ -11,10 +20,12 @@ export class LuiStepper extends LitElement {
   @property({ reflect: true }) orientation = 'horizontal';
   @property({ attribute: 'label-placement' }) labelPlacement = 'end';
   @property({ type: Boolean }) linear = false;
-  @property() label = 'Progress';
-  @property({ attribute: 'completed-label' }) completedLabel = 'Completed';
-  @property({ attribute: 'loading-label' }) loadingLabel = 'Loading';
-  @property({ attribute: 'step-label' }) stepLabel = 'Step {step} of {total}';
+  @property() label = DEFAULTS.label;
+  @property({ attribute: 'completed-label' }) completedLabel =
+    DEFAULTS.completedLabel;
+  @property({ attribute: 'loading-label' }) loadingLabel =
+    DEFAULTS.loadingLabel;
+  @property({ attribute: 'step-label' }) stepLabel = DEFAULTS.stepLabel;
 
   // A horizontal stepper that does not fit its container stacks instead of
   // scrolling sideways (WCAG 1.4.10 Reflow).
@@ -102,7 +113,7 @@ export class LuiStepper extends LitElement {
   }
 
   private _position(index: number): string {
-    return this.stepLabel
+    return (this.stepLabel || DEFAULTS.stepLabel)
       .replace('{step}', String(index))
       .replace('{total}', String(this._steps.length));
   }
@@ -127,8 +138,8 @@ export class LuiStepper extends LitElement {
       step.navigable = !this.linear || index <= current;
       step.orientation = this._orientation;
       step.labelsBottom = this._labelsBottom;
-      step.completedLabel = this.completedLabel;
-      step.loadingLabel = this.loadingLabel;
+      step.completedLabel = this.completedLabel || DEFAULTS.completedLabel;
+      step.loadingLabel = this.loadingLabel || DEFAULTS.loadingLabel;
       step.position = this._position(index);
       this._resizeObserver?.observe(step);
     });
@@ -183,7 +194,11 @@ export class LuiStepper extends LitElement {
       .join(' ');
 
     return html`
-      <div class="${classes}" role="list" aria-label="${this.label}">
+      <div
+        class="${classes}"
+        role="list"
+        aria-label="${this.label || DEFAULTS.label}"
+      >
         <slot @slotchange="${this._syncSteps}"></slot>
       </div>
       <p class="stepper__announcement" role="status">${this._announcement}</p>

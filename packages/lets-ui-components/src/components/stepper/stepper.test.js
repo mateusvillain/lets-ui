@@ -311,6 +311,21 @@ describe('lui-stepper position', () => {
     expect(position(steps[2])).toBe('Etapa 3 de 4');
   });
 
+  it('falls back to the default labels when they are removed', async () => {
+    const { stepper, steps } = await mount(
+      FOUR('label="Progresso" step-label="Etapa {step} de {total}"')
+    );
+    stepper.removeAttribute('label');
+    stepper.removeAttribute('step-label');
+    await settle(stepper, steps);
+    expect(position(steps[2])).toBe('Step 3 of 4');
+    expect(
+      stepper.shadowRoot
+        .querySelector('[role="list"]')
+        .getAttribute('aria-label')
+    ).toBe('Progress');
+  });
+
   it('recounts the total when a step is added', async () => {
     const { stepper, steps } = await mount(FOUR());
     const extra = document.createElement('lui-step');
