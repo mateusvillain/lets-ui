@@ -110,3 +110,37 @@ export function computeStates({ mode, base, tint, surface }) {
     state('pressed', amounts.pressed, mix(tint, base, amounts.pressed)),
   ];
 }
+
+export const THEMES = ['light', 'dark'];
+
+/**
+ * The query string that reproduces a view, so a link can be shared. A preset
+ * is stored by name and resolved again on load, so the link follows the
+ * tokens; custom colours are stored as hex without the `#`.
+ */
+export function toSearch({ theme, preset, mode, base, tint, surface }) {
+  const params = new URLSearchParams({ theme });
+  if (preset && preset !== 'custom') {
+    params.set('preset', preset);
+  } else {
+    params.set('mode', mode);
+    for (const [key, value] of Object.entries({ base, tint, surface })) {
+      params.set(key, value.slice(1));
+    }
+  }
+  return `?${params}`;
+}
+
+/** Reads what `toSearch()` wrote, dropping anything that does not validate. */
+export function fromSearch(search) {
+  const params = new URLSearchParams(search);
+  const view = {};
+  if (THEMES.includes(params.get('theme'))) view.theme = params.get('theme');
+  if (params.get('preset')) view.preset = params.get('preset');
+  if (MODES.includes(params.get('mode'))) view.mode = params.get('mode');
+  for (const key of ['base', 'tint', 'surface']) {
+    const value = params.has(key) && normalizeHex(params.get(key));
+    if (value) view[key] = value;
+  }
+  return view;
+}

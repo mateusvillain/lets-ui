@@ -9,6 +9,22 @@
  */
 import '@lets-ui/tokens';
 import '@/styles/calculator.css';
+
+const PRESETS = [
+  { key: 'button-primary', name: 'Button', detail: 'Primary' },
+  { key: 'button-neutral', name: 'Button', detail: 'Neutral' },
+  { key: 'button-danger', name: 'Button', detail: 'Danger' },
+  { key: 'field', name: 'Field', detail: 'Default border' },
+  { key: 'field-error', name: 'Field', detail: 'Error border' },
+];
+
+const STATES = ['rest', 'hover', 'pressed'];
+
+const COLOURS = [
+  { slot: 'base', label: 'Resting background' },
+  { slot: 'tint', label: 'Content colour (tint)' },
+  { slot: 'surface', label: 'Surface behind the border' },
+];
 ---
 
 <!doctype html>
@@ -17,100 +33,258 @@ import '@/styles/calculator.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>State Calculator — Let's UI</title>
+    <script is:inline>
+      // Set the theme before the first paint: the link wins, then the OS.
+      (() => {
+        const theme = new URLSearchParams(location.search).get('theme');
+        document.documentElement.dataset.theme =
+          theme === 'light' || theme === 'dark'
+            ? theme
+            : matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+      })();
+    </script>
   </head>
   <body>
-    <main class="sc">
-      <header class="sc-head">
-        <div>
-          <h1 class="sc-title">State Calculator</h1>
-          <p class="sc-lead">
-            Pick a resting colour and the content colour drawn on it. Hover and
-            pressed are that content colour mixed into the resting one.
-          </p>
+    <div class="sc">
+      <header class="sc-top">
+        <div class="sc-brand">
+          <span class="sc-logo" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <div>
+            <p class="sc-eyebrow">Let's UI</p>
+            <h1 class="sc-title">State Calculator</h1>
+          </div>
         </div>
 
-        <label class="sc-field sc-field--inline">
-          <span class="sc-label">Theme</span>
-          <select class="sc-select" data-theme-select>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </label>
+        <div class="sc-top__actions">
+          <fieldset class="sc-fieldset">
+            <legend class="sc-visually-hidden">Theme</legend>
+            <div class="sc-segmented sc-segmented--compact">
+            <label>
+              <input type="radio" name="theme" value="light" />
+              <span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+                Light
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="theme" value="dark" />
+              <span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" /></svg>
+                Dark
+              </span>
+            </label>
+            </div>
+          </fieldset>
+
+          <button type="button" class="sc-button" data-share>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" /><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg>
+            Copy link
+          </button>
+        </div>
       </header>
 
-      <section class="sc-panel" aria-label="Inputs">
-        <fieldset class="sc-modes">
-          <legend class="sc-label">Applies to</legend>
-          <label class="sc-mode">
-            <input type="radio" name="mode" value="background" checked />
-            <span>Background <small>8% / 16%</small></span>
-          </label>
-          <label class="sc-mode">
-            <input type="radio" name="mode" value="border" />
-            <span>Border <small>40% / 56%</small></span>
-          </label>
-        </fieldset>
+      <p class="sc-lead">
+        Pick a resting colour and the content colour drawn on it. Hover and
+        pressed are that content colour mixed into the resting one — see what
+        they resolve to and whether they stay legible.
+      </p>
 
-        <label class="sc-field">
-          <span class="sc-label">Start from</span>
-          <select class="sc-select" data-preset>
-            <option value="custom">Custom colours</option>
-            <option value="button-primary">Button — primary</option>
-            <option value="button-neutral">Button — neutral</option>
-            <option value="button-danger">Button — danger</option>
-            <option value="field">Field border</option>
-            <option value="field-error">Field border — error</option>
-          </select>
-        </label>
+      <div class="sc-layout">
+        <aside class="sc-panel sc-controls" aria-label="Inputs">
+          <fieldset class="sc-fieldset sc-group">
+              <legend class="sc-label">Applies to</legend>
+              <div class="sc-segmented sc-segmented--stacked">
+              <label>
+                <input type="radio" name="mode" value="background" />
+                <span>Background <small>8 / 16%</small></span>
+              </label>
+              <label>
+                <input type="radio" name="mode" value="border" />
+                <span>Border <small>40 / 56%</small></span>
+              </label>
+              </div>
+          </fieldset>
 
-        <div class="sc-colours">
-          <label class="sc-field" data-colour="base">
-            <span class="sc-label" data-base-label>Resting background</span>
-            <span class="sc-colour">
-              <input type="color" aria-label="Resting colour picker" />
-              <input class="sc-hex" type="text" spellcheck="false" maxlength="7" aria-label="Resting colour hex" />
-            </span>
-          </label>
+          <fieldset class="sc-fieldset sc-group">
+            <legend class="sc-label">Start from</legend>
+            <div class="sc-presets">
+            {
+              PRESETS.map(({ key, name, detail }) => (
+                <label class="sc-preset">
+                  <input type="radio" name="preset" value={key} />
+                  <span class="sc-preset__swatch" data-preset-swatch={key} aria-hidden="true" />
+                  <span class="sc-preset__text">
+                    {name} <small>{detail}</small>
+                  </span>
+                </label>
+              ))
+            }
+            <label class="sc-preset">
+              <input type="radio" name="preset" value="custom" />
+              <span class="sc-preset__swatch sc-preset__swatch--custom" aria-hidden="true" />
+              <span class="sc-preset__text">
+                Custom <small>Your colours</small>
+              </span>
+            </label>
+            </div>
+          </fieldset>
 
-          <label class="sc-field" data-colour="tint">
-            <span class="sc-label">Content colour (tint)</span>
-            <span class="sc-colour">
-              <input type="color" aria-label="Content colour picker" />
-              <input class="sc-hex" type="text" spellcheck="false" maxlength="7" aria-label="Content colour hex" />
-            </span>
-          </label>
+          <div class="sc-group sc-colours">
+            {
+              COLOURS.map(({ slot, label }) => (
+                <div class="sc-colour" data-colour={slot}>
+                  <input
+                    type="color"
+                    id={`${slot}-picker`}
+                    aria-label={`${label} picker`}
+                  />
+                  <label class="sc-colour__field">
+                    <span class="sc-label" data-colour-label>{label}</span>
+                    <input
+                      class="sc-hex"
+                      type="text"
+                      spellcheck="false"
+                      autocomplete="off"
+                      maxlength="7"
+                    />
+                  </label>
+                </div>
+              ))
+            }
+            <button type="button" class="sc-icon-button sc-swap" data-swap aria-label="Swap resting and content colours" title="Swap colours">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3" /></svg>
+            </button>
+          </div>
+        </aside>
 
-          <label class="sc-field" data-colour="surface" hidden>
-            <span class="sc-label">Surface behind the border</span>
-            <span class="sc-colour">
-              <input type="color" aria-label="Surface colour picker" />
-              <input class="sc-hex" type="text" spellcheck="false" maxlength="7" aria-label="Surface colour hex" />
-            </span>
-          </label>
+        <div class="sc-main">
+          <section class="sc-panel" aria-labelledby="sample-title">
+            <div class="sc-panel__head">
+              <div>
+                <h2 class="sc-subtitle" id="sample-title">Live sample</h2>
+                <p class="sc-note" data-sample-note></p>
+              </div>
+              <fieldset class="sc-fieldset">
+                <legend class="sc-visually-hidden">Show state</legend>
+                <div class="sc-segmented sc-segmented--compact">
+                {
+                  ['live', ...STATES].map((pin) => (
+                    <label>
+                      <input type="radio" name="pin" value={pin} checked={pin === 'live'} />
+                      <span>{pin}</span>
+                    </label>
+                  ))
+                }
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="sc-stage" data-stage data-pin="live">
+              <button type="button" class="sc-sample" data-sample>
+                Hover and press me
+              </button>
+            </div>
+
+            <div class="sc-code">
+              <pre data-code></pre>
+              <button type="button" class="sc-icon-button" data-copy-code aria-label="Copy CSS" title="Copy CSS">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V6a2 2 0 0 1 2-2h9" /></svg>
+              </button>
+            </div>
+          </section>
+
+          <section class="sc-panel" aria-labelledby="states-title">
+            <div class="sc-panel__head">
+              <div>
+                <h2 class="sc-subtitle" id="states-title">States</h2>
+                <p class="sc-note" data-states-note></p>
+              </div>
+            </div>
+
+            <div class="sc-results">
+              {
+                STATES.map((name) => (
+                  <article class="sc-card" data-state={name}>
+                    <div class="sc-swatch" data-swatch>
+                      <span data-swatch-text>Aa</span>
+                    </div>
+                    <div class="sc-card__row">
+                      <h3 class="sc-card__name">{name}</h3>
+                      <span class="sc-pill" data-amount />
+                    </div>
+                    <button type="button" class="sc-card__hex" data-copy-hex title="Copy hex">
+                      <span data-hex />
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V6a2 2 0 0 1 2-2h9" /></svg>
+                    </button>
+                    <div class="sc-meter" data-meter>
+                      <div class="sc-meter__track">
+                        <span class="sc-meter__fill" />
+                        <span class="sc-meter__mark" />
+                      </div>
+                      <div class="sc-card__row">
+                        <span class="sc-meter__ratio" data-ratio />
+                        <span class="sc-badge" data-badge />
+                      </div>
+                    </div>
+                  </article>
+                ))
+              }
+            </div>
+          </section>
+
+          <section class="sc-panel" aria-labelledby="scale-title">
+            <div class="sc-panel__head">
+              <div>
+                <h2 class="sc-subtitle" id="scale-title">Mix scale</h2>
+                <p class="sc-note">
+                  Drag along the scale to see any amount of tint, and where the
+                  state layer sits on it.
+                </p>
+              </div>
+            </div>
+
+            <div class="sc-scale" data-scale>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                class="sc-scale__range"
+                aria-label="Amount of tint"
+                data-scale-range
+              />
+              <span class="sc-scale__marker" data-marker="hover"><span class="sc-scale__label">hover</span></span>
+              <span class="sc-scale__marker" data-marker="pressed"><span class="sc-scale__label">pressed</span></span>
+            </div>
+
+            <div class="sc-readout" aria-live="polite">
+              <span class="sc-readout__swatch" data-readout-swatch />
+              <strong data-readout-amount></strong>
+              <code data-readout-hex></code>
+              <span data-readout-ratio></span>
+              <span class="sc-badge" data-readout-badge></span>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
-      <section class="sc-results" aria-label="Results" data-results></section>
-
-      <section class="sc-panel sc-live" aria-label="Live sample">
-        <h2 class="sc-subtitle">Try it</h2>
-        <p class="sc-note">
-          Hover and press the sample. It uses the same <code>color-mix()</code>
-          and the same timings as the components.
-        </p>
-        <div class="sc-stage" data-stage>
-          <button type="button" class="sc-sample" data-sample>Sample</button>
-        </div>
-        <pre class="sc-code" data-code></pre>
-      </section>
-    </main>
+      <div class="sc-toast" role="status" aria-live="polite" data-toast></div>
+    </div>
 
     <script>
       import {
         AMOUNTS,
         computeStates,
+        contrast,
         cssColorToHex,
+        fromSearch,
+        mix,
         normalizeHex,
+        toSearch,
       } from '@/lib/state.js';
 
       // Each preset names the tokens a real component reads, resolved in the
@@ -146,22 +320,33 @@ import '@/styles/calculator.css';
       };
 
       const THRESHOLDS = { background: 4.5, border: 3 };
-
-      const state = {
-        mode: 'background',
-        base: '#339bf0',
-        tint: '#ffffff',
-        surface: '#ffffff',
-      };
+      const SLOTS = ['base', 'tint', 'surface'];
 
       const root = document.documentElement;
-      const results = document.querySelector('[data-results]');
-      const stage = document.querySelector('[data-stage]');
-      const code = document.querySelector('[data-code]');
-      const presetSelect = document.querySelector('[data-preset]');
-      const themeSelect = document.querySelector('[data-theme-select]');
-      const baseLabel = document.querySelector('[data-base-label]');
-      const surfaceField = document.querySelector('[data-colour="surface"]');
+      const $ = (selector, scope = document) => scope.querySelector(selector);
+      const $$ = (selector, scope = document) => [
+        ...scope.querySelectorAll(selector),
+      ];
+
+      const stage = $('[data-stage]');
+      const sample = $('[data-sample]');
+      const code = $('[data-code]');
+      const range = $('[data-scale-range]');
+      const toast = $('[data-toast]');
+
+      const linked = fromSearch(location.search);
+      const state = {
+        theme: root.dataset.theme,
+        preset: linked.preset in PRESETS ? linked.preset : 'custom',
+        mode: linked.mode ?? 'background',
+        base: linked.base ?? '#339bf0',
+        tint: linked.tint ?? '#ffffff',
+        surface: linked.surface ?? '#ffffff',
+        pin: 'live',
+        // The state the live sample is in, so its card can light up.
+        live: 'rest',
+      };
+      if (!linked.preset && !linked.base) state.preset = 'button-primary';
 
       const probe = document.createElement('span');
       probe.hidden = true;
@@ -176,77 +361,170 @@ import '@/styles/calculator.css';
         const preset = PRESETS[key];
         if (!preset) return;
         state.mode = preset.mode;
-        for (const slot of ['base', 'tint', 'surface']) {
+        for (const slot of SLOTS) {
           if (preset[slot]) state[slot] = resolveToken(preset[slot]);
         }
       }
 
-      function format(ratio) {
-        return `${ratio.toFixed(2)}:1`;
+      const format = (ratio) => `${ratio.toFixed(2)}:1`;
+
+      function badge(el, ratio, threshold) {
+        const pass = ratio >= threshold;
+        el.dataset.pass = String(pass);
+        el.textContent = `${pass ? '✓ Pass' : '✕ Below'} ${threshold}:1`;
+      }
+
+      let toastTimer;
+      function notify(message) {
+        toast.textContent = message;
+        toast.dataset.visible = '';
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => delete toast.dataset.visible, 1800);
+      }
+
+      async function copy(text, message) {
+        try {
+          await navigator.clipboard.writeText(text);
+          notify(message);
+        } catch {
+          notify('Copy failed — your browser blocked the clipboard');
+        }
+      }
+
+      function renderScale() {
+        const { mode, base, tint, surface } = state;
+        const amount = Number(range.value);
+        const color = mix(tint, base, amount);
+        const ratio = contrast(color, mode === 'background' ? tint : surface);
+
+        range.style.setProperty('--value', `${amount}%`);
+        range.setAttribute('aria-valuetext', `${amount}% tint, ${color}`);
+        $('[data-readout-swatch]').style.background = color;
+        $('[data-readout-amount]').textContent = `${amount}%`;
+        $('[data-readout-hex]').textContent = color;
+        $('[data-readout-ratio]').textContent = format(ratio);
+        badge($('[data-readout-badge]'), ratio, THRESHOLDS[mode]);
+      }
+
+      function renderActive() {
+        const active = state.pin === 'live' ? state.live : state.pin;
+        for (const card of $$('[data-state]')) {
+          card.toggleAttribute('data-active', card.dataset.state === active);
+        }
       }
 
       function render() {
-        const { mode } = state;
+        const { mode, preset, base, tint, surface, theme } = state;
         const amounts = AMOUNTS[mode];
         const threshold = THRESHOLDS[mode];
+        const isBackground = mode === 'background';
 
-        document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
-        baseLabel.textContent =
-          mode === 'background' ? 'Resting background' : 'Resting border';
-        surfaceField.hidden = mode !== 'border';
+        root.dataset.theme = theme;
+        root.dataset.mode = mode;
+        $(`input[name="theme"][value="${theme}"]`).checked = true;
+        $(`input[name="mode"][value="${mode}"]`).checked = true;
+        $(`input[name="preset"][value="${preset}"]`).checked = true;
 
-        for (const slot of ['base', 'tint', 'surface']) {
-          const field = document.querySelector(`[data-colour="${slot}"]`);
-          field.querySelector('input[type="color"]').value = state[slot];
-          const hex = field.querySelector('.sc-hex');
+        // Preset chips preview their own colours in the current theme.
+        for (const swatch of $$('[data-preset-swatch]')) {
+          const tokens = PRESETS[swatch.dataset.presetSwatch];
+          swatch.style.setProperty('--base', `var(${tokens.base})`);
+          swatch.style.setProperty('--tint', `var(${tokens.tint})`);
+          swatch.dataset.mode = tokens.mode;
+        }
+
+        $('[data-colour="base"] [data-colour-label]').textContent =
+          isBackground ? 'Resting background' : 'Resting border';
+        $('[data-colour="surface"]').hidden = isBackground;
+        $('[data-swap]').hidden = !isBackground;
+
+        for (const slot of SLOTS) {
+          const field = $(`[data-colour="${slot}"]`);
+          field.style.setProperty('--value', state[slot]);
+          $('input[type="color"]', field).value = state[slot];
+          const hex = $('.sc-hex', field);
           if (document.activeElement !== hex) hex.value = state[slot];
         }
 
-        const against =
-          mode === 'background' ? 'content colour' : 'surface';
-        results.innerHTML = computeStates(state)
-          .map(
-            (s) => `
-              <article class="sc-card">
-                <div class="sc-swatch sc-swatch--${mode}" style="--swatch: ${s.color}; --tint: ${state.tint}; --surface: ${state.surface}">
-                  ${mode === 'background' ? 'Aa' : ''}
-                </div>
-                <h3 class="sc-card__name">${s.name}</h3>
-                <p class="sc-card__hex">${s.color}</p>
-                <p class="sc-card__meta">${s.amount ? `${s.amount}% of the tint` : 'No tint'}</p>
-                <p class="sc-card__meta">
-                  ${format(s.contrast)} against the ${against}
-                  <span class="sc-badge" data-pass="${s.contrast >= threshold}">
-                    ${s.contrast >= threshold ? 'Pass' : 'Below'} ${threshold}:1
-                  </span>
-                </p>
-              </article>`
-          )
-          .join('');
+        const against = isBackground ? 'content colour' : 'surface';
+        $('[data-states-note]').textContent = isBackground
+          ? `Text drawn in the content colour has to keep ${threshold}:1 in every state.`
+          : `The border has to keep ${threshold}:1 against the surface behind it.`;
+
+        for (const s of computeStates(state)) {
+          const card = $(`[data-state="${s.name}"]`);
+          const swatch = $('[data-swatch]', card);
+          swatch.style.setProperty('--swatch', s.color);
+          swatch.style.setProperty('--tint', tint);
+          swatch.style.setProperty('--surface', surface);
+          $('[data-swatch-text]', swatch).hidden = !isBackground;
+          $('[data-amount]', card).textContent = s.amount
+            ? `+${s.amount}% tint`
+            : 'No tint';
+          $('[data-hex]', card).textContent = s.color;
+          $('[data-copy-hex]', card).dataset.value = s.color;
+          $('[data-copy-hex]', card).setAttribute(
+            'aria-label',
+            `Copy ${s.name} colour ${s.color}`
+          );
+
+          // The meter runs to twice the threshold, so the mark sits mid-track.
+          const meter = $('[data-meter]', card);
+          meter.style.setProperty(
+            '--fill',
+            `${Math.min(s.contrast / (threshold * 2), 1) * 100}%`
+          );
+          meter.dataset.pass = String(s.contrast >= threshold);
+          $('[data-ratio]', card).textContent =
+            `${format(s.contrast)} vs ${against}`;
+          badge($('[data-badge]', card), s.contrast, threshold);
+        }
 
         stage.dataset.mode = mode;
-        stage.style.setProperty('--base', state.base);
-        stage.style.setProperty('--tint', state.tint);
-        stage.style.setProperty('--surface', state.surface);
+        stage.style.setProperty('--base', base);
+        stage.style.setProperty('--tint', tint);
+        stage.style.setProperty('--surface', surface);
         stage.style.setProperty('--hover', `${amounts.hover}%`);
         stage.style.setProperty('--pressed', `${amounts.pressed}%`);
+        $('[data-sample-note]').textContent =
+          state.pin === 'live'
+            ? 'Hover and press it — same color-mix() and timings as the components.'
+            : `Pinned to ${state.pin}. Switch back to live to interact.`;
 
-        const property = mode === 'background' ? 'background-color' : 'border-color';
+        const property = isBackground ? 'background-color' : 'border-color';
         code.textContent = [
-          `/* rest */    ${property}: ${state.base};`,
-          `/* hover */   ${property}: color-mix(in srgb, ${state.tint} ${amounts.hover}%, ${state.base});`,
-          `/* pressed */ ${property}: color-mix(in srgb, ${state.tint} ${amounts.pressed}%, ${state.base});`,
+          `/* rest */    ${property}: ${base};`,
+          `/* hover */   ${property}: color-mix(in srgb, ${tint} ${amounts.hover}%, ${base});`,
+          `/* pressed */ ${property}: color-mix(in srgb, ${tint} ${amounts.pressed}%, ${base});`,
         ].join('\n');
+
+        const scale = $('[data-scale]');
+        scale.style.setProperty('--base', base);
+        scale.style.setProperty('--tint', tint);
+        for (const [name, amount] of Object.entries(amounts)) {
+          $(`[data-marker="${name}"]`, scale).style.setProperty(
+            '--at',
+            `${amount}%`
+          );
+        }
+
+        renderScale();
+        renderActive();
+        history.replaceState(null, '', toSearch(state));
       }
 
-      for (const slot of ['base', 'tint', 'surface']) {
-        const field = document.querySelector(`[data-colour="${slot}"]`);
-        const picker = field.querySelector('input[type="color"]');
-        const hex = field.querySelector('.sc-hex');
+      function toCustom() {
+        state.preset = 'custom';
+      }
+
+      for (const slot of SLOTS) {
+        const field = $(`[data-colour="${slot}"]`);
+        const picker = $('input[type="color"]', field);
+        const hex = $('.sc-hex', field);
 
         picker.addEventListener('input', () => {
           state[slot] = picker.value;
-          presetSelect.value = 'custom';
+          toCustom();
           render();
         });
 
@@ -255,7 +533,7 @@ import '@/styles/calculator.css';
           hex.setAttribute('aria-invalid', String(!value));
           if (!value) return;
           state[slot] = value;
-          presetSelect.value = 'custom';
+          toCustom();
           render();
         });
 
@@ -265,28 +543,84 @@ import '@/styles/calculator.css';
         });
       }
 
-      for (const radio of document.querySelectorAll('input[name="mode"]')) {
+      $('[data-swap]').addEventListener('click', () => {
+        [state.base, state.tint] = [state.tint, state.base];
+        toCustom();
+        render();
+      });
+
+      for (const radio of $$('input[name="mode"]')) {
         radio.addEventListener('change', () => {
           state.mode = radio.value;
-          presetSelect.value = 'custom';
+          range.value = AMOUNTS[state.mode].pressed;
+          toCustom();
           render();
         });
       }
 
-      presetSelect.addEventListener('change', () => {
-        applyPreset(presetSelect.value);
-        render();
-      });
+      for (const radio of $$('input[name="preset"]')) {
+        radio.addEventListener('change', () => {
+          state.preset = radio.value;
+          applyPreset(state.preset);
+          range.value = AMOUNTS[state.mode].pressed;
+          render();
+        });
+      }
 
-      themeSelect.addEventListener('change', () => {
-        root.dataset.theme = themeSelect.value;
-        applyPreset(presetSelect.value);
-        render();
-      });
+      for (const radio of $$('input[name="theme"]')) {
+        radio.addEventListener('change', () => {
+          state.theme = radio.value;
+          root.dataset.theme = state.theme;
+          applyPreset(state.preset);
+          render();
+        });
+      }
 
-      presetSelect.value = 'button-primary';
-      applyPreset('button-primary');
+      for (const radio of $$('input[name="pin"]')) {
+        radio.addEventListener('change', () => {
+          state.pin = radio.value;
+          stage.dataset.pin = state.pin;
+          render();
+        });
+      }
+
+      // Follow the live sample so the card for its current state lights up.
+      const setLive = (name) => {
+        state.live = name;
+        renderActive();
+      };
+      sample.addEventListener('pointerenter', () => setLive('hover'));
+      sample.addEventListener('pointerleave', () => setLive('rest'));
+      sample.addEventListener('pointerdown', () => setLive('pressed'));
+      sample.addEventListener('pointerup', (event) =>
+        setLive(event.pointerType === 'mouse' ? 'hover' : 'rest')
+      );
+      sample.addEventListener('keydown', (event) => {
+        if (event.key === ' ' || event.key === 'Enter') setLive('pressed');
+      });
+      sample.addEventListener('keyup', () => setLive('rest'));
+      sample.addEventListener('blur', () => setLive('rest'));
+
+      range.addEventListener('input', renderScale);
+
+      for (const button of $$('[data-copy-hex]')) {
+        button.addEventListener('click', () =>
+          copy(button.dataset.value, `Copied ${button.dataset.value}`)
+        );
+      }
+
+      $('[data-copy-code]').addEventListener('click', () =>
+        copy(code.textContent, 'Copied CSS')
+      );
+
+      $('[data-share]').addEventListener('click', () =>
+        copy(location.href, 'Link copied — it opens this exact view')
+      );
+
+      applyPreset(state.preset);
+      range.value = AMOUNTS[state.mode].pressed;
       render();
+      requestAnimationFrame(() => (root.dataset.ready = ''));
     </script>
   </body>
 </html>

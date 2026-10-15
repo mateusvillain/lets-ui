@@ -1,7 +1,7 @@
 /*
  * The calculator's own chrome reads the Let's UI tokens, so it follows the
- * theme select. The sample and the swatches take the colours under test from
- * custom properties set by the script, never from tokens.
+ * theme switch. The sample, the swatches and the scale take the colours under
+ * test from custom properties set by the script, never from tokens.
  */
 
 * {
@@ -10,27 +10,121 @@
 
 body {
   margin: 0;
-  background: var(--lui-color-neutral-background-surface);
+  background: var(--lui-color-neutral-border-subtle);
   color: var(--lui-color-neutral-text-body);
   font-family:
     var(--lui-brand-typography-font-family-body), system-ui, sans-serif;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* The page follows a theme change instead of snapping to it. */
+body,
+.sc-panel,
+.sc-preset,
+.sc-segmented,
+.sc-button,
+.sc-hex {
+  transition:
+    background-color 200ms ease-out,
+    border-color 200ms ease-out,
+    color 200ms ease-out;
+}
+
+svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+code,
+pre {
+  font-family: var(--lui-brand-typography-font-family-code), monospace;
+}
+
+.sc-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Layout ------------------------------------------------------------------ */
 
 .sc {
   display: grid;
   gap: var(--lui-spacing-fixed-24);
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: var(--lui-spacing-fixed-40) var(--lui-spacing-fixed-24);
+  padding: var(--lui-spacing-fixed-32) var(--lui-spacing-fixed-24)
+    var(--lui-spacing-fixed-40);
 }
 
-.sc-head {
+.sc-top {
   display: flex;
   flex-wrap: wrap;
   gap: var(--lui-spacing-fixed-16);
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
+}
+
+.sc-top__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lui-spacing-fixed-8);
+  align-items: center;
+}
+
+.sc-brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Three stacked tiles: rest, hover, pressed of the brand colour. */
+.sc-logo {
+  display: grid;
+  grid-template-columns: repeat(3, 12px);
+  overflow: hidden;
+  height: 36px;
+  border-radius: var(--lui-border-radius-md);
+  box-shadow: var(--lui-elevation-base);
+}
+
+.sc-logo > * {
+  background: var(--lui-color-primary-background-container);
+}
+
+.sc-logo > :nth-child(2) {
+  background: color-mix(
+    in srgb,
+    var(--lui-color-neutral-text-inverse) 8%,
+    var(--lui-color-primary-background-container)
+  );
+}
+
+.sc-logo > :nth-child(3) {
+  background: color-mix(
+    in srgb,
+    var(--lui-color-neutral-text-inverse) 16%,
+    var(--lui-color-primary-background-container)
+  );
+}
+
+.sc-eyebrow {
+  margin: 0;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.75rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .sc-title {
@@ -38,186 +132,663 @@ body {
   color: var(--lui-color-neutral-text-heading);
   font-family:
     var(--lui-brand-typography-font-family-heading), system-ui, sans-serif;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.sc-lead {
+  max-width: 68ch;
+  margin: 0;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 1.0625rem;
+}
+
+.sc-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--lui-spacing-fixed-24);
+  align-items: start;
+}
+
+@media (width >= 900px) {
+  .sc-layout {
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+
+  .sc-controls {
+    position: sticky;
+    top: var(--lui-spacing-fixed-24);
+  }
+}
+
+.sc-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--lui-spacing-fixed-24);
+}
+
+.sc-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--lui-spacing-fixed-16);
+  padding: var(--lui-spacing-fixed-24);
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-border-radius-xl);
+  background: var(--lui-color-neutral-background-surface);
+  box-shadow: var(--lui-elevation-base);
+}
+
+.sc-panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lui-spacing-fixed-16);
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .sc-subtitle {
   margin: 0;
   color: var(--lui-color-neutral-text-heading);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
-.sc-lead,
 .sc-note {
   max-width: 60ch;
-  margin: var(--lui-spacing-fixed-8) 0 0;
+  margin: 4px 0 0;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.875rem;
 }
 
-.sc-panel {
+.sc-controls {
+  gap: var(--lui-spacing-fixed-24);
+}
+
+.sc-group {
   display: grid;
-  gap: var(--lui-spacing-fixed-16);
-  padding: var(--lui-spacing-fixed-24);
-  border: var(--lui-border-width-1) solid
-    var(--lui-color-neutral-border-default);
-  border-radius: var(--lui-border-radius-lg);
+  gap: 12px;
+}
+
+.sc-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sc-fieldset > legend {
+  margin-bottom: 12px;
+  padding: 0;
 }
 
 .sc-label {
   color: var(--lui-color-neutral-text-heading);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: var(--lui-typography-font-weight-semibold);
 }
 
-.sc-field {
+/* Shared focus ring for every control on the page. */
+:is(button, .sc-hex, input[type='color']):focus-visible {
+  outline: none;
+  box-shadow: var(--lui-focus-ring-primary);
+}
+
+/* Segmented control ------------------------------------------------------- */
+
+.sc-segmented {
   display: grid;
-  gap: var(--lui-spacing-fixed-8);
-}
-
-.sc-field[hidden] {
-  display: none;
-}
-
-.sc-field--inline {
+  grid-auto-columns: 1fr;
   grid-auto-flow: column;
-  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--lui-border-radius-lg);
+  background: var(--lui-color-neutral-border-subtle);
 }
 
-.sc-select,
-.sc-hex {
-  min-height: 40px;
-  padding: 0 var(--lui-spacing-fixed-8);
+.sc-segmented label {
+  position: relative;
+  display: grid;
+  cursor: pointer;
+}
+
+.sc-segmented input,
+.sc-presets input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sc-segmented span {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--lui-border-radius-md);
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.875rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  text-transform: capitalize;
+  white-space: nowrap;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out,
+    box-shadow 160ms ease-out;
+}
+
+.sc-segmented--stacked span {
+  flex-direction: column;
+  gap: 0;
+  min-height: 48px;
+  line-height: 1.2;
+}
+
+.sc-segmented small {
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.75rem;
+  font-weight: var(--lui-typography-font-weight-regular);
+}
+
+.sc-segmented--compact span {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 0.8125rem;
+}
+
+.sc-segmented label:hover span {
+  color: var(--lui-color-neutral-text-heading);
+}
+
+.sc-segmented input:checked + span {
+  background: var(--lui-color-neutral-background-surface);
+  color: var(--lui-color-neutral-text-heading);
+  box-shadow: var(--lui-elevation-base);
+}
+
+.sc-segmented input:focus-visible + span {
+  outline: none;
+  box-shadow: var(--lui-focus-ring-primary);
+}
+
+/* Buttons ----------------------------------------------------------------- */
+
+.sc-button,
+.sc-icon-button {
+  display: inline-flex;
+  gap: var(--lui-spacing-fixed-8);
+  align-items: center;
+  justify-content: center;
   border: var(--lui-border-width-1) solid
     var(--lui-color-neutral-border-default);
   border-radius: var(--lui-border-radius-md);
   background: var(--lui-color-neutral-background-surface);
-  color: inherit;
+  color: var(--lui-color-neutral-text-heading);
   font: inherit;
+  font-size: 0.875rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  cursor: pointer;
+}
+
+.sc-button {
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.sc-icon-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.sc-button:hover,
+.sc-icon-button:hover {
+  background: color-mix(
+    in srgb,
+    var(--lui-color-neutral-text-body) 8%,
+    var(--lui-color-neutral-background-surface)
+  );
+}
+
+.sc-button:active,
+.sc-icon-button:active {
+  background: color-mix(
+    in srgb,
+    var(--lui-color-neutral-text-body) 16%,
+    var(--lui-color-neutral-background-surface)
+  );
+}
+
+/* Presets ----------------------------------------------------------------- */
+
+.sc-presets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.sc-preset {
+  position: relative;
+  display: grid;
+  cursor: pointer;
+}
+
+.sc-preset > :not(input) {
+  pointer-events: none;
+}
+
+.sc-preset__text {
+  display: grid;
+  padding: 10px 12px 10px 44px;
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-border-radius-lg);
+  color: var(--lui-color-neutral-text-heading);
+  font-size: 0.8125rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  line-height: 1.3;
+  transition:
+    border-color 160ms ease-out,
+    background-color 160ms ease-out;
+}
+
+.sc-preset__text small {
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.75rem;
+  font-weight: var(--lui-typography-font-weight-regular);
+}
+
+.sc-preset:hover .sc-preset__text {
+  border-color: var(--lui-color-neutral-border-default);
+}
+
+.sc-preset input:checked ~ .sc-preset__text {
+  border-color: var(--lui-color-primary-border-default);
+  background: var(--lui-color-primary-background-surface);
+}
+
+.sc-presets input:focus-visible ~ .sc-preset__text {
+  box-shadow: var(--lui-focus-ring-primary);
+}
+
+/* A preset previews itself: its tint on its base, or its border. */
+.sc-preset__swatch {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--lui-border-radius-sm);
+  background: linear-gradient(135deg, var(--base) 0 55%, var(--tint) 55% 100%);
+  box-shadow: inset 0 0 0 1px var(--lui-color-black-alpha-2);
+  transform: translateY(-50%);
+}
+
+.sc-preset__swatch[data-mode='border'] {
+  border: 3px solid var(--base);
+  background: var(--lui-color-neutral-background-surface);
+}
+
+.sc-preset__swatch--custom {
+  background: conic-gradient(
+    from 0deg,
+    #f25f5c,
+    #ffe066,
+    #70c1b3,
+    #339bf0,
+    #9b5de5,
+    #f25f5c
+  );
+}
+
+/* Colours ----------------------------------------------------------------- */
+
+.sc-colours {
+  position: relative;
+}
+
+.sc-colour {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-border-radius-lg);
+}
+
+.sc-colour[hidden] {
+  display: none;
+}
+
+.sc-colour input[type='color'] {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--lui-border-radius-md);
+  background: var(--value);
+  box-shadow: inset 0 0 0 1px var(--lui-color-black-alpha-2);
+  cursor: pointer;
+  appearance: none;
+  transition: transform 120ms ease-out;
+}
+
+.sc-colour input[type='color']:hover {
+  transform: scale(1.05);
+}
+
+.sc-colour input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+/* The input paints its own background, so the native swatch steps aside. */
+.sc-colour input[type='color']::-webkit-color-swatch {
+  border: 0;
+  opacity: 0;
+}
+
+.sc-colour input[type='color']::-moz-color-swatch {
+  border: 0;
+  opacity: 0;
+}
+
+.sc-colour__field {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
 }
 
 .sc-hex {
-  width: 9ch;
-  font-family: ui-monospace, monospace;
+  width: 100%;
+  min-height: 32px;
+  padding: 0 var(--lui-spacing-fixed-8);
+  border: var(--lui-border-width-1) solid transparent;
+  border-radius: var(--lui-border-radius-sm);
+  background: transparent;
+  color: var(--lui-color-neutral-text-body);
+  font: inherit;
+  font-family: var(--lui-brand-typography-font-family-code), monospace;
+  font-size: 0.9375rem;
+  text-transform: lowercase;
+}
+
+.sc-hex:hover,
+.sc-hex:focus {
+  border-color: var(--lui-color-neutral-border-default);
+  background: var(--lui-color-neutral-background-surface);
 }
 
 .sc-hex[aria-invalid='true'] {
   border-color: var(--lui-color-danger-border-default);
 }
 
-.sc-modes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--lui-spacing-fixed-8) var(--lui-spacing-fixed-24);
-  margin: 0;
-  padding: 0;
-  border: 0;
+/* Sits on the seam between the resting and the content colour rows. */
+.sc-swap {
+  position: absolute;
+  top: 56px;
+  right: 12px;
+  border-radius: var(--lui-border-radius-circle);
+  box-shadow: var(--lui-elevation-base);
+  transition: transform 240ms ease-out;
 }
 
-.sc-modes legend {
-  margin-bottom: var(--lui-spacing-fixed-8);
+.sc-swap:hover {
+  transform: rotate(180deg);
 }
 
-.sc-mode {
-  display: flex;
-  gap: var(--lui-spacing-fixed-8);
-  align-items: center;
-  cursor: pointer;
+.sc-swap[hidden] {
+  display: none;
 }
 
-.sc-mode small {
-  color: var(--lui-color-neutral-text-caption);
-}
+/* Live sample ------------------------------------------------------------- */
 
-.sc-colours {
+.sc-stage {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--lui-spacing-fixed-16);
+  place-items: center;
+  min-height: 200px;
+  padding: var(--lui-spacing-fixed-32);
+  border-radius: var(--lui-border-radius-lg);
+  background-color: var(--lui-color-neutral-border-subtle);
+  background-image: radial-gradient(
+    var(--lui-color-black-alpha-2) 1px,
+    transparent 1px
+  );
+  background-size: 16px 16px;
 }
 
-.sc-colour {
-  display: flex;
-  gap: var(--lui-spacing-fixed-8);
-  align-items: center;
+.sc-stage[data-mode='border'] {
+  background-color: var(--surface);
 }
 
-.sc-colour input[type='color'] {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: var(--lui-border-width-1) solid
-    var(--lui-color-neutral-border-default);
+/*
+ * Same mix and timings as `state()` / `state-border()` and `state-timing()`.
+ * `--amount` is the only thing a state changes; the colour follows from it.
+ */
+.sc-sample {
+  --amount: 0%;
+  --state: color-mix(in srgb, var(--tint) var(--amount), var(--base));
+
+  min-width: 220px;
+  min-height: 48px;
+  padding: 0 var(--lui-spacing-fixed-24);
+  border: var(--lui-border-width-1) solid transparent;
   border-radius: var(--lui-border-radius-md);
-  background: none;
+  background-color: var(--state);
+  color: var(--tint);
+  font: inherit;
+  font-weight: var(--lui-typography-font-weight-semibold);
   cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 220ms ease-out,
+    border-color 220ms ease-out;
 }
 
-.sc-select:focus-visible,
-.sc-hex:focus-visible,
-.sc-mode input:focus-visible,
-.sc-colour input[type='color']:focus-visible {
-  outline: none;
-  box-shadow: var(--lui-focus-ring-primary);
+.sc-sample:hover {
+  --amount: var(--hover);
+
+  transition-duration: 140ms;
 }
+
+.sc-sample:active {
+  --amount: var(--pressed);
+
+  transition-duration: 40ms;
+  transition-timing-function: linear;
+}
+
+.sc-stage[data-mode='border'] .sc-sample {
+  border-color: var(--state);
+  background-color: var(--surface);
+}
+
+/* A pinned state holds still, whatever the pointer does. */
+.sc-stage[data-pin='rest'] .sc-sample {
+  --amount: 0%;
+}
+
+.sc-stage[data-pin='hover'] .sc-sample {
+  --amount: var(--hover);
+}
+
+.sc-stage[data-pin='pressed'] .sc-sample {
+  --amount: var(--pressed);
+}
+
+.sc-code {
+  position: relative;
+}
+
+.sc-code pre {
+  overflow-x: auto;
+  margin: 0;
+  padding: var(--lui-spacing-fixed-16);
+  padding-right: 56px;
+  border-radius: var(--lui-border-radius-lg);
+  background: var(--lui-color-neutral-border-subtle);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+.sc-code .sc-icon-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+/* State cards ------------------------------------------------------------- */
 
 .sc-results {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--lui-spacing-fixed-16);
 }
 
 .sc-card {
   display: grid;
-  gap: 4px;
-  padding: var(--lui-spacing-fixed-16);
+  gap: 10px;
+  align-content: start;
+  padding: 12px;
   border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
   border-radius: var(--lui-border-radius-lg);
+  transition:
+    border-color 160ms ease-out,
+    box-shadow 160ms ease-out,
+    transform 160ms ease-out;
+}
+
+/* Lights up with the state the live sample is in, or the pinned one. */
+.sc-card[data-active] {
+  border-color: var(--lui-color-primary-border-default);
+  box-shadow: var(--lui-elevation-hovered);
+  transform: translateY(-2px);
+}
+
+.sc-card__row {
+  display: flex;
+  gap: var(--lui-spacing-fixed-8);
+  align-items: center;
+  justify-content: space-between;
 }
 
 .sc-card__name {
-  margin: var(--lui-spacing-fixed-8) 0 0;
+  margin: 0;
   color: var(--lui-color-neutral-text-heading);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   text-transform: capitalize;
 }
 
-.sc-card__hex {
-  margin: 0;
-  font-family: ui-monospace, monospace;
-}
-
-.sc-card__meta {
-  margin: 0;
+.sc-pill {
+  padding: 2px 8px;
+  border-radius: var(--lui-border-radius-circle);
+  background: var(--lui-color-neutral-border-subtle);
   color: var(--lui-color-neutral-text-caption);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
 }
 
 .sc-swatch {
   display: grid;
   place-items: center;
-  height: 88px;
+  height: 112px;
   border-radius: var(--lui-border-radius-md);
-  font-size: 1.5rem;
-  font-weight: var(--lui-typography-font-weight-semibold);
-}
-
-.sc-swatch--background {
   background: var(--swatch);
   color: var(--tint);
+  font-size: 1.75rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+  box-shadow: inset 0 0 0 1px var(--lui-color-black-alpha-2);
+  transition:
+    background-color 200ms ease-out,
+    border-color 200ms ease-out;
 }
 
 /* A border swatch is the line on its surface, thick enough to read the colour. */
-.sc-swatch--border {
-  border: 4px solid var(--swatch);
+[data-mode='border'] .sc-swatch {
+  border: 6px solid var(--swatch);
   background: var(--surface);
 }
 
-.sc-badge {
-  display: inline-block;
-  margin-left: 4px;
-  padding: 0 6px;
+.sc-card__hex {
+  display: flex;
+  gap: var(--lui-spacing-fixed-8);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
   border-radius: var(--lui-border-radius-sm);
+  background: transparent;
+  color: var(--lui-color-neutral-text-heading);
+  font-family: var(--lui-brand-typography-font-family-code), monospace;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.sc-card__hex svg {
+  color: var(--lui-color-neutral-text-caption);
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.sc-card__hex:hover {
+  background: var(--lui-color-neutral-border-subtle);
+}
+
+.sc-card__hex:is(:hover, :focus-visible) svg {
+  opacity: 1;
+}
+
+.sc-meter {
+  display: grid;
+  gap: 6px;
+}
+
+.sc-meter__track {
+  position: relative;
+  height: 6px;
+  border-radius: var(--lui-border-radius-circle);
+  background: var(--lui-color-neutral-border-subtle);
+}
+
+.sc-meter__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--fill);
+  border-radius: inherit;
+  background: var(--lui-color-success-background-container);
+  transition:
+    width 260ms ease-out,
+    background-color 260ms ease-out;
+}
+
+.sc-meter[data-pass='false'] .sc-meter__fill {
+  background: var(--lui-color-danger-background-container);
+}
+
+/* The threshold, at the middle of a track that runs to twice it. */
+.sc-meter__mark {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 50%;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--lui-color-neutral-text-heading);
+}
+
+.sc-meter__ratio {
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.8125rem;
+}
+
+.sc-badge {
+  padding: 2px 8px;
+  border-radius: var(--lui-border-radius-circle);
   background: var(--lui-color-success-background-surface);
   color: var(--lui-color-neutral-text-heading);
   font-size: 0.75rem;
+  font-weight: var(--lui-typography-font-weight-medium);
   white-space: nowrap;
 }
 
@@ -225,71 +796,152 @@ body {
   background: var(--lui-color-danger-background-surface);
 }
 
-.sc-stage {
-  display: grid;
-  place-items: center;
-  padding: var(--lui-spacing-fixed-32);
+/* Mix scale --------------------------------------------------------------- */
+
+.sc-scale {
+  position: relative;
+  padding-bottom: 28px;
+}
+
+.sc-scale__range {
+  display: block;
+  width: 100%;
+  height: 48px;
+  margin: 0;
   border-radius: var(--lui-border-radius-md);
-  background: var(--lui-color-neutral-border-subtle);
+  background: linear-gradient(to right, var(--base), var(--tint));
+  box-shadow: inset 0 0 0 1px var(--lui-color-black-alpha-2);
+  cursor: ew-resize;
+  appearance: none;
 }
 
-.sc-stage[data-mode='border'] {
-  background: var(--surface);
-}
-
-/* Same mix and timings as `state()` / `state-border()` and `state-timing()`. */
-.sc-sample {
-  min-width: 200px;
-  min-height: 44px;
-  padding: 0 var(--lui-spacing-fixed-24);
-  border: var(--lui-border-width-1) solid transparent;
-  border-radius: var(--lui-border-radius-md);
-  background: var(--base);
-  color: var(--tint);
-  font: inherit;
-  font-weight: var(--lui-typography-font-weight-semibold);
-  cursor: pointer;
-  transition:
-    background-color 220ms ease-out,
-    border-color 220ms ease-out;
-}
-
-.sc-sample:hover {
-  background-color: color-mix(in srgb, var(--tint) var(--hover), var(--base));
-  transition-duration: 140ms;
-}
-
-.sc-sample:active {
-  background-color: color-mix(in srgb, var(--tint) var(--pressed), var(--base));
-  transition-duration: 40ms;
-  transition-timing-function: linear;
-}
-
-.sc-sample:focus-visible {
+.sc-scale__range:focus-visible {
   outline: none;
   box-shadow: var(--lui-focus-ring-primary);
 }
 
-.sc-stage[data-mode='border'] .sc-sample {
-  border-color: var(--base);
-  background: var(--surface);
+.sc-scale__range::-webkit-slider-runnable-track {
+  height: 48px;
+  background: transparent;
 }
 
-.sc-stage[data-mode='border'] .sc-sample:hover {
-  border-color: color-mix(in srgb, var(--tint) var(--hover), var(--base));
-  background: var(--surface);
+.sc-scale__range::-webkit-slider-thumb {
+  width: 6px;
+  height: 56px;
+  margin-top: -4px;
+  border: 2px solid var(--lui-color-neutral-background-surface);
+  border-radius: 3px;
+  background: var(--lui-color-neutral-text-heading);
+  box-shadow: var(--lui-elevation-floating);
+  appearance: none;
 }
 
-.sc-stage[data-mode='border'] .sc-sample:active {
-  border-color: color-mix(in srgb, var(--tint) var(--pressed), var(--base));
-  background: var(--surface);
+.sc-scale__range::-moz-range-thumb {
+  width: 6px;
+  height: 56px;
+  border: 2px solid var(--lui-color-neutral-background-surface);
+  border-radius: 3px;
+  background: var(--lui-color-neutral-text-heading);
+  box-shadow: var(--lui-elevation-floating);
 }
 
-.sc-code {
-  overflow-x: auto;
-  margin: 0;
-  padding: var(--lui-spacing-fixed-16);
+/* Where hover and pressed sit on the scale, under the track. */
+.sc-scale__marker {
+  position: absolute;
+  top: 48px;
+  left: calc(3px + (100% - 6px) * var(--at) / 100%);
+  height: 28px;
+  pointer-events: none;
+  transition: left 260ms ease-out;
+}
+
+.sc-scale__marker::before {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 2px;
+  height: 8px;
+  background: var(--lui-color-neutral-text-heading);
+  content: '';
+}
+
+.sc-scale__label {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.sc-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.sc-readout__swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--lui-border-radius-sm);
+  box-shadow: inset 0 0 0 1px var(--lui-color-black-alpha-2);
+}
+
+.sc-readout strong {
+  min-width: 4ch;
+  color: var(--lui-color-neutral-text-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-readout code {
+  color: var(--lui-color-neutral-text-heading);
+}
+
+/* Toast ------------------------------------------------------------------- */
+
+.sc-toast {
+  position: fixed;
+  bottom: var(--lui-spacing-fixed-24);
+  left: 50%;
+  z-index: 10;
+  padding: 10px 16px;
   border-radius: var(--lui-border-radius-md);
-  background: var(--lui-color-neutral-border-subtle);
-  font-size: 0.8125rem;
+  background: var(--lui-color-neutral-background-overlay);
+  color: var(--lui-color-neutral-text-inverse);
+  font-size: 0.875rem;
+  box-shadow: var(--lui-elevation-overlay);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms ease-out;
+}
+
+.sc-toast[data-visible] {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Nothing animates in from the first paint. */
+html:not([data-ready]) *,
+html:not([data-ready]) ::before,
+html:not([data-ready]) ::after {
+  transition: none !important;
+}
+
+/* The sample keeps its timings: they are what it demonstrates. */
+@media (prefers-reduced-motion: reduce) {
+  :not(.sc-sample),
+  ::before,
+  ::after {
+    transition-duration: 0ms !important;
+  }
+
+  .sc-card[data-active] {
+    transform: none;
+  }
 }
