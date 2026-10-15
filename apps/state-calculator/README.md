@@ -28,6 +28,12 @@ first.
   surface behind it (a component boundary needs 3:1).
 - **Start from** loads the tokens a real component uses, resolved in the theme
   selected at the top. Editing any colour switches back to custom colours.
+- **Live sample** can be pinned to rest, hover or pressed; while it is live,
+  the card for the state it is in lights up.
+- **Mix scale** is a slider across every amount of tint, with hover and
+  pressed marked on it.
+- Hex values and the CSS copy on click. **Copy link** shares the exact view:
+  the theme, the preset or the custom colours live in the query string.
 - The amounts in `src/lib/state.js` mirror `$state-amounts` and
   `$state-border-amounts` in `packages/styles/src/utilities/_functions.scss`.
   Change both together.

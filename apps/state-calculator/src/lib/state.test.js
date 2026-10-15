@@ -4,8 +4,10 @@ import {
   contrast,
   computeStates,
   cssColorToHex,
+  fromSearch,
   mix,
   normalizeHex,
+  toSearch,
 } from './state.js';
 
 describe('normalizeHex', () => {
@@ -82,5 +84,38 @@ describe('computeStates', () => {
     expect(() =>
       computeStates({ mode: 'outline', base: '#fff', tint: '#000' })
     ).toThrow();
+  });
+});
+
+describe('toSearch / fromSearch', () => {
+  const custom = {
+    theme: 'dark',
+    preset: 'custom',
+    mode: 'border',
+    base: '#eeecf1',
+    tint: '#282b33',
+    surface: '#ffffff',
+  };
+
+  it('round-trips custom colours', () => {
+    expect(fromSearch(toSearch(custom))).toEqual({
+      theme: 'dark',
+      mode: 'border',
+      base: '#eeecf1',
+      tint: '#282b33',
+      surface: '#ffffff',
+    });
+  });
+
+  it('stores a preset by name only', () => {
+    const search = toSearch({ ...custom, preset: 'field' });
+    expect(search).toBe('?theme=dark&preset=field');
+    expect(fromSearch(search)).toEqual({ theme: 'dark', preset: 'field' });
+  });
+
+  it('drops values that do not validate', () => {
+    expect(fromSearch('?theme=sepia&mode=outline&base=nope&tint=fff')).toEqual({
+      tint: '#ffffff',
+    });
   });
 });
