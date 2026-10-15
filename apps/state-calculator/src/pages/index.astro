@@ -261,7 +261,7 @@ const COLOURS = [
               <span class="sc-scale__marker" data-marker="pressed"><span class="sc-scale__label">pressed</span></span>
             </div>
 
-            <div class="sc-readout" aria-live="polite">
+            <div class="sc-readout">
               <span class="sc-readout__swatch" data-readout-swatch />
               <strong data-readout-amount></strong>
               <code data-readout-hex></code>
@@ -337,7 +337,9 @@ const COLOURS = [
       const linked = fromSearch(location.search);
       const state = {
         theme: root.dataset.theme,
-        preset: linked.preset in PRESETS ? linked.preset : 'custom',
+        preset: Object.hasOwn(PRESETS, linked.preset ?? '')
+          ? linked.preset
+          : 'custom',
         mode: linked.mode ?? 'background',
         base: linked.base ?? '#339bf0',
         tint: linked.tint ?? '#ffffff',
@@ -397,7 +399,6 @@ const COLOURS = [
         const color = mix(tint, base, amount);
         const ratio = contrast(color, mode === 'background' ? tint : surface);
 
-        range.style.setProperty('--value', `${amount}%`);
         range.setAttribute('aria-valuetext', `${amount}% tint, ${color}`);
         $('[data-readout-swatch]').style.background = color;
         $('[data-readout-amount]').textContent = `${amount}%`;
@@ -502,15 +503,24 @@ const COLOURS = [
         scale.style.setProperty('--base', base);
         scale.style.setProperty('--tint', tint);
         for (const [name, amount] of Object.entries(amounts)) {
-          $(`[data-marker="${name}"]`, scale).style.setProperty(
-            '--at',
-            `${amount}%`
-          );
+          // Unitless: the marker scales the track width by it.
+          $(`[data-marker="${name}"]`, scale).style.setProperty('--at', amount);
         }
 
         renderScale();
         renderActive();
-        history.replaceState(null, '', toSearch(state));
+        syncUrl();
+      }
+
+      // Safari throws past 100 replaceState calls in 30s, and a colour picker
+      // fires on every drag step, so the URL catches up once input settles.
+      let urlTimer;
+      function syncUrl() {
+        clearTimeout(urlTimer);
+        urlTimer = setTimeout(
+          () => history.replaceState(null, '', toSearch(state)),
+          250
+        );
       }
 
       function toCustom() {
