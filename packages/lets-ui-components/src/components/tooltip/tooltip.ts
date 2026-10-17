@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './tooltip.scss?inline';
 
 const VALID_POSITIONS = new Set(['top', 'bottom', 'left', 'right']);
@@ -29,34 +30,47 @@ export class LuiTooltip extends LitElement {
       : 'top';
   }
 
+  // A slotted trigger with nothing focusable in it, such as plain text: the
+  // wrapper becomes the Tab stop, so keyboard users can still reach the text.
+  @state() private _wrapperFocusable = false;
+
+  private _describedTrigger: HTMLElement | null = null;
+
+  updated(changedProps: Map<string, unknown>) {
+    if (changedProps.has('text') && this._describedTrigger) {
+      this._describedTrigger.ariaDescription = this.text;
+    }
+  }
+
+  // The trigger is slotted, so it lives in the light DOM: a query from the
+  // wrapper inside this shadow root never reaches it. The slot's assigned
+  // elements do.
+  private _findTrigger(slot: HTMLSlotElement): HTMLElement | null {
+    for (const el of slot.assignedElements({ flatten: true })) {
+      const focusable = el.matches(FOCUSABLE_SELECTOR)
+        ? el
+        : el.querySelector(FOCUSABLE_SELECTOR);
+      if (focusable) return focusable as HTMLElement;
+    }
+    return null;
+  }
+
+  // The content's ID lives in this shadow root, and an IDREF cannot cross it,
+  // so the trigger gets the text itself as its `ariaDescription`. Set as a
+  // property rather than an attribute: `lui-button`, `lui-icon-button` and
+  // `lui-link` pass it on to their inner control without leaving it on their
+  // role-less host, and on a native element it reflects to the attribute.
   private _handleSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
-    const nodes = slot.assignedNodes({ flatten: true });
-    this._hasCustomTrigger = nodes.length > 0;
+    this._hasCustomTrigger = slot.assignedNodes({ flatten: true }).length > 0;
 
-    // Connect aria-describedby to focusable elements inside the trigger slot
-    if (this._hasCustomTrigger) {
-      const triggerWrapper = this.shadowRoot?.querySelector(
-        '[data-tooltip-trigger]'
-      );
-      if (triggerWrapper) {
-        const focusables = Array.from(
-          triggerWrapper.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-        );
-        const describedBy = `${this._baseId}-content`;
-        if (focusables.length > 0) {
-          focusables.forEach((el) =>
-            el.setAttribute('aria-describedby', describedBy)
-          );
-        } else {
-          (triggerWrapper as HTMLElement).setAttribute('tabindex', '0');
-          (triggerWrapper as HTMLElement).setAttribute(
-            'aria-describedby',
-            describedBy
-          );
-        }
-      }
+    const trigger = this._findTrigger(slot);
+    if (this._describedTrigger !== trigger) {
+      if (this._describedTrigger) this._describedTrigger.ariaDescription = null;
+      this._describedTrigger = trigger;
     }
+    if (trigger) trigger.ariaDescription = this.text;
+    this._wrapperFocusable = this._hasCustomTrigger && !trigger;
   }
 
   render() {
@@ -69,7 +83,13 @@ export class LuiTooltip extends LitElement {
     return html`
       <span class="tooltip tooltip--${position}">
         ${this._hasCustomTrigger
-          ? html`<span class="tooltip__trigger" data-tooltip-trigger
+          ? html`<span
+              class="tooltip__trigger"
+              data-tooltip-trigger
+              tabindex="${ifDefined(this._wrapperFocusable ? '0' : undefined)}"
+              aria-describedby="${ifDefined(
+                this._wrapperFocusable ? describedBy : undefined
+              )}"
               ><slot @slotchange="${this._handleSlotChange}"></slot
             ></span>`
           : html`
