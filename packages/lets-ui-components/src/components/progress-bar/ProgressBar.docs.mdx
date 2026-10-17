@@ -5,7 +5,7 @@ import * as ProgressBarStories from './ProgressBar.stories';
 
 # Progress Bar
 
-O Progress Bar mostra quanto de uma tarefa já foi feito: um envio, uma importação, um passo de configuração. Com `value`, a barra preenche na proporção de `value` sobre `max` e o valor aparece ao lado do rótulo — em percentual, ou na unidade que você passar em `value-text`. Sem `value`, ela fica indeterminada: um trecho corre pela trilha enquanto a duração não é conhecida.
+O Progress Bar mostra quanto de uma tarefa já foi feito, como o envio de arquivos ou uma importação. Com `value`, a barra preenche na proporção de `value` sobre `max` e o valor aparece ao lado do rótulo, em percentual ou no texto passado em `value-text`. Sem `value`, a barra fica indeterminada e um trecho percorre a trilha enquanto a duração não é conhecida.
 
 Use quando a espera é longa o bastante para a pessoa querer saber quanto falta. Para um trecho de tela que carrega com formato já conhecido, use Skeleton. Para um passo entre vários com nome próprio, use Stepper.
 
@@ -14,19 +14,19 @@ Use quando a espera é longa o bastante para a pessoa querer saber quanto falta.
 
 ## Posição do rótulo
 
-Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `inline`, rótulo, trilha e valor dividem a mesma linha — útil em listas e tabelas, onde a altura conta. Nos dois casos a legenda (`caption`) fica abaixo.
+Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `inline`, rótulo, trilha e valor ficam na mesma linha, o que economiza altura em listas e tabelas. Nos dois casos a legenda (`caption`) fica abaixo.
 
 <Canvas of={ProgressBarStories.LabelPlacement} />
 
 ## Variantes
 
-`primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite. A cor nunca é o único sinal: diga o estado também no rótulo ou na legenda.
+`primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite. Informe o estado também no rótulo ou na legenda, porque a cor sozinha não basta.
 
 <Canvas of={ProgressBarStories.Variants} />
 
 ## Outras unidades
 
-`value` e `max` não precisam ser percentuais: podem estar em GB, arquivos, etapas ou qualquer outra unidade. A barra sempre preenche na proporção `value / max`. Sem `value-text`, o texto ao lado do rótulo é essa proporção em percentual; com `value-text`, ele mostra exatamente o que você escrever, como "3.2 GB of 10 GB". Atualize `value-text` junto com `value`.
+`value` e `max` podem estar em qualquer unidade, como GB ou etapas. A barra sempre preenche na proporção `value / max`. Sem `value-text`, o texto ao lado do rótulo é essa proporção em percentual; com `value-text`, ele mostra exatamente o que você escrever, como "3.2 GB of 10 GB". Atualize `value-text` junto com `value`.
 
 <Canvas of={ProgressBarStories.CustomUnit} />
 
@@ -93,7 +93,7 @@ Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value
 
 ### Atualizando o valor
 
-O componente reage a mudanças nas propriedades, mas não monta o `value-text`: quem conhece a unidade, o idioma e o plural é o sistema. Ao mudar o `value`, atualize o texto na mesma chamada.
+O componente atualiza a barra quando as propriedades mudam, mas não gera o `value-text`. O texto depende da unidade e do idioma do sistema, então atualize `value` e `valueText` juntos.
 
 ```js
 const bar = document.querySelector('lui-progress-bar');
