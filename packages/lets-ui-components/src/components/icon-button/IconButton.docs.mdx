@@ -1,4 +1,4 @@
-import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as IconButtonStories from './IconButton.stories';
 
 <Meta of={IconButtonStories} />
@@ -22,6 +22,30 @@ O Icon Button está disponível em dois tamanhos: `lg` (40px) para áreas com ma
 Use o estado desabilitado quando a ação não está disponível no contexto atual. O botão fica visualmente inativo e não responde a interações.
 
 <Canvas of={IconButtonStories.Disabled} />
+
+## Estado de componentes acionados
+
+Icon Buttons costumam abrir menus e painéis ou alternar formatações — como o botão de menu, o de
+"mais opções" ou o de negrito numa toolbar. Informe o estado com `aria-expanded`, `aria-haspopup`
+ou `aria-pressed` no próprio `<lui-icon-button>`. O componente repassa esses atributos ao `<button>`
+interno, que é quem o leitor de tela anuncia; no elemento externo eles não teriam efeito.
+
+Usado como `slot="trigger"` de um Modal ou Drawer, o botão recebe esses atributos do próprio
+componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` que
+eles definem não é repassado: um ID não pode ser referenciado através de shadow roots diferentes.
+
+```html
+<lui-icon-button
+  aria-label="Mais opções"
+  aria-expanded="false"
+  aria-haspopup="menu"
+>
+  <svg aria-hidden="true" ...>...</svg>
+</lui-icon-button>
+<lui-icon-button aria-label="Negrito" aria-pressed="true">
+  <svg aria-hidden="true" ...>...</svg>
+</lui-icon-button>
+```
 
 ## Todos os ícones
 
