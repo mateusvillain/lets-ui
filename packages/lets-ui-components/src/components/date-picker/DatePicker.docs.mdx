@@ -168,41 +168,107 @@ abaixo para usar o idioma do projeto.
 
 ## Acessibilidade
 
-O campo é um `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data
-exibida. O calendário segue o padrão
+O calendário segue o padrão
 [Date Picker Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/)
-do WAI-ARIA APG. Os dias ficam numa `grid` com um único ponto de tabulação, o
-mês é anunciado numa região `aria-live` e o dia de hoje tem
-`aria-current="date"`.
+do WAI-ARIA APG: um diálogo não modal com os dias numa `grid`.
 
-| Tecla                        | Ação                                           |
-| ---------------------------- | ---------------------------------------------- |
-| `Enter`, `Space`, `↓`        | No campo, abre o calendário no dia selecionado |
-| `←` `→`                      | Dia anterior / seguinte                        |
-| `↑` `↓`                      | Mesma coluna na semana anterior / seguinte     |
-| `Home` `End`                 | Início / fim da semana                         |
-| `Page Up` `Page Down`        | Mês anterior / seguinte                        |
-| `Shift` + `Page Up` / `Down` | Ano anterior / seguinte                        |
-| `Enter`, `Space`             | Seleciona o dia focado e fecha                 |
-| `Esc`                        | Fecha sem alterar e devolve o foco ao campo    |
-
-O calendário também fecha com um clique fora dele ou quando o foco sai com `Tab`.
-
-Com `editable`, o campo é um `<input inputmode="numeric">` nomeado pelo rótulo.
-O formato esperado, como `dd / mm / yyyy`, faz parte da descrição acessível do
-campo, junto com o hint ou o erro. Assim ele continua anunciado depois que o
-placeholder some, e mesmo quando o `placeholder` é trocado. O calendário abre
-pelo botão ao lado, nomeado por `dialog-label` e pela data escolhida, como
-`Choose date, Jan 16, 2026`. O botão tem anel de foco próprio, para não se
-confundir com o foco na caixa de texto. Na caixa de texto, `Alt` + `↓` abre o
-calendário, já que as setas movem o cursor. Ao escolher um dia ou apertar
-`Esc`, o foco volta ao botão.
+### Nome do campo
 
 Sempre dê um nome ao campo, com `label` ou, quando não houver rótulo visível,
 com `aria-label`. Sem os dois, o campo fica sem nome acessível: com `editable`,
 só resta o placeholder, que leitores de tela não anunciam de forma confiável.
 Com `range`, use um rótulo que descreva o período, como "Estadia" ou "Período
 do relatório".
+
+### Teclado no campo
+
+| Tecla            | Ação                                                        |
+| ---------------- | ----------------------------------------------------------- |
+| `Enter`, `Space` | No botão, abre ou fecha o calendário                        |
+| `↓`, `↑`         | No botão, abre o calendário no dia selecionado ou em hoje   |
+| `Alt` + `↓`      | Com `editable`, na caixa de texto, abre o calendário        |
+| `Esc`            | Com o calendário aberto, fecha sem alterar                  |
+| `0`–`9`          | Com `editable`, digita a data; a máscara põe os separadores |
+
+Com `editable`, as setas da caixa de texto movem o cursor, por isso o
+calendário abre com `Alt` + `↓`, como num `<select>` nativo.
+
+### Teclado no calendário
+
+| Tecla                        | Ação                                                   |
+| ---------------------------- | ------------------------------------------------------ |
+| `←` `→`                      | Dia anterior / seguinte                                |
+| `↑` `↓`                      | Mesma coluna na semana anterior / seguinte             |
+| `Home` `End`                 | Início / fim da semana                                 |
+| `Page Up` `Page Down`        | Mês anterior / seguinte                                |
+| `Shift` + `Page Up` / `Down` | Ano anterior / seguinte                                |
+| `Enter`, `Space`             | Seleciona o dia focado e fecha                         |
+| `Tab`                        | Passa pelos botões de mês e pela grade; ao sair, fecha |
+| `Esc`                        | Fecha sem alterar                                      |
+
+Com `range`, o primeiro `Enter` marca uma ponta e o segundo marca a outra.
+Entre os dois, o intervalo acompanha o foco. `Esc` descarta a seleção
+incompleta e mantém o valor anterior.
+
+### Foco
+
+- Ao abrir, o foco vai para o dia selecionado ou, sem valor, para o dia de hoje.
+  As setas e a navegação de mês param nos limites de `min` e `max`.
+- A grade tem um único ponto de tabulação, inclusive com dois meses lado a lado.
+- Ao fechar com `Esc` ou ao escolher um dia, o foco volta ao controle que abriu
+  o calendário: o campo ou, com `editable`, o botão do calendário.
+- O calendário fecha com `Tab` para fora dele ou com um clique fora. O diálogo
+  tem `aria-modal="false"` e não prende o foco.
+- Dentro de um modal, `Esc` fecha só o calendário, não o modal.
+- Com `open` no HTML, o calendário aparece sem tirar o foco da página.
+- Com `editable`, o botão do calendário tem anel de foco próprio, para não se
+  confundir com o foco na caixa de texto.
+
+### O que o leitor de tela anuncia
+
+| Elemento              | Anúncio                                                                                                              |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Campo                 | `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data exibida, com `aria-expanded`                       |
+| Campo com `editable`  | `<input inputmode="numeric">` nomeado pelo rótulo e descrito pelo formato (`dd / mm / yyyy`), pelo hint ou pelo erro |
+| Botão do calendário   | `dialog-label` seguido da data escolhida: `Choose date, Jan 16, 2026`                                                |
+| Calendário            | Diálogo nomeado por `dialog-label`                                                                                   |
+| Mês                   | Região `aria-live="polite"`, anunciada ao trocar de mês                                                              |
+| Dias da semana        | Nome completo ("Sunday"), mesmo quando a tela mostra só "S"                                                          |
+| Dia                   | Data por extenso: "Friday, January 16, 2026"                                                                         |
+| Hoje                  | `aria-current="date"`                                                                                                |
+| Dia selecionado       | `aria-selected="true"` na célula; com `range`, nas duas pontas e nos dias entre elas                                 |
+| Dia fora do intervalo | `aria-disabled="true"`: alcançável pelo teclado, mas não pode ser escolhido                                          |
+| Botões de mês         | `previous-month-label` e `next-month-label`; `aria-disabled` no limite de `min` e `max`                              |
+| Erro                  | `aria-invalid`, `aria-required` e a mensagem ligada por `aria-describedby`                                           |
+
+O formato faz parte da descrição do campo, não só do placeholder, porque o
+placeholder some quando a pessoa começa a digitar e pode ser trocado por outro
+texto.
+
+### Critérios WCAG
+
+| Critério                     | Como o componente atende                                                         |
+| ---------------------------- | -------------------------------------------------------------------------------- |
+| 1.3.1 Info and Relationships | Rótulo ligado ao campo; `grid` com cabeçalhos de coluna; hint e erro ligados     |
+| 1.3.2 Meaningful Sequence    | O calendário vem logo depois do campo no DOM                                     |
+| 1.4.1 Use of Color           | Hoje tem negrito e `aria-current`; a seleção tem preenchimento e `aria-selected` |
+| 2.1.1 Keyboard               | Todas as ações têm tecla, incluindo seleção de range                             |
+| 2.1.2 No Keyboard Trap       | Diálogo não modal; `Esc` e `Tab` saem dele                                       |
+| 2.4.3 Focus Order            | Foco entra no dia ativo e volta ao controle que abriu o calendário               |
+| 2.4.6 Headings and Labels    | Mês anunciado; dias e botões com nome descritivo                                 |
+| 2.4.7 Focus Visible          | Anel de foco no campo, nos dias, nos botões de mês e no botão do calendário      |
+| 2.5.8 Target Size (Minimum)  | Dias com 32 px e botões de mês com 40 px                                         |
+| 3.3.1 Error Identification   | `aria-invalid` e mensagem de erro; `badInput` com `bad-input-text`               |
+| 3.3.2 Labels or Instructions | Rótulo e, com `editable`, formato na descrição acessível                         |
+| 4.1.2 Name, Role, Value      | Papéis, nomes e estados nativos ou ARIA em todos os controles                    |
+
+### Status de testes
+
+| Área                             | Status                                                  |
+| -------------------------------- | ------------------------------------------------------- |
+| Teclado, foco e atributos ARIA   | Testes automatizados, no Chromium                       |
+| Regras do axe                    | Painel Accessibility do Storybook, sem bloquear o build |
+| Leitor de tela (VoiceOver, NVDA) | Ainda não testado manualmente                           |
 
 ## Classe CSS (sem Web Component)
 
