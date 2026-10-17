@@ -81,6 +81,7 @@ export class LuiDropdownMenu extends LitElement {
   @state() private _hasTriggerSlot = false;
 
   private _baseId: string;
+  private _markedTrigger: HTMLElement | null = null;
   private _handleDocumentClick!: (e: MouseEvent) => void;
   private _handleDocumentKeydown!: (e: KeyboardEvent) => void;
 
@@ -181,6 +182,13 @@ export class LuiDropdownMenu extends LitElement {
   // and cannot be referenced from the trigger's tree.
   private _updateSlottedTrigger() {
     const trigger = this._trigger;
+    // A trigger swapped out may live on elsewhere in the page; it must not
+    // keep announcing a menu it no longer opens.
+    if (this._markedTrigger && this._markedTrigger !== trigger) {
+      this._markedTrigger.removeAttribute('aria-haspopup');
+      this._markedTrigger.removeAttribute('aria-expanded');
+    }
+    this._markedTrigger = trigger;
     if (!trigger) return;
     trigger.setAttribute('aria-haspopup', 'menu');
     trigger.setAttribute('aria-expanded', this.open ? 'true' : 'false');

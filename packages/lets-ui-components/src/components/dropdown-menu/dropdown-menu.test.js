@@ -119,4 +119,15 @@ describe('swapped trigger', () => {
 
     await expect.poll(() => next.getAttribute('aria-haspopup')).toBe('menu');
   });
+
+  it('clears the state from a trigger moved out of the slot', async () => {
+    const { menu, trigger } = await mount(triggers['a native button']);
+    await expect.poll(() => trigger.getAttribute('aria-haspopup')).toBe('menu');
+
+    trigger.removeAttribute('slot');
+
+    await expect.poll(() => trigger.hasAttribute('aria-haspopup')).toBe(false);
+    expect(trigger.hasAttribute('aria-expanded')).toBe(false);
+    expect(menu.contains(trigger)).toBe(true);
+  });
 });
