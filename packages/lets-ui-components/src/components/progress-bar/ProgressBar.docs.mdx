@@ -91,6 +91,24 @@ Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value
 <lui-progress-bar label="Carregando"></lui-progress-bar>
 ```
 
+### Atualizando o valor
+
+O componente reage a mudanças nas propriedades, mas não monta o `value-text`: quem conhece a unidade, o idioma e o plural é o sistema. Ao mudar o `value`, atualize o texto na mesma chamada.
+
+```js
+const bar = document.querySelector('lui-progress-bar');
+
+function updateStorage(usedGB, totalGB) {
+  bar.value = usedGB;
+  bar.max = totalGB;
+  bar.valueText = `${usedGB} GB of ${totalGB} GB`;
+}
+
+updateStorage(3.2, 10);
+// A pessoa exclui um arquivo de 0.5 GB
+updateStorage(2.7, 10);
+```
+
 ### Classe CSS
 
 ```html
