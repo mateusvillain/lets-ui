@@ -50,7 +50,7 @@ Com `hide-label` e `hide-value`, sobra apenas a trilha. O `label` continua sendo
 
 ## Classe CSS (sem Web Component)
 
-Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido. Deixe a legenda com `aria-live="polite"` no HTML desde o início, mesmo vazia, para que as mudanças nela sejam anunciadas.
+Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido. Deixe a legenda com `aria-live="polite"` no HTML desde o início, mesmo vazia, para que as mudanças nela sejam anunciadas. Vazia, escreva-a sem espaço nem quebra de linha entre as tags (`<span …></span>`); só assim ela deixa de ocupar espaço abaixo da trilha.
 
 <Canvas of={ProgressBarStories.CSSClass} />
 
@@ -141,6 +141,7 @@ updateStorage(2.7, 10);
       style="--lui-progress-bar-value: 40%"
     ></span>
   </div>
+  <span class="progress-bar__caption" aria-live="polite"></span>
 </div>
 ```
 

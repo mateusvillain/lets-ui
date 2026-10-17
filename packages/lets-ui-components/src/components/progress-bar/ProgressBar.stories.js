@@ -164,6 +164,7 @@ export const CSSClass = () => `
         >
           <span class="progress-bar__indicator"></span>
         </div>
+        <span class="progress-bar__caption" aria-live="polite"></span>
       </div>
     </div>
   </div>

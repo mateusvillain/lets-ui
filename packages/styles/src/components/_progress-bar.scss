@@ -55,13 +55,25 @@ $segment: 30%;
     border-radius: radius(circle);
   }
 
+  // The fill spans the whole track and slides in from the start edge, so a
+  // change in value animates a transform instead of the width, without layout
+  // on every frame. The track clips the part that is still outside.
   &__indicator {
+    --lui-progress-bar-offset: calc(
+      clamp(0%, var(--lui-progress-bar-value, 0%), 100%) - 100%
+    );
+
     display: block;
-    inline-size: clamp(0%, var(--lui-progress-bar-value, 0%), 100%);
+    inline-size: 100%;
     block-size: 100%;
     background-color: var(--lui-progress-bar-color);
     border-radius: inherit;
-    transition: inline-size 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(var(--lui-progress-bar-offset));
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:dir(rtl) {
+      transform: translateX(calc(var(--lui-progress-bar-offset) * -1));
+    }
   }
 
   &__caption {
@@ -71,7 +83,8 @@ $segment: 30%;
     color: text(caption);
 
     // An empty caption stays in the page as a live region, but out of the
-    // flex flow, so it adds no row gap.
+    // flex flow, so it adds no row gap. Only a truly empty element matches,
+    // so write it without whitespace inside.
     &:empty {
       position: absolute;
     }
@@ -118,18 +131,26 @@ $segment: 30%;
     }
   }
 
-  &--indeterminate .progress-bar__indicator {
+  // The sweep is a separate segment drawn by the track, while the fill waits
+  // at 0. When the first value arrives, the fill grows from the start edge
+  // instead of shrinking from the segment.
+  &--indeterminate .progress-bar__track::after {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
     inline-size: $segment;
-    transition: none;
+    content: '';
+    background-color: var(--lui-progress-bar-color);
+    border-radius: inherit;
     animation: lui-progress-bar-indeterminate 1.6s cubic-bezier(0.4, 0, 0.2, 1)
       infinite;
+  }
 
-    // translateX is physical, so right-to-left needs the mirrored sweep. Only
-    // with motion allowed, or this selector would outrank the pulse below.
-    @media (prefers-reduced-motion: no-preference) {
-      &:dir(rtl) {
-        animation-name: lui-progress-bar-indeterminate-rtl;
-      }
+  // translateX is physical, so right-to-left needs the mirrored sweep. Only
+  // with motion allowed, or this selector would outrank the pulse below.
+  @media (prefers-reduced-motion: no-preference) {
+    &--indeterminate .progress-bar__track:dir(rtl)::after {
+      animation-name: lui-progress-bar-indeterminate-rtl;
     }
   }
 
@@ -140,20 +161,22 @@ $segment: 30%;
 
     // No travel: the whole track fades in and out, so the bar still reads as
     // working without anything moving across the screen.
-    &--indeterminate .progress-bar__indicator {
+    &--indeterminate .progress-bar__track::after {
       inline-size: 100%;
       animation: lui-progress-bar-pulse 2.4s ease-in-out infinite;
     }
   }
 
   // A forced-colors theme repaints both backgrounds into one, which would hide
-  // the fill. The track gets an outline and the fill a system colour.
+  // the fill. The track gets an outline, which unlike a border adds no size,
+  // and the fill a system colour.
   @media (forced-colors: active) {
     &__track {
-      border: width(1) solid CanvasText;
+      outline: width(1) solid CanvasText;
     }
 
-    &__indicator {
+    &__indicator,
+    &--indeterminate .progress-bar__track::after {
       background-color: Highlight;
     }
   }

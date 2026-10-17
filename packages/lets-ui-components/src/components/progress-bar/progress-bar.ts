@@ -26,9 +26,16 @@ function pick<T extends string>(
 export class LuiProgressBar extends LitElement {
   static styles = unsafeCSS(styles);
 
-  // A missing or removed `value` makes the bar indeterminate, so null is a state
-  // rather than a missing default.
-  @property({ type: Number }) value: number | null = null;
+  // A missing, removed or empty `value` makes the bar indeterminate, so null is
+  // a state rather than a missing default. Lit's Number converter would turn
+  // an empty attribute into 0, which reads as "no progress" instead.
+  @property({
+    converter: {
+      fromAttribute: (value: string | null) =>
+        value === null || value.trim() === '' ? null : Number(value),
+    },
+  })
+  value: number | null = null;
   @property({ type: Number }) max = 100;
   @property() variant = 'primary';
   @property() size = 'md';

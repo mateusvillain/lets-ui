@@ -46,7 +46,7 @@ describe('determinate', () => {
     const fill = part(progress, 'indicator').getBoundingClientRect();
 
     expect(bar(progress).getAttribute('aria-valuemax')).toBe('4');
-    expect(fill.width / track.width).toBeCloseTo(0.75, 2);
+    expect((fill.right - track.left) / track.width).toBeCloseTo(0.75, 2);
     expect(part(progress, 'value').textContent.trim()).toBe('75%');
   });
 
@@ -113,11 +113,38 @@ describe('indeterminate', () => {
     ).toBe(true);
   });
 
-  it('mirrors the sweep in right-to-left', async () => {
+  it('treats an empty value attribute as indeterminate', async () => {
+    const progress = await mount(
+      '<lui-progress-bar value=""></lui-progress-bar>'
+    );
+
+    expect(bar(progress).hasAttribute('aria-valuenow')).toBe(false);
+    expect(
+      root(progress).classList.contains('progress-bar--indeterminate')
+    ).toBe(true);
+  });
+
+  it('grows the fill from the start edge when a value arrives', async () => {
+    const progress = await mount('<lui-progress-bar></lui-progress-bar>');
+    const track = part(progress, 'track').getBoundingClientRect();
+
+    expect(part(progress, 'indicator').getBoundingClientRect().right).toBe(
+      track.left
+    );
+  });
+
+  it('mirrors the fill and the sweep in right-to-left', async () => {
     const ltr = await mount('<lui-progress-bar></lui-progress-bar>');
     const rtl = await mount('<lui-progress-bar dir="rtl"></lui-progress-bar>');
+    const filled = await mount(
+      '<lui-progress-bar dir="rtl" value="25"></lui-progress-bar>'
+    );
     const animation = (progress) =>
-      getComputedStyle(part(progress, 'indicator')).animationName;
+      getComputedStyle(part(progress, 'track'), '::after').animationName;
+    const track = part(filled, 'track').getBoundingClientRect();
+    const fill = part(filled, 'indicator').getBoundingClientRect();
+
+    expect((track.right - fill.left) / track.width).toBeCloseTo(0.25, 2);
 
     expect(animation(ltr)).toBe('lui-progress-bar-indeterminate');
     expect(animation(rtl)).toBe('lui-progress-bar-indeterminate-rtl');
