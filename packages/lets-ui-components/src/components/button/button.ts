@@ -31,6 +31,12 @@ export class LuiButton extends LitElement {
   @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
+  // State ARIA set on the host — by the author or by a Modal or Drawer this
+  // button triggers — never reaches the inner control on its own, and the host
+  // has no role to carry it, so it is mirrored onto the element that does.
+  @property({ attribute: 'aria-expanded' }) ariaExpanded: string | null = null;
+  @property({ attribute: 'aria-haspopup' }) ariaHasPopup: string | null = null;
+  @property({ attribute: 'aria-pressed' }) ariaPressed: string | null = null;
   @property() href = '';
   @property() target = '';
   @property() rel = '';
@@ -92,9 +98,12 @@ export class LuiButton extends LitElement {
     if (this.disabled) e.stopPropagation();
   };
 
-  private _renderContent(displayLabel: string) {
+  // The default slot stays rendered while loading: a label passed as content
+  // rather than through `label` is the only accessible name the button has.
+  private _renderContent() {
     return this.loading
-      ? html`${spinnerIcon}${displayLabel}`
+      ? html`${spinnerIcon}${this.loadingText ||
+        html`<slot>${this.label}</slot>`}`
       : html`<slot name="prefix"></slot><slot>${this.label}</slot
           ><slot name="suffix"></slot>`;
   }
@@ -115,9 +124,11 @@ export class LuiButton extends LitElement {
         aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        aria-expanded="${ifDefined(this.ariaExpanded ?? undefined)}"
+        aria-haspopup="${ifDefined(this.ariaHasPopup ?? undefined)}"
         @click="${this._handleLinkClick}"
       >
-        ${this._renderContent(displayLabel)}
+        ${this._renderContent()}
       </a>
     `;
   }
@@ -140,9 +151,12 @@ export class LuiButton extends LitElement {
         ?disabled="${this.disabled}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        aria-expanded="${ifDefined(this.ariaExpanded ?? undefined)}"
+        aria-haspopup="${ifDefined(this.ariaHasPopup ?? undefined)}"
+        aria-pressed="${ifDefined(this.ariaPressed ?? undefined)}"
         @click="${this._handleClick}"
       >
-        ${this._renderContent(displayLabel)}
+        ${this._renderContent()}
       </button>
     `;
   }
