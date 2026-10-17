@@ -30,11 +30,12 @@ export class LuiButton extends LitElement {
   @property({ type: Boolean }) loading = false;
   @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
-  @property({ attribute: 'aria-label' }) ariaLabel = '';
+  @property({ attribute: 'aria-label', reflect: true }) ariaLabel = '';
   // State ARIA set on the host — by the author or by a Modal or Drawer this
   // button triggers — never reaches the inner control on its own, and the host
   // has no role to carry it, so it is mirrored onto the element that does.
   // These accessors replace the native reflecting ones, so they reflect too.
+  // An empty value is not a valid ARIA token, so it renders no attribute.
   @property({ attribute: 'aria-expanded', reflect: true })
   ariaExpanded: string | null = null;
   @property({ attribute: 'aria-haspopup', reflect: true })
@@ -135,8 +136,8 @@ export class LuiButton extends LitElement {
         aria-label="${ifDefined(this._ariaLabel)}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
-        aria-expanded="${ifDefined(this.ariaExpanded ?? undefined)}"
-        aria-haspopup="${ifDefined(this.ariaHasPopup ?? undefined)}"
+        aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
+        aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
         @click="${this._handleLinkClick}"
       >
         ${this._renderContent()}
@@ -160,9 +161,9 @@ export class LuiButton extends LitElement {
         ?disabled="${this.disabled}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
-        aria-expanded="${ifDefined(this.ariaExpanded ?? undefined)}"
-        aria-haspopup="${ifDefined(this.ariaHasPopup ?? undefined)}"
-        aria-pressed="${ifDefined(this.ariaPressed ?? undefined)}"
+        aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
+        aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
+        aria-pressed="${ifDefined(this.ariaPressed || undefined)}"
         @click="${this._handleClick}"
       >
         ${this._renderContent()}

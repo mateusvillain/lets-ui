@@ -140,6 +140,13 @@ eles definem não é repassado: um ID não pode ser referenciado através de sha
 <lui-button label="Negrito" aria-pressed="true"></lui-button>
 ```
 
+O Button ainda não tem estilo visual para `aria-pressed="true"`: o estado é anunciado pelo leitor
+de tela, mas não aparece na tela. Até que exista, indique o estado alternado também de forma
+visível — por exemplo, trocando o `label` ou o ícone.
+
+Dentro de um Dropdown Menu, o estado aberto/fechado ainda não chega ao Button: o Dropdown Menu o
+aplica num elemento interno, não no gatilho.
+
 ## Integração com formulários
 
 `type="submit"` e `type="reset"` funcionam nativamente com qualquer `<form>` pai.

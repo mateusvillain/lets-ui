@@ -58,6 +58,15 @@ describe('state ARIA', () => {
     expect(control(button).getAttribute('aria-expanded')).toBe('true');
   });
 
+  it('renders no attribute for an empty state value', async () => {
+    const button = await mount(
+      '<lui-button label="Menu" aria-expanded aria-pressed=""></lui-button>'
+    );
+
+    expect(control(button).hasAttribute('aria-expanded')).toBe(false);
+    expect(control(button).hasAttribute('aria-pressed')).toBe(false);
+  });
+
   it('renders no state ARIA when none is set', async () => {
     const button = await mount('<lui-button label="Save"></lui-button>');
 
@@ -141,6 +150,15 @@ describe('accessible name', () => {
 
     expect(control(button).hasAttribute('aria-label')).toBe(false);
     expect(control(button).textContent.trim()).toBe('Save');
+  });
+
+  it('reflects an aria-label set as a property to the host', async () => {
+    const button = await mount('<lui-button>X</lui-button>');
+
+    button.ariaLabel = 'Fechar diálogo';
+    await button.updateComplete;
+    expect(button.getAttribute('aria-label')).toBe('Fechar diálogo');
+    expect(control(button).getAttribute('aria-label')).toBe('Fechar diálogo');
   });
 
   it('uses an explicit aria-label', async () => {
