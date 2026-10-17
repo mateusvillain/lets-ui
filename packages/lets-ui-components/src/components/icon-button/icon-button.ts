@@ -20,13 +20,10 @@ export class LuiIconButton extends LitElement {
   @property({ attribute: 'aria-pressed', reflect: true })
   ariaPressed: string | null = null;
 
-  get _size(): 'xl' | 'lg' | 'md' | 'sm' {
-    const s = this.size;
-    return (['xl', 'lg', 'md', 'sm'] as const).includes(
-      s as 'xl' | 'lg' | 'md' | 'sm'
-    )
-      ? (s as 'xl' | 'lg' | 'md' | 'sm')
-      : 'md';
+  // Only `lg` and `md` are styled. Any other value would render a button with
+  // no padding or size — a target a few pixels wide — so it falls back to `md`.
+  get _size(): 'lg' | 'md' {
+    return this.size === 'lg' ? 'lg' : 'md';
   }
 
   render() {

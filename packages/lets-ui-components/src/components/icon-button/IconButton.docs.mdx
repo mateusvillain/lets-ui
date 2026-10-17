@@ -5,14 +5,22 @@ import * as IconButtonStories from './IconButton.stories';
 
 # Icon Button
 
-Botão compacto que exibe apenas um ícone, sem rótulo de texto. Use quando o espaço é limitado e a ação é reconhecível pelo ícone — como fechar, excluir ou navegar. Sempre forneça um `aria-label` descritivo para garantir acessibilidade.
+Botão compacto que exibe apenas um ícone, sem rótulo de texto. Use quando o espaço é limitado e a ação é reconhecível pelo ícone — como fechar, excluir ou abrir um menu.
 
 <Canvas of={IconButtonStories.IconButton} />
 <Controls of={IconButtonStories.IconButton} />
 
+## Nome acessível
+
+**`aria-label` é obrigatório.** Sem texto visível, ele é o único nome que o leitor de tela anuncia; sem ele, o botão é lido apenas como "botão". Descreva a ação, não o ícone — `aria-label="Excluir arquivo"`, não `aria-label="Lixeira"` — e, quando houver vários Icon Buttons na mesma tela, torne cada nome distinto (`"Excluir arquivo"`, `"Excluir pasta"`).
+
+Marque o SVG do slot com `aria-hidden="true"`: ele é decorativo, já que o nome vem do `aria-label`.
+
+Se a ação navega para outra página, use `lui-button` com `href` ou `lui-link` — um Icon Button é sempre um botão, e um controle que navega deve ser anunciado como link.
+
 ## Tamanhos
 
-O Icon Button está disponível em dois tamanhos: `lg` (40px) para áreas com mais espaço e `md` (32px) para layouts mais compactos como toolbars e tabelas.
+O Icon Button está disponível em dois tamanhos: `lg` (40px) para áreas com mais espaço e `md` (32px) para layouts mais compactos como toolbars e tabelas. Os dois atendem à área mínima de toque de 24px da WCAG 2.5.8. Qualquer outro valor de `size` usa `md`.
 
 <Canvas of={IconButtonStories.SizeLg} />
 <Canvas of={IconButtonStories.SizeMd} />
@@ -53,6 +61,17 @@ Exemplos de uso com ícones SVG. O slot aceita qualquer SVG ou ícone de qualque
 
 <Canvas of={IconButtonStories.AllIcons} />
 
+## Atributos
+
+| Atributo        | Tipo      | Padrão  | Descrição                                                                      |
+| --------------- | --------- | ------- | ------------------------------------------------------------------------------ |
+| `aria-label`    | `string`  | —       | **Obrigatório.** Nome acessível que descreve a ação do botão                   |
+| `size`          | `string`  | `'md'`  | Tamanho: `lg` (40px) ou `md` (32px); outros valores usam `md`                  |
+| `disabled`      | `boolean` | `false` | Desabilita o botão e o remove da ordem de tabulação                            |
+| `aria-expanded` | `string`  | —       | Estado aberto/fechado do que o botão controla; repassado ao `<button>` interno |
+| `aria-haspopup` | `string`  | —       | Tipo de popup que o botão abre; repassado ao `<button>` interno                |
+| `aria-pressed`  | `string`  | —       | Estado de botão alternável; repassado ao `<button>` interno                    |
+
 ## Classe CSS (sem Web Component)
 
 <Canvas of={IconButtonStories.CSSClass} />
@@ -63,7 +82,7 @@ Exemplos de uso com ícones SVG. O slot aceita qualquer SVG ou ícone de qualque
 
 ```html
 <lui-icon-button size="lg" aria-label="Fechar">
-  <svg width="24" height="24" ...>...</svg>
+  <svg width="24" height="24" aria-hidden="true" ...>...</svg>
 </lui-icon-button>
 ```
 
@@ -71,6 +90,6 @@ Exemplos de uso com ícones SVG. O slot aceita qualquer SVG ou ícone de qualque
 
 ```html
 <button class="icon-button icon-button--lg" aria-label="Fechar">
-  <svg width="24" height="24" ...>...</svg>
+  <svg width="24" height="24" aria-hidden="true" ...>...</svg>
 </button>
 ```

@@ -41,6 +41,31 @@ describe('accessible name', () => {
   });
 });
 
+describe('size', () => {
+  it('renders lg and md', async () => {
+    const lg = await mount(
+      `<lui-icon-button size="lg" aria-label="Fechar">${icon}</lui-icon-button>`
+    );
+    const md = await mount(
+      `<lui-icon-button size="md" aria-label="Fechar">${icon}</lui-icon-button>`
+    );
+
+    expect(control(lg).classList.contains('icon-button--lg')).toBe(true);
+    expect(control(md).classList.contains('icon-button--md')).toBe(true);
+  });
+
+  it('falls back to md for a size that has no styles', async () => {
+    const button = await mount(
+      `<lui-icon-button size="sm" aria-label="Fechar">${icon}</lui-icon-button>`
+    );
+    const { width, height } = control(button).getBoundingClientRect();
+
+    expect(control(button).classList.contains('icon-button--md')).toBe(true);
+    expect(width).toBeGreaterThanOrEqual(24);
+    expect(height).toBeGreaterThanOrEqual(24);
+  });
+});
+
 describe('disabled', () => {
   it('disables the inner button without an invalid aria-disabled', async () => {
     const button = await mount(
