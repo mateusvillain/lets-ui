@@ -4,10 +4,14 @@ import { cdp, userEvent } from 'vitest/browser';
 import { LuiTooltip } from './tooltip.ts';
 import { LuiButton } from '../button/button.ts';
 import { LuiIconButton } from '../icon-button/icon-button.ts';
+import { LuiCloseButton } from '../close-button/close-button.ts';
+import { LuiLink } from '../link/link.ts';
 
 customElements.define('lui-tooltip', LuiTooltip);
 customElements.define('lui-button', LuiButton);
 customElements.define('lui-icon-button', LuiIconButton);
+customElements.define('lui-close-button', LuiCloseButton);
+// `lui-link` is defined by the test that needs it not upgraded yet.
 
 const TEXT = 'Editar o item';
 
@@ -16,6 +20,7 @@ const triggers = {
   'a lui-button': '<lui-button label="Editar"></lui-button>',
   'a lui-icon-button':
     '<lui-icon-button aria-label="Editar"><svg aria-hidden="true"></svg></lui-icon-button>',
+  'a lui-close-button': '<lui-close-button label="Editar"></lui-close-button>',
 };
 
 const mounted = [];
@@ -186,5 +191,111 @@ describe('without a trigger', () => {
     await host.firstElementChild.updateComplete;
 
     await expect.poll(() => describedBy(TEXT)).toHaveLength(1);
+  });
+});
+
+describe("the author's own description", () => {
+  it('is put back when the trigger leaves the tooltip', async () => {
+    const { tooltip, trigger } = await mount(
+      '<button aria-description="Do autor">Editar</button>'
+    );
+    expect(trigger.getAttribute('aria-description')).toBe(TEXT);
+
+    tooltip.after(trigger);
+    await expect
+      .poll(() => trigger.getAttribute('aria-description'))
+      .toBe('Do autor');
+  });
+});
+
+describe('a trigger that changes after it is slotted', () => {
+  it('describes a button rendered later inside the slotted wrapper', async () => {
+    const { tooltip, trigger } = await mount('<span></span>');
+    const button = document.createElement('button');
+    button.textContent = 'Editar';
+
+    trigger.append(button);
+    await expect.poll(() => button.getAttribute('aria-description')).toBe(TEXT);
+    await expect
+      .poll(() =>
+        tooltip.shadowRoot
+          .querySelector('[data-tooltip-trigger]')
+          .hasAttribute('tabindex')
+      )
+      .toBe(false);
+  });
+});
+
+describe('with a disabled trigger', () => {
+  const wrapper = (tooltip) =>
+    tooltip.shadowRoot.querySelector('[data-tooltip-trigger]');
+
+  it.each([
+    ['a native button', '<button disabled>Excluir</button>'],
+    ['a lui-button', '<lui-button label="Excluir" disabled></lui-button>'],
+  ])(
+    'keeps the text reachable through the wrapper with %s',
+    async (_, html) => {
+      const { tooltip, before, after } = await mount(html);
+
+      await expect
+        .poll(() => wrapper(tooltip).getAttribute('tabindex'))
+        .toBe('0');
+      before.focus();
+      await userEvent.tab();
+      expect(deepActive()).toBe(wrapper(tooltip));
+      await userEvent.tab();
+      expect(deepActive()).toBe(after);
+    }
+  );
+
+  it('describes the button again once it is enabled', async () => {
+    const { tooltip, trigger } = await mount(
+      '<button disabled>Excluir</button>'
+    );
+
+    trigger.disabled = false;
+    await expect
+      .poll(() => trigger.getAttribute('aria-description'))
+      .toBe(TEXT);
+    await expect
+      .poll(() => wrapper(tooltip).hasAttribute('tabindex'))
+      .toBe(false);
+  });
+});
+
+describe('with only whitespace inside', () => {
+  it('keeps its own button', async () => {
+    const host = document.createElement('div');
+    host.innerHTML = `<lui-tooltip text="${TEXT}" label="Ajuda">\n  </lui-tooltip>`;
+    document.body.append(host);
+    mounted.push(host);
+    const tooltip = host.firstElementChild;
+    await tooltip.updateComplete;
+    // Let `slotchange` run and any re-render it causes settle.
+    await new Promise((r) => setTimeout(r, 50));
+    await tooltip.updateComplete;
+
+    expect(tooltip.shadowRoot.querySelector('button')?.textContent.trim()).toBe(
+      'Ajuda'
+    );
+  });
+});
+
+describe('with a trigger not upgraded yet', () => {
+  it('describes its inner control, not its host', async () => {
+    const { trigger } = await mount(
+      '<lui-link href="#" label="Editar"></lui-link>'
+    );
+    await new Promise((r) => setTimeout(r));
+    expect(trigger.hasAttribute('aria-description')).toBe(false);
+
+    customElements.define('lui-link', LuiLink);
+    await expect
+      .poll(() =>
+        trigger.shadowRoot?.querySelector('a')?.getAttribute('aria-description')
+      )
+      .toBe(TEXT);
+    expect(trigger.hasAttribute('aria-description')).toBe(false);
   });
 });

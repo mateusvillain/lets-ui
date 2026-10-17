@@ -26,17 +26,23 @@ Slot any focusable element inside `<lui-tooltip>` to use it as the trigger.
 
 ### Trigger customizado
 
-O trigger deve ser **um** controle focável: um `<button>`, `<a href>`, campo de formulário,
-`lui-button`, `lui-icon-button` ou `lui-link`. Ele pode estar dentro de outro elemento, como um
-`<span>`; o Tooltip usa o primeiro controle focável que encontrar no conteúdo.
+O trigger deve ser **um** controle focável: um `<button>`, `<a href>`, campo de formulário nativo,
+`lui-button`, `lui-close-button`, `lui-icon-button` ou `lui-link`. Ele pode estar dentro de outro
+elemento, como um `<span>`; o Tooltip usa o primeiro controle focável que encontrar no conteúdo, e
+acompanha o conteúdo quando ele muda depois. Outros componentes do Let's UI, como `lui-input` ou
+`lui-select`, ainda não são suportados como trigger.
 
 - **Uma única parada de `Tab`**, no próprio controle. O Tooltip não adiciona nenhum elemento focável
   ao redor dele.
 - **O texto do tooltip vira a descrição do controle.** O Tooltip define `aria-description` com o
-  valor de `text` no trigger. Com `lui-button`, `lui-icon-button` e `lui-link`, a descrição é
+  valor de `text` no trigger. Com `lui-button`, `lui-close-button`, `lui-icon-button` e `lui-link`, a descrição é
   repassada ao `<button>` ou `<a>` interno, que é quem o leitor de tela anuncia. O host não recebe o
   atributo, para não aparecer como um segundo nó na árvore de acessibilidade.
 - O tooltip abre com o ponteiro sobre o trigger e com o foco de teclado nele.
+- **Uma descrição própria do trigger** em `aria-description` é substituída pelo texto do tooltip
+  enquanto ele estiver dentro do Tooltip, e restaurada quando sair. Já `aria-describedby` tem
+  precedência sobre `aria-description`: um trigger que use os dois anuncia só o que o
+  `aria-describedby` referencia. Nesse caso, inclua o texto do tooltip no elemento referenciado.
 
 O Tooltip não usa `aria-describedby` no trigger customizado: o conteúdo fica no shadow root do
 componente, e um ID não pode ser referenciado de fora dele. `aria-description` é um atributo do
@@ -55,8 +61,10 @@ botão, mas não lhe dá um nome.
 
 ### Trigger sem controle focável
 
-Se o conteúdo não tiver nada focável, como um texto, o Tooltip torna o próprio contêiner do trigger
-focável e o descreve com o conteúdo do tooltip, para que o texto continue acessível pelo teclado.
+Se o conteúdo não tiver nada focável, como um texto, ou se o controle estiver desabilitado, o
+Tooltip torna o próprio contêiner do trigger focável e o descreve com o conteúdo do tooltip, para que
+o texto continue acessível pelo teclado. É o caso de um tooltip que explica por que um botão está
+desabilitado.
 Prefira um controle real sempre que o tooltip explicar uma ação.
 
 ### Sem trigger
