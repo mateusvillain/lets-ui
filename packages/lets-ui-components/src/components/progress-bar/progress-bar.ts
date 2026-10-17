@@ -84,7 +84,10 @@ export class LuiProgressBar extends LitElement {
     // no label, or it is hidden, the name moves to aria-label, so the bar
     // always has a name. The visible value repeats aria-valuenow, or
     // aria-valuetext when it has a unit of its own, so it stays out of the
-    // accessibility tree. The caption describes the bar.
+    // accessibility tree. The caption describes the bar and is a polite live
+    // region, because screen readers do not reliably announce a change in
+    // aria-valuenow. It is always rendered: a live region inserted together
+    // with its text is often not announced.
     return html`
       <div class="${classes}">
         ${showLabel
@@ -115,11 +118,9 @@ export class LuiProgressBar extends LitElement {
               : `--lui-progress-bar-value: ${fraction}%`}"
           ></span>
         </div>
-        ${caption
-          ? html`<span class="progress-bar__caption" id="caption"
-              >${caption}</span
-            >`
-          : nothing}
+        <span class="progress-bar__caption" id="caption" aria-live="polite"
+          >${caption || nothing}</span
+        >
       </div>
     `;
   }

@@ -148,7 +148,7 @@ export const CSSClass = () => `
         >
           <span class="progress-bar__indicator" style="--lui-progress-bar-value: 40%"></span>
         </div>
-        <span class="progress-bar__caption" id="css-progress-caption">Caption</span>
+        <span class="progress-bar__caption" id="css-progress-caption" aria-live="polite">Caption</span>
       </div>
       <div class="progress-bar progress-bar--md progress-bar--success progress-bar--indeterminate progress-bar--inline">
         <span class="progress-bar__label" id="css-progress-busy">Loading</span>

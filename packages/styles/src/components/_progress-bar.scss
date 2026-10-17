@@ -69,6 +69,12 @@ $segment: 30%;
 
     flex: 1 0 100%;
     color: text(caption);
+
+    // An empty caption stays in the page as a live region, but out of the
+    // flex flow, so it adds no row gap.
+    &:empty {
+      position: absolute;
+    }
   }
 
   // Label, track and value share one line; the caption still wraps below.

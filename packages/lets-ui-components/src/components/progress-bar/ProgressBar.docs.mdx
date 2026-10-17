@@ -50,7 +50,7 @@ Com `hide-label` e `hide-value`, sobra apenas a trilha. O `label` continua sendo
 
 ## Classe CSS (sem Web Component)
 
-Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido.
+Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido. Deixe a legenda com `aria-live="polite"` no HTML desde o início, mesmo vazia, para que as mudanças nela sejam anunciadas.
 
 <Canvas of={ProgressBarStories.CSSClass} />
 
@@ -58,9 +58,13 @@ Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value
 
 - A trilha tem `role="progressbar"`, `aria-valuemin="0"`, `aria-valuemax` igual a `max` e `aria-valuenow` com o valor já limitado ao intervalo. No modo indeterminado, `aria-valuenow` não existe.
 - O rótulo visível nomeia a barra por `aria-labelledby`. Com `hide-label`, o mesmo texto vai para `aria-label`; sem `label`, o nome é "Progress bar".
-- A legenda descreve a barra por `aria-describedby`.
+- A legenda descreve a barra por `aria-describedby` e é uma região `aria-live="polite"`. Os leitores de tela não anunciam com confiança a mudança de `aria-valuenow`, então é pela legenda que a pessoa fica sabendo do avanço e do resultado. A região existe mesmo sem `caption`, porque uma região inserida junto com o texto costuma não ser anunciada.
+- Atualize a legenda em marcos e no resultado ("Metade dos arquivos enviados", "Envio concluído"), não a cada passo. Cada mudança é lida em voz alta, e uma contagem que muda a cada arquivo interrompe a pessoa o tempo todo.
+- No modo indeterminado e na variante `danger`, informe o resultado na legenda. Esses estados não têm atributo ARIA próprio, então sem texto a pessoa não sabe que a tarefa terminou ou falhou. Mantenha a barra na página até o anúncio: se ela for removida junto com a mudança, a legenda não chega a ser lida.
 - Com `value-text`, o mesmo texto vira `aria-valuetext`, e o leitor de tela anuncia "3.2 GB of 10 GB" em vez de calcular um percentual. Sem ele, só `aria-valuenow` é exposto.
 - O valor visível repete o `aria-valuenow` (ou o `aria-valuetext`), então fica fora da árvore de acessibilidade para não ser lido duas vezes.
+- A barra não é interativa e não recebe foco. Enquanto a tarefa roda, desabilite na aplicação os controles que dependem dela, como o botão de enviar.
+- Quando a barra indica o carregamento de uma área da tela, marque essa área com `aria-busy="true"` até o fim e retire o atributo depois.
 - Com `prefers-reduced-motion: reduce`, o preenchimento não anima e o modo indeterminado deixa de correr pela trilha: a barra inteira só pulsa.
 - Em `forced-colors`, a trilha ganha contorno e o preenchimento usa a cor de destaque do sistema.
 

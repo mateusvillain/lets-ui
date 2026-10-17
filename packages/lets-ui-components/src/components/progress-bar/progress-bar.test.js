@@ -198,6 +198,26 @@ describe('accessible name', () => {
     expect(part(progress, 'caption').textContent).toBe('2 of 20 files');
   });
 
+  it('keeps an empty live caption that adds no space', async () => {
+    const progress = await mount(
+      '<lui-progress-bar value="10" label="Upload"></lui-progress-bar>'
+    );
+    const caption = part(progress, 'caption');
+
+    expect(caption.getAttribute('aria-live')).toBe('polite');
+    expect(bar(progress).hasAttribute('aria-describedby')).toBe(false);
+    expect(root(progress).getBoundingClientRect().bottom).toBe(
+      part(progress, 'track').getBoundingClientRect().bottom
+    );
+
+    progress.caption = 'Upload complete';
+    await progress.updateComplete;
+
+    expect(part(progress, 'caption')).toBe(caption);
+    expect(caption.textContent).toBe('Upload complete');
+    expect(bar(progress).getAttribute('aria-describedby')).toBe('caption');
+  });
+
   it('keeps a hidden label as the accessible name', async () => {
     const progress = await mount(
       '<lui-progress-bar value="10" label="Upload" hide-label></lui-progress-bar>'
