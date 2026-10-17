@@ -152,6 +152,9 @@ export class LuiDatePicker extends LitElement {
       );
     }
     this._typing = false;
+    // A field disabled with the calendar open — by its fieldset, say — takes
+    // the calendar with it, so no date can be picked while disabled.
+    if (changed.has('disabled') && this.disabled) this.open = false;
     if (changed.has('open')) {
       this._anchor = null;
       this._preview = null;
@@ -176,6 +179,9 @@ export class LuiDatePicker extends LitElement {
       changed.has('min') ||
       changed.has('max') ||
       changed.has('editable') ||
+      changed.has('required') ||
+      changed.has('errorText') ||
+      changed.has('badInputText') ||
       changed.has('_text')
     ) {
       this._syncFormValue();
@@ -263,13 +269,24 @@ export class LuiDatePicker extends LitElement {
     }
   }
 
+  // A render formats every day on screen — up to 84 with a range — and the
+  // pointer re-renders on each day it crosses while a range is picked, so the
+  // formatters are built once per locale and options.
+  private _formatters = new Map<string, Intl.DateTimeFormat>();
+
   private _formatter(options: Intl.DateTimeFormatOptions) {
-    try {
-      return new Intl.DateTimeFormat(this.locale || undefined, options);
-    } catch {
-      // An unknown locale tag throws; fall back to the user agent's.
-      return new Intl.DateTimeFormat(undefined, options);
+    const key = `${this.locale}|${JSON.stringify(options)}`;
+    let formatter = this._formatters.get(key);
+    if (!formatter) {
+      try {
+        formatter = new Intl.DateTimeFormat(this.locale || undefined, options);
+      } catch {
+        // An unknown locale tag throws; fall back to the user agent's.
+        formatter = new Intl.DateTimeFormat(undefined, options);
+      }
+      this._formatters.set(key, formatter);
     }
+    return formatter;
   }
 
   private _format(date: Date, options: Intl.DateTimeFormatOptions) {

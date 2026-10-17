@@ -190,6 +190,15 @@ describe('opening and closing', () => {
     expect(el.shadowRoot.activeElement).toBe(trigger(el));
   });
 
+  it('closes when disabled while open', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    el.disabled = true;
+    await el.updateComplete;
+    expect(el.open).toBe(false);
+    expect($(el, '[role="dialog"]')).toBeNull();
+  });
+
   it('closes on a click outside', async () => {
     const el = await mount('value="2026-01-16"');
     await openWithClick(el);
@@ -350,6 +359,14 @@ describe('forms', () => {
     expect(el.closest('form').checkValidity()).toBe(false);
     await el.updateComplete;
     expect(el.error).toBe(true);
+  });
+
+  it('updates validity when required changes after render', async () => {
+    const el = await mount('name="start"', inForm);
+    expect(el.closest('form').checkValidity()).toBe(true);
+    el.required = true;
+    await el.updateComplete;
+    expect(el.closest('form').checkValidity()).toBe(false);
   });
 
   it('is invalid when the value falls outside the range', async () => {
