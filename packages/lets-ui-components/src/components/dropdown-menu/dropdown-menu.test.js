@@ -86,6 +86,46 @@ describe.each(Object.entries(triggers))('with %s as trigger', (_, html) => {
     expect(menu.open).toBe(false);
     expect(deepActive()).toBe(focusable(trigger));
   });
+
+  it('returns focus to the trigger when an item is picked', async () => {
+    const { menu, trigger } = await mount(html);
+
+    menu.open = true;
+    await menu.updateComplete;
+    const item = menu.shadowRoot.querySelector('.menu-item');
+    await expect
+      .poll(() => {
+        item.focus();
+        return menu.shadowRoot.activeElement;
+      })
+      .toBe(item);
+
+    await userEvent.keyboard('{Enter}');
+
+    expect(menu.open).toBe(false);
+    expect(deepActive()).toBe(focusable(trigger));
+  });
+});
+
+describe('picking an item', () => {
+  it('lets a menu-select listener move focus elsewhere', async () => {
+    const { menu } = await mount(triggers['a native button']);
+    const elsewhere = document.createElement('button');
+    document.body.append(elsewhere);
+    mounted.push(elsewhere);
+    menu.addEventListener('menu-select', () => elsewhere.focus());
+
+    menu.open = true;
+    await menu.updateComplete;
+    const item = menu.shadowRoot.querySelector('.menu-item');
+    await expect
+      .poll(() => item.checkVisibility({ visibilityProperty: true }))
+      .toBe(true);
+    item.click();
+
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(elsewhere);
+  });
 });
 
 describe('wrapper', () => {

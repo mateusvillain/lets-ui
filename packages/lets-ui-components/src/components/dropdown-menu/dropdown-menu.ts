@@ -228,6 +228,9 @@ export class LuiDropdownMenu extends LitElement {
     const li = item.parentElement;
     if (li?.classList.contains('menu-item--has-submenu')) return;
     const label = item.querySelector('.menu-item__label')?.textContent?.trim();
+    // Before the event, so a listener that moves focus — to a Modal it opens,
+    // say — wins over the trigger.
+    this._focusTrigger();
     this.dispatchEvent(
       new CustomEvent('menu-select', {
         bubbles: true,
