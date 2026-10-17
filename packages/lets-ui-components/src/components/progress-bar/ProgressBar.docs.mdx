@@ -1,0 +1,116 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ProgressBarStories from './ProgressBar.stories';
+
+<Meta of={ProgressBarStories} />
+
+# Progress Bar
+
+O Progress Bar mostra quanto de uma tarefa já foi feito: um envio, uma importação, um passo de configuração. Com `value`, a barra preenche na proporção de `value` sobre `max` e o valor aparece ao lado do rótulo — em percentual, ou na unidade que você passar em `value-text`. Sem `value`, ela fica indeterminada: um trecho corre pela trilha enquanto a duração não é conhecida.
+
+Use quando a espera é longa o bastante para a pessoa querer saber quanto falta. Para um trecho de tela que carrega com formato já conhecido, use Skeleton. Para um passo entre vários com nome próprio, use Stepper.
+
+<Canvas of={ProgressBarStories.ProgressBar} />
+<Controls of={ProgressBarStories.ProgressBar} />
+
+## Posição do rótulo
+
+Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `inline`, rótulo, trilha e valor dividem a mesma linha — útil em listas e tabelas, onde a altura conta. Nos dois casos a legenda (`caption`) fica abaixo.
+
+<Canvas of={ProgressBarStories.LabelPlacement} />
+
+## Variantes
+
+`primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite. A cor nunca é o único sinal: diga o estado também no rótulo ou na legenda.
+
+<Canvas of={ProgressBarStories.Variants} />
+
+## Outras unidades
+
+`value` e `max` não precisam ser percentuais: podem estar em GB, arquivos, etapas ou qualquer outra unidade. A barra sempre preenche na proporção `value / max`. Sem `value-text`, o texto ao lado do rótulo é essa proporção em percentual; com `value-text`, ele mostra exatamente o que você escrever, como "3.2 GB of 10 GB". Atualize `value-text` junto com `value`.
+
+<Canvas of={ProgressBarStories.CustomUnit} />
+
+## Tamanhos
+
+`sm` (4px), `md` (8px, padrão) e `lg` (12px). Só a espessura da trilha muda; o texto continua o mesmo.
+
+<Canvas of={ProgressBarStories.Sizes} />
+
+## Indeterminado
+
+Omita `value` quando não há como medir o avanço. O valor some e o leitor de tela não anuncia número, só que a tarefa está em andamento. Assim que a medida existir, passe `value` e a barra muda para o modo determinado.
+
+<Canvas of={ProgressBarStories.Indeterminate} />
+
+## Só a barra
+
+Com `hide-label` e `hide-value`, sobra apenas a trilha. O `label` continua sendo o nome acessível da barra, então informe-o mesmo assim.
+
+<Canvas of={ProgressBarStories.BarOnly} />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido.
+
+<Canvas of={ProgressBarStories.CSSClass} />
+
+## Acessibilidade
+
+- A trilha tem `role="progressbar"`, `aria-valuemin="0"`, `aria-valuemax` igual a `max` e `aria-valuenow` com o valor já limitado ao intervalo. No modo indeterminado, `aria-valuenow` não existe.
+- O rótulo visível nomeia a barra por `aria-labelledby`. Com `hide-label`, o mesmo texto vai para `aria-label`; sem `label`, o nome é "Progress bar".
+- A legenda descreve a barra por `aria-describedby`.
+- Com `value-text`, o mesmo texto vira `aria-valuetext`, e o leitor de tela anuncia "3.2 GB of 10 GB" em vez de calcular um percentual. Sem ele, só `aria-valuenow` é exposto.
+- O valor visível repete o `aria-valuenow` (ou o `aria-valuetext`), então fica fora da árvore de acessibilidade para não ser lido duas vezes.
+- Com `prefers-reduced-motion: reduce`, o preenchimento não anima e o modo indeterminado deixa de correr pela trilha: a barra inteira só pulsa.
+- Em `forced-colors`, a trilha ganha contorno e o preenchimento usa a cor de destaque do sistema.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-progress-bar
+  value="40"
+  label="Enviando arquivos"
+  caption="8 de 20 arquivos"
+></lui-progress-bar>
+<lui-progress-bar
+  value="3"
+  max="4"
+  variant="success"
+  value-text="3 of 4 steps"
+  label-placement="inline"
+  label="Etapas"
+></lui-progress-bar>
+<lui-progress-bar
+  value="3.2"
+  max="10"
+  value-text="3.2 GB of 10 GB"
+  label="Armazenamento"
+></lui-progress-bar>
+<lui-progress-bar label="Carregando"></lui-progress-bar>
+```
+
+### Classe CSS
+
+```html
+<div class="progress-bar progress-bar--md progress-bar--primary">
+  <span class="progress-bar__label" id="upload-label">Enviando arquivos</span>
+  <span class="progress-bar__value" aria-hidden="true">40%</span>
+  <div
+    class="progress-bar__track"
+    role="progressbar"
+    aria-labelledby="upload-label"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="40"
+  >
+    <span
+      class="progress-bar__indicator"
+      style="--lui-progress-bar-value: 40%"
+    ></span>
+  </div>
+</div>
+```
+
+Modificadores: `progress-bar--{primary|success|caution|danger}`, `progress-bar--{sm|md|lg}`, `progress-bar--inline` e `progress-bar--indeterminate`.
