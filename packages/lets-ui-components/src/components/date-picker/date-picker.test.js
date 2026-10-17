@@ -44,15 +44,17 @@ const trigger = (el) => $(el, '.date-picker__control');
 // Months shown side by side can both draw a day; the copy in its own month
 // comes first when there is one.
 const day = (el, iso) =>
-  $(el, `.calendar__day[data-date="${iso}"]:not(.calendar__day--outside)`) ??
-  $(el, `.calendar__day[data-date="${iso}"]`);
+  $(
+    el,
+    `.date-picker-calendar__day[data-date="${iso}"]:not(.date-picker-calendar__day--outside)`
+  ) ?? $(el, `.date-picker-calendar__day[data-date="${iso}"]`);
 const titles = (el) =>
-  [...el.shadowRoot.querySelectorAll('.calendar__title')].map((t) =>
+  [...el.shadowRoot.querySelectorAll('.date-picker-calendar__title')].map((t) =>
     t.textContent.trim()
   );
 const dayClasses = (el, iso) => [...day(el, iso).classList];
 const activeDay = (el) => el.shadowRoot.activeElement?.dataset.date;
-const title = (el) => $(el, '.calendar__title').textContent.trim();
+const title = (el) => $(el, '.date-picker-calendar__title').textContent.trim();
 
 async function openWithClick(el) {
   await userEvent.click(trigger(el));
@@ -137,7 +139,7 @@ describe('trigger', () => {
     const headers = (el) =>
       [
         ...el.shadowRoot.querySelectorAll(
-          '.calendar__weekday [aria-hidden="true"]'
+          '.date-picker-calendar__weekday [aria-hidden="true"]'
         ),
       ].map((th) => th.textContent.trim());
     const en = await mount('value="2026-01-16" open');
@@ -231,7 +233,7 @@ describe('selection', () => {
     const el = await mount(`value="${toISODate(today())}"`);
     await openWithClick(el);
     const button = day(el, toISODate(today()));
-    expect(button.classList).toContain('calendar__day--selected');
+    expect(button.classList).toContain('date-picker-calendar__day--selected');
     expect(button.getAttribute('aria-current')).toBe('date');
     expect(button.closest('td').getAttribute('aria-selected')).toBe('true');
   });
@@ -239,9 +241,11 @@ describe('selection', () => {
   it('dims days of the neighbouring months', async () => {
     const el = await mount('value="2026-01-16"');
     await openWithClick(el);
-    expect(day(el, '2025-12-28').classList).toContain('calendar__day--outside');
+    expect(day(el, '2025-12-28').classList).toContain(
+      'date-picker-calendar__day--outside'
+    );
     expect(day(el, '2026-01-01').classList).not.toContain(
-      'calendar__day--outside'
+      'date-picker-calendar__day--outside'
     );
   });
 });
@@ -266,8 +270,8 @@ describe('min and max', () => {
       'value="2026-01-16" min="2026-01-10" max="2026-02-05"'
     );
     await openWithClick(el);
-    const previous = $(el, '.calendar__nav--previous');
-    const next = $(el, '.calendar__nav--next');
+    const previous = $(el, '.date-picker-calendar__nav--previous');
+    const next = $(el, '.date-picker-calendar__nav--next');
     expect(previous.getAttribute('aria-disabled')).toBe('true');
     expect(next.getAttribute('aria-disabled')).toBe('false');
     previous.click();
@@ -400,29 +404,43 @@ describe('range', () => {
     const el = await mount(RANGE);
     await openWithClick(el);
     expect(titles(el)).toEqual(['January 2026', 'February 2026']);
-    const months = el.shadowRoot.querySelectorAll('.calendar__month');
-    expect(months[0].querySelector('.calendar__nav--previous')).not.toBeNull();
-    expect(months[0].querySelector('.calendar__nav--next')).toBeNull();
-    expect(months[1].querySelector('.calendar__nav--next')).not.toBeNull();
+    const months = el.shadowRoot.querySelectorAll(
+      '.date-picker-calendar__month'
+    );
+    expect(
+      months[0].querySelector('.date-picker-calendar__nav--previous')
+    ).not.toBeNull();
+    expect(
+      months[0].querySelector('.date-picker-calendar__nav--next')
+    ).toBeNull();
+    expect(
+      months[1].querySelector('.date-picker-calendar__nav--next')
+    ).not.toBeNull();
   });
 
   it('lines the two grids up on the same number of weeks', async () => {
     const el = await mount(RANGE);
     await openWithClick(el);
-    const rows = [...el.shadowRoot.querySelectorAll('.calendar__grid')].map(
-      (grid) => grid.querySelectorAll('tbody tr').length
-    );
+    const rows = [
+      ...el.shadowRoot.querySelectorAll('.date-picker-calendar__grid'),
+    ].map((grid) => grid.querySelectorAll('tbody tr').length);
     expect(rows).toEqual([5, 5]);
   });
 
   it('marks both ends and the days between', async () => {
     const el = await mount(RANGE);
     await openWithClick(el);
-    expect(dayClasses(el, '2026-01-16')).toContain('calendar__day--selected');
-    expect(dayClasses(el, '2026-01-21')).toContain('calendar__day--selected');
-    expect(dayClasses(el, '2026-01-18')).toContain('calendar__day--in-range');
+    expect(dayClasses(el, '2026-01-16')).toContain(
+      'date-picker-calendar__day--selected'
+    );
+    expect(dayClasses(el, '2026-01-21')).toContain(
+      'date-picker-calendar__day--selected'
+    );
+    expect(dayClasses(el, '2026-01-18')).toContain(
+      'date-picker-calendar__day--in-range'
+    );
     expect(dayClasses(el, '2026-01-22')).not.toContain(
-      'calendar__day--in-range'
+      'date-picker-calendar__day--in-range'
     );
     expect(
       day(el, '2026-01-18').closest('td').getAttribute('aria-selected')
@@ -436,14 +454,22 @@ describe('range', () => {
     await openWithClick(el);
     const joins = (iso) =>
       dayClasses(el, iso).filter((c) => c.includes('--join-'));
-    expect(joins('2026-01-16')).toEqual(['calendar__day--join-end']);
-    expect(joins('2026-01-17')).toEqual(['calendar__day--join-start']);
-    expect(joins('2026-01-18')).toEqual(['calendar__day--join-end']);
-    expect(joins('2026-01-19')).toEqual([
-      'calendar__day--join-start',
-      'calendar__day--join-end',
+    expect(joins('2026-01-16')).toEqual([
+      'date-picker-calendar__day--join-end',
     ]);
-    expect(joins('2026-01-21')).toEqual(['calendar__day--join-start']);
+    expect(joins('2026-01-17')).toEqual([
+      'date-picker-calendar__day--join-start',
+    ]);
+    expect(joins('2026-01-18')).toEqual([
+      'date-picker-calendar__day--join-end',
+    ]);
+    expect(joins('2026-01-19')).toEqual([
+      'date-picker-calendar__day--join-start',
+      'date-picker-calendar__day--join-end',
+    ]);
+    expect(joins('2026-01-21')).toEqual([
+      'date-picker-calendar__day--join-start',
+    ]);
     expect(joins('2026-01-22')).toEqual([]);
     const radius = (iso) => getComputedStyle(day(el, iso));
     expect(radius('2026-01-16').borderTopRightRadius).toBe('0px');
@@ -462,7 +488,7 @@ describe('range', () => {
     const el = await mount(RANGE);
     await openWithClick(el);
     expect(
-      el.shadowRoot.querySelectorAll('.calendar__day[tabindex="0"]')
+      el.shadowRoot.querySelectorAll('.date-picker-calendar__day[tabindex="0"]')
     ).toHaveLength(1);
   });
 
@@ -496,11 +522,15 @@ describe('range', () => {
     await el.updateComplete;
     await userEvent.hover(day(el, '2026-01-14'));
     await el.updateComplete;
-    expect(dayClasses(el, '2026-01-12')).toContain('calendar__day--in-range');
-    expect(dayClasses(el, '2026-01-14')).toContain('calendar__day--selected');
+    expect(dayClasses(el, '2026-01-12')).toContain(
+      'date-picker-calendar__day--in-range'
+    );
+    expect(dayClasses(el, '2026-01-14')).toContain(
+      'date-picker-calendar__day--selected'
+    );
     // The committed range is set aside while a new one is being picked.
     expect(dayClasses(el, '2026-01-18')).not.toContain(
-      'calendar__day--in-range'
+      'date-picker-calendar__day--in-range'
     );
   });
 
@@ -515,7 +545,9 @@ describe('range', () => {
     }
     expect(activeDay(el)).toBe('2026-02-06');
     expect(titles(el)).toEqual(['January 2026', 'February 2026']);
-    expect(dayClasses(el, '2026-01-31')).toContain('calendar__day--in-range');
+    expect(dayClasses(el, '2026-01-31')).toContain(
+      'date-picker-calendar__day--in-range'
+    );
     await userEvent.keyboard('{Enter}');
     await el.updateComplete;
     expect(el.value).toBe('2026-01-16/2026-02-06');
@@ -540,9 +572,11 @@ describe('range', () => {
     await el.updateComplete;
     expect(el.value).toBe('2026-01-16/2026-01-21');
     await openWithClick(el);
-    expect(dayClasses(el, '2026-01-16')).toContain('calendar__day--selected');
+    expect(dayClasses(el, '2026-01-16')).toContain(
+      'date-picker-calendar__day--selected'
+    );
     expect(dayClasses(el, '2026-01-05')).not.toContain(
-      'calendar__day--selected'
+      'date-picker-calendar__day--selected'
     );
   });
 

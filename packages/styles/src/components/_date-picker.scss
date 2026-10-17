@@ -134,7 +134,7 @@
 }
 
 // One surface holding one month, or two side by side for a range.
-.calendar {
+.date-picker-calendar {
   @include flex(row, flex-start, flex-start, fluid(16));
 
   width: max-content;

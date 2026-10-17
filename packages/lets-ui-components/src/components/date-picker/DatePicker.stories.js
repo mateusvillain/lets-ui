@@ -420,7 +420,7 @@ CSSClass.parameters = {
   docs: {
     description: {
       story:
-        'Sem o Web Component, só o campo funciona. Abrir o calendário, navegar e selecionar dependem do JavaScript do componente. As classes `.calendar__*` ficam disponíveis para quem montar o próprio calendário.',
+        'Sem o Web Component, só o campo funciona. Abrir o calendário, navegar e selecionar dependem do JavaScript do componente. As classes `.date-picker-calendar__*` ficam disponíveis para quem montar o próprio calendário.',
     },
   },
 };

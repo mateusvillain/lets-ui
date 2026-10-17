@@ -189,7 +189,7 @@ export class LuiDatePicker extends LitElement {
     if (this._focusActiveDay && this.open) {
       this._focusActiveDay = false;
       this.renderRoot
-        .querySelector<HTMLElement>('.calendar__day[tabindex="0"]')
+        .querySelector<HTMLElement>('.date-picker-calendar__day[tabindex="0"]')
         ?.focus();
     }
   }
@@ -609,17 +609,17 @@ export class LuiDatePicker extends LitElement {
       addDays(REFERENCE_SUNDAY, (this._firstDay + i) % 7)
     );
     const spacer = html`<span
-      class="calendar__nav-spacer"
+      class="date-picker-calendar__nav-spacer"
       aria-hidden="true"
     ></span>`;
 
     return html`
-      <div class="calendar__month">
-        <div class="calendar__header">
+      <div class="date-picker-calendar__month">
+        <div class="date-picker-calendar__header">
           ${isFirst
             ? html`<button
                 type="button"
-                class="calendar__nav calendar__nav--previous"
+                class="date-picker-calendar__nav date-picker-calendar__nav--previous"
                 aria-label="${this.previousMonthLabel}"
                 aria-disabled="${this._canShowMonth(this._revealedMonth(-1))
                   ? 'false'
@@ -629,13 +629,17 @@ export class LuiDatePicker extends LitElement {
                 ${ICON_CHEVRON_LEFT}
               </button>`
             : spacer}
-          <div id="${titleId}" class="calendar__title" aria-live="polite">
+          <div
+            id="${titleId}"
+            class="date-picker-calendar__title"
+            aria-live="polite"
+          >
             ${this._format(month, { month: 'long', year: 'numeric' })}
           </div>
           ${isLast
             ? html`<button
                 type="button"
-                class="calendar__nav calendar__nav--next"
+                class="date-picker-calendar__nav date-picker-calendar__nav--next"
                 aria-label="${this.nextMonthLabel}"
                 aria-disabled="${this._canShowMonth(this._revealedMonth(1))
                   ? 'false'
@@ -647,7 +651,7 @@ export class LuiDatePicker extends LitElement {
             : spacer}
         </div>
         <table
-          class="calendar__grid"
+          class="date-picker-calendar__grid"
           role="grid"
           aria-labelledby="${titleId}"
           @keydown="${this._handleGridKeydown}"
@@ -659,11 +663,11 @@ export class LuiDatePicker extends LitElement {
                 // in Portuguese, "日" in Chinese. Cutting the short form
                 // repeats letters instead, like "se" for segunda and sexta.
                 (day) => html`
-                  <th class="calendar__weekday" scope="col">
+                  <th class="date-picker-calendar__weekday" scope="col">
                     <span aria-hidden="true"
                       >${this._format(day, { weekday: 'narrow' })}</span
                     >
-                    <span class="calendar__sr-only"
+                    <span class="date-picker-calendar__sr-only"
                       >${this._format(day, { weekday: 'long' })}</span
                     >
                   </th>
@@ -699,19 +703,19 @@ export class LuiDatePicker extends LitElement {
                       isHighlighted(day) && isHighlighted(week[column + 1]);
                     const isToday = isSameDay(day, now);
                     const classes = [
-                      'calendar__day',
-                      inMonth ? '' : 'calendar__day--outside',
-                      isToday ? 'calendar__day--today' : '',
-                      isBetween ? 'calendar__day--in-range' : '',
-                      isEdge ? 'calendar__day--selected' : '',
-                      joinsStart ? 'calendar__day--join-start' : '',
-                      joinsEnd ? 'calendar__day--join-end' : '',
+                      'date-picker-calendar__day',
+                      inMonth ? '' : 'date-picker-calendar__day--outside',
+                      isToday ? 'date-picker-calendar__day--today' : '',
+                      isBetween ? 'date-picker-calendar__day--in-range' : '',
+                      isEdge ? 'date-picker-calendar__day--selected' : '',
+                      joinsStart ? 'date-picker-calendar__day--join-start' : '',
+                      joinsEnd ? 'date-picker-calendar__day--join-end' : '',
                     ]
                       .filter(Boolean)
                       .join(' ');
                     return html`
                       <td
-                        class="calendar__cell"
+                        class="date-picker-calendar__cell"
                         aria-selected="${isEdge || isBetween
                           ? 'true'
                           : 'false'}"
@@ -769,7 +773,7 @@ export class LuiDatePicker extends LitElement {
         aria-label="${this.dialogLabel}"
         @keydown="${this._handlePopoverKeydown}"
       >
-        <div class="calendar">
+        <div class="date-picker-calendar">
           ${months.map((month, i) => this._renderMonth(month, i, weekCount))}
         </div>
       </div>
