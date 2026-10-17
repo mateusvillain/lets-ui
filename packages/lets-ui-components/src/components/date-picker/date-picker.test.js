@@ -418,6 +418,21 @@ describe('range', () => {
     ).not.toBeNull();
   });
 
+  it('announces both months from a single live region', async () => {
+    const el = await mount(RANGE);
+    await openWithClick(el);
+    const regions = el.shadowRoot.querySelectorAll('[aria-live]');
+    expect(regions).toHaveLength(1);
+    expect(regions[0].textContent.trim().replace(/\s+/g, ' ')).toBe(
+      'January – February 2026'
+    );
+    await userEvent.click($(el, '.date-picker-calendar__nav--next'));
+    await el.updateComplete;
+    expect(regions[0].textContent.trim().replace(/\s+/g, ' ')).toBe(
+      'February – March 2026'
+    );
+  });
+
   it('lines the two grids up on the same number of weeks', async () => {
     const el = await mount(RANGE);
     await openWithClick(el);

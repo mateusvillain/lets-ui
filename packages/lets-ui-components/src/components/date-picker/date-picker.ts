@@ -629,11 +629,7 @@ export class LuiDatePicker extends LitElement {
                 ${ICON_CHEVRON_LEFT}
               </button>`
             : spacer}
-          <div
-            id="${titleId}"
-            class="date-picker-calendar__title"
-            aria-live="polite"
-          >
+          <div id="${titleId}" class="date-picker-calendar__title">
             ${this._format(month, { month: 'long', year: 'numeric' })}
           </div>
           ${isLast
@@ -756,6 +752,18 @@ export class LuiDatePicker extends LitElement {
     `;
   }
 
+  // One live region for the months on screen, so paging a range announces
+  // "January – February 2026" once instead of two titles one after the other.
+  private _formatViewMonths(months: Date[]) {
+    const formatter = this._formatter({ month: 'long', year: 'numeric' });
+    const first = months[0];
+    const last = months[months.length - 1];
+    if (first === last) return formatter.format(first);
+    return typeof formatter.formatRange === 'function'
+      ? formatter.formatRange(first, last)
+      : `${formatter.format(first)} – ${formatter.format(last)}`;
+  }
+
   private _renderCalendar() {
     const months = Array.from({ length: this._monthCount }, (_, i) =>
       addMonths(this._viewMonth, i)
@@ -775,6 +783,9 @@ export class LuiDatePicker extends LitElement {
       >
         <div class="date-picker-calendar">
           ${months.map((month, i) => this._renderMonth(month, i, weekCount))}
+        </div>
+        <div class="date-picker-calendar__sr-only" aria-live="polite">
+          ${this._formatViewMonths(months)}
         </div>
       </div>
     `;
