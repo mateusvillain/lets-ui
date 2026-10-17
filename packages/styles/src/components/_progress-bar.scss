@@ -14,8 +14,8 @@ $sizes: (
 // The fill takes the container colour of each feedback role.
 $variants: primary, success, caution, danger;
 
-// The indeterminate segment covers this fraction of the track, as in the
-// prototype (120 of 400). Constant, for the same reason as the thickness.
+// The indeterminate segment covers this fraction of the track (120 of 400 px
+// in the design). Constant, for the same reason as the thickness.
 $segment: 30%;
 
 // One row wraps into as many lines as the placement needs, so a missing label,
