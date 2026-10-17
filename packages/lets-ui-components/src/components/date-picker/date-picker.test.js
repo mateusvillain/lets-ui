@@ -718,6 +718,27 @@ describe('editable', () => {
     expect(el.open).toBe(true);
   });
 
+  it('describes the text box with the format, even with a placeholder', async () => {
+    const el = await mount(
+      'editable locale="pt-BR" placeholder="Birth date" hint="Hint"'
+    );
+    const ids = input(el).getAttribute('aria-describedby').split(' ');
+    const texts = ids.map((id) =>
+      el.shadowRoot.getElementById(id).textContent.trim()
+    );
+    expect(texts).toEqual(['dd / mm / yyyy', 'Hint']);
+  });
+
+  it('names the calendar button with the chosen date', async () => {
+    const el = await mount('editable');
+    expect(toggle(el).getAttribute('aria-label')).toBe('Choose date');
+    el.value = '2026-01-16';
+    await el.updateComplete;
+    expect(toggle(el).getAttribute('aria-label')).toBe(
+      'Choose date, Jan 16, 2026'
+    );
+  });
+
   it('labels the text box', async () => {
     const el = await mount('editable label="Start"');
     expect(input(el).labels?.[0]?.textContent.trim()).toBe('Start');

@@ -806,8 +806,18 @@ export class LuiDatePicker extends LitElement {
   // and a button beside it opens the calendar.
   private _renderTextControl() {
     const message = this._message;
+    const selection = this._selection;
+    const formatId = `${this._baseId}-format`;
+    // The format is part of the description, not only the placeholder: the
+    // placeholder is gone once typing starts, and an author may replace it.
+    const describedBy = [formatId, message ? `${this._baseId}-message` : '']
+      .filter(Boolean)
+      .join(' ');
 
     return html`
+      <span id="${formatId}" class="date-picker__sr-only"
+        >${maskPattern(this._mask)}</span
+      >
       <div class="date-picker__control">
         <input
           id="${this._baseId}-control"
@@ -818,9 +828,7 @@ export class LuiDatePicker extends LitElement {
           .value="${live(this._text)}"
           placeholder="${this.placeholder || maskPattern(this._mask)}"
           aria-label="${ifDefined(this.ariaLabel || undefined)}"
-          aria-describedby="${ifDefined(
-            message ? `${this._baseId}-message` : undefined
-          )}"
+          aria-describedby="${describedBy}"
           aria-invalid="${this.error ? 'true' : 'false'}"
           aria-required="${this.required ? 'true' : 'false'}"
           ?disabled="${this.disabled}"
@@ -830,7 +838,9 @@ export class LuiDatePicker extends LitElement {
         <button
           type="button"
           class="date-picker__toggle"
-          aria-label="${this.dialogLabel}"
+          aria-label="${selection
+            ? `${this.dialogLabel}, ${this._formatValue(selection)}`
+            : this.dialogLabel}"
           aria-haspopup="dialog"
           aria-expanded="${this.open ? 'true' : 'false'}"
           aria-controls="${ifDefined(

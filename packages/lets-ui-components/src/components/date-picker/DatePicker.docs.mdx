@@ -162,7 +162,7 @@ abaixo para usar o idioma do projeto.
 | `optional-text`        | `'(optional)'`              | Marcador exibido quando `optional` está ativo                                                    |
 | `error-text`           | `'This field is required.'` | Mensagem exibida quando `error` está ativo                                                       |
 | `bad-input-text`       | `'Enter a valid date.'`     | Mensagem de erro, com `editable`, quando o texto não forma uma data                              |
-| `dialog-label`         | `'Choose date'`             | Nome acessível do calendário e, com `editable`, do botão que o abre                              |
+| `dialog-label`         | `'Choose date'`             | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida   |
 | `previous-month-label` | `'Previous month'`          | `aria-label` do botão de mês anterior                                                            |
 | `next-month-label`     | `'Next month'`              | `aria-label` do botão de próximo mês                                                             |
 
@@ -188,10 +188,21 @@ mês é anunciado numa região `aria-live` e o dia de hoje tem
 
 O calendário também fecha com um clique fora dele ou quando o foco sai com `Tab`.
 
-Com `editable`, o campo é um `<input inputmode="numeric">` nomeado pelo rótulo,
-e o calendário abre pelo botão ao lado, nomeado por `dialog-label`. Na caixa de
-texto, `Alt` + `↓` abre o calendário, já que as setas movem o cursor. Ao
-escolher um dia ou apertar `Esc`, o foco volta ao botão.
+Com `editable`, o campo é um `<input inputmode="numeric">` nomeado pelo rótulo.
+O formato esperado, como `dd / mm / yyyy`, faz parte da descrição acessível do
+campo, junto com o hint ou o erro. Assim ele continua anunciado depois que o
+placeholder some, e mesmo quando o `placeholder` é trocado. O calendário abre
+pelo botão ao lado, nomeado por `dialog-label` e pela data escolhida, como
+`Choose date, Jan 16, 2026`. O botão tem anel de foco próprio, para não se
+confundir com o foco na caixa de texto. Na caixa de texto, `Alt` + `↓` abre o
+calendário, já que as setas movem o cursor. Ao escolher um dia ou apertar
+`Esc`, o foco volta ao botão.
+
+Sempre dê um nome ao campo, com `label` ou, quando não houver rótulo visível,
+com `aria-label`. Sem os dois, o campo fica sem nome acessível: com `editable`,
+só resta o placeholder, que leitores de tela não anunciam de forma confiável.
+Com `range`, use um rótulo que descreva o período, como "Estadia" ou "Período
+do relatório".
 
 ## Classe CSS (sem Web Component)
 

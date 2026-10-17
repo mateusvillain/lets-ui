@@ -68,13 +68,23 @@
     margin: 0;
     border: 0;
     background: transparent;
+    border-radius: radius(xs);
     outline: 0;
     cursor: pointer;
 
-    // Like the Input's actions, it shows focus through the control's ring.
+    // A ring of its own, so focus on the button reads apart from focus on the
+    // text box, which lights the whole control.
+    &:focus-visible {
+      box-shadow: focus-ring(primary);
+    }
+
     &:disabled {
       cursor: not-allowed;
     }
+  }
+
+  &__sr-only {
+    @include sr-only;
   }
 
   &--placeholder .date-picker__value {
