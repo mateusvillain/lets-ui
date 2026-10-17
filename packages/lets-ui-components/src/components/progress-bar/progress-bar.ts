@@ -34,7 +34,7 @@ export class LuiProgressBar extends LitElement {
   @property() size = 'md';
   @property({ attribute: 'label-placement' }) labelPlacement = 'top';
   @property() label = '';
-  // What the value says in its own unit — "3.2 GB of 10 GB", "3 of 4 steps".
+  // The value in its own unit, such as "3.2 GB of 10 GB" or "3 of 4 steps".
   // Replaces the percentage on screen and becomes aria-valuetext, so assistive
   // technology reads the same words instead of a computed percentage.
   @property({ attribute: 'value-text' }) valueText = '';
@@ -77,11 +77,11 @@ export class LuiProgressBar extends LitElement {
       .filter(Boolean)
       .join(' ');
 
-    // The visible label names the bar through aria-labelledby. Without one —
-    // or with it hidden — the name moves to aria-label, so the bar is never
-    // anonymous. The visible value repeats aria-valuenow, or aria-valuetext
-    // when it has a unit of its own, so it stays out of the accessibility tree;
-    // the caption describes the bar.
+    // The visible label names the bar through aria-labelledby. When there is
+    // no label, or it is hidden, the name moves to aria-label, so the bar
+    // always has a name. The visible value repeats aria-valuenow, or
+    // aria-valuetext when it has a unit of its own, so it stays out of the
+    // accessibility tree. The caption describes the bar.
     return html`
       <div class="${classes}">
         ${showLabel
