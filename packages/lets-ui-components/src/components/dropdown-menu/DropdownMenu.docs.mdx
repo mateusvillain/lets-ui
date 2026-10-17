@@ -5,7 +5,7 @@ import * as DropdownMenuStories from './DropdownMenu.stories';
 
 # Dropdown Menu
 
-Menu contextual flutuante que agrupa ações relacionadas a um elemento ou contexto. O trigger é livre — qualquer botão, icon-button ou link pode abrir o menu, sem acoplamento ao componente.
+Menu contextual flutuante que agrupa ações relacionadas a um elemento ou contexto. O trigger é livre — um `<button>`, `lui-button` ou `lui-icon-button` pode abrir o menu, sem acoplamento ao componente.
 
 <Canvas of={DropdownMenuStories.Default} />
 <Controls of={DropdownMenuStories.Default} />
@@ -34,6 +34,37 @@ Use para indicar ações temporariamente indisponíveis sem remover a opção da
 
 <Canvas of={DropdownMenuStories.WithDisabledItem} />
 
+## Acessibilidade
+
+### Trigger
+
+O trigger deve ser um **botão**. Abrir um menu é uma ação na mesma tela, não uma navegação, então
+não use um link. O Dropdown Menu marca o trigger com `aria-haspopup="menu"` e mantém o
+`aria-expanded` sincronizado com o estado aberto. Com `lui-button` e `lui-icon-button`, os dois
+atributos são repassados ao `<button>` interno, que é quem o leitor de tela anuncia.
+
+O menu não define `aria-controls`: o painel fica no shadow root do componente, e um ID não pode ser
+referenciado de fora dele.
+
+Um `lui-icon-button` como trigger precisa de um `aria-label` que descreva o menu, como
+`"Mais opções"` ou `"Ações do arquivo"`.
+
+### Teclado
+
+| Tecla             | Ação                                              |
+| ----------------- | ------------------------------------------------- |
+| `Enter` / `Space` | No trigger, abre e fecha o menu                   |
+| `↓` / `↑`         | Move entre os itens, voltando ao início ou ao fim |
+| `→`               | Abre o submenu do item focado                     |
+| `←`               | Fecha o submenu e volta ao item pai               |
+| `Escape`          | Fecha o menu e devolve o foco ao trigger          |
+| `Tab`             | Fecha o menu                                      |
+
+Duas limitações conhecidas no teclado, tratadas em
+[#152](https://github.com/mateusvillain/lets-ui/issues/152): ao abrir, o foco ainda não vai para o
+primeiro item, então é preciso usar `Tab` para entrar no menu antes das setas; e, ao fechar com
+`Tab`, o foco passa ao item seguinte do menu em vez de sair dele.
+
 ## Classe CSS (sem Web Component)
 
 <Canvas of={DropdownMenuStories.CSSClass} />
@@ -44,7 +75,12 @@ Use para indicar ações temporariamente indisponíveis sem remover a opção da
 
 ```html
 <lui-dropdown-menu>
-  <lui-button slot="trigger" variant="secondary" size="md" label="Opções"></lui-button>
+  <lui-button
+    slot="trigger"
+    variant="secondary"
+    size="md"
+    label="Opções"
+  ></lui-button>
   <lui-menu-item slot="items" label="Editar" shortcut="⌘,E"></lui-menu-item>
   <lui-menu-divider slot="items"></lui-menu-divider>
   <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
@@ -55,10 +91,20 @@ Use para indicar ações temporariamente indisponíveis sem remover a opção da
 
 ```html
 <div class="dropdown-menu">
-  <button class="btn btn--secondary btn--md" aria-expanded="false">Opções</button>
+  <button
+    class="btn btn--secondary btn--md"
+    aria-haspopup="menu"
+    aria-expanded="false"
+  >
+    Opções
+  </button>
   <div class="dropdown-menu__panel is-open">
-    <button class="menu-item"><span class="menu-item__label">Editar</span></button>
-    <button class="menu-item menu-item--danger"><span class="menu-item__label">Excluir</span></button>
+    <button class="menu-item">
+      <span class="menu-item__label">Editar</span>
+    </button>
+    <button class="menu-item menu-item--danger">
+      <span class="menu-item__label">Excluir</span>
+    </button>
   </div>
 </div>
 ```

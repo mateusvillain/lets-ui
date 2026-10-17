@@ -120,6 +120,9 @@ export class LuiDropdownMenu extends LitElement {
     if (changedProps.has('open')) {
       this._syncOpenState();
     }
+    if (changedProps.has('open') || changedProps.has('_hasTriggerSlot')) {
+      this._updateSlottedTrigger();
+    }
   }
 
   openMenu() {
@@ -141,6 +144,9 @@ export class LuiDropdownMenu extends LitElement {
 
     if (this.open) {
       requestAnimationFrame(() => {
+        // Closed again before this frame — by Escape, say — focus has already
+        // gone back to the trigger and must not be pulled into a closed panel.
+        if (!this.open) return;
         const first = panel.querySelector<HTMLElement>(
           '.dropdown-menu__panel > li > .menu-item:not([disabled]):not([aria-disabled="true"])'
         );
@@ -153,17 +159,48 @@ export class LuiDropdownMenu extends LitElement {
     }
   }
 
+  // The trigger is slotted, so it lives in the light DOM: a query from the
+  // wrapper inside this shadow root never reaches it. The slot's assigned
+  // elements do.
+  private get _trigger(): HTMLElement | null {
+    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="trigger"]'
+    );
+    for (const el of slot?.assignedElements({ flatten: true }) ?? []) {
+      const focusable = el.matches(FOCUSABLE_SELECTOR)
+        ? el
+        : el.querySelector(FOCUSABLE_SELECTOR);
+      if (focusable) return focusable as HTMLElement;
+    }
+    return null;
+  }
+
+  // The state belongs on the control the user focuses, not on the wrapper,
+  // which has no role. `lui-button` and `lui-icon-button` pass it on to their
+  // inner button. No `aria-controls`: the panel's ID lives in this shadow root
+  // and cannot be referenced from the trigger's tree.
+  private _updateSlottedTrigger() {
+    const trigger = this._trigger;
+    if (!trigger) return;
+    trigger.setAttribute('aria-haspopup', 'menu');
+    trigger.setAttribute('aria-expanded', this.open ? 'true' : 'false');
+  }
+
+  // A custom element without `delegatesFocus` ignores `focus()` on its host,
+  // so focus goes to the control inside its shadow root.
   private _focusTrigger() {
-    const wrapper = this.shadowRoot?.querySelector(
-      '[data-dropdown-trigger]'
-    ) as HTMLElement | null;
-    const focusable = wrapper?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-    (focusable || wrapper)?.focus();
+    const trigger = this._trigger;
+    const target =
+      trigger?.shadowRoot?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ??
+      trigger;
+    target?.focus();
   }
 
   private _handleTriggerSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     this._hasTriggerSlot = slot.assignedNodes({ flatten: true }).length > 0;
+    // A swapped trigger leaves `_hasTriggerSlot` unchanged, so no update runs.
+    this._updateSlottedTrigger();
   }
 
   private _handleItemsSlotChange(e: Event) {
@@ -264,8 +301,6 @@ export class LuiDropdownMenu extends LitElement {
         <span
           class="dropdown-menu__trigger"
           data-dropdown-trigger
-          aria-expanded="${this.open ? 'true' : 'false'}"
-          aria-controls="${this._baseId}-panel"
           @click="${this._handleTriggerClick}"
         >
           <slot
