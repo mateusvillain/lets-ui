@@ -42,6 +42,15 @@ Usado como `slot="trigger"` de um Modal ou Drawer, o botão recebe esses atribut
 componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` que
 eles definem não é repassado: um ID não pode ser referenciado através de shadow roots diferentes.
 
+<Canvas of={IconButtonStories.ModalTrigger} />
+
+O Icon Button ainda não tem estilo visual para `aria-pressed="true"`: o estado é anunciado pelo
+leitor de tela, mas não aparece na tela. Até que exista, indique o estado alternado também de
+forma visível — por exemplo, trocando o ícone.
+
+Dentro de um Dropdown Menu, o estado aberto/fechado ainda não chega ao Icon Button: o Dropdown
+Menu o aplica num elemento interno, não no gatilho.
+
 ```html
 <lui-icon-button
   aria-label="Mais opções"
@@ -57,7 +66,8 @@ eles definem não é repassado: um ID não pode ser referenciado através de sha
 
 ## Todos os ícones
 
-Exemplos de uso com ícones SVG. O slot aceita qualquer SVG ou ícone de qualquer biblioteca.
+Catálogo de ícones SVG. O slot aceita qualquer SVG ou ícone de qualquer biblioteca. Aqui cada botão
+é rotulado com o nome do ícone apenas por ser um catálogo — em uso real, descreva a ação, como explicado em Nome acessível.
 
 <Canvas of={IconButtonStories.AllIcons} />
 

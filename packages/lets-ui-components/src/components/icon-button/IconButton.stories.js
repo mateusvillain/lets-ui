@@ -83,6 +83,17 @@ export const AllIcons = () => `
 `;
 AllIcons.parameters = { controls: { disable: true } };
 
+export const ModalTrigger = () => `
+  <lui-modal title="Configurações">
+    <lui-icon-button slot="trigger" size="lg" aria-label="Abrir configurações">
+      ${SVG['dots-nine']}
+    </lui-icon-button>
+    <p>O Icon Button recebe <code>aria-expanded</code> e <code>aria-haspopup</code> do Modal e os repassa ao botão interno.</p>
+  </lui-modal>
+`;
+ModalTrigger.storyName = 'Trigger de Modal';
+ModalTrigger.parameters = { controls: { disable: true } };
+
 export const CSSClass = () => `
   <button class="icon-button icon-button--lg" aria-label="Fechar">
     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

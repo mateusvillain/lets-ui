@@ -2,9 +2,11 @@ import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
 import { afterEach, describe, expect, it } from 'vitest';
 import { LuiIconButton } from './icon-button.ts';
 import { LuiModal } from '../modal/modal.ts';
+import { LuiDrawer } from '../drawer/drawer.ts';
 
 customElements.define('lui-icon-button', LuiIconButton);
 customElements.define('lui-modal', LuiModal);
+customElements.define('lui-drawer', LuiDrawer);
 
 const icon = '<svg aria-hidden="true" width="24" height="24"></svg>';
 const mounted = [];
@@ -31,6 +33,15 @@ describe('accessible name', () => {
       `<lui-icon-button aria-label="Fechar">${icon}</lui-icon-button>`
     );
 
+    expect(control(button).getAttribute('aria-label')).toBe('Fechar');
+  });
+
+  it('reflects an aria-label set as a property to the host', async () => {
+    const button = await mount(`<lui-icon-button>${icon}</lui-icon-button>`);
+
+    button.ariaLabel = 'Fechar';
+    await button.updateComplete;
+    expect(button.getAttribute('aria-label')).toBe('Fechar');
     expect(control(button).getAttribute('aria-label')).toBe('Fechar');
   });
 
@@ -113,6 +124,15 @@ describe('state ARIA', () => {
     expect(control(button).getAttribute('aria-pressed')).toBe('true');
   });
 
+  it('renders no attribute for an empty state value', async () => {
+    const button = await mount(
+      `<lui-icon-button aria-label="Menu" aria-expanded aria-pressed="">${icon}</lui-icon-button>`
+    );
+
+    expect(control(button).hasAttribute('aria-expanded')).toBe(false);
+    expect(control(button).hasAttribute('aria-pressed')).toBe(false);
+  });
+
   it('renders no state ARIA when none is set', async () => {
     const button = await mount(
       `<lui-icon-button aria-label="Fechar">${icon}</lui-icon-button>`
@@ -143,5 +163,26 @@ describe('state ARIA', () => {
 
     modal.open = false;
     await modal.updateComplete;
+  });
+
+  it('announces the open state of the drawer it triggers', async () => {
+    const host = document.createElement('div');
+    host.innerHTML = `<lui-drawer title="Filtros"><lui-icon-button slot="trigger" aria-label="Filtros">${icon}</lui-icon-button></lui-drawer>`;
+    document.body.append(host);
+    mounted.push(host);
+    const drawer = host.querySelector('lui-drawer');
+    const button = host.querySelector('lui-icon-button');
+    await drawer.updateComplete;
+    await button.updateComplete;
+    const expanded = () => control(button).getAttribute('aria-expanded');
+
+    await expect.poll(expanded).toBe('false');
+    expect(control(button).getAttribute('aria-haspopup')).toBe('dialog');
+
+    drawer.open = true;
+    await expect.poll(expanded).toBe('true');
+
+    drawer.open = false;
+    await drawer.updateComplete;
   });
 });
