@@ -20,7 +20,7 @@ Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `in
 
 ## Variantes
 
-`primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite. Informe o estado também no rótulo ou na legenda, porque a cor sozinha não basta.
+`primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite. Informe o estado também na legenda, porque a cor sozinha não basta e a legenda é anunciada quando muda.
 
 <Canvas of={ProgressBarStories.Variants} />
 
@@ -38,13 +38,13 @@ Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `in
 
 ## Indeterminado
 
-Omita `value` quando não há como medir o avanço. O valor some e o leitor de tela não anuncia número, só que a tarefa está em andamento. O `value-text` também é ignorado nesse modo; para dizer em que etapa a tarefa está, use `caption`. Assim que a medida existir, passe `value` e a barra muda para o modo determinado.
+Omita `value` quando não há como medir o avanço. O valor some e o leitor de tela não anuncia número, apenas a barra de progresso. O `value-text` também é ignorado nesse modo; para dizer em que etapa a tarefa está, use `caption`. Assim que a medida existir, passe `value` e a barra muda para o modo determinado.
 
 <Canvas of={ProgressBarStories.Indeterminate} />
 
 ## Só a barra
 
-Com `hide-label` e `hide-value`, sobra apenas a trilha. O `label` continua sendo o nome acessível da barra, então informe-o mesmo assim.
+Com `hide-label` e `hide-value`, sobra apenas a trilha. O `label` continua sendo o nome acessível da barra, então informe-o mesmo assim. Mostre o avanço em texto por perto, porque a trilha sozinha não basta para quem não distingue bem o preenchimento.
 
 <Canvas of={ProgressBarStories.BarOnly} />
 
@@ -56,17 +56,26 @@ Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value
 
 ## Acessibilidade
 
-- A trilha tem `role="progressbar"`, `aria-valuemin="0"`, `aria-valuemax` igual a `max` e `aria-valuenow` com o valor já limitado ao intervalo. No modo indeterminado, `aria-valuenow` não existe.
-- O rótulo visível nomeia a barra por `aria-labelledby`. Com `hide-label`, o mesmo texto vai para `aria-label`; sem `label`, o nome é "Progress bar".
-- A legenda descreve a barra por `aria-describedby` e é uma região `aria-live="polite"`. Os leitores de tela não anunciam com confiança a mudança de `aria-valuenow`, então é pela legenda que a pessoa fica sabendo do avanço e do resultado. A região existe mesmo sem `caption`, porque uma região inserida junto com o texto costuma não ser anunciada.
-- Atualize a legenda em marcos e no resultado ("Metade dos arquivos enviados", "Envio concluído"), não a cada passo. Cada mudança é lida em voz alta, e uma contagem que muda a cada arquivo interrompe a pessoa o tempo todo.
-- No modo indeterminado e na variante `danger`, informe o resultado na legenda. Esses estados não têm atributo ARIA próprio, então sem texto a pessoa não sabe que a tarefa terminou ou falhou. Mantenha a barra na página até o anúncio: se ela for removida junto com a mudança, a legenda não chega a ser lida.
-- Com `value-text`, o mesmo texto vira `aria-valuetext`, e o leitor de tela anuncia "3.2 GB of 10 GB" em vez de calcular um percentual. Sem ele, só `aria-valuenow` é exposto.
+### O que o componente faz
+
+- A trilha tem `role="progressbar"`, `aria-valuemin="0"`, `aria-valuemax` igual a `max` e `aria-valuenow` com o valor já limitado ao intervalo. No modo indeterminado, `aria-valuenow` e `aria-valuetext` não existem.
+- O rótulo visível nomeia a barra por `aria-labelledby`. Com `hide-label`, o mesmo texto vai para `aria-label`. Sem `label`, o nome é "Progress bar", em inglês.
+- Com `value-text`, o mesmo texto vira `aria-valuetext`, e o leitor de tela anuncia "3.2 GB of 10 GB" em vez de um percentual. Sem ele, só `aria-valuenow` é exposto.
 - O valor visível repete o `aria-valuenow` (ou o `aria-valuetext`), então fica fora da árvore de acessibilidade para não ser lido duas vezes.
-- A barra não é interativa e não recebe foco. Enquanto a tarefa roda, desabilite na aplicação os controles que dependem dela, como o botão de enviar.
-- Quando a barra indica o carregamento de uma área da tela, marque essa área com `aria-busy="true"` até o fim e retire o atributo depois.
+- A legenda descreve a barra por `aria-describedby` e é uma região `aria-live="polite"`. Os leitores de tela não anunciam com confiança a mudança de `aria-valuenow`, então é pela legenda que a pessoa fica sabendo do avanço e do resultado. A região existe mesmo sem `caption`, porque uma região inserida junto com o texto costuma não ser anunciada.
+- A barra não é interativa e não recebe foco.
 - Com `prefers-reduced-motion: reduce`, o preenchimento não anima e o modo indeterminado deixa de correr pela trilha: a barra inteira só pulsa.
 - Em `forced-colors`, a trilha ganha contorno e o preenchimento usa a cor de destaque do sistema.
+
+### O que fica com a aplicação
+
+- Passe sempre um `label` no idioma da página, mesmo com `hide-label`. O nome padrão "Progress bar" serve só como último recurso.
+- Atualize a legenda em marcos e no resultado ("Metade dos arquivos enviados", "Envio concluído"), não a cada passo. Cada mudança é lida em voz alta, e uma contagem que muda a cada arquivo interrompe a pessoa o tempo todo.
+- Informe o resultado na legenda, principalmente no modo indeterminado e nas variantes `success`, `caution` e `danger`. A cor e o modo indeterminado não têm atributo ARIA próprio, e o rótulo não é anunciado quando muda, então sem a legenda a pessoa não sabe que a tarefa terminou ou falhou.
+- Mantenha a barra na página até o anúncio. Se ela for removida junto com a mudança da legenda, o texto não chega a ser lido.
+- Use `hide-value` só quando o avanço também estiver em texto, na legenda ou ao redor da barra. Sem o valor, quem não distingue bem o preenchimento da trilha fica sem a informação.
+- Enquanto a tarefa roda, desabilite os controles que dependem dela, como o botão de enviar.
+- Quando a barra indica o carregamento de uma área da tela, marque essa área com `aria-busy="true"` até o fim e retire o atributo depois.
 
 ## Uso
 

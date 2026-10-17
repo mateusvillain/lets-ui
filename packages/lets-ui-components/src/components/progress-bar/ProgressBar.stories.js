@@ -126,7 +126,10 @@ export const Indeterminate = () => `
 
 export const BarOnly = () => `
   <div style="width: 400px; padding: 16px;">
-    <lui-progress-bar value="60" label="Profile completion" hide-label hide-value></lui-progress-bar>
+    <lui-stack gap="8">
+      <p class="body--md">Your profile is 60% complete</p>
+      <lui-progress-bar value="60" label="Profile completion" hide-label hide-value></lui-progress-bar>
+    </lui-stack>
   </div>
 `;
 BarOnly.storyName = 'Só a barra';
