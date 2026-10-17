@@ -49,6 +49,15 @@ describe('state ARIA', () => {
     expect(control(button).hasAttribute('aria-expanded')).toBe(false);
   });
 
+  it('reflects the state set as a property to the host attribute', async () => {
+    const button = await mount('<lui-button label="Menu"></lui-button>');
+
+    button.ariaExpanded = 'true';
+    await button.updateComplete;
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(control(button).getAttribute('aria-expanded')).toBe('true');
+  });
+
   it('renders no state ARIA when none is set', async () => {
     const button = await mount('<lui-button label="Save"></lui-button>');
 
@@ -105,7 +114,6 @@ describe('loading', () => {
     );
 
     expect(control(button).textContent.trim()).toBe('Save');
-    expect(control(button).getAttribute('aria-label')).toBe('Save');
   });
 
   it('replaces the content with loading-text', async () => {
@@ -115,14 +123,31 @@ describe('loading', () => {
 
     expect(control(button).querySelector('slot')).toBeNull();
     expect(control(button).textContent.trim()).toBe('Salvando');
-    expect(control(button).getAttribute('aria-label')).toBe('Salvando');
   });
 
   it('hides the prefix and suffix icons', async () => {
     const button = await mount(
-      '<lui-button loading label="Save"><span slot="prefix">*</span></lui-button>'
+      '<lui-button loading label="Save"><span slot="prefix">*</span><span slot="suffix">*</span></lui-button>'
     );
 
     expect(control(button).querySelector('slot[name="prefix"]')).toBeNull();
+    expect(control(button).querySelector('slot[name="suffix"]')).toBeNull();
+  });
+});
+
+describe('accessible name', () => {
+  it('sets no aria-label unless one is given', async () => {
+    const button = await mount('<lui-button label="Save"></lui-button>');
+
+    expect(control(button).hasAttribute('aria-label')).toBe(false);
+    expect(control(button).textContent.trim()).toBe('Save');
+  });
+
+  it('uses an explicit aria-label', async () => {
+    const button = await mount(
+      '<lui-button aria-label="Fechar diálogo">X</lui-button>'
+    );
+
+    expect(control(button).getAttribute('aria-label')).toBe('Fechar diálogo');
   });
 });

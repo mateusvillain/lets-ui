@@ -106,17 +106,3 @@ a {
     }
   }
 }
-
-// A forced-colors theme drops `box-shadow`, which is the whole focus ring, and
-// the state mixin clears the outline — so the focus would vanish. A system
-// outline takes its place; `:not(:disabled)` matches the mixin's specificity
-// and this rule comes after it.
-@media (forced-colors: active) {
-  button,
-  a {
-    &.btn:not(:disabled):focus-visible {
-      outline: width(2) solid CanvasText;
-      outline-offset: width(2);
-    }
-  }
-}

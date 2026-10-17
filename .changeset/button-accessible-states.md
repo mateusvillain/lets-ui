@@ -3,4 +3,4 @@
 '@lets-ui/styles': patch
 ---
 
-Announce the expanded, popup and pressed state of Button, keep its slotted label while loading, and show its focus in forced-colors mode
+Announce the expanded, popup and pressed state of Button and keep its accessible name in step with its visible text. Show the focus of every component built on the shared state styles in forced-colors mode

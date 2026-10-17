@@ -128,7 +128,8 @@ esses atributos ao controle interno, que é quem o leitor de tela anuncia; no el
 não teriam efeito. `aria-pressed` só se aplica sem `href`, já que links não têm estado pressionado.
 
 Usado como `slot="trigger"` de um Modal ou Drawer, o botão recebe esses atributos do próprio
-componente e anuncia "recolhido" ou "expandido" sem configuração adicional.
+componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` que
+eles definem não é repassado: um ID não pode ser referenciado através de shadow roots diferentes.
 
 ```html
 <lui-button
@@ -180,7 +181,7 @@ como modais, drawers e alertas de confirmação.
 | `target`        | `string`  | `''`        | Alvo da navegação; só aplicado junto de `href`                                      |
 | `rel`           | `string`  | `''`        | Relação do link; somado a `noopener noreferrer` com `target="_blank"`               |
 | `download`      | `string`  | —           | Baixa o recurso em vez de navegar; aceito sem valor; só junto de `href`             |
-| `aria-label`    | `string`  | `''`        | Label acessível sobrescrevendo o derivado do `label`                                |
+| `aria-label`    | `string`  | `''`        | Nome acessível no lugar do texto visível; use só quando não houver texto            |
 | `aria-expanded` | `string`  | —           | Estado aberto/fechado do que o botão controla; repassado ao controle interno        |
 | `aria-haspopup` | `string`  | —           | Tipo de popup que o botão abre; repassado ao controle interno                       |
 | `aria-pressed`  | `string`  | —           | Estado de botão alternável; repassado ao controle interno, ignorado com `href`      |

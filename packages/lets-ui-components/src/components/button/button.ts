@@ -34,9 +34,13 @@ export class LuiButton extends LitElement {
   // State ARIA set on the host — by the author or by a Modal or Drawer this
   // button triggers — never reaches the inner control on its own, and the host
   // has no role to carry it, so it is mirrored onto the element that does.
-  @property({ attribute: 'aria-expanded' }) ariaExpanded: string | null = null;
-  @property({ attribute: 'aria-haspopup' }) ariaHasPopup: string | null = null;
-  @property({ attribute: 'aria-pressed' }) ariaPressed: string | null = null;
+  // These accessors replace the native reflecting ones, so they reflect too.
+  @property({ attribute: 'aria-expanded', reflect: true })
+  ariaExpanded: string | null = null;
+  @property({ attribute: 'aria-haspopup', reflect: true })
+  ariaHasPopup: string | null = null;
+  @property({ attribute: 'aria-pressed', reflect: true })
+  ariaPressed: string | null = null;
   @property() href = '';
   @property() target = '';
   @property() rel = '';
@@ -108,7 +112,14 @@ export class LuiButton extends LitElement {
           ><slot name="suffix"></slot>`;
   }
 
-  private _renderAnchor(displayLabel: string, isDisabled: boolean) {
+  // Only an explicit `aria-label` overrides the name. Otherwise it comes from
+  // the rendered text — `label`, slotted content or `loading-text` — so the
+  // name always matches what is on screen (WCAG 2.5.3).
+  private get _ariaLabel(): string | undefined {
+    return this.ariaLabel || undefined;
+  }
+
+  private _renderAnchor(isDisabled: boolean) {
     return html`
       <a
         class="${this._classes}"
@@ -121,7 +132,7 @@ export class LuiButton extends LitElement {
         tabindex="${ifDefined(
           this.disabled ? '-1' : this.loading ? '0' : undefined
         )}"
-        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
+        aria-label="${ifDefined(this._ariaLabel)}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
         aria-expanded="${ifDefined(this.ariaExpanded ?? undefined)}"
@@ -134,12 +145,10 @@ export class LuiButton extends LitElement {
   }
 
   render() {
-    const displayLabel =
-      this.loading && this.loadingText ? this.loadingText : this.label;
     const isDisabled = this.disabled || this.loading;
 
     if (this._isLink) {
-      return this._renderAnchor(displayLabel, isDisabled);
+      return this._renderAnchor(isDisabled);
     }
 
     return html`
@@ -147,7 +156,7 @@ export class LuiButton extends LitElement {
         class="${this._classes}"
         type="button"
         ?autofocus="${this.autofocus}"
-        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
+        aria-label="${ifDefined(this._ariaLabel)}"
         ?disabled="${this.disabled}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
