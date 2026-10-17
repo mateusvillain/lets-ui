@@ -405,6 +405,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 | Button                | `lui-button`                      | Yes             |
 | Icon Button           | `lui-icon-button`                 | Yes             |
 | Checkbox              | `lui-checkbox`                    | Yes             |
+| Date Picker           | `lui-date-picker`                 | Yes             |
 | Input                 | `lui-input`                       | Yes             |
 | OTP Input             | `lui-otp-input`                   | Yes             |
 | Radio / RadioGroup    | `lui-radio`, `lui-radio-group`    | Yes             |
@@ -450,7 +451,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 2. Foundations — Color, Spacing, Border, Typography, Elevation
 3. Actionable — Buttons, Icon Buttons
 4. Navigation — Links, Breadcrumb, Pagination, Stepper, Tabs, Dropdown Menu
-5. Form and options — Input, OTP Input, Textarea, Checkbox, Radio, Select, Switch
+5. Form and options — Input, OTP Input, Textarea, Checkbox, Radio, Select, Switch, Date Picker
 6. Content — Card, Alert, Tag, Divider, Heading, Image, Body, Skeleton
 7. Layout — Container, Flex, Grid, Stack, Sidebar, Box, Center, Inline, Switcher, Float
 8. Miscellaneous — Modal, Drawer, Tooltip, Shortcut
