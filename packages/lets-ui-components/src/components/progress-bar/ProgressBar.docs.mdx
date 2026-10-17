@@ -38,7 +38,7 @@ Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `in
 
 ## Indeterminado
 
-Omita `value` quando não há como medir o avanço. O valor some e o leitor de tela não anuncia número, só que a tarefa está em andamento. Assim que a medida existir, passe `value` e a barra muda para o modo determinado.
+Omita `value` quando não há como medir o avanço. O valor some e o leitor de tela não anuncia número, só que a tarefa está em andamento. O `value-text` também é ignorado nesse modo; para dizer em que etapa a tarefa está, use `caption`. Assim que a medida existir, passe `value` e a barra muda para o modo determinado.
 
 <Canvas of={ProgressBarStories.Indeterminate} />
 

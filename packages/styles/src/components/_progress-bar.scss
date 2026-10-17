@@ -75,13 +75,16 @@ $segment: 30%;
   &--inline {
     column-gap: fluid(12);
 
+    // A long label wraps instead of squeezing the track. When even the
+    // minimum track no longer fits beside it, the track drops to a new line.
     .progress-bar__label {
-      flex: none;
+      flex: 0 1 auto;
     }
 
     .progress-bar__track {
       flex: 1 1 0;
       order: 1;
+      min-inline-size: 25%;
     }
 
     .progress-bar__value {
@@ -94,9 +97,12 @@ $segment: 30%;
     }
   }
 
+  // md is the base track above, so only the other sizes need a modifier.
   @each $key, $height in $sizes {
-    &--#{$key} .progress-bar__track {
-      block-size: $height;
+    @if $key != md {
+      &--#{$key} .progress-bar__track {
+        block-size: $height;
+      }
     }
   }
 
@@ -109,8 +115,16 @@ $segment: 30%;
   &--indeterminate .progress-bar__indicator {
     inline-size: $segment;
     transition: none;
-    animation: progress-bar-indeterminate 1.6s cubic-bezier(0.4, 0, 0.2, 1)
+    animation: lui-progress-bar-indeterminate 1.6s cubic-bezier(0.4, 0, 0.2, 1)
       infinite;
+
+    // translateX is physical, so right-to-left needs the mirrored sweep. Only
+    // with motion allowed, or this selector would outrank the pulse below.
+    @media (prefers-reduced-motion: no-preference) {
+      &:dir(rtl) {
+        animation-name: lui-progress-bar-indeterminate-rtl;
+      }
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -122,7 +136,7 @@ $segment: 30%;
     // working without anything moving across the screen.
     &--indeterminate .progress-bar__indicator {
       inline-size: 100%;
-      animation: progress-bar-pulse 2.4s ease-in-out infinite;
+      animation: lui-progress-bar-pulse 2.4s ease-in-out infinite;
     }
   }
 
@@ -141,7 +155,7 @@ $segment: 30%;
 
 // From just off the start edge to just off the end edge, so each cycle is one
 // sweep. The percentages are of the segment, which is 30% of the track.
-@keyframes progress-bar-indeterminate {
+@keyframes lui-progress-bar-indeterminate {
   0% {
     transform: translateX(-100%);
   }
@@ -151,7 +165,17 @@ $segment: 30%;
   }
 }
 
-@keyframes progress-bar-pulse {
+@keyframes lui-progress-bar-indeterminate-rtl {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(math.div(100%, $segment) * -100%);
+  }
+}
+
+@keyframes lui-progress-bar-pulse {
   0%,
   100% {
     opacity: 1;

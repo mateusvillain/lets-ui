@@ -62,6 +62,18 @@ describe('determinate', () => {
     expect(bar(under).getAttribute('aria-valuenow')).toBe('0');
   });
 
+  it('rounds the percentage down, so 100% means done', async () => {
+    const almost = await mount(
+      '<lui-progress-bar value="99.6"></lui-progress-bar>'
+    );
+    const exact = await mount(
+      '<lui-progress-bar value="29"></lui-progress-bar>'
+    );
+
+    expect(part(almost, 'value').textContent.trim()).toBe('99%');
+    expect(part(exact, 'value').textContent.trim()).toBe('29%');
+  });
+
   it('hides the value text on request', async () => {
     const progress = await mount(
       '<lui-progress-bar value="40" hide-value></lui-progress-bar>'
@@ -99,6 +111,16 @@ describe('indeterminate', () => {
     expect(
       root(progress).classList.contains('progress-bar--indeterminate')
     ).toBe(true);
+  });
+
+  it('mirrors the sweep in right-to-left', async () => {
+    const ltr = await mount('<lui-progress-bar></lui-progress-bar>');
+    const rtl = await mount('<lui-progress-bar dir="rtl"></lui-progress-bar>');
+    const animation = (progress) =>
+      getComputedStyle(part(progress, 'indicator')).animationName;
+
+    expect(animation(ltr)).toBe('lui-progress-bar-indeterminate');
+    expect(animation(rtl)).toBe('lui-progress-bar-indeterminate-rtl');
   });
 
   it('turns indeterminate again when value is removed', async () => {
@@ -139,6 +161,18 @@ describe('appearance', () => {
 
     expect(track.left).toBeGreaterThan(label.right);
     expect(value.left).toBeGreaterThan(track.right);
+  });
+
+  it('keeps the track visible beside a long inline label', async () => {
+    const progress = await mount(
+      '<lui-progress-bar value="10" label="Uploading quarterly financial report for the board.xlsx" label-placement="inline"></lui-progress-bar>'
+    );
+    const track = part(progress, 'track').getBoundingClientRect();
+
+    expect(track.width).toBeGreaterThanOrEqual(100);
+    expect(track.right).toBeLessThanOrEqual(
+      root(progress).getBoundingClientRect().right
+    );
   });
 
   it('puts the track under the label on top', async () => {

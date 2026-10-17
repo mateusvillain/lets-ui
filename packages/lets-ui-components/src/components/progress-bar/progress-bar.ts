@@ -60,6 +60,9 @@ export class LuiProgressBar extends LitElement {
     const max = this._max;
     const indeterminate = value === null;
     const fraction = indeterminate ? 0 : (value / max) * 100;
+    // Rounded down, so the text says 100% only when the task is done. The
+    // epsilon absorbs float error such as 29 / 100 * 100 = 28.999…
+    const percent = Math.floor(fraction + 1e-9);
 
     const ownLabel = (this.label ?? '').trim();
     const caption = (this.caption ?? '').trim();
@@ -91,7 +94,7 @@ export class LuiProgressBar extends LitElement {
           : nothing}
         ${showValue
           ? html`<span class="progress-bar__value" aria-hidden="true"
-              >${valueText || `${Math.round(fraction)}%`}</span
+              >${valueText || `${percent}%`}</span
             >`
           : nothing}
         <div
