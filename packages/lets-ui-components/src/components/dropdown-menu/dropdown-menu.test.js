@@ -126,6 +126,37 @@ describe('picking an item', () => {
     expect(menu.open).toBe(false);
     expect(document.activeElement).toBe(elsewhere);
   });
+
+  it('returns focus to the trigger from a submenu item', async () => {
+    const { menu, trigger } = await mount(
+      `${triggers['a native button']}<lui-menu-item slot="items" label="Compartilhar"><lui-menu-item label="Por e-mail"></lui-menu-item></lui-menu-item>`
+    );
+    let picked;
+    menu.addEventListener('menu-select', (e) => (picked = e.detail.label));
+
+    menu.open = true;
+    await menu.updateComplete;
+    const parent = menu.shadowRoot.querySelector(
+      '.menu-item--has-submenu > .menu-item'
+    );
+    const subItem = menu.shadowRoot.querySelector(
+      '.menu-item--has-submenu .dropdown-menu__panel .menu-item'
+    );
+    // The submenu only shows while its parent holds focus, after a transition.
+    await expect
+      .poll(async () => {
+        parent.focus();
+        await userEvent.keyboard('{ArrowRight}');
+        return menu.shadowRoot.activeElement;
+      })
+      .toBe(subItem);
+
+    await userEvent.keyboard('{Enter}');
+
+    expect(picked).toBe('Por e-mail');
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(trigger);
+  });
 });
 
 describe('wrapper', () => {
