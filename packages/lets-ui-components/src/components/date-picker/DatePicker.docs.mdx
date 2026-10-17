@@ -8,7 +8,7 @@ import * as DatePickerStories from './DatePicker.stories';
 O Date Picker seleciona uma data num calendário. Com `range`, seleciona um
 intervalo. Use quando a data é próxima ou quando o dia da semana importa, como
 em agendamentos, reservas e prazos. Para datas distantes que a pessoa já sabe,
-como a data de nascimento, um Input com máscara é mais rápido de preencher.
+como a data de nascimento, ative `editable` para que a data possa ser digitada.
 
 O campo tem a mesma anatomia, os mesmos estados e os mesmos tamanhos do Input.
 O valor é uma string ISO 8601 em qualquer idioma: `YYYY-MM-DD` para uma data e
@@ -34,6 +34,33 @@ O campo mostra as duas pontas com `Intl.DateTimeFormat.formatRange`, que não
 repete o que elas têm em comum: `Jan 16 – 21, 2026`.
 
 <Canvas of={DatePickerStories.Range} />
+
+## Digitação
+
+Com `editable`, o campo vira uma caixa de texto e o calendário abre pelo botão
+ao lado. A pessoa digita só os números. A máscara põe as barras, os pontos ou
+os hífens na ordem do `locale`, e o placeholder mostra o formato esperado.
+Barras e hífens ganham um espaço de cada lado, para separar os campos:
+
+| `locale` | Máscara          |
+| -------- | ---------------- |
+| `pt-BR`  | `dd / mm / yyyy` |
+| `en-US`  | `mm / dd / yyyy` |
+| `de-DE`  | `dd.mm.yyyy`     |
+| `ja-JP`  | `yyyy / mm / dd` |
+
+Com `range`, o campo recebe as duas datas: `dd / mm / yyyy – dd / mm / yyyy`.
+
+O `value` só muda quando o texto forma uma data completa e válida, e cada
+mudança emite `change`. Enquanto o texto está incompleto ou forma uma data que
+não existe, como 30/02, o `value` fica vazio e o campo reporta `badInput`, com
+a mensagem de `bad-input-text`. Colar uma data em ISO 8601, como `2026-01-16`,
+também funciona.
+
+Para traduzir as letras do formato, use `placeholder`, como em
+`placeholder="dd / mm / aaaa"`.
+
+<Canvas of={DatePickerStories.Editable} />
 
 ## Min e max
 
@@ -90,7 +117,9 @@ O `lui-date-picker` é um form-associated custom element. O valor entra no
 A validação usa `ElementInternals.setValidity()`, como nos elementos nativos.
 Com `required` e sem data, o campo reporta `valueMissing`. Um `value` que começa
 antes de `min` reporta `rangeUnderflow`, e um que termina depois de `max`
-reporta `rangeOverflow`. A mensagem exibida vem de `error-text`.
+reporta `rangeOverflow`. A mensagem exibida vem de `error-text`. Com
+`editable`, um texto que não forma uma data reporta `badInput`, com a mensagem
+de `bad-input-text`.
 
 <Canvas of={DatePickerStories.FormIntegration} />
 
@@ -98,7 +127,7 @@ reporta `rangeOverflow`. A mensagem exibida vem de `error-text`.
 
 | Evento   | `detail`                                        | Quando                                    |
 | -------- | ----------------------------------------------- | ----------------------------------------- |
-| `change` | `{ value: string }`                             | O usuário escolhe uma data                |
+| `change` | `{ value: string }`                             | O usuário escolhe ou digita uma data      |
 | `change` | `{ value: string, start: string, end: string }` | Com `range`, o usuário fecha um intervalo |
 
 ## Atributos
@@ -107,6 +136,7 @@ reporta `rangeOverflow`. A mensagem exibida vem de `error-text`.
 | ------------------- | --------- | --------- | ------------------------------------------------------------------------ |
 | `value`             | `string`  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range` |
 | `range`             | `boolean` | `false`   | Seleciona um intervalo, com dois meses lado a lado                       |
+| `editable`          | `boolean` | `false`   | Permite digitar a data, com máscara no formato do `locale`               |
 | `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                 |
 | `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                   |
 | `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                               |
@@ -126,14 +156,15 @@ reporta `rangeOverflow`. A mensagem exibida vem de `error-text`.
 Os textos gerados pelo componente estão em inglês. Troque-os pelos atributos
 abaixo para usar o idioma do projeto.
 
-| Atributo               | Padrão                      | Descrição                                     |
-| ---------------------- | --------------------------- | --------------------------------------------- |
-| `placeholder`          | `'Select a date'`           | Texto do campo sem data                       |
-| `optional-text`        | `'(optional)'`              | Marcador exibido quando `optional` está ativo |
-| `error-text`           | `'This field is required.'` | Mensagem exibida quando `error` está ativo    |
-| `dialog-label`         | `'Choose date'`             | Nome acessível do calendário                  |
-| `previous-month-label` | `'Previous month'`          | `aria-label` do botão de mês anterior         |
-| `next-month-label`     | `'Next month'`              | `aria-label` do botão de próximo mês          |
+| Atributo               | Padrão                      | Descrição                                                                                        |
+| ---------------------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| `placeholder`          | `'Select a date'`           | Texto do campo sem data. Com `editable`, o padrão é o formato do `locale`, como `dd / mm / yyyy` |
+| `optional-text`        | `'(optional)'`              | Marcador exibido quando `optional` está ativo                                                    |
+| `error-text`           | `'This field is required.'` | Mensagem exibida quando `error` está ativo                                                       |
+| `bad-input-text`       | `'Enter a valid date.'`     | Mensagem de erro, com `editable`, quando o texto não forma uma data                              |
+| `dialog-label`         | `'Choose date'`             | Nome acessível do calendário e, com `editable`, do botão que o abre                              |
+| `previous-month-label` | `'Previous month'`          | `aria-label` do botão de mês anterior                                                            |
+| `next-month-label`     | `'Next month'`              | `aria-label` do botão de próximo mês                                                             |
 
 ## Acessibilidade
 
@@ -156,6 +187,11 @@ mês é anunciado numa região `aria-live` e o dia de hoje tem
 | `Esc`                        | Fecha sem alterar e devolve o foco ao campo    |
 
 O calendário também fecha com um clique fora dele ou quando o foco sai com `Tab`.
+
+Com `editable`, o campo é um `<input inputmode="numeric">` nomeado pelo rótulo,
+e o calendário abre pelo botão ao lado, nomeado por `dialog-label`. Na caixa de
+texto, `Alt` + `↓` abre o calendário, já que as setas movem o cursor. Ao
+escolher um dia ou apertar `Esc`, o foco volta ao botão.
 
 ## Classe CSS (sem Web Component)
 

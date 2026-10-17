@@ -10,6 +10,14 @@ import {
   toISODate,
   today,
 } from './date.ts';
+import {
+  applyMask,
+  caretAfterDigits,
+  dateMask,
+  maskPattern,
+  rangeMask,
+  readMask,
+} from './mask.ts';
 
 // Only the element under test: the full index would pull in every component
 // and the Sass each one inlines.
@@ -532,5 +540,197 @@ describe('range', () => {
     el.max = '';
     await el.updateComplete;
     expect(form.checkValidity()).toBe(true);
+  });
+});
+
+describe('mask helpers', () => {
+  const maskFor = (locale) =>
+    dateMask(
+      new Intl.DateTimeFormat(locale, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        numberingSystem: 'latn',
+      })
+    );
+
+  it('follows the order and marks of the locale', () => {
+    expect(maskPattern(maskFor('pt-BR'))).toBe('dd / mm / yyyy');
+    expect(maskPattern(maskFor('en-US'))).toBe('mm / dd / yyyy');
+    expect(maskPattern(maskFor('de-DE'))).toBe('dd.mm.yyyy');
+    expect(maskPattern(maskFor('ja-JP'))).toBe('yyyy / mm / dd');
+  });
+
+  it('drops a trailing mark', () => {
+    expect(maskPattern(maskFor('ko-KR'))).toBe('yyyy. mm. dd');
+  });
+
+  it('writes a mark only once a digit follows it', () => {
+    const mask = maskFor('pt-BR');
+    expect(applyMask('16', mask)).toBe('16');
+    expect(applyMask('160', mask)).toBe('16 / 0');
+    expect(applyMask('16012026', mask)).toBe('16 / 01 / 2026');
+  });
+
+  it('reads whole dates and rejects impossible ones', () => {
+    const mask = maskFor('pt-BR');
+    expect(readMask('16012026', mask).map(toISODate)).toEqual(['2026-01-16']);
+    expect(readMask('30022026', mask)).toBeNull();
+    expect(
+      readMask('1601202621012026', rangeMask(mask)).map(toISODate)
+    ).toEqual(['2026-01-16', '2026-01-21']);
+  });
+
+  it('places the caret after a count of digits', () => {
+    expect(caretAfterDigits('16 / 01 / 2026', 0)).toBe(0);
+    expect(caretAfterDigits('16 / 01 / 2026', 2)).toBe(2);
+    expect(caretAfterDigits('16 / 01 / 2026', 3)).toBe(6);
+  });
+});
+
+describe('editable', () => {
+  const input = (el) => $(el, '.date-picker__input');
+  const toggle = (el) => $(el, '.date-picker__toggle');
+
+  async function type(el, text) {
+    await userEvent.click(input(el));
+    await userEvent.keyboard(text);
+    await el.updateComplete;
+  }
+
+  it('shows the locale pattern as the placeholder', async () => {
+    const el = await mount('editable locale="pt-BR"');
+    expect(input(el).placeholder).toBe('dd / mm / yyyy');
+    const custom = await mount('editable placeholder="dd / mm / aaaa"');
+    expect(input(custom).placeholder).toBe('dd / mm / aaaa');
+  });
+
+  it('shows the value in the mask', async () => {
+    const el = await mount('editable locale="pt-BR" value="2026-01-16"');
+    expect(input(el).value).toBe('16 / 01 / 2026');
+    el.value = '2026-03-09';
+    await el.updateComplete;
+    expect(input(el).value).toBe('09 / 03 / 2026');
+  });
+
+  it('masks typed digits and sets the value once the date is whole', async () => {
+    const el = await mount('editable locale="pt-BR"');
+    const events = [];
+    el.addEventListener('change', (e) => events.push(e.detail.value));
+    await type(el, '1601');
+    expect(input(el).value).toBe('16 / 01');
+    expect(el.value).toBe('');
+    await userEvent.keyboard('2026');
+    await el.updateComplete;
+    expect(input(el).value).toBe('16 / 01 / 2026');
+    expect(el.value).toBe('2026-01-16');
+    expect(events).toEqual(['2026-01-16']);
+  });
+
+  it('ignores anything but digits', async () => {
+    const el = await mount('editable locale="pt-BR"');
+    await type(el, '1a6/-0');
+    expect(input(el).value).toBe('16 / 0');
+  });
+
+  it('follows the locale order', async () => {
+    const el = await mount('editable locale="en-US"');
+    await type(el, '01162026');
+    expect(input(el).value).toBe('01 / 16 / 2026');
+    expect(el.value).toBe('2026-01-16');
+  });
+
+  it('clears the value when a digit is deleted', async () => {
+    const el = await mount('editable locale="pt-BR" value="2026-01-16"');
+    const events = [];
+    el.addEventListener('change', (e) => events.push(e.detail.value));
+    await type(el, '{End}{Backspace}');
+    expect(input(el).value).toBe('16 / 01 / 202');
+    expect(el.value).toBe('');
+    expect(events).toEqual(['']);
+  });
+
+  it('reads a pasted ISO date', async () => {
+    const el = await mount('editable locale="pt-BR"');
+    input(el).value = '2026-01-16';
+    input(el).dispatchEvent(new InputEvent('input', { bubbles: true }));
+    await el.updateComplete;
+    expect(input(el).value).toBe('16 / 01 / 2026');
+    expect(el.value).toBe('2026-01-16');
+  });
+
+  it('is invalid with a partial or impossible date', async () => {
+    const el = await mount(
+      'editable locale="pt-BR" name="start"',
+      (html) => `<form>${html}</form>`
+    );
+    const form = el.closest('form');
+    expect(form.checkValidity()).toBe(true);
+    await type(el, '3002');
+    expect(form.checkValidity()).toBe(false);
+    await userEvent.keyboard('2026');
+    await el.updateComplete;
+    expect(el.value).toBe('');
+    expect(form.checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      'Enter a valid date.'
+    );
+  });
+
+  it('types both ends of a range', async () => {
+    const el = await mount('editable range locale="pt-BR"');
+    await type(el, '1601202621012026');
+    expect(input(el).value).toBe('16 / 01 / 2026 – 21 / 01 / 2026');
+    expect(el.value).toBe('2026-01-16/2026-01-21');
+  });
+
+  it('rejects a range that ends before it starts', async () => {
+    const el = await mount(
+      'editable range locale="pt-BR" name="stay"',
+      (html) => `<form>${html}</form>`
+    );
+    await type(el, '2101202616012026');
+    expect(el.value).toBe('');
+    expect(el.closest('form').checkValidity()).toBe(false);
+  });
+
+  it('opens the calendar from the button and returns focus to it', async () => {
+    const el = await mount('editable locale="pt-BR" value="2026-01-16"');
+    await userEvent.click(toggle(el));
+    await el.updateComplete;
+    expect(el.open).toBe(true);
+    expect(toggle(el).getAttribute('aria-expanded')).toBe('true');
+    expect(activeDay(el)).toBe('2026-01-16');
+    await userEvent.click(day(el, '2026-01-20'));
+    await el.updateComplete;
+    expect(el.value).toBe('2026-01-20');
+    expect(input(el).value).toBe('20 / 01 / 2026');
+    expect(el.shadowRoot.activeElement).toBe(toggle(el));
+  });
+
+  it('opens the calendar from the text box with Alt+ArrowDown', async () => {
+    const el = await mount('editable');
+    await type(el, '{ArrowDown}');
+    expect(el.open).toBe(false);
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await el.updateComplete;
+    expect(el.open).toBe(true);
+  });
+
+  it('labels the text box', async () => {
+    const el = await mount('editable label="Start"');
+    expect(input(el).labels?.[0]?.textContent.trim()).toBe('Start');
+  });
+
+  it('clears the text on reset', async () => {
+    const el = await mount(
+      'editable locale="pt-BR" name="start"',
+      (html) => `<form>${html}</form>`
+    );
+    await type(el, '1601');
+    el.closest('form').reset();
+    await el.updateComplete;
+    expect(input(el).value).toBe('');
   });
 });

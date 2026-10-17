@@ -5,7 +5,9 @@
 @use 'field';
 
 // The trigger is a field like any other — same border, states and sizes as the
-// Input — but a button, since the value is picked rather than typed.
+// Input — but a button, since the value is picked rather than typed. With
+// `editable`, the control holds a text box and a button that opens the
+// calendar.
 .date-picker {
   @include field.wrapper;
 
@@ -50,6 +52,31 @@
     white-space: nowrap;
   }
 
+  &__input {
+    @include field.input-element;
+
+    &::placeholder {
+      color: text(caption);
+    }
+  }
+
+  &__toggle {
+    @include center;
+
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    outline: 0;
+    cursor: pointer;
+
+    // Like the Input's actions, it shows focus through the control's ring.
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
   &--placeholder .date-picker__value {
     color: text(caption);
   }
@@ -79,14 +106,18 @@
     }
   }
 
-  @include field.states('date-picker', '.date-picker__control');
+  @include field.states(
+    'date-picker',
+    ':is(.date-picker__control, .date-picker__input)'
+  );
 }
 
 @each $key, $props in field.$size {
   .date-picker--#{$key} {
     @include field.size-body('date-picker', $props);
 
-    .date-picker__value {
+    .date-picker__value,
+    .date-picker__input {
       @include font-scale(map.get($props, body));
     }
   }

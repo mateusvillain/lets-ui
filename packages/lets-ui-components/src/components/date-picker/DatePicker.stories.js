@@ -10,7 +10,14 @@ export default {
     },
     placeholder: {
       control: 'text',
+      description:
+        'Vazio usa o padrão: `Select a date`, ou o formato do `locale` com `editable`',
       table: { defaultValue: { summary: 'Select a date' } },
+    },
+    editable: {
+      control: 'boolean',
+      description: 'Permite digitar a data, com máscara no formato do locale',
+      table: { defaultValue: { summary: 'false' } },
     },
     range: {
       control: 'boolean',
@@ -70,10 +77,44 @@ export default {
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } },
     },
+    optionalText: {
+      control: 'text',
+      description: 'Marcador exibido ao lado do rótulo com `optional`',
+      table: { category: 'Textos', defaultValue: { summary: '(optional)' } },
+    },
+    badInputText: {
+      control: 'text',
+      description:
+        'Mensagem de erro, com `editable`, quando o texto não forma uma data',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'Enter a valid date.' },
+      },
+    },
+    dialogLabel: {
+      control: 'text',
+      description:
+        'Nome acessível do calendário e, com `editable`, do botão que o abre',
+      table: { category: 'Textos', defaultValue: { summary: 'Choose date' } },
+    },
+    previousMonthLabel: {
+      control: 'text',
+      description: '`aria-label` do botão de mês anterior',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'Previous month' },
+      },
+    },
+    nextMonthLabel: {
+      control: 'text',
+      description: '`aria-label` do botão de próximo mês',
+      table: { category: 'Textos', defaultValue: { summary: 'Next month' } },
+    },
   },
 };
 
 const Template = ({
+  editable,
   range,
   label,
   placeholder,
@@ -90,8 +131,14 @@ const Template = ({
   error,
   errorText,
   disabled,
+  optionalText,
+  badInputText,
+  dialogLabel,
+  previousMonthLabel,
+  nextMonthLabel,
 }) => {
   const attrs = [
+    editable ? 'editable' : '',
     range ? 'range' : '',
     label ? `label="${label}"` : '',
     placeholder ? `placeholder="${placeholder}"` : '',
@@ -108,6 +155,11 @@ const Template = ({
     error ? 'error' : '',
     errorText ? `error-text="${errorText}"` : '',
     disabled ? 'disabled' : '',
+    optionalText ? `optional-text="${optionalText}"` : '',
+    badInputText ? `bad-input-text="${badInputText}"` : '',
+    dialogLabel ? `dialog-label="${dialogLabel}"` : '',
+    previousMonthLabel ? `previous-month-label="${previousMonthLabel}"` : '',
+    nextMonthLabel ? `next-month-label="${nextMonthLabel}"` : '',
   ]
     .filter(Boolean)
     .join('\n    ');
@@ -122,9 +174,10 @@ const Template = ({
 export const DatePicker = Template.bind({});
 DatePicker.storyName = 'Date Picker';
 DatePicker.args = {
+  editable: false,
   range: false,
   label: 'Label',
-  placeholder: 'Placeholder',
+  placeholder: '',
   value: '',
   min: '',
   max: '',
@@ -138,6 +191,11 @@ DatePicker.args = {
   error: false,
   errorText: 'This field is required.',
   disabled: false,
+  optionalText: '(optional)',
+  badInputText: 'Enter a valid date.',
+  dialogLabel: 'Choose date',
+  previousMonthLabel: 'Previous month',
+  nextMonthLabel: 'Next month',
 };
 
 export const Open = () => `
@@ -170,6 +228,36 @@ Range.parameters = {
     description: {
       story:
         'Com `range`, o calendário mostra dois meses lado a lado. O primeiro clique marca uma ponta do intervalo e o segundo marca a outra, em qualquer ordem. Entre os dois cliques, o intervalo acompanha o ponteiro ou o foco. O `value` é um intervalo ISO 8601: `2026-01-16/2026-01-21`.',
+    },
+  },
+};
+
+export const Editable = () => `
+  <div style="width: 280px; min-height: 380px; display: flex; flex-direction: column; gap: 16px;">
+    <lui-date-picker
+      editable
+      label="Data de nascimento"
+      locale="pt-BR"
+      placeholder="dd / mm / aaaa"
+      dialog-label="Escolher data"
+      bad-input-text="Digite uma data válida."
+    ></lui-date-picker>
+    <lui-date-picker
+      editable
+      range
+      label="Período"
+      locale="pt-BR"
+      value="2026-01-16/2026-01-21"
+      dialog-label="Escolher datas"
+    ></lui-date-picker>
+  </div>
+`;
+Editable.storyName = 'Typed entry';
+Editable.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com `editable`, a data pode ser digitada. A máscara segue o formato do `locale` e o calendário continua disponível pelo botão ao lado. O `value` só muda quando o texto forma uma data completa e válida.',
     },
   },
 };

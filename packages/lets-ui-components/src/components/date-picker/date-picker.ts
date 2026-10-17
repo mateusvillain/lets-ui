@@ -1,6 +1,7 @@
 import { LitElement, html, nothing, unsafeCSS, PropertyValues } from 'lit';
-import { property, query, state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { live } from 'lit/directives/live.js';
 import styles from './date-picker.scss?inline';
 import { nameProperty } from '../../utils/form.js';
 import {
@@ -21,6 +22,17 @@ import {
   toISORange,
   today,
 } from './date.js';
+import {
+  type MaskSegment,
+  applyMask,
+  caretAfterDigits,
+  dateMask,
+  maskCapacity,
+  maskDigits,
+  maskPattern,
+  rangeMask,
+  readMask,
+} from './mask.js';
 
 const ICON_CALENDAR = html`
   <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -61,7 +73,8 @@ export class LuiDatePicker extends LitElement {
   @property({ type: Boolean, reflect: true }) range = false;
   @property() min = '';
   @property() max = '';
-  @property() placeholder = 'Select a date';
+  @property({ type: Boolean, reflect: true }) editable = false;
+  @property() placeholder = '';
   @property() size = 'lg';
   @property() locale = 'en-US';
   @property({ type: Number, attribute: 'first-day-of-week' })
@@ -74,6 +87,8 @@ export class LuiDatePicker extends LitElement {
   @property() hint = '';
   @property({ type: Boolean }) error = false;
   @property({ attribute: 'error-text' }) errorText = 'This field is required.';
+  @property({ attribute: 'bad-input-text' }) badInputText =
+    'Enter a valid date.';
   @property({ attribute: 'dialog-label' }) dialogLabel = 'Choose date';
   @property({ attribute: 'previous-month-label' }) previousMonthLabel =
     'Previous month';
@@ -90,13 +105,17 @@ export class LuiDatePicker extends LitElement {
   // anchor and the day under the pointer or the focus is the other end.
   @state() private _anchor: Date | null = null;
   @state() private _preview: Date | null = null;
-
-  @query('.date-picker__control') private _triggerEl!: HTMLButtonElement;
+  // What is typed in the field with `editable`. It runs ahead of `value`,
+  // which stays empty until the text spells a whole date.
+  @state() private _text = '';
 
   private _baseId: string;
   // Set by user interaction only, so an `open` attribute in the markup shows
   // the calendar without pulling focus into it on page load.
   private _focusActiveDay = false;
+  // Set while typing writes `value`, so the text being typed is not replaced
+  // by the formatted value.
+  private _typing = false;
 
   constructor() {
     super();
@@ -117,6 +136,22 @@ export class LuiDatePicker extends LitElement {
   }
 
   protected willUpdate(changed: PropertyValues) {
+    if (
+      (changed.has('value') || changed.has('locale') || changed.has('range')) &&
+      !this._typing
+    ) {
+      const selection = this._selection;
+      this._text = selection ? this._maskText(selection) : '';
+    }
+    // A date typed with the calendar open brings the calendar to it.
+    if (changed.has('value') && this._typing && this.open && this._selection) {
+      this._activeDate = clampDate(
+        this._selection.start,
+        this._minDate,
+        this._maxDate
+      );
+    }
+    this._typing = false;
     if (changed.has('open')) {
       this._anchor = null;
       this._preview = null;
@@ -139,7 +174,9 @@ export class LuiDatePicker extends LitElement {
       changed.has('value') ||
       changed.has('range') ||
       changed.has('min') ||
-      changed.has('max')
+      changed.has('max') ||
+      changed.has('editable') ||
+      changed.has('_text')
     ) {
       this._syncFormValue();
     }
@@ -157,6 +194,7 @@ export class LuiDatePicker extends LitElement {
 
   formResetCallback() {
     this.value = '';
+    this._text = '';
     this.error = false;
     this.open = false;
   }
@@ -183,6 +221,29 @@ export class LuiDatePicker extends LitElement {
 
   get _maxDate() {
     return parseISODate(this.max);
+  }
+
+  // Text that spells no date — partial or impossible, like February 30.
+  get _badInput() {
+    return this.editable && this._text.trim() !== '' && !this._selection;
+  }
+
+  // The control that opens the calendar and takes the focus back when it
+  // closes: the field itself, or the button beside the text box with
+  // `editable`.
+  private get _triggerEl() {
+    return this.renderRoot.querySelector<HTMLElement>(
+      this.editable ? '.date-picker__toggle' : '.date-picker__control'
+    );
+  }
+
+  // The element the browser points at when it reports the field invalid.
+  private get _validityAnchor() {
+    return (
+      this.renderRoot.querySelector<HTMLElement>(
+        this.editable ? '.date-picker__input' : '.date-picker__control'
+      ) ?? undefined
+    );
   }
 
   get _firstDay() {
@@ -215,6 +276,26 @@ export class LuiDatePicker extends LitElement {
     return this._formatter(options).format(date);
   }
 
+  get _mask(): MaskSegment[] {
+    const mask = dateMask(
+      this._formatter({
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        numberingSystem: 'latn',
+      })
+    );
+    return this.range ? rangeMask(mask) : mask;
+  }
+
+  private _maskText({ start, end }: DateRange) {
+    const mask = this._mask;
+    return applyMask(
+      maskDigits(this.range ? [start, end] : [start], mask),
+      mask
+    );
+  }
+
   private _formatValue({ start, end }: DateRange) {
     const formatter = this._formatter({
       month: 'short',
@@ -239,23 +320,30 @@ export class LuiDatePicker extends LitElement {
     );
     const min = this._minDate;
     const max = this._maxDate;
-    if (this.required && !selection) {
+    const anchor = this._validityAnchor;
+    if (this._badInput) {
+      this._internals.setValidity(
+        { badInput: true },
+        this.badInputText,
+        anchor
+      );
+    } else if (this.required && !selection) {
       this._internals.setValidity(
         { valueMissing: true },
         this.errorText,
-        this._triggerEl
+        anchor
       );
     } else if (selection && min && selection.start < min) {
       this._internals.setValidity(
         { rangeUnderflow: true },
         this.errorText,
-        this._triggerEl
+        anchor
       );
     } else if (selection && max && selection.end > max) {
       this._internals.setValidity(
         { rangeOverflow: true },
         this.errorText,
-        this._triggerEl
+        anchor
       );
     } else {
       this._internals.setValidity({});
@@ -300,6 +388,70 @@ export class LuiDatePicker extends LitElement {
       return;
     }
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.open) {
+      e.preventDefault();
+      this._openCalendar();
+    }
+  }
+
+  // Only digits are typed; the mask writes the marks between them. A pasted
+  // ISO date, like `2026-01-16`, is read as one.
+  private _handleInput(e: InputEvent) {
+    const input = e.target as HTMLInputElement;
+    const raw = input.value;
+    const mask = this._mask;
+    const capacity = maskCapacity(mask);
+    const pasted = this.range ? parseISORange(raw) : parseISODate(raw);
+    const digits = pasted
+      ? maskDigits(
+          'start' in pasted ? [pasted.start, pasted.end] : [pasted],
+          mask
+        )
+      : raw.replace(/\D/g, '').slice(0, capacity);
+    const digitsBeforeCaret = pasted
+      ? digits.length
+      : raw.slice(0, input.selectionStart ?? raw.length).replace(/\D/g, '')
+          .length;
+
+    const text = applyMask(digits, mask);
+    input.value = text;
+    const caret = caretAfterDigits(text, digitsBeforeCaret);
+    input.setSelectionRange(caret, caret);
+    this._text = text;
+
+    const dates = digits.length === capacity ? readMask(digits, mask) : null;
+    let value = '';
+    if (dates && !this.range) {
+      value = toISODate(dates[0]);
+    } else if (dates && dates[0] <= dates[1]) {
+      value = toISORange({ start: dates[0], end: dates[1] });
+    }
+    if (value === this.value) return;
+    this._typing = true;
+    this.value = value;
+    if (value) this.error = false;
+    const range = value && this.range ? parseISORange(value) : null;
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        bubbles: true,
+        composed: true,
+        detail: range
+          ? { value, start: toISODate(range.start), end: toISODate(range.end) }
+          : { value },
+      })
+    );
+  }
+
+  // The arrows move the caret in a text box, so it opens the calendar with
+  // Alt+↓, like a native select.
+  private _handleInputKeydown(e: KeyboardEvent) {
+    if (this.disabled) return;
+    if (e.key === 'Escape' && this.open) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.open = false;
+      return;
+    }
+    if (e.key === 'ArrowDown' && e.altKey && !this.open) {
       e.preventDefault();
       this._openCalendar();
     }
@@ -607,11 +759,102 @@ export class LuiDatePicker extends LitElement {
     `;
   }
 
-  render() {
+  private _renderButtonControl() {
     const selection = this._selection;
-    const message = this.error ? this.errorText : this.hint;
     const labelId = `${this._baseId}-label`;
     const valueId = `${this._baseId}-value`;
+    const message = this._message;
+
+    return html`
+      <button
+        id="${this._baseId}-control"
+        type="button"
+        class="date-picker__control"
+        aria-haspopup="dialog"
+        aria-expanded="${this.open ? 'true' : 'false'}"
+        aria-controls="${ifDefined(
+          this.open ? `${this._baseId}-dialog` : undefined
+        )}"
+        aria-label="${ifDefined(this.ariaLabel || undefined)}"
+        aria-labelledby="${ifDefined(
+          this.ariaLabel
+            ? undefined
+            : this.label
+              ? `${labelId} ${valueId}`
+              : valueId
+        )}"
+        aria-describedby="${ifDefined(
+          message ? `${this._baseId}-message` : undefined
+        )}"
+        aria-invalid="${this.error ? 'true' : 'false'}"
+        aria-required="${this.required ? 'true' : 'false'}"
+        ?disabled="${this.disabled}"
+        @click="${this._handleTriggerClick}"
+        @keydown="${this._handleTriggerKeydown}"
+      >
+        <span id="${valueId}" class="date-picker__value">
+          ${selection
+            ? this._formatValue(selection)
+            : this.placeholder || 'Select a date'}
+        </span>
+        <span class="date-picker__icon">${ICON_CALENDAR}</span>
+      </button>
+    `;
+  }
+
+  // With `editable`, a text box takes the date in the locale's numeric form,
+  // and a button beside it opens the calendar.
+  private _renderTextControl() {
+    const message = this._message;
+
+    return html`
+      <div class="date-picker__control">
+        <input
+          id="${this._baseId}-control"
+          class="date-picker__input"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          .value="${live(this._text)}"
+          placeholder="${this.placeholder || maskPattern(this._mask)}"
+          aria-label="${ifDefined(this.ariaLabel || undefined)}"
+          aria-describedby="${ifDefined(
+            message ? `${this._baseId}-message` : undefined
+          )}"
+          aria-invalid="${this.error ? 'true' : 'false'}"
+          aria-required="${this.required ? 'true' : 'false'}"
+          ?disabled="${this.disabled}"
+          @input="${this._handleInput}"
+          @keydown="${this._handleInputKeydown}"
+        />
+        <button
+          type="button"
+          class="date-picker__toggle"
+          aria-label="${this.dialogLabel}"
+          aria-haspopup="dialog"
+          aria-expanded="${this.open ? 'true' : 'false'}"
+          aria-controls="${ifDefined(
+            this.open ? `${this._baseId}-dialog` : undefined
+          )}"
+          ?disabled="${this.disabled}"
+          @click="${this._handleTriggerClick}"
+          @keydown="${this._handleTriggerKeydown}"
+        >
+          <span class="date-picker__icon">${ICON_CALENDAR}</span>
+        </button>
+      </div>
+    `;
+  }
+
+  get _message() {
+    if (!this.error) return this.hint;
+    return this._badInput ? this.badInputText : this.errorText;
+  }
+
+  render() {
+    const selection = this._selection;
+    const message = this._message;
+    const labelId = `${this._baseId}-label`;
     const forceStateClass =
       this.forceState === 'focused' || this.open
         ? ' date-picker--force-focus'
@@ -646,37 +889,9 @@ export class LuiDatePicker extends LitElement {
           : nothing}
 
         <div class="date-picker__anchor">
-          <button
-            id="${this._baseId}-control"
-            type="button"
-            class="date-picker__control"
-            aria-haspopup="dialog"
-            aria-expanded="${this.open ? 'true' : 'false'}"
-            aria-controls="${ifDefined(
-              this.open ? `${this._baseId}-dialog` : undefined
-            )}"
-            aria-label="${ifDefined(this.ariaLabel || undefined)}"
-            aria-labelledby="${ifDefined(
-              this.ariaLabel
-                ? undefined
-                : this.label
-                  ? `${labelId} ${valueId}`
-                  : valueId
-            )}"
-            aria-describedby="${ifDefined(
-              message ? `${this._baseId}-message` : undefined
-            )}"
-            aria-invalid="${this.error ? 'true' : 'false'}"
-            aria-required="${this.required ? 'true' : 'false'}"
-            ?disabled="${this.disabled}"
-            @click="${this._handleTriggerClick}"
-            @keydown="${this._handleTriggerKeydown}"
-          >
-            <span id="${valueId}" class="date-picker__value">
-              ${selection ? this._formatValue(selection) : this.placeholder}
-            </span>
-            <span class="date-picker__icon">${ICON_CALENDAR}</span>
-          </button>
+          ${this.editable
+            ? this._renderTextControl()
+            : this._renderButtonControl()}
           ${this.open ? this._renderCalendar() : nothing}
         </div>
 
