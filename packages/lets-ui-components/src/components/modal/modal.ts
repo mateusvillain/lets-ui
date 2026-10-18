@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
+import { deepActiveElement, returnFocus } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './modal.scss?inline';
 
@@ -22,6 +23,7 @@ export class LuiModal extends LitElement {
 
   private _baseId: string;
   private _triggerTargets: Set<HTMLElement> = new Set();
+  private _returnFocusTo: HTMLElement | null = null;
   private _handleDocumentKeydown!: (e: KeyboardEvent) => void;
 
   constructor() {
@@ -50,10 +52,25 @@ export class LuiModal extends LitElement {
     if (this.open) unlockBodyScroll();
   }
 
+  willUpdate(changedProps: Map<string, unknown>) {
+    // Before the render hides or shows anything, focus is still on whatever
+    // opened the modal.
+    if (changedProps.has('open') && this.open) {
+      this._returnFocusTo = deepActiveElement();
+    }
+  }
+
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('open')) {
       if (this.open && this._dialog) {
-        requestAnimationFrame(() => this._dialog.focus());
+        requestAnimationFrame(() => {
+          // Closed again before this frame: focus has already gone back and
+          // must not be pulled into a hidden dialog.
+          if (this.open) this._dialog.focus();
+        });
+      } else if (changedProps.get('open') === true) {
+        returnFocus(this, this._returnFocusTo, this._trigger);
+        this._returnFocusTo = null;
       }
     }
     if (changedProps.has('open') || changedProps.has('_hasTriggerSlot')) {
@@ -69,6 +86,18 @@ export class LuiModal extends LitElement {
       slot,
       this.open,
       this._triggerTargets
+    );
+  }
+
+  // The default button, or the first slotted trigger: where focus goes when
+  // the element that opened the modal is no longer there.
+  private get _trigger(): HTMLElement | null {
+    return (
+      this.shadowRoot?.querySelector<HTMLElement>(
+        'button[aria-haspopup="dialog"]'
+      ) ??
+      this._triggerTargets.values().next().value ??
+      null
     );
   }
 
