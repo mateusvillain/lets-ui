@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.12.1
+
+### Fixed
+
+- Button and Icon Button did not announce the state of what they open or toggle. `aria-expanded`, `aria-haspopup` and `aria-pressed` set on the host, whether by the author or by a Modal, Drawer or Dropdown Menu they trigger, stayed on an element with no role. Both now forward these attributes to their inner control.
+- Button lost its accessible name while `loading` when the label was passed as content instead of `label`. The default slot now stays rendered during loading.
+- Focus disappeared in forced-colors (high contrast) mode on every component built on the shared state styles, because the focus ring is a `box-shadow` that the mode removes. A system outline now takes its place. Button also gets a border there, since its background, its only edge, is dropped.
+- Icon Button rendered with no padding or size for `size` values other than `lg` and `md`, a target a few pixels wide. Those values now fall back to `md`. It also no longer renders an empty `aria-label` or an invalid `aria-disabled`.
+- Dropdown Menu set `aria-haspopup` and `aria-expanded` on an internal wrapper instead of its trigger, so the open state was never announced. They now go on the slotted trigger, `aria-haspopup="menu"`, and move with it when the trigger is swapped. Focus returns to the trigger on Escape and when an item is picked.
+- Modal and Drawer set `aria-controls` on a trigger passed through the `trigger` slot, pointing at an ID inside their shadow root that the trigger cannot reference. The slotted trigger now keeps only `aria-haspopup` and `aria-expanded`, and the default `trigger-label` button keeps `aria-controls`. The attributes move to a trigger swapped into the slot and skip `tabindex="-1"` and disabled descendants.
+- Modal and Drawer did not move focus back after closing, so it dropped to the top of the document. Focus now returns to the element that opened them on every close path (Escape, close button, backdrop, `closeModal()` / `closeDrawer()`, setting `open`, or removing the element). When that element is gone, focus goes to the component's trigger. A dialog closed before its first frame no longer pulls focus into the hidden panel.
+- Modal locked and unlocked page scroll only through `openModal()` and `closeModal()`, so setting `open` directly could leave the page locked. The lock now follows `open`.
+- Tooltip with a custom trigger made its wrapper a second Tab stop and described the wrapper instead of the focused control. The slotted trigger now gets the tooltip text as `aria-description`, and the wrapper is focusable only when the trigger has nothing focusable or is disabled. Button, Close Button, Icon Button and Link forward that description to their inner control.
+
+### Changed
+
+- **State Calculator** (`apps/state-calculator`) has a new interface: a sidebar with preset chips and a colour-pair swap, a live sample that can be pinned to rest, hover or pressed, contrast meters on each state, a mix scale slider and a shareable link. It is a standalone app, and no published package changes.
+
 ## v1.12.0
 
 ### Added
