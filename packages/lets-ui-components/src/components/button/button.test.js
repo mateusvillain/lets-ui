@@ -2,6 +2,7 @@ import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
 import { afterEach, describe, expect, it } from 'vitest';
 import { LuiButton } from './button.ts';
 import { LuiModal } from '../modal/modal.ts';
+import { exposed } from '../../test/ax-tree.js';
 
 customElements.define('lui-button', LuiButton);
 customElements.define('lui-modal', LuiModal);
@@ -44,18 +45,53 @@ describe('state ARIA', () => {
     await button.updateComplete;
     expect(control(button).getAttribute('aria-expanded')).toBe('true');
 
-    button.removeAttribute('aria-expanded');
+    button.setAttribute('aria-expanded', 'false');
     await button.updateComplete;
-    expect(control(button).hasAttribute('aria-expanded')).toBe(false);
+    expect(control(button).getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('reflects the state set as a property to the host attribute', async () => {
+  it('takes the state set as a property, without reflecting it', async () => {
     const button = await mount('<lui-button label="Menu"></lui-button>');
 
     button.ariaExpanded = 'true';
     await button.updateComplete;
-    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(button.hasAttribute('aria-expanded')).toBe(false);
     expect(control(button).getAttribute('aria-expanded')).toBe('true');
+
+    button.ariaExpanded = null;
+    await button.updateComplete;
+    expect(control(button).hasAttribute('aria-expanded')).toBe(false);
+  });
+
+  it('removes the ARIA attributes from the host', async () => {
+    const button = await mount(
+      '<lui-button aria-label="Menu" aria-expanded="false" aria-haspopup="menu" aria-pressed="true"></lui-button>'
+    );
+
+    expect(button.ariaExpanded).toBe('false');
+    expect(
+      button.getAttributeNames().filter((n) => n.startsWith('aria-'))
+    ).toEqual([]);
+  });
+
+  it('exposes the state on the button alone in the accessibility tree', async () => {
+    await mount(
+      '<lui-button aria-label="Menu" aria-expanded="false" aria-haspopup="menu"></lui-button>'
+    );
+
+    expect(await exposed('Menu')).toEqual([
+      'button "Menu" hasPopup=menu expanded=false',
+    ]);
+  });
+
+  it('exposes the state on the link alone in the accessibility tree', async () => {
+    await mount(
+      '<lui-button href="/x" label="Mais" aria-expanded="false" aria-haspopup="menu"></lui-button>'
+    );
+
+    expect(await exposed('Mais')).toEqual([
+      'link "Mais" hasPopup=menu expanded=false',
+    ]);
   });
 
   it('renders no attribute for an empty state value', async () => {
@@ -99,8 +135,18 @@ describe('state ARIA', () => {
     await expect.poll(expanded).toBe('false');
     expect(control(button).getAttribute('aria-haspopup')).toBe('dialog');
 
+    expect(await exposed('Settings')).toContain(
+      'button "Settings" hasPopup=dialog expanded=false'
+    );
+    expect(
+      button.getAttributeNames().filter((n) => n.startsWith('aria-'))
+    ).toEqual([]);
+
     modal.open = true;
     await expect.poll(expanded).toBe('true');
+    await expect
+      .poll(() => exposed('Settings'))
+      .toContain('button "Settings" hasPopup=dialog expanded=true');
 
     modal.open = false;
     await modal.updateComplete;
@@ -152,12 +198,12 @@ describe('accessible name', () => {
     expect(control(button).textContent.trim()).toBe('Save');
   });
 
-  it('reflects an aria-label set as a property to the host', async () => {
+  it('takes an aria-label set as a property, without reflecting it', async () => {
     const button = await mount('<lui-button>X</lui-button>');
 
     button.ariaLabel = 'Fechar diálogo';
     await button.updateComplete;
-    expect(button.getAttribute('aria-label')).toBe('Fechar diálogo');
+    expect(button.hasAttribute('aria-label')).toBe(false);
     expect(control(button).getAttribute('aria-label')).toBe('Fechar diálogo');
   });
 
@@ -167,5 +213,8 @@ describe('accessible name', () => {
     );
 
     expect(control(button).getAttribute('aria-label')).toBe('Fechar diálogo');
+    expect(await exposed('Fechar diálogo')).toEqual([
+      'button "Fechar diálogo"',
+    ]);
   });
 });

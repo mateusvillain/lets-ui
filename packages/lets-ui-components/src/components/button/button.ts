@@ -2,13 +2,14 @@ import { LitElement, html, svg, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './button.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
 
 const spinnerIcon = svg`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true" class="btn__spinner">
   <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="56.549" stroke-dashoffset="42.412"/>
 </svg>`;
 
-export class LuiButton extends LitElement {
+export class LuiButton extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
 
@@ -30,17 +31,17 @@ export class LuiButton extends LitElement {
   @property({ type: Boolean }) loading = false;
   @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
-  @property({ attribute: 'aria-label', reflect: true }) ariaLabel = '';
-  // State ARIA set on the host — by the author or by a Modal or Drawer this
-  // button triggers — never reaches the inner control on its own, and the host
-  // has no role to carry it, so it is mirrored onto the element that does.
-  // These accessors replace the native reflecting ones, so they reflect too.
-  // An empty value is not a valid ARIA token, so it renders no attribute.
-  @property({ attribute: 'aria-expanded', reflect: true })
+  // ARIA set on the host — by the author or by a Modal or Drawer this button
+  // triggers — is rendered on the inner control, the element with a role.
+  // `HostAriaMixin` removes the host attribute so the role-less host isn't
+  // exposed as a second node. An empty value is not a valid ARIA token, so it
+  // renders no attribute.
+  @property({ attribute: 'aria-label' }) ariaLabel = '';
+  @property({ attribute: 'aria-expanded' })
   ariaExpanded: string | null = null;
-  @property({ attribute: 'aria-haspopup', reflect: true })
+  @property({ attribute: 'aria-haspopup' })
   ariaHasPopup: string | null = null;
-  @property({ attribute: 'aria-pressed', reflect: true })
+  @property({ attribute: 'aria-pressed' })
   ariaPressed: string | null = null;
   // Set by a Tooltip that wraps this button and mirrored onto the inner
   // control. Not reflected: the host has no role, and the attribute there would

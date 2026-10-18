@@ -57,9 +57,11 @@ Use no tooltip o mesmo texto do `aria-label`, para que quem enxerga veja o nome 
 
 ## Estado de componentes acionados
 
-Icon Buttons costumam abrir menus e painéis ou alternar formatações, como o botão de "mais opções" ou o de negrito numa toolbar. Informe o estado com `aria-expanded`, `aria-haspopup` ou `aria-pressed` no próprio `<lui-icon-button>`. O componente repassa esses atributos ao `<button>` interno, que é o que o leitor de tela anuncia.
+Icon Buttons costumam abrir menus e painéis ou alternar formatações, como o botão de "mais opções" ou o de negrito numa toolbar. Informe o estado com `aria-expanded`, `aria-haspopup` ou `aria-pressed` no próprio `<lui-icon-button>`. O componente leva esses atributos, e o `aria-label`, ao `<button>` interno, que é o que o leitor de tela anuncia, e os remove do elemento externo: lá eles criariam um segundo nó, sem papel, na árvore de acessibilidade.
 
-Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão recebe esses atributos do próprio componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` não é repassado: um ID não pode ser referenciado entre shadow roots diferentes.
+Como o atributo sai do `<lui-icon-button>`, seletores como `lui-icon-button[aria-pressed="true"]` e `getAttribute('aria-pressed')` não o encontram. Leia a propriedade (`button.ariaPressed`). Para limpar um estado, use um valor explícito (`aria-pressed="false"`) ou a propriedade com `null`: remover um atributo que o componente já consumiu não tem efeito.
+
+Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão recebe esse estado do próprio componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` não é repassado: um ID não pode ser referenciado entre shadow roots diferentes.
 
 <Canvas of={IconButtonStories.DropdownTrigger} />
 

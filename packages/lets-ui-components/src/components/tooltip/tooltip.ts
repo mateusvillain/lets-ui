@@ -2,6 +2,7 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './tooltip.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 
 const VALID_POSITIONS = new Set(['top', 'bottom', 'left', 'right']);
 const FOCUSABLE_SELECTOR =
@@ -22,7 +23,7 @@ const isDisabled = (el: HTMLElement) =>
 const isContent = (node: Node) =>
   node.nodeType === Node.ELEMENT_NODE || !!node.textContent?.trim();
 
-export class LuiTooltip extends LitElement {
+export class LuiTooltip extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
 
   @property() text = 'Tooltip';

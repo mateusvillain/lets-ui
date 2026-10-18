@@ -16,6 +16,10 @@ function triggerTarget(el: Element): HTMLElement {
  * IDREF nor ariaControlsElements can point into it from the light DOM.
  * aria-haspopup + aria-expanded carry the contract on their own.
  *
+ * Set through the ARIA properties, not attributes: a native trigger reflects
+ * them as usual, and a Let's UI one renders them on its inner control without
+ * leaving them on its role-less host.
+ *
  * Returns the current targets; pass them back as `previous` on the next call.
  */
 export function syncDialogTriggers(
@@ -28,12 +32,12 @@ export function syncDialogTriggers(
   );
   for (const el of previous) {
     if (targets.has(el)) continue;
-    el.removeAttribute('aria-haspopup');
-    el.removeAttribute('aria-expanded');
+    el.ariaHasPopup = null;
+    el.ariaExpanded = null;
   }
   for (const el of targets) {
-    el.setAttribute('aria-haspopup', 'dialog');
-    el.setAttribute('aria-expanded', open ? 'true' : 'false');
+    el.ariaHasPopup = 'dialog';
+    el.ariaExpanded = open ? 'true' : 'false';
   }
   return targets;
 }

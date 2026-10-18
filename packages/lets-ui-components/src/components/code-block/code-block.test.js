@@ -234,7 +234,7 @@ describe('lui-code-block markup', () => {
 describe('lui-code-block copy', () => {
   it('renders the copy button by default and drops it with copy="false"', async () => {
     const block = await mount('<lui-code-block>x</lui-code-block>');
-    expect(copyButton(block).getAttribute('aria-label')).toBe('Copy code');
+    expect(copyButton(block).ariaLabel).toBe('Copy code');
 
     const without = await mount(
       '<lui-code-block copy="false">x</lui-code-block>'
@@ -314,9 +314,7 @@ describe('lui-code-block copy', () => {
     const block = await mount(
       '<lui-code-block label="main.js">x</lui-code-block>'
     );
-    expect(copyButton(block).getAttribute('aria-label')).toBe(
-      'Copy code: main.js'
-    );
+    expect(copyButton(block).ariaLabel).toBe('Copy code: main.js');
   });
 });
 
