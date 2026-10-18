@@ -53,6 +53,13 @@ O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close drawer"
 <lui-drawer title="Título" close-label="Fechar drawer"></lui-drawer>
 ```
 
+### Contrato ARIA do trigger
+
+O trigger recebe `aria-haspopup="dialog"` e `aria-expanded`, que acompanha o estado aberto/fechado. É isso que o leitor de tela anuncia.
+
+- **Trigger padrão** (o botão gerado por `trigger-label`): também recebe `aria-controls`, porque vive no mesmo shadow root do painel e o IDREF resolve.
+- **Trigger customizado** (`slot="trigger"`): não recebe `aria-controls`. O painel fica no shadow root do `lui-drawer`, e nem um IDREF nem `ariaControlsElements` alcançam o interior de outro shadow root a partir do light DOM — o navegador descarta a referência. A relação trigger → painel fica ausente da árvore de acessibilidade, por limitação da plataforma. O estado expandido continua anunciado.
+
 ### Classe CSS
 
 ```html
