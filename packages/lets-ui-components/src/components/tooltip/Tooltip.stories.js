@@ -51,8 +51,10 @@ export const Positions = () => `
 
 export const WithCustomTrigger = () => `
   <div style="padding:80px;display:flex;gap:32px;justify-content:center;align-items:center;flex-wrap:wrap;">
-    <lui-tooltip text="Edit this item" position="top">
-      <lui-icon-button label="Edit" icon="pencil"></lui-icon-button>
+    <lui-tooltip text="Delete this item" position="top">
+      <lui-icon-button aria-label="Delete">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.75 6C19.1642 6 19.5 6.33579 19.5 6.75C19.5 7.16421 19.1642 7.5 18.75 7.5H18V19.5C18 20.3284 17.3284 21 16.5 21H7.5C6.67157 21 6 20.3284 6 19.5V7.5H5.25C4.83579 7.5 4.5 7.16421 4.5 6.75C4.5 6.33579 4.83579 6 5.25 6H18.75ZM7.5 19.5H16.5V7.5H7.5V19.5ZM14.25 3C14.6642 3 15 3.33579 15 3.75C15 4.16421 14.6642 4.5 14.25 4.5H9.75C9.33579 4.5 9 4.16421 9 3.75C9 3.33579 9.33579 3 9.75 3H14.25Z"/></svg>
+      </lui-icon-button>
     </lui-tooltip>
     <lui-tooltip text="More options available" position="right">
       <lui-button label="Options" variant="secondary"></lui-button>

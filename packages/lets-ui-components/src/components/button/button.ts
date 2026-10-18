@@ -42,6 +42,11 @@ export class LuiButton extends LitElement {
   ariaHasPopup: string | null = null;
   @property({ attribute: 'aria-pressed', reflect: true })
   ariaPressed: string | null = null;
+  // Set by a Tooltip that wraps this button and mirrored onto the inner
+  // control. Not reflected: the host has no role, and the attribute there would
+  // add a second, generic node to the accessibility tree.
+  @property({ attribute: 'aria-description' })
+  ariaDescription: string | null = null;
   @property() href = '';
   @property() target = '';
   @property() rel = '';
@@ -138,6 +143,7 @@ export class LuiButton extends LitElement {
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
         aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
         aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
+        aria-description="${ifDefined(this.ariaDescription || undefined)}"
         @click="${this._handleLinkClick}"
       >
         ${this._renderContent()}
@@ -164,6 +170,7 @@ export class LuiButton extends LitElement {
         aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
         aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
         aria-pressed="${ifDefined(this.ariaPressed || undefined)}"
+        aria-description="${ifDefined(this.ariaDescription || undefined)}"
         @click="${this._handleClick}"
       >
         ${this._renderContent()}

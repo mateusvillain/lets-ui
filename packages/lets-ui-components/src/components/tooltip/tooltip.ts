@@ -1,10 +1,26 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './tooltip.scss?inline';
 
 const VALID_POSITIONS = new Set(['top', 'bottom', 'left', 'right']);
 const FOCUSABLE_SELECTOR =
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), lui-button, lui-icon-button, lui-link';
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), lui-button, lui-close-button, lui-icon-button, lui-link';
+
+// Native controls match `:disabled`. Let's UI buttons take `disabled` as a
+// property that not all of them reflect, and may not be upgraded yet, so both
+// are checked. A disabled `lui-link` stays focusable, so it is not disabled
+// here.
+const isDisabled = (el: HTMLElement) =>
+  el.matches(':disabled') ||
+  (el.localName.startsWith('lui-') &&
+    el.localName !== 'lui-link' &&
+    (el.hasAttribute('disabled') ||
+      (el as HTMLElement & { disabled?: boolean }).disabled === true));
+
+// Formatting whitespace around the content is not a trigger.
+const isContent = (node: Node) =>
+  node.nodeType === Node.ELEMENT_NODE || !!node.textContent?.trim();
 
 export class LuiTooltip extends LitElement {
   static styles = unsafeCSS(styles);
@@ -29,34 +45,85 @@ export class LuiTooltip extends LitElement {
       : 'top';
   }
 
-  private _handleSlotChange(e: Event) {
-    const slot = e.target as HTMLSlotElement;
-    const nodes = slot.assignedNodes({ flatten: true });
-    this._hasCustomTrigger = nodes.length > 0;
+  // A slotted trigger with nothing focusable in it, such as plain text or a
+  // disabled button: the wrapper becomes the Tab stop, so keyboard users can
+  // still reach the text.
+  @state() private _wrapperFocusable = false;
 
-    // Connect aria-describedby to focusable elements inside the trigger slot
-    if (this._hasCustomTrigger) {
-      const triggerWrapper = this.shadowRoot?.querySelector(
-        '[data-tooltip-trigger]'
-      );
-      if (triggerWrapper) {
-        const focusables = Array.from(
-          triggerWrapper.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-        );
-        const describedBy = `${this._baseId}-content`;
-        if (focusables.length > 0) {
-          focusables.forEach((el) =>
-            el.setAttribute('aria-describedby', describedBy)
-          );
-        } else {
-          (triggerWrapper as HTMLElement).setAttribute('tabindex', '0');
-          (triggerWrapper as HTMLElement).setAttribute(
-            'aria-describedby',
-            describedBy
-          );
-        }
-      }
+  private _describedTrigger: HTMLElement | null = null;
+  // The trigger's own description, put back when it leaves the slot.
+  private _authorDescription: string | null = null;
+
+  // `slotchange` only fires for the slot's direct children: a button rendered
+  // inside a slotted wrapper later, or a trigger that gets disabled, would go
+  // unnoticed.
+  private _observer = new MutationObserver(() => this._syncTrigger());
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._observer.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['disabled', 'href', 'tabindex'],
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._observer.disconnect();
+  }
+
+  updated(changedProps: Map<string, unknown>) {
+    if (changedProps.has('text') && this._describedTrigger) {
+      this._describe(this._describedTrigger, this.text);
     }
+  }
+
+  // The trigger is slotted, so it lives in the light DOM: a query from the
+  // wrapper inside this shadow root never reaches it. The slot's assigned
+  // elements do.
+  private _findTrigger(slot: HTMLSlotElement): HTMLElement | null {
+    for (const el of slot.assignedElements({ flatten: true })) {
+      const focusable = el.matches(FOCUSABLE_SELECTOR)
+        ? el
+        : el.querySelector(FOCUSABLE_SELECTOR);
+      if (focusable) return focusable as HTMLElement;
+    }
+    return null;
+  }
+
+  // The content's ID lives in this shadow root, and an IDREF cannot cross it,
+  // so the trigger gets the text itself as its `ariaDescription`. Set as a
+  // property rather than an attribute: `lui-button`, `lui-close-button`,
+  // `lui-icon-button` and `lui-link` pass it on to their inner control without
+  // leaving it on their role-less host, and on a native element it reflects to
+  // the attribute. Before a Let's UI element is upgraded only the native,
+  // reflecting setter exists, so it waits for the element's own.
+  private async _describe(el: HTMLElement, value: string | null) {
+    if (!el.matches(':defined')) await customElements.whenDefined(el.localName);
+    el.ariaDescription = value;
+  }
+
+  private _syncTrigger() {
+    const slot = this.shadowRoot?.querySelector('slot');
+    if (!slot) return;
+    this._hasCustomTrigger = slot
+      .assignedNodes({ flatten: true })
+      .some(isContent);
+
+    const control = this._hasCustomTrigger ? this._findTrigger(slot) : null;
+    const trigger = control && !isDisabled(control) ? control : null;
+    if (this._describedTrigger !== trigger) {
+      if (this._describedTrigger) {
+        this._describe(this._describedTrigger, this._authorDescription);
+      }
+      this._describedTrigger = trigger;
+      this._authorDescription = trigger?.ariaDescription ?? null;
+      if (trigger) this._describe(trigger, this.text);
+    }
+    this._wrapperFocusable = this._hasCustomTrigger && !trigger;
   }
 
   render() {
@@ -69,8 +136,14 @@ export class LuiTooltip extends LitElement {
     return html`
       <span class="tooltip tooltip--${position}">
         ${this._hasCustomTrigger
-          ? html`<span class="tooltip__trigger" data-tooltip-trigger
-              ><slot @slotchange="${this._handleSlotChange}"></slot
+          ? html`<span
+              class="tooltip__trigger"
+              data-tooltip-trigger
+              tabindex="${ifDefined(this._wrapperFocusable ? '0' : undefined)}"
+              aria-describedby="${ifDefined(
+                this._wrapperFocusable ? describedBy : undefined
+              )}"
+              ><slot @slotchange="${this._syncTrigger}"></slot
             ></span>`
           : html`
               <button
@@ -84,7 +157,7 @@ export class LuiTooltip extends LitElement {
               </button>
               <slot
                 style="display:none"
-                @slotchange="${this._handleSlotChange}"
+                @slotchange="${this._syncTrigger}"
               ></slot>
             `}
         <span id="${describedBy}" class="tooltip__content" role="tooltip"

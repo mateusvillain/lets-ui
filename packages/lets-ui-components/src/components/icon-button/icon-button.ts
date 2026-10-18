@@ -20,6 +20,11 @@ export class LuiIconButton extends LitElement {
   ariaHasPopup: string | null = null;
   @property({ attribute: 'aria-pressed', reflect: true })
   ariaPressed: string | null = null;
+  // Set by a Tooltip that wraps this button and mirrored onto the inner
+  // control. Not reflected: the host has no role, and the attribute there would
+  // add a second, generic node to the accessibility tree.
+  @property({ attribute: 'aria-description' })
+  ariaDescription: string | null = null;
 
   // Only `lg` and `md` are styled. Any other value would render a button with
   // no padding or size — a target a few pixels wide — so it falls back to `md`.
@@ -36,6 +41,7 @@ export class LuiIconButton extends LitElement {
         aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
         aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
         aria-pressed="${ifDefined(this.ariaPressed || undefined)}"
+        aria-description="${ifDefined(this.ariaDescription || undefined)}"
       >
         <slot></slot>
       </button>

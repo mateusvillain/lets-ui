@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './close-button.scss?inline';
 
 export class LuiCloseButton extends LitElement {
@@ -8,6 +9,11 @@ export class LuiCloseButton extends LitElement {
   @property() size = 'md';
   @property({ type: Boolean }) disabled = false;
   @property() label = 'Close';
+  // Set by a Tooltip that wraps this button and mirrored onto the inner
+  // control. Not reflected: the host has no role, and the attribute there would
+  // add a second, generic node to the accessibility tree.
+  @property({ attribute: 'aria-description' })
+  ariaDescription: string | null = null;
 
   get _size(): 'sm' | 'md' | 'lg' {
     const s = this.size;
@@ -24,6 +30,7 @@ export class LuiCloseButton extends LitElement {
         aria-label="${this.label}"
         ?disabled="${this.disabled}"
         ?aria-disabled="${this.disabled}"
+        aria-description="${ifDefined(this.ariaDescription || undefined)}"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
