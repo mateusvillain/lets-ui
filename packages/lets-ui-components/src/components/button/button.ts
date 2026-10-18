@@ -2,13 +2,14 @@ import { LitElement, html, svg, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './button.scss?inline';
+import { TriggerAriaMixin, stateAria } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
 
 const spinnerIcon = svg`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true" class="btn__spinner">
   <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="56.549" stroke-dashoffset="42.412"/>
 </svg>`;
 
-export class LuiButton extends LitElement {
+export class LuiButton extends TriggerAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
 
@@ -30,6 +31,7 @@ export class LuiButton extends LitElement {
   @property({ type: Boolean }) loading = false;
   @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
+  // Taken off the host and rendered on the inner control; see `HostAriaMixin`.
   @property({ attribute: 'aria-label' }) ariaLabel = '';
   @property() href = '';
   @property() target = '';
@@ -92,14 +94,24 @@ export class LuiButton extends LitElement {
     if (this.disabled) e.stopPropagation();
   };
 
-  private _renderContent(displayLabel: string) {
+  // The default slot stays rendered while loading: a label passed as content
+  // rather than through `label` is the only accessible name the button has.
+  private _renderContent() {
     return this.loading
-      ? html`${spinnerIcon}${displayLabel}`
+      ? html`${spinnerIcon}${this.loadingText ||
+        html`<slot>${this.label}</slot>`}`
       : html`<slot name="prefix"></slot><slot>${this.label}</slot
           ><slot name="suffix"></slot>`;
   }
 
-  private _renderAnchor(displayLabel: string, isDisabled: boolean) {
+  // Only an explicit `aria-label` overrides the name. Otherwise it comes from
+  // the rendered text — `label`, slotted content or `loading-text` — so the
+  // name always matches what is on screen (WCAG 2.5.3).
+  private get _ariaLabel(): string | undefined {
+    return this.ariaLabel || undefined;
+  }
+
+  private _renderAnchor(isDisabled: boolean) {
     return html`
       <a
         class="${this._classes}"
@@ -112,23 +124,23 @@ export class LuiButton extends LitElement {
         tabindex="${ifDefined(
           this.disabled ? '-1' : this.loading ? '0' : undefined
         )}"
-        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
+        aria-label="${ifDefined(this._ariaLabel)}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        aria-expanded="${ifDefined(stateAria(this.ariaExpanded))}"
+        aria-haspopup="${ifDefined(stateAria(this.ariaHasPopup))}"
         @click="${this._handleLinkClick}"
       >
-        ${this._renderContent(displayLabel)}
+        ${this._renderContent()}
       </a>
     `;
   }
 
   render() {
-    const displayLabel =
-      this.loading && this.loadingText ? this.loadingText : this.label;
     const isDisabled = this.disabled || this.loading;
 
     if (this._isLink) {
-      return this._renderAnchor(displayLabel, isDisabled);
+      return this._renderAnchor(isDisabled);
     }
 
     return html`
@@ -136,13 +148,16 @@ export class LuiButton extends LitElement {
         class="${this._classes}"
         type="button"
         ?autofocus="${this.autofocus}"
-        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
+        aria-label="${ifDefined(this._ariaLabel)}"
         ?disabled="${this.disabled}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        aria-expanded="${ifDefined(stateAria(this.ariaExpanded))}"
+        aria-haspopup="${ifDefined(stateAria(this.ariaHasPopup))}"
+        aria-pressed="${ifDefined(stateAria(this.ariaPressed))}"
         @click="${this._handleClick}"
       >
-        ${this._renderContent(displayLabel)}
+        ${this._renderContent()}
       </button>
     `;
   }
