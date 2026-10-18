@@ -1,12 +1,13 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import styles from './tooltip.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 
 const VALID_POSITIONS = new Set(['top', 'bottom', 'left', 'right']);
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), lui-button, lui-icon-button, lui-link';
 
-export class LuiTooltip extends LitElement {
+export class LuiTooltip extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
 
   @property() text = 'Tooltip';

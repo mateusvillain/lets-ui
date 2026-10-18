@@ -1,8 +1,9 @@
 import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import styles from './radio.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 
-export class LuiRadio extends LitElement {
+export class LuiRadio extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
 

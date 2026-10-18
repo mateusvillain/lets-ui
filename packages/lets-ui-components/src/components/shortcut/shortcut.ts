@@ -1,8 +1,9 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import styles from './shortcut.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 
-export class LuiShortcut extends LitElement {
+export class LuiShortcut extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
 
   @property() keys = '';

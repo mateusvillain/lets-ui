@@ -72,9 +72,13 @@ export class LuiModal extends LitElement {
           : el.querySelector('button, [href], input, [tabindex]')
       ) as HTMLElement | null;
       const target = (focusable ?? el) as HTMLElement;
-      target.setAttribute('aria-haspopup', 'dialog');
-      target.setAttribute('aria-controls', `${this._baseId}-dialog`);
-      target.setAttribute('aria-expanded', this.open ? 'true' : 'false');
+      // Set through the ARIA properties, not attributes: a native trigger
+      // reflects them as usual, and a Let's UI one renders them on its inner
+      // control without leaving them on its role-less host. No
+      // `aria-controls`: the dialog's ID lives in this shadow root, so a
+      // reference from the light-DOM trigger would dangle.
+      target.ariaHasPopup = 'dialog';
+      target.ariaExpanded = this.open ? 'true' : 'false';
     }
   }
 

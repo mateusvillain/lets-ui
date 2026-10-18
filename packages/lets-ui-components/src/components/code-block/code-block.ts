@@ -3,6 +3,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property, state } from 'lit/decorators.js';
 import styles from './code-block.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 
 // A failure asks the reader to do something, so it stays up longer than a
 // confirmation that only reports.
@@ -79,7 +80,7 @@ export type CodeHighlighter = (code: string, language: string) => string | null;
 let highlighter: CodeHighlighter | null = null;
 const instances = new Set<LuiCodeBlock>();
 
-export class LuiCodeBlock extends LitElement {
+export class LuiCodeBlock extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
 
   // One highlighter for the whole page, so the package carries no parser of
@@ -336,7 +337,7 @@ export class LuiCodeBlock extends LitElement {
       >
         <lui-icon-button
           size="lg"
-          aria-label="${name}"
+          .ariaLabel="${name}"
           @click="${this._handleCopy}"
         >
           ${copyIcon}
