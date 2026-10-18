@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
+import { FocusReturnController } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './drawer.scss?inline';
 
@@ -28,6 +29,7 @@ export class LuiDrawer extends LitElement {
 
   constructor() {
     super();
+    new FocusReturnController(this, () => this._trigger);
     this._baseId = `lui-drawer-${Math.random().toString(36).slice(2, 9)}`;
   }
 
@@ -72,6 +74,18 @@ export class LuiDrawer extends LitElement {
     );
   }
 
+  // The default button, or the first slotted trigger: where focus goes when
+  // the element that opened the drawer is no longer there.
+  private get _trigger(): HTMLElement | null {
+    return (
+      this.shadowRoot?.querySelector<HTMLElement>(
+        'button[aria-haspopup="dialog"]'
+      ) ??
+      this._triggerTargets.values().next().value ??
+      null
+    );
+  }
+
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
     const s = this.size;
     return (['xl', 'lg', 'md', 'sm'] as const).includes(
@@ -110,7 +124,11 @@ export class LuiDrawer extends LitElement {
         panel.classList.add('is-open');
       }
 
-      requestAnimationFrame(() => panel.focus());
+      requestAnimationFrame(() => {
+        // Closed again before this frame: focus has already gone back and
+        // must not be pulled into a hidden panel.
+        if (this.open) panel.focus();
+      });
     } else {
       backdrop.classList.remove('is-open');
       panel.classList.remove('is-open');

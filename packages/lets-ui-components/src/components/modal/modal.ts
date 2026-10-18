@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
+import { FocusReturnController } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './modal.scss?inline';
 
@@ -26,6 +27,7 @@ export class LuiModal extends LitElement {
 
   constructor() {
     super();
+    new FocusReturnController(this, () => this._trigger);
     this._baseId = `lui-modal-${Math.random().toString(36).slice(2, 9)}`;
   }
 
@@ -52,8 +54,18 @@ export class LuiModal extends LitElement {
 
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('open')) {
+      // Here rather than in openModal/closeModal, so setting `open` or the
+      // attribute directly locks and unlocks the page too.
+      const wasOpen = changedProps.get('open') === true;
+      if (this.open && !wasOpen) lockBodyScroll();
+      if (!this.open && wasOpen) unlockBodyScroll();
+
       if (this.open && this._dialog) {
-        requestAnimationFrame(() => this._dialog.focus());
+        requestAnimationFrame(() => {
+          // Closed again before this frame: focus has already gone back and
+          // must not be pulled into a hidden dialog.
+          if (this.open) this._dialog.focus();
+        });
       }
     }
     if (changedProps.has('open') || changedProps.has('_hasTriggerSlot')) {
@@ -69,6 +81,18 @@ export class LuiModal extends LitElement {
       slot,
       this.open,
       this._triggerTargets
+    );
+  }
+
+  // The default button, or the first slotted trigger: where focus goes when
+  // the element that opened the modal is no longer there.
+  private get _trigger(): HTMLElement | null {
+    return (
+      this.shadowRoot?.querySelector<HTMLElement>(
+        'button[aria-haspopup="dialog"]'
+      ) ??
+      this._triggerTargets.values().next().value ??
+      null
     );
   }
 
@@ -89,12 +113,10 @@ export class LuiModal extends LitElement {
     openedModals.forEach((modal) => modal.closeModal());
 
     this.open = true;
-    lockBodyScroll();
   }
 
   closeModal() {
     this.open = false;
-    unlockBodyScroll();
   }
 
   private _trapFocus(event: KeyboardEvent) {

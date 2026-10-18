@@ -1,6 +1,6 @@
 // Interactive descendants only: a [tabindex="-1"] icon or a disabled control
 // ahead of the real button must not take the trigger's ARIA.
-const FOCUSABLE =
+export const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 function triggerTarget(el: Element): HTMLElement {
