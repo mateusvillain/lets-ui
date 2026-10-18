@@ -94,6 +94,45 @@ export const ModalTrigger = () => `
 ModalTrigger.storyName = 'Trigger de Modal';
 ModalTrigger.parameters = { controls: { disable: true } };
 
+export const WithTooltip = () => `
+  <div style="display: flex; gap: 8px; padding: 48px 0 0;">
+    <lui-tooltip text="Aprovar item" position="top">
+      <lui-icon-button size="md" aria-label="Aprovar item">
+        ${SVG.check}
+      </lui-icon-button>
+    </lui-tooltip>
+    <lui-tooltip text="Excluir item" position="top">
+      <lui-icon-button size="md" aria-label="Excluir item">
+        ${SVG.trash}
+      </lui-icon-button>
+    </lui-tooltip>
+  </div>
+`;
+WithTooltip.storyName = 'Com Tooltip';
+WithTooltip.parameters = { controls: { disable: true } };
+
+export const DropdownTrigger = () => `
+  <div style="margin-bottom: 120px;">
+    <lui-dropdown-menu>
+      <lui-icon-button slot="trigger" size="md" aria-label="Mais opções">
+        ${SVG['dots-three']}
+      </lui-icon-button>
+      <lui-menu-item slot="items" label="Duplicar"></lui-menu-item>
+      <lui-menu-item slot="items" label="Excluir"></lui-menu-item>
+    </lui-dropdown-menu>
+  </div>
+`;
+DropdownTrigger.storyName = 'Trigger de Dropdown Menu';
+DropdownTrigger.parameters = {
+  controls: { disable: true },
+  docs: {
+    description: {
+      story:
+        'O Dropdown Menu define `aria-haspopup="menu"` e `aria-expanded` no Icon Button, que os repassa ao botão interno: o leitor de tela anuncia "Mais opções, botão, recolhido, menu".',
+    },
+  },
+};
+
 export const CSSClass = () => `
   <button class="icon-button icon-button--lg" aria-label="Fechar">
     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

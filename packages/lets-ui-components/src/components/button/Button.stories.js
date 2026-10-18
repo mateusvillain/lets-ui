@@ -342,6 +342,39 @@ LinkDisabled.parameters = {
   },
 };
 
+export const Sizes = () =>
+  `<div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+    <lui-button variant="primary" size="lg" label="Large (lg)"></lui-button>
+    <lui-button variant="primary" size="md" label="Medium (md)"></lui-button>
+  </div>`;
+Sizes.storyName = 'Tamanhos';
+
+export const DropdownTrigger = () =>
+  `<div style="margin-bottom: 120px;">
+    <lui-dropdown-menu>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Exportar"></lui-button>
+      <lui-menu-item slot="items" label="PDF"></lui-menu-item>
+      <lui-menu-item slot="items" label="CSV"></lui-menu-item>
+    </lui-dropdown-menu>
+  </div>`;
+DropdownTrigger.storyName = 'Trigger de Dropdown Menu';
+DropdownTrigger.parameters = {
+  docs: {
+    description: {
+      story:
+        'O Dropdown Menu define `aria-haspopup="menu"` e `aria-expanded` no Button, que os repassa ao botão interno: o leitor de tela anuncia "Exportar, botão, recolhido, menu".',
+    },
+  },
+};
+
+export const WithTooltip = () =>
+  `<div style="padding: 48px 0 0;">
+    <lui-tooltip text="Salva uma cópia sem publicar" position="top">
+      <lui-button variant="secondary" size="lg" label="Salvar rascunho"></lui-button>
+    </lui-tooltip>
+  </div>`;
+WithTooltip.storyName = 'Com Tooltip';
+
 export const CSSClass = () => `
   <div style="display: flex; gap: 12px;">
     <button class="btn btn--primary btn--lg">Confirmar</button>
