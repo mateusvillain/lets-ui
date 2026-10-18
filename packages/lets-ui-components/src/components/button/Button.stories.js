@@ -167,6 +167,18 @@ export const Block = () =>
 export const Loading = () =>
   `<lui-button variant="primary" size="lg" label="Salvar" loading></lui-button>`;
 
+export const LoadingWithContent = () =>
+  `<lui-button variant="primary" size="lg" loading>${prefixIcon}Salvar</lui-button>`;
+LoadingWithContent.storyName = 'Loading com conteúdo';
+LoadingWithContent.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com o texto passado como conteúdo do slot, ele continua visível durante o `loading`. Só o ícone `prefix` dá lugar ao spinner.',
+    },
+  },
+};
+
 export const LoadingWithText = () =>
   `<lui-button variant="primary" size="lg" label="Salvar" loading loading-text="Salvando..."></lui-button>`;
 
