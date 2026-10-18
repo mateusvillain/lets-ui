@@ -128,7 +128,7 @@ DropdownTrigger.parameters = {
   docs: {
     description: {
       story:
-        'O Dropdown Menu define `aria-haspopup="menu"` e `aria-expanded` no Icon Button, que os repassa ao botão interno: o leitor de tela anuncia "Mais opções, botão, recolhido, menu".',
+        'O Dropdown Menu define `aria-haspopup="menu"` e `aria-expanded` no Icon Button, que os repassa ao botão interno: o leitor de tela anuncia algo como "Mais opções, botão, recolhido, menu".',
     },
   },
 };

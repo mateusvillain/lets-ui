@@ -304,7 +304,7 @@ AsLink.parameters = {
 };
 
 export const LinkNewTab = () =>
-  `<lui-button variant="primary" size="lg" href="https://example.com" target="_blank">Assinar agora</lui-button>`;
+  `<lui-button variant="primary" size="lg" href="https://example.com" target="_blank">Assinar agora (abre em nova aba)</lui-button>`;
 LinkNewTab.storyName = 'Link em nova aba';
 LinkNewTab.parameters = {
   docs: {
@@ -362,7 +362,7 @@ DropdownTrigger.parameters = {
   docs: {
     description: {
       story:
-        'O Dropdown Menu define `aria-haspopup="menu"` e `aria-expanded` no Button, que os repassa ao botão interno: o leitor de tela anuncia "Exportar, botão, recolhido, menu".',
+        'O Dropdown Menu define `aria-haspopup="menu"` e `aria-expanded` no Button, que os repassa ao botão interno: o leitor de tela anuncia algo como "Exportar, botão, recolhido, menu".',
     },
   },
 };
