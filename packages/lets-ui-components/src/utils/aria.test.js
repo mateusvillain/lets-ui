@@ -8,6 +8,7 @@ import { LuiCodeBlock } from '../components/code-block/code-block.ts';
 import { LuiIconButton } from '../components/icon-button/icon-button.ts';
 import { LuiInput } from '../components/input/input.ts';
 import { LuiLink } from '../components/link/link.ts';
+import { LuiModal } from '../components/modal/modal.ts';
 import { LuiRadio } from '../components/radio/radio.ts';
 import { LuiSelect } from '../components/select/select.ts';
 import { LuiShortcut } from '../components/shortcut/shortcut.ts';
@@ -36,6 +37,7 @@ const components = {
 for (const [tag, [element]] of Object.entries(components)) {
   customElements.define(tag, element);
 }
+customElements.define('lui-modal', LuiModal);
 
 const mounted = [];
 
@@ -102,5 +104,19 @@ describe('HostAriaMixin', () => {
 
     expect(el.hasAttribute('aria-label')).toBe(false);
     expect(el.getAttribute('aria-describedby')).toBe('x');
+  });
+
+  it("passes a Modal's state to a Link trigger, not to its host", async () => {
+    const modal = await mount(
+      '<lui-modal title="Termos"><lui-link slot="trigger" href="#">Termos</lui-link></lui-modal>'
+    );
+    const link = modal.querySelector('lui-link');
+
+    await expect
+      .poll(() => exposed('Termos'))
+      .toContain('link "Termos" hasPopup=dialog expanded=false');
+    expect(
+      link.getAttributeNames().filter((n) => n.startsWith('aria-'))
+    ).toEqual([]);
   });
 });
