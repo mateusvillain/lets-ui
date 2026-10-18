@@ -2,25 +2,15 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './icon-button.scss?inline';
-import { HostAriaMixin } from '../../utils/aria.js';
+import { TriggerAriaMixin, stateAria } from '../../utils/aria.js';
 
-export class LuiIconButton extends HostAriaMixin(LitElement) {
+export class LuiIconButton extends TriggerAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
 
   @property() size = 'md';
   @property({ type: Boolean }) disabled = false;
-  // ARIA set on the host — by the author or by a Modal or Drawer this button
-  // triggers — is rendered on the inner control, the element with a role.
-  // `HostAriaMixin` removes the host attribute so the role-less host isn't
-  // exposed as a second node. An empty value is not a valid ARIA token, so it
-  // renders no attribute.
+  // Taken off the host and rendered on the inner control; see `HostAriaMixin`.
   @property({ attribute: 'aria-label' }) ariaLabel = '';
-  @property({ attribute: 'aria-expanded' })
-  ariaExpanded: string | null = null;
-  @property({ attribute: 'aria-haspopup' })
-  ariaHasPopup: string | null = null;
-  @property({ attribute: 'aria-pressed' })
-  ariaPressed: string | null = null;
   // Set by a Tooltip that wraps this button and mirrored onto the inner
   // control. Not reflected: the host has no role, and the attribute there would
   // add a second, generic node to the accessibility tree.
@@ -39,9 +29,9 @@ export class LuiIconButton extends HostAriaMixin(LitElement) {
         class="icon-button icon-button--${this._size}"
         aria-label="${ifDefined(this.ariaLabel || undefined)}"
         ?disabled="${this.disabled}"
-        aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
-        aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
-        aria-pressed="${ifDefined(this.ariaPressed || undefined)}"
+        aria-expanded="${ifDefined(stateAria(this.ariaExpanded))}"
+        aria-haspopup="${ifDefined(stateAria(this.ariaHasPopup))}"
+        aria-pressed="${ifDefined(stateAria(this.ariaPressed))}"
         aria-description="${ifDefined(this.ariaDescription || undefined)}"
       >
         <slot></slot>

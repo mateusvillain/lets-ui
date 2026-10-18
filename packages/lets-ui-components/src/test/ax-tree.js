@@ -8,8 +8,11 @@ const TEXT = ['StaticText', 'InlineTextBox'];
 async function axNodes() {
   const session = cdp();
   const { frameTree } = await session.send('Page.getFrameTree');
-  const frames = [frameTree, ...(frameTree.childFrames ?? [])];
-  const frame = frames.find((f) => f.frame.url === location.href) ?? frameTree;
+  const flatten = (f) => [f, ...(f.childFrames ?? []).flatMap(flatten)];
+  const frame = flatten(frameTree).find((f) => f.frame.url === location.href);
+  // Reading another frame would find none of the components, and assertions
+  // that something is absent would pass for the wrong reason.
+  if (!frame) throw new Error(`No frame found for ${location.href}`);
   const { nodes } = await session.send('Accessibility.getFullAXTree', {
     frameId: frame.frame.id,
   });

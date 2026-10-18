@@ -57,3 +57,31 @@ export const HostAriaMixin = <T extends Constructor<ReactiveElement>>(
       this.removeAttribute(name);
     }
   };
+
+/**
+ * `HostAriaMixin` plus the state a trigger takes on its host: `aria-expanded`,
+ * `aria-haspopup` and `aria-pressed`, set by the author or by a Modal or Drawer
+ * the component triggers. The component renders them on its inner control with
+ * `stateAria()`.
+ *
+ * Declared here, rather than in each trigger, so a component a Modal or Drawer
+ * can take as trigger never falls back to the browser's own ARIA properties,
+ * which would write the attribute back onto the role-less host.
+ */
+export const TriggerAriaMixin = <T extends Constructor<ReactiveElement>>(
+  Base: T
+) =>
+  class extends HostAriaMixin(Base) {
+    static properties = {
+      ariaExpanded: { attribute: 'aria-expanded' },
+      ariaHasPopup: { attribute: 'aria-haspopup' },
+      ariaPressed: { attribute: 'aria-pressed' },
+    };
+  };
+
+/**
+ * A state value as an attribute binding: an empty or missing value is not a
+ * valid ARIA token, so it renders no attribute (`ifDefined(stateAria(x))`).
+ */
+export const stateAria = (value: string | null | undefined) =>
+  value || undefined;
