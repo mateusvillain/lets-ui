@@ -1,7 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
-import { deepActiveElement, returnFocus } from '../../utils/focus-return.js';
+import { FocusReturnController } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './drawer.scss?inline';
 
@@ -25,11 +25,11 @@ export class LuiDrawer extends LitElement {
 
   private _baseId: string;
   private _triggerTargets: Set<HTMLElement> = new Set();
-  private _returnFocusTo: HTMLElement | null = null;
   private _handleDocumentKeydown!: (e: KeyboardEvent) => void;
 
   constructor() {
     super();
+    new FocusReturnController(this, () => this._trigger);
     this._baseId = `lui-drawer-${Math.random().toString(36).slice(2, 9)}`;
   }
 
@@ -54,21 +54,9 @@ export class LuiDrawer extends LitElement {
     if (this.open) unlockBodyScroll();
   }
 
-  willUpdate(changedProps: Map<string, unknown>) {
-    // Before the render hides or shows anything, focus is still on whatever
-    // opened the drawer.
-    if (changedProps.has('open') && this.open) {
-      this._returnFocusTo = deepActiveElement();
-    }
-  }
-
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('open')) {
       this._syncOpenState(changedProps.get('open') !== undefined);
-      if (!this.open && changedProps.get('open') === true) {
-        returnFocus(this, this._returnFocusTo, this._trigger);
-        this._returnFocusTo = null;
-      }
     }
     if (changedProps.has('open') || changedProps.has('_hasTriggerSlot')) {
       this._updateSlottedTrigger();

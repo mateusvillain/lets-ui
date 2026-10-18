@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser';
 import { LuiButton } from '../components/button/button.ts';
 import { LuiDrawer } from '../components/drawer/drawer.ts';
 import { LuiModal } from '../components/modal/modal.ts';
+import { deepActiveElement as deepActive } from './focus-return.ts';
 
 // Only the elements under test: the full index would pull in every
 // component and the Sass each one inlines.
@@ -23,12 +24,6 @@ afterEach(() => {
 });
 
 const frame = () => new Promise((r) => requestAnimationFrame(r));
-
-const deepActive = () => {
-  let el = document.activeElement;
-  while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
-  return el;
-};
 
 // The control that actually holds focus: the element itself for a native
 // button, the button in its shadow root for a Let's UI one.
@@ -166,7 +161,7 @@ describe.each([
     );
   });
 
-  it('does not throw or move focus when nothing can take it', async () => {
+  it('drops focus from the closed panel when nothing can take it', async () => {
     const host = await mount(
       `<button id="opener">Open</button><${tag} title="T" hide-trigger></${tag}>`
     );
@@ -181,7 +176,39 @@ describe.each([
     el.open = false;
     await el.updateComplete;
 
-    expect(host.contains(deepActive())).toBe(false);
+    expect(deepActive()).toBeNull();
+    expect(document.activeElement).toBe(document.body);
+  });
+
+  it('returns focus from inside another shadow root', async () => {
+    const host = await mount('<div></div>');
+    const root = host.firstElementChild.attachShadow({ mode: 'open' });
+    root.innerHTML = `<${tag} title="T"></${tag}>`;
+    const el = root.querySelector(tag);
+    await el.updateComplete;
+    const trigger = el.shadowRoot.querySelector('button[aria-haspopup]');
+
+    await openFrom(trigger, el);
+    await userEvent.keyboard('{Escape}');
+    await el.updateComplete;
+
+    expect(deepActive()).toBe(trigger);
+  });
+
+  it('returns focus when removed from the page while open', async () => {
+    const host = await mount(
+      `<button id="opener">Open</button><${tag} title="T" hide-trigger></${tag}>`
+    );
+    const el = host.querySelector(tag);
+    const opener = host.querySelector('#opener');
+    opener.addEventListener('click', () => {
+      el.open = true;
+    });
+
+    await openFrom(opener, el);
+    el.remove();
+
+    expect(deepActive()).toBe(opener);
   });
 
   it('leaves focus that already moved outside', async () => {
@@ -249,5 +276,20 @@ describe('lui-modal opened from another modal', () => {
     await b.updateComplete;
 
     expect(deepActive()).toBe(triggerA);
+  });
+});
+
+describe('lui-modal scroll lock', () => {
+  it('locks and unlocks the page when open is set directly', async () => {
+    const host = await mount('<lui-modal title="T"></lui-modal>');
+    const el = host.querySelector('lui-modal');
+
+    el.open = true;
+    await el.updateComplete;
+    expect(document.body.style.overflow).toBe('hidden');
+
+    el.removeAttribute('open');
+    await el.updateComplete;
+    expect(document.body.style.overflow).toBe('');
   });
 });

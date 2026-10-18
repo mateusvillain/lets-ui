@@ -1,7 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
-import { deepActiveElement, returnFocus } from '../../utils/focus-return.js';
+import { FocusReturnController } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './modal.scss?inline';
 
@@ -23,11 +23,11 @@ export class LuiModal extends LitElement {
 
   private _baseId: string;
   private _triggerTargets: Set<HTMLElement> = new Set();
-  private _returnFocusTo: HTMLElement | null = null;
   private _handleDocumentKeydown!: (e: KeyboardEvent) => void;
 
   constructor() {
     super();
+    new FocusReturnController(this, () => this._trigger);
     this._baseId = `lui-modal-${Math.random().toString(36).slice(2, 9)}`;
   }
 
@@ -52,25 +52,20 @@ export class LuiModal extends LitElement {
     if (this.open) unlockBodyScroll();
   }
 
-  willUpdate(changedProps: Map<string, unknown>) {
-    // Before the render hides or shows anything, focus is still on whatever
-    // opened the modal.
-    if (changedProps.has('open') && this.open) {
-      this._returnFocusTo = deepActiveElement();
-    }
-  }
-
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('open')) {
+      // Here rather than in openModal/closeModal, so setting `open` or the
+      // attribute directly locks and unlocks the page too.
+      const wasOpen = changedProps.get('open') === true;
+      if (this.open && !wasOpen) lockBodyScroll();
+      if (!this.open && wasOpen) unlockBodyScroll();
+
       if (this.open && this._dialog) {
         requestAnimationFrame(() => {
           // Closed again before this frame: focus has already gone back and
           // must not be pulled into a hidden dialog.
           if (this.open) this._dialog.focus();
         });
-      } else if (changedProps.get('open') === true) {
-        returnFocus(this, this._returnFocusTo, this._trigger);
-        this._returnFocusTo = null;
       }
     }
     if (changedProps.has('open') || changedProps.has('_hasTriggerSlot')) {
@@ -118,12 +113,10 @@ export class LuiModal extends LitElement {
     openedModals.forEach((modal) => modal.closeModal());
 
     this.open = true;
-    lockBodyScroll();
   }
 
   closeModal() {
     this.open = false;
-    unlockBodyScroll();
   }
 
   private _trapFocus(event: KeyboardEvent) {

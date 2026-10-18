@@ -69,6 +69,8 @@ Ao abrir, o foco vai para o dialog. Ao fechar — por Escape, botão de fechar, 
 
 - Se esse elemento saiu da página, o foco vai para o trigger do componente. Sem trigger (`hide-trigger`), o foco não é movido.
 - Se algo já moveu o foco para fora do `lui-modal` antes de fechar, o componente não o devolve.
+- No Safari, clicar com o mouse não foca botões. Um botão externo que abre o componente por clique (com `hide-trigger`) não é registrado como origem, e o foco não volta para ele. Os triggers do próprio componente não têm essa limitação: são o destino de reserva.
+- Remover o componente da página enquanto está aberto também devolve o foco.
 
 ### Classe CSS
 
