@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
+import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './modal.scss?inline';
 
@@ -20,6 +21,7 @@ export class LuiModal extends LitElement {
   @state() private _hasActionsSlot = false;
 
   private _baseId: string;
+  private _triggerTargets: Set<HTMLElement> = new Set();
   private _handleDocumentKeydown!: (e: KeyboardEvent) => void;
 
   constructor() {
@@ -59,25 +61,15 @@ export class LuiModal extends LitElement {
     }
   }
 
-  // No aria-controls here: the dialog lives in this shadow root, and neither
-  // an IDREF nor ariaControlsElements can point into it from the light DOM.
-  // aria-haspopup + aria-expanded carry the trigger's contract on their own.
   private _updateSlottedTrigger() {
-    if (!this._hasTriggerSlot) return;
     const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
       'slot[name="trigger"]'
     );
-    const assigned = slot?.assignedElements({ flatten: true }) ?? [];
-    for (const el of assigned) {
-      const focusable = (
-        el.matches('button, [href], input, [tabindex]')
-          ? el
-          : el.querySelector('button, [href], input, [tabindex]')
-      ) as HTMLElement | null;
-      const target = (focusable ?? el) as HTMLElement;
-      target.setAttribute('aria-haspopup', 'dialog');
-      target.setAttribute('aria-expanded', this.open ? 'true' : 'false');
-    }
+    this._triggerTargets = syncDialogTriggers(
+      slot,
+      this.open,
+      this._triggerTargets
+    );
   }
 
   get _size(): 'xl' | 'lg' | 'md' | 'sm' {
@@ -133,6 +125,9 @@ export class LuiModal extends LitElement {
   private _handleTriggerSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     this._hasTriggerSlot = slot.assignedNodes({ flatten: true }).length > 0;
+    // A swapped trigger leaves _hasTriggerSlot unchanged, so updated() alone
+    // would miss it.
+    this._updateSlottedTrigger();
   }
 
   private _handleActionsSlotChange(e: Event) {
