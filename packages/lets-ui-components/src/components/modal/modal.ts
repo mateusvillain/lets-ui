@@ -59,6 +59,9 @@ export class LuiModal extends LitElement {
     }
   }
 
+  // No aria-controls here: the dialog lives in this shadow root, and neither
+  // an IDREF nor ariaControlsElements can point into it from the light DOM.
+  // aria-haspopup + aria-expanded carry the trigger's contract on their own.
   private _updateSlottedTrigger() {
     if (!this._hasTriggerSlot) return;
     const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
@@ -73,7 +76,6 @@ export class LuiModal extends LitElement {
       ) as HTMLElement | null;
       const target = (focusable ?? el) as HTMLElement;
       target.setAttribute('aria-haspopup', 'dialog');
-      target.setAttribute('aria-controls', `${this._baseId}-dialog`);
       target.setAttribute('aria-expanded', this.open ? 'true' : 'false');
     }
   }
