@@ -56,6 +56,22 @@ O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close modal"`
 <lui-modal title="Título" close-label="Fechar modal"></lui-modal>
 ```
 
+### Contrato ARIA do trigger
+
+O trigger recebe `aria-haspopup="dialog"` e `aria-expanded`, que acompanha o estado aberto/fechado. É isso que o leitor de tela anuncia.
+
+- **Trigger padrão** (o botão gerado por `trigger-label`): também recebe `aria-controls`, porque vive no mesmo shadow root do dialog e o IDREF resolve.
+- **Trigger customizado** (`slot="trigger"`): não recebe `aria-controls`. O dialog fica no shadow root do `lui-modal`, e nem um IDREF nem `ariaControlsElements` alcançam o interior de outro shadow root a partir do light DOM — o navegador descarta a referência. A relação trigger → dialog fica ausente da árvore de acessibilidade, por limitação da plataforma. O estado expandido continua anunciado.
+
+### Foco
+
+Ao abrir, o foco vai para o dialog. Ao fechar — por Escape, botão de fechar, clique no backdrop, `closeModal()` ou removendo `open` — o foco volta ao elemento que estava focado quando o dialog abriu: o trigger padrão, o trigger do slot ou o botão externo que alterou `open`.
+
+- Se esse elemento saiu da página, o foco vai para o trigger do componente. Sem trigger (`hide-trigger`), o foco não é movido.
+- Se algo já moveu o foco para fora do `lui-modal` antes de fechar, o componente não o devolve.
+- No Safari, clicar com o mouse não foca botões. Um botão externo que abre o componente por clique (com `hide-trigger`) não é registrado como origem, e o foco não volta para ele. Os triggers do próprio componente não têm essa limitação: são o destino de reserva.
+- Remover o componente da página enquanto está aberto também devolve o foco.
+
 ### Classe CSS
 
 ```html

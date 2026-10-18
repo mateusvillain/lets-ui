@@ -30,7 +30,18 @@ export class LuiButton extends LitElement {
   @property({ type: Boolean }) loading = false;
   @property({ attribute: 'loading-text' }) loadingText = '';
   @property() label = '';
-  @property({ attribute: 'aria-label' }) ariaLabel = '';
+  @property({ attribute: 'aria-label', reflect: true }) ariaLabel = '';
+  // State ARIA set on the host — by the author or by a Modal or Drawer this
+  // button triggers — never reaches the inner control on its own, and the host
+  // has no role to carry it, so it is mirrored onto the element that does.
+  // These accessors replace the native reflecting ones, so they reflect too.
+  // An empty value is not a valid ARIA token, so it renders no attribute.
+  @property({ attribute: 'aria-expanded', reflect: true })
+  ariaExpanded: string | null = null;
+  @property({ attribute: 'aria-haspopup', reflect: true })
+  ariaHasPopup: string | null = null;
+  @property({ attribute: 'aria-pressed', reflect: true })
+  ariaPressed: string | null = null;
   // Set by a Tooltip that wraps this button and mirrored onto the inner
   // control. Not reflected: the host has no role, and the attribute there would
   // add a second, generic node to the accessibility tree.
@@ -97,14 +108,24 @@ export class LuiButton extends LitElement {
     if (this.disabled) e.stopPropagation();
   };
 
-  private _renderContent(displayLabel: string) {
+  // The default slot stays rendered while loading: a label passed as content
+  // rather than through `label` is the only accessible name the button has.
+  private _renderContent() {
     return this.loading
-      ? html`${spinnerIcon}${displayLabel}`
+      ? html`${spinnerIcon}${this.loadingText ||
+        html`<slot>${this.label}</slot>`}`
       : html`<slot name="prefix"></slot><slot>${this.label}</slot
           ><slot name="suffix"></slot>`;
   }
 
-  private _renderAnchor(displayLabel: string, isDisabled: boolean) {
+  // Only an explicit `aria-label` overrides the name. Otherwise it comes from
+  // the rendered text — `label`, slotted content or `loading-text` — so the
+  // name always matches what is on screen (WCAG 2.5.3).
+  private get _ariaLabel(): string | undefined {
+    return this.ariaLabel || undefined;
+  }
+
+  private _renderAnchor(isDisabled: boolean) {
     return html`
       <a
         class="${this._classes}"
@@ -117,24 +138,24 @@ export class LuiButton extends LitElement {
         tabindex="${ifDefined(
           this.disabled ? '-1' : this.loading ? '0' : undefined
         )}"
-        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
+        aria-label="${ifDefined(this._ariaLabel)}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
+        aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
         aria-description="${ifDefined(this.ariaDescription || undefined)}"
         @click="${this._handleLinkClick}"
       >
-        ${this._renderContent(displayLabel)}
+        ${this._renderContent()}
       </a>
     `;
   }
 
   render() {
-    const displayLabel =
-      this.loading && this.loadingText ? this.loadingText : this.label;
     const isDisabled = this.disabled || this.loading;
 
     if (this._isLink) {
-      return this._renderAnchor(displayLabel, isDisabled);
+      return this._renderAnchor(isDisabled);
     }
 
     return html`
@@ -142,14 +163,17 @@ export class LuiButton extends LitElement {
         class="${this._classes}"
         type="button"
         ?autofocus="${this.autofocus}"
-        aria-label="${ifDefined(this.ariaLabel || displayLabel || undefined)}"
+        aria-label="${ifDefined(this._ariaLabel)}"
         ?disabled="${this.disabled}"
         aria-disabled="${isDisabled ? 'true' : 'false'}"
         aria-busy="${ifDefined(this.loading ? 'true' : undefined)}"
+        aria-expanded="${ifDefined(this.ariaExpanded || undefined)}"
+        aria-haspopup="${ifDefined(this.ariaHasPopup || undefined)}"
+        aria-pressed="${ifDefined(this.ariaPressed || undefined)}"
         aria-description="${ifDefined(this.ariaDescription || undefined)}"
         @click="${this._handleClick}"
       >
-        ${this._renderContent(displayLabel)}
+        ${this._renderContent()}
       </button>
     `;
   }
