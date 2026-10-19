@@ -22,6 +22,17 @@ const isDisabled = (el: HTMLElement) =>
 const isContent = (node: Node) =>
   node.nodeType === Node.ELEMENT_NODE || !!node.textContent?.trim();
 
+const normalize = (value: string) =>
+  value.replace(/\s+/g, ' ').trim().toLowerCase();
+
+// The trigger's name, as far as the tooltip can tell: its `aria-label`, else
+// its text, else the `label` a Let's UI button renders when it has no content.
+const nameOf = (el: HTMLElement) =>
+  el.getAttribute('aria-label') ||
+  el.textContent?.trim() ||
+  (el as HTMLElement & { label?: string }).label ||
+  '';
+
 export class LuiTooltip extends LitElement {
   static styles = unsafeCSS(styles);
 
@@ -66,7 +77,7 @@ export class LuiTooltip extends LitElement {
       subtree: true,
       characterData: true,
       attributes: true,
-      attributeFilter: ['disabled', 'href', 'tabindex'],
+      attributeFilter: ['disabled', 'href', 'tabindex', 'aria-label', 'label'],
     });
   }
 
@@ -77,7 +88,7 @@ export class LuiTooltip extends LitElement {
 
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('text') && this._describedTrigger) {
-      this._describe(this._describedTrigger, this.text);
+      this._describeWithText(this._describedTrigger);
     }
   }
 
@@ -106,6 +117,19 @@ export class LuiTooltip extends LitElement {
     el.ariaDescription = value;
   }
 
+  // A tooltip that repeats the trigger's name, the usual case for an Icon
+  // Button, would have screen readers announce it twice: the trigger keeps
+  // the author's description instead. The name is read once the trigger is
+  // upgraded, since a Let's UI button only knows its `label` by then.
+  private async _describeWithText(el: HTMLElement) {
+    if (!el.matches(':defined')) await customElements.whenDefined(el.localName);
+    if (this._describedTrigger !== el) return;
+    el.ariaDescription =
+      normalize(this.text) === normalize(nameOf(el))
+        ? this._authorDescription
+        : this.text;
+  }
+
   private _syncTrigger() {
     const slot = this.shadowRoot?.querySelector('slot');
     if (!slot) return;
@@ -121,7 +145,10 @@ export class LuiTooltip extends LitElement {
       }
       this._describedTrigger = trigger;
       this._authorDescription = trigger?.ariaDescription ?? null;
-      if (trigger) this._describe(trigger, this.text);
+      if (trigger) this._describeWithText(trigger);
+    } else if (trigger) {
+      // Its name may have changed to match the text, or to stop matching it.
+      this._describeWithText(trigger);
     }
     this._wrapperFocusable = this._hasCustomTrigger && !trigger;
   }

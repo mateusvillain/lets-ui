@@ -299,3 +299,79 @@ describe('with a trigger not upgraded yet', () => {
     expect(trigger.hasAttribute('aria-description')).toBe(false);
   });
 });
+
+describe('a tooltip that repeats the trigger name', () => {
+  const NAME = 'Excluir item';
+  const nodeNamed = async (name) =>
+    (await axNodes())
+      .filter((n) => n.role?.value === 'button' && n.name?.value === name)
+      .map((n) => ({ name: n.name.value, description: n.description?.value }));
+
+  it.each([
+    [
+      'a lui-icon-button',
+      `<lui-icon-button aria-label="${NAME}"><svg aria-hidden="true"></svg></lui-icon-button>`,
+    ],
+    ['a lui-button with label', `<lui-button label="${NAME}"></lui-button>`],
+    ['a lui-button with slotted text', `<lui-button>${NAME}</lui-button>`],
+    ['a native button', `<button>${NAME}</button>`],
+  ])('sets no description on %s', async (_, html) => {
+    await mount(html, NAME);
+
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+  });
+
+  it('matches regardless of case and surrounding whitespace', async () => {
+    await mount(`<button>  ${NAME.toUpperCase()} </button>`, NAME);
+
+    await expect
+      .poll(() => nodeNamed(NAME.toUpperCase()))
+      .toEqual([{ name: NAME.toUpperCase() }]);
+  });
+
+  it('describes the trigger once the text stops matching', async () => {
+    const { tooltip } = await mount(`<button>${NAME}</button>`, NAME);
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+
+    tooltip.text = 'Remove o item da lista';
+    await expect
+      .poll(() => nodeNamed(NAME))
+      .toEqual([{ name: NAME, description: 'Remove o item da lista' }]);
+
+    tooltip.text = NAME;
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+  });
+
+  it("follows a change to the trigger's aria-label", async () => {
+    const { trigger } = await mount(
+      `<lui-icon-button aria-label="Editar"><svg aria-hidden="true"></svg></lui-icon-button>`,
+      NAME
+    );
+    await expect
+      .poll(() => nodeNamed('Editar'))
+      .toEqual([{ name: 'Editar', description: NAME }]);
+
+    trigger.setAttribute('aria-label', NAME);
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+
+    trigger.setAttribute('aria-label', 'Editar');
+    await expect
+      .poll(() => nodeNamed('Editar'))
+      .toEqual([{ name: 'Editar', description: NAME }]);
+  });
+
+  it("keeps the author's own description, and restores it on leaving", async () => {
+    const { tooltip, trigger } = await mount(
+      `<button aria-description="Do autor">${NAME}</button>`,
+      NAME
+    );
+    await expect
+      .poll(() => nodeNamed(NAME))
+      .toEqual([{ name: NAME, description: 'Do autor' }]);
+
+    tooltip.after(trigger);
+    await expect
+      .poll(() => trigger.getAttribute('aria-description'))
+      .toBe('Do autor');
+  });
+});

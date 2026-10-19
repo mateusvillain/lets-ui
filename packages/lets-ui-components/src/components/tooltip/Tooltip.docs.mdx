@@ -38,9 +38,14 @@ acompanha o conteúdo quando ele muda depois. Outros componentes do Let's UI, co
   valor de `text` no trigger. Com `lui-button`, `lui-close-button`, `lui-icon-button` e `lui-link`, a descrição é
   repassada ao `<button>` ou `<a>` interno, que é quem o leitor de tela anuncia. O host não recebe o
   atributo, para não aparecer como um segundo nó na árvore de acessibilidade.
+- **Um texto igual ao nome do trigger não vira descrição.** Quando `text` repete o nome do controle
+  (o `aria-label` ou, sem ele, o texto visível, ignorando maiúsculas e espaços nas pontas), o
+  Tooltip não define `aria-description`, e o leitor de tela anuncia o nome uma vez só. Se `text`
+  ou o nome mudar depois, a descrição acompanha.
 - O tooltip abre com o ponteiro sobre o trigger e com o foco de teclado nele.
 - **Uma descrição própria do trigger** em `aria-description` é substituída pelo texto do tooltip
-  enquanto ele estiver dentro do Tooltip, e restaurada quando sair. Já `aria-describedby` tem
+  enquanto ele estiver dentro do Tooltip, e restaurada quando sair. Se o texto repetir o nome, a
+  descrição do autor é mantida. Já `aria-describedby` tem
   precedência sobre `aria-description`: um trigger que use os dois anuncia só o que o
   `aria-describedby` referencia. Nesse caso, inclua o texto do tooltip no elemento referenciado.
 
