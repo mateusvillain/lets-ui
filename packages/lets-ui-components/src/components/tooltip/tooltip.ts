@@ -22,6 +22,55 @@ const isDisabled = (el: HTMLElement) =>
 const isContent = (node: Node) =>
   node.nodeType === Node.ELEMENT_NODE || !!node.textContent?.trim();
 
+const normalize = (value: string) =>
+  value.replace(/\s+/g, ' ').trim().toLowerCase();
+
+// Attributes that change a trigger's name, on it or inside it.
+const NAME_ATTRIBUTES = [
+  'aria-label',
+  'aria-labelledby',
+  'aria-hidden',
+  'hidden',
+];
+
+// The text a node contributes to a name: slots stand for what they render,
+// hidden content contributes nothing.
+const textOf = (node: Node): string => {
+  if (node.nodeType === Node.TEXT_NODE) return node.textContent ?? '';
+  if (!(node instanceof Element)) return '';
+  if (
+    node.getAttribute('aria-hidden') === 'true' ||
+    node.hasAttribute('hidden') ||
+    node.matches('style, script, template')
+  ) {
+    return '';
+  }
+  const children =
+    node instanceof HTMLSlotElement
+      ? node.assignedNodes({ flatten: true })
+      : [...node.childNodes];
+  return children.map(textOf).join('');
+};
+
+// The trigger's name, as far as the tooltip needs it. A Let's UI trigger is
+// read from the control it renders, which holds what its host only passes
+// on: `label`, `loading-text`, a link's external label.
+const nameOf = (el: HTMLElement) => {
+  const control = el.shadowRoot?.querySelector('button, a') ?? el;
+  const labelledBy = control.getAttribute('aria-labelledby')?.trim();
+  if (labelledBy) {
+    const root = control.getRootNode() as Document | ShadowRoot;
+    return labelledBy
+      .split(/\s+/)
+      .map((id) => {
+        const label = root.getElementById(id);
+        return label ? textOf(label) : '';
+      })
+      .join(' ');
+  }
+  return control.getAttribute('aria-label') || textOf(control);
+};
+
 export class LuiTooltip extends LitElement {
   static styles = unsafeCSS(styles);
 
@@ -51,13 +100,18 @@ export class LuiTooltip extends LitElement {
   @state() private _wrapperFocusable = false;
 
   private _describedTrigger: HTMLElement | null = null;
-  // The trigger's own description, put back when it leaves the slot.
-  private _authorDescription: string | null = null;
+  // Each trigger's own description, put back when it leaves the slot.
+  private _authorDescriptions = new WeakMap<HTMLElement, string | null>();
 
   // `slotchange` only fires for the slot's direct children: a button rendered
   // inside a slotted wrapper later, or a trigger that gets disabled, would go
   // unnoticed.
   private _observer = new MutationObserver(() => this._syncTrigger());
+  // A Let's UI trigger renders its name in its own shadow root, out of reach
+  // of the observer above: a `label` set as a property changes nothing there.
+  private _nameObserver = new MutationObserver(() => {
+    if (this._describedTrigger) this._describe(this._describedTrigger);
+  });
 
   connectedCallback() {
     super.connectedCallback();
@@ -66,18 +120,19 @@ export class LuiTooltip extends LitElement {
       subtree: true,
       characterData: true,
       attributes: true,
-      attributeFilter: ['disabled', 'href', 'tabindex'],
+      attributeFilter: ['disabled', 'href', 'tabindex', ...NAME_ATTRIBUTES],
     });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this._observer.disconnect();
+    this._nameObserver.disconnect();
   }
 
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('text') && this._describedTrigger) {
-      this._describe(this._describedTrigger, this.text);
+      this._describe(this._describedTrigger);
     }
   }
 
@@ -100,10 +155,39 @@ export class LuiTooltip extends LitElement {
   // `lui-icon-button` and `lui-link` pass it on to their inner control without
   // leaving it on their role-less host, and on a native element it reflects to
   // the attribute. Before a Let's UI element is upgraded only the native,
-  // reflecting setter exists, so it waits for the element's own.
-  private async _describe(el: HTMLElement, value: string | null) {
+  // reflecting setter exists, so it waits for the element's own, and for its
+  // first render, which holds its name.
+  //
+  // A tooltip that repeats the trigger's name, the usual case for an Icon
+  // Button, would have screen readers announce it twice: the trigger keeps the
+  // author's description instead. The value is decided from the state once
+  // the wait is over, so calls that resolve out of order agree.
+  private async _describe(el: HTMLElement) {
     if (!el.matches(':defined')) await customElements.whenDefined(el.localName);
-    el.ariaDescription = value;
+    await (el as HTMLElement & { updateComplete?: Promise<unknown> })
+      .updateComplete;
+
+    const author = this._authorDescriptions.get(el) ?? null;
+    let value: string | null;
+    if (el === this._describedTrigger) {
+      value =
+        normalize(this.text) === normalize(nameOf(el)) ? author : this.text;
+      if (el.shadowRoot) {
+        this._nameObserver.observe(el.shadowRoot, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+          attributes: true,
+          attributeFilter: NAME_ATTRIBUTES,
+        });
+      }
+    } else {
+      // Already put back by an earlier call.
+      if (!this._authorDescriptions.has(el)) return;
+      this._authorDescriptions.delete(el);
+      value = author;
+    }
+    if (el.ariaDescription !== value) el.ariaDescription = value;
   }
 
   private _syncTrigger() {
@@ -115,14 +199,20 @@ export class LuiTooltip extends LitElement {
 
     const control = this._hasCustomTrigger ? this._findTrigger(slot) : null;
     const trigger = control && !isDisabled(control) ? control : null;
-    if (this._describedTrigger !== trigger) {
-      if (this._describedTrigger) {
-        this._describe(this._describedTrigger, this._authorDescription);
-      }
+    const previous = this._describedTrigger;
+    if (previous !== trigger) {
+      this._nameObserver.disconnect();
       this._describedTrigger = trigger;
-      this._authorDescription = trigger?.ariaDescription ?? null;
-      if (trigger) this._describe(trigger, this.text);
+      if (previous) this._describe(previous);
+      // A trigger back before its description was put back keeps the one
+      // already recorded, not the tooltip's text.
+      if (trigger && !this._authorDescriptions.has(trigger)) {
+        this._authorDescriptions.set(trigger, trigger.ariaDescription ?? null);
+      }
     }
+    // Also run for the same trigger: its name may have changed to match the
+    // text, or to stop matching it.
+    if (trigger) this._describe(trigger);
     this._wrapperFocusable = this._hasCustomTrigger && !trigger;
   }
 
