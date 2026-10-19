@@ -167,6 +167,18 @@ export const Block = () =>
 export const Loading = () =>
   `<lui-button variant="primary" size="lg" label="Salvar" loading></lui-button>`;
 
+export const LoadingWithContent = () =>
+  `<lui-button variant="primary" size="lg" loading>${prefixIcon}Salvar</lui-button>`;
+LoadingWithContent.storyName = 'Loading com conteúdo';
+LoadingWithContent.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com o texto passado como conteúdo do slot, ele continua visível durante o `loading`. Só o ícone `prefix` dá lugar ao spinner.',
+    },
+  },
+};
+
 export const LoadingWithText = () =>
   `<lui-button variant="primary" size="lg" label="Salvar" loading loading-text="Salvando..."></lui-button>`;
 
@@ -292,7 +304,7 @@ AsLink.parameters = {
 };
 
 export const LinkNewTab = () =>
-  `<lui-button variant="primary" size="lg" href="https://example.com" target="_blank">Assinar agora</lui-button>`;
+  `<lui-button variant="primary" size="lg" href="https://example.com" target="_blank">Assinar agora (abre em nova aba)</lui-button>`;
 LinkNewTab.storyName = 'Link em nova aba';
 LinkNewTab.parameters = {
   docs: {
@@ -329,6 +341,39 @@ LinkDisabled.parameters = {
     },
   },
 };
+
+export const Sizes = () =>
+  `<div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+    <lui-button variant="primary" size="lg" label="Large (lg)"></lui-button>
+    <lui-button variant="primary" size="md" label="Medium (md)"></lui-button>
+  </div>`;
+Sizes.storyName = 'Tamanhos';
+
+export const DropdownTrigger = () =>
+  `<div style="margin-bottom: 120px;">
+    <lui-dropdown-menu>
+      <lui-button slot="trigger" variant="secondary" size="md" label="Exportar"></lui-button>
+      <lui-menu-item slot="items" label="PDF"></lui-menu-item>
+      <lui-menu-item slot="items" label="CSV"></lui-menu-item>
+    </lui-dropdown-menu>
+  </div>`;
+DropdownTrigger.storyName = 'Trigger de Dropdown Menu';
+DropdownTrigger.parameters = {
+  docs: {
+    description: {
+      story:
+        'O Dropdown Menu define `aria-haspopup="menu"` e `aria-expanded` no Button, que os repassa ao botão interno: o leitor de tela anuncia algo como "Exportar, botão, recolhido, menu".',
+    },
+  },
+};
+
+export const WithTooltip = () =>
+  `<div style="padding: 48px 0 0;">
+    <lui-tooltip text="Salva uma cópia sem publicar" position="top">
+      <lui-button variant="secondary" size="lg" label="Salvar rascunho"></lui-button>
+    </lui-tooltip>
+  </div>`;
+WithTooltip.storyName = 'Com Tooltip';
 
 export const CSSClass = () => `
   <div style="display: flex; gap: 12px;">

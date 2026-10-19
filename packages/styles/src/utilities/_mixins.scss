@@ -186,6 +186,16 @@
       outline: none;
       outline-offset: 3px;
     }
+
+    // A forced-colors theme drops `box-shadow`, which is the whole focus ring,
+    // and the rule above clears the outline — so focus would vanish. A system
+    // outline takes its place; it sits last to win at the same specificity.
+    @media (forced-colors: active) {
+      &:focus-visible {
+        outline: width(2) solid CanvasText;
+        outline-offset: width(2);
+      }
+    }
   }
 }
 

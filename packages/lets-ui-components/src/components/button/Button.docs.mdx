@@ -1,78 +1,107 @@
-import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ButtonStories from './Button.stories';
 
 <Meta of={ButtonStories} />
 
 # Button
 
-Elemento interativo utilizado para executar ações na interface.
+Dispara uma ação: salvar um formulário, confirmar uma exclusão, abrir um diálogo. Mostra um texto que nomeia a ação e, opcionalmente, ícones antes ou depois dele. Com `href`, a mesma aparência vale para um link.
 
 <Canvas of={ButtonStories.Button} />
 <Controls of={ButtonStories.Button} />
+
+## Quando usar
+
+Use o Button para ações que acontecem na página atual ou que enviam dados: salvar, enviar, excluir, abrir um Modal ou um Drawer.
+
+- Para levar a outra página com a aparência de um botão, como um CTA "Ver curso", use o próprio Button com `href` (veja [Como link](#como-link-href)). Ele renderiza um `<a>`.
+- Para um link dentro de um texto ou numa lista de navegação, use o [componente Link](?path=/docs/navigation-link--docs).
+- Quando não há espaço para texto e o ícone basta para reconhecer a ação, use o [Icon Button](?path=/docs/actionable-icon-button--docs). Para fechar um painel, use o [Close Button](?path=/docs/actionable-close-button--docs).
+- Para um conjunto de ações a partir de um único botão, use o [Dropdown Menu](?path=/docs/actionable-dropdown-menu--docs) com um Button como gatilho.
 
 ## Variantes
 
 ### Primary
 
-Ação principal da tela. Use para o CTA mais importante — deve existir apenas um por contexto.
+A ação principal da tela, como "Salvar" ou "Continuar". Use só um por contexto: dois botões Primary lado a lado disputam a atenção.
 
 <Canvas of={ButtonStories.Primary} />
 
 ### Secondary
 
-Ação secundária ou complementar. Use ao lado do Primary para oferecer uma alternativa de menor peso visual.
+Uma ação alternativa à principal, como "Cancelar" ou "Salvar rascunho". Fica ao lado do Primary, com menos peso visual.
 
 <Canvas of={ButtonStories.Secondary} />
 
 ### Neutral
 
-Ação genérica sem conotação semântica. Use para ações utilitárias que não se encaixam em nenhum outro contexto.
+Uma ação utilitária sem relação com o fluxo principal, como "Exportar" ou "Filtrar".
 
 <Canvas of={ButtonStories.Neutral} />
 
 ### Danger
 
-Ação destrutiva ou irreversível. Use para confirmar exclusões, remoções ou operações de alto risco.
+Uma ação destrutiva ou irreversível, como "Excluir conta". Peça confirmação antes de executá-la, por exemplo num Modal.
 
 <Canvas of={ButtonStories.Danger} />
 
 ### Success
 
-Ação de confirmação positiva. Use para finalizar fluxos como salvar, enviar ou concluir.
+Uma ação que conclui um fluxo com resultado positivo, como "Aprovar" ou "Concluir pedido".
 
 <Canvas of={ButtonStories.Success} />
 
-## Icon
+A cor reforça o tipo de ação, mas não a comunica sozinha: o texto do botão precisa dizer o que ele faz.
+
+## Tamanhos
+
+`lg` (padrão) para formulários e chamadas principais, `md` para áreas mais densas, como toolbars, tabelas e cards. Qualquer outro valor de `size` usa `lg`.
+
+<Canvas of={ButtonStories.Sizes} />
+
+## Ícones
+
+Coloque um SVG no slot `prefix` para um ícone antes do texto e no slot `suffix` para um ícone depois. Os ícones herdam `currentColor` e acompanham o tamanho da fonte do botão. Marque o SVG com `aria-hidden="true"`: o nome vem do texto.
 
 <Canvas of={ButtonStories.WithIcon} />
 
+## Texto do botão
+
+O texto vem do atributo `label` ou do conteúdo do slot padrão. Quando os dois existem, o conteúdo do slot é o que aparece. Esse texto também é o nome acessível do botão.
+
+Use `aria-label` só quando o texto visível não basta para descrever a ação. Nesse caso, comece o `aria-label` pelo texto visível ("Excluir" → "Excluir arquivo"), para que quem usa comando de voz possa dizer o que vê (WCAG 2.5.3).
+
+<Canvas of={ButtonStories.Label} />
+
 ## Block
 
-O atributo `block` faz o botão ocupar toda a largura disponível do container pai.
+`block` faz o botão ocupar toda a largura do container. Use em layouts estreitos, como formulários no celular ou o rodapé de um card.
 
 <Canvas of={ButtonStories.Block} />
 
 ## Disabled
 
-O atributo `disabled` desabilita o botão e previne interações.
+`disabled` desabilita o botão: ele fica opaco, não responde a clique e sai da ordem de tabulação. Dentro de um `<fieldset disabled>`, o botão também fica desabilitado.
+
+Como o botão desabilitado não recebe foco, quem navega por teclado ou leitor de tela não chega até ele. Dentro de um Tooltip, o foco vai para o wrapper do tooltip, que mostra o texto mas é anunciado como grupo, sem o papel de botão nem o estado indisponível. Se a pessoa precisa saber por que a ação está indisponível, explique o motivo num texto visível perto do botão.
 
 <Canvas of={ButtonStories.Disabled} />
 
-## Label
-
-<Canvas of={ButtonStories.Label} />
-
 ## Loading
 
-O atributo `loading` exibe um spinner e bloqueia interações enquanto uma operação está em andamento.
-O botão não fica opaco: permanece visualmente ativo, indicando progresso.
+`loading` mostra um spinner e bloqueia a ação enquanto uma operação está em andamento. O botão não fica opaco nem perde o foco: ele continua com a aparência ativa, para mostrar que algo está acontecendo, e recebe `aria-busy="true"` e `aria-disabled="true"`.
+
+Os ícones `prefix` e `suffix` dão lugar ao spinner. O texto continua visível, seja ele passado por `label` ou pelo slot, e segue sendo o nome acessível do botão.
 
 <Canvas of={ButtonStories.Loading} />
 
+### Loading com conteúdo
+
+<Canvas of={ButtonStories.LoadingWithContent} />
+
 ### Loading com texto alternativo
 
-O atributo `loading-text` substitui o label exibido enquanto `loading` estiver ativo.
-Útil para comunicar o estado ao usuário sem alterar o label original.
+`loading-text` troca o texto exibido enquanto `loading` estiver ativo, como "Salvando...". O nome acessível acompanha o texto na tela.
 
 <Canvas of={ButtonStories.LoadingWithText} />
 
@@ -82,20 +111,17 @@ O atributo `loading-text` substitui o label exibido enquanto `loading` estiver a
 
 ## Como link (`href`)
 
-Quando o controle **navega ou baixa** em vez de executar uma ação, ele é semanticamente um link.
-Passar `href` faz o componente renderizar `<a>` no lugar de `<button>`, mantendo a mesma aparência
-e os mesmos atributos de estilo (`variant`, `size`, `block`).
+Quando o controle **navega ou baixa** um arquivo em vez de executar uma ação, ele é um link. Com `href`, o componente renderiza `<a>` no lugar de `<button>`, com a mesma aparência e os mesmos atributos de estilo (`variant`, `size`, `block`).
 
-Isso preserva os comportamentos nativos que se perdem ao usar um botão com navegação programática:
-abrir em nova aba, botão direito, clique do meio, Ctrl/Cmd + clique e o atributo `download`.
+Assim o link mantém o que se perde ao navegar por JavaScript a partir de um botão: abrir em nova aba, menu do botão direito, clique do meio, Ctrl/Cmd + clique e `download`.
 
 <Canvas of={ButtonStories.AsLink} />
 
 ### Nova aba
 
-Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente.
-Um `rel` informado é somado a essa proteção, não a substitui — `rel="nofollow"`
-com `target="_blank"` resulta em `nofollow noopener noreferrer`.
+Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente. Um `rel` informado se soma a essa proteção, sem substituí-la: `rel="nofollow"` com `target="_blank"` resulta em `nofollow noopener noreferrer`.
+
+Avise que o link abre uma nova aba, no próprio texto ("Assinar agora (abre em nova aba)") ou com um ícone acompanhado de texto para leitores de tela.
 
 <Canvas of={ButtonStories.LinkNewTab} />
 
@@ -105,65 +131,113 @@ com `target="_blank"` resulta em `nofollow noopener noreferrer`.
 
 ### Desabilitado e loading
 
-Links não têm `disabled` nativo. Com `disabled` ou `loading`, o `href` é omitido, então o elemento
-não navega por clique, clique do meio ou "abrir em nova aba", e `aria-disabled="true"` mais
-`role="link"` mantêm o anúncio correto em leitores de tela.
+Links não têm `disabled` nativo. Com `disabled` ou `loading`, o `href` é omitido, então o elemento não navega por clique, clique do meio ou "abrir em nova aba". `aria-disabled="true"` e `role="link"` mantêm o anúncio correto em leitores de tela.
 
-Os dois estados diferem no foco: `disabled` recebe `tabindex="-1"` e sai da ordem de tabulação,
-como um botão nativo desabilitado. `loading` é transitório e recebe `tabindex="0"`, mantendo o
-foco de quem já estava no elemento quando a operação começou — sem `href`, uma âncora não é
-focável nem programaticamente.
+Os dois estados diferem no foco. `disabled` recebe `tabindex="-1"` e sai da ordem de tabulação, como um botão nativo desabilitado. `loading` é transitório e recebe `tabindex="0"`, para manter o foco de quem já estava no elemento quando a operação começou: sem `href`, uma âncora não é focável nem por código.
 
 <Canvas of={ButtonStories.LinkDisabled} />
 
 Atributos de formulário (`type`, `name`, `value`, `form`) não se aplicam quando há `href`.
 
+## Estado de componentes acionados
+
+Quando o botão abre ou alterna algo, como um menu, um painel ou um filtro, informe o estado com `aria-expanded`, `aria-haspopup` ou `aria-pressed` no próprio `<lui-button>`. O componente repassa esses atributos ao controle interno, que é o que o leitor de tela anuncia. `aria-pressed` só se aplica sem `href`, já que links não têm estado pressionado.
+
+Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão recebe esses atributos do próprio componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` não é repassado: um ID não pode ser referenciado entre shadow roots diferentes.
+
+<Canvas of={ButtonStories.DropdownTrigger} />
+
+```html
+<lui-button
+  label="Filtros"
+  aria-expanded="false"
+  aria-haspopup="true"
+></lui-button>
+<lui-button label="Negrito" aria-pressed="true"></lui-button>
+```
+
+O Button ainda não tem estilo visual para `aria-pressed="true"`: o estado é anunciado pelo leitor de tela, mas não aparece na tela. Até que exista, mostre o estado alternado também de forma visível, por exemplo trocando o `label` ou o ícone.
+
+## Com Tooltip
+
+Dentro de um [Tooltip](?path=/docs/content-tooltip--docs), o texto do tooltip vira a descrição do botão (`aria-description`): o leitor de tela anuncia primeiro o nome do botão e depois o texto do tooltip. O botão continua sendo a única parada de tabulação, e o tooltip abre no foco e no hover.
+
+Use o tooltip para informação complementar. Tudo que a pessoa precisa para entender a ação deve estar no texto do botão.
+
+<Canvas of={ButtonStories.WithTooltip} />
+
 ## Integração com formulários
 
-`type="submit"` e `type="reset"` funcionam nativamente com qualquer `<form>` pai.
-Dois botões de submit com `name` e `value` distintos permitem identificar qual ação foi escolhida
-nos dados submetidos. O atributo `form` permite associar o botão a um form pelo ID,
-mesmo que esteja fora do elemento `<form>` no DOM.
+`type="submit"` e `type="reset"` funcionam nativamente com o `<form>` pai. Dois botões de submit com `name` e `value` diferentes indicam, nos dados enviados, qual ação foi escolhida. O atributo `form` associa o botão a um formulário pelo ID, mesmo fora do elemento `<form>`.
 
 <Canvas of={ButtonStories.FormIntegration} />
 
 ## Autofocus
 
-Use `autofocus` para mover o foco do teclado automaticamente para o botão quando o contexto é renderizado.
-O caso de uso mais comum é a ação primária de um diálogo ou modal: ao abrir, o foco já está no botão correto,
-permitindo que o usuário confirme a ação com Enter sem precisar navegar.
+`autofocus` move o foco para o botão quando o contexto aparece. O caso mais comum é a ação principal de um diálogo: ao abrir, o foco já está no botão certo, e a pessoa confirma com Enter sem precisar navegar.
 
-**Evite usar em páginas inteiras.** Receber foco automaticamente no meio do conteúdo desorientaletores de tela e
-usuários de teclado, que esperam começar a navegação pelo topo. Reserve para contextos isolados e transitórios,
-como modais, drawers e alertas de confirmação.
+**Evite em páginas inteiras.** Receber o foco no meio do conteúdo desorienta quem usa leitor de tela ou teclado, que espera começar pelo topo da página. Reserve para contextos isolados e passageiros, como Modals, Drawers e confirmações.
 
 <Canvas of={ButtonStories.Autofocus} />
 
-## Atributos
-
-| Atributo       | Tipo      | Padrão      | Descrição                                                                           |
-| -------------- | --------- | ----------- | ----------------------------------------------------------------------------------- |
-| `label`        | `string`  | `''`        | Texto exibido no botão                                                              |
-| `variant`      | `string`  | `'primary'` | Estilo visual: `primary`, `secondary`, `neutral`, `danger`, `success`               |
-| `size`         | `string`  | `'lg'`      | Tamanho: `lg`, `md`                                                                 |
-| `type`         | `string`  | `'button'`  | Tipo HTML: `button`, `submit`, `reset`                                              |
-| `name`         | `string`  | `''`        | Nome submetido com o form ao usar `type="submit"`                                   |
-| `value`        | `string`  | `''`        | Valor submetido junto ao `name`; incluído apenas quando este botão dispara o submit |
-| `form`         | `string`  | `''`        | ID do `<form>` associado; permite usar o botão fora do elemento form                |
-| `disabled`     | `boolean` | `false`     | Desabilita o botão e previne interações                                             |
-| `autofocus`    | `boolean` | `false`     | Move o foco para o botão automaticamente ao renderizar o contexto                   |
-| `block`        | `boolean` | `false`     | Torna o botão full-width dentro do seu container                                    |
-| `loading`      | `boolean` | `false`     | Exibe spinner e bloqueia interações; não aplica opacidade de disabled               |
-| `loading-text` | `string`  | `''`        | Texto alternativo exibido enquanto `loading` estiver ativo                          |
-| `href`         | `string`  | `''`        | Quando preenchido, renderiza `<a>` no lugar de `<button>`                           |
-| `target`       | `string`  | `''`        | Alvo da navegação; só aplicado junto de `href`                                      |
-| `rel`          | `string`  | `''`        | Relação do link; somado a `noopener noreferrer` com `target="_blank"`               |
-| `download`     | `string`  | —           | Baixa o recurso em vez de navegar; aceito sem valor; só junto de `href`             |
-| `aria-label`   | `string`  | `''`        | Label acessível sobrescrevendo o derivado do `label`                                |
-
 ## Classe CSS (sem Web Component)
 
+Sem o Web Component, use `<button class="btn btn--{variant} btn--{size}">` ou `<a class="btn ...">` para links. Também ficam a cargo de quem usa:
+
+- o `type` do botão, que é `submit` por padrão dentro de um `<form>`;
+- o spinner, o `aria-busy` e o bloqueio de clique do estado de loading;
+- o `aria-disabled` e a remoção do `href` num link desabilitado;
+- o `rel="noopener noreferrer"` com `target="_blank"`.
+
 <Canvas of={ButtonStories.CSSClass} />
+
+## Propriedades
+
+| Atributo        | Tipo                                                             | Padrão    | Descrição                                                                       |
+| --------------- | ---------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------- |
+| `label`         | `string`                                                         | `''`      | Texto do botão. O conteúdo do slot padrão tem precedência.                      |
+| `variant`       | `'primary' \| 'secondary' \| 'neutral' \| 'danger' \| 'success'` | `primary` | Estilo visual.                                                                  |
+| `size`          | `'lg' \| 'md'`                                                   | `lg`      | Tamanho. Outros valores usam `lg`.                                              |
+| `type`          | `'button' \| 'submit' \| 'reset'`                                | `button`  | Comportamento no formulário.                                                    |
+| `name`          | `string`                                                         | `''`      | Nome enviado com o formulário ao usar `type="submit"`.                          |
+| `value`         | `string`                                                         | `''`      | Valor enviado junto do `name`, só quando este botão dispara o envio.            |
+| `form`          | `string`                                                         | `''`      | ID do `<form>` associado, para usar o botão fora dele.                          |
+| `disabled`      | `boolean`                                                        | `false`   | Desabilita o botão e o tira da ordem de tabulação.                              |
+| `loading`       | `boolean`                                                        | `false`   | Mostra o spinner e bloqueia a ação, sem opacidade de desabilitado.              |
+| `loading-text`  | `string`                                                         | `''`      | Texto exibido enquanto `loading` estiver ativo.                                 |
+| `block`         | `boolean`                                                        | `false`   | Ocupa toda a largura do container.                                              |
+| `autofocus`     | `boolean`                                                        | `false`   | Move o foco para o botão quando o contexto aparece.                             |
+| `href`          | `string`                                                         | `''`      | Renderiza `<a>` no lugar de `<button>`.                                         |
+| `target`        | `string`                                                         | `''`      | Alvo da navegação. Só com `href`.                                               |
+| `rel`           | `string`                                                         | `''`      | Relação do link. Somado a `noopener noreferrer` com `target="_blank"`.          |
+| `download`      | `string`                                                         | —         | Baixa o recurso em vez de navegar. Aceito sem valor. Só com `href`.             |
+| `aria-label`    | `string`                                                         | `''`      | Substitui o texto visível como nome acessível. Comece pelo texto visível.       |
+| `aria-expanded` | `string`                                                         | —         | Estado aberto/fechado do que o botão controla. Repassado ao controle interno.   |
+| `aria-haspopup` | `string`                                                         | —         | Tipo de popup que o botão abre. Repassado ao controle interno.                  |
+| `aria-pressed`  | `string`                                                         | —         | Estado de botão alternável. Repassado ao controle interno, ignorado com `href`. |
+
+### Slots
+
+| Slot     | Descrição                                                         |
+| -------- | ----------------------------------------------------------------- |
+| (padrão) | Texto do botão. Tem precedência sobre `label`.                    |
+| `prefix` | Ícone antes do texto. Substituído pelo spinner durante `loading`. |
+| `suffix` | Ícone depois do texto. Some durante `loading`.                    |
+
+## Acessibilidade
+
+- Renderiza um `<button>` nativo, ou um `<a>` com `href`: navegável com `Tab`. `Enter` e `Espaço` acionam o botão; `Enter` aciona o link.
+- O nome acessível é o texto na tela (`label`, conteúdo do slot ou `loading-text`). Só um `aria-label` explícito o substitui.
+- Com `disabled`, o botão sai da ordem de tabulação. Com `loading`, continua focável e recebe `aria-busy="true"` e `aria-disabled="true"`, então quem estava nele não perde o foco.
+- `aria-expanded`, `aria-haspopup` e `aria-pressed` definidos no `<lui-button>`, e a descrição de um Tooltip em volta dele, são repassados ao controle interno. O elemento externo não tem papel e não carrega esses atributos para o leitor de tela.
+- O foco aparece também em modo de alto contraste (`forced-colors`), e o botão ganha uma borda para não se confundir com texto.
+- Os ícones dos slots são decorativos: marque-os com `aria-hidden="true"`.
+
+### Responsabilidades de quem usa
+
+- Escreva um texto que diga o que o botão faz ("Salvar alterações", não "OK"). Em listas, torne cada texto distinto ("Excluir arquivo", "Excluir pasta").
+- Use `href` sempre que o botão navegar. Um `<button>` que muda de página por JavaScript é anunciado como botão e perde os comportamentos de link.
+- Quando a ação é indisponível por um motivo que a pessoa precisa conhecer, mostre o motivo em texto visível.
 
 ## Uso
 
@@ -178,7 +252,7 @@ como modais, drawers e alertas de confirmação.
 ### Classe CSS
 
 ```html
-<button class="btn btn--primary btn--lg">Confirmar</button>
-<button class="btn btn--secondary btn--lg">Cancelar</button>
+<button class="btn btn--primary btn--lg" type="button">Confirmar</button>
+<button class="btn btn--secondary btn--lg" type="button">Cancelar</button>
 <a class="btn btn--primary btn--lg" href="/cursos">Ver curso</a>
 ```

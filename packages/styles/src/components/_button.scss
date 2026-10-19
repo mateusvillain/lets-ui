@@ -71,6 +71,12 @@ a {
       outline-offset: width(2);
     }
 
+    // A forced-colors theme drops the background, the only edge the button
+    // has — without a border it reads as plain text.
+    @media (forced-colors: active) {
+      border: width(1) solid ButtonBorder;
+    }
+
     &:disabled {
       cursor: not-allowed;
       opacity: opacity(disabled);
