@@ -42,6 +42,7 @@ import { LuiLink } from './components/link/link.js';
 import { LuiModal } from './components/modal/modal.js';
 import { LuiOtpInput } from './components/otp-input/otp-input.js';
 import { LuiPagination } from './components/pagination/pagination.js';
+import { LuiProgressBar } from './components/progress-bar/progress-bar.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
 import { LuiSkeleton } from './components/skeleton/skeleton.js';
@@ -105,6 +106,7 @@ define('lui-link', LuiLink);
 define('lui-modal', LuiModal);
 define('lui-otp-input', LuiOtpInput);
 define('lui-pagination', LuiPagination);
+define('lui-progress-bar', LuiProgressBar);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
 define('lui-shortcut', LuiShortcut);
@@ -164,6 +166,7 @@ export {
   LuiModal,
   LuiOtpInput,
   LuiPagination,
+  LuiProgressBar,
   LuiNativeSelect,
   LuiSelect,
   LuiShortcut,
