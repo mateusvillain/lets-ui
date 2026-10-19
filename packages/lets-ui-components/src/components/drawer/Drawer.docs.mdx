@@ -53,6 +53,22 @@ O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close drawer"
 <lui-drawer title="Título" close-label="Fechar drawer"></lui-drawer>
 ```
 
+### Fechar por uma ação
+
+Marque com `data-drawer-close` o botão que só fecha o drawer — um "Cancelar", por exemplo. Funciona no slot `actions` e no conteúdo, num elemento nativo ou num `lui-button`, e também quando o clique vem de algo dentro do elemento marcado.
+
+```html
+<lui-drawer title="Título">
+  <p>Conteúdo</p>
+  <lui-button slot="actions" variant="secondary" label="Cancelar" data-drawer-close></lui-button>
+  <lui-button slot="actions" label="Confirmar"></lui-button>
+</lui-drawer>
+```
+
+- O atributo fecha o `lui-drawer` mais próximo acima dele: dentro de um `lui-drawer` aninhado, fecha só esse.
+- No slot `trigger`, o atributo é ignorado.
+- Ações que fazem algo antes de fechar (como "Confirmar") chamam `closeDrawer()` no próprio handler.
+
 ### Contrato ARIA do trigger
 
 O trigger recebe `aria-haspopup="dialog"` e `aria-expanded`, que acompanha o estado aberto/fechado. É isso que o leitor de tela anuncia.
@@ -62,7 +78,7 @@ O trigger recebe `aria-haspopup="dialog"` e `aria-expanded`, que acompanha o est
 
 ### Foco
 
-Ao abrir, o foco vai para o painel. Ao fechar — por Escape, botão de fechar, clique no backdrop, `closeDrawer()` ou removendo `open` — o foco volta ao elemento que estava focado quando o painel abriu: o trigger padrão, o trigger do slot ou o botão externo que alterou `open`.
+Ao abrir, o foco vai para o painel. Ao fechar — por Escape, botão de fechar, clique no backdrop, elemento com `data-drawer-close`, `closeDrawer()` ou removendo `open` — o foco volta ao elemento que estava focado quando o painel abriu: o trigger padrão, o trigger do slot ou o botão externo que alterou `open`.
 
 - Se esse elemento saiu da página, o foco vai para o trigger do componente. Sem trigger (`hide-trigger`), o foco não é movido.
 - Se algo já moveu o foco para fora do `lui-drawer` antes de fechar, o componente não o devolve.

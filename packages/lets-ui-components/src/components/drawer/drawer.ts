@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
+import { isDialogCloseClick } from '../../utils/dialog-close.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
 import { FocusReturnController } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
@@ -190,6 +191,12 @@ export class LuiDrawer extends LitElement {
     }
   }
 
+  // On the panel rather than the host, so a closer in the trigger slot
+  // is never reached.
+  private _handleCloseClick(e: MouseEvent) {
+    if (isDialogCloseClick(e, this, 'data-drawer-close')) this.closeDrawer();
+  }
+
   render() {
     const size = this._size;
     return html`
@@ -233,6 +240,7 @@ export class LuiDrawer extends LitElement {
       <div
         id="${this._baseId}-panel"
         data-drawer-panel
+        @click="${this._handleCloseClick}"
         class="drawer drawer--${size}"
         tabindex="-1"
         role="dialog"
