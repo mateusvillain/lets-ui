@@ -103,7 +103,12 @@ export class LuiDropdownMenu extends LitElement {
     this._handleDocumentKeydown = (event: KeyboardEvent) => {
       if (!this.open) return;
       if (event.key === 'Escape') {
+        // Only a menu holding focus takes the key: a dialog around it stays
+        // open, and a menu left open behind a dialog does not pull focus out.
+        const holdsFocus = this.matches(':focus-within');
         this.closeMenu();
+        if (!holdsFocus) return;
+        event.preventDefault();
         this._focusTrigger();
       }
     };
