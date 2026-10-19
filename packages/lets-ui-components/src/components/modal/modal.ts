@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
+import { DialogStackController } from '../../utils/dialog-stack.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
 import { FocusReturnController } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
@@ -23,32 +24,19 @@ export class LuiModal extends LitElement {
 
   private _baseId: string;
   private _triggerTargets: Set<HTMLElement> = new Set();
-  private _handleDocumentKeydown!: (e: KeyboardEvent) => void;
 
   constructor() {
     super();
     new FocusReturnController(this, () => this._trigger);
+    new DialogStackController(this, {
+      escape: () => this.closeModal(),
+      tab: (event) => this._trapFocus(event),
+    });
     this._baseId = `lui-modal-${Math.random().toString(36).slice(2, 9)}`;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this._handleDocumentKeydown = (event: KeyboardEvent) => {
-      if (!this.open) return;
-      if (event.key === 'Escape') {
-        this.closeModal();
-        return;
-      }
-      if (event.key === 'Tab') {
-        this._trapFocus(event);
-      }
-    };
-    document.addEventListener('keydown', this._handleDocumentKeydown);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('keydown', this._handleDocumentKeydown);
     if (this.open) unlockBodyScroll();
   }
 
@@ -106,10 +94,11 @@ export class LuiModal extends LitElement {
   }
 
   openModal() {
-    // Close other open modals
+    // Close other open modals, but not one this modal sits in (through a
+    // Drawer, say): closing it would hide this one too.
     const openedModals = Array.from(
       document.querySelectorAll<LuiModal>('lui-modal')
-    ).filter((modal) => modal !== this && modal.open);
+    ).filter((modal) => modal !== this && modal.open && !modal.contains(this));
     openedModals.forEach((modal) => modal.closeModal());
 
     this.open = true;

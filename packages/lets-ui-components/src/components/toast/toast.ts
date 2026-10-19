@@ -174,7 +174,10 @@ export class LuiToast extends LitElement {
   }
 
   private _handleKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') this._dismiss();
+    if (e.key !== 'Escape') return;
+    // Consumed here: an open dialog stays open.
+    e.preventDefault();
+    this._dismiss();
   }
 
   private _handleActionSlotChange(e: Event) {
