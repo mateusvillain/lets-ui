@@ -102,6 +102,22 @@ describe.each([
     expect(deepActive()).toBe(defaultTrigger(outerEl));
   });
 
+  it('ignores a held Escape after the first press', async () => {
+    const { outerEl, innerEl } = await stack();
+
+    await escape(innerEl, outerEl);
+    document.activeElement.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        repeat: true,
+        bubbles: true,
+        composed: true,
+      })
+    );
+    await outerEl.updateComplete;
+    expect(outerEl.open).toBe(true);
+  });
+
   it('hands Escape back to the dialog below once the top one is removed', async () => {
     const { outerEl, innerEl } = await stack();
 
@@ -146,5 +162,75 @@ describe.each(['lui-modal', 'lui-drawer'])('a single %s', (tag) => {
 
     await escape(el, menu);
     expect(el.open).toBe(false);
+  });
+
+  it('leaves an Escape that ends an IME composition to the input', async () => {
+    const host = await mount(`<${tag}><input /></${tag}>`);
+    const el = host.querySelector(tag);
+    const input = el.querySelector('input');
+
+    await openFrom(defaultTrigger(el), el);
+    input.focus();
+    input.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        isComposing: true,
+        bubbles: true,
+        composed: true,
+      })
+    );
+    await el.updateComplete;
+    expect(el.open).toBe(true);
+  });
+
+  it('closes on Escape over a dropdown menu left open behind it', async () => {
+    const host = await mount(`
+      <lui-dropdown-menu>
+        <button slot="trigger">Actions</button>
+        <lui-menu-item slot="items" label="Edit"></lui-menu-item>
+      </lui-dropdown-menu>
+      <${tag}></${tag}>
+    `);
+    const el = host.querySelector(tag);
+    const menu = host.querySelector('lui-dropdown-menu');
+
+    menu.open = true;
+    await menu.updateComplete;
+    await frame();
+    // Opened by code, as a session timeout would: no click closes the menu.
+    el.open = true;
+    await el.updateComplete;
+    await frame();
+
+    await escape(el, menu);
+    expect(el.open).toBe(false);
+    expect(menu.open).toBe(false);
+  });
+});
+
+describe('a lui-modal inside a lui-drawer inside a lui-modal', () => {
+  it('keeps the modals around it open', async () => {
+    const host = await mount(`
+      <lui-modal title="Outer">
+        <lui-drawer title="Middle" hide-trigger>
+          <lui-modal title="Inner" hide-trigger></lui-modal>
+        </lui-drawer>
+      </lui-modal>
+    `);
+    const outer = host.querySelector('lui-modal');
+    const middle = outer.querySelector('lui-drawer');
+    const inner = middle.querySelector('lui-modal');
+
+    await openFrom(defaultTrigger(outer), outer);
+    middle.openDrawer();
+    await middle.updateComplete;
+    inner.openModal();
+    await inner.updateComplete;
+    expect(outer.open).toBe(true);
+
+    await escape(outer, middle, inner);
+    expect(inner.open).toBe(false);
+    expect(middle.open).toBe(true);
+    expect(outer.open).toBe(true);
   });
 });

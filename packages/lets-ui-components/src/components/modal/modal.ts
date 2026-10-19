@@ -94,10 +94,11 @@ export class LuiModal extends LitElement {
   }
 
   openModal() {
-    // Close other open modals
+    // Close other open modals, but not one this modal sits in (through a
+    // Drawer, say): closing it would hide this one too.
     const openedModals = Array.from(
       document.querySelectorAll<LuiModal>('lui-modal')
-    ).filter((modal) => modal !== this && modal.open);
+    ).filter((modal) => modal !== this && modal.open && !modal.contains(this));
     openedModals.forEach((modal) => modal.closeModal());
 
     this.open = true;

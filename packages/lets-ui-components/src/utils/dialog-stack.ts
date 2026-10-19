@@ -19,7 +19,9 @@ function handleKeydown(event: KeyboardEvent) {
   const top = stack[stack.length - 1];
   if (!top) return;
   if (event.key === 'Escape') {
-    if (event.defaultPrevented) return;
+    // A held key closes one dialog, not the whole stack; an Escape that
+    // cancels an IME composition belongs to the input.
+    if (event.defaultPrevented || event.repeat || event.isComposing) return;
     event.preventDefault();
     top.keys.escape();
   } else if (event.key === 'Tab') {
