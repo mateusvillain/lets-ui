@@ -24,6 +24,11 @@ export class LuiLink extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) visited = false;
   @property({ attribute: 'aria-label' }) ariaLabel = '';
+  // Set by a Tooltip that wraps this link and mirrored onto the inner
+  // control. Not reflected: the host has no role, and the attribute there would
+  // add a second, generic node to the accessibility tree.
+  @property({ attribute: 'aria-description' })
+  ariaDescription: string | null = null;
 
   private get _target(): string {
     return this.external ? '_blank' : this.target;
@@ -61,6 +66,7 @@ export class LuiLink extends LitElement {
       tabindex="${ifDefined(this.disabled ? '0' : undefined)}"
       aria-disabled="${ifDefined(this.disabled ? 'true' : undefined)}"
       aria-label="${ifDefined(this.ariaLabel || undefined)}"
+      aria-description="${ifDefined(this.ariaDescription || undefined)}"
       ><slot>${this.label}</slot>${this.external
         ? html`${externalIcon}<span
               style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"
