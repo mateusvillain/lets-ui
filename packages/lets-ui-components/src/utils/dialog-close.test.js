@@ -114,7 +114,7 @@ describe.each([
     expect(el.open).toBe(true);
   });
 
-  it('does not open or close from a closer in the trigger slot', async () => {
+  it('still opens from a trigger that carries the attribute', async () => {
     const host = await mount(
       `<${tag} title="T"><button slot="trigger" ${attr}>Open</button></${tag}>`
     );
@@ -126,6 +126,8 @@ describe.each([
     expect(el.open).toBe(true);
   });
 
+  // Set through `open`: openModal() closes every other modal, the parent
+  // included, so this is the only way two nested modals are open at once.
   it('closes only the nested dialog that owns the closer', async () => {
     const host = await mount(`
       <${tag} id="outer" title="Outer">
@@ -146,6 +148,71 @@ describe.each([
 
     expect(inner.open).toBe(false);
     expect(outer.open).toBe(true);
+  });
+
+  it('ignores a closer wrapped around a nested dialog', async () => {
+    const host = await mount(`
+      <${tag} id="outer" title="Outer">
+        <div ${attr}>
+          <${tag} id="inner" title="Inner" hide-trigger>
+            <button id="inside">Inside</button>
+          </${tag}>
+        </div>
+      </${tag}>
+    `);
+    const outer = host.querySelector('#outer');
+    const inner = host.querySelector('#inner');
+    outer.open = true;
+    inner.open = true;
+    await outer.updateComplete;
+    await inner.updateComplete;
+
+    host.querySelector('#inside').click();
+    await outer.updateComplete;
+
+    expect(outer.open).toBe(true);
+    expect(inner.open).toBe(true);
+  });
+
+  it('ignores the attribute on the host itself', async () => {
+    const host = await mount(
+      `<${tag} title="T" ${attr}><button id="body">Body</button></${tag}>`
+    );
+    const el = host.querySelector(tag);
+    await open(el);
+
+    host.querySelector('#body').click();
+    await el.updateComplete;
+
+    expect(el.open).toBe(true);
+  });
+
+  it('ignores a loading lui-button', async () => {
+    const host = await mount(
+      `<${tag} title="T"><lui-button slot="actions" label="Cancel" loading ${attr}></lui-button></${tag}>`
+    );
+    const el = host.querySelector(tag);
+    await open(el);
+
+    host.querySelector('lui-button').shadowRoot.querySelector('button').click();
+    await el.updateComplete;
+
+    expect(el.open).toBe(true);
+  });
+
+  it('ignores a click whose default was prevented', async () => {
+    const host = await mount(
+      `<${tag} title="T"><button slot="actions" ${attr}>Cancel</button></${tag}>`
+    );
+    const el = host.querySelector(tag);
+    await open(el);
+    const closer = host.querySelector(`[${attr}]`);
+    closer.addEventListener('click', (e) => e.preventDefault());
+
+    closer.click();
+    await el.updateComplete;
+
+    expect(el.open).toBe(true);
   });
 
   it(`ignores the ${other} attribute`, async () => {

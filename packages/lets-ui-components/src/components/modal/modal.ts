@@ -167,7 +167,8 @@ export class LuiModal extends LitElement {
   // On the dialog rather than the host, so a closer in the trigger slot
   // is never reached.
   private _handleCloseClick(e: MouseEvent) {
-    if (isDialogCloseClick(e, this, 'data-modal-close')) this.closeModal();
+    if (isDialogCloseClick(e, this, 'data-modal-close', LuiModal))
+      this.closeModal();
   }
 
   render() {

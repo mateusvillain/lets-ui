@@ -67,6 +67,7 @@ Marque com `data-drawer-close` o botão que só fecha o drawer — um "Cancelar"
 
 - O atributo fecha o `lui-drawer` mais próximo acima dele: dentro de um `lui-drawer` aninhado, fecha só esse.
 - No slot `trigger`, o atributo é ignorado.
+- Não fecha quando o clique passa por um controle com `aria-disabled="true"` (um `lui-button` em `loading`) ou quando um handler chama `event.preventDefault()`.
 - Ações que fazem algo antes de fechar (como "Confirmar") chamam `closeDrawer()` no próprio handler.
 
 ### Contrato ARIA do trigger

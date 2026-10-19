@@ -194,7 +194,8 @@ export class LuiDrawer extends LitElement {
   // On the panel rather than the host, so a closer in the trigger slot
   // is never reached.
   private _handleCloseClick(e: MouseEvent) {
-    if (isDialogCloseClick(e, this, 'data-drawer-close')) this.closeDrawer();
+    if (isDialogCloseClick(e, this, 'data-drawer-close', LuiDrawer))
+      this.closeDrawer();
   }
 
   render() {
