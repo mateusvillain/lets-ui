@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { isDialogCloseClick } from '../../utils/dialog-close.js';
+import { DialogStackController } from '../../utils/dialog-stack.js';
 import { syncDialogTriggers } from '../../utils/dialog-trigger.js';
 import { FocusReturnController } from '../../utils/focus-return.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
@@ -26,32 +27,19 @@ export class LuiDrawer extends LitElement {
 
   private _baseId: string;
   private _triggerTargets: Set<HTMLElement> = new Set();
-  private _handleDocumentKeydown!: (e: KeyboardEvent) => void;
 
   constructor() {
     super();
     new FocusReturnController(this, () => this._trigger);
+    new DialogStackController(this, {
+      escape: () => this.closeDrawer(),
+      tab: (event) => this._trapFocus(event),
+    });
     this._baseId = `lui-drawer-${Math.random().toString(36).slice(2, 9)}`;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this._handleDocumentKeydown = (event: KeyboardEvent) => {
-      if (!this.open) return;
-      if (event.key === 'Escape') {
-        this.closeDrawer();
-        return;
-      }
-      if (event.key === 'Tab') {
-        this._trapFocus(event);
-      }
-    };
-    document.addEventListener('keydown', this._handleDocumentKeydown);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('keydown', this._handleDocumentKeydown);
     if (this.open) unlockBodyScroll();
   }
 

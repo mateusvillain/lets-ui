@@ -99,7 +99,13 @@ export class LuiCodeBlock extends LitElement {
   // wherever it was. One listener serves every block on the page.
   private static _handleEscape = (event: KeyboardEvent) => {
     if (event.key !== 'Escape') return;
-    instances.forEach((block) => block._dismissTooltip());
+    let dismissed = false;
+    instances.forEach((block) => {
+      if (block._dismissTooltip()) dismissed = true;
+    });
+    // Consumed when it put a tooltip away: a dialog holding the block stays
+    // open until the next Escape.
+    if (dismissed) event.preventDefault();
   };
 
   @property() variant = 'default';
@@ -242,9 +248,14 @@ export class LuiCodeBlock extends LitElement {
     }
   }
 
-  private _dismissTooltip() {
+  // Whether a shown tooltip was put away.
+  private _dismissTooltip(): boolean {
     const copy = this.shadowRoot?.querySelector('.code-block__copy');
-    if (copy?.matches(':hover, :focus-within')) this._tooltipDismissed = true;
+    if (this._tooltipDismissed || !copy?.matches(':hover, :focus-within')) {
+      return false;
+    }
+    this._tooltipDismissed = true;
+    return true;
   }
 
   private _restoreTooltip() {
