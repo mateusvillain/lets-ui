@@ -39,7 +39,8 @@ acompanha o conteúdo quando ele muda depois. Outros componentes do Let's UI, co
   repassada ao `<button>` ou `<a>` interno, que é quem o leitor de tela anuncia. O host não recebe o
   atributo, para não aparecer como um segundo nó na árvore de acessibilidade.
 - **Um texto igual ao nome do trigger não vira descrição.** Quando `text` repete o nome do controle
-  (o `aria-label` ou, sem ele, o texto visível, ignorando maiúsculas e espaços nas pontas), o
+  (`aria-labelledby`, `aria-label` ou, sem eles, o texto que ele renderiza, ignorando maiúsculas e
+  diferenças de espaço), o
   Tooltip não define `aria-description`, e o leitor de tela anuncia o nome uma vez só. Se `text`
   ou o nome mudar depois, a descrição acompanha.
 - O tooltip abre com o ponteiro sobre o trigger e com o foco de teclado nele.
