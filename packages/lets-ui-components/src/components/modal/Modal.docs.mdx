@@ -72,6 +72,12 @@ Ao abrir, o foco vai para o dialog. Ao fechar — por Escape, botão de fechar, 
 - No Safari, clicar com o mouse não foca botões. Um botão externo que abre o componente por clique (com `hide-trigger`) não é registrado como origem, e o foco não volta para ele. Os triggers do próprio componente não têm essa limitação: são o destino de reserva.
 - Remover o componente da página enquanto está aberto também devolve o foco.
 
+### Diálogos empilhados
+
+Com diálogos abertos um sobre o outro (um Modal aberto de dentro de outro Drawer, por exemplo), Escape fecha só o do topo, e só ele prende o foco com Tab. O foco volta ao trigger dentro do diálogo que continua aberto; um segundo Escape fecha o de baixo.
+
+Um componente dentro do diálogo que usa Escape — um Dropdown Menu aberto, o tooltip do botão de copiar de um Code Block — consome a tecla: Escape fecha esse componente, e o diálogo continua aberto.
+
 ### Classe CSS
 
 ```html

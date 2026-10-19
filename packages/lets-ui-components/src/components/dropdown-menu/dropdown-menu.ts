@@ -103,6 +103,8 @@ export class LuiDropdownMenu extends LitElement {
     this._handleDocumentKeydown = (event: KeyboardEvent) => {
       if (!this.open) return;
       if (event.key === 'Escape') {
+        // Consumed here: a dialog holding the menu stays open.
+        event.preventDefault();
         this.closeMenu();
         this._focusTrigger();
       }
