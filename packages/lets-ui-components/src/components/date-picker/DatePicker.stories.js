@@ -91,6 +91,43 @@ export default {
         defaultValue: { summary: 'Enter a valid date.' },
       },
     },
+    formatText: {
+      control: 'text',
+      description:
+        'Formato da digitação, com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'formato do locale, como dd / mm / yyyy' },
+      },
+    },
+    rangeErrorText: {
+      control: 'text',
+      description: 'Mensagem de erro quando a data fica fora de `min` e `max`',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'Enter a date within the allowed period.' },
+      },
+    },
+    rangeOrderText: {
+      control: 'text',
+      description:
+        'Mensagem de erro, com `editable range`, quando a data final é anterior à inicial',
+      table: {
+        category: 'Textos',
+        defaultValue: {
+          summary: "The end date can't be before the start date.",
+        },
+      },
+    },
+    rangeStartText: {
+      control: 'text',
+      description:
+        'Anúncio para leitores de tela, com `range`, depois que a primeira ponta é escolhida',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'Start date selected. Choose the end date.' },
+      },
+    },
     dialogLabel: {
       control: 'text',
       description:
@@ -133,6 +170,10 @@ const Template = ({
   disabled,
   optionalText,
   badInputText,
+  formatText,
+  rangeErrorText,
+  rangeOrderText,
+  rangeStartText,
   dialogLabel,
   previousMonthLabel,
   nextMonthLabel,
@@ -157,6 +198,10 @@ const Template = ({
     disabled ? 'disabled' : '',
     optionalText ? `optional-text="${optionalText}"` : '',
     badInputText ? `bad-input-text="${badInputText}"` : '',
+    formatText ? `format-text="${formatText}"` : '',
+    rangeErrorText ? `range-error-text="${rangeErrorText}"` : '',
+    rangeOrderText ? `range-order-text="${rangeOrderText}"` : '',
+    rangeStartText ? `range-start-text="${rangeStartText}"` : '',
     dialogLabel ? `dialog-label="${dialogLabel}"` : '',
     previousMonthLabel ? `previous-month-label="${previousMonthLabel}"` : '',
     nextMonthLabel ? `next-month-label="${nextMonthLabel}"` : '',
@@ -193,6 +238,10 @@ DatePicker.args = {
   disabled: false,
   optionalText: '(optional)',
   badInputText: 'Enter a valid date.',
+  formatText: '',
+  rangeErrorText: 'Enter a date within the allowed period.',
+  rangeOrderText: "The end date can't be before the start date.",
+  rangeStartText: 'Start date selected. Choose the end date.',
   dialogLabel: 'Choose date',
   previousMonthLabel: 'Previous month',
   nextMonthLabel: 'Next month',
@@ -238,7 +287,7 @@ export const Editable = () => `
       editable
       label="Data de nascimento"
       locale="pt-BR"
-      placeholder="dd / mm / aaaa"
+      format-text="dd / mm / aaaa"
       dialog-label="Escolher data"
       bad-input-text="Digite uma data válida."
     ></lui-date-picker>
@@ -248,7 +297,9 @@ export const Editable = () => `
       label="Período"
       locale="pt-BR"
       value="2026-01-16/2026-01-21"
+      format-text="dd / mm / aaaa – dd / mm / aaaa"
       dialog-label="Escolher datas"
+      range-order-text="A data final não pode ser anterior à inicial."
     ></lui-date-picker>
   </div>
 `;

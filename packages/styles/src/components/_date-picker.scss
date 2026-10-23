@@ -144,6 +144,12 @@
   border-radius: radius(md);
   box-shadow: elevation(base);
 
+  // Two months side by side are about 500px wide, more than a phone has, so
+  // a range stacks them on the mobile range.
+  @include media-down('1xs') {
+    flex-direction: column;
+  }
+
   &__month {
     @include flex(column, stretch, flex-start, fluid(8));
   }

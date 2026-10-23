@@ -1,6 +1,6 @@
 import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
 import { afterEach, describe, expect, it } from 'vitest';
-import { userEvent } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 import { LuiDatePicker } from './date-picker.ts';
 import {
   addMonths,
@@ -381,6 +381,40 @@ describe('forms', () => {
     expect(el.closest('form').checkValidity()).toBe(false);
   });
 
+  it('gives each validity state its own message', async () => {
+    const empty = await mount('name="start" required', inForm);
+    expect(empty.closest('form').checkValidity()).toBe(false);
+    await empty.updateComplete;
+    expect($(empty, '.date-picker__message').textContent.trim()).toBe(
+      'This field is required.'
+    );
+
+    const early = await mount(
+      'name="start" value="2026-01-01" min="2026-01-10"',
+      inForm
+    );
+    expect(early.closest('form').checkValidity()).toBe(false);
+    await early.updateComplete;
+    expect($(early, '.date-picker__message').textContent.trim()).toBe(
+      'Enter a date within the allowed period.'
+    );
+
+    const late = await mount(
+      'name="start" value="2026-01-20" max="2026-01-10" range-error-text="Fora do período."',
+      inForm
+    );
+    expect(late.closest('form').checkValidity()).toBe(false);
+    await late.updateComplete;
+    expect($(late, '.date-picker__message').textContent.trim()).toBe(
+      'Fora do período.'
+    );
+  });
+
+  it('does not mark the button control as required', async () => {
+    const el = await mount('required label="Check-in"');
+    expect(trigger(el).hasAttribute('aria-required')).toBe(false);
+  });
+
   it('clears on reset', async () => {
     const el = await mount('name="start" value="2026-01-16"', inForm);
     el.closest('form').reset();
@@ -421,16 +455,52 @@ describe('range', () => {
   it('announces both months from a single live region', async () => {
     const el = await mount(RANGE);
     await openWithClick(el);
-    const regions = el.shadowRoot.querySelectorAll('[aria-live]');
-    expect(regions).toHaveLength(1);
-    expect(regions[0].textContent.trim().replace(/\s+/g, ' ')).toBe(
+    const region = $(el, '.date-picker-calendar__months-status');
+    expect(region.getAttribute('aria-live')).toBe('polite');
+    expect(region.textContent.trim().replace(/\s+/g, ' ')).toBe(
       'January – February 2026'
     );
     await userEvent.click($(el, '.date-picker-calendar__nav--next'));
     await el.updateComplete;
-    expect(regions[0].textContent.trim().replace(/\s+/g, ' ')).toBe(
+    expect(region.textContent.trim().replace(/\s+/g, ' ')).toBe(
       'February – March 2026'
     );
+  });
+
+  it('announces the start of a range until the end is picked', async () => {
+    const el = await mount(RANGE);
+    await openWithClick(el);
+    const region = $(el, '.date-picker-calendar__range-status');
+    expect(region.getAttribute('aria-live')).toBe('polite');
+    expect(region.textContent.trim()).toBe('');
+    await userEvent.keyboard('{Enter}');
+    await el.updateComplete;
+    expect(region.textContent.trim()).toBe(
+      'Start date selected. Choose the end date.'
+    );
+    await userEvent.keyboard('{ArrowRight}');
+    await el.updateComplete;
+    expect(region.textContent.trim()).toBe(
+      'Start date selected. Choose the end date.'
+    );
+  });
+
+  it('names the field with the period in order after a backwards pick', async () => {
+    const el = await mount('range label="Stay" value="2026-01-16/2026-01-21"');
+    await openWithClick(el);
+    await userEvent.click(day(el, '2026-01-20'));
+    await el.updateComplete;
+    await userEvent.click(day(el, '2026-01-12'));
+    await el.updateComplete;
+    expect(el.value).toBe('2026-01-12/2026-01-20');
+    expect(el.shadowRoot.activeElement).toBe(trigger(el));
+    const name = trigger(el)
+      .getAttribute('aria-labelledby')
+      .split(' ')
+      .map((id) => el.shadowRoot.getElementById(id).textContent.trim())
+      .join(' ')
+      .replace(/\s/g, ' ');
+    expect(name).toBe('Stay Jan 12 – 20, 2026');
   });
 
   it('lines the two grids up on the same number of weeks', async () => {
@@ -497,6 +567,21 @@ describe('range', () => {
     expect(
       dayClasses(el, '2026-01-16').filter((c) => c.includes('--join-'))
     ).toEqual([]);
+  });
+
+  it('stacks the two months on a phone-sized viewport', async () => {
+    const direction = (el) =>
+      getComputedStyle($(el, '.date-picker-calendar')).flexDirection;
+    const el = await mount(RANGE);
+    await openWithClick(el);
+    try {
+      await page.viewport(1024, 768);
+      expect(direction(el)).toBe('row');
+      await page.viewport(375, 812);
+      expect(direction(el)).toBe('column');
+    } finally {
+      await page.viewport(1024, 768);
+    }
   });
 
   it('keeps a single tab stop across both months', async () => {
@@ -759,6 +844,51 @@ describe('editable', () => {
     await type(el, '2101202616012026');
     expect(el.value).toBe('');
     expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect(input(el).value).toBe('21 / 01 / 2026 – 16 / 01 / 2026');
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      "The end date can't be before the start date."
+    );
+  });
+
+  it('keeps the impossible-date message for a reversed but impossible range', async () => {
+    const el = await mount(
+      'editable range locale="pt-BR" name="stay"',
+      (html) => `<form>${html}</form>`
+    );
+    await type(el, '3002202616012026');
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      'Enter a valid date.'
+    );
+  });
+
+  it('shows the format below the field when there is no hint', async () => {
+    const el = await mount('editable locale="pt-BR"');
+    const message = $(el, '.date-picker__message');
+    expect(message.textContent.trim()).toBe('dd / mm / yyyy');
+    // Read once, from the message, not again from the hidden format.
+    expect(input(el).getAttribute('aria-describedby')).toBe(message.id);
+    await type(el, '16');
+    expect(message.textContent.trim()).toBe('dd / mm / yyyy');
+  });
+
+  it('translates the format everywhere with format-text', async () => {
+    const el = await mount(
+      'editable locale="pt-BR" format-text="dd / mm / aaaa"'
+    );
+    expect(input(el).placeholder).toBe('dd / mm / aaaa');
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      'dd / mm / aaaa'
+    );
+    el.hint = 'Hint';
+    await el.updateComplete;
+    const texts = input(el)
+      .getAttribute('aria-describedby')
+      .split(' ')
+      .map((id) => el.shadowRoot.getElementById(id).textContent.trim());
+    expect(texts).toEqual(['dd / mm / aaaa', 'Hint']);
   });
 
   it('opens the calendar from the button and returns focus to it', async () => {

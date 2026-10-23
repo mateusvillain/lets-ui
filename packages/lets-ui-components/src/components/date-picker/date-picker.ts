@@ -89,6 +89,15 @@ export class LuiDatePicker extends LitElement {
   @property({ attribute: 'error-text' }) errorText = 'This field is required.';
   @property({ attribute: 'bad-input-text' }) badInputText =
     'Enter a valid date.';
+  // The typed format, as the reader should see it. Empty means the locale's
+  // pattern with English letters, like `dd / mm / yyyy`.
+  @property({ attribute: 'format-text' }) formatText = '';
+  @property({ attribute: 'range-error-text' }) rangeErrorText =
+    'Enter a date within the allowed period.';
+  @property({ attribute: 'range-order-text' }) rangeOrderText =
+    "The end date can't be before the start date.";
+  @property({ attribute: 'range-start-text' }) rangeStartText =
+    'Start date selected. Choose the end date.';
   @property({ attribute: 'dialog-label' }) dialogLabel = 'Choose date';
   @property({ attribute: 'previous-month-label' }) previousMonthLabel =
     'Previous month';
@@ -182,6 +191,8 @@ export class LuiDatePicker extends LitElement {
       changed.has('required') ||
       changed.has('errorText') ||
       changed.has('badInputText') ||
+      changed.has('rangeErrorText') ||
+      changed.has('rangeOrderText') ||
       changed.has('_text')
     ) {
       this._syncFormValue();
@@ -232,6 +243,41 @@ export class LuiDatePicker extends LitElement {
   // Text that spells no date — partial or impossible, like February 30.
   get _badInput() {
     return this.editable && this._text.trim() !== '' && !this._selection;
+  }
+
+  // Two whole, real dates typed the wrong way round. It is bad input too, but
+  // with a message of its own, since the dates themselves are fine.
+  get _reversedRange() {
+    if (!this.range || !this._badInput) return false;
+    const mask = this._mask;
+    const digits = this._text.replace(/\D/g, '');
+    const dates =
+      digits.length === maskCapacity(mask) ? readMask(digits, mask) : null;
+    return !!dates && dates[0] > dates[1];
+  }
+
+  // The validity flag the value breaks, with the message that explains it, in
+  // the order the browser would check them.
+  get _invalidity(): { flags: ValidityStateFlags; message: string } | null {
+    if (this._badInput) {
+      return {
+        flags: { badInput: true },
+        message: this._reversedRange ? this.rangeOrderText : this.badInputText,
+      };
+    }
+    const selection = this._selection;
+    if (this.required && !selection) {
+      return { flags: { valueMissing: true }, message: this.errorText };
+    }
+    const min = this._minDate;
+    const max = this._maxDate;
+    if (selection && min && selection.start < min) {
+      return { flags: { rangeUnderflow: true }, message: this.rangeErrorText };
+    }
+    if (selection && max && selection.end > max) {
+      return { flags: { rangeOverflow: true }, message: this.rangeErrorText };
+    }
+    return null;
   }
 
   // The control that opens the calendar and takes the focus back when it
@@ -305,6 +351,10 @@ export class LuiDatePicker extends LitElement {
     return this.range ? rangeMask(mask) : mask;
   }
 
+  get _formatText() {
+    return this.formatText || maskPattern(this._mask);
+  }
+
   private _maskText({ start, end }: DateRange) {
     const mask = this._mask;
     return applyMask(
@@ -335,32 +385,12 @@ export class LuiDatePicker extends LitElement {
           : toISODate(selection.start)
         : null
     );
-    const min = this._minDate;
-    const max = this._maxDate;
-    const anchor = this._validityAnchor;
-    if (this._badInput) {
+    const invalidity = this._invalidity;
+    if (invalidity) {
       this._internals.setValidity(
-        { badInput: true },
-        this.badInputText,
-        anchor
-      );
-    } else if (this.required && !selection) {
-      this._internals.setValidity(
-        { valueMissing: true },
-        this.errorText,
-        anchor
-      );
-    } else if (selection && min && selection.start < min) {
-      this._internals.setValidity(
-        { rangeUnderflow: true },
-        this.errorText,
-        anchor
-      );
-    } else if (selection && max && selection.end > max) {
-      this._internals.setValidity(
-        { rangeOverflow: true },
-        this.errorText,
-        anchor
+        invalidity.flags,
+        invalidity.message,
+        this._validityAnchor
       );
     } else {
       this._internals.setValidity({});
@@ -772,6 +802,12 @@ export class LuiDatePicker extends LitElement {
       ...months.map((month) => monthWeeks(month, this._firstDay).length)
     );
 
+    // A range is picked in two steps, and the first leaves nothing a screen
+    // reader would read on its own, so a second region announces it. It
+    // changes only when the start is picked, never with the months, so the
+    // two regions do not speak over each other. The second step needs no
+    // region: the calendar closes and the focus lands on the field, named with
+    // the period it now holds, ends in order.
     return html`
       <div
         id="${this._baseId}-dialog"
@@ -784,8 +820,17 @@ export class LuiDatePicker extends LitElement {
         <div class="date-picker-calendar">
           ${months.map((month, i) => this._renderMonth(month, i, weekCount))}
         </div>
-        <div class="date-picker-calendar__sr-only" aria-live="polite">
+        <div
+          class="date-picker-calendar__sr-only date-picker-calendar__months-status"
+          aria-live="polite"
+        >
           ${this._formatViewMonths(months)}
+        </div>
+        <div
+          class="date-picker-calendar__sr-only date-picker-calendar__range-status"
+          aria-live="polite"
+        >
+          ${this.range && this._anchor ? this.rangeStartText : ''}
         </div>
       </div>
     `;
@@ -819,7 +864,6 @@ export class LuiDatePicker extends LitElement {
           message ? `${this._baseId}-message` : undefined
         )}"
         aria-invalid="${this.error ? 'true' : 'false'}"
-        aria-required="${this.required ? 'true' : 'false'}"
         ?disabled="${this.disabled}"
         @click="${this._handleTriggerClick}"
         @keydown="${this._handleTriggerKeydown}"
@@ -842,13 +886,17 @@ export class LuiDatePicker extends LitElement {
     const formatId = `${this._baseId}-format`;
     // The format is part of the description, not only the placeholder: the
     // placeholder is gone once typing starts, and an author may replace it.
-    const describedBy = [formatId, message ? `${this._baseId}-message` : '']
+    // When the message below the field already shows it, it is read once.
+    const describedBy = [
+      this._showsFormat ? '' : formatId,
+      message ? `${this._baseId}-message` : '',
+    ]
       .filter(Boolean)
       .join(' ');
 
     return html`
       <span id="${formatId}" class="date-picker__sr-only"
-        >${maskPattern(this._mask)}</span
+        >${this._formatText}</span
       >
       <div class="date-picker__control">
         <input
@@ -858,7 +906,7 @@ export class LuiDatePicker extends LitElement {
           inputmode="numeric"
           autocomplete="off"
           .value="${live(this._text)}"
-          placeholder="${this.placeholder || maskPattern(this._mask)}"
+          placeholder="${this.placeholder || this._formatText}"
           aria-label="${ifDefined(this.ariaLabel || undefined)}"
           aria-describedby="${describedBy}"
           aria-invalid="${this.error ? 'true' : 'false'}"
@@ -888,9 +936,15 @@ export class LuiDatePicker extends LitElement {
     `;
   }
 
+  // With `editable` and no hint, the format takes the hint's place, so it stays
+  // on screen once the placeholder is gone.
+  get _showsFormat() {
+    return this.editable && !this.error && !this.hint;
+  }
+
   get _message() {
-    if (!this.error) return this.hint;
-    return this._badInput ? this.badInputText : this.errorText;
+    if (this.error) return this._invalidity?.message ?? this.errorText;
+    return this._showsFormat ? this._formatText : this.hint;
   }
 
   render() {
