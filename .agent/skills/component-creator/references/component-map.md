@@ -16,6 +16,7 @@ Usar este mapa para decidir se o componente já existe e em qual formato.
 | button        | `_button.scss`        | `button.js`        | cobertura completa                                            |
 | card          | `_card.scss`          | `card.js`          | cobertura completa                                            |
 | checkbox      | `_checkbox.scss`      | `checkbox.js`      | cobertura completa                                            |
+| date-picker   | `_date-picker.scss`   | `date-picker.ts`   | campo + calendário; data ou range; min/max; teclado APG       |
 | divider       | `_divider.scss`       | `divider.js`       | cobertura completa                                            |
 | drawer        | `_drawer.scss`        | `drawer.js`        | cobertura completa; slide-in da direita; backdrop animado     |
 | dropdown-menu | `_dropdown-menu.scss` | `dropdown-menu.js` | inclui `lui-menu-item`; suporte a shortcut, submenu e divisor |

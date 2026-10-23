@@ -1,0 +1,268 @@
+@use 'sass:map';
+@use '../utilities/functions' as *;
+@use '../utilities/tokens.map' as *;
+@use '../utilities/mixins' as *;
+@use 'field';
+
+// The trigger is a field like any other — same border, states and sizes as the
+// Input — but a button, since the value is picked rather than typed. With
+// `editable`, the control holds a text box and a button that opens the
+// calendar.
+.date-picker {
+  @include field.wrapper;
+
+  &__head {
+    @include field.head;
+  }
+
+  &__label-wrap {
+    @include field.label-wrap;
+  }
+
+  &__optional,
+  &__message {
+    @include field.secondary-text;
+  }
+
+  // The popover is positioned against the control alone, so a hint or an
+  // error message below it does not push the calendar down.
+  &__anchor {
+    position: relative;
+  }
+
+  &__control {
+    @include field.control;
+
+    font: inherit;
+    text-align: start;
+    margin: 0;
+    outline: 0;
+
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+  }
+
+  &__value {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: text(body);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__input {
+    @include field.input-element;
+
+    &::placeholder {
+      color: text(caption);
+    }
+  }
+
+  &__toggle {
+    @include center;
+
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    border-radius: radius(xs);
+    outline: 0;
+    cursor: pointer;
+
+    // A ring of its own, so focus on the button reads apart from focus on the
+    // text box, which lights the whole control.
+    &:focus-visible {
+      box-shadow: focus-ring(primary);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &__sr-only {
+    @include sr-only;
+  }
+
+  &--placeholder .date-picker__value {
+    color: text(caption);
+  }
+
+  &__icon {
+    display: flex;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: icon(neutral);
+
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: currentcolor;
+    }
+  }
+
+  &__popover {
+    position: absolute;
+    top: calc(100% + fluid(8));
+    left: 0;
+    z-index: 100;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  @include field.states(
+    'date-picker',
+    ':is(.date-picker__control, .date-picker__input)'
+  );
+}
+
+@each $key, $props in field.$size {
+  .date-picker--#{$key} {
+    @include field.size-body('date-picker', $props);
+
+    .date-picker__value,
+    .date-picker__input {
+      @include font-scale(map.get($props, body));
+    }
+  }
+}
+
+// One surface holding one month, or two side by side for a range.
+.date-picker-calendar {
+  @include flex(row, flex-start, flex-start, fluid(16));
+
+  width: max-content;
+  box-sizing: border-box;
+  padding: fluid(8);
+  background-color: bg(surface, secondary);
+  border-radius: radius(md);
+  box-shadow: elevation(base);
+
+  // Two months side by side are about 500px wide, more than a phone has, so
+  // a range stacks them on the mobile range.
+  @include media-down('1xs') {
+    flex-direction: column;
+  }
+
+  &__month {
+    @include flex(column, stretch, flex-start, fluid(8));
+  }
+
+  &__header {
+    @include flex(row, center, space-between, fluid(8));
+  }
+
+  &__title {
+    @include font-scale(body--lg);
+
+    flex: 1 1 auto;
+    margin: 0;
+    color: text(body);
+    text-align: center;
+  }
+
+  &__nav,
+  &__nav-spacer {
+    flex-shrink: 0;
+    width: fixed(40);
+    height: fixed(40);
+  }
+
+  &__nav {
+    @include center;
+
+    box-sizing: border-box;
+    padding: fluid(8);
+    margin: 0;
+    border: 0;
+    border-radius: radius(md);
+    color: icon(neutral);
+    cursor: pointer;
+
+    @include states(primary);
+
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: currentcolor;
+    }
+  }
+
+  &__grid {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  &__weekday {
+    @include font-scale(body--md);
+
+    padding: fluid(4);
+    color: text(caption);
+    text-align: center;
+  }
+
+  &__cell {
+    padding: 0;
+  }
+
+  &__day {
+    @include font-scale(body--lg);
+
+    display: block;
+    width: fixed(32);
+    height: fixed(32);
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: radius(md);
+    color: text(body);
+    text-align: center;
+    cursor: pointer;
+
+    @include states(primary);
+
+    &--outside {
+      color: text(caption);
+    }
+
+    // Not in the prototype, which has no today variant. Primary text keeps it
+    // apart from its neighbours without competing with the selected fill.
+    &--today {
+      color: text(primary);
+      font-weight: weight(semibold);
+    }
+
+    // The days between the two ends of a range.
+    &--in-range {
+      @include state-base(bg(surface, primary));
+    }
+
+    &--selected {
+      @include state-base(bg(container, primary));
+
+      color: text(inverse);
+    }
+
+    // Corners shared with the next highlighted day in the row. Logical
+    // properties, so the band joins the right way in right-to-left too.
+    &--join-start {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+
+    &--join-end {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+  }
+
+  &__sr-only {
+    @include sr-only;
+  }
+}

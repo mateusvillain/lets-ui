@@ -1,0 +1,324 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as DatePickerStories from './DatePicker.stories';
+
+<Meta of={DatePickerStories} />
+
+# Date Picker
+
+O Date Picker seleciona uma data num calendário. Com `range`, seleciona um
+intervalo. Use quando a data é próxima ou quando o dia da semana importa, como
+em agendamentos, reservas e prazos. Para datas distantes que a pessoa já sabe,
+como a data de nascimento, ative `editable` para que a data possa ser digitada.
+
+O campo tem a mesma anatomia, os mesmos estados e os mesmos tamanhos do Input.
+O valor é uma string ISO 8601 em qualquer idioma: `YYYY-MM-DD` para uma data e
+`YYYY-MM-DD/YYYY-MM-DD` para um intervalo.
+
+<Canvas of={DatePickerStories.DatePicker} />
+<Controls of={DatePickerStories.DatePicker} />
+
+## Calendário aberto
+
+<Canvas of={DatePickerStories.Open} />
+
+## Range
+
+Use `range` para escolher um período, como uma hospedagem, férias ou o filtro
+de um relatório. O calendário mostra dois meses lado a lado, então um intervalo
+que passa de um mês para o outro aparece inteiro. O primeiro clique marca uma
+ponta e o segundo marca a outra, em qualquer ordem. Entre os dois cliques, o
+intervalo acompanha o ponteiro ou o foco do teclado. `Esc` cancela a seleção
+incompleta e mantém o valor anterior.
+
+Se a segunda data vem antes da primeira, ela vira o início e a primeira vira o
+fim. Ao fechar, o foco volta ao campo, que é anunciado com o período já em
+ordem. As duas pontas fazem parte do período: em `2026-01-16/2026-01-21`, o
+dia 21 está incluído.
+
+Em telas menores que o breakpoint `sm`, os dois meses ficam um embaixo do
+outro.
+
+O campo mostra as duas pontas com `Intl.DateTimeFormat.formatRange`, que não
+repete o que elas têm em comum: `Jan 16 – 21, 2026`.
+
+<Canvas of={DatePickerStories.Range} />
+
+## Digitação
+
+Com `editable`, o campo vira uma caixa de texto e o calendário abre pelo botão
+ao lado. A pessoa digita só os números. A máscara põe as barras, os pontos ou
+os hífens na ordem do `locale`. O formato esperado aparece no placeholder e,
+sem `hint`, também abaixo do campo, para continuar visível depois que a pessoa
+começa a digitar. Barras e hífens ganham um espaço de cada lado, para separar os
+campos:
+
+| `locale` | Máscara          |
+| -------- | ---------------- |
+| `pt-BR`  | `dd / mm / yyyy` |
+| `en-US`  | `mm / dd / yyyy` |
+| `de-DE`  | `dd.mm.yyyy`     |
+| `ja-JP`  | `yyyy / mm / dd` |
+
+Com `range`, o campo recebe as duas datas: `dd / mm / yyyy – dd / mm / yyyy`.
+
+O `value` só muda quando o texto forma uma data completa e válida, e cada
+mudança emite `change`. Enquanto o texto está incompleto ou forma uma data que
+não existe, como 30/02, o `value` fica vazio e o campo reporta `badInput`, com
+a mensagem de `bad-input-text`. Com `range`, duas datas válidas em que a final
+vem antes da inicial também reportam `badInput`, mas com a mensagem de
+`range-order-text`. Em todos os casos, o texto digitado fica no campo para ser
+corrigido. Colar uma data em ISO 8601, como `2026-01-16`, também funciona.
+
+Para traduzir as letras do formato, use `format-text`, como em
+`format-text="dd / mm / aaaa"`. Ele vale para o placeholder, para o texto
+abaixo do campo e para a descrição acessível. Com `hint`, inclua o formato no
+texto do hint, já que ele toma o lugar do formato abaixo do campo.
+
+<Canvas of={DatePickerStories.Editable} />
+
+## Min e max
+
+Use `min` e `max` para limitar as datas que podem ser escolhidas. Por exemplo,
+uma reserva que não pode ser no passado ou um prazo que não pode passar do fim
+do trimestre.
+
+<Canvas of={DatePickerStories.MinMax} />
+
+## Error
+
+<Canvas of={DatePickerStories.Error} />
+
+## Disabled
+
+<Canvas of={DatePickerStories.Disabled} />
+
+## Sizes
+
+<Canvas of={DatePickerStories.Sizes} />
+
+## Idioma e início da semana
+
+`locale` recebe uma tag BCP 47 e define o idioma do mês no cabeçalho, dos dias
+da semana, dos nomes acessíveis dos dias e do texto do campo. O texto do campo
+segue a convenção de cada idioma. A ordem de dia, mês e ano, a abreviação do mês
+e a pontuação mudam conforme a `locale`:
+
+| `locale` | Data               | Range                   |
+| -------- | ------------------ | ----------------------- |
+| `en-US`  | Oct 16, 2026       | Oct 16 – 21, 2026       |
+| `en-GB`  | 16 Oct 2026        | 16 – 21 Oct 2026        |
+| `pt-BR`  | 16 de out. de 2026 | 16 – 21 de out. de 2026 |
+| `de-DE`  | 16. Okt. 2026      | 16.–21. Okt. 2026       |
+
+Em todos os idiomas, o dia e o ano aparecem em números e o mês aparece
+abreviado. O mês escrito evita confusão: `10/11/2026` é outubro nos Estados
+Unidos e novembro no Brasil. A `locale` não altera o `value`, que fica em
+ISO 8601.
+
+Se o navegador não reconhecer a tag, o campo usa o idioma do navegador.
+
+`first-day-of-week` define a primeira coluna do calendário. Nos Estados Unidos
+e no Brasil a semana começa no domingo, e na maior parte da Europa começa na
+segunda.
+
+<Canvas of={DatePickerStories.Localized} />
+
+## Integração com formulários
+
+O `lui-date-picker` é um form-associated custom element. O valor entra no
+`FormData` do form com o `name` do campo, em ISO 8601.
+
+A validação usa `ElementInternals.setValidity()`, como nos elementos nativos.
+Com `required` e sem data, o campo reporta `valueMissing`. Um `value` que começa
+antes de `min` reporta `rangeUnderflow`, e um que termina depois de `max`
+reporta `rangeOverflow`. Cada caso tem a sua mensagem:
+
+| Validade                           | Quando                                                       | Mensagem           |
+| ---------------------------------- | ------------------------------------------------------------ | ------------------ |
+| `valueMissing`                     | `required` e sem data                                        | `error-text`       |
+| `rangeUnderflow` / `rangeOverflow` | A data começa antes de `min` ou termina depois de `max`      | `range-error-text` |
+| `badInput`                         | Com `editable`, o texto está incompleto ou a data não existe | `bad-input-text`   |
+| `badInput`                         | Com `editable range`, a data final vem antes da inicial      | `range-order-text` |
+
+<Canvas of={DatePickerStories.FormIntegration} />
+
+## Eventos
+
+| Evento   | `detail`                                        | Quando                                    |
+| -------- | ----------------------------------------------- | ----------------------------------------- |
+| `change` | `{ value: string }`                             | O usuário escolhe ou digita uma data      |
+| `change` | `{ value: string, start: string, end: string }` | Com `range`, o usuário fecha um intervalo |
+
+## Atributos
+
+| Atributo            | Tipo      | Padrão    | Descrição                                                                |
+| ------------------- | --------- | --------- | ------------------------------------------------------------------------ |
+| `value`             | `string`  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range` |
+| `range`             | `boolean` | `false`   | Seleciona um intervalo, com dois meses lado a lado                       |
+| `editable`          | `boolean` | `false`   | Permite digitar a data, com máscara no formato do `locale`               |
+| `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                 |
+| `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                   |
+| `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                               |
+| `locale`            | `string`  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`               |
+| `first-day-of-week` | `number`  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                  |
+| `size`              | `string`  | `'lg'`    | `lg` ou `md`                                                             |
+| `label`             | `string`  | `''`      | Rótulo do campo                                                          |
+| `hint`              | `string`  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato      |
+| `error`             | `boolean` | `false`   | Exibe o estado de erro e a mensagem de `error-text`                      |
+| `disabled`          | `boolean` | `false`   | Desabilita o campo                                                       |
+| `optional`          | `boolean` | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                    |
+| `name`              | `string`  | `''`      | Nome do campo no `FormData`                                              |
+| `required`          | `boolean` | `false`   | Bloqueia a submissão sem data                                            |
+
+## Textos padrão
+
+Os textos gerados pelo componente estão em inglês. Troque-os pelos atributos
+abaixo para usar o idioma do projeto.
+
+| Atributo               | Padrão                                           | Descrição                                                                                      |
+| ---------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `placeholder`          | `'Select a date'`                                | Texto do campo sem data. Com `editable`, o padrão é o `format-text`                            |
+| `optional-text`        | `'(optional)'`                                   | Marcador exibido quando `optional` está ativo                                                  |
+| `error-text`           | `'This field is required.'`                      | Mensagem exibida quando `error` está ativo, e de `valueMissing`                                |
+| `bad-input-text`       | `'Enter a valid date.'`                          | Mensagem de erro, com `editable`, quando o texto não forma uma data                            |
+| `range-error-text`     | `'Enter a date within the allowed period.'`      | Mensagem de erro quando a data fica fora de `min` e `max`                                      |
+| `range-order-text`     | `'The end date can't be before the start date.'` | Mensagem de erro, com `editable range`, quando a data final vem antes da inicial               |
+| `range-start-text`     | `'Start date selected. Choose the end date.'`    | Anúncio, com `range`, depois que a primeira ponta é escolhida                                  |
+| `format-text`          | Formato do `locale`, como `dd / mm / yyyy`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível            |
+| `dialog-label`         | `'Choose date'`                                  | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida |
+| `previous-month-label` | `'Previous month'`                               | `aria-label` do botão de mês anterior                                                          |
+| `next-month-label`     | `'Next month'`                                   | `aria-label` do botão de próximo mês                                                           |
+
+## Acessibilidade
+
+O calendário segue o padrão
+[Date Picker Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/)
+do WAI-ARIA APG: um diálogo não modal com os dias numa `grid`.
+
+### Nome do campo
+
+Sempre dê um nome ao campo, com `label` ou, quando não houver rótulo visível,
+com `aria-label`. Sem os dois, o campo fica sem nome acessível: com `editable`,
+só resta o placeholder, que leitores de tela não anunciam de forma confiável.
+Com `range`, use um rótulo que descreva o período, como "Estadia" ou "Período
+do relatório".
+
+### Teclado no campo
+
+| Tecla            | Ação                                                        |
+| ---------------- | ----------------------------------------------------------- |
+| `Enter`, `Space` | No botão, abre ou fecha o calendário                        |
+| `↓`, `↑`         | No botão, abre o calendário no dia selecionado ou em hoje   |
+| `Alt` + `↓`      | Com `editable`, na caixa de texto, abre o calendário        |
+| `Esc`            | Com o calendário aberto, fecha sem alterar                  |
+| `0`–`9`          | Com `editable`, digita a data; a máscara põe os separadores |
+
+Com `editable`, as setas da caixa de texto movem o cursor, por isso o
+calendário abre com `Alt` + `↓`, como num `<select>` nativo.
+
+### Teclado no calendário
+
+| Tecla                        | Ação                                                   |
+| ---------------------------- | ------------------------------------------------------ |
+| `←` `→`                      | Dia anterior / seguinte                                |
+| `↑` `↓`                      | Mesma coluna na semana anterior / seguinte             |
+| `Home` `End`                 | Início / fim da semana                                 |
+| `Page Up` `Page Down`        | Mês anterior / seguinte                                |
+| `Shift` + `Page Up` / `Down` | Ano anterior / seguinte                                |
+| `Enter`, `Space`             | Seleciona o dia focado e fecha                         |
+| `Tab`                        | Passa pelos botões de mês e pela grade; ao sair, fecha |
+| `Esc`                        | Fecha sem alterar                                      |
+
+Com `range`, o primeiro `Enter` marca uma ponta e o segundo marca a outra.
+Entre os dois, o intervalo acompanha o foco. `Esc` descarta a seleção
+incompleta e mantém o valor anterior.
+
+### Foco
+
+- Ao abrir, o foco vai para o dia selecionado ou, sem valor, para o dia de hoje.
+  As setas e a navegação de mês param nos limites de `min` e `max`.
+- A grade tem um único ponto de tabulação, inclusive com dois meses lado a lado.
+- Ao fechar com `Esc` ou ao escolher um dia, o foco volta ao controle que abriu
+  o calendário: o campo ou, com `editable`, o botão do calendário.
+- O calendário fecha com `Tab` para fora dele ou com um clique fora. O diálogo
+  tem `aria-modal="false"` e não prende o foco.
+- Dentro de um modal, `Esc` fecha só o calendário, não o modal.
+- Com `open` no HTML, o calendário aparece sem tirar o foco da página.
+- Com `editable`, o botão do calendário tem anel de foco próprio, para não se
+  confundir com o foco na caixa de texto.
+
+### O que o leitor de tela anuncia
+
+| Elemento              | Anúncio                                                                                                              |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Campo                 | `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data exibida, com `aria-expanded`                       |
+| Campo com `editable`  | `<input inputmode="numeric">` nomeado pelo rótulo e descrito pelo formato (`dd / mm / yyyy`), pelo hint ou pelo erro |
+| Botão do calendário   | `dialog-label` seguido da data escolhida: `Choose date, Jan 16, 2026`                                                |
+| Calendário            | Diálogo nomeado por `dialog-label`                                                                                   |
+| Mês                   | Uma região `aria-live="polite"`, anunciada ao trocar de mês; com `range`, os dois meses juntos                       |
+| Primeira ponta        | Com `range`, outra região `aria-live="polite"` anuncia `range-start-text` depois da primeira escolha                 |
+| Período escolhido     | Ao fechar, o foco volta ao campo, nomeado com o período em ordem: `Stay Jan 12 – 20, 2026`                           |
+| Dias da semana        | Nome completo ("Sunday"), mesmo quando a tela mostra só "S"                                                          |
+| Dia                   | Data por extenso: "Friday, January 16, 2026"                                                                         |
+| Hoje                  | `aria-current="date"`                                                                                                |
+| Dia selecionado       | `aria-selected="true"` na célula; com `range`, nas duas pontas e nos dias entre elas                                 |
+| Dia fora do intervalo | `aria-disabled="true"`: alcançável pelo teclado, mas não pode ser escolhido                                          |
+| Botões de mês         | `previous-month-label` e `next-month-label`; `aria-disabled` no limite de `min` e `max`                              |
+| Erro                  | `aria-invalid`, a mensagem do caso ligada por `aria-describedby` e, com `editable`, `aria-required`                  |
+
+O formato faz parte da descrição do campo, não só do placeholder, porque o
+placeholder some quando a pessoa começa a digitar e pode ser trocado por outro
+texto. Sem `hint`, a descrição aponta só para o texto abaixo do campo, que já
+mostra o formato, para que ele seja lido uma vez.
+
+O campo sem `editable` é um `<button>`, que não aceita `aria-required`. Nele, a
+obrigatoriedade aparece na validação do form, com `valueMissing` e
+`error-text`.
+
+### Critérios WCAG
+
+| Critério                     | Como o componente atende                                                                 |
+| ---------------------------- | ---------------------------------------------------------------------------------------- |
+| 1.3.1 Info and Relationships | Rótulo ligado ao campo; `grid` com cabeçalhos de coluna; hint e erro ligados             |
+| 1.3.2 Meaningful Sequence    | O calendário vem logo depois do campo no DOM                                             |
+| 1.4.1 Use of Color           | Hoje tem negrito e `aria-current`; a seleção tem preenchimento e `aria-selected`         |
+| 1.4.10 Reflow                | Com `range`, os dois meses ficam um embaixo do outro em telas estreitas                  |
+| 2.1.1 Keyboard               | Todas as ações têm tecla, incluindo seleção de range                                     |
+| 2.1.2 No Keyboard Trap       | Diálogo não modal; `Esc` e `Tab` saem dele                                               |
+| 2.4.3 Focus Order            | Foco entra no dia ativo e volta ao controle que abriu o calendário                       |
+| 2.4.6 Headings and Labels    | Mês anunciado; dias e botões com nome descritivo                                         |
+| 2.4.7 Focus Visible          | Anel de foco no campo, nos dias, nos botões de mês e no botão do calendário              |
+| 2.5.8 Target Size (Minimum)  | Dias com 32 px e botões de mês com 40 px                                                 |
+| 3.3.1 Error Identification   | `aria-invalid` e mensagem de erro; `badInput` com `bad-input-text`                       |
+| 3.3.2 Labels or Instructions | Rótulo e, com `editable`, formato visível abaixo do campo e na descrição                 |
+| 3.3.3 Error Suggestion       | Uma mensagem para cada erro: vazio, fora do período, data inválida e fim antes do início |
+| 4.1.2 Name, Role, Value      | Papéis, nomes e estados nativos ou ARIA em todos os controles                            |
+
+### Status de testes
+
+| Área                             | Status                                                  |
+| -------------------------------- | ------------------------------------------------------- |
+| Teclado, foco e atributos ARIA   | Testes automatizados, no Chromium                       |
+| Regras do axe                    | Painel Accessibility do Storybook, sem bloquear o build |
+| Leitor de tela (VoiceOver, NVDA) | Ainda não testado manualmente                           |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={DatePickerStories.CSSClass} />
+
+## Uso
+
+```html
+<lui-date-picker
+  name="check-in"
+  label="Check-in"
+  min="2026-01-12"
+  max="2026-01-28"
+></lui-date-picker>
+
+<script>
+  document
+    .querySelector('lui-date-picker')
+    .addEventListener('change', (e) => console.log(e.detail.value));
+</script>
+```

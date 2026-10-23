@@ -19,6 +19,7 @@ import { LuiDrawer } from './components/drawer/drawer.js';
 import { LuiEmptyState } from './components/empty-state/empty-state.js';
 import { LuiHeading } from './components/heading/heading.js';
 import { LuiTabs, LuiTab } from './components/tabs/tabs.js';
+import { LuiDatePicker } from './components/date-picker/date-picker.js';
 import { LuiDivider } from './components/divider/divider.js';
 import {
   LuiDropdownMenu,
@@ -85,6 +86,7 @@ define('lui-drawer', LuiDrawer);
 define('lui-empty-state', LuiEmptyState);
 define('lui-tabs', LuiTabs);
 define('lui-tab', LuiTab);
+define('lui-date-picker', LuiDatePicker);
 define('lui-divider', LuiDivider);
 define('lui-dropdown-menu', LuiDropdownMenu);
 define('lui-menu-item', LuiMenuItem);
@@ -144,6 +146,7 @@ export {
   LuiEmptyState,
   LuiTabs,
   LuiTab,
+  LuiDatePicker,
   LuiDivider,
   LuiDropdownMenu,
   LuiMenuItem,
