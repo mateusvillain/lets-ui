@@ -11,7 +11,7 @@ export default {
     placeholder: {
       control: 'text',
       description:
-        'Vazio usa o padrão: `Select a date`, ou o formato do `locale` com `editable`',
+        'Vazio usa o padrão: `Select a date`, ou o `format-text` com `editable`',
       table: { defaultValue: { summary: 'Select a date' } },
     },
     editable: {
