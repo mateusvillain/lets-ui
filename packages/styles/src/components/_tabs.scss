@@ -95,6 +95,7 @@ lui-tab {
   color: text(inverse);
 
   @include state-base(bg(container, primary));
+  @include filled-state-tint;
 }
 
 // --- Interaction states — specificity 0,3,0 ---

@@ -70,15 +70,16 @@ design value?" but "will this ever resolve differently?".
 
 Component SCSS uses utility functions from `packages/styles/src/utilities/_functions.scss`:
 
-| Function                   | Usage                                                    |
-| -------------------------- | -------------------------------------------------------- |
-| `bg($category, $variant)`  | Background colors (e.g. `bg(container, primary)`)        |
-| `text($variant)`           | Text colors (e.g. `text(body)`, `text(inverse)`)         |
-| `color($category, $scale)` | Primitive colors (e.g. `color(brand, 5)`)                |
-| `radius($size)`            | Border radius (`xs`, `sm`, `md`, `lg`, `circle`, `none`) |
-| `width($size)`             | Border width (`0`, `1`, `2`)                             |
-| `fluid($px)`               | Fluid/responsive sizing                                  |
-| `fixed($px)`               | Fixed pixel sizing                                       |
+| Function                   | Usage                                                         |
+| -------------------------- | ------------------------------------------------------------- |
+| `bg($category, $variant)`  | Background colors (e.g. `bg(container, primary)`)             |
+| `text($variant)`           | Text colors (e.g. `text(body)`, `text(inverse)`)              |
+| `color($category, $scale)` | Primitive colors (e.g. `color(brand, 5)`)                     |
+| `tint($role)`              | State tint for filled components (`foreground`, `background`) |
+| `radius($size)`            | Border radius (`xs`, `sm`, `md`, `lg`, `circle`, `none`)      |
+| `width($size)`             | Border width (`0`, `1`, `2`)                                  |
+| `fluid($px)`               | Fluid/responsive sizing                                       |
+| `fixed($px)`               | Fixed pixel sizing                                            |
 
 Token source files are in `packages/lets-ui-tokens/tokens/{brand,global}/`. Terrazzo compiles them into `packages/lets-ui-tokens/dist/` — `letsui.tokens.scss` (the generated map, do not edit manually) and `letsui.tokens.static.scss` (literal values for media query preludes and Sass loops, which cannot take a `var()`).
 

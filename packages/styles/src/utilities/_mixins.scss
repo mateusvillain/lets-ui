@@ -109,6 +109,20 @@
   --lui-state-tint: #{$tint};
 }
 
+// Filled state tint
+//  @include filled-state-tint;                   (light label on the fill)
+//  @include filled-state-tint(tint(background)); (dark label on the fill)
+// For a component with a solid fill and a label on it — a button, the current
+// page, a checked box. Its states tint with the colour opposite its label
+// instead of the label itself, so the fill moves away from the label and the
+// label gains contrast on hover and press instead of losing it. `$tint` is
+// that opposite: `tint(foreground)` for an inverse label, the default, and
+// `tint(background)` for a body-coloured one. Both flip with the theme, so the
+// pair holds in light and dark. See `$state-tint` in _functions.scss.
+@mixin filled-state-tint($tint: tint(foreground)) {
+  @include state-tint($tint);
+}
+
 // A transition reads its timing from the state being entered, so overriding
 // these two properties inside `:hover` / `:active` gives each direction its own
 // pace from a single `transition` declaration:

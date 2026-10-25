@@ -105,6 +105,7 @@ $indicator-size: calc(#{fluid(20)} + #{fluid(4)} * 4);
 .stepper__item--active {
   .stepper__circle {
     @include state-base(bg(container, primary));
+    @include filled-state-tint;
 
     border-color: transparent;
     color: text(inverse);

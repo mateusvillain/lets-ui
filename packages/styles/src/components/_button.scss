@@ -7,26 +7,31 @@ $colors: (
   primary: (
     bg: bg(container, primary),
     fg: text(inverse),
+    state-tint: tint(foreground),
     focus-ring: focus-ring(primary),
   ),
   secondary: (
     bg: bg(container, secondary),
     fg: text(inverse),
+    state-tint: tint(foreground),
     focus-ring: focus-ring(secondary),
   ),
   neutral: (
     bg: bg(container, neutral),
     fg: text(body),
+    state-tint: tint(background),
     focus-ring: focus-ring(neutral),
   ),
   danger: (
     bg: bg(container, danger),
     fg: text(inverse),
+    state-tint: tint(foreground),
     focus-ring: focus-ring(danger),
   ),
   success: (
     bg: bg(container, success),
     fg: text(inverse),
+    state-tint: tint(foreground),
     focus-ring: focus-ring(success),
   ),
 );
@@ -109,6 +114,10 @@ a {
       color: map.get($values, fg);
 
       @include states($key, $key, $bg: map.get($values, bg));
+
+      // Every variant is a solid fill: its states tint with the colour
+      // opposite its label. See `filled-state-tint`.
+      @include filled-state-tint(map.get($values, state-tint));
     }
   }
 }

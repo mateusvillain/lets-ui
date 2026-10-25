@@ -49,6 +49,7 @@
   color: text(inverse);
 
   @include state-base(bg(container, primary));
+  @include filled-state-tint;
 }
 
 .pagination__ellipsis {
