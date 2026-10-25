@@ -94,8 +94,7 @@ lui-tab {
 .tabs--card .tab[aria-selected='true'] {
   color: text(inverse);
 
-  @include state-base(bg(container, primary));
-  @include filled-state-tint;
+  @include state-base(bg(container, primary), tint(foreground));
 }
 
 // --- Interaction states — specificity 0,3,0 ---

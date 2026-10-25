@@ -75,40 +75,31 @@ export const mixins = [
   },
   {
     name: 'states',
-    signature: '@include states($variant, $focus-visible, $focus?)',
-    desc: 'Aplica estados interativos completos: disabled, hover, active e focus-visible. Ideal para botões e controles interativos.',
+    signature: '@include states($focus-visible, $focus?, $bg?, $tint?)',
+    desc: 'Aplica estados interativos completos: disabled, hover, active e focus-visible. Ideal para botões e controles interativos. Num componente preenchido (fundo sólido com rótulo por cima), passe em $tint a cor oposta à do rótulo: o hover e o pressed misturam essa cor, o fundo se afasta do texto e o contraste aumenta nos estados. Sem $tint, os estados misturam a cor do próprio conteúdo, como num componente de superfície. O mesmo $tint existe em state-layer() e state-base().',
     params: [
-      { name: '$variant',       default: '—', values: 'primary | secondary | danger | success | neutral' },
       { name: '$focus-visible', default: '—', values: 'primary | secondary | danger | success | neutral' },
       { name: '$focus',         default: 'null', values: 'primary | secondary | danger | success | neutral' },
+      { name: '$bg',            default: 'transparent', values: 'cor de fundo em repouso, ex.: bg(container, primary)' },
+      { name: '$tint',          default: 'null', values: 'tint(foreground) para rótulo claro · tint(background) para rótulo escuro' },
     ],
-    example: `.btn--primary {
-  @include states(primary, primary);
+    example: `.menu-item {
+  // Superfície: os estados misturam a cor do próprio conteúdo.
+  @include states(primary);
 }
 
-.btn--danger {
-  @include states(danger, danger);
-}`,
-  },
-  {
-    name: 'filled-state-tint',
-    signature: '@include filled-state-tint($tint?)',
-    desc: 'Para componentes preenchidos (fundo sólido com rótulo por cima): faz o hover e o pressed misturarem a cor oposta à do rótulo, em vez da cor do próprio rótulo. O fundo se afasta do texto e o contraste aumenta nos estados. Use junto com states() ou state-layer().',
-    params: [
-      { name: '$tint', default: 'tint(foreground)', values: 'tint(foreground) para rótulo em text(inverse) · tint(background) para rótulo em text(body)' },
-    ],
-    example: `.btn--primary {
+.btn--primary {
   color: text(inverse);
 
-  @include states(primary, primary, $bg: bg(container, primary));
-  @include filled-state-tint;
+  // Preenchido, rótulo claro: tinta oposta ao rótulo.
+  @include states(primary, primary, $bg: bg(container, primary), $tint: tint(foreground));
 }
 
 .btn--neutral {
   color: text(body);
 
-  @include states(neutral, neutral, $bg: bg(container, neutral));
-  @include filled-state-tint(tint(background));
+  // Preenchido, rótulo escuro.
+  @include states(neutral, neutral, $bg: bg(container, neutral), $tint: tint(background));
 }`,
   },
   {

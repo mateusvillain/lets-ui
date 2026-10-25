@@ -150,12 +150,14 @@ A cor dessa camada depende do tipo de componente:
   precisar saber sobre que superfície o componente está apoiado.
 - **Componentes preenchidos** — um fundo sólido com rótulo por cima, como um
   botão, a página atual, uma aba card selecionada ou uma caixa marcada —
-  misturam a **cor oposta à do rótulo**, pelo mixin `filled-state-tint`. Um
+  misturam a **cor oposta à do rótulo**, pelo parâmetro `$tint` de `states()`
+  (ou de `state-layer()` / `state-base()`), declarado junto com o fundo. Um
   preenchimento colorido já nasce perto do contraste mínimo, e misturar nele a
   cor do rótulo aproxima um do outro: o texto perderia contraste justamente no
   hover. Com a cor oposta, o fundo se afasta do rótulo e o contraste **aumenta**
-  no hover e no pressed. Na prática, o preenchimento escurece no tema claro e
-  clareia no escuro.
+  no hover e no pressed. Na prática, um preenchimento com rótulo claro escurece
+  no tema claro e clareia no escuro; um com rótulo escuro, como o botão neutro,
+  faz o inverso.
 
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '32px' }}>
   {[

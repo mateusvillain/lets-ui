@@ -16,7 +16,7 @@
   border: width(1) solid;
 
   // The on-colour the unchecked border tints with. `checked-base` replaces it
-  // with the mark colour, and tints its fill with `filled-state-tint`.
+  // with the mark colour, and tints its fill with the opposite of the mark.
   color: text(body);
 
   @include state-border-layer(stroke(neutral, subtle), all 0.2s ease);
@@ -55,8 +55,12 @@
 @mixin checked-base {
   color: bg(surface, neutral);
 
-  @include states(primary, primary, $bg: bg(container, primary));
-  @include filled-state-tint;
+  @include states(
+    primary,
+    primary,
+    $bg: bg(container, primary),
+    $tint: tint(foreground)
+  );
 }
 
 // $input-type-sel = full native input selector, e.g. "input[type='checkbox']"

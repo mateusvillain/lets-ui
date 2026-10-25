@@ -113,11 +113,14 @@ a {
     &.btn--#{$key} {
       color: map.get($values, fg);
 
-      @include states($key, $key, $bg: map.get($values, bg));
-
       // Every variant is a solid fill: its states tint with the colour
-      // opposite its label. See `filled-state-tint`.
-      @include filled-state-tint(map.get($values, state-tint));
+      // opposite its label. See `state-base`.
+      @include states(
+        $key,
+        $key,
+        $bg: map.get($values, bg),
+        $tint: map.get($values, state-tint)
+      );
     }
   }
 }

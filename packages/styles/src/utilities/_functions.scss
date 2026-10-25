@@ -19,7 +19,8 @@
 // Override `--lui-state-tint` when the element's text colour is not the
 // on-colour you want the state to use.
 
-// Filled components are the exception, and take `filled-state-tint`. A solid
+// Filled components are the exception, and pass `$tint` to `states()`,
+// `state-layer()` or `state-base()` along with their fill. A solid
 // fill with a label on it sits close to the contrast minimum by design — it
 // has to, to read as a strong colour — and mixing the label's own colour in
 // moves the fill towards the label: 8% of white over a primary button cost it
@@ -226,8 +227,8 @@ $state-border-amounts: (
 
 // tint($role)
 //  $role = foreground, background
-// The far ends of the theme's neutral scale, for `filled-state-tint`: the
-// colour a filled component's states mix in, opposite its label.
+// The far ends of the theme's neutral scale, for the `$tint` of a filled
+// component: the colour its states mix in, opposite its label.
 @function tint($role) {
   $value: map.get(tokens.$color, semantic, tint, $role);
 
