@@ -4,6 +4,7 @@ import { live } from 'lit/directives/live.js';
 import { DialogStackController } from '../../utils/dialog-stack.js';
 import { FOCUSABLE } from '../../utils/dialog-trigger.js';
 import { FocusReturnController } from '../../utils/focus-return.js';
+import { inertOutside } from '../../utils/inert-outside.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
 import styles from './command-palette.scss?inline';
 
@@ -74,6 +75,7 @@ interface ItemData {
   caption: string;
   description: string;
   shortcut: string;
+  shortcutLabel: string;
   avatar: string;
   avatarSrc: string;
   tag: string;
@@ -108,7 +110,9 @@ export class LuiCommandPalette extends LitElement {
   @property() placeholder = 'Search actions or files';
   @property() label = 'Command palette';
   @property({ attribute: 'empty-text' }) emptyText = 'No results found';
+  @property({ attribute: 'result-label' }) resultLabel = '1 result';
   @property({ attribute: 'results-label' }) resultsLabel = '{count} results';
+  @property({ attribute: 'list-label' }) listLabel = 'Results';
   @property({ attribute: 'clear-label' }) clearLabel = 'Clear search';
   @property({ attribute: 'tags-label' }) tagsLabel = 'Filter results';
   @property({ attribute: 'navigate-label' }) navigateLabel = 'Navigate';
@@ -124,6 +128,7 @@ export class LuiCommandPalette extends LitElement {
   @state() private _activeIndex = 0;
   @state() private _groups: GroupData[] = [];
   @state() private _tags: TagData[] = [];
+  @state() private _status = '';
 
   @query('[data-palette-dialog]') private _dialog!: HTMLElement;
   @query('[data-palette-backdrop]') private _backdrop!: HTMLElement;
@@ -138,6 +143,8 @@ export class LuiCommandPalette extends LitElement {
   });
   private _visibleGroups: GroupData[] = [];
   private _visible: ItemData[] = [];
+  private _restoreInert: (() => void) | null = null;
+  private _statusTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     super();
@@ -166,6 +173,8 @@ export class LuiCommandPalette extends LitElement {
     super.disconnectedCallback();
     document.removeEventListener('keydown', this._handleHotkey);
     this._observer.disconnect();
+    clearTimeout(this._statusTimer);
+    this._releaseInert();
     if (this.open) unlockBodyScroll();
   }
 
@@ -187,6 +196,13 @@ export class LuiCommandPalette extends LitElement {
       this._query = '';
       this._activeIndex = 0;
     }
+    // Before the update, not after: focus goes back to the opener while the
+    // update finishes, and an inert opener cannot take it.
+    if (changed.has('open') && !this.open) {
+      this._releaseInert();
+      clearTimeout(this._statusTimer);
+      this._status = '';
+    }
     this._visibleGroups = this._groups
       .map((group) => ({
         ...group,
@@ -203,6 +219,7 @@ export class LuiCommandPalette extends LitElement {
       const wasOpen = changed.get('open') === true;
       if (this.open && !wasOpen) {
         lockBodyScroll();
+        this._restoreInert = inertOutside(this);
         requestAnimationFrame(() => {
           // Closed again before this frame: focus has already gone back.
           if (this.open) this._input?.focus();
@@ -215,6 +232,40 @@ export class LuiCommandPalette extends LitElement {
         ?.querySelector('[role="option"].is-active')
         ?.scrollIntoView({ block: 'nearest' });
     }
+    if (
+      [
+        'open',
+        '_query',
+        '_tag',
+        '_groups',
+        'emptyText',
+        'resultLabel',
+        'resultsLabel',
+      ].some((key) => changed.has(key))
+    ) {
+      this._scheduleStatus();
+    }
+  }
+
+  private _releaseInert() {
+    this._restoreInert?.();
+    this._restoreInert = null;
+  }
+
+  // The count is announced once typing pauses, not on every key: a screen
+  // reader would otherwise read a number per letter.
+  private _scheduleStatus() {
+    clearTimeout(this._statusTimer);
+    if (!this.open) return;
+    this._statusTimer = setTimeout(() => {
+      const count = this._visible.length;
+      this._status =
+        count === 1
+          ? this.resultLabel
+          : count
+            ? this.resultsLabel.replace('{count}', String(count))
+            : this.emptyText;
+    }, 400);
   }
 
   // The first palette on the page takes the shortcut; the rest see it handled.
@@ -241,6 +292,7 @@ export class LuiCommandPalette extends LitElement {
         caption: el.getAttribute('caption') ?? '',
         description: el.getAttribute('description') ?? '',
         shortcut: el.getAttribute('shortcut') ?? '',
+        shortcutLabel: el.getAttribute('shortcut-label') ?? '',
         avatar: el.getAttribute('avatar') ?? '',
         avatarSrc: el.getAttribute('avatar-src') ?? '',
         tag: el.getAttribute('tag') ?? '',
@@ -393,6 +445,7 @@ export class LuiCommandPalette extends LitElement {
     const describedBy = [
       item.caption && `${item.id}-caption`,
       item.description && `${item.id}-description`,
+      item.shortcut && `${item.id}-shortcut`,
     ]
       .filter(Boolean)
       .join(' ');
@@ -447,10 +500,13 @@ export class LuiCommandPalette extends LitElement {
         </span>
         ${item.shortcut
           ? html`<lui-shortcut
-              class="command-palette__shortcut"
-              keys="${item.shortcut}"
-              aria-hidden="true"
-            ></lui-shortcut>`
+                class="command-palette__shortcut"
+                keys="${item.shortcut}"
+                aria-hidden="true"
+              ></lui-shortcut>
+              <span id="${item.id}-shortcut" class="command-palette__sr-only"
+                >${item.shortcutLabel || item.shortcut}</span
+              >`
           : nothing}
       </div>
     `;
@@ -512,7 +568,7 @@ export class LuiCommandPalette extends LitElement {
               autocomplete="off"
               spellcheck="false"
               aria-autocomplete="list"
-              aria-expanded="true"
+              aria-expanded="${count ? 'true' : 'false'}"
               aria-controls="${listboxId}"
               aria-activedescendant="${active?.id ?? nothing}"
               aria-label="${this.placeholder}"
@@ -549,7 +605,7 @@ export class LuiCommandPalette extends LitElement {
                       @click="${() => this._toggleTag(tag.value)}"
                     >
                       <lui-tag
-                        size="sm"
+                        size="md"
                         tag-style="${pressed ? 'container' : 'surface'}"
                         variant="${pressed ? 'primary' : 'neutral'}"
                         label="${tag.label}"
@@ -563,7 +619,7 @@ export class LuiCommandPalette extends LitElement {
               id="${listboxId}"
               class="command-palette__results"
               role="listbox"
-              aria-label="${this.label}"
+              aria-label="${this.listLabel}"
             >
               ${this._renderResults(this._visibleGroups)}
             </div>
@@ -571,7 +627,7 @@ export class LuiCommandPalette extends LitElement {
               ? nothing
               : html`<p class="command-palette__empty">${this.emptyText}</p>`}
 
-            <lui-divider></lui-divider>
+            <lui-divider class="command-palette__rule"></lui-divider>
             <div class="command-palette__footer" aria-hidden="true">
               <span class="command-palette__legend">
                 <span class="command-palette__keys">
@@ -598,11 +654,7 @@ export class LuiCommandPalette extends LitElement {
           </div>
 
           <div class="command-palette__status" role="status">
-            ${this.open
-              ? count
-                ? this.resultsLabel.replace('{count}', String(count))
-                : this.emptyText
-              : ''}
+            ${this._status}
           </div>
         </div>
       </div>

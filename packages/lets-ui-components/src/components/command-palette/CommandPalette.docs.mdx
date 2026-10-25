@@ -173,10 +173,10 @@ O `letsui.css` traz as classes do palette, com o mesmo markup que o Web Componen
         aria-label="Filter results"
       >
         <button type="button" class="command-palette__tag" aria-pressed="true">
-          <span class="tag--sm tag--container-primary">Pages</span>
+          <span class="tag--md tag--container-primary">Pages</span>
         </button>
         <button type="button" class="command-palette__tag" aria-pressed="false">
-          <span class="tag--sm tag--surface-neutral">Users</span>
+          <span class="tag--md tag--surface-neutral">Users</span>
         </button>
       </div>
 
@@ -243,7 +243,7 @@ O `letsui.css` traz as classes do palette, com o mesmo markup que o Web Componen
       <!-- Sem resultados, no lugar da lista -->
       <!-- <p class="command-palette__empty">No results found</p> -->
 
-      <div class="divider"></div>
+      <div class="divider command-palette__rule"></div>
       <div class="command-palette__footer" aria-hidden="true">
         <span class="command-palette__legend">
           <span class="command-palette__keys">
@@ -318,7 +318,9 @@ Todos os textos visíveis e anunciados têm atributo próprio, para traduzir:
   label="Paleta de comandos"
   placeholder="Buscar ações ou arquivos"
   empty-text="Nenhum resultado"
+  result-label="1 resultado"
   results-label="{count} resultados"
+  list-label="Resultados"
   clear-label="Limpar busca"
   tags-label="Filtrar resultados"
   navigate-label="Navegar"
@@ -329,10 +331,12 @@ Todos os textos visíveis e anunciados têm atributo próprio, para traduzir:
 
 ### Acessibilidade
 
-- O painel é um `role="dialog"` com `aria-modal="true"`, nomeado por `label`.
-- O campo é um `role="combobox"` que controla o `role="listbox"` dos resultados. O foco fica no campo; o item destacado é indicado por `aria-activedescendant` e `aria-selected`.
-- Cada item é um `role="option"` nomeado pelo título e descrito pela caption e pela descrição. Ícone, avatar e atalho são decorativos.
+- O painel é um `role="dialog"` com `aria-modal="true"`, nomeado por `label`. Enquanto ele está aberto, o resto da página recebe `inert`: some da árvore de acessibilidade, do Tab e do mouse, e volta ao fechar. Só o que o palette tornou inerte é restaurado.
+- O campo é um `role="combobox"` que controla o `role="listbox"` dos resultados, nomeado por `list-label`. O foco fica no campo; o item destacado é indicado por `aria-activedescendant` e `aria-selected`. `aria-expanded` fica `false` quando a lista está vazia.
+- Cada item é um `role="option"` nomeado pelo título e descrito pela caption, pela descrição e pelo atalho. Ícone e avatar são decorativos. Como `⌘` é lido de formas diferentes por cada leitor de tela, use `shortcut-label` para dar o atalho por extenso (`shortcut-label="Command 3"`).
 - Grupos são `role="group"` nomeados pelo cabeçalho.
 - As tags são botões com `aria-pressed`.
-- A contagem de resultados (ou o estado vazio) é anunciada numa região `role="status"`.
+- A contagem de resultados (ou o estado vazio) é anunciada numa região `role="status"` quando a digitação pausa, e não a cada tecla.
 - O foco fica preso no palette enquanto ele está aberto e volta ao elemento que o abriu ao fechar.
+- Em modo de alto contraste (cores forçadas), a opção ativa e a tag pressionada ganham um contorno na cor de seleção do sistema, já que o fundo que as marca deixa de ser pintado.
+- Em telas baixas (celular deitado, página com zoom de 400%), o espaçamento diminui e a legenda de teclado sai, deixando a altura para os resultados.

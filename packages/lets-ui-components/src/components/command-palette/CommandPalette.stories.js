@@ -66,6 +66,11 @@ const ITEM_ATTRIBUTES = {
     'shortcut',
     'Teclas do atalho exibido à direita, separadas por vírgula, como em `lui-shortcut`.',
   ],
+  itemShortcutLabel: [
+    'shortcut-label',
+    'Atalho por extenso para leitores de tela, como "Command 1". Sem ele, o leitor recebe o próprio `shortcut`.',
+    'shortcut',
+  ],
   itemAvatar: [
     'avatar',
     'Nome da pessoa. Troca o ícone por um Avatar com as iniciais.',
@@ -178,6 +183,7 @@ Default.args = {
   itemCaption: 'Page',
   itemDescription: '',
   itemShortcut: '⌘1',
+  itemShortcutLabel: 'Command 1',
   itemAvatar: '',
   itemAvatarSrc: '',
   itemValue: 'calendar',
@@ -206,7 +212,7 @@ export const Navigation = () =>
       'placeholder="Go to…"',
       `
     <lui-command-group label="Pages">
-      <lui-command-item value="/" label="Home" shortcut="⌘1" keywords="dashboard start">${icon('house')}</lui-command-item>
+      <lui-command-item value="/" label="Home" shortcut="⌘1" shortcut-label="Command 1" keywords="dashboard start">${icon('house')}</lui-command-item>
       <lui-command-item value="/inbox" label="Inbox" caption="12 unread" shortcut="⌘2" keywords="messages mail">${icon('inbox')}</lui-command-item>
       <lui-command-item value="/calendar" label="Calendar" shortcut="⌘3" keywords="events schedule agenda">${icon('calendar')}</lui-command-item>
       <lui-command-item value="/notifications" label="Notifications" shortcut="⌘4" keywords="alerts">${icon('bell')}</lui-command-item>
@@ -396,7 +402,9 @@ export const Localized = () =>
     label="Paleta de comandos"
     placeholder="Buscar ações ou arquivos"
     empty-text="Nenhum resultado encontrado"
+    result-label="1 resultado"
     results-label="{count} resultados"
+    list-label="Resultados"
     clear-label="Limpar busca"
     tags-label="Filtrar resultados"
     navigate-label="Navegar"
@@ -464,10 +472,10 @@ export const CSSClass = () => `
     <div class="command-palette__panel">
       <div class="command-palette__tags" role="group" aria-label="Filter results">
         <button type="button" class="command-palette__tag" aria-pressed="true">
-          <span class="tag--sm tag--container-primary">Pages</span>
+          <span class="tag--md tag--container-primary">Pages</span>
         </button>
         <button type="button" class="command-palette__tag" aria-pressed="false">
-          <span class="tag--sm tag--surface-neutral">Users</span>
+          <span class="tag--md tag--surface-neutral">Users</span>
         </button>
       </div>
 
@@ -514,7 +522,7 @@ export const CSSClass = () => `
         </div>
       </div>
 
-      <div class="divider"></div>
+      <div class="divider command-palette__rule"></div>
       <div class="command-palette__footer" aria-hidden="true">
         <span class="command-palette__legend">
           <span class="command-palette__keys">

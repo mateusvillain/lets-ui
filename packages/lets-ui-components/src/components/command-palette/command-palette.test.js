@@ -28,6 +28,7 @@ afterEach(() => {
 });
 
 const frame = () => new Promise((r) => requestAnimationFrame(r));
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const MARKUP = `
   <button id="opener">Open</button>
@@ -167,9 +168,70 @@ describe('lui-command-palette', () => {
     expect($(palette, '.command-palette__empty').textContent).toBe(
       'No results found'
     );
-    expect($(palette, '[role="status"]').textContent.trim()).toBe(
-      'No results found'
+    expect(input(palette).getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('announces the result count once typing pauses', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const status = () => $(palette, '[role="status"]').textContent.trim();
+
+    await type(palette, 'c');
+    await type(palette, 'ca');
+    await type(palette, 'cal');
+    expect(status()).toBe('');
+
+    await wait(450);
+    await palette.updateComplete;
+    expect(status()).toBe('1 result');
+
+    await type(palette, 'zzz');
+    await wait(450);
+    await palette.updateComplete;
+    expect(status()).toBe('No results found');
+  });
+
+  it('makes the rest of the page inert while open', async () => {
+    const { host, palette } = await mount();
+    const opener = host.querySelector('#opener');
+    opener.focus();
+    palette.show();
+    await settle(palette);
+
+    expect(opener.inert).toBe(true);
+    expect(palette.inert).toBe(false);
+
+    palette.hide();
+    await settle(palette);
+    expect(opener.inert).toBe(false);
+    expect(document.activeElement).toBe(opener);
+  });
+
+  it('leaves alone what was inert before it opened', async () => {
+    const { host, palette } = await mount();
+    const opener = host.querySelector('#opener');
+    opener.inert = true;
+    palette.show();
+    await settle(palette);
+    palette.hide();
+    await settle(palette);
+
+    expect(opener.inert).toBe(true);
+  });
+
+  it('names the listbox and describes items by their shortcut', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+
+    expect($(palette, '[role="listbox"]').getAttribute('aria-label')).toBe(
+      'Results'
     );
+    const calendar = options(palette)[0];
+    const ids = calendar.getAttribute('aria-describedby').split(' ');
+    const shortcut = ids.find((id) => id.endsWith('-shortcut'));
+    expect(palette.shadowRoot.getElementById(shortcut).textContent).toBe('⌘,1');
   });
 
   it('clears the query from the clear control', async () => {

@@ -111,18 +111,29 @@ lui-command-tag {
   &__tags {
     @include flex(row, center, flex-start, fluid(8), wrap);
 
-    padding: 0 fluid(24) fluid(16);
+    // The tag's own inline padding (8) is taken off the left edge, so its text
+    // lines up with the group labels below rather than its box.
+    padding: 0 fluid(24) fluid(16) fluid(16);
   }
 
   &__tag {
     display: inline-flex;
     padding: 0;
     border: 0;
-    border-radius: radius(sm);
+    border-radius: radius(md);
     background: none;
     cursor: pointer;
 
     @include focus-ring(primary);
+
+    // Forced colors paint every tag the same: the pressed one keeps a system
+    // highlight outline so its state does not rest on a background alone.
+    @media (forced-colors: active) {
+      &[aria-pressed='true'] {
+        outline: width(2) solid Highlight;
+        outline-offset: width(2);
+      }
+    }
   }
 
   &__results {
@@ -166,6 +177,15 @@ lui-command-tag {
       background-color: state(pressed);
 
       @include state-timing(pressed);
+    }
+
+    // Forced colors drop the background that marks the active option, which
+    // would leave nothing to show where the arrow keys are.
+    @media (forced-colors: active) {
+      &.is-active {
+        outline: width(2) solid Highlight;
+        outline-offset: calc(#{width(2)} * -1);
+      }
     }
   }
 
@@ -258,7 +278,37 @@ lui-command-tag {
     height: 1lh;
   }
 
-  &__status {
+  &__status,
+  &__sr-only {
     @include sr-only;
+  }
+
+  // A short viewport — a phone on its side, or the page zoomed to 400% — has
+  // no room for the spacing and the keyboard legend: the results take it.
+  @media (height < 30rem) {
+    &__backdrop {
+      padding: fluid(8);
+    }
+
+    &__dialog {
+      gap: fluid(8);
+    }
+
+    &__panel {
+      padding-top: fluid(8);
+    }
+
+    &__tags {
+      padding-bottom: fluid(8);
+    }
+
+    &__results {
+      max-height: none;
+    }
+
+    &__rule,
+    &__footer {
+      display: none;
+    }
   }
 }
