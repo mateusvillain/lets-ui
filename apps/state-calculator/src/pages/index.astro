@@ -287,16 +287,16 @@ const COLOURS = [
         AMOUNTS,
         computeStates,
         contrast,
-        cssColorToHex,
         fromSearch,
         mix,
         normalizeHex,
+        rgbToHex,
         toSearch,
       } from '@/lib/state.js';
 
       // Each preset names the tokens a real component reads, resolved in the
       // current theme so the numbers match what ships. Filled components tint
-      // with the colour opposite their label (`filled-state-tint`); surface
+      // with the colour opposite their label (the `$tint` of `states()`); surface
       // ones with their own content colour.
       const FILLED = {
         mode: 'background',
@@ -383,14 +383,16 @@ const COLOURS = [
       // Through a canvas, which resolves any colour space to sRGB bytes: the
       // brand and palette tokens are authored in OKLCH, and getComputedStyle
       // hands them back as `oklch(...)`.
-      const canvas = document.createElement('canvas').getContext('2d');
+      const canvas = document
+        .createElement('canvas')
+        .getContext('2d', { willReadFrequently: true });
       function resolveToken(name) {
         probe.style.color = `var(${name})`;
         canvas.clearRect(0, 0, 1, 1);
         canvas.fillStyle = getComputedStyle(probe).color;
         canvas.fillRect(0, 0, 1, 1);
         const [r, g, b] = canvas.getImageData(0, 0, 1, 1).data;
-        return cssColorToHex(`rgb(${r}, ${g}, ${b})`);
+        return rgbToHex([r, g, b].map((channel) => channel / 255));
       }
 
       function applyPreset(key) {
@@ -400,6 +402,9 @@ const COLOURS = [
         for (const slot of SLOTS) {
           if (preset[slot]) state[slot] = resolveToken(preset[slot]);
         }
+        // A border preset has no label: keep it in step with the tint, as
+        // `computeStates` assumes, rather than leaving the previous preset's.
+        if (!preset.content) state.content = state.tint;
       }
 
       const format = (ratio) => `${ratio.toFixed(2)}:1`;
@@ -596,7 +601,10 @@ const COLOURS = [
       }
 
       $('[data-swap]').addEventListener('click', () => {
+        // A surface pair tints with its own label: keep the tint following it.
+        const surface = state.tint === state.content;
         [state.base, state.content] = [state.content, state.base];
+        if (surface) state.tint = state.content;
         toCustom();
         render();
       });

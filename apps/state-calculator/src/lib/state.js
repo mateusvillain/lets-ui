@@ -10,7 +10,7 @@
  * Which colour is the tint depends on the component. A surface component — a
  * menu item, a line tab, a field border — tints with its own content colour.
  * A filled one — a button, the current page, a checked box — tints with the
- * colour opposite its label (`filled-state-tint`), so the fill moves away from
+ * colour opposite its label (the `$tint` of `states()`), so the fill moves away from
  * the label and the label gains contrast. That is why the label (`content`)
  * and the tint are separate colours here.
  */

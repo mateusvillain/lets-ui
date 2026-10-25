@@ -10,7 +10,7 @@ and 56% into a border. The tint depends on the component:
 - **Surface components** (a menu item, a line tab, a field border) tint with
   their own content colour.
 - **Filled components** (a button, the current page, a checked box) tint with
-  the colour opposite their label — `filled-state-tint` in
+  the colour opposite their label — the `$tint` of `states()` in
   `packages/styles/src/utilities/_mixins.scss` — so the fill moves away from the
   label and the label gains contrast on hover and press.
 
