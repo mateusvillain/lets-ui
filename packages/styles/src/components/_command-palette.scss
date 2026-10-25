@@ -1,0 +1,264 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+@use 'field';
+@use 'shortcut';
+
+// Data-only children: the palette reads them and renders its own markup.
+lui-command-group,
+lui-command-item,
+lui-command-tag {
+  display: none;
+}
+
+.command-palette {
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 15vh fluid(16) fluid(16);
+
+    // The scrim the Modal paints, from the darkest neutral rather than a literal.
+    background: color-mix(in srgb, color(gray, 8) 40%, transparent);
+  }
+
+  &__dialog {
+    @include flex(column, stretch, flex-start, fluid(16), nowrap);
+
+    width: 100%;
+    max-width: 560px;
+    max-height: 100%;
+    outline: 0;
+  }
+
+  // Search field
+  &__field {
+    @include flex(row, center, flex-start, fluid(8), nowrap);
+
+    flex-shrink: 0;
+    padding: fluid(12) fluid(16);
+    background: bg(surface, neutral);
+    border: width(1) solid;
+    border-radius: radius(lg);
+    color: text(body);
+
+    @include state-border-layer(stroke(neutral, subtle));
+
+    &:hover {
+      border-color: state-border(hover);
+
+      @include state-timing(hover);
+    }
+
+    &:focus-within {
+      border-color: stroke(primary);
+    }
+  }
+
+  &__search-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: icon(neutral);
+  }
+
+  &__input {
+    @include field.input-element;
+
+    &::placeholder {
+      color: text(caption);
+    }
+  }
+
+  &__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    border: 0;
+    border-radius: radius(sm);
+    color: icon(neutral);
+    cursor: pointer;
+
+    @include states(primary);
+  }
+
+  &__search-icon svg,
+  &__clear svg {
+    width: fixed(24);
+    height: fixed(24);
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  // Panel: tags, results and the keyboard legend
+  &__panel {
+    @include flex(column, stretch, flex-start, 0, nowrap);
+
+    min-height: 0;
+    padding-top: fluid(24);
+    background: bg(surface, secondary);
+    border: width(1) solid stroke(neutral, subtle);
+    border-radius: radius(lg);
+    overflow: hidden;
+  }
+
+  &__tags {
+    @include flex(row, center, flex-start, fluid(8), wrap);
+
+    padding: 0 fluid(24) fluid(16);
+  }
+
+  &__tag {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    border-radius: radius(sm);
+    background: none;
+    cursor: pointer;
+
+    @include focus-ring(primary);
+  }
+
+  &__results {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 50vh;
+    padding: 0 fluid(8);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  &__group-label {
+    @include font-scale(body--sm);
+
+    padding: 0 fluid(16);
+    color: text(caption);
+  }
+
+  &__separator {
+    padding: fluid(8) fluid(16) fluid(16);
+  }
+
+  // Result item
+  &__item {
+    @include flex(row, flex-start, flex-start, fluid(8), nowrap);
+
+    padding: fluid(12) fluid(16);
+    border-radius: radius(md);
+    color: text(body);
+    cursor: pointer;
+
+    @include state-layer(bg(surface, neutral));
+
+    &.is-active {
+      background-color: state(hover);
+
+      @include state-timing(hover);
+    }
+
+    &:active {
+      background-color: state(pressed);
+
+      @include state-timing(pressed);
+    }
+  }
+
+  &__leading {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    min-width: fixed(24);
+    height: fixed(24);
+    color: icon(neutral);
+
+    svg {
+      width: fixed(24);
+      height: fixed(24);
+    }
+  }
+
+  &__text {
+    @include flex(column, stretch, flex-start, 0, nowrap);
+
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__title-row {
+    @include flex(row, baseline, flex-start, fluid(8), nowrap);
+  }
+
+  &__title {
+    @include font-scale(body--lg);
+
+    color: text(body);
+  }
+
+  &__caption {
+    @include font-scale(body--sm);
+
+    color: text(caption);
+  }
+
+  &__description {
+    @include font-scale(body--lg);
+
+    color: text(caption);
+  }
+
+  &__shortcut {
+    flex-shrink: 0;
+    padding-top: width(1);
+  }
+
+  &__empty {
+    @include font-scale(body--lg);
+
+    margin: 0;
+    padding: fluid(8) fluid(24) fluid(24);
+    color: text(caption);
+    text-align: center;
+  }
+
+  // Keyboard legend
+  &__footer {
+    @include flex(row, center, flex-start, fluid(16), wrap);
+    @include font-scale(body--md);
+
+    padding: fluid(24);
+    background: bg(surface, neutral);
+    color: text(body);
+  }
+
+  &__legend {
+    @include flex(row, center, flex-start, fluid(8), nowrap);
+
+    // Close sits apart, at the far end of the row.
+    &:last-child {
+      margin-inline-start: auto;
+    }
+  }
+
+  &__keys {
+    @include flex(row, center, flex-start, fluid(4), nowrap);
+  }
+
+  // A key that shows an icon instead of text: the glyph fills one line box,
+  // so the key keeps the height of its text neighbours.
+  &__key svg {
+    display: block;
+    width: 1lh;
+    height: 1lh;
+  }
+
+  &__status {
+    @include sr-only;
+  }
+}
