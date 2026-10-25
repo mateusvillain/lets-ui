@@ -2,10 +2,17 @@
  * Interaction state math — the JavaScript twin of `state()` and
  * `state-border()` in `packages/styles/src/utilities/_functions.scss`.
  *
- * A state colour is the content colour (the tint) mixed into the resting
- * colour (the base) with `color-mix(in srgb, tint N%, base)`. For opaque
- * colours that is a plain per-channel interpolation of the gamma-encoded sRGB
- * values, which is what this reproduces.
+ * A state colour is a tint mixed into the resting colour (the base) with
+ * `color-mix(in srgb, tint N%, base)`. For opaque colours that is a plain
+ * per-channel interpolation of the gamma-encoded sRGB values, which is what
+ * this reproduces.
+ *
+ * Which colour is the tint depends on the component. A surface component — a
+ * menu item, a line tab, a field border — tints with its own content colour.
+ * A filled one — a button, the current page, a checked box — tints with the
+ * colour opposite its label (`filled-state-tint`), so the fill moves away from
+ * the label and the label gains contrast. That is why the label (`content`)
+ * and the tint are separate colours here.
  */
 
 // Keep in sync with `$state-amounts` and `$state-border-amounts`.
@@ -88,15 +95,16 @@ export function contrast(a, b) {
 
 /**
  * The resting, hover and pressed colours for one mode, each with the contrast
- * that matters for it: the content colour against a background (text has to
- * stay legible, 4.5:1), or a border against the surface it sits on (a
- * component boundary has to stay identifiable, 3:1).
+ * that matters for it: the label against a background (text has to stay
+ * legible, 4.5:1), or a border against the surface it sits on (a component
+ * boundary has to stay identifiable, 3:1). Without a `content` colour the
+ * label is taken to be the tint, as on a surface component.
  */
-export function computeStates({ mode, base, tint, surface }) {
+export function computeStates({ mode, base, tint, content = tint, surface }) {
   const amounts = AMOUNTS[mode];
   if (!amounts) throw new Error(`Invalid mode: "${mode}"`);
 
-  const against = mode === 'background' ? tint : surface;
+  const against = mode === 'background' ? content : surface;
   const state = (name, amount, color) => ({
     name,
     amount,
@@ -118,14 +126,27 @@ export const THEMES = ['light', 'dark'];
  * is stored by name and resolved again on load, so the link follows the
  * tokens; custom colours are stored as hex without the `#`.
  */
-export function toSearch({ theme, preset, mode, base, tint, surface }) {
+export function toSearch({
+  theme,
+  preset,
+  mode,
+  base,
+  content,
+  tint,
+  surface,
+}) {
   const params = new URLSearchParams({ theme });
   if (preset && preset !== 'custom') {
     params.set('preset', preset);
   } else {
     params.set('mode', mode);
-    for (const [key, value] of Object.entries({ base, tint, surface })) {
-      params.set(key, value.slice(1));
+    for (const [key, value] of Object.entries({
+      base,
+      content,
+      tint,
+      surface,
+    })) {
+      if (value) params.set(key, value.slice(1));
     }
   }
   return `?${params}`;
@@ -138,7 +159,7 @@ export function fromSearch(search) {
   if (THEMES.includes(params.get('theme'))) view.theme = params.get('theme');
   if (params.get('preset')) view.preset = params.get('preset');
   if (MODES.includes(params.get('mode'))) view.mode = params.get('mode');
-  for (const key of ['base', 'tint', 'surface']) {
+  for (const key of ['base', 'content', 'tint', 'surface']) {
     const value = params.has(key) && normalizeHex(params.get(key));
     if (value) view[key] = value;
   }
