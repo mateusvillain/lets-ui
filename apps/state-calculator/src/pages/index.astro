@@ -2,10 +2,12 @@
 /**
  * State Calculator — what hover and pressed resolve to for a colour pair.
  *
- * Let's UI does not pick state colours: it mixes a component's content colour
- * into its resting colour (8% / 16% for a background, 40% / 56% for a border).
- * This page runs that mix for any pair, shows the contrast each state keeps,
- * and renders a live sample driven by the same `color-mix()` the styles use.
+ * Let's UI does not pick state colours: it mixes a tint into a component's
+ * resting colour (8% / 16% for a background, 40% / 56% for a border). The
+ * tint is the content colour on a surface component and the colour opposite
+ * the label on a filled one. This page runs that mix for any colours, shows
+ * the contrast the label keeps in each state, and renders a live sample
+ * driven by the same `color-mix()` the styles use.
  */
 import '@lets-ui/tokens';
 import '@/styles/calculator.css';
@@ -14,6 +16,8 @@ const PRESETS = [
   { key: 'button-primary', name: 'Button', detail: 'Primary' },
   { key: 'button-neutral', name: 'Button', detail: 'Neutral' },
   { key: 'button-danger', name: 'Button', detail: 'Danger' },
+  { key: 'button-success', name: 'Button', detail: 'Success' },
+  { key: 'menu-item', name: 'Menu item', detail: 'Surface' },
   { key: 'field', name: 'Field', detail: 'Default border' },
   { key: 'field-error', name: 'Field', detail: 'Error border' },
 ];
@@ -22,7 +26,8 @@ const STATES = ['rest', 'hover', 'pressed'];
 
 const COLOURS = [
   { slot: 'base', label: 'Resting background' },
-  { slot: 'tint', label: 'Content colour (tint)' },
+  { slot: 'content', label: 'Label colour' },
+  { slot: 'tint', label: 'State tint' },
   { slot: 'surface', label: 'Surface behind the border' },
 ];
 ---
@@ -88,9 +93,11 @@ const COLOURS = [
       </header>
 
       <p class="sc-lead">
-        Pick a resting colour and the content colour drawn on it. Hover and
-        pressed are that content colour mixed into the resting one — see what
-        they resolve to and whether they stay legible.
+        Pick a resting colour, the label drawn on it and the tint its states mix
+        in. A surface component tints with its own content colour; a filled
+        one, with the colour opposite its label, so the label gains contrast on
+        hover and press. See what each state resolves to and whether the label
+        stays legible.
       </p>
 
       <div class="sc-layout">
@@ -155,7 +162,7 @@ const COLOURS = [
                 </div>
               ))
             }
-            <button type="button" class="sc-icon-button sc-swap" data-swap aria-label="Swap resting and content colours" title="Swap colours">
+            <button type="button" class="sc-icon-button sc-swap" data-swap aria-label="Swap resting and label colours" title="Swap colours">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3" /></svg>
             </button>
           </div>
@@ -280,30 +287,48 @@ const COLOURS = [
         AMOUNTS,
         computeStates,
         contrast,
-        cssColorToHex,
         fromSearch,
         mix,
         normalizeHex,
+        rgbToHex,
         toSearch,
       } from '@/lib/state.js';
 
       // Each preset names the tokens a real component reads, resolved in the
-      // current theme so the numbers match what ships.
+      // current theme so the numbers match what ships. Filled components tint
+      // with the colour opposite their label (the `$tint` of `states()`); surface
+      // ones with their own content colour.
+      const FILLED = {
+        mode: 'background',
+        content: '--lui-color-neutral-text-inverse',
+        // tint(foreground) in the styles.
+        tint: '--lui-color-gray-8',
+      };
       const PRESETS = {
         'button-primary': {
-          mode: 'background',
+          ...FILLED,
           base: '--lui-color-primary-background-container',
-          tint: '--lui-color-neutral-text-inverse',
         },
         'button-neutral': {
           mode: 'background',
           base: '--lui-color-neutral-background-container',
-          tint: '--lui-color-neutral-text-body',
+          content: '--lui-color-neutral-text-body',
+          // tint(background) in the styles.
+          tint: '--lui-color-gray-1',
         },
         'button-danger': {
-          mode: 'background',
+          ...FILLED,
           base: '--lui-color-danger-background-container',
-          tint: '--lui-color-neutral-text-inverse',
+        },
+        'button-success': {
+          ...FILLED,
+          base: '--lui-color-success-background-container',
+        },
+        'menu-item': {
+          mode: 'background',
+          base: '--lui-color-neutral-background-surface',
+          content: '--lui-color-neutral-text-body',
+          tint: '--lui-color-neutral-text-body',
         },
         field: {
           mode: 'border',
@@ -320,7 +345,7 @@ const COLOURS = [
       };
 
       const THRESHOLDS = { background: 4.5, border: 3 };
-      const SLOTS = ['base', 'tint', 'surface'];
+      const SLOTS = ['base', 'content', 'tint', 'surface'];
 
       const root = document.documentElement;
       const $ = (selector, scope = document) => scope.querySelector(selector);
@@ -341,8 +366,9 @@ const COLOURS = [
           ? linked.preset
           : 'custom',
         mode: linked.mode ?? 'background',
-        base: linked.base ?? '#339bf0',
-        tint: linked.tint ?? '#ffffff',
+        base: linked.base ?? '#0a7ac8',
+        content: linked.content ?? linked.tint ?? '#ffffff',
+        tint: linked.tint ?? '#131519',
         surface: linked.surface ?? '#ffffff',
         pin: 'live',
         // The state the live sample is in, so its card can light up.
@@ -354,9 +380,19 @@ const COLOURS = [
       probe.hidden = true;
       document.body.append(probe);
 
+      // Through a canvas, which resolves any colour space to sRGB bytes: the
+      // brand and palette tokens are authored in OKLCH, and getComputedStyle
+      // hands them back as `oklch(...)`.
+      const canvas = document
+        .createElement('canvas')
+        .getContext('2d', { willReadFrequently: true });
       function resolveToken(name) {
         probe.style.color = `var(${name})`;
-        return cssColorToHex(getComputedStyle(probe).color);
+        canvas.clearRect(0, 0, 1, 1);
+        canvas.fillStyle = getComputedStyle(probe).color;
+        canvas.fillRect(0, 0, 1, 1);
+        const [r, g, b] = canvas.getImageData(0, 0, 1, 1).data;
+        return rgbToHex([r, g, b].map((channel) => channel / 255));
       }
 
       function applyPreset(key) {
@@ -366,6 +402,9 @@ const COLOURS = [
         for (const slot of SLOTS) {
           if (preset[slot]) state[slot] = resolveToken(preset[slot]);
         }
+        // A border preset has no label: keep it in step with the tint, as
+        // `computeStates` assumes, rather than leaving the previous preset's.
+        if (!preset.content) state.content = state.tint;
       }
 
       const format = (ratio) => `${ratio.toFixed(2)}:1`;
@@ -394,10 +433,10 @@ const COLOURS = [
       }
 
       function renderScale() {
-        const { mode, base, tint, surface } = state;
+        const { mode, base, content, tint, surface } = state;
         const amount = Number(range.value);
         const color = mix(tint, base, amount);
-        const ratio = contrast(color, mode === 'background' ? tint : surface);
+        const ratio = contrast(color, mode === 'background' ? content : surface);
 
         range.setAttribute('aria-valuetext', `${amount}% tint, ${color}`);
         $('[data-readout-swatch]').style.background = color;
@@ -415,7 +454,7 @@ const COLOURS = [
       }
 
       function render() {
-        const { mode, preset, base, tint, surface, theme } = state;
+        const { mode, preset, base, content, tint, surface, theme } = state;
         const amounts = AMOUNTS[mode];
         const threshold = THRESHOLDS[mode];
         const isBackground = mode === 'background';
@@ -431,12 +470,17 @@ const COLOURS = [
           const tokens = PRESETS[swatch.dataset.presetSwatch];
           swatch.style.setProperty('--base', `var(${tokens.base})`);
           swatch.style.setProperty('--tint', `var(${tokens.tint})`);
+          if (tokens.content) {
+            swatch.style.setProperty('--content', `var(${tokens.content})`);
+          }
           swatch.dataset.mode = tokens.mode;
         }
 
         $('[data-colour="base"] [data-colour-label]').textContent =
           isBackground ? 'Resting background' : 'Resting border';
         $('[data-colour="surface"]').hidden = isBackground;
+        // A border has no label on it: only the tint and the surface count.
+        $('[data-colour="content"]').hidden = !isBackground;
         $('[data-swap]').hidden = !isBackground;
 
         for (const slot of SLOTS) {
@@ -447,9 +491,9 @@ const COLOURS = [
           if (document.activeElement !== hex) hex.value = state[slot];
         }
 
-        const against = isBackground ? 'content colour' : 'surface';
+        const against = isBackground ? 'label' : 'surface';
         $('[data-states-note]').textContent = isBackground
-          ? `Text drawn in the content colour has to keep ${threshold}:1 in every state.`
+          ? `The label has to keep ${threshold}:1 in every state.`
           : `The border has to keep ${threshold}:1 against the surface behind it.`;
 
         for (const s of computeStates(state)) {
@@ -457,6 +501,7 @@ const COLOURS = [
           const swatch = $('[data-swatch]', card);
           swatch.style.setProperty('--swatch', s.color);
           swatch.style.setProperty('--tint', tint);
+          swatch.style.setProperty('--content', content);
           swatch.style.setProperty('--surface', surface);
           $('[data-swatch-text]', swatch).hidden = !isBackground;
           $('[data-amount]', card).textContent = s.amount
@@ -484,6 +529,7 @@ const COLOURS = [
         stage.dataset.mode = mode;
         stage.style.setProperty('--base', base);
         stage.style.setProperty('--tint', tint);
+        stage.style.setProperty('--content', content);
         stage.style.setProperty('--surface', surface);
         stage.style.setProperty('--hover', `${amounts.hover}%`);
         stage.style.setProperty('--pressed', `${amounts.pressed}%`);
@@ -494,6 +540,7 @@ const COLOURS = [
 
         const property = isBackground ? 'background-color' : 'border-color';
         code.textContent = [
+          ...(isBackground ? [`/* label */   color: ${content};`] : []),
           `/* rest */    ${property}: ${base};`,
           `/* hover */   ${property}: color-mix(in srgb, ${tint} ${amounts.hover}%, ${base});`,
           `/* pressed */ ${property}: color-mix(in srgb, ${tint} ${amounts.pressed}%, ${base});`,
@@ -554,7 +601,10 @@ const COLOURS = [
       }
 
       $('[data-swap]').addEventListener('click', () => {
-        [state.base, state.tint] = [state.tint, state.base];
+        // A surface pair tints with its own label: keep the tint following it.
+        const surface = state.tint === state.content;
+        [state.base, state.content] = [state.content, state.base];
+        if (surface) state.tint = state.content;
         toCustom();
         render();
       });
