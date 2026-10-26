@@ -26,7 +26,7 @@ pnpm storybook
 pnpm build-storybook
 ```
 
-Commits must follow the **Conventional Commits** spec (enforced via commitlint). See `.agent/skills/conventional-commit/` for guidance.
+Commits must follow the **Conventional Commits** spec (enforced via commitlint). See `.agents/skills/conventional-commit/` for guidance.
 
 ## Architecture
 
@@ -97,7 +97,7 @@ Each interactive component in `packages/lets-ui-components/src/components/` is a
 
 ## Agent Skills
 
-`.agent/skills/` contains guided workflows for common tasks — use these when available:
+`.agents/skills/` contains guided workflows for common tasks — use these when available:
 
 - **`component-creator`** — Creating or updating SCSS components or Web Components; checks token coverage and blocks creation if tokens are missing
 - **`documentation`** — Generating Storybook stories (`.stories.js`) and MDX docs (`.docs.mdx`)
