@@ -12,7 +12,7 @@ $sizes: (
 );
 
 // The fill takes the container colour of each feedback role; the track sits
-// under it in the subtle neutral, which keeps every fill at 3:1 or more.
+// under it in gray 2, which keeps every fill at 3:1 or more.
 $variants: primary, success, caution, danger;
 
 // The indeterminate segment covers this fraction of the track (120 of 400 px
@@ -53,11 +53,13 @@ $segment: 30%;
     overflow: hidden;
     block-size: map.get($sizes, md);
 
-    // The subtle neutral, not the container one: against the container track
-    // every fill fell under the 3:1 of WCAG 1.4.11 (2.34–2.97:1). The subtle
-    // track gives 3.27–4.15:1 in both themes. The track itself is faint
-    // against the page, which is fine: the fill is what carries the value.
-    background-color: stroke(neutral, subtle);
+    // Gray 2, not the neutral container: against the container track every
+    // fill fell under the 3:1 of WCAG 1.4.11 (2.34–2.97:1). Gray 2 gives
+    // 3.27–4.15:1 in both themes. The track itself is faint against the page,
+    // which is fine: the fill is what carries the value.
+    // A primitive, as a stopgap until a semantic background slot for the
+    // track exists, like the Skeleton and Avatar backgrounds.
+    background-color: color(gray, 2);
     border-radius: radius(circle);
   }
 
