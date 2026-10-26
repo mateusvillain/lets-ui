@@ -82,8 +82,6 @@ Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão
 
 Para ligar e desligar uma opção, como um filtro ou uma formatação, use `aria-pressed="true"` ou `"false"` e troque o valor a cada clique. Pressionado, o botão ganha o fundo de container neutro. Hover, foco e `disabled` continuam funcionando sobre o estado pressionado. Em modo de alto contraste (`forced-colors`), o botão pressionado usa as cores de destaque do sistema e ganha um anel interno.
 
-O fundo sozinho tem contraste abaixo de 3:1 com o estado não pressionado (cerca de 1.6:1 no tema claro e 2.1:1 no escuro). Quando o estado precisa ser percebido com segurança, mostre-o também de outra forma, por exemplo trocando o ícone.
-
 Mantenha o mesmo `aria-label` nos dois estados: o leitor de tela anuncia "pressionado" ou "não pressionado", e um nome que muda com o estado confunde. `aria-pressed="mixed"` não tem estilo próprio e aparece como não pressionado.
 
 <Canvas of={IconButtonStories.Toggle} />
@@ -130,7 +128,6 @@ Sem o Web Component, use `<button class="icon-button icon-button--{size}" type="
 - `aria-expanded`, `aria-haspopup` e `aria-pressed` definidos no `<lui-icon-button>`, e a descrição de um Tooltip em volta dele, são repassados ao `<button>` interno. O elemento externo não tem papel e não carrega esses atributos para o leitor de tela.
 - Os dois tamanhos atendem à área mínima de 24px da WCAG 2.5.8.
 - O foco continua visível em modo de alto contraste (`forced-colors`), com um contorno do sistema no lugar do anel.
-- Com `aria-pressed="true"`, o botão ganha o fundo de container neutro, com contraste abaixo de 3:1 em relação ao estado não pressionado. Em `forced-colors`, usa as cores de destaque do sistema e um anel interno.
 - Com `disabled`, o botão sai da ordem de tabulação.
 
 ### Responsabilidades de quem usa
