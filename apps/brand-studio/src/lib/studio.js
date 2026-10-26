@@ -54,9 +54,9 @@ const el = (tag, attrs = {}, children = []) => {
 /**
  * A compact property row: a muted label on the left, the control on the
  * right — the inspector layout of Figma/Framer/Penpot, rather than the
- * design system's own stacked, floating-label form field. The control keeps
- * its accessible name (`label-hidden` only removes the visible duplicate),
- * and the wrapper still carries the "changed" marker.
+ * design system's own stacked form field. The control is named through
+ * `aria-label` rather than its own `label`, so the row's label is the only
+ * visible one, and the wrapper still carries the "changed" marker.
  *
  * `wide` is for controls that need the row's full width to stay usable — a
  * pair of bounds, or a text input next to a presets select — rather than the
@@ -351,7 +351,6 @@ export function mountStudio({ root, templates, meta }) {
 
     const input = el('lui-input', {
       size: 'md',
-      'label-hidden': true,
       class: 'st-hex',
     });
 
@@ -529,7 +528,6 @@ export function mountStudio({ root, templates, meta }) {
   function fontFamilyControl(item, value, write) {
     const input = el('lui-input', {
       size: 'md',
-      'label-hidden': true,
       'aria-label': item.label,
       value: value.join(', '),
     });
@@ -574,7 +572,6 @@ export function mountStudio({ root, templates, meta }) {
       const input = el('lui-input', {
         size: 'md',
         type: 'number',
-        'label-hidden': true,
         'aria-label': ariaLabel,
         'increment-label': 'Aumentar valor',
         'decrement-label': 'Diminuir valor',
@@ -605,7 +602,6 @@ export function mountStudio({ root, templates, meta }) {
   function selectControl(item, value, write) {
     const select = el('lui-native-select', {
       size: 'md',
-      'label-hidden': true,
       'aria-label': item.label,
       placeholder: 'Select',
       options: item.options.map((option) => option.label).join(','),
@@ -683,7 +679,6 @@ export function mountStudio({ root, templates, meta }) {
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
-      'label-hidden': true,
       'aria-label': `${item.label} (${unit})`,
       'increment-label': 'Aumentar valor',
       'decrement-label': 'Diminuir valor',
@@ -720,7 +715,6 @@ export function mountStudio({ root, templates, meta }) {
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
-      'label-hidden': true,
       'aria-label': item.label,
       'increment-label': 'Aumentar valor',
       'decrement-label': 'Diminuir valor',
