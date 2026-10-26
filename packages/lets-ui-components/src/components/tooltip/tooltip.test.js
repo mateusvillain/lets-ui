@@ -142,6 +142,40 @@ describe('the description', () => {
   });
 });
 
+describe('a text that repeats the trigger name', () => {
+  const iconButton = (label) =>
+    `<lui-icon-button aria-label="${label}"><svg aria-hidden="true"></svg></lui-icon-button>`;
+
+  it('is not added as a description', async () => {
+    const { tooltip } = await mount(iconButton(TEXT));
+    await tooltip.updateComplete;
+
+    const button = (await axNodes()).find(
+      (n) => n.role?.value === 'button' && n.name?.value === TEXT
+    );
+    expect(button).toBeDefined();
+    expect(button.description?.value ?? '').toBe('');
+  });
+
+  it('keeps the visible text out of the accessibility tree', async () => {
+    const { tooltip } = await mount(iconButton(TEXT));
+
+    expect(content(tooltip).getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('follows the name changing into and out of the text', async () => {
+    const { trigger } = await mount(iconButton('Editar'));
+
+    trigger.setAttribute('aria-label', TEXT);
+    await expect.poll(() => describedBy(TEXT)).toEqual([]);
+
+    trigger.setAttribute('aria-label', 'Editar');
+    await expect
+      .poll(() => describedBy(TEXT))
+      .toEqual([{ role: 'button', name: 'Editar' }]);
+  });
+});
+
 describe('with a trigger that has nothing focusable', () => {
   const wrapper = (tooltip) =>
     tooltip.shadowRoot.querySelector('[data-tooltip-trigger]');

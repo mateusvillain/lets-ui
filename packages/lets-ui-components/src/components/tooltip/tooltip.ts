@@ -22,6 +22,18 @@ const isDisabled = (el: HTMLElement) =>
 const isContent = (node: Node) =>
   node.nodeType === Node.ELEMENT_NODE || !!node.textContent?.trim();
 
+// The trigger's accessible name as its author wrote it: `aria-label` first,
+// then the `label` Let's UI buttons render as text, then the text itself.
+const triggerName = (el: HTMLElement) =>
+  (
+    el.getAttribute('aria-label') ||
+    el.getAttribute('label') ||
+    el.textContent ||
+    ''
+  )
+    .trim()
+    .toLowerCase();
+
 export class LuiTooltip extends LitElement {
   static styles = unsafeCSS(styles);
 
@@ -66,7 +78,7 @@ export class LuiTooltip extends LitElement {
       subtree: true,
       characterData: true,
       attributes: true,
-      attributeFilter: ['disabled', 'href', 'tabindex'],
+      attributeFilter: ['disabled', 'href', 'tabindex', 'aria-label', 'label'],
     });
   }
 
@@ -77,7 +89,10 @@ export class LuiTooltip extends LitElement {
 
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('text') && this._describedTrigger) {
-      this._describe(this._describedTrigger, this.text);
+      this._describe(
+        this._describedTrigger,
+        this._descriptionFor(this._describedTrigger)
+      );
     }
   }
 
@@ -106,6 +121,16 @@ export class LuiTooltip extends LitElement {
     el.ariaDescription = value;
   }
 
+  // On an icon-only button the tooltip usually spells out the button's own
+  // name. Describing it with the same text would make a screen reader say it
+  // twice, so a tooltip that repeats the name leaves the description to the
+  // author's own.
+  private _descriptionFor(el: HTMLElement) {
+    return triggerName(el) === this.text.trim().toLowerCase()
+      ? this._authorDescription
+      : this.text;
+  }
+
   private _syncTrigger() {
     const slot = this.shadowRoot?.querySelector('slot');
     if (!slot) return;
@@ -121,8 +146,10 @@ export class LuiTooltip extends LitElement {
       }
       this._describedTrigger = trigger;
       this._authorDescription = trigger?.ariaDescription ?? null;
-      if (trigger) this._describe(trigger, this.text);
     }
+    // Every pass, not only when the trigger changes: its name may have changed
+    // into or out of matching the text.
+    if (trigger) this._describe(trigger, this._descriptionFor(trigger));
     this._wrapperFocusable = this._hasCustomTrigger && !trigger;
   }
 
@@ -133,6 +160,9 @@ export class LuiTooltip extends LitElement {
       this.ariaLabel ||
       (this._hasCustomTrigger ? '' : `${this.label}: ${this.text}`);
 
+    // With a described trigger the text reaches it as a property, and the
+    // content is only what sighted users see: left in the tree, browse mode
+    // would read it a second time right after the trigger.
     return html`
       <span class="tooltip tooltip--${position}">
         ${this._hasCustomTrigger
@@ -160,7 +190,15 @@ export class LuiTooltip extends LitElement {
                 @slotchange="${this._syncTrigger}"
               ></slot>
             `}
-        <span id="${describedBy}" class="tooltip__content" role="tooltip"
+        <span
+          id="${describedBy}"
+          class="tooltip__content"
+          role="tooltip"
+          aria-hidden="${ifDefined(
+            this._hasCustomTrigger && !this._wrapperFocusable
+              ? 'true'
+              : undefined
+          )}"
           >${this.text}</span
         >
       </span>
