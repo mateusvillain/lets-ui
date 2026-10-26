@@ -68,6 +68,28 @@ Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value
 
 O elemento nativo `<progress>` não segue os temas e as marcas do Let's UI: a aparência da trilha e do preenchimento muda de navegador para navegador e mal aceita estilo. Ele também não oferece os três tamanhos, as variantes de cor nem a varredura do modo indeterminado com movimento reduzido. Por isso o Progress Bar usa uma `div` com `role="progressbar"` e os atributos `aria-value*`, que leitores de tela anunciam da mesma forma que o `<progress>`. Em HTML próprio, sem os estilos do Let's UI, o `<progress>` nativo continua sendo a primeira opção.
 
+## Propriedades
+
+| Atributo          | Tipo                                              | Padrão      | Descrição                                                                                           |
+| ----------------- | ------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------- |
+| `value`           | `number`                                          | —           | Avanço atual, limitado entre `0` e `max`. Sem ele, a barra fica indeterminada.                      |
+| `max`             | `number`                                          | `100`       | Valor que completa a barra. Zero, negativo ou inválido vira `100`.                                  |
+| `variant`         | `'primary' \| 'success' \| 'caution' \| 'danger'` | `'primary'` | Cor do preenchimento.                                                                               |
+| `size`            | `'sm' \| 'md' \| 'lg'`                            | `'md'`      | Espessura da trilha: 4px, 8px ou 12px.                                                              |
+| `label-placement` | `'top' \| 'inline'`                               | `'top'`     | Rótulo e valor acima da trilha ou na mesma linha dela.                                              |
+| `value-text`      | `string`                                          | `''`        | Texto exibido no lugar do percentual e usado como `aria-valuetext`. Ignorado no modo indeterminado. |
+| `caption`         | `string`                                          | `''`        | Legenda abaixo da trilha, anunciada quando muda.                                                    |
+| `hide-label`      | `boolean`                                         | `false`     | Esconde o rótulo visível; `label` continua nomeando a barra.                                        |
+| `hide-value`      | `boolean`                                         | `false`     | Esconde o valor ao lado do rótulo.                                                                  |
+
+## Textos padrão
+
+Os textos que o componente gera são em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
+
+| Atributo | Tipo     | Padrão           | Descrição                                                                                              |
+| -------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
+| `label`  | `string` | `'Progress bar'` | Rótulo visível e nome acessível da barra. O padrão só é usado como `aria-label` e não aparece na tela. |
+
 ## Acessibilidade
 
 ### O que o componente faz
