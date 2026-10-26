@@ -80,6 +80,21 @@ describe('computeStates', () => {
     expect(rest.contrast).toBeCloseTo(contrast('#eeecf1', '#ffffff'));
   });
 
+  it('measures a filled label against its own colour, not the tint', () => {
+    // A primary button: white label, tinted with the dark opposite.
+    const [rest, hover, pressed] = computeStates({
+      mode: 'background',
+      base: '#0a7ac8',
+      content: '#ffffff',
+      tint: '#131519',
+      surface: '#ffffff',
+    });
+    expect(hover.color).toBe(mix('#131519', '#0a7ac8', 8));
+    expect(hover.contrast).toBeCloseTo(contrast(hover.color, '#ffffff'));
+    expect(hover.contrast).toBeGreaterThan(rest.contrast);
+    expect(pressed.contrast).toBeGreaterThan(hover.contrast);
+  });
+
   it('throws on an unknown mode', () => {
     expect(() =>
       computeStates({ mode: 'outline', base: '#fff', tint: '#000' })
@@ -93,6 +108,7 @@ describe('toSearch / fromSearch', () => {
     preset: 'custom',
     mode: 'border',
     base: '#eeecf1',
+    content: '#ffffff',
     tint: '#282b33',
     surface: '#ffffff',
   };
@@ -102,6 +118,7 @@ describe('toSearch / fromSearch', () => {
       theme: 'dark',
       mode: 'border',
       base: '#eeecf1',
+      content: '#ffffff',
       tint: '#282b33',
       surface: '#ffffff',
     });

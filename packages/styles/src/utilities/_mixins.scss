@@ -67,8 +67,21 @@
   inherits: false;
 }
 
-@mixin state-base($bg) {
+// `$tint` is for a component with a solid fill and a label on it — a button,
+// the current page, a checked box. Its states tint with the colour opposite
+// its label instead of the label itself, so the fill moves away from the label
+// and the label gains contrast on hover and press instead of losing it:
+// `tint(foreground)` for a light label, `tint(background)` for a dark one.
+// Both flip with the theme. Leave it out on a surface component, which tints
+// with its own content colour. The fill and its tint are declared together so
+// a filled component cannot get one without the other. See `$state-tint` in
+// _functions.scss.
+@mixin state-base($bg, $tint: null) {
   --lui-bg: #{$bg};
+
+  @if $tint {
+    @include state-tint($tint);
+  }
 }
 
 // The border counterpart of `--lui-bg`, registered for the same reasons.
@@ -121,8 +134,8 @@
 // The press has to land inside a click — mousedown to mouseup is roughly 80ms,
 // so anything slower never reaches the pressed tint. The exits are the slowest
 // of the four, which keeps a cursor sweeping across a toolbar from flickering.
-@mixin state-layer($bg: transparent) {
-  @include state-base($bg);
+@mixin state-layer($bg: transparent, $tint: null) {
+  @include state-base($bg, $tint);
 
   background-color: var(--lui-bg, transparent);
   transition:
@@ -147,8 +160,10 @@
 
 // States
 //  @include states($focus-visible, $focus);
-@mixin states($focus-visible, $focus: null, $bg: transparent) {
-  @include state-layer($bg);
+//  @include states($focus-visible, $focus, $bg: <fill>, $tint: <opposite>);
+// `$tint` as in `state-base`: set it on a filled component.
+@mixin states($focus-visible, $focus: null, $bg: transparent, $tint: null) {
+  @include state-layer($bg, $tint);
 
   &:disabled,
   &.is-disabled,
