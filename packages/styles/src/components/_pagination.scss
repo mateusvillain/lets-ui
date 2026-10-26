@@ -48,7 +48,7 @@
 .pagination__item[aria-current='page'] {
   color: text(inverse);
 
-  @include state-base(bg(container, primary));
+  @include state-base(bg(container, primary), tint(foreground));
 }
 
 .pagination__ellipsis {
