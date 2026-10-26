@@ -1,5 +1,7 @@
 import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
 import { afterEach, describe, expect, it } from 'vitest';
+import { cdp } from 'vitest/browser';
+import { contrast } from '../../test/contrast.js';
 import { LuiProgressBar } from './progress-bar.ts';
 
 customElements.define('lui-progress-bar', LuiProgressBar);
@@ -259,5 +261,111 @@ describe('accessible name', () => {
       '<lui-progress-bar value="10"></lui-progress-bar>'
     );
     expect(bar(progress).getAttribute('aria-label')).toBe('Progress bar');
+  });
+});
+
+// --- Contrast, forced colors and reduced motion ---
+
+const VARIANTS = ['primary', 'success', 'caution', 'danger'];
+const background = (el) => getComputedStyle(el).backgroundColor;
+
+// The page colour, resolved the way a token is in the page.
+function surface() {
+  const probe = document.createElement('div');
+  probe.style.backgroundColor = 'var(--lui-color-neutral-background-surface)';
+  document.body.append(probe);
+  mounted.push(probe);
+  return background(probe);
+}
+
+const emulate = (features) =>
+  cdp().send('Emulation.setEmulatedMedia', { features });
+
+describe('contrast (WCAG 1.4.11)', () => {
+  // The default brand, as Storybook and the docs render it: without
+  // `data-brand`, the brand colours do not follow the dark theme.
+  afterEach(() => {
+    document.documentElement.removeAttribute('data-theme');
+    document.documentElement.removeAttribute('data-brand');
+  });
+
+  describe.each(['light', 'dark'])('%s theme', (theme) => {
+    it.each(VARIANTS.flatMap((v) => ['sm', 'md', 'lg'].map((s) => [v, s])))(
+      'keeps the %s fill at 3:1 against the track and the page (%s)',
+      async (variant, size) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-brand', 'lets-ui');
+        const progress = await mount(
+          `<lui-progress-bar value="50" variant="${variant}" size="${size}"></lui-progress-bar>`
+        );
+        const fill = background(part(progress, 'indicator'));
+        const track = background(part(progress, 'track'));
+
+        expect(contrast(fill, track)).toBeGreaterThanOrEqual(3);
+        expect(contrast(fill, surface())).toBeGreaterThanOrEqual(3);
+      }
+    );
+  });
+});
+
+describe('forced colors', () => {
+  afterEach(() => emulate([]));
+
+  it('paints the fill and the sweep in Highlight and outlines the track', async () => {
+    const determinate = await mount(
+      '<lui-progress-bar value="50" size="sm"></lui-progress-bar>'
+    );
+    const indeterminate = await mount(
+      '<lui-progress-bar size="sm"></lui-progress-bar>'
+    );
+    const height = part(determinate, 'track').getBoundingClientRect().height;
+    await emulate([{ name: 'forced-colors', value: 'active' }]);
+    const probe = document.createElement('div');
+    probe.style.cssText = 'forced-color-adjust: none; background: Highlight';
+    document.body.append(probe);
+    mounted.push(probe);
+    const track = getComputedStyle(part(determinate, 'track'));
+
+    expect(background(part(determinate, 'indicator'))).toBe(background(probe));
+    expect(
+      getComputedStyle(part(indeterminate, 'track'), '::after').backgroundColor
+    ).toBe(background(probe));
+    expect(track.outlineStyle).toBe('solid');
+    expect(track.outlineWidth).toBe('1px');
+    // An outline adds no size, so the 4px track keeps its height.
+    expect(part(determinate, 'track').getBoundingClientRect().height).toBe(
+      height
+    );
+  });
+});
+
+describe('reduced motion', () => {
+  afterEach(() => emulate([]));
+
+  it('pulses the whole track instead of sweeping', async () => {
+    const progress = await mount('<lui-progress-bar></lui-progress-bar>');
+    await emulate([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    const segment = getComputedStyle(part(progress, 'track'), '::after');
+
+    expect(segment.animationName).toBe('lui-progress-bar-pulse');
+    expect(segment.animationDuration).toBe('2.4s');
+    expect(segment.width).toBe(getComputedStyle(part(progress, 'track')).width);
+    expect(
+      getComputedStyle(part(progress, 'indicator')).transitionDuration
+    ).toBe('0s');
+  });
+
+  it('fades the pulse from full opacity down to 0.4', async () => {
+    const progress = await mount('<lui-progress-bar></lui-progress-bar>');
+    await emulate([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    const [animation] = part(progress, 'track').getAnimations({
+      subtree: true,
+    });
+    const opacities = animation.effect
+      .getKeyframes()
+      .map((frame) => Number(frame.opacity));
+
+    expect(Math.max(...opacities)).toBe(1);
+    expect(Math.min(...opacities)).toBeCloseTo(0.4);
   });
 });
