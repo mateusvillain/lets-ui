@@ -20,7 +20,9 @@ Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `in
 
 ## Variantes
 
-`primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite. Informe o estado também na legenda, porque a cor sozinha não basta e a legenda é anunciada quando muda.
+`primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite.
+
+Toda barra `success`, `caution` ou `danger` leva o desfecho na legenda, como "Envio concluído" ou "Falha no envio: conexão perdida". A cor sozinha não informa o estado a quem não a distingue nem ao leitor de tela, e a legenda é anunciada quando muda.
 
 <Canvas of={ProgressBarStories.Variants} />
 
@@ -44,27 +46,40 @@ Omita `value` quando não há como medir o avanço. O valor some e o leitor de t
 
 ## Só a barra
 
-Com `hide-label` e `hide-value`, sobra apenas a trilha. O `label` continua sendo o nome acessível da barra, então informe-o mesmo assim. Mostre o avanço em texto por perto, porque a trilha sozinha não basta para quem não distingue bem o preenchimento.
+Com `hide-label` e `hide-value`, sobra apenas a trilha. Use essa combinação **só quando o valor ou o estado estiver em texto ao lado da barra**, como "Seu perfil está 60% completo" logo acima. Sem esse texto, a trilha sozinha não basta para quem não distingue bem o preenchimento.
+
+O `label` continua sendo o nome acessível da barra, então informe-o mesmo assim, no idioma da página.
 
 <Canvas of={ProgressBarStories.BarOnly} />
 
 ## Classe CSS (sem Web Component)
 
-Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido. Deixe a legenda com `aria-live="polite"` no HTML desde o início, mesmo vazia, para que as mudanças nela sejam anunciadas. Vazia, escreva-a sem espaço nem quebra de linha entre as tags (`<span …></span>`); só assim ela deixa de ocupar espaço abaixo da trilha.
+Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. Confira:
+
+- `role="progressbar"` na trilha (`.progress-bar__track`).
+- `aria-valuemin`, `aria-valuemax` e `aria-valuenow`. No indeterminado, omita `aria-valuenow`.
+- Um nome: `aria-labelledby` apontando para o rótulo visível, ou `aria-label` quando não há rótulo.
+- A legenda com `aria-live="polite"` no HTML desde o início, mesmo vazia, ligada à trilha por `aria-describedby` quando tiver texto.
+  A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido. A legenda precisa existir desde o início para que as mudanças nela sejam anunciadas. Vazia, escreva-a sem espaço nem quebra de linha entre as tags (`<span …></span>`); só assim ela deixa de ocupar espaço abaixo da trilha.
 
 <Canvas of={ProgressBarStories.CSSClass} />
+
+## Por que `div` + ARIA e não `<progress>`
+
+O elemento nativo `<progress>` não segue os temas e as marcas do Let's UI: a aparência da trilha e do preenchimento muda de navegador para navegador e mal aceita estilo. Ele também não oferece os três tamanhos, as variantes de cor nem a varredura do modo indeterminado com movimento reduzido. Por isso o Progress Bar usa uma `div` com `role="progressbar"` e os atributos `aria-value*`, que leitores de tela anunciam da mesma forma que o `<progress>`. Em HTML próprio, sem os estilos do Let's UI, o `<progress>` nativo continua sendo a primeira opção.
 
 ## Acessibilidade
 
 ### O que o componente faz
 
 - A trilha tem `role="progressbar"`, `aria-valuemin="0"`, `aria-valuemax` igual a `max` e `aria-valuenow` com o valor já limitado ao intervalo. No modo indeterminado, `aria-valuenow` e `aria-valuetext` não existem.
-- O rótulo visível nomeia a barra por `aria-labelledby`. Com `hide-label`, o mesmo texto vai para `aria-label`. Sem `label`, o nome é "Progress bar", em inglês.
+- O rótulo visível nomeia a barra por `aria-labelledby`. Com `hide-label`, o mesmo texto vai para `aria-label`. Sem `label`, o nome é "Progress bar", em inglês: é uma rede de segurança para a barra nunca ficar sem nome, não um padrão de uso.
 - Com `value-text`, o mesmo texto vira `aria-valuetext`, e o leitor de tela anuncia "3.2 GB of 10 GB" em vez de um percentual. Sem ele, só `aria-valuenow` é exposto.
 - O valor visível repete o `aria-valuenow` (ou o `aria-valuetext`), então fica fora da árvore de acessibilidade para não ser lido duas vezes.
 - A legenda descreve a barra por `aria-describedby` e é uma região `aria-live="polite"`. Os leitores de tela não anunciam com confiança a mudança de `aria-valuenow`, então é pela legenda que a pessoa fica sabendo do avanço e do resultado. A região existe mesmo sem `caption`, porque uma região inserida junto com o texto costuma não ser anunciada.
 - A barra não é interativa e não recebe foco.
-- Com `prefers-reduced-motion: reduce`, o preenchimento não anima e o modo indeterminado deixa de correr pela trilha: a barra inteira só pulsa.
+- Com `prefers-reduced-motion: reduce`, o preenchimento não anima e o modo indeterminado deixa de correr pela trilha: a barra inteira só pulsa, devagar. O pulso só indica que a tarefa está ativa; a legenda é o canal principal para dizer em que ponto ela está e como terminou.
+- O preenchimento tem contraste de pelo menos 3:1 com a trilha e com a página nas quatro variantes, nos temas claro e escuro, com a marca padrão. Outra marca (`data-brand`) muda a cor `primary` e pode mudar essa razão: confira ao criar uma marca.
 - Em `forced-colors`, a trilha ganha contorno e o preenchimento usa a cor de destaque do sistema.
 
 ### O que fica com a aplicação
@@ -132,6 +147,7 @@ updateStorage(2.7, 10);
     class="progress-bar__track"
     role="progressbar"
     aria-labelledby="upload-label"
+    aria-describedby="upload-caption"
     aria-valuemin="0"
     aria-valuemax="100"
     aria-valuenow="40"
@@ -141,7 +157,9 @@ updateStorage(2.7, 10);
       style="--lui-progress-bar-value: 40%"
     ></span>
   </div>
-  <span class="progress-bar__caption" aria-live="polite"></span>
+  <span class="progress-bar__caption" id="upload-caption" aria-live="polite"
+    >8 de 20 arquivos</span
+  >
 </div>
 ```
 

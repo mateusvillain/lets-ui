@@ -85,13 +85,22 @@ export const LabelPlacement = () => `
 export const Variants = () => `
   <div style="width: 400px; padding: 16px;">
     <lui-stack gap="16">
-      <lui-progress-bar value="25" label="Primary"></lui-progress-bar>
-      <lui-progress-bar value="25" label="Success" variant="success"></lui-progress-bar>
-      <lui-progress-bar value="50" label="Caution" variant="caution"></lui-progress-bar>
-      <lui-progress-bar value="100" label="Danger" variant="danger"></lui-progress-bar>
+      <lui-progress-bar value="25" label="Enviando arquivos" caption="5 de 20 arquivos"></lui-progress-bar>
+      <lui-progress-bar value="100" label="Enviando arquivos" variant="success" caption="Envio concluído"></lui-progress-bar>
+      <lui-progress-bar value="90" label="Armazenamento" variant="caution" caption="Quase cheio: 9 de 10 GB usados"></lui-progress-bar>
+      <lui-progress-bar value="60" label="Enviando arquivos" variant="danger" caption="Falha no envio: conexão perdida"></lui-progress-bar>
     </lui-stack>
   </div>
 `;
+
+Variants.parameters = {
+  docs: {
+    description: {
+      story:
+        'Cada variante de resultado traz o desfecho na legenda: a cor sozinha não informa o estado.',
+    },
+  },
+};
 
 export const CustomUnit = () => `
   <div style="width: 400px; padding: 16px;">
@@ -153,8 +162,24 @@ export const CSSClass = () => `
         </div>
         <span class="progress-bar__caption" id="css-progress-caption" aria-live="polite">Caption</span>
       </div>
-      <div class="progress-bar progress-bar--md progress-bar--success progress-bar--indeterminate progress-bar--inline">
-        <span class="progress-bar__label" id="css-progress-busy">Loading</span>
+      <div class="progress-bar progress-bar--md progress-bar--success progress-bar--inline">
+        <span class="progress-bar__label" id="css-progress-done">Enviando arquivos</span>
+        <span class="progress-bar__value" aria-hidden="true">100%</span>
+        <div
+          class="progress-bar__track"
+          role="progressbar"
+          aria-labelledby="css-progress-done"
+          aria-describedby="css-progress-done-caption"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="100"
+        >
+          <span class="progress-bar__indicator" style="--lui-progress-bar-value: 100%"></span>
+        </div>
+        <span class="progress-bar__caption" id="css-progress-done-caption" aria-live="polite">Envio concluído</span>
+      </div>
+      <div class="progress-bar progress-bar--md progress-bar--primary progress-bar--indeterminate">
+        <span class="progress-bar__label" id="css-progress-busy">Preparando a importação</span>
         <div
           class="progress-bar__track"
           role="progressbar"
