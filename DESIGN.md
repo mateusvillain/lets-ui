@@ -522,7 +522,7 @@ Pre-commit hooks (Husky + lint-staged) run Prettier and linters on staged files 
 
 ## Adding a New Component — Checklist
 
-Use the `.agent/skills/component-creator` workflow for guided creation. At minimum:
+Use the `.agents/skills/component-creator` workflow for guided creation. At minimum:
 
 - [ ] All required tokens exist in `packages/lets-ui-tokens`. If not, add them first and rebuild.
 - [ ] SCSS file created in `packages/styles/src/components/` (pure-CSS components) and registered in `_components.scss`.
