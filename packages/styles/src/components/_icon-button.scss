@@ -73,3 +73,57 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
 
   @include states(primary, primary, $bg: bg(surface, neutral));
 }
+
+// --- Pressed (toggle) — specificity 0,2,0 ---
+// The pressed state is the container fill alone, by design decision. It goes
+// through `--lui-bg`, so hover and press still tint on top of it.
+// Known trade-off: surface → container is 1.64:1 in the light theme and
+// 2.08:1 in the dark one, under the 3:1 of WCAG 1.4.11.
+.icon-button[aria-pressed='true'] {
+  @include state-base(bg(container, neutral));
+}
+
+// --- Forced colors ---
+// A forced-colors theme repaints the fill with the button colour, so the
+// pressed fill would vanish. The pressed button opts out of the repaint and
+// takes `Highlight`, still through `--lui-bg` so the hover tint mixes against
+// it. The slotted icon carries its own colour and has to follow.
+// A disabled button cannot take `Highlight`, which reads as active: it falls
+// back to the button face and `GrayText`, and an inner ring in `currentcolor`
+// keeps the pressed state visible in that grey.
+// The ring is a pseudo-element, not a border, `box-shadow` or `outline`: a
+// border would shift the layout, and the other two already belong to focus.
+// `border-radius: inherit` follows the `:focus` radius change.
+@media (forced-colors: active) {
+  .icon-button[aria-pressed='true'] {
+    forced-color-adjust: none;
+    color: HighlightText;
+
+    @include state-base(Highlight);
+
+    ::slotted(*) {
+      color: HighlightText;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: width(2) solid currentcolor;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    &:disabled,
+    &.is-disabled,
+    &[aria-disabled='true'] {
+      color: GrayText;
+
+      @include state-base(ButtonFace);
+
+      ::slotted(*) {
+        color: GrayText;
+      }
+    }
+  }
+}
