@@ -26,7 +26,7 @@ pnpm storybook
 pnpm build-storybook
 ```
 
-Commits must follow the **Conventional Commits** spec (enforced via commitlint). See `.agent/skills/conventional-commit/` for guidance.
+Commits must follow the **Conventional Commits** spec (enforced via commitlint). See `.agents/skills/conventional-commit/` for guidance.
 
 ## Architecture
 
@@ -70,15 +70,16 @@ design value?" but "will this ever resolve differently?".
 
 Component SCSS uses utility functions from `packages/styles/src/utilities/_functions.scss`:
 
-| Function                   | Usage                                                    |
-| -------------------------- | -------------------------------------------------------- |
-| `bg($category, $variant)`  | Background colors (e.g. `bg(container, primary)`)        |
-| `text($variant)`           | Text colors (e.g. `text(body)`, `text(inverse)`)         |
-| `color($category, $scale)` | Primitive colors (e.g. `color(brand, 5)`)                |
-| `radius($size)`            | Border radius (`xs`, `sm`, `md`, `lg`, `circle`, `none`) |
-| `width($size)`             | Border width (`0`, `1`, `2`)                             |
-| `fluid($px)`               | Fluid/responsive sizing                                  |
-| `fixed($px)`               | Fixed pixel sizing                                       |
+| Function                   | Usage                                                         |
+| -------------------------- | ------------------------------------------------------------- |
+| `bg($category, $variant)`  | Background colors (e.g. `bg(container, primary)`)             |
+| `text($variant)`           | Text colors (e.g. `text(body)`, `text(inverse)`)              |
+| `color($category, $scale)` | Primitive colors (e.g. `color(brand, 5)`)                     |
+| `tint($role)`              | State tint for filled components (`foreground`, `background`) |
+| `radius($size)`            | Border radius (`xs`, `sm`, `md`, `lg`, `circle`, `none`)      |
+| `width($size)`             | Border width (`0`, `1`, `2`)                                  |
+| `fluid($px)`               | Fluid/responsive sizing                                       |
+| `fixed($px)`               | Fixed pixel sizing                                            |
 
 Token source files are in `packages/lets-ui-tokens/tokens/{brand,global}/`. Terrazzo compiles them into `packages/lets-ui-tokens/dist/` — `letsui.tokens.scss` (the generated map, do not edit manually) and `letsui.tokens.static.scss` (literal values for media query preludes and Sass loops, which cannot take a `var()`).
 
@@ -96,7 +97,7 @@ Each interactive component in `packages/lets-ui-components/src/components/` is a
 
 ## Agent Skills
 
-`.agent/skills/` contains guided workflows for common tasks — use these when available:
+`.agents/skills/` contains guided workflows for common tasks — use these when available:
 
 - **`component-creator`** — Creating or updating SCSS components or Web Components; checks token coverage and blocks creation if tokens are missing
 - **`documentation`** — Generating Storybook stories (`.stories.js`) and MDX docs (`.docs.mdx`)

@@ -68,7 +68,7 @@ Adicionar a nova entrada na tabela "Componentes existentes", em ordem alfabétic
 ### 2. Commitar e fazer push
 
 ```bash
-git add .agent/skills/issue-creator/references/label-map.md
+git add .agents/skills/issue-creator/references/label-map.md
 git commit -m "chore(issue-creator): add component: <nome> to label-map"
 git push
 ```
