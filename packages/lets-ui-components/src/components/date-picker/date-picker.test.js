@@ -230,7 +230,10 @@ describe('selection', () => {
     const button = day(el, toISODate(today()));
     expect(button.classList).toContain('date-picker-calendar__day--selected');
     expect(button.getAttribute('aria-current')).toBe('date');
-    expect(button.closest('td').getAttribute('aria-selected')).toBe('true');
+    // The focused button is the gridcell, so it carries the selection itself.
+    expect(button.getAttribute('role')).toBe('gridcell');
+    expect(button.getAttribute('aria-selected')).toBe('true');
+    expect(button.closest('td').getAttribute('role')).toBe('presentation');
   });
 
   it('leaves the cells of the neighbouring months empty', async () => {
@@ -528,9 +531,7 @@ describe('range', () => {
     expect(dayClasses(el, '2026-01-22')).not.toContain(
       'date-picker-calendar__day--in-range'
     );
-    expect(
-      day(el, '2026-01-18').closest('td').getAttribute('aria-selected')
-    ).toBe('true');
+    expect(day(el, '2026-01-18').getAttribute('aria-selected')).toBe('true');
   });
 
   it('squares only the corners shared with a highlighted neighbour', async () => {

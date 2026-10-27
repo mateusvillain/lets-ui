@@ -741,15 +741,19 @@ export class LuiDatePicker extends LitElement {
                     ]
                       .filter(Boolean)
                       .join(' ');
+                    // The button is the gridcell, so the focused element carries
+                    // aria-selected and a screen reader reads it with the day.
                     return html`
                       <td
                         class="date-picker-calendar__cell"
-                        aria-selected="${isEdge || isBetween
-                          ? 'true'
-                          : 'false'}"
+                        role="presentation"
                       >
                         <button
                           type="button"
+                          role="gridcell"
+                          aria-selected="${isEdge || isBetween
+                            ? 'true'
+                            : 'false'}"
                           class="${classes}"
                           data-date="${toISODate(day)}"
                           tabindex="${isSameDay(day, active) ? 0 : -1}"
