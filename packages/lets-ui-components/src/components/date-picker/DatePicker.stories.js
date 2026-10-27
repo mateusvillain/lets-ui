@@ -119,6 +119,12 @@ export default {
         },
       },
     },
+    requiredText: {
+      control: 'text',
+      description:
+        'Sem `editable`, texto oculto que descreve o campo como obrigatório quando `required` está ativo',
+      table: { category: 'Textos', defaultValue: { summary: 'Required' } },
+    },
     rangeStartText: {
       control: 'text',
       description:
@@ -173,6 +179,7 @@ const Template = ({
   formatText,
   rangeErrorText,
   rangeOrderText,
+  requiredText,
   rangeStartText,
   dialogLabel,
   previousMonthLabel,
@@ -201,6 +208,7 @@ const Template = ({
     formatText ? `format-text="${formatText}"` : '',
     rangeErrorText ? `range-error-text="${rangeErrorText}"` : '',
     rangeOrderText ? `range-order-text="${rangeOrderText}"` : '',
+    requiredText ? `required-text="${requiredText}"` : '',
     rangeStartText ? `range-start-text="${rangeStartText}"` : '',
     dialogLabel ? `dialog-label="${dialogLabel}"` : '',
     previousMonthLabel ? `previous-month-label="${previousMonthLabel}"` : '',
@@ -241,6 +249,7 @@ DatePicker.args = {
   formatText: '',
   rangeErrorText: 'Enter a date within the allowed period.',
   rangeOrderText: "The end date can't be before the start date.",
+  requiredText: 'Required',
   rangeStartText: 'Start date selected. Choose the end date.',
   dialogLabel: 'Choose date',
   previousMonthLabel: 'Previous month',

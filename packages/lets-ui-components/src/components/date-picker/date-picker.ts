@@ -58,6 +58,12 @@ const ICON_CHEVRON_RIGHT = html`
   </svg>
 `;
 
+// Read with `||`: removing the attribute leaves the property null, and the
+// text still needs a value.
+const DEFAULTS = {
+  requiredText: 'Required',
+};
+
 // January 4, 2026 is a Sunday: adding 0–6 days walks a whole week from it.
 const REFERENCE_SUNDAY = new Date(2026, 0, 4);
 
@@ -82,6 +88,10 @@ export class LuiDatePicker extends LitElement {
   @property({ type: Boolean, reflect: true }) open = false;
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
+  // Read only without `editable`: a button takes no aria-required, so the
+  // field is described as required instead.
+  @property({ attribute: 'required-text' }) requiredText =
+    DEFAULTS.requiredText;
   @property({ type: Boolean }) optional = false;
   @property({ attribute: 'optional-text' }) optionalText = '(optional)';
   @property() hint = '';
@@ -859,7 +869,16 @@ export class LuiDatePicker extends LitElement {
     const selection = this._selection;
     const labelId = `${this._baseId}-label`;
     const valueId = `${this._baseId}-value`;
+    const requiredId = `${this._baseId}-required`;
     const message = this._message;
+    // Read before the message, so "Required" comes first and an error that
+    // repeats it stays second.
+    const describedBy = [
+      this.required ? requiredId : '',
+      message ? `${this._baseId}-message` : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return html`
       <button
@@ -879,9 +898,7 @@ export class LuiDatePicker extends LitElement {
               ? `${labelId} ${valueId}`
               : valueId
         )}"
-        aria-describedby="${ifDefined(
-          message ? `${this._baseId}-message` : undefined
-        )}"
+        aria-describedby="${ifDefined(describedBy || undefined)}"
         aria-invalid="${this.error ? 'true' : 'false'}"
         ?disabled="${this.disabled}"
         @click="${this._handleTriggerClick}"
@@ -894,6 +911,11 @@ export class LuiDatePicker extends LitElement {
         </span>
         <span class="date-picker__icon">${ICON_CALENDAR}</span>
       </button>
+      ${this.required
+        ? html`<span id="${requiredId}" class="date-picker__sr-only"
+            >${this.requiredText || DEFAULTS.requiredText}</span
+          >`
+        : nothing}
     `;
   }
 

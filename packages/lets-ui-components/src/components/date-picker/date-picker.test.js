@@ -170,6 +170,36 @@ describe('trigger', () => {
     }
   });
 
+  it('describes a required button field as required, before the message', async () => {
+    const el = await mount('label="Check-in" required hint="Pick a weekday"');
+    const ids = trigger(el).getAttribute('aria-describedby').split(' ');
+    const texts = ids.map((id) =>
+      el.shadowRoot.getElementById(id).textContent.trim()
+    );
+    expect(texts).toEqual(['Required', 'Pick a weekday']);
+    el.requiredText = 'Obrigatório';
+    await el.updateComplete;
+    expect(el.shadowRoot.getElementById(ids[0]).textContent.trim()).toBe(
+      'Obrigatório'
+    );
+    el.removeAttribute('required-text');
+    el.requiredText = null;
+    await el.updateComplete;
+    expect(el.shadowRoot.getElementById(ids[0]).textContent.trim()).toBe(
+      'Required'
+    );
+  });
+
+  it('adds no required text when not required, nor with editable', async () => {
+    const el = await mount('label="Check-in"');
+    expect(trigger(el).hasAttribute('aria-describedby')).toBe(false);
+    const typed = await mount('label="Check-in" editable required');
+    expect(typed.shadowRoot.textContent).not.toMatch(/Required/);
+    expect($(typed, '.date-picker__input').getAttribute('aria-required')).toBe(
+      'true'
+    );
+  });
+
   it('does not open while disabled', async () => {
     const el = await mount('disabled');
     expect(trigger(el).disabled).toBe(true);

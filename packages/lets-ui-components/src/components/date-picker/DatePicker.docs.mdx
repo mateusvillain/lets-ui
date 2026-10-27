@@ -175,19 +175,20 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 Os textos gerados pelo componente estão em inglês. Troque-os pelos atributos
 abaixo para usar o idioma do projeto.
 
-| Atributo               | Padrão                                           | Descrição                                                                                      |
-| ---------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| `placeholder`          | `'Select a date'`                                | Texto do campo sem data. Com `editable`, o padrão é o `format-text`                            |
-| `optional-text`        | `'(optional)'`                                   | Marcador exibido quando `optional` está ativo                                                  |
-| `error-text`           | `'This field is required.'`                      | Mensagem exibida quando `error` está ativo, e de `valueMissing`                                |
-| `bad-input-text`       | `'Enter a valid date.'`                          | Mensagem de erro, com `editable`, quando o texto não forma uma data                            |
-| `range-error-text`     | `'Enter a date within the allowed period.'`      | Mensagem de erro quando a data fica fora de `min` e `max`                                      |
-| `range-order-text`     | `'The end date can't be before the start date.'` | Mensagem de erro, com `editable range`, quando a data final vem antes da inicial               |
-| `range-start-text`     | `'Start date selected. Choose the end date.'`    | Anúncio, com `range`, depois que a primeira ponta é escolhida                                  |
-| `format-text`          | Formato do `locale`, como `dd / mm / yyyy`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível            |
-| `dialog-label`         | `'Choose date'`                                  | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida |
-| `previous-month-label` | `'Previous month'`                               | `aria-label` do botão de mês anterior                                                          |
-| `next-month-label`     | `'Next month'`                                   | `aria-label` do botão de próximo mês                                                           |
+| Atributo               | Padrão                                           | Descrição                                                                                       |
+| ---------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `placeholder`          | `'Select a date'`                                | Texto do campo sem data. Com `editable`, o padrão é o `format-text`                             |
+| `optional-text`        | `'(optional)'`                                   | Marcador exibido quando `optional` está ativo                                                   |
+| `error-text`           | `'This field is required.'`                      | Mensagem exibida quando `error` está ativo, e de `valueMissing`                                 |
+| `bad-input-text`       | `'Enter a valid date.'`                          | Mensagem de erro, com `editable`, quando o texto não forma uma data                             |
+| `range-error-text`     | `'Enter a date within the allowed period.'`      | Mensagem de erro quando a data fica fora de `min` e `max`                                       |
+| `range-order-text`     | `'The end date can't be before the start date.'` | Mensagem de erro, com `editable range`, quando a data final vem antes da inicial                |
+| `required-text`        | `'Required'`                                     | Sem `editable`, texto oculto que descreve o campo como obrigatório quando `required` está ativo |
+| `range-start-text`     | `'Start date selected. Choose the end date.'`    | Anúncio, com `range`, depois que a primeira ponta é escolhida                                   |
+| `format-text`          | Formato do `locale`, como `dd / mm / yyyy`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível             |
+| `dialog-label`         | `'Choose date'`                                  | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida  |
+| `previous-month-label` | `'Previous month'`                               | `aria-label` do botão de mês anterior                                                           |
+| `next-month-label`     | `'Next month'`                                   | `aria-label` do botão de próximo mês                                                            |
 
 ## Acessibilidade
 
@@ -251,30 +252,32 @@ incompleta e mantém o valor anterior.
 
 ### O que o leitor de tela anuncia
 
-| Elemento              | Anúncio                                                                                                               |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Campo                 | `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data exibida, com `aria-expanded`                        |
-| Campo com `editable`  | `<input inputmode="numeric">` nomeado pelo rótulo e descrito pelo formato (`dd / mm / yyyy`), pelo hint ou pelo erro  |
-| Botão do calendário   | `dialog-label` seguido da data escolhida: `Choose date, Jan 16, 2026`                                                 |
-| Calendário            | Diálogo nomeado por `dialog-label`                                                                                    |
-| Mês                   | Uma região `aria-live="polite"`, anunciada ao trocar de mês; com `range`, os dois meses juntos                        |
-| Primeira ponta        | Com `range`, outra região `aria-live="polite"` anuncia `range-start-text` depois da primeira escolha                  |
-| Período escolhido     | Ao fechar, o foco volta ao campo, nomeado com o período em ordem: `Stay Jan 12 – 20, 2026`                            |
-| Dias da semana        | Nome completo ("Sunday"), mesmo quando a tela mostra só "S"                                                           |
-| Dia                   | Data por extenso: "Friday, January 16, 2026". O próprio botão do dia é a célula da grade (`role="gridcell"`)          |
-| Hoje                  | `aria-current="date"`                                                                                                 |
-| Dia selecionado       | `aria-selected="true"` no botão do dia, que é o elemento com foco; com `range`, nas duas pontas e nos dias entre elas |
-| Dia fora do intervalo | `aria-disabled="true"`: alcançável pelo teclado, mas não pode ser escolhido                                           |
-| Botões de mês         | `previous-month-label` e `next-month-label`; `aria-disabled` no limite de `min` e `max`                               |
-| Erro                  | `aria-invalid`, a mensagem do caso ligada por `aria-describedby` e, com `editable`, `aria-required`                   |
+| Elemento              | Anúncio                                                                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Campo                 | `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data exibida, com `aria-expanded`                                                          |
+| Campo com `editable`  | `<input inputmode="numeric">` nomeado pelo rótulo e descrito pelo formato (`dd / mm / yyyy`), pelo hint ou pelo erro                                    |
+| Botão do calendário   | `dialog-label` seguido da data escolhida: `Choose date, Jan 16, 2026`                                                                                   |
+| Calendário            | Diálogo nomeado por `dialog-label`                                                                                                                      |
+| Mês                   | Uma região `aria-live="polite"`, anunciada ao trocar de mês; com `range`, os dois meses juntos                                                          |
+| Primeira ponta        | Com `range`, outra região `aria-live="polite"` anuncia `range-start-text` depois da primeira escolha                                                    |
+| Período escolhido     | Ao fechar, o foco volta ao campo, nomeado com o período em ordem: `Stay Jan 12 – 20, 2026`                                                              |
+| Dias da semana        | Nome completo ("Sunday"), mesmo quando a tela mostra só "S"                                                                                             |
+| Dia                   | Data por extenso: "Friday, January 16, 2026". O próprio botão do dia é a célula da grade (`role="gridcell"`)                                            |
+| Hoje                  | `aria-current="date"`                                                                                                                                   |
+| Dia selecionado       | `aria-selected="true"` no botão do dia, que é o elemento com foco; com `range`, nas duas pontas e nos dias entre elas                                   |
+| Dia fora do intervalo | `aria-disabled="true"`: alcançável pelo teclado, mas não pode ser escolhido                                                                             |
+| Botões de mês         | `previous-month-label` e `next-month-label`; `aria-disabled` no limite de `min` e `max`                                                                 |
+| Erro                  | `aria-invalid`, a mensagem do caso ligada por `aria-describedby`; obrigatório: com `editable`, `aria-required`, e sem ele, `required-text` na descrição |
 
 O formato faz parte da descrição do campo, não só do placeholder, porque o
 placeholder some quando a pessoa começa a digitar e pode ser trocado por outro
 texto. Sem `hint`, a descrição aponta só para o texto abaixo do campo, que já
 mostra o formato, para que ele seja lido uma vez.
 
-O campo sem `editable` é um `<button>`, que não aceita `aria-required`. Nele, a
-obrigatoriedade aparece na validação do form, com `valueMissing` e
+O campo sem `editable` é um `<button>`, que não aceita `aria-required`. Com
+`required`, um texto oculto (`required-text`, "Required" por padrão) entra na
+descrição do botão, antes da mensagem, para que o campo seja anunciado como
+obrigatório desde o início. Ao enviar o form vazio, vale o `valueMissing`, com
 `error-text`.
 
 ### Critérios WCAG
