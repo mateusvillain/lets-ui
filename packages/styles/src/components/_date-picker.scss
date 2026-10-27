@@ -227,10 +227,6 @@
 
     @include states(primary);
 
-    &--outside {
-      color: text(caption);
-    }
-
     // Not in the prototype, which has no today variant. Primary text keeps it
     // apart from its neighbours without competing with the selected fill.
     &--today {

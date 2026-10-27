@@ -257,7 +257,7 @@ Open.parameters = {
   docs: {
     description: {
       story:
-        'O calendário abre abaixo do campo, no mês da data selecionada. Sem valor, abre no mês atual. O dia selecionado tem fundo primário e o dia de hoje tem texto primário. Os dias dos meses vizinhos completam as semanas com a cor de legenda.',
+        'O calendário abre abaixo do campo, no mês da data selecionada. Sem valor, abre no mês atual. O dia selecionado tem fundo primário e o dia de hoje tem texto primário. As células dos meses vizinhos ficam vazias.',
     },
   },
 };

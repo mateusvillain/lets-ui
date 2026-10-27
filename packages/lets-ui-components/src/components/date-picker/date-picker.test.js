@@ -41,13 +41,8 @@ afterEach(() => {
 
 const $ = (el, selector) => el.shadowRoot.querySelector(selector);
 const trigger = (el) => $(el, '.date-picker__control');
-// Months shown side by side can both draw a day; the copy in its own month
-// comes first when there is one.
 const day = (el, iso) =>
-  $(
-    el,
-    `.date-picker-calendar__day[data-date="${iso}"]:not(.date-picker-calendar__day--outside)`
-  ) ?? $(el, `.date-picker-calendar__day[data-date="${iso}"]`);
+  $(el, `.date-picker-calendar__day[data-date="${iso}"]`);
 const titles = (el) =>
   [...el.shadowRoot.querySelectorAll('.date-picker-calendar__title')].map((t) =>
     t.textContent.trim()
@@ -238,15 +233,21 @@ describe('selection', () => {
     expect(button.closest('td').getAttribute('aria-selected')).toBe('true');
   });
 
-  it('dims days of the neighbouring months', async () => {
+  it('leaves the cells of the neighbouring months empty', async () => {
     const el = await mount('value="2026-01-16"');
     await openWithClick(el);
-    expect(day(el, '2025-12-28').classList).toContain(
-      'date-picker-calendar__day--outside'
-    );
-    expect(day(el, '2026-01-01').classList).not.toContain(
-      'date-picker-calendar__day--outside'
-    );
+    // January 2026 starts on a Thursday: four December cells come first.
+    const cells = [
+      ...el.shadowRoot.querySelectorAll('.date-picker-calendar__cell'),
+    ];
+    expect(
+      cells.slice(0, 4).every((cell) => cell.textContent.trim() === '')
+    ).toBe(true);
+    expect(
+      cells.slice(0, 4).some((cell) => cell.hasAttribute('aria-selected'))
+    ).toBe(false);
+    expect(day(el, '2025-12-28')).toBeNull();
+    expect(day(el, '2026-01-01')).not.toBeNull();
   });
 });
 

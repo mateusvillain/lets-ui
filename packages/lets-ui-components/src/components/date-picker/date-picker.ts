@@ -706,9 +706,12 @@ export class LuiDatePicker extends LitElement {
               (week) => html`
                 <tr>
                   ${week.map((day, column) => {
-                    const inMonth = isSameMonth(day, month);
-                    // Side by side, a day can show up in two grids. Only the
-                    // copy in its own month is highlighted and focusable.
+                    // Days of the neighbouring months only fill the week, so
+                    // the cell stays empty: no number, nothing to click and
+                    // nothing for a screen reader to list.
+                    if (!isSameMonth(day, month)) {
+                      return html`<td class="date-picker-calendar__cell"></td>`;
+                    }
                     const isHighlighted = (date: Date | undefined) =>
                       !!date &&
                       !!highlight &&
@@ -730,7 +733,6 @@ export class LuiDatePicker extends LitElement {
                     const isToday = isSameDay(day, now);
                     const classes = [
                       'date-picker-calendar__day',
-                      inMonth ? '' : 'date-picker-calendar__day--outside',
                       isToday ? 'date-picker-calendar__day--today' : '',
                       isBetween ? 'date-picker-calendar__day--in-range' : '',
                       isEdge ? 'date-picker-calendar__day--selected' : '',
@@ -750,9 +752,7 @@ export class LuiDatePicker extends LitElement {
                           type="button"
                           class="${classes}"
                           data-date="${toISODate(day)}"
-                          tabindex="${inMonth && isSameDay(day, active)
-                            ? 0
-                            : -1}"
+                          tabindex="${isSameDay(day, active) ? 0 : -1}"
                           aria-label="${this._format(day, {
                             weekday: 'long',
                             month: 'long',
