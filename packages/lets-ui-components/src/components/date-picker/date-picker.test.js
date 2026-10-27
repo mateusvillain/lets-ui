@@ -955,6 +955,18 @@ describe('editable', () => {
     expect(el.shadowRoot.activeElement).toBe(toggle(el));
   });
 
+  it('returns focus to the text box it was opened from', async () => {
+    const el = await mount('editable locale="pt-BR" value="2026-01-16"');
+    input(el).focus();
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await el.updateComplete;
+    expect(el.open).toBe(true);
+    await userEvent.keyboard('{ArrowRight}{Enter}');
+    await el.updateComplete;
+    expect(el.value).toBe('2026-01-17');
+    expect(el.shadowRoot.activeElement).toBe(input(el));
+  });
+
   it('opens the calendar from the text box with Alt+ArrowDown', async () => {
     const el = await mount('editable');
     await type(el, '{ArrowDown}');
@@ -1165,6 +1177,29 @@ describe('range in two fields', () => {
     await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
     await el.updateComplete;
     expect(el.open).toBe(true);
+  });
+
+  it('returns focus to the end box after Escape', async () => {
+    const el = await mount(`${SPLIT} value="2026-01-16/2026-01-21"`);
+    end(el).focus();
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await el.updateComplete;
+    expect(el.open).toBe(true);
+    await userEvent.keyboard('{Escape}');
+    await el.updateComplete;
+    expect(el.open).toBe(false);
+    expect(el.shadowRoot.activeElement).toBe(end(el));
+  });
+
+  it('returns focus to the start box after picking the range', async () => {
+    const el = await mount(`${SPLIT} value="2026-01-16/2026-01-21"`);
+    start(el).focus();
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await el.updateComplete;
+    await userEvent.keyboard('{Enter}{ArrowRight}{ArrowRight}{Enter}');
+    await el.updateComplete;
+    expect(el.value).toBe('2026-01-16/2026-01-18');
+    expect(el.shadowRoot.activeElement).toBe(start(el));
   });
 
   it('requires both boxes and clears them on reset', async () => {

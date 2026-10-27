@@ -144,6 +144,8 @@ export class LuiDatePicker extends LitElement {
   // Set by user interaction only, so an `open` attribute in the markup shows
   // the calendar without pulling focus into it on page load.
   private _focusActiveDay = false;
+  // The control the calendar was opened from, which takes the focus back.
+  private _opener: HTMLElement | null = null;
   // Set while typing writes `value`, so the text being typed is not replaced
   // by the formatted value.
   private _typing = false;
@@ -198,6 +200,8 @@ export class LuiDatePicker extends LitElement {
     if (changed.has('open')) {
       this._anchor = null;
       this._preview = null;
+      // Closed without `_close`, by a click outside, say: forget the opener.
+      if (!this.open) this._opener = null;
       if (this.open) {
         this._activeDate = clampDate(
           this._selection?.start ?? today(),
@@ -516,13 +520,19 @@ export class LuiDatePicker extends LitElement {
   };
 
   private _openCalendar() {
+    this._opener = (this.renderRoot as ShadowRoot)
+      .activeElement as HTMLElement | null;
     this._focusActiveDay = true;
     this.open = true;
   }
 
   private _close({ restoreFocus = true } = {}) {
     this.open = false;
-    if (restoreFocus) this._triggerEl?.focus();
+    const opener = this._opener;
+    this._opener = null;
+    if (restoreFocus) {
+      (opener?.isConnected ? opener : this._triggerEl)?.focus();
+    }
   }
 
   private _handleTriggerClick() {
