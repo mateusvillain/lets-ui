@@ -424,6 +424,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 | Image             | `lui-image`                             |
 | Link              | `lui-link`                              |
 | Pagination        | `lui-pagination`                        |
+| Progress Bar      | `lui-progress-bar`                      |
 | Skeleton          | `lui-skeleton`                          |
 | Stepper / Step    | `lui-stepper`, `lui-step`               |
 | Tabs / Tab        | `lui-tabs`, `lui-tab`                   |
@@ -451,7 +452,7 @@ Boolean attributes follow the HTML spec: presence means true, absence means fals
 3. Actionable — Buttons, Icon Buttons
 4. Navigation — Links, Breadcrumb, Pagination, Stepper, Tabs, Dropdown Menu
 5. Form and options — Input, OTP Input, Textarea, Checkbox, Radio, Select, Switch
-6. Content — Card, Alert, Tag, Divider, Heading, Image, Body, Skeleton
+6. Content — Card, Alert, Tag, Divider, Heading, Image, Body, Skeleton, Progress Bar
 7. Layout — Container, Flex, Grid, Stack, Sidebar, Box, Center, Inline, Switcher, Float
 8. Miscellaneous — Modal, Drawer, Tooltip, Shortcut
 9. Utilities — Functions, Mixins, Flex
