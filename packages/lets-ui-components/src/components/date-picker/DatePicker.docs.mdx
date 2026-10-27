@@ -91,10 +91,12 @@ das caixas, e escolher o período no calendário preenche as duas.
 
 O `value` continua o mesmo do range em um campo, `YYYY-MM-DD/YYYY-MM-DD`, e só
 muda quando as duas datas estão completas e em ordem. Com erro, só a caixa com
-problema fica marcada com `aria-invalid`: a final, quando vem antes da inicial
-ou passa de `max`; a inicial, quando vem antes de `min`; a que está incompleta,
-quando a outra já forma uma data. Colar um intervalo em ISO 8601 em qualquer
-uma das caixas preenche as duas.
+problema fica marcada com `aria-invalid` e descrita pela mensagem: a final,
+quando vem antes da inicial ou passa de `max`; a inicial, quando vem antes de
+`min`; a que tem uma data incompleta ou que não existe (`badInput`). Uma caixa
+vazia não é `badInput`: com `required`, a que falta reporta `valueMissing`; sem
+`required`, o campo continua válido e o `value` fica vazio até as duas datas.
+Colar um intervalo em ISO 8601 em qualquer uma das caixas preenche as duas.
 
 Sem `editable`, o range continua um botão só, e `range-fields` não tem efeito.
 Cada caixa tem a largura da data, então as duas ficam tão próximas quanto no

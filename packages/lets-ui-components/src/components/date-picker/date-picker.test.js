@@ -1096,6 +1096,46 @@ describe('range in two fields', () => {
     expect(end(el).getAttribute('aria-invalid')).toBe('true');
   });
 
+  it('reports a missing end as valueMissing on that box only', async () => {
+    const el = await mount(
+      `${SPLIT} required`,
+      (html) => `<form>${html}</form>`
+    );
+    await typeIn(el, start(el), '16012026');
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    const validity = el._internals.validity;
+    expect(validity.valueMissing).toBe(true);
+    expect(validity.badInput).toBe(false);
+    const message = $(el, '.date-picker__message');
+    expect(message.textContent.trim()).toBe('This field is required.');
+    expect(start(el).getAttribute('aria-invalid')).toBe('false');
+    expect(end(el).getAttribute('aria-invalid')).toBe('true');
+    expect(start(el).getAttribute('aria-describedby')).not.toContain(
+      message.id
+    );
+    expect(end(el).getAttribute('aria-describedby')).toContain(message.id);
+  });
+
+  it('marks both boxes when both are missing', async () => {
+    const el = await mount(
+      `${SPLIT} required`,
+      (html) => `<form>${html}</form>`
+    );
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect(el._internals.validity.valueMissing).toBe(true);
+    expect(start(el).getAttribute('aria-invalid')).toBe('true');
+    expect(end(el).getAttribute('aria-invalid')).toBe('true');
+  });
+
+  it('accepts a missing end when not required', async () => {
+    const el = await mount(SPLIT, (html) => `<form>${html}</form>`);
+    await typeIn(el, start(el), '16012026');
+    expect(el.value).toBe('');
+    expect(el.closest('form').checkValidity()).toBe(true);
+  });
+
   it('marks the box that spells no date', async () => {
     const el = await mount(SPLIT, (html) => `<form>${html}</form>`);
     await typeIn(el, start(el), '16012026');

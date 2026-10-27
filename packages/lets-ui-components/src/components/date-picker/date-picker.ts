@@ -292,8 +292,19 @@ export class LuiDatePicker extends LitElement {
 
   // Text that spells no date — partial or impossible, like February 30.
   get _badInput() {
-    const typed = this._split ? this._startText + this._endText : this._text;
-    return this.editable && typed.trim() !== '' && !this._selection;
+    if (this._split) {
+      // An empty box is a missing end, not bad input.
+      const start = this._readField(this._startText);
+      const end = this._readField(this._endText);
+      const spellsNoDate = (text: string, date: Date | null) =>
+        /\d/.test(text) && !date;
+      return (
+        spellsNoDate(this._startText, start) ||
+        spellsNoDate(this._endText, end) ||
+        (!!start && !!end && start > end)
+      );
+    }
+    return this.editable && this._text.trim() !== '' && !this._selection;
   }
 
   // Two whole, real dates typed the wrong way round. It is bad input too, but
@@ -353,6 +364,12 @@ export class LuiDatePicker extends LitElement {
     }
     if (flags.rangeUnderflow) return { start: true, end: false };
     if (flags.rangeOverflow) return { start: false, end: true };
+    if (flags.valueMissing) {
+      return {
+        start: !this._readField(this._startText),
+        end: !this._readField(this._endText),
+      };
+    }
     return both;
   }
 
@@ -1100,13 +1117,18 @@ export class LuiDatePicker extends LitElement {
     const message = this._message;
     const formatId = `${this._baseId}-format`;
     const labelId = `${this._baseId}-label`;
-    const describedBy = [
-      this._showsFormat ? '' : formatId,
-      message ? `${this._baseId}-message` : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
     const invalid = this._invalidFields;
+    // An error message describes only the boxes it is about; a hint or the
+    // format describes both.
+    const describedBy = (end: boolean) =>
+      [
+        this._showsFormat ? '' : formatId,
+        message && (!this.error || (end ? invalid.end : invalid.start))
+          ? `${this._baseId}-message`
+          : '',
+      ]
+        .filter(Boolean)
+        .join(' ');
     const field = (end: boolean) => html`
       <input
         id="${this._baseId}-${end ? 'end' : 'control'}"
@@ -1119,7 +1141,7 @@ export class LuiDatePicker extends LitElement {
         aria-label="${end
           ? this.endLabel || DEFAULTS.endLabel
           : this.startLabel || DEFAULTS.startLabel}"
-        aria-describedby="${describedBy}"
+        aria-describedby="${describedBy(end)}"
         aria-invalid="${(end ? invalid.end : invalid.start) ? 'true' : 'false'}"
         aria-required="${this.required ? 'true' : 'false'}"
         ?disabled="${this.disabled}"
