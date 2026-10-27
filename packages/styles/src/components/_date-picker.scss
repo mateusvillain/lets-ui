@@ -60,13 +60,25 @@
     }
   }
 
-  // `range-fields="two"`: a text box per end in one control. The focused box
-  // takes a tint of its own, since the ring lights the whole control and would
-  // not say which end is being typed.
+  // `range-fields="two"`: a text box per end in one control. Each box is as
+  // wide as its date, so the ends sit as close as in the single-field range.
+  // `field-sizing` is not everywhere yet; where it is missing, a width in `ch`
+  // fits the `dd / mm / yyyy` pattern. The focused box takes a tint of its
+  // own, since the ring lights the whole control and would not say which end
+  // is being typed.
+  &__control--split {
+    gap: fixed(0);
+  }
+
   &__control--split &__input {
-    flex-basis: 0;
-    padding-inline: fluid(4);
+    flex: 0 1 auto;
+    padding-inline: fluid(2);
     border-radius: radius(xs);
+    field-sizing: content;
+
+    @supports not (field-sizing: content) {
+      width: 12ch;
+    }
 
     &:focus {
       background-color: bg(surface, primary);
@@ -75,7 +87,8 @@
 
   &__separator {
     flex-shrink: 0;
-    color: text(caption);
+    padding-inline: fluid(4);
+    color: text(body);
   }
 
   &__toggle {
@@ -99,6 +112,11 @@
     &:disabled {
       cursor: not-allowed;
     }
+  }
+
+  // The calendar button keeps the far end of a two-box control.
+  &__control--split &__toggle {
+    margin-inline-start: auto;
   }
 
   &__sr-only {
