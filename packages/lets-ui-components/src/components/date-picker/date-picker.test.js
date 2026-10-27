@@ -1001,3 +1001,146 @@ describe('editable', () => {
     expect(input(el).value).toBe('');
   });
 });
+
+describe('range in two fields', () => {
+  const SPLIT = 'editable range range-fields="two" locale="pt-BR" label="Stay"';
+  const start = (el) => $(el, '.date-picker__input--start');
+  const end = (el) => $(el, '.date-picker__input--end');
+
+  async function typeIn(el, field, text) {
+    await userEvent.click(field);
+    await userEvent.keyboard(text);
+    await el.updateComplete;
+  }
+
+  it('names the group by the label and each box by its end', async () => {
+    const el = await mount(SPLIT);
+    const group = $(el, '[role="group"]');
+    expect(
+      el.shadowRoot
+        .getElementById(group.getAttribute('aria-labelledby'))
+        .textContent.trim()
+    ).toBe('Stay');
+    expect(start(el).getAttribute('aria-label')).toBe('Start date');
+    expect(end(el).getAttribute('aria-label')).toBe('End date');
+    expect($(el, '.date-picker__separator').getAttribute('aria-hidden')).toBe(
+      'true'
+    );
+    expect(start(el).placeholder).toBe('dd / mm / yyyy');
+    el.startLabel = 'Entrada';
+    el.endLabel = null;
+    await el.updateComplete;
+    expect(start(el).getAttribute('aria-label')).toBe('Entrada');
+    expect(end(el).getAttribute('aria-label')).toBe('End date');
+  });
+
+  it('keeps one box without editable or range, and by default', async () => {
+    const button = await mount('range range-fields="two" label="Stay"');
+    expect($(button, '.date-picker__input')).toBeNull();
+    const single = await mount('editable range-fields="two" label="Day"');
+    expect(single.shadowRoot.querySelectorAll('input')).toHaveLength(1);
+    const one = await mount('editable range label="Stay"');
+    expect(one.shadowRoot.querySelectorAll('input')).toHaveLength(1);
+  });
+
+  it('sets the value once both ends are whole and in order', async () => {
+    const el = await mount(SPLIT);
+    const events = [];
+    el.addEventListener('change', (e) => events.push(e.detail));
+    await typeIn(el, start(el), '16012026');
+    expect(start(el).value).toBe('16 / 01 / 2026');
+    expect(el.value).toBe('');
+    await typeIn(el, end(el), '21012026');
+    expect(end(el).value).toBe('21 / 01 / 2026');
+    expect(el.value).toBe('2026-01-16/2026-01-21');
+    expect(events).toEqual([
+      {
+        value: '2026-01-16/2026-01-21',
+        start: '2026-01-16',
+        end: '2026-01-21',
+      },
+    ]);
+  });
+
+  it('shows the value in both boxes', async () => {
+    const el = await mount(`${SPLIT} value="2026-01-16/2026-01-21"`);
+    expect(start(el).value).toBe('16 / 01 / 2026');
+    expect(end(el).value).toBe('21 / 01 / 2026');
+    el.value = '';
+    await el.updateComplete;
+    expect(start(el).value).toBe('');
+    expect(end(el).value).toBe('');
+  });
+
+  it('fills both boxes from a pasted ISO range', async () => {
+    const el = await mount(SPLIT);
+    start(el).value = '2026-01-16/2026-01-21';
+    start(el).dispatchEvent(new InputEvent('input', { bubbles: true }));
+    await el.updateComplete;
+    expect(start(el).value).toBe('16 / 01 / 2026');
+    expect(end(el).value).toBe('21 / 01 / 2026');
+    expect(el.value).toBe('2026-01-16/2026-01-21');
+  });
+
+  it('marks only the end when it comes before the start', async () => {
+    const el = await mount(SPLIT, (html) => `<form>${html}</form>`);
+    await typeIn(el, start(el), '21012026');
+    await typeIn(el, end(el), '16012026');
+    expect(el.value).toBe('');
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      "The end date can't be before the start date."
+    );
+    expect(start(el).getAttribute('aria-invalid')).toBe('false');
+    expect(end(el).getAttribute('aria-invalid')).toBe('true');
+  });
+
+  it('marks the box that spells no date', async () => {
+    const el = await mount(SPLIT, (html) => `<form>${html}</form>`);
+    await typeIn(el, start(el), '16012026');
+    await typeIn(el, end(el), '2101');
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect(start(el).getAttribute('aria-invalid')).toBe('false');
+    expect(end(el).getAttribute('aria-invalid')).toBe('true');
+  });
+
+  it('fills both boxes from the calendar', async () => {
+    const el = await mount(`${SPLIT} value="2026-01-16/2026-01-21"`);
+    await userEvent.click($(el, '.date-picker__toggle'));
+    await el.updateComplete;
+    day(el, '2026-02-03').click();
+    await el.updateComplete;
+    day(el, '2026-02-10').click();
+    await el.updateComplete;
+    expect(el.value).toBe('2026-02-03/2026-02-10');
+    expect(start(el).value).toBe('03 / 02 / 2026');
+    expect(end(el).value).toBe('10 / 02 / 2026');
+  });
+
+  it('opens the calendar with Alt+ArrowDown from either box', async () => {
+    const el = await mount(`${SPLIT} value="2026-01-16/2026-01-21"`);
+    end(el).focus();
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await el.updateComplete;
+    expect(el.open).toBe(true);
+  });
+
+  it('requires both boxes and clears them on reset', async () => {
+    const el = await mount(
+      `${SPLIT} name="stay" required value="2026-01-16/2026-01-21"`,
+      (html) => `<form>${html}</form>`
+    );
+    expect(start(el).getAttribute('aria-required')).toBe('true');
+    expect(end(el).getAttribute('aria-required')).toBe('true');
+    expect(new FormData(el.closest('form')).get('stay')).toBe(
+      '2026-01-16/2026-01-21'
+    );
+    el.closest('form').reset();
+    await el.updateComplete;
+    expect(start(el).value).toBe('');
+    expect(end(el).value).toBe('');
+    expect(el.closest('form').checkValidity()).toBe(false);
+  });
+});

@@ -62,6 +62,8 @@ const ICON_CHEVRON_RIGHT = html`
 // text still needs a value.
 const DEFAULTS = {
   requiredText: 'Required',
+  startLabel: 'Start date',
+  endLabel: 'End date',
 };
 
 // January 4, 2026 is a Sunday: adding 0–6 days walks a whole week from it.
@@ -112,6 +114,11 @@ export class LuiDatePicker extends LitElement {
   @property({ attribute: 'previous-month-label' }) previousMonthLabel =
     'Previous month';
   @property({ attribute: 'next-month-label' }) nextMonthLabel = 'Next month';
+  // With `editable range`, `two` types each end in a text box of its own,
+  // inside one control that still looks like a single field.
+  @property({ attribute: 'range-fields' }) rangeFields = 'one';
+  @property({ attribute: 'start-label' }) startLabel = DEFAULTS.startLabel;
+  @property({ attribute: 'end-label' }) endLabel = DEFAULTS.endLabel;
   @property({ attribute: 'force-state' }) forceState = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
@@ -127,6 +134,9 @@ export class LuiDatePicker extends LitElement {
   // What is typed in the field with `editable`. It runs ahead of `value`,
   // which stays empty until the text spells a whole date.
   @state() private _text = '';
+  // The same, one per end, with `range-fields="two"`.
+  @state() private _startText = '';
+  @state() private _endText = '';
 
   private _baseId: string;
   // Set once the missing-name warning is logged, so it shows once per field.
@@ -158,11 +168,20 @@ export class LuiDatePicker extends LitElement {
 
   protected willUpdate(changed: PropertyValues) {
     if (
-      (changed.has('value') || changed.has('locale') || changed.has('range')) &&
+      (changed.has('value') ||
+        changed.has('locale') ||
+        changed.has('range') ||
+        changed.has('editable') ||
+        changed.has('rangeFields')) &&
       !this._typing
     ) {
       const selection = this._selection;
-      this._text = selection ? this._maskText(selection) : '';
+      if (this._split) {
+        this._startText = selection ? this._fieldText(selection.start) : '';
+        this._endText = selection ? this._fieldText(selection.end) : '';
+      } else {
+        this._text = selection ? this._maskText(selection) : '';
+      }
     }
     // A date typed with the calendar open brings the calendar to it.
     if (changed.has('value') && this._typing && this.open && this._selection) {
@@ -214,7 +233,10 @@ export class LuiDatePicker extends LitElement {
       changed.has('badInputText') ||
       changed.has('rangeErrorText') ||
       changed.has('rangeOrderText') ||
-      changed.has('_text')
+      changed.has('rangeFields') ||
+      changed.has('_text') ||
+      changed.has('_startText') ||
+      changed.has('_endText')
     ) {
       this._syncFormValue();
     }
@@ -233,12 +255,19 @@ export class LuiDatePicker extends LitElement {
   formResetCallback() {
     this.value = '';
     this._text = '';
+    this._startText = '';
+    this._endText = '';
     this.error = false;
     this.open = false;
   }
 
   get _size(): 'lg' | 'md' {
     return this.size === 'md' ? 'md' : 'lg';
+  }
+
+  // Two text boxes, one per end of the range.
+  get _split() {
+    return this.editable && this.range && this.rangeFields === 'two';
   }
 
   get _monthCount() {
@@ -263,13 +292,19 @@ export class LuiDatePicker extends LitElement {
 
   // Text that spells no date — partial or impossible, like February 30.
   get _badInput() {
-    return this.editable && this._text.trim() !== '' && !this._selection;
+    const typed = this._split ? this._startText + this._endText : this._text;
+    return this.editable && typed.trim() !== '' && !this._selection;
   }
 
   // Two whole, real dates typed the wrong way round. It is bad input too, but
   // with a message of its own, since the dates themselves are fine.
   get _reversedRange() {
     if (!this.range || !this._badInput) return false;
+    if (this._split) {
+      const start = this._readField(this._startText);
+      const end = this._readField(this._endText);
+      return !!start && !!end && start > end;
+    }
     const mask = this._mask;
     const digits = this._text.replace(/\D/g, '');
     const dates =
@@ -301,6 +336,26 @@ export class LuiDatePicker extends LitElement {
     return null;
   }
 
+  // With two text boxes, the ones the error is about: a box that spells no
+  // date, the end of a range typed the wrong way round, the end past `max`.
+  get _invalidFields(): { start: boolean; end: boolean } {
+    const none = { start: false, end: false };
+    const both = { start: true, end: true };
+    if (!this._split || !this.error) return none;
+    const flags = this._invalidity?.flags;
+    if (!flags) return both;
+    if (flags.badInput) {
+      if (this._reversedRange) return { start: false, end: true };
+      return {
+        start: !this._readField(this._startText),
+        end: !this._readField(this._endText),
+      };
+    }
+    if (flags.rangeUnderflow) return { start: true, end: false };
+    if (flags.rangeOverflow) return { start: false, end: true };
+    return both;
+  }
+
   // The control that opens the calendar and takes the focus back when it
   // closes: the field itself, or the button beside the text box with
   // `editable`.
@@ -312,11 +367,13 @@ export class LuiDatePicker extends LitElement {
 
   // The element the browser points at when it reports the field invalid.
   private get _validityAnchor() {
-    return (
-      this.renderRoot.querySelector<HTMLElement>(
-        this.editable ? '.date-picker__input' : '.date-picker__control'
-      ) ?? undefined
-    );
+    const atFault = this.error ? this._invalidFields : null;
+    const selector = !this.editable
+      ? '.date-picker__control'
+      : atFault?.end && !atFault.start
+        ? '.date-picker__input--end'
+        : '.date-picker__input';
+    return this.renderRoot.querySelector<HTMLElement>(selector) ?? undefined;
   }
 
   get _firstDay() {
@@ -369,7 +426,7 @@ export class LuiDatePicker extends LitElement {
         numberingSystem: 'latn',
       })
     );
-    return this.range ? rangeMask(mask) : mask;
+    return this.range && !this._split ? rangeMask(mask) : mask;
   }
 
   get _formatText() {
@@ -382,6 +439,19 @@ export class LuiDatePicker extends LitElement {
       maskDigits(this.range ? [start, end] : [start], mask),
       mask
     );
+  }
+
+  // One end of a range in its own text box.
+  private _fieldText(date: Date) {
+    const mask = this._mask;
+    return applyMask(maskDigits([date], mask), mask);
+  }
+
+  private _readField(text: string): Date | null {
+    const mask = this._mask;
+    const digits = text.replace(/\D/g, '');
+    if (digits.length !== maskCapacity(mask)) return null;
+    return readMask(digits, mask)?.[0] ?? null;
   }
 
   private _formatValue({ start, end }: DateRange) {
@@ -493,6 +563,44 @@ export class LuiDatePicker extends LitElement {
     } else if (dates && dates[0] <= dates[1]) {
       value = toISORange({ start: dates[0], end: dates[1] });
     }
+    this._setTypedValue(value);
+  }
+
+  // With two text boxes, each takes one date. A range pasted into either, like
+  // `2026-01-16/2026-01-21`, fills both.
+  private _handleFieldInput(e: InputEvent, end: boolean) {
+    const input = e.target as HTMLInputElement;
+    const raw = input.value;
+    const pastedRange = parseISORange(raw);
+    if (pastedRange) {
+      this._startText = this._fieldText(pastedRange.start);
+      this._endText = this._fieldText(pastedRange.end);
+      input.value = end ? this._endText : this._startText;
+    } else {
+      const mask = this._mask;
+      const pasted = parseISODate(raw);
+      const digits = pasted
+        ? maskDigits([pasted], mask)
+        : raw.replace(/\D/g, '').slice(0, maskCapacity(mask));
+      const digitsBeforeCaret = pasted
+        ? digits.length
+        : raw.slice(0, input.selectionStart ?? raw.length).replace(/\D/g, '')
+            .length;
+      const text = applyMask(digits, mask);
+      input.value = text;
+      const caret = caretAfterDigits(text, digitsBeforeCaret);
+      input.setSelectionRange(caret, caret);
+      if (end) this._endText = text;
+      else this._startText = text;
+    }
+    const start = this._readField(this._startText);
+    const last = this._readField(this._endText);
+    this._setTypedValue(
+      start && last && start <= last ? toISORange({ start, end: last }) : ''
+    );
+  }
+
+  private _setTypedValue(value: string) {
     if (value === this.value) return;
     this._typing = true;
     this.value = value;
@@ -923,7 +1031,6 @@ export class LuiDatePicker extends LitElement {
   // and a button beside it opens the calendar.
   private _renderTextControl() {
     const message = this._message;
-    const selection = this._selection;
     const formatId = `${this._baseId}-format`;
     // The format is part of the description, not only the placeholder: the
     // placeholder is gone once typing starts, and an author may replace it.
@@ -956,23 +1063,86 @@ export class LuiDatePicker extends LitElement {
           @input="${this._handleInput}"
           @keydown="${this._handleInputKeydown}"
         />
-        <button
-          type="button"
-          class="date-picker__toggle"
-          aria-label="${selection
-            ? `${this.dialogLabel}, ${this._formatValue(selection)}`
-            : this.dialogLabel}"
-          aria-haspopup="dialog"
-          aria-expanded="${this.open ? 'true' : 'false'}"
-          aria-controls="${ifDefined(
-            this.open ? `${this._baseId}-dialog` : undefined
-          )}"
-          ?disabled="${this.disabled}"
-          @click="${this._handleTriggerClick}"
-          @keydown="${this._handleTriggerKeydown}"
-        >
-          <span class="date-picker__icon">${ICON_CALENDAR}</span>
-        </button>
+        ${this._renderToggle()}
+      </div>
+    `;
+  }
+
+  // The button beside the text boxes that opens the calendar.
+  private _renderToggle() {
+    const selection = this._selection;
+    return html`
+      <button
+        type="button"
+        class="date-picker__toggle"
+        aria-label="${selection
+          ? `${this.dialogLabel}, ${this._formatValue(selection)}`
+          : this.dialogLabel}"
+        aria-haspopup="dialog"
+        aria-expanded="${this.open ? 'true' : 'false'}"
+        aria-controls="${ifDefined(
+          this.open ? `${this._baseId}-dialog` : undefined
+        )}"
+        ?disabled="${this.disabled}"
+        @click="${this._handleTriggerClick}"
+        @keydown="${this._handleTriggerKeydown}"
+      >
+        <span class="date-picker__icon">${ICON_CALENDAR}</span>
+      </button>
+    `;
+  }
+
+  // With `range-fields="two"`, one control holds a text box per end. The
+  // group carries the field's name; each box is named by its end, so a screen
+  // reader says which date is being typed. The dash between them is drawn
+  // only.
+  private _renderSplitControl() {
+    const message = this._message;
+    const formatId = `${this._baseId}-format`;
+    const labelId = `${this._baseId}-label`;
+    const describedBy = [
+      this._showsFormat ? '' : formatId,
+      message ? `${this._baseId}-message` : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
+    const invalid = this._invalidFields;
+    const field = (end: boolean) => html`
+      <input
+        id="${this._baseId}-${end ? 'end' : 'control'}"
+        class="date-picker__input date-picker__input--${end ? 'end' : 'start'}"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        .value="${live(end ? this._endText : this._startText)}"
+        placeholder="${this.placeholder || this._formatText}"
+        aria-label="${end
+          ? this.endLabel || DEFAULTS.endLabel
+          : this.startLabel || DEFAULTS.startLabel}"
+        aria-describedby="${describedBy}"
+        aria-invalid="${(end ? invalid.end : invalid.start) ? 'true' : 'false'}"
+        aria-required="${this.required ? 'true' : 'false'}"
+        ?disabled="${this.disabled}"
+        @input="${(e: InputEvent) => this._handleFieldInput(e, end)}"
+        @keydown="${this._handleInputKeydown}"
+      />
+    `;
+
+    return html`
+      <span id="${formatId}" class="date-picker__sr-only"
+        >${this._formatText}</span
+      >
+      <div
+        class="date-picker__control date-picker__control--split"
+        role="group"
+        aria-label="${ifDefined(this.ariaLabel || undefined)}"
+        aria-labelledby="${ifDefined(
+          !this.ariaLabel && this.label ? labelId : undefined
+        )}"
+      >
+        ${field(false)}
+        <span class="date-picker__separator" aria-hidden="true">–</span>
+        ${field(true)} ${this._renderToggle()}
       </div>
     `;
   }
@@ -1026,9 +1196,11 @@ export class LuiDatePicker extends LitElement {
           : nothing}
 
         <div class="date-picker__anchor">
-          ${this.editable
-            ? this._renderTextControl()
-            : this._renderButtonControl()}
+          ${this._split
+            ? this._renderSplitControl()
+            : this.editable
+              ? this._renderTextControl()
+              : this._renderButtonControl()}
           ${this.open ? this._renderCalendar() : nothing}
         </div>
 

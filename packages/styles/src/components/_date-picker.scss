@@ -60,6 +60,24 @@
     }
   }
 
+  // `range-fields="two"`: a text box per end in one control. The focused box
+  // takes a tint of its own, since the ring lights the whole control and would
+  // not say which end is being typed.
+  &__control--split &__input {
+    flex-basis: 0;
+    padding-inline: fluid(4);
+    border-radius: radius(xs);
+
+    &:focus {
+      background-color: bg(surface, primary);
+    }
+  }
+
+  &__separator {
+    flex-shrink: 0;
+    color: text(caption);
+  }
+
   &__toggle {
     @include center;
 

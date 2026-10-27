@@ -76,6 +76,32 @@ texto do hint, já que ele toma o lugar do formato abaixo do campo.
 
 <Canvas of={DatePickerStories.Editable} />
 
+### Range em dois campos
+
+Com `editable range`, `range-fields="two"` separa as duas pontas em duas caixas
+de texto dentro do mesmo campo. Visualmente continua um campo só, com um traço
+entre as datas e o botão do calendário no fim. Na estrutura, são dois campos: o
+rótulo nomeia o grupo, e cada caixa tem o seu nome, `start-label` e
+`end-label`, para que o leitor de tela diga qual data está sendo digitada.
+
+Cada caixa usa a máscara de uma data só, como `dd / mm / yyyy`. A ordem do
+`Tab` é início, fim e botão do calendário. O foco não pula sozinho para o fim
+ao completar o início. `Alt` + `↓` abre o calendário a partir de qualquer uma
+das caixas, e escolher o período no calendário preenche as duas.
+
+O `value` continua o mesmo do range em um campo, `YYYY-MM-DD/YYYY-MM-DD`, e só
+muda quando as duas datas estão completas e em ordem. Com erro, só a caixa com
+problema fica marcada com `aria-invalid`: a final, quando vem antes da inicial
+ou passa de `max`; a inicial, quando vem antes de `min`; a que está incompleta,
+quando a outra já forma uma data. Colar um intervalo em ISO 8601 em qualquer
+uma das caixas preenche as duas.
+
+Sem `editable`, o range continua um botão só, e `range-fields` não tem efeito.
+Em larguras estreitas, as duas caixas dividem o espaço e o texto pode ficar
+cortado. Reserve uns 360px para o campo.
+
+<Canvas of={DatePickerStories.RangeTwoFields} />
+
 ## Min e max
 
 Use `min` e `max` para limitar as datas que podem ser escolhidas. Por exemplo,
@@ -151,24 +177,25 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 
 ## Atributos
 
-| Atributo            | Tipo      | Padrão    | Descrição                                                                      |
-| ------------------- | --------- | --------- | ------------------------------------------------------------------------------ |
-| `value`             | `string`  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`       |
-| `range`             | `boolean` | `false`   | Seleciona um intervalo, com dois meses lado a lado                             |
-| `editable`          | `boolean` | `false`   | Permite digitar a data, com máscara no formato do `locale`                     |
-| `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                       |
-| `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                         |
-| `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                                     |
-| `locale`            | `string`  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`                     |
-| `first-day-of-week` | `number`  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                        |
-| `size`              | `string`  | `'lg'`    | `lg` ou `md`                                                                   |
-| `label`             | `string`  | `''`      | Rótulo do campo. Obrigatório, ou `aria-label` quando não houver rótulo visível |
-| `hint`              | `string`  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato            |
-| `error`             | `boolean` | `false`   | Exibe o estado de erro e a mensagem de `error-text`                            |
-| `disabled`          | `boolean` | `false`   | Desabilita o campo                                                             |
-| `optional`          | `boolean` | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                          |
-| `name`              | `string`  | `''`      | Nome do campo no `FormData`                                                    |
-| `required`          | `boolean` | `false`   | Bloqueia a submissão sem data                                                  |
+| Atributo            | Tipo      | Padrão    | Descrição                                                                          |
+| ------------------- | --------- | --------- | ---------------------------------------------------------------------------------- |
+| `value`             | `string`  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`           |
+| `range`             | `boolean` | `false`   | Seleciona um intervalo, com dois meses lado a lado                                 |
+| `editable`          | `boolean` | `false`   | Permite digitar a data, com máscara no formato do `locale`                         |
+| `range-fields`      | `string`  | `'one'`   | Com `editable range`, `two` usa uma caixa de texto para cada ponta, no mesmo campo |
+| `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                           |
+| `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                             |
+| `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                                         |
+| `locale`            | `string`  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`                         |
+| `first-day-of-week` | `number`  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                            |
+| `size`              | `string`  | `'lg'`    | `lg` ou `md`                                                                       |
+| `label`             | `string`  | `''`      | Rótulo do campo. Obrigatório, ou `aria-label` quando não houver rótulo visível     |
+| `hint`              | `string`  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato                |
+| `error`             | `boolean` | `false`   | Exibe o estado de erro e a mensagem de `error-text`                                |
+| `disabled`          | `boolean` | `false`   | Desabilita o campo                                                                 |
+| `optional`          | `boolean` | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                              |
+| `name`              | `string`  | `''`      | Nome do campo no `FormData`                                                        |
+| `required`          | `boolean` | `false`   | Bloqueia a submissão sem data                                                      |
 
 ## Textos padrão
 
@@ -183,6 +210,8 @@ abaixo para usar o idioma do projeto.
 | `bad-input-text`       | `'Enter a valid date.'`                          | Mensagem de erro, com `editable`, quando o texto não forma uma data                             |
 | `range-error-text`     | `'Enter a date within the allowed period.'`      | Mensagem de erro quando a data fica fora de `min` e `max`                                       |
 | `range-order-text`     | `'The end date can't be before the start date.'` | Mensagem de erro, com `editable range`, quando a data final vem antes da inicial                |
+| `start-label`          | `'Start date'`                                   | Com `range-fields="two"`, nome acessível da caixa da data inicial                               |
+| `end-label`            | `'End date'`                                     | Com `range-fields="two"`, nome acessível da caixa da data final                                 |
 | `required-text`        | `'Required'`                                     | Sem `editable`, texto oculto que descreve o campo como obrigatório quando `required` está ativo |
 | `range-start-text`     | `'Start date selected. Choose the end date.'`    | Anúncio, com `range`, depois que a primeira ponta é escolhida                                   |
 | `format-text`          | Formato do `locale`, como `dd / mm / yyyy`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível             |
@@ -255,6 +284,7 @@ incompleta e mantém o valor anterior.
 | Elemento              | Anúncio                                                                                                                                                 |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Campo                 | `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data exibida, com `aria-expanded`                                                          |
+| Range em dois campos  | `role="group"` nomeado pelo rótulo, com duas caixas nomeadas por `start-label` e `end-label`, cada uma descrita pelo formato                            |
 | Campo com `editable`  | `<input inputmode="numeric">` nomeado pelo rótulo e descrito pelo formato (`dd / mm / yyyy`), pelo hint ou pelo erro                                    |
 | Botão do calendário   | `dialog-label` seguido da data escolhida: `Choose date, Jan 16, 2026`                                                                                   |
 | Calendário            | Diálogo nomeado por `dialog-label`                                                                                                                      |

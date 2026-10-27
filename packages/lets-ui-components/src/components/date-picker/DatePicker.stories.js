@@ -24,6 +24,13 @@ export default {
       description: 'Seleciona um intervalo em vez de uma data',
       table: { defaultValue: { summary: 'false' } },
     },
+    rangeFields: {
+      control: 'inline-radio',
+      options: ['one', 'two'],
+      description:
+        'Com `editable range`, `two` usa uma caixa de texto para cada ponta, no mesmo campo',
+      table: { defaultValue: { summary: 'one' } },
+    },
     value: {
       control: 'text',
       description:
@@ -119,6 +126,18 @@ export default {
         },
       },
     },
+    startLabel: {
+      control: 'text',
+      description:
+        'Com `range-fields="two"`, nome acessível da caixa da data inicial',
+      table: { category: 'Textos', defaultValue: { summary: 'Start date' } },
+    },
+    endLabel: {
+      control: 'text',
+      description:
+        'Com `range-fields="two"`, nome acessível da caixa da data final',
+      table: { category: 'Textos', defaultValue: { summary: 'End date' } },
+    },
     requiredText: {
       control: 'text',
       description:
@@ -159,6 +178,9 @@ export default {
 const Template = ({
   editable,
   range,
+  rangeFields,
+  startLabel,
+  endLabel,
   label,
   placeholder,
   value,
@@ -188,6 +210,9 @@ const Template = ({
   const attrs = [
     editable ? 'editable' : '',
     range ? 'range' : '',
+    rangeFields && rangeFields !== 'one' ? `range-fields="${rangeFields}"` : '',
+    startLabel ? `start-label="${startLabel}"` : '',
+    endLabel ? `end-label="${endLabel}"` : '',
     label ? `label="${label}"` : '',
     placeholder ? `placeholder="${placeholder}"` : '',
     value ? `value="${value}"` : '',
@@ -229,6 +254,9 @@ DatePicker.storyName = 'Date Picker';
 DatePicker.args = {
   editable: false,
   range: false,
+  rangeFields: 'one',
+  startLabel: 'Start date',
+  endLabel: 'End date',
   label: 'Label',
   placeholder: '',
   value: '',
@@ -313,6 +341,33 @@ export const Editable = () => `
   </div>
 `;
 Editable.storyName = 'Typed entry';
+
+export const RangeTwoFields = () => `
+  <div style="width: 360px; min-height: 380px;">
+    <lui-date-picker
+      editable
+      range
+      range-fields="two"
+      label="Estadia"
+      locale="pt-BR"
+      value="2026-01-16/2026-01-21"
+      format-text="dd / mm / aaaa"
+      start-label="Data de entrada"
+      end-label="Data de saída"
+      dialog-label="Escolher datas"
+      range-order-text="A data de saída não pode ser anterior à de entrada."
+    ></lui-date-picker>
+  </div>
+`;
+RangeTwoFields.storyName = 'Range in two fields';
+RangeTwoFields.parameters = {
+  docs: {
+    description: {
+      story:
+        'Com `editable range range-fields="two"`, o campo continua com a aparência de um só, mas cada ponta tem a sua caixa de texto, com nome próprio para leitores de tela. A caixa com foco ganha um fundo de destaque.',
+    },
+  },
+};
 Editable.parameters = {
   docs: {
     description: {
