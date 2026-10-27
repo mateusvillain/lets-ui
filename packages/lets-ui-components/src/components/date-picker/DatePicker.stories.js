@@ -249,7 +249,7 @@ DatePicker.args = {
 
 export const Open = () => `
   <div style="width: 244px; min-height: 380px;">
-    <lui-date-picker value="2026-01-16" open></lui-date-picker>
+    <lui-date-picker label="Label" value="2026-01-16" open></lui-date-picker>
   </div>
 `;
 Open.storyName = 'Calendar open';

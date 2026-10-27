@@ -119,6 +119,8 @@ export class LuiDatePicker extends LitElement {
   @state() private _text = '';
 
   private _baseId: string;
+  // Set once the missing-name warning is logged, so it shows once per field.
+  private _warnedNoName = false;
   // Set by user interaction only, so an `open` attribute in the markup shows
   // the calendar without pulling focus into it on page load.
   private _focusActiveDay = false;
@@ -182,6 +184,15 @@ export class LuiDatePicker extends LitElement {
   }
 
   protected updated(changed: PropertyValues) {
+    // There is no name to fall back on: the placeholder is not a reliable name
+    // and a made-up default would describe nothing. Tell the author instead.
+    if (!this._warnedNoName && !this.label && !this.ariaLabel) {
+      this._warnedNoName = true;
+      console.warn(
+        'lui-date-picker: set `label` or `aria-label`. Without them the field has no accessible name.',
+        this
+      );
+    }
     if (
       changed.has('value') ||
       changed.has('range') ||

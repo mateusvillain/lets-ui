@@ -1,5 +1,5 @@
 import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { LuiDatePicker } from './date-picker.ts';
 import {
@@ -150,6 +150,24 @@ describe('trigger', () => {
       .map((id) => el.shadowRoot.getElementById(id).textContent.trim())
       .join(' ');
     expect(name).toBe('Birth date Jan 16, 2026');
+  });
+
+  it('warns once when it has neither label nor aria-label', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const el = await mount('value="2026-01-16"');
+      el.value = '2026-01-17';
+      await el.updateComplete;
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).toMatch(/label.*aria-label/);
+      warn.mockClear();
+      await mount('label="Check-in"');
+      await mount('aria-label="Check-in"');
+      await mount('editable aria-label="Check-in"');
+      expect(warn).not.toHaveBeenCalled();
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it('does not open while disabled', async () => {

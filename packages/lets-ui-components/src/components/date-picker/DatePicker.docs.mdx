@@ -151,24 +151,24 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 
 ## Atributos
 
-| Atributo            | Tipo      | Padrão    | Descrição                                                                |
-| ------------------- | --------- | --------- | ------------------------------------------------------------------------ |
-| `value`             | `string`  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range` |
-| `range`             | `boolean` | `false`   | Seleciona um intervalo, com dois meses lado a lado                       |
-| `editable`          | `boolean` | `false`   | Permite digitar a data, com máscara no formato do `locale`               |
-| `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                 |
-| `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                   |
-| `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                               |
-| `locale`            | `string`  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`               |
-| `first-day-of-week` | `number`  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                  |
-| `size`              | `string`  | `'lg'`    | `lg` ou `md`                                                             |
-| `label`             | `string`  | `''`      | Rótulo do campo                                                          |
-| `hint`              | `string`  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato      |
-| `error`             | `boolean` | `false`   | Exibe o estado de erro e a mensagem de `error-text`                      |
-| `disabled`          | `boolean` | `false`   | Desabilita o campo                                                       |
-| `optional`          | `boolean` | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                    |
-| `name`              | `string`  | `''`      | Nome do campo no `FormData`                                              |
-| `required`          | `boolean` | `false`   | Bloqueia a submissão sem data                                            |
+| Atributo            | Tipo      | Padrão    | Descrição                                                                      |
+| ------------------- | --------- | --------- | ------------------------------------------------------------------------------ |
+| `value`             | `string`  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`       |
+| `range`             | `boolean` | `false`   | Seleciona um intervalo, com dois meses lado a lado                             |
+| `editable`          | `boolean` | `false`   | Permite digitar a data, com máscara no formato do `locale`                     |
+| `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                       |
+| `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                         |
+| `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                                     |
+| `locale`            | `string`  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`                     |
+| `first-day-of-week` | `number`  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                        |
+| `size`              | `string`  | `'lg'`    | `lg` ou `md`                                                                   |
+| `label`             | `string`  | `''`      | Rótulo do campo. Obrigatório, ou `aria-label` quando não houver rótulo visível |
+| `hint`              | `string`  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato            |
+| `error`             | `boolean` | `false`   | Exibe o estado de erro e a mensagem de `error-text`                            |
+| `disabled`          | `boolean` | `false`   | Desabilita o campo                                                             |
+| `optional`          | `boolean` | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                          |
+| `name`              | `string`  | `''`      | Nome do campo no `FormData`                                                    |
+| `required`          | `boolean` | `false`   | Bloqueia a submissão sem data                                                  |
 
 ## Textos padrão
 
@@ -197,9 +197,11 @@ do WAI-ARIA APG: um diálogo não modal com os dias numa `grid`.
 
 ### Nome do campo
 
-Sempre dê um nome ao campo, com `label` ou, quando não houver rótulo visível,
-com `aria-label`. Sem os dois, o campo fica sem nome acessível: com `editable`,
-só resta o placeholder, que leitores de tela não anunciam de forma confiável.
+`label` é obrigatório. Quando não houver rótulo visível, use `aria-label` no
+lugar dele. Sem os dois, o campo fica sem nome acessível: sem `editable`, o nome
+é só a data ou o placeholder; com `editable`, só resta o placeholder, que
+leitores de tela não anunciam de forma confiável. Nesse caso, o componente
+avisa no console uma vez por campo.
 Com `range`, use um rótulo que descreva o período, como "Estadia" ou "Período
 do relatório".
 
