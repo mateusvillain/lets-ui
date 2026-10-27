@@ -62,8 +62,8 @@
 
   // `range-fields="two"`: a text box per end in one control. Each box is as
   // wide as its date, so the ends sit as close as in the single-field range.
-  // `field-sizing` is not everywhere yet; where it is missing, a width in `ch`
-  // fits the `dd / mm / yyyy` pattern. The focused box takes a tint of its
+  // `field-sizing` is not everywhere yet; where it is missing, 14ch fits the
+  // 14 characters of `dd / mm / yyyy`. The focused box takes a tint of its
   // own, since the ring lights the whole control and would not say which end
   // is being typed.
   &__control--split {
@@ -77,7 +77,7 @@
     field-sizing: content;
 
     @supports not (field-sizing: content) {
-      width: 12ch;
+      width: 14ch;
     }
 
     &:focus {
