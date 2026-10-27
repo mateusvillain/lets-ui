@@ -262,7 +262,7 @@ describe('min and max', () => {
     await openWithClick(el);
     expect(day(el, '2026-01-09').getAttribute('aria-disabled')).toBe('true');
     expect(day(el, '2026-01-21').getAttribute('aria-disabled')).toBe('true');
-    expect(day(el, '2026-01-10').getAttribute('aria-disabled')).toBe('false');
+    expect(day(el, '2026-01-10').hasAttribute('aria-disabled')).toBe(false);
     day(el, '2026-01-21').click();
     await el.updateComplete;
     expect(el.value).toBe('2026-01-16');
@@ -277,7 +277,7 @@ describe('min and max', () => {
     const previous = $(el, '.date-picker-calendar__nav--previous');
     const next = $(el, '.date-picker-calendar__nav--next');
     expect(previous.getAttribute('aria-disabled')).toBe('true');
-    expect(next.getAttribute('aria-disabled')).toBe('false');
+    expect(next.hasAttribute('aria-disabled')).toBe(false);
     previous.click();
     await el.updateComplete;
     expect(title(el)).toBe('January 2026');

@@ -651,9 +651,11 @@ export class LuiDatePicker extends LitElement {
                 type="button"
                 class="date-picker-calendar__nav date-picker-calendar__nav--previous"
                 aria-label="${this.previousMonthLabel}"
-                aria-disabled="${this._canShowMonth(this._revealedMonth(-1))
-                  ? 'false'
-                  : 'true'}"
+                aria-disabled="${ifDefined(
+                  this._canShowMonth(this._revealedMonth(-1))
+                    ? undefined
+                    : 'true'
+                )}"
                 @click="${() => this._shiftMonth(-1)}"
               >
                 ${ICON_CHEVRON_LEFT}
@@ -667,9 +669,11 @@ export class LuiDatePicker extends LitElement {
                 type="button"
                 class="date-picker-calendar__nav date-picker-calendar__nav--next"
                 aria-label="${this.nextMonthLabel}"
-                aria-disabled="${this._canShowMonth(this._revealedMonth(1))
-                  ? 'false'
-                  : 'true'}"
+                aria-disabled="${ifDefined(
+                  this._canShowMonth(this._revealedMonth(1))
+                    ? undefined
+                    : 'true'
+                )}"
                 @click="${() => this._shiftMonth(1)}"
               >
                 ${ICON_CHEVRON_RIGHT}
@@ -766,9 +770,9 @@ export class LuiDatePicker extends LitElement {
                           aria-current="${ifDefined(
                             isToday ? 'date' : undefined
                           )}"
-                          aria-disabled="${isOutOfRange(day, min, max)
-                            ? 'true'
-                            : 'false'}"
+                          aria-disabled="${ifDefined(
+                            isOutOfRange(day, min, max) ? 'true' : undefined
+                          )}"
                           @click="${() => this._pick(day)}"
                           @mouseenter="${() => this._handleDayHover(day)}"
                         >
