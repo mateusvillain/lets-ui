@@ -965,12 +965,14 @@ export class LuiDatePicker extends LitElement {
                     ]
                       .filter(Boolean)
                       .join(' ');
-                    // Where the day sits in the selection. A one-day range
-                    // reads as a single selected day.
+                    // Where the day sits in the selection. A committed one-day
+                    // range reads as a single selected day; the first pick of
+                    // a range, still alone, is the start.
                     const selectionText = !isHighlighted(day)
                       ? ''
                       : !this.range ||
-                          isSameDay(highlight!.start, highlight!.end)
+                          (!this._anchor &&
+                            isSameDay(highlight!.start, highlight!.end))
                         ? this.selectedDayText
                         : isSameDay(day, highlight!.start)
                           ? this.rangeStartDayText
@@ -991,7 +993,9 @@ export class LuiDatePicker extends LitElement {
                       .join(', ');
                     // The button is the gridcell, so the focused element carries
                     // aria-selected. VoiceOver ignores it on a gridcell, so the
-                    // name says the same.
+                    // name says the same. The name is hidden text, not
+                    // aria-label: VoiceOver reads a gridcell's name and then its
+                    // content, and a cell with only hidden content is "blank".
                     return html`
                       <td
                         class="date-picker-calendar__cell"
@@ -1006,7 +1010,6 @@ export class LuiDatePicker extends LitElement {
                           class="${classes}"
                           data-date="${toISODate(day)}"
                           tabindex="${isSameDay(day, active) ? 0 : -1}"
-                          aria-label="${name}"
                           aria-current="${ifDefined(
                             isToday ? 'date' : undefined
                           )}"
@@ -1018,7 +1021,10 @@ export class LuiDatePicker extends LitElement {
                           @click="${() => this._pick(day)}"
                           @mouseenter="${() => this._handleDayHover(day)}"
                         >
-                          <span aria-hidden="true">${day.getDate()}</span>
+                          <span aria-hidden="true">${day.getDate()}</span
+                          ><span class="date-picker-calendar__sr-only"
+                            >${name}</span
+                          >
                         </button>
                       </td>
                     `;

@@ -48,6 +48,9 @@ const titles = (el) =>
     t.textContent.trim()
   );
 const dayClasses = (el, iso) => [...day(el, iso).classList];
+// The name a screen reader gets: the hidden text, with the number left out.
+const dayName = (el, iso) =>
+  day(el, iso).querySelector('.date-picker-calendar__sr-only').textContent;
 const activeDay = (el) => el.shadowRoot.activeElement?.dataset.date;
 const title = (el) => $(el, '.date-picker-calendar__title').textContent.trim();
 
@@ -287,19 +290,19 @@ describe('selection', () => {
   it('says the selected state in the day name', async () => {
     const el = await mount('value="2026-01-16"');
     await openWithClick(el);
-    expect(day(el, '2026-01-16').getAttribute('aria-label')).toBe(
+    expect(dayName(el, '2026-01-16')).toBe(
       'Friday, January 16, 2026, selected'
     );
-    expect(day(el, '2026-01-17').getAttribute('aria-label')).toBe(
-      'Saturday, January 17, 2026'
-    );
-    // The name says the date in full; the number on screen is not read again.
-    const number = day(el, '2026-01-17').querySelector('span');
+    expect(dayName(el, '2026-01-17')).toBe('Saturday, January 17, 2026');
+    // The name is hidden text inside the button, so the cell is not blank;
+    // the number on screen is not read again.
+    const button = day(el, '2026-01-17');
+    expect(button.hasAttribute('aria-label')).toBe(false);
+    const number = button.querySelector('[aria-hidden="true"]');
     expect(number.textContent).toBe('17');
-    expect(number.getAttribute('aria-hidden')).toBe('true');
     el.selectedDayText = 'selecionado';
     await el.updateComplete;
-    expect(day(el, '2026-01-16').getAttribute('aria-label')).toBe(
+    expect(dayName(el, '2026-01-16')).toBe(
       'Friday, January 16, 2026, selecionado'
     );
   });
@@ -376,7 +379,7 @@ describe('unavailable days', () => {
     expect(getComputedStyle(day(el, '2026-01-18')).textDecorationLine).toBe(
       'line-through'
     );
-    expect(day(el, '2026-01-18').getAttribute('aria-label')).toBe(
+    expect(dayName(el, '2026-01-18')).toBe(
       'Sunday, January 18, 2026, unavailable'
     );
     expect(day(el, '2026-01-17').hasAttribute('aria-disabled')).toBe(false);
@@ -688,7 +691,7 @@ describe('range', () => {
   it('says where each day sits in the period', async () => {
     const el = await mount(RANGE);
     await openWithClick(el);
-    const name = (iso) => day(el, iso).getAttribute('aria-label');
+    const name = (iso) => dayName(el, iso);
     expect(name('2026-01-16')).toBe(
       'Friday, January 16, 2026, start of period'
     );
@@ -699,10 +702,20 @@ describe('range', () => {
     expect(name('2026-01-22')).toBe('Thursday, January 22, 2026');
   });
 
+  it('names the first pick of a range as its start', async () => {
+    const el = await mount(RANGE);
+    await openWithClick(el);
+    day(el, '2026-01-22').click();
+    await el.updateComplete;
+    expect(dayName(el, '2026-01-22')).toBe(
+      'Thursday, January 22, 2026, start of period'
+    );
+  });
+
   it('reads a one-day range as a single selected day', async () => {
     const el = await mount('range value="2026-01-16/2026-01-16"');
     await openWithClick(el);
-    expect(day(el, '2026-01-16').getAttribute('aria-label')).toBe(
+    expect(dayName(el, '2026-01-16')).toBe(
       'Friday, January 16, 2026, selected'
     );
   });
