@@ -122,6 +122,16 @@ ser escolhido e ganha um traço, que não depende só da opacidade — a mesma
 opacidade de um dia fora de `min`/`max` não bastaria para diferenciar os dois
 motivos.
 
+Com `editable`, digitar ou colar uma data que cai num dia marcado por
+`isDateDisabled` também deixa o campo inválido, com a mensagem de
+`unavailable-date-text`, própria desse caso e diferente da de `range-error-text`
+(fora de `min`/`max`). Isso vale mesmo sem o calendário aberto, já que digitar
+contorna o clique bloqueado. Com `range`, a checagem é só nas duas pontas: um
+período pode atravessar um dia indisponível no meio, do mesmo jeito que já
+atravessa um fim de semana ou um feriado sem problema — só a data escolhida
+como início ou fim é que não pode cair num dia indisponível. Com
+`range-fields="two"`, só a caixa da ponta em questão fica marcada.
+
 <Canvas of={DatePickerStories.UnavailableDates} />
 
 ## Error
@@ -179,6 +189,7 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 | `rangeUnderflow` / `rangeOverflow` | A data começa antes de `min` ou termina depois de `max`      | `range-error-text` |
 | `badInput`                         | Com `editable`, o texto está incompleto ou a data não existe | `bad-input-text`   |
 | `badInput`                         | Com `editable range`, a data final vem antes da inicial      | `range-order-text` |
+| `customError`                      | Uma ponta cai num dia de `isDateDisabled`                    | `unavailable-date-text` |
 
 <Canvas of={DatePickerStories.FormIntegration} />
 
@@ -225,6 +236,7 @@ abaixo para usar o idioma do projeto.
 | `bad-input-text`       | `'Enter a valid date.'`                          | Mensagem de erro, com `editable`, quando o texto não forma uma data                             |
 | `range-error-text`     | `'Enter a date within the allowed period.'`      | Mensagem de erro quando a data fica fora de `min` e `max`                                       |
 | `range-order-text`     | `'The end date can't be before the start date.'` | Mensagem de erro, com `editable range`, quando a data final vem antes da inicial                |
+| `unavailable-date-text`| `'This date is unavailable.'`                    | Mensagem de erro quando uma ponta cai num dia marcado por `isDateDisabled`                       |
 | `start-label`          | `'Start date'`                                   | Com `range-fields="two"`, nome acessível da caixa da data inicial                               |
 | `end-label`            | `'End date'`                                     | Com `range-fields="two"`, nome acessível da caixa da data final                                 |
 | `required-text`        | `'Required'`                                     | Sem `editable`, texto oculto que descreve o campo como obrigatório quando `required` está ativo |

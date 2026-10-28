@@ -376,6 +376,48 @@ describe('unavailable days', () => {
       'date-picker-calendar__day--in-range'
     );
   });
+
+  it('reports a typed unavailable date as invalid with its own message', async () => {
+    const el = await mount(
+      'editable locale="pt-BR" name="start"',
+      (html) => `<form>${html}</form>`
+    );
+    el.isDateDisabled = (date) => date.getDate() === 18;
+    await el.updateComplete;
+    await userEvent.click($(el, '.date-picker__input'));
+    await userEvent.keyboard('18012026');
+    await el.updateComplete;
+    expect(el.value).toBe('2026-01-18');
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      'This date is unavailable.'
+    );
+  });
+
+  it('lets a range run through an unavailable day, checking only its ends', async () => {
+    const el = await mount(
+      'range value="2026-01-16/2026-01-21" name="stay"',
+      (html) => `<form>${html}</form>`
+    );
+    el.isDateDisabled = (date) => date.getDate() === 18;
+    await el.updateComplete;
+    expect(el.closest('form').checkValidity()).toBe(true);
+  });
+
+  it('is invalid when an end of the range is itself unavailable', async () => {
+    const el = await mount(
+      'range value="2026-01-16/2026-01-18" name="stay"',
+      (html) => `<form>${html}</form>`
+    );
+    el.isDateDisabled = (date) => date.getDate() === 18;
+    await el.updateComplete;
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      'This date is unavailable.'
+    );
+  });
 });
 
 describe('keyboard', () => {
@@ -1138,6 +1180,21 @@ describe('range in two fields', () => {
     await el.updateComplete;
     expect($(el, '.date-picker__message').textContent.trim()).toBe(
       "The end date can't be before the start date."
+    );
+    expect(start(el).getAttribute('aria-invalid')).toBe('false');
+    expect(end(el).getAttribute('aria-invalid')).toBe('true');
+  });
+
+  it('marks only the box that lands on an unavailable day', async () => {
+    const el = await mount(SPLIT, (html) => `<form>${html}</form>`);
+    el.isDateDisabled = (date) => date.getDate() === 18;
+    await el.updateComplete;
+    await typeIn(el, start(el), '16012026');
+    await typeIn(el, end(el), '18012026');
+    expect(el.closest('form').checkValidity()).toBe(false);
+    await el.updateComplete;
+    expect($(el, '.date-picker__message').textContent.trim()).toBe(
+      'This date is unavailable.'
     );
     expect(start(el).getAttribute('aria-invalid')).toBe('false');
     expect(end(el).getAttribute('aria-invalid')).toBe('true');

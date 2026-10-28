@@ -111,6 +111,10 @@ export class LuiDatePicker extends LitElement {
   @property({ attribute: 'format-text' }) formatText = '';
   @property({ attribute: 'range-error-text' }) rangeErrorText =
     'Enter a date within the allowed period.';
+  // A date `isDateDisabled` names: inside `min`/`max`, but still blocked, so
+  // it earns a message of its own rather than reusing `range-error-text`.
+  @property({ attribute: 'unavailable-date-text' }) unavailableDateText =
+    'This date is unavailable.';
   @property({ attribute: 'range-order-text' }) rangeOrderText =
     "The end date can't be before the start date.";
   @property({ attribute: 'range-start-text' }) rangeStartText =
@@ -236,12 +240,14 @@ export class LuiDatePicker extends LitElement {
       changed.has('range') ||
       changed.has('min') ||
       changed.has('max') ||
+      changed.has('isDateDisabled') ||
       changed.has('editable') ||
       changed.has('required') ||
       changed.has('errorText') ||
       changed.has('badInputText') ||
       changed.has('rangeErrorText') ||
       changed.has('rangeOrderText') ||
+      changed.has('unavailableDateText') ||
       changed.has('rangeFields') ||
       changed.has('_text') ||
       changed.has('_startText') ||
@@ -332,6 +338,27 @@ export class LuiDatePicker extends LitElement {
     return !!dates && dates[0] > dates[1];
   }
 
+  // The ends of the current selection `isDateDisabled` names, if any — a
+  // holiday typed or pasted straight past the calendar, which only blocks a
+  // click. A date is checked at its two ends only: `isDateDisabled` names
+  // single days, like `min`/`max` name a border, not every day of a range,
+  // so a period is free to run through an unavailable day without landing on
+  // one.
+  get _unavailableEnds(): { start: boolean; end: boolean } {
+    const none = { start: false, end: false };
+    const selection = this._selection;
+    if (!this.isDateDisabled || !selection) return none;
+    return {
+      start: this.isDateDisabled(selection.start),
+      end: this.range && this.isDateDisabled(selection.end),
+    };
+  }
+
+  get _hasUnavailableEnd() {
+    const ends = this._unavailableEnds;
+    return ends.start || ends.end;
+  }
+
   // The validity flag the value breaks, with the message that explains it, in
   // the order the browser would check them.
   get _invalidity(): { flags: ValidityStateFlags; message: string } | null {
@@ -353,6 +380,12 @@ export class LuiDatePicker extends LitElement {
     if (selection && max && selection.end > max) {
       return { flags: { rangeOverflow: true }, message: this.rangeErrorText };
     }
+    if (selection && this._hasUnavailableEnd) {
+      return {
+        flags: { customError: true },
+        message: this.unavailableDateText,
+      };
+    }
     return null;
   }
 
@@ -373,6 +406,7 @@ export class LuiDatePicker extends LitElement {
     }
     if (flags.rangeUnderflow) return { start: true, end: false };
     if (flags.rangeOverflow) return { start: false, end: true };
+    if (flags.customError) return this._unavailableEnds;
     if (flags.valueMissing) {
       return {
         start: !this._readField(this._startText),
