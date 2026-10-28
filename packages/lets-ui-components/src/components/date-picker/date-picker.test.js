@@ -630,6 +630,7 @@ describe('range', () => {
     await openWithClick(el);
     const region = $(el, '.date-picker-calendar__range-status');
     expect(region.getAttribute('aria-live')).toBe('polite');
+    expect(region.getAttribute('role')).toBe('status');
     expect(region.textContent.trim()).toBe('');
     await userEvent.keyboard('{Enter}');
     await el.updateComplete;

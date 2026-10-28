@@ -1065,9 +1065,12 @@ export class LuiDatePicker extends LitElement {
     // A range is picked in two steps, and the first leaves nothing a screen
     // reader would read on its own, so a second region announces it. It
     // changes only when the start is picked, never with the months, so the
-    // two regions do not speak over each other. The second step needs no
-    // region: the calendar closes and the focus lands on the field, named with
-    // the period it now holds, ends in order.
+    // two regions do not speak over each other. VoiceOver repeats the focused
+    // day after Enter and speaks this region only once that ends, assertive or
+    // not, so it stays polite: an alert would buy nothing there and interrupt
+    // other screen readers. The second step needs no region: the calendar
+    // closes and the focus lands on the field, named with the period it now
+    // holds, ends in order.
     return html`
       <div
         id="${this._baseId}-dialog"
@@ -1088,6 +1091,7 @@ export class LuiDatePicker extends LitElement {
         </div>
         <div
           class="date-picker-calendar__sr-only date-picker-calendar__range-status"
+          role="status"
           aria-live="polite"
         >
           ${this.range && this._anchor ? this.rangeStartText : ''}
