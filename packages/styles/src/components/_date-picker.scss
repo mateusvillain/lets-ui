@@ -292,6 +292,13 @@
       border-start-end-radius: 0;
       border-end-end-radius: 0;
     }
+
+    // A holiday or sold-out day, set through `isDateDisabled`. Opacity alone
+    // repeats the cue an out-of-range day already carries; the strikethrough
+    // says this day specifically is off-limits, not just muted.
+    &--unavailable {
+      text-decoration: line-through;
+    }
   }
 
   &__sr-only {

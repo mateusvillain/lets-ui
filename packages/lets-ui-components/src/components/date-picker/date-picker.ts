@@ -81,6 +81,11 @@ export class LuiDatePicker extends LitElement {
   @property({ type: Boolean, reflect: true }) range = false;
   @property() min = '';
   @property() max = '';
+  // Holidays, sold-out days — gaps `min`/`max` can't express since they're a
+  // range, not a list. JS only: no attribute reflects a function.
+  @property({ attribute: false }) isDateDisabled:
+    | ((date: Date) => boolean)
+    | null = null;
   @property({ type: Boolean, reflect: true }) editable = false;
   @property() placeholder = '';
   @property() size = 'lg';
@@ -730,14 +735,23 @@ export class LuiDatePicker extends LitElement {
     this._focusActiveDay = true;
   }
 
+  // Out of `min`/`max`, or named by `isDateDisabled` — a holiday, say. Either
+  // way the day can't be picked.
+  private _isPickable(date: Date) {
+    return (
+      !isOutOfRange(date, this._minDate, this._maxDate) &&
+      !this.isDateDisabled?.(date)
+    );
+  }
+
   private _handleDayHover(date: Date) {
-    if (this._anchor && !isOutOfRange(date, this._minDate, this._maxDate)) {
+    if (this._anchor && this._isPickable(date)) {
       this._preview = date;
     }
   }
 
   private _pick(date: Date) {
-    if (isOutOfRange(date, this._minDate, this._maxDate)) return;
+    if (!this._isPickable(date)) return;
     this._activeDate = date;
 
     if (!this.range) {
@@ -891,6 +905,7 @@ export class LuiDatePicker extends LitElement {
                     const joinsEnd =
                       isHighlighted(day) && isHighlighted(week[column + 1]);
                     const isToday = isSameDay(day, now);
+                    const isUnavailable = !!this.isDateDisabled?.(day);
                     const classes = [
                       'date-picker-calendar__day',
                       isToday ? 'date-picker-calendar__day--today' : '',
@@ -898,6 +913,11 @@ export class LuiDatePicker extends LitElement {
                       isEdge ? 'date-picker-calendar__day--selected' : '',
                       joinsStart ? 'date-picker-calendar__day--join-start' : '',
                       joinsEnd ? 'date-picker-calendar__day--join-end' : '',
+                      // Opacity alone repeats the adjacent-month cue; the
+                      // strikethrough says "unavailable" on its own.
+                      isUnavailable
+                        ? 'date-picker-calendar__day--unavailable'
+                        : '',
                     ]
                       .filter(Boolean)
                       .join(' ');
@@ -927,7 +947,9 @@ export class LuiDatePicker extends LitElement {
                             isToday ? 'date' : undefined
                           )}"
                           aria-disabled="${ifDefined(
-                            isOutOfRange(day, min, max) ? 'true' : undefined
+                            isOutOfRange(day, min, max) || isUnavailable
+                              ? 'true'
+                              : undefined
                           )}"
                           @click="${() => this._pick(day)}"
                           @mouseenter="${() => this._handleDayHover(day)}"

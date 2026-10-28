@@ -398,6 +398,34 @@ MinMax.parameters = {
   },
 };
 
+export const UnavailableDates = () => {
+  const container = document.createElement('div');
+  container.style.cssText = 'width: 244px; min-height: 380px;';
+  container.innerHTML = `
+    <lui-date-picker
+      label="Check-in"
+      value="2026-01-16"
+      hint="Dates with no availability are crossed out."
+    ></lui-date-picker>
+  `;
+  const picker = container.querySelector('lui-date-picker');
+  const unavailable = new Set(['2026-01-18', '2026-01-19', '2026-01-25']);
+  picker.isDateDisabled = (date) => {
+    const iso = date.toISOString().slice(0, 10);
+    return unavailable.has(iso);
+  };
+  return container;
+};
+UnavailableDates.storyName = 'Unavailable dates';
+UnavailableDates.parameters = {
+  docs: {
+    description: {
+      story:
+        '`isDateDisabled` recebe uma função, só em JS, para marcar dias por uma regra que `min` e `max` não alcançam: feriados, dias já reservados, datas sem vaga. Esses dias ficam com `aria-disabled`, não podem ser escolhidos e ganham um traço, que não depende só da opacidade para se diferenciar.',
+    },
+  },
+};
+
 export const Error = () => `
   <div style="width: 244px;">
     <lui-date-picker

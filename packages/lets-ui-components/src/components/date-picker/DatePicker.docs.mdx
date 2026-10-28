@@ -112,6 +112,18 @@ do trimestre.
 
 <Canvas of={DatePickerStories.MinMax} />
 
+## Datas indisponíveis
+
+`min` e `max` cortam as pontas, mas não abrem buracos no meio: um feriado, um
+dia já reservado, uma data sem vaga. Para isso, `isDateDisabled` recebe uma
+função, só em JS (não é um atributo HTML), chamada com cada dia do mês
+mostrado. Um dia em que ela retorna `true` fica com `aria-disabled`, não pode
+ser escolhido e ganha um traço, que não depende só da opacidade — a mesma
+opacidade de um dia fora de `min`/`max` não bastaria para diferenciar os dois
+motivos.
+
+<Canvas of={DatePickerStories.UnavailableDates} />
+
 ## Error
 
 <Canvas of={DatePickerStories.Error} />
@@ -187,6 +199,7 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 | `range-fields`      | `string`  | `'one'`   | Com `editable range`, `two` usa uma caixa de texto para cada ponta, no mesmo campo |
 | `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                           |
 | `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                             |
+| `isDateDisabled`    | `(date: Date) => boolean` | `null` | Só em JS, sem atributo. Marca dias indisponíveis fora do padrão de `min`/`max`      |
 | `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                                         |
 | `locale`            | `string`  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`                         |
 | `first-day-of-week` | `number`  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                            |

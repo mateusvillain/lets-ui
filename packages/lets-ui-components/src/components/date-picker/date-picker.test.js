@@ -343,6 +343,41 @@ describe('min and max', () => {
   });
 });
 
+describe('unavailable days', () => {
+  it('disables a day named by isDateDisabled and ignores clicks on it', async () => {
+    const el = await mount('value="2026-01-16"');
+    el.isDateDisabled = (date) => date.getDate() === 18;
+    await el.updateComplete;
+    await openWithClick(el);
+    expect(day(el, '2026-01-18').getAttribute('aria-disabled')).toBe('true');
+    expect(dayClasses(el, '2026-01-18')).toContain(
+      'date-picker-calendar__day--unavailable'
+    );
+    expect(day(el, '2026-01-17').hasAttribute('aria-disabled')).toBe(false);
+    day(el, '2026-01-18').click();
+    await el.updateComplete;
+    expect(el.value).toBe('2026-01-16');
+    expect(el.open).toBe(true);
+  });
+
+  it('does not preview an unavailable day as the end of a range', async () => {
+    const el = await mount('range value="2026-01-16/2026-01-16"');
+    el.isDateDisabled = (date) => date.getDate() === 18;
+    await el.updateComplete;
+    await openWithClick(el);
+    day(el, '2026-01-16').click();
+    await el.updateComplete;
+    await userEvent.hover(day(el, '2026-01-18'));
+    await el.updateComplete;
+    expect(dayClasses(el, '2026-01-18')).not.toContain(
+      'date-picker-calendar__day--selected'
+    );
+    expect(dayClasses(el, '2026-01-18')).not.toContain(
+      'date-picker-calendar__day--in-range'
+    );
+  });
+});
+
 describe('keyboard', () => {
   const press = async (el, key) => {
     await userEvent.keyboard(key);
