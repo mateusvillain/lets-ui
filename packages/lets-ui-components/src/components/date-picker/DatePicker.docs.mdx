@@ -132,6 +132,31 @@ atravessa um fim de semana ou um feriado sem problema — só a data escolhida
 como início ou fim é que não pode cair num dia indisponível. Com
 `range-fields="two"`, só a caixa da ponta em questão fica marcada.
 
+Como não é um atributo, a função é atribuída por JS, depois que o elemento
+existe. Compare as datas pelas partes locais: `toISOString()` lê UTC e, a
+leste de Greenwich, cai no dia anterior.
+
+```html
+<lui-date-picker id="check-in" label="Check-in"></lui-date-picker>
+
+<script>
+  const unavailable = new Set(['2026-01-18', '2026-01-19', '2026-01-25']);
+
+  const iso = (date) =>
+    [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+
+  document.querySelector('#check-in').isDateDisabled = (date) =>
+    unavailable.has(iso(date));
+</script>
+```
+
+A função roda a cada renderização, uma vez por dia do mês na tela. Mantenha-a
+rápida: uma consulta a um `Set`, não uma requisição.
+
 <Canvas of={DatePickerStories.UnavailableDates} />
 
 ## Error
@@ -183,12 +208,12 @@ Com `required` e sem data, o campo reporta `valueMissing`. Um `value` que começ
 antes de `min` reporta `rangeUnderflow`, e um que termina depois de `max`
 reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 
-| Validade                           | Quando                                                       | Mensagem           |
-| ---------------------------------- | ------------------------------------------------------------ | ------------------ |
-| `valueMissing`                     | `required` e sem data                                        | `error-text`       |
-| `rangeUnderflow` / `rangeOverflow` | A data começa antes de `min` ou termina depois de `max`      | `range-error-text` |
-| `badInput`                         | Com `editable`, o texto está incompleto ou a data não existe | `bad-input-text`   |
-| `badInput`                         | Com `editable range`, a data final vem antes da inicial      | `range-order-text` |
+| Validade                           | Quando                                                       | Mensagem                |
+| ---------------------------------- | ------------------------------------------------------------ | ----------------------- |
+| `valueMissing`                     | `required` e sem data                                        | `error-text`            |
+| `rangeUnderflow` / `rangeOverflow` | A data começa antes de `min` ou termina depois de `max`      | `range-error-text`      |
+| `badInput`                         | Com `editable`, o texto está incompleto ou a data não existe | `bad-input-text`        |
+| `badInput`                         | Com `editable range`, a data final vem antes da inicial      | `range-order-text`      |
 | `customError`                      | Uma ponta cai num dia de `isDateDisabled`                    | `unavailable-date-text` |
 
 <Canvas of={DatePickerStories.FormIntegration} />
@@ -202,49 +227,49 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 
 ## Atributos
 
-| Atributo            | Tipo      | Padrão    | Descrição                                                                          |
-| ------------------- | --------- | --------- | ---------------------------------------------------------------------------------- |
-| `value`             | `string`  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`           |
-| `range`             | `boolean` | `false`   | Seleciona um intervalo, com dois meses lado a lado                                 |
-| `editable`          | `boolean` | `false`   | Permite digitar a data, com máscara no formato do `locale`                         |
-| `range-fields`      | `string`  | `'one'`   | Com `editable range`, `two` usa uma caixa de texto para cada ponta, no mesmo campo |
-| `min`               | `string`  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                           |
-| `max`               | `string`  | `''`      | Última data selecionável, `YYYY-MM-DD`                                             |
-| `isDateDisabled`    | `(date: Date) => boolean` | `null` | Só em JS, sem atributo. Marca dias indisponíveis fora do padrão de `min`/`max`      |
-| `open`              | `boolean` | `false`   | Calendário aberto, refletido como atributo                                         |
-| `locale`            | `string`  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`                         |
-| `first-day-of-week` | `number`  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                            |
-| `size`              | `string`  | `'lg'`    | `lg` ou `md`                                                                       |
-| `label`             | `string`  | `''`      | Rótulo do campo. Obrigatório, ou `aria-label` quando não houver rótulo visível     |
-| `hint`              | `string`  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato                |
-| `error`             | `boolean` | `false`   | Exibe o estado de erro e a mensagem de `error-text`                                |
-| `disabled`          | `boolean` | `false`   | Desabilita o campo                                                                 |
-| `optional`          | `boolean` | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                              |
-| `name`              | `string`  | `''`      | Nome do campo no `FormData`                                                        |
-| `required`          | `boolean` | `false`   | Bloqueia a submissão sem data                                                      |
+| Atributo            | Tipo                      | Padrão    | Descrição                                                                          |
+| ------------------- | ------------------------- | --------- | ---------------------------------------------------------------------------------- |
+| `value`             | `string`                  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`           |
+| `range`             | `boolean`                 | `false`   | Seleciona um intervalo, com dois meses lado a lado                                 |
+| `editable`          | `boolean`                 | `false`   | Permite digitar a data, com máscara no formato do `locale`                         |
+| `range-fields`      | `string`                  | `'one'`   | Com `editable range`, `two` usa uma caixa de texto para cada ponta, no mesmo campo |
+| `min`               | `string`                  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                           |
+| `max`               | `string`                  | `''`      | Última data selecionável, `YYYY-MM-DD`                                             |
+| `isDateDisabled`    | `(date: Date) => boolean` | `null`    | Só em JS, sem atributo. Marca dias indisponíveis fora do padrão de `min`/`max`     |
+| `open`              | `boolean`                 | `false`   | Calendário aberto, refletido como atributo                                         |
+| `locale`            | `string`                  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`                         |
+| `first-day-of-week` | `number`                  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                            |
+| `size`              | `string`                  | `'lg'`    | `lg` ou `md`                                                                       |
+| `label`             | `string`                  | `''`      | Rótulo do campo. Obrigatório, ou `aria-label` quando não houver rótulo visível     |
+| `hint`              | `string`                  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato                |
+| `error`             | `boolean`                 | `false`   | Exibe o estado de erro e a mensagem de `error-text`                                |
+| `disabled`          | `boolean`                 | `false`   | Desabilita o campo                                                                 |
+| `optional`          | `boolean`                 | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                              |
+| `name`              | `string`                  | `''`      | Nome do campo no `FormData`                                                        |
+| `required`          | `boolean`                 | `false`   | Bloqueia a submissão sem data                                                      |
 
 ## Textos padrão
 
 Os textos gerados pelo componente estão em inglês. Troque-os pelos atributos
 abaixo para usar o idioma do projeto.
 
-| Atributo               | Padrão                                           | Descrição                                                                                       |
-| ---------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| `placeholder`          | `'Select a date'`                                | Texto do campo sem data. Com `editable`, o padrão é o `format-text`                             |
-| `optional-text`        | `'(optional)'`                                   | Marcador exibido quando `optional` está ativo                                                   |
-| `error-text`           | `'This field is required.'`                      | Mensagem exibida quando `error` está ativo, e de `valueMissing`                                 |
-| `bad-input-text`       | `'Enter a valid date.'`                          | Mensagem de erro, com `editable`, quando o texto não forma uma data                             |
-| `range-error-text`     | `'Enter a date within the allowed period.'`      | Mensagem de erro quando a data fica fora de `min` e `max`                                       |
-| `range-order-text`     | `'The end date can't be before the start date.'` | Mensagem de erro, com `editable range`, quando a data final vem antes da inicial                |
-| `unavailable-date-text`| `'This date is unavailable.'`                    | Mensagem de erro quando uma ponta cai num dia marcado por `isDateDisabled`                       |
-| `start-label`          | `'Start date'`                                   | Com `range-fields="two"`, nome acessível da caixa da data inicial                               |
-| `end-label`            | `'End date'`                                     | Com `range-fields="two"`, nome acessível da caixa da data final                                 |
-| `required-text`        | `'Required'`                                     | Sem `editable`, texto oculto que descreve o campo como obrigatório quando `required` está ativo |
-| `range-start-text`     | `'Start date selected. Choose the end date.'`    | Anúncio, com `range`, depois que a primeira ponta é escolhida                                   |
-| `format-text`          | Formato do `locale`, como `dd / mm / yyyy`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível             |
-| `dialog-label`         | `'Choose date'`                                  | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida  |
-| `previous-month-label` | `'Previous month'`                               | `aria-label` do botão de mês anterior                                                           |
-| `next-month-label`     | `'Next month'`                                   | `aria-label` do botão de próximo mês                                                            |
+| Atributo                | Padrão                                           | Descrição                                                                                       |
+| ----------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `placeholder`           | `'Select a date'`                                | Texto do campo sem data. Com `editable`, o padrão é o `format-text`                             |
+| `optional-text`         | `'(optional)'`                                   | Marcador exibido quando `optional` está ativo                                                   |
+| `error-text`            | `'This field is required.'`                      | Mensagem exibida quando `error` está ativo, e de `valueMissing`                                 |
+| `bad-input-text`        | `'Enter a valid date.'`                          | Mensagem de erro, com `editable`, quando o texto não forma uma data                             |
+| `range-error-text`      | `'Enter a date within the allowed period.'`      | Mensagem de erro quando a data fica fora de `min` e `max`                                       |
+| `range-order-text`      | `'The end date can't be before the start date.'` | Mensagem de erro, com `editable range`, quando a data final vem antes da inicial                |
+| `unavailable-date-text` | `'This date is unavailable.'`                    | Mensagem de erro quando uma ponta cai num dia marcado por `isDateDisabled`                      |
+| `start-label`           | `'Start date'`                                   | Com `range-fields="two"`, nome acessível da caixa da data inicial                               |
+| `end-label`             | `'End date'`                                     | Com `range-fields="two"`, nome acessível da caixa da data final                                 |
+| `required-text`         | `'Required'`                                     | Sem `editable`, texto oculto que descreve o campo como obrigatório quando `required` está ativo |
+| `range-start-text`      | `'Start date selected. Choose the end date.'`    | Anúncio, com `range`, depois que a primeira ponta é escolhida                                   |
+| `format-text`           | Formato do `locale`, como `dd / mm / yyyy`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível             |
+| `dialog-label`          | `'Choose date'`                                  | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida  |
+| `previous-month-label`  | `'Previous month'`                               | `aria-label` do botão de mês anterior                                                           |
+| `next-month-label`      | `'Next month'`                                   | `aria-label` do botão de próximo mês                                                            |
 
 ## Acessibilidade
 
