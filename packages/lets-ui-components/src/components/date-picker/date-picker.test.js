@@ -293,6 +293,10 @@ describe('selection', () => {
     expect(day(el, '2026-01-17').getAttribute('aria-label')).toBe(
       'Saturday, January 17, 2026'
     );
+    // The name says the date in full; the number on screen is not read again.
+    const number = day(el, '2026-01-17').querySelector('span');
+    expect(number.textContent).toBe('17');
+    expect(number.getAttribute('aria-hidden')).toBe('true');
     el.selectedDayText = 'selecionado';
     await el.updateComplete;
     expect(day(el, '2026-01-16').getAttribute('aria-label')).toBe(

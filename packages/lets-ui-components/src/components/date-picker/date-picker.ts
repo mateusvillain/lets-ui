@@ -1018,7 +1018,7 @@ export class LuiDatePicker extends LitElement {
                           @click="${() => this._pick(day)}"
                           @mouseenter="${() => this._handleDayHover(day)}"
                         >
-                          ${day.getDate()}
+                          <span aria-hidden="true">${day.getDate()}</span>
                         </button>
                       </td>
                     `;
