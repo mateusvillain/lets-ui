@@ -965,20 +965,26 @@ export class LuiDatePicker extends LitElement {
                     ]
                       .filter(Boolean)
                       .join(' ');
-                    // Where the day sits in the selection. A committed one-day
-                    // range reads as a single selected day; the first pick of
-                    // a range, still alone, is the start.
-                    const selectionText = !isHighlighted(day)
+                    // What a screen reader hears follows what is chosen, not the
+                    // preview: between the two picks of a range only the first
+                    // day is chosen, so the day under the focus is not called
+                    // the end before Enter makes it one. A committed one-day
+                    // range reads as a single selected day.
+                    const isChosen = this._anchor
+                      ? isSameDay(day, this._anchor)
+                      : isHighlighted(day);
+                    const selectionText = !isChosen
                       ? ''
-                      : !this.range ||
-                          (!this._anchor &&
-                            isSameDay(highlight!.start, highlight!.end))
-                        ? this.selectedDayText
-                        : isSameDay(day, highlight!.start)
-                          ? this.rangeStartDayText
-                          : isSameDay(day, highlight!.end)
-                            ? this.rangeEndDayText
-                            : this.inRangeDayText;
+                      : this._anchor
+                        ? this.rangeStartDayText
+                        : !this.range ||
+                            isSameDay(highlight!.start, highlight!.end)
+                          ? this.selectedDayText
+                          : isSameDay(day, highlight!.start)
+                            ? this.rangeStartDayText
+                            : isSameDay(day, highlight!.end)
+                              ? this.rangeEndDayText
+                              : this.inRangeDayText;
                     const name = [
                       this._format(day, {
                         weekday: 'long',
@@ -1004,9 +1010,7 @@ export class LuiDatePicker extends LitElement {
                         <button
                           type="button"
                           role="gridcell"
-                          aria-selected="${isEdge || isBetween
-                            ? 'true'
-                            : 'false'}"
+                          aria-selected="${isChosen ? 'true' : 'false'}"
                           class="${classes}"
                           data-date="${toISODate(day)}"
                           tabindex="${isSameDay(day, active) ? 0 : -1}"

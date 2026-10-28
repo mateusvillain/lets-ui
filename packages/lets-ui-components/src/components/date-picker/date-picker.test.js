@@ -712,6 +712,23 @@ describe('range', () => {
     );
   });
 
+  it('leaves the preview out of what a screen reader hears', async () => {
+    const el = await mount(RANGE);
+    await openWithClick(el);
+    day(el, '2026-01-22').click();
+    await el.updateComplete;
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}');
+    await el.updateComplete;
+    // Drawn as the end, but not chosen yet.
+    expect(dayClasses(el, '2026-01-24')).toContain(
+      'date-picker-calendar__day--selected'
+    );
+    expect(dayName(el, '2026-01-24')).toBe('Saturday, January 24, 2026');
+    expect(day(el, '2026-01-24').getAttribute('aria-selected')).toBe('false');
+    expect(day(el, '2026-01-23').getAttribute('aria-selected')).toBe('false');
+    expect(day(el, '2026-01-22').getAttribute('aria-selected')).toBe('true');
+  });
+
   it('reads a one-day range as a single selected day', async () => {
     const el = await mount('range value="2026-01-16/2026-01-16"');
     await openWithClick(el);

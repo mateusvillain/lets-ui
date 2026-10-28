@@ -320,7 +320,10 @@ calendário abre com `Alt` + `↓`, como num `<select>` nativo.
 
 Com `range`, o primeiro `Enter` marca uma ponta e o segundo marca a outra.
 Entre os dois, o intervalo acompanha o foco. `Esc` descarta a seleção
-incompleta e mantém o valor anterior.
+incompleta e mantém o valor anterior. Essa prévia é só visual: até o segundo
+`Enter`, só o primeiro dia escolhido tem `aria-selected` e
+`range-start-day-text` no nome, para que o dia com foco não seja anunciado
+como fim do período antes de ser escolhido.
 
 ### Foco
 
