@@ -119,6 +119,16 @@ export class LuiDatePicker extends LitElement {
     "The end date can't be before the start date.";
   @property({ attribute: 'range-start-text' }) rangeStartText =
     'Start date selected. Choose the end date.';
+  // Appended to a day's name. VoiceOver does not announce `aria-selected` on
+  // a gridcell, so the state is spoken as part of the name too.
+  @property({ attribute: 'selected-day-text' }) selectedDayText = 'selected';
+  @property({ attribute: 'range-start-day-text' }) rangeStartDayText =
+    'start of period';
+  @property({ attribute: 'in-range-day-text' }) inRangeDayText = 'in period';
+  @property({ attribute: 'range-end-day-text' }) rangeEndDayText =
+    'end of period';
+  @property({ attribute: 'unavailable-day-text' }) unavailableDayText =
+    'unavailable';
   @property({ attribute: 'dialog-label' }) dialogLabel = 'Choose date';
   @property({ attribute: 'previous-month-label' }) previousMonthLabel =
     'Previous month';
@@ -955,8 +965,33 @@ export class LuiDatePicker extends LitElement {
                     ]
                       .filter(Boolean)
                       .join(' ');
+                    // Where the day sits in the selection. A one-day range
+                    // reads as a single selected day.
+                    const selectionText = !isHighlighted(day)
+                      ? ''
+                      : !this.range ||
+                          isSameDay(highlight!.start, highlight!.end)
+                        ? this.selectedDayText
+                        : isSameDay(day, highlight!.start)
+                          ? this.rangeStartDayText
+                          : isSameDay(day, highlight!.end)
+                            ? this.rangeEndDayText
+                            : this.inRangeDayText;
+                    const name = [
+                      this._format(day, {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                      }),
+                      selectionText,
+                      isUnavailable ? this.unavailableDayText : '',
+                    ]
+                      .filter(Boolean)
+                      .join(', ');
                     // The button is the gridcell, so the focused element carries
-                    // aria-selected and a screen reader reads it with the day.
+                    // aria-selected. VoiceOver ignores it on a gridcell, so the
+                    // name says the same.
                     return html`
                       <td
                         class="date-picker-calendar__cell"
@@ -971,12 +1006,7 @@ export class LuiDatePicker extends LitElement {
                           class="${classes}"
                           data-date="${toISODate(day)}"
                           tabindex="${isSameDay(day, active) ? 0 : -1}"
-                          aria-label="${this._format(day, {
-                            weekday: 'long',
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })}"
+                          aria-label="${name}"
                           aria-current="${ifDefined(
                             isToday ? 'date' : undefined
                           )}"

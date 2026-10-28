@@ -284,6 +284,22 @@ describe('selection', () => {
     expect(button.closest('td').getAttribute('role')).toBe('presentation');
   });
 
+  it('says the selected state in the day name', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    expect(day(el, '2026-01-16').getAttribute('aria-label')).toBe(
+      'Friday, January 16, 2026, selected'
+    );
+    expect(day(el, '2026-01-17').getAttribute('aria-label')).toBe(
+      'Saturday, January 17, 2026'
+    );
+    el.selectedDayText = 'selecionado';
+    await el.updateComplete;
+    expect(day(el, '2026-01-16').getAttribute('aria-label')).toBe(
+      'Friday, January 16, 2026, selecionado'
+    );
+  });
+
   it('leaves the cells of the neighbouring months empty', async () => {
     const el = await mount('value="2026-01-16"');
     await openWithClick(el);
@@ -355,6 +371,9 @@ describe('unavailable days', () => {
     );
     expect(getComputedStyle(day(el, '2026-01-18')).textDecorationLine).toBe(
       'line-through'
+    );
+    expect(day(el, '2026-01-18').getAttribute('aria-label')).toBe(
+      'Sunday, January 18, 2026, unavailable'
     );
     expect(day(el, '2026-01-17').hasAttribute('aria-disabled')).toBe(false);
     day(el, '2026-01-18').click();
@@ -660,6 +679,28 @@ describe('range', () => {
       'date-picker-calendar__day--in-range'
     );
     expect(day(el, '2026-01-18').getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('says where each day sits in the period', async () => {
+    const el = await mount(RANGE);
+    await openWithClick(el);
+    const name = (iso) => day(el, iso).getAttribute('aria-label');
+    expect(name('2026-01-16')).toBe(
+      'Friday, January 16, 2026, start of period'
+    );
+    expect(name('2026-01-18')).toBe('Sunday, January 18, 2026, in period');
+    expect(name('2026-01-21')).toBe(
+      'Wednesday, January 21, 2026, end of period'
+    );
+    expect(name('2026-01-22')).toBe('Thursday, January 22, 2026');
+  });
+
+  it('reads a one-day range as a single selected day', async () => {
+    const el = await mount('range value="2026-01-16/2026-01-16"');
+    await openWithClick(el);
+    expect(day(el, '2026-01-16').getAttribute('aria-label')).toBe(
+      'Friday, January 16, 2026, selected'
+    );
   });
 
   it('squares only the corners shared with a highlighted neighbour', async () => {

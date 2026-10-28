@@ -153,6 +153,44 @@ export default {
         defaultValue: { summary: 'Start date selected. Choose the end date.' },
       },
     },
+    unavailableDateText: {
+      control: 'text',
+      description:
+        'Mensagem de erro quando uma ponta cai num dia marcado por `isDateDisabled`',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'This date is unavailable.' },
+      },
+    },
+    selectedDayText: {
+      control: 'text',
+      description:
+        'Junto ao nome do dia selecionado, sem `range` ou num período de um dia só',
+      table: { category: 'Textos', defaultValue: { summary: 'selected' } },
+    },
+    rangeStartDayText: {
+      control: 'text',
+      description: 'Com `range`, junto ao nome do primeiro dia do período',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'start of period' },
+      },
+    },
+    inRangeDayText: {
+      control: 'text',
+      description: 'Com `range`, junto ao nome dos dias entre as pontas',
+      table: { category: 'Textos', defaultValue: { summary: 'in period' } },
+    },
+    rangeEndDayText: {
+      control: 'text',
+      description: 'Com `range`, junto ao nome do último dia do período',
+      table: { category: 'Textos', defaultValue: { summary: 'end of period' } },
+    },
+    unavailableDayText: {
+      control: 'text',
+      description: 'Junto ao nome de um dia marcado por `isDateDisabled`',
+      table: { category: 'Textos', defaultValue: { summary: 'unavailable' } },
+    },
     dialogLabel: {
       control: 'text',
       description:
@@ -203,6 +241,12 @@ const Template = ({
   rangeOrderText,
   requiredText,
   rangeStartText,
+  unavailableDateText,
+  selectedDayText,
+  rangeStartDayText,
+  inRangeDayText,
+  rangeEndDayText,
+  unavailableDayText,
   dialogLabel,
   previousMonthLabel,
   nextMonthLabel,
@@ -235,6 +279,12 @@ const Template = ({
     rangeOrderText ? `range-order-text="${rangeOrderText}"` : '',
     requiredText ? `required-text="${requiredText}"` : '',
     rangeStartText ? `range-start-text="${rangeStartText}"` : '',
+    unavailableDateText ? `unavailable-date-text="${unavailableDateText}"` : '',
+    selectedDayText ? `selected-day-text="${selectedDayText}"` : '',
+    rangeStartDayText ? `range-start-day-text="${rangeStartDayText}"` : '',
+    inRangeDayText ? `in-range-day-text="${inRangeDayText}"` : '',
+    rangeEndDayText ? `range-end-day-text="${rangeEndDayText}"` : '',
+    unavailableDayText ? `unavailable-day-text="${unavailableDayText}"` : '',
     dialogLabel ? `dialog-label="${dialogLabel}"` : '',
     previousMonthLabel ? `previous-month-label="${previousMonthLabel}"` : '',
     nextMonthLabel ? `next-month-label="${nextMonthLabel}"` : '',
@@ -279,6 +329,12 @@ DatePicker.args = {
   rangeOrderText: "The end date can't be before the start date.",
   requiredText: 'Required',
   rangeStartText: 'Start date selected. Choose the end date.',
+  unavailableDateText: 'This date is unavailable.',
+  selectedDayText: 'selected',
+  rangeStartDayText: 'start of period',
+  inRangeDayText: 'in period',
+  rangeEndDayText: 'end of period',
+  unavailableDayText: 'unavailable',
   dialogLabel: 'Choose date',
   previousMonthLabel: 'Previous month',
   nextMonthLabel: 'Next month',
