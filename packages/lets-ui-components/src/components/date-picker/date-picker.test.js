@@ -353,6 +353,9 @@ describe('unavailable days', () => {
     expect(dayClasses(el, '2026-01-18')).toContain(
       'date-picker-calendar__day--unavailable'
     );
+    expect(getComputedStyle(day(el, '2026-01-18')).textDecorationLine).toBe(
+      'line-through'
+    );
     expect(day(el, '2026-01-17').hasAttribute('aria-disabled')).toBe(false);
     day(el, '2026-01-18').click();
     await el.updateComplete;

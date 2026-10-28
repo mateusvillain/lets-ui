@@ -295,8 +295,9 @@
 
     // A holiday or sold-out day, set through `isDateDisabled`. Opacity alone
     // repeats the cue an out-of-range day already carries; the strikethrough
-    // says this day specifically is off-limits, not just muted.
-    &--unavailable {
+    // says this day specifically is off-limits, not just muted. Paired with
+    // `aria-disabled` so it outranks the `text-decoration: none` of `states`.
+    &--unavailable[aria-disabled='true'] {
       text-decoration: line-through;
     }
   }

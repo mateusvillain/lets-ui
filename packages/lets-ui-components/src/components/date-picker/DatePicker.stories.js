@@ -410,8 +410,14 @@ export const UnavailableDates = () => {
   `;
   const picker = container.querySelector('lui-date-picker');
   const unavailable = new Set(['2026-01-18', '2026-01-19', '2026-01-25']);
+  // Local date parts: `toISOString()` reads UTC and lands on the previous day
+  // east of Greenwich.
   picker.isDateDisabled = (date) => {
-    const iso = date.toISOString().slice(0, 10);
+    const iso = [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
     return unavailable.has(iso);
   };
   return container;
