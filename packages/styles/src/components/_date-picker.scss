@@ -302,6 +302,10 @@
     // repeats the cue an out-of-range day already carries; the strikethrough
     // says this day specifically is off-limits, not just muted. Paired with
     // `aria-disabled` so it outranks the `text-decoration: none` of `states`.
+    // Accepted as-is: the opacity dims the range fill under an unavailable
+    // day in the middle of a period. The fade reinforces that the day is
+    // off-limits even though the range spanning it stays valid, so it is
+    // left alone rather than special-cased to stay fully opaque.
     &--unavailable[aria-disabled='true'] {
       text-decoration: line-through;
     }
