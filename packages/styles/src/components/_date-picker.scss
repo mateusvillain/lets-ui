@@ -250,7 +250,11 @@
   &__day {
     @include font-scale(body--lg);
 
-    display: block;
+    // The cell itself is the interactive gridcell now, not a button nested
+    // inside it (see date-picker.ts), so it keeps the browser's table-cell
+    // display instead of switching to block — overriding it would drop the
+    // cell out of the table's column layout.
+    display: table-cell;
     width: fixed(32);
     height: fixed(32);
     padding: 0;
@@ -259,6 +263,7 @@
     border-radius: radius(md);
     color: text(body);
     text-align: center;
+    vertical-align: middle;
     cursor: pointer;
 
     @include states(primary);

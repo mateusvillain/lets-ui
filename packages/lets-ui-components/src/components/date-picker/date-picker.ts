@@ -759,6 +759,13 @@ export class LuiDatePicker extends LitElement {
   }
 
   private _handleGridKeydown(e: KeyboardEvent) {
+    // The day cell is the `td` itself now, not a nested button, so Enter and
+    // Space need their usual activation spelled out by hand.
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this._pick(this._activeDate);
+      return;
+    }
     const current = this._activeDate;
     const weekStart = startOfWeek(current, this._firstDay);
     const moves: Record<string, () => Date> = {
@@ -997,39 +1004,38 @@ export class LuiDatePicker extends LitElement {
                     ]
                       .filter(Boolean)
                       .join(', ');
-                    // The button is the gridcell, so the focused element carries
-                    // aria-selected. VoiceOver ignores it on a gridcell, so the
-                    // name says the same. The name is hidden text, not
-                    // aria-label: VoiceOver reads a gridcell's name and then its
-                    // content, and a cell with only hidden content is "blank".
+                    // The `td` is the gridcell itself, not a button nested
+                    // inside a presentational cell: Safari's VoiceOver reads
+                    // the whole row and says "column N" instead of the
+                    // weekday when the interactive element is a child of the
+                    // cell rather than the cell, same as the APG reference
+                    // keeps a plain `td`. The focused cell carries
+                    // aria-selected directly. The name is hidden text, not
+                    // aria-label: VoiceOver reads a gridcell's name and then
+                    // its content, and a cell with only hidden content is
+                    // "blank".
                     return html`
                       <td
-                        class="date-picker-calendar__cell"
-                        role="presentation"
+                        role="gridcell"
+                        aria-selected="${isChosen ? 'true' : 'false'}"
+                        class="date-picker-calendar__cell ${classes}"
+                        data-date="${toISODate(day)}"
+                        tabindex="${isSameDay(day, active) ? 0 : -1}"
+                        aria-current="${ifDefined(
+                          isToday ? 'date' : undefined
+                        )}"
+                        aria-disabled="${ifDefined(
+                          isOutOfRange(day, min, max) || isUnavailable
+                            ? 'true'
+                            : undefined
+                        )}"
+                        @click="${() => this._pick(day)}"
+                        @mouseenter="${() => this._handleDayHover(day)}"
                       >
-                        <button
-                          type="button"
-                          role="gridcell"
-                          aria-selected="${isChosen ? 'true' : 'false'}"
-                          class="${classes}"
-                          data-date="${toISODate(day)}"
-                          tabindex="${isSameDay(day, active) ? 0 : -1}"
-                          aria-current="${ifDefined(
-                            isToday ? 'date' : undefined
-                          )}"
-                          aria-disabled="${ifDefined(
-                            isOutOfRange(day, min, max) || isUnavailable
-                              ? 'true'
-                              : undefined
-                          )}"
-                          @click="${() => this._pick(day)}"
-                          @mouseenter="${() => this._handleDayHover(day)}"
+                        <span aria-hidden="true">${day.getDate()}</span
+                        ><span class="date-picker-calendar__sr-only"
+                          >${name}</span
                         >
-                          <span aria-hidden="true">${day.getDate()}</span
-                          ><span class="date-picker-calendar__sr-only"
-                            >${name}</span
-                          >
-                        </button>
                       </td>
                     `;
                   })}

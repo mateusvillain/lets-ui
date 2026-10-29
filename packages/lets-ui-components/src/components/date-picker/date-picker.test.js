@@ -278,13 +278,14 @@ describe('selection', () => {
   it('marks the selected day and today', async () => {
     const el = await mount(`value="${toISODate(today())}"`);
     await openWithClick(el);
-    const button = day(el, toISODate(today()));
-    expect(button.classList).toContain('date-picker-calendar__day--selected');
-    expect(button.getAttribute('aria-current')).toBe('date');
-    // The focused button is the gridcell, so it carries the selection itself.
-    expect(button.getAttribute('role')).toBe('gridcell');
-    expect(button.getAttribute('aria-selected')).toBe('true');
-    expect(button.closest('td').getAttribute('role')).toBe('presentation');
+    const cell = day(el, toISODate(today()));
+    expect(cell.classList).toContain('date-picker-calendar__day--selected');
+    expect(cell.getAttribute('aria-current')).toBe('date');
+    // The cell is the gridcell itself, not a button nested inside one: a
+    // nested interactive element reads the whole row in Safari + VoiceOver.
+    expect(cell.tagName).toBe('TD');
+    expect(cell.getAttribute('role')).toBe('gridcell');
+    expect(cell.getAttribute('aria-selected')).toBe('true');
   });
 
   it('says the selected state in the day name', async () => {
