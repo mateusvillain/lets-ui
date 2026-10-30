@@ -58,6 +58,24 @@ const ICON_CHEVRON_RIGHT = html`
   </svg>
 `;
 
+// The right chevron turned a quarter. It turns again, by CSS, while the year
+// grid is open.
+const ICON_CHEVRON_DOWN = html`
+  <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+    <path
+      transform="rotate(90 12 12)"
+      d="M10.09 5.47C9.8 5.18 9.33 5.18 9.03 5.47C8.74 5.76 8.74 6.24 9.03 6.53L14.5 12L9.03 17.47C8.74 17.76 8.74 18.24 9.03 18.53C9.33 18.82 9.8 18.82 10.09 18.53L16.09 12.53C16.39 12.24 16.39 11.76 16.09 11.47L10.09 5.47Z"
+    ></path>
+  </svg>
+`;
+
+// Twelve years a page, three a row: a page starts on a multiple of twelve, so
+// a year always lands on the same page. The month grid has the same shape.
+const YEARS_PER_PAGE = 12;
+const GRID_COLUMNS = 3;
+
+const monthIndex = (date: Date) => date.getFullYear() * 12 + date.getMonth();
+
 // Read with `||`: removing the attribute leaves the property null, and the
 // text still needs a value.
 const DEFAULTS = {
@@ -133,6 +151,18 @@ export class LuiDatePicker extends LitElement {
   @property({ attribute: 'previous-month-label' }) previousMonthLabel =
     'Previous month';
   @property({ attribute: 'next-month-label' }) nextMonthLabel = 'Next month';
+  // Appended to the month and the year in the title, each a button: a click
+  // swaps the days for a grid of months or years, the pointer's way to a
+  // distant date.
+  @property({ attribute: 'choose-month-label' }) chooseMonthLabel =
+    'choose month';
+  @property({ attribute: 'choose-year-label' }) chooseYearLabel = 'choose year';
+  @property({ attribute: 'previous-year-label' }) previousYearLabel =
+    'Previous year';
+  @property({ attribute: 'next-year-label' }) nextYearLabel = 'Next year';
+  @property({ attribute: 'previous-years-label' }) previousYearsLabel =
+    'Previous years';
+  @property({ attribute: 'next-years-label' }) nextYearsLabel = 'Next years';
   // With `editable range`, `two` types each end in a text box of its own,
   // inside one control that still looks like a single field.
   @property({ attribute: 'range-fields' }) rangeFields = 'one';
@@ -150,6 +180,8 @@ export class LuiDatePicker extends LitElement {
   // anchor and the day under the pointer or the focus is the other end.
   @state() private _anchor: Date | null = null;
   @state() private _preview: Date | null = null;
+  // The days, or the months or years the title's buttons swap them for.
+  @state() private _view: 'days' | 'months' | 'years' = 'days';
   // What is typed in the field with `editable`. It runs ahead of `value`,
   // which stays empty until the text spells a whole date.
   @state() private _text = '';
@@ -165,6 +197,10 @@ export class LuiDatePicker extends LitElement {
   private _focusActiveDay = false;
   // The control the calendar was opened from, which takes the focus back.
   private _opener: HTMLElement | null = null;
+  // Where the month or year grid opened from, restored when it is left
+  // without a pick, and the panel whose title opened it.
+  private _beforePicker: { active: Date; view: Date; panel: number } | null =
+    null;
   // Set while typing writes `value`, so the text being typed is not replaced
   // by the formatted value.
   private _typing = false;
@@ -219,6 +255,8 @@ export class LuiDatePicker extends LitElement {
     if (changed.has('open')) {
       this._anchor = null;
       this._preview = null;
+      this._view = 'days';
+      this._beforePicker = null;
       // Closed without `_close`, by a click outside, say: forget the opener.
       if (!this.open) this._opener = null;
       if (this.open) {
@@ -268,7 +306,7 @@ export class LuiDatePicker extends LitElement {
     if (this._focusActiveDay && this.open) {
       this._focusActiveDay = false;
       this.renderRoot
-        .querySelector<HTMLElement>('.date-picker-calendar__day[tabindex="0"]')
+        .querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')
         ?.focus();
     }
   }
@@ -729,7 +767,13 @@ export class LuiDatePicker extends LitElement {
       e.preventDefault();
       // A date picker inside a modal closes itself, not the modal.
       e.stopPropagation();
-      this._close();
+      // The month and year grids are a step inside the calendar, so Esc backs
+      // out of them first, and only a second Esc closes.
+      if (this._view !== 'days') {
+        this._closePicker();
+      } else {
+        this._close();
+      }
     }
   }
 
@@ -847,6 +891,278 @@ export class LuiDatePicker extends LitElement {
     return this._selection;
   }
 
+  // The month and the year of a panel, each a button that opens its grid.
+  // Read from the locale's own pattern, without the words between them — "de"
+  // in Portuguese — and in its order, so a year that comes first stays first.
+  // The day grid is named by the whole title, kept in a hidden element.
+  private _renderTitle(month: Date, panel: number, labelId?: string) {
+    const formatter = this._formatter({ month: 'long', year: 'numeric' });
+    const partsOf = (date: Date) =>
+      formatter
+        .formatToParts(date)
+        .filter((part) => part.type === 'month' || part.type === 'year');
+    const parts = partsOf(month);
+    // Every month name, in the form the pattern gives it: some languages
+    // inflect the month next to the year.
+    const monthNames = Array.from(
+      { length: 12 },
+      (_, i) =>
+        partsOf(new Date(month.getFullYear(), i, 1)).find(
+          (part) => part.type === 'month'
+        )?.value ?? ''
+    );
+    // An invisible copy of the buttons, with the month names stacked in one
+    // cell, holds the title to the width of the longest month. Without it the
+    // title, wider than a week, resizes the calendar from month to month.
+    return html`
+      <div class="date-picker-calendar__title">
+        <span
+          id="${ifDefined(labelId)}"
+          class="date-picker-calendar__title-text"
+          hidden
+          >${formatter.format(month)}</span
+        >
+        <div class="date-picker-calendar__title-buttons">
+          ${parts.map((part) =>
+            this._renderTitleButton(
+              part.type === 'month' ? 'months' : 'years',
+              part.value,
+              panel
+            )
+          )}
+        </div>
+        <div
+          class="date-picker-calendar__title-buttons date-picker-calendar__title-sizer"
+          aria-hidden="true"
+        >
+          ${parts.map(
+            (part) => html`
+              <span class="date-picker-calendar__title-button">
+                <span class="date-picker-calendar__title-stack">
+                  ${part.type === 'month'
+                    ? monthNames.map((name) => html`<span>${name}</span>`)
+                    : html`<span>${part.value}</span>`}
+                </span>
+                ${ICON_CHEVRON_DOWN}
+              </span>
+            `
+          )}
+        </div>
+      </div>
+    `;
+  }
+
+  private _renderTitleButton(
+    view: 'months' | 'years',
+    text: string,
+    panel: number
+  ) {
+    const expanded = this._view === view;
+    const hint =
+      view === 'months' ? this.chooseMonthLabel : this.chooseYearLabel;
+    return html`
+      <button
+        type="button"
+        class="date-picker-calendar__title-button date-picker-calendar__title-button--${view}"
+        aria-expanded="${expanded ? 'true' : 'false'}"
+        @click="${() =>
+          expanded ? this._closePicker() : this._openPicker(view, panel)}"
+      >
+        <span>${text}</span
+        ><span class="date-picker-calendar__sr-only">, ${hint}</span>
+        ${ICON_CHEVRON_DOWN}
+      </button>
+    `;
+  }
+
+  // Same rule as the days: what is chosen, not the preview.
+  private get _chosenDates() {
+    const selection = this._selection;
+    return this._anchor
+      ? [this._anchor]
+      : selection
+        ? [selection.start, selection.end]
+        : [];
+  }
+
+  private _renderMonths() {
+    const active = this._activeDate;
+    const year = active.getFullYear();
+    const now = today();
+    const chosen = this._chosenDates;
+    const cells = Array.from({ length: 12 }, (_, i) => {
+      const month = new Date(year, i, 1);
+      return {
+        date: month,
+        data: { month: toISODate(month).slice(0, 7) },
+        // The short form fits three to a row; the hidden name says it whole.
+        text: this._format(month, { month: 'short' }),
+        name: this._format(month, { month: 'long' }),
+        isActive: isSameMonth(month, active),
+        isCurrent: isSameMonth(month, now),
+        isChosen: chosen.some((date) => isSameMonth(date, month)),
+        isDisabled: !this._canShowMonth(month),
+      };
+    });
+    return this._renderPicker({
+      cells,
+      previousLabel: this.previousYearLabel,
+      nextLabel: this.nextYearLabel,
+      canPrevious: !this._isYearOutOfRange(year - 1),
+      canNext: !this._isYearOutOfRange(year + 1),
+      onShift: (delta) => this._shiftMonthYear(delta),
+      onPick: (date) => this._pickMonth(date),
+      onKeydown: this._handleMonthGridKeydown,
+    });
+  }
+
+  private _renderYears() {
+    const start = this._yearPageStart;
+    const active = this._activeDate.getFullYear();
+    const current = today().getFullYear();
+    const chosen = this._chosenDates;
+    const cells = Array.from({ length: YEARS_PER_PAGE }, (_, i) => {
+      const year = start + i;
+      const text = this._format(new Date(year, 0, 1), { year: 'numeric' });
+      return {
+        date: new Date(year, 0, 1),
+        data: { year: String(year) },
+        text,
+        name: text,
+        isActive: year === active,
+        isCurrent: year === current,
+        isChosen: chosen.some((date) => date.getFullYear() === year),
+        isDisabled: this._isYearOutOfRange(year),
+      };
+    });
+    return this._renderPicker({
+      cells,
+      previousLabel: this.previousYearsLabel,
+      nextLabel: this.nextYearsLabel,
+      canPrevious: this._canShowYears(start - YEARS_PER_PAGE),
+      canNext: this._canShowYears(start + YEARS_PER_PAGE),
+      onShift: (delta) => this._shiftYears(delta),
+      onPick: (date) => this._pickYear(date.getFullYear()),
+      onKeydown: this._handleYearGridKeydown,
+    });
+  }
+
+  // The month and year grids: one panel, three cells a row, with the arrows
+  // paging a year of months or twelve years. The cells take every state of
+  // a day and the same markup, the `td` as the gridcell.
+  private _renderPicker(options: {
+    cells: {
+      date: Date;
+      data: Record<string, string>;
+      text: string;
+      name: string;
+      isActive: boolean;
+      isCurrent: boolean;
+      isChosen: boolean;
+      isDisabled: boolean;
+    }[];
+    previousLabel: string;
+    nextLabel: string;
+    canPrevious: boolean;
+    canNext: boolean;
+    onShift: (delta: number) => void;
+    onPick: (date: Date) => void;
+    onKeydown: (e: KeyboardEvent) => void;
+  }) {
+    const rows = Array.from(
+      { length: options.cells.length / GRID_COLUMNS },
+      (_, row) =>
+        options.cells.slice(row * GRID_COLUMNS, (row + 1) * GRID_COLUMNS)
+    );
+    const panel = this._beforePicker?.panel ?? 0;
+
+    return html`
+      <div class="date-picker-calendar__month">
+        <div class="date-picker-calendar__header">
+          <button
+            type="button"
+            class="date-picker-calendar__nav date-picker-calendar__nav--previous"
+            aria-label="${options.previousLabel}"
+            aria-disabled="${ifDefined(
+              options.canPrevious ? undefined : 'true'
+            )}"
+            @click="${() => options.onShift(-1)}"
+          >
+            ${ICON_CHEVRON_LEFT}
+          </button>
+          ${this._renderTitle(startOfMonth(this._activeDate), panel)}
+          <button
+            type="button"
+            class="date-picker-calendar__nav date-picker-calendar__nav--next"
+            aria-label="${options.nextLabel}"
+            aria-disabled="${ifDefined(options.canNext ? undefined : 'true')}"
+            @click="${() => options.onShift(1)}"
+          >
+            ${ICON_CHEVRON_RIGHT}
+          </button>
+        </div>
+        <table
+          class="date-picker-calendar__grid"
+          role="grid"
+          aria-labelledby="${this._baseId}-view-status"
+          @keydown="${options.onKeydown}"
+        >
+          <tbody>
+            ${rows.map(
+              (row) => html`
+                <tr>
+                  ${row.map((cell) => {
+                    const classes = [
+                      'date-picker-calendar__option',
+                      cell.isCurrent
+                        ? 'date-picker-calendar__option--today'
+                        : '',
+                      cell.isChosen
+                        ? 'date-picker-calendar__option--selected'
+                        : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ');
+                    // Hidden text, as on the days, so VoiceOver reads the
+                    // selection it skips in aria-selected.
+                    const name = [
+                      cell.name,
+                      cell.isChosen ? this.selectedDayText : '',
+                    ]
+                      .filter(Boolean)
+                      .join(', ');
+                    return html`
+                      <td
+                        role="gridcell"
+                        aria-selected="${cell.isChosen ? 'true' : 'false'}"
+                        class="${classes}"
+                        data-year="${ifDefined(cell.data.year)}"
+                        data-month="${ifDefined(cell.data.month)}"
+                        tabindex="${cell.isActive ? 0 : -1}"
+                        aria-current="${ifDefined(
+                          cell.isCurrent ? 'date' : undefined
+                        )}"
+                        aria-disabled="${ifDefined(
+                          cell.isDisabled ? 'true' : undefined
+                        )}"
+                        @click="${() => options.onPick(cell.date)}"
+                      >
+                        <span aria-hidden="true">${cell.text}</span
+                        ><span class="date-picker-calendar__sr-only"
+                          >${name}</span
+                        >
+                      </td>
+                    `;
+                  })}
+                </tr>
+              `
+            )}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   private _renderMonth(month: Date, index: number, weekCount: number) {
     const active = this._activeDate;
     const highlight = this._highlight;
@@ -882,9 +1198,7 @@ export class LuiDatePicker extends LitElement {
                 ${ICON_CHEVRON_LEFT}
               </button>`
             : spacer}
-          <div id="${titleId}" class="date-picker-calendar__title">
-            ${this._format(month, { month: 'long', year: 'numeric' })}
-          </div>
+          ${this._renderTitle(month, index, titleId)}
           ${isLast
             ? html`<button
                 type="button"
@@ -1049,6 +1363,174 @@ export class LuiDatePicker extends LitElement {
   }
 
   // One live region for the months on screen, so paging a range announces
+  // The first year on the page that holds the active day.
+  get _yearPageStart() {
+    const year = this._activeDate.getFullYear();
+    return year - (((year % YEARS_PER_PAGE) + YEARS_PER_PAGE) % YEARS_PER_PAGE);
+  }
+
+  // A year with no day inside `min`/`max`.
+  private _isYearOutOfRange(year: number) {
+    const min = this._minDate;
+    const max = this._maxDate;
+    return (
+      (!!min && year < min.getFullYear()) || (!!max && year > max.getFullYear())
+    );
+  }
+
+  private _canShowYears(start: number) {
+    return !(
+      this._isYearOutOfRange(start) &&
+      this._isYearOutOfRange(start + YEARS_PER_PAGE - 1)
+    );
+  }
+
+  // The active day and month in another year, clamped to the month's length
+  // and to `min`/`max`.
+  private _inYear(year: number) {
+    return clampDate(
+      addMonths(this._activeDate, (year - this._activeDate.getFullYear()) * 12),
+      this._minDate,
+      this._maxDate
+    );
+  }
+
+  // Opens the month or year grid from a panel's title. The active day moves
+  // into that panel's month first, so the grid starts on what was clicked and
+  // the pick lands back in the same panel.
+  private _openPicker(view: 'months' | 'years', panel: number) {
+    if (!this._beforePicker) {
+      this._beforePicker = {
+        active: this._activeDate,
+        view: this._viewMonth,
+        panel,
+      };
+      const month = addMonths(this._viewMonth, panel);
+      if (!isSameMonth(this._activeDate, month)) {
+        this._activeDate = clampDate(
+          addMonths(
+            this._activeDate,
+            monthIndex(month) - monthIndex(this._activeDate)
+          ),
+          this._minDate,
+          this._maxDate
+        );
+      }
+    }
+    this._view = view;
+    this._focusActiveDay = true;
+  }
+
+  // Back to the days without a pick: the calendar shows what it showed before.
+  private _closePicker() {
+    if (this._beforePicker) {
+      this._activeDate = this._beforePicker.active;
+      this._viewMonth = this._beforePicker.view;
+    }
+    this._beforePicker = null;
+    this._view = 'days';
+    this._focusActiveDay = true;
+  }
+
+  // Back to the days on a month or year just picked. It shows in the panel
+  // its title was clicked in, so a range does not slide a month.
+  private _returnToDays(active: Date) {
+    const panel = this._beforePicker?.panel ?? 0;
+    const view = startOfMonth(addMonths(active, -panel));
+    this._activeDate = active;
+    this._viewMonth = this._canShowMonth(view) ? view : startOfMonth(active);
+    this._beforePicker = null;
+    this._view = 'days';
+    this._focusActiveDay = true;
+  }
+
+  private _pickYear(year: number) {
+    if (this._isYearOutOfRange(year)) return;
+    this._returnToDays(this._inYear(year));
+  }
+
+  private _pickMonth(month: Date) {
+    if (!this._canShowMonth(month)) return;
+    this._returnToDays(this._inMonth(month));
+  }
+
+  // The active day in another month, clamped to the month's length and to
+  // `min`/`max`.
+  private _inMonth(month: Date) {
+    return clampDate(
+      addMonths(
+        this._activeDate,
+        monthIndex(month) - monthIndex(this._activeDate)
+      ),
+      this._minDate,
+      this._maxDate
+    );
+  }
+
+  private _shiftYears(delta: number) {
+    const start = this._yearPageStart + delta * YEARS_PER_PAGE;
+    if (!this._canShowYears(start)) return;
+    this._activeDate = this._inYear(
+      this._activeDate.getFullYear() + delta * YEARS_PER_PAGE
+    );
+  }
+
+  // The month grid pages a year at a time.
+  private _shiftMonthYear(delta: number) {
+    const year = this._activeDate.getFullYear() + delta;
+    if (this._isYearOutOfRange(year)) return;
+    this._activeDate = this._inYear(year);
+  }
+
+  // The month and year grids share their keys: arrows by cell and row, Home
+  // and End along the row, Page Up and Page Down a page at a time.
+  private _gridMoves(e: KeyboardEvent, position: number, page: number) {
+    const column = position % GRID_COLUMNS;
+    const moves: Record<string, number> = {
+      ArrowLeft: -1,
+      ArrowRight: 1,
+      ArrowUp: -GRID_COLUMNS,
+      ArrowDown: GRID_COLUMNS,
+      Home: -column,
+      End: GRID_COLUMNS - 1 - column,
+      PageUp: -page,
+      PageDown: page,
+    };
+    return moves[e.key];
+  }
+
+  private _handleYearGridKeydown(e: KeyboardEvent) {
+    const year = this._activeDate.getFullYear();
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this._pickYear(year);
+      return;
+    }
+    const delta = this._gridMoves(
+      e,
+      year - this._yearPageStart,
+      YEARS_PER_PAGE
+    );
+    if (delta === undefined) return;
+    e.preventDefault();
+    this._activeDate = this._inYear(year + delta);
+    this._focusActiveDay = true;
+  }
+
+  private _handleMonthGridKeydown(e: KeyboardEvent) {
+    const active = this._activeDate;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this._pickMonth(active);
+      return;
+    }
+    const delta = this._gridMoves(e, active.getMonth(), 12);
+    if (delta === undefined) return;
+    e.preventDefault();
+    this._activeDate = this._inMonth(addMonths(startOfMonth(active), delta));
+    this._focusActiveDay = true;
+  }
+
   // "January – February 2026" once instead of two titles one after the other.
   private _formatViewMonths(months: Date[]) {
     const formatter = this._formatter({ month: 'long', year: 'numeric' });
@@ -1058,6 +1540,14 @@ export class LuiDatePicker extends LitElement {
     return typeof formatter.formatRange === 'function'
       ? formatter.formatRange(first, last)
       : `${formatter.format(first)} – ${formatter.format(last)}`;
+  }
+
+  // "2016 – 2027", the page of years on screen.
+  private _formatYearPage() {
+    const start = this._yearPageStart;
+    const format = (year: number) =>
+      this._format(new Date(year, 0, 1), { year: 'numeric' });
+    return `${format(start)} – ${format(start + YEARS_PER_PAGE - 1)}`;
   }
 
   private _renderCalendar() {
@@ -1087,13 +1577,24 @@ export class LuiDatePicker extends LitElement {
         @keydown="${this._handlePopoverKeydown}"
       >
         <div class="date-picker-calendar">
-          ${months.map((month, i) => this._renderMonth(month, i, weekCount))}
+          ${this._view === 'years'
+            ? this._renderYears()
+            : this._view === 'months'
+              ? this._renderMonths()
+              : months.map((month, i) =>
+                  this._renderMonth(month, i, weekCount)
+                )}
         </div>
         <div
+          id="${this._baseId}-view-status"
           class="date-picker-calendar__sr-only date-picker-calendar__months-status"
           aria-live="polite"
         >
-          ${this._formatViewMonths(months)}
+          ${this._view === 'years'
+            ? this._formatYearPage()
+            : this._view === 'months'
+              ? this._format(this._activeDate, { year: 'numeric' })
+              : this._formatViewMonths(months)}
         </div>
         <div
           class="date-picker-calendar__sr-only date-picker-calendar__range-status"

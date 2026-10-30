@@ -194,15 +194,6 @@
     @include flex(row, center, space-between, fluid(8));
   }
 
-  &__title {
-    @include font-scale(body--lg);
-
-    flex: 1 1 auto;
-    margin: 0;
-    color: text(body);
-    text-align: center;
-  }
-
   &__nav,
   &__nav-spacer {
     flex-shrink: 0;
@@ -230,6 +221,76 @@
     }
   }
 
+  // The month and the year, side by side, between the arrows. The buttons and
+  // their invisible copy share one cell, so the copy sets the width.
+  &__title {
+    display: grid;
+    flex: 1 1 auto;
+    justify-items: center;
+  }
+
+  &__title-buttons {
+    @include flex(row, center, center, fluid(2));
+
+    grid-area: 1 / 1;
+  }
+
+  &__title-sizer {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  // Every month name in one cell: the widest decides the width.
+  &__title-stack {
+    display: inline-grid;
+
+    > * {
+      grid-area: 1 / 1;
+    }
+  }
+
+  // Each opens its grid. The chevron says it is a button: as plain text the
+  // title gives no hint it can be clicked.
+  &__title-button {
+    @include font-scale(body--lg);
+    @include flex(row, center, center, fluid(4));
+
+    box-sizing: border-box;
+    min-height: fixed(40);
+    padding: 0 fluid(8);
+    margin: 0;
+    border: 0;
+    border-radius: radius(md);
+    color: text(body);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+
+    @include states(primary);
+
+    svg {
+      flex-shrink: 0;
+      width: fixed(16);
+      height: fixed(16);
+      fill: icon(neutral);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    &[aria-expanded='true'] svg {
+      transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      svg {
+        transition: none;
+      }
+    }
+  }
+
+  // Stretched to the panel, which the title makes wider than a week in most
+  // languages: a grid centred under it would leave a gap on either side. The
+  // days keep 32px as their base width, so the spare width splits evenly
+  // across the columns. A fixed layout at 100% would set the panel's own
+  // width to a million pixels, since the panel sizes to its content.
   &__grid {
     border-collapse: collapse;
     border-spacing: 0;
@@ -247,7 +308,10 @@
     padding: 0;
   }
 
-  &__day {
+  // A month or a year shares every state of a day: selected, current, out of
+  // range.
+  &__day,
+  &__option {
     @include font-scale(body--lg);
 
     // The cell itself is the interactive gridcell now, not a button nested
@@ -309,6 +373,14 @@
     &--unavailable[aria-disabled='true'] {
       text-decoration: line-through;
     }
+  }
+
+  // Three months or years fill the width of a week, so the calendar keeps its
+  // size when the title swaps the days for them.
+  // A third of the row each, whatever the length of the month's name.
+  &__option {
+    width: calc(100% / 3);
+    height: fixed(40);
   }
 
   &__sr-only {

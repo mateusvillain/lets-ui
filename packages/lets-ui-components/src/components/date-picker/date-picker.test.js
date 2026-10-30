@@ -44,15 +44,16 @@ const trigger = (el) => $(el, '.date-picker__control');
 const day = (el, iso) =>
   $(el, `.date-picker-calendar__day[data-date="${iso}"]`);
 const titles = (el) =>
-  [...el.shadowRoot.querySelectorAll('.date-picker-calendar__title')].map((t) =>
-    t.textContent.trim()
+  [...el.shadowRoot.querySelectorAll('.date-picker-calendar__title-text')].map(
+    (t) => t.textContent.trim()
   );
 const dayClasses = (el, iso) => [...day(el, iso).classList];
 // The name a screen reader gets: the hidden text, with the number left out.
 const dayName = (el, iso) =>
   day(el, iso).querySelector('.date-picker-calendar__sr-only').textContent;
 const activeDay = (el) => el.shadowRoot.activeElement?.dataset.date;
-const title = (el) => $(el, '.date-picker-calendar__title').textContent.trim();
+const title = (el) =>
+  $(el, '.date-picker-calendar__title-text').textContent.trim();
 
 async function openWithClick(el) {
   await userEvent.click(trigger(el));
@@ -506,6 +507,291 @@ describe('keyboard', () => {
     await el.updateComplete;
     expect(el.open).toBe(true);
     expect(activeDay(el)).toBe('2026-01-16');
+  });
+});
+
+describe('year grid', () => {
+  const titleButton = (el) =>
+    $(el, '.date-picker-calendar__title-button--years');
+  const year = (el, y) =>
+    $(el, `.date-picker-calendar__option[data-year="${y}"]`);
+  const activeYear = (el) => el.shadowRoot.activeElement?.dataset.year;
+  const years = (el) =>
+    [...el.shadowRoot.querySelectorAll('.date-picker-calendar__option')].map(
+      (cell) => cell.dataset.year
+    );
+  const openYears = async (el) => {
+    await userEvent.click(titleButton(el));
+    await el.updateComplete;
+  };
+
+  it('opens from the month title, a button that says what it does', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    const button = titleButton(el);
+    expect(button.textContent.replace(/\s+/g, ' ').trim()).toBe(
+      '2026, choose year'
+    );
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    await openYears(el);
+    expect(titleButton(el).getAttribute('aria-expanded')).toBe('true');
+    expect(
+      el.shadowRoot.querySelector('.date-picker-calendar__day')
+    ).toBeNull();
+    // Twelve years, starting on a multiple of twelve.
+    expect(years(el)).toEqual(
+      Array.from({ length: 12 }, (_, i) => String(2016 + i))
+    );
+    expect(activeYear(el)).toBe('2026');
+    expect(year(el, 2026).getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('moves with the keyboard and picks with Enter, back on the same day', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    await openYears(el);
+    await userEvent.keyboard('{ArrowRight}');
+    await el.updateComplete;
+    expect(activeYear(el)).toBe('2027');
+    await userEvent.keyboard('{ArrowUp}');
+    await el.updateComplete;
+    expect(activeYear(el)).toBe('2024');
+    await userEvent.keyboard('{PageUp}');
+    await el.updateComplete;
+    expect(activeYear(el)).toBe('2012');
+    expect(years(el)[0]).toBe('2004');
+    await userEvent.keyboard('{Enter}');
+    await el.updateComplete;
+    expect(title(el)).toBe('January 2012');
+    expect(activeDay(el)).toBe('2012-01-16');
+    // Choosing a year only moves the calendar; the value waits for a day.
+    expect(el.value).toBe('2026-01-16');
+    expect(el.open).toBe(true);
+  });
+
+  it('picks a year with a click', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    await openYears(el);
+    await userEvent.click(year(el, 2019));
+    await el.updateComplete;
+    expect(title(el)).toBe('January 2019');
+    expect(activeDay(el)).toBe('2019-01-16');
+  });
+
+  it('backs out with Esc, and only a second Esc closes', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    await openYears(el);
+    await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
+    await el.updateComplete;
+    await userEvent.keyboard('{Escape}');
+    await el.updateComplete;
+    expect(el.open).toBe(true);
+    expect(title(el)).toBe('January 2026');
+    expect(activeDay(el)).toBe('2026-01-16');
+    await userEvent.keyboard('{Escape}');
+    await el.updateComplete;
+    expect(el.open).toBe(false);
+  });
+
+  it('disables years outside min and max', async () => {
+    const el = await mount(
+      'value="2026-01-16" min="2020-03-01" max="2027-06-30"'
+    );
+    await openWithClick(el);
+    await openYears(el);
+    expect(year(el, 2019).getAttribute('aria-disabled')).toBe('true');
+    expect(year(el, 2020).hasAttribute('aria-disabled')).toBe(false);
+    expect(year(el, 2027).hasAttribute('aria-disabled')).toBe(false);
+    expect(
+      $(el, '.date-picker-calendar__nav--previous').getAttribute(
+        'aria-disabled'
+      )
+    ).toBe('true');
+    expect(
+      $(el, '.date-picker-calendar__nav--next').getAttribute('aria-disabled')
+    ).toBe('true');
+    year(el, 2018).click();
+    await el.updateComplete;
+    expect(titleButton(el).getAttribute('aria-expanded')).toBe('true');
+    // A year cut by min lands on min, not before it.
+    await userEvent.click(year(el, 2020));
+    await el.updateComplete;
+    expect(activeDay(el)).toBe('2020-03-01');
+  });
+
+  it('keeps a range start and the panel the active day was in', async () => {
+    const el = await mount('range');
+    await openWithClick(el);
+    const start = toISODate(today());
+    await userEvent.click(day(el, start));
+    await el.updateComplete;
+    // The start lies in the first of the two months on screen.
+    await openYears(el);
+    await userEvent.keyboard('{ArrowRight}{Enter}');
+    await el.updateComplete;
+    const next = addMonths(today(), 12);
+    expect(titles(el)[0]).toBe(
+      new Intl.DateTimeFormat('en-US', {
+        month: 'long',
+        year: 'numeric',
+      }).format(next)
+    );
+    // Still between the two picks: the start survives the trip.
+    expect(
+      $(el, '.date-picker-calendar__range-status').textContent.trim()
+    ).not.toBe('');
+    expect(day(el, toISODate(next)).getAttribute('tabindex')).toBe('0');
+  });
+});
+
+describe('month grid', () => {
+  const monthButton = (el) =>
+    $(el, '.date-picker-calendar__title-button--months');
+  const yearButton = (el) =>
+    $(el, '.date-picker-calendar__title-button--years');
+  const month = (el, ym) =>
+    $(el, `.date-picker-calendar__option[data-month="${ym}"]`);
+  const activeMonth = (el) => el.shadowRoot.activeElement?.dataset.month;
+  const press = async (el, key) => {
+    await userEvent.keyboard(key);
+    await el.updateComplete;
+  };
+  const openMonths = async (el) => {
+    await userEvent.click(monthButton(el));
+    await el.updateComplete;
+  };
+
+  it('splits the title into a month and a year button, without the words between', async () => {
+    const el = await mount('value="2026-01-16" locale="pt-BR"');
+    await openWithClick(el);
+    const text = (button) => button.querySelector('span').textContent;
+    expect(text(monthButton(el))).toBe('janeiro');
+    expect(text(yearButton(el))).toBe('2026');
+    // The day grid is still named by the whole title.
+    expect(title(el)).toBe('janeiro de 2026');
+  });
+
+  it('opens from the month button with the months of the year', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    expect(monthButton(el).textContent.replace(/\s+/g, ' ').trim()).toBe(
+      'January, choose month'
+    );
+    await openMonths(el);
+    expect(monthButton(el).getAttribute('aria-expanded')).toBe('true');
+    expect(yearButton(el).getAttribute('aria-expanded')).toBe('false');
+    const months = [
+      ...el.shadowRoot.querySelectorAll('.date-picker-calendar__option'),
+    ].map((cell) => cell.dataset.month);
+    expect(months).toEqual(
+      Array.from(
+        { length: 12 },
+        (_, i) => `2026-${String(i + 1).padStart(2, '0')}`
+      )
+    );
+    expect(activeMonth(el)).toBe('2026-01');
+    expect(month(el, '2026-01').getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('moves with the keyboard and picks with Enter, back on the same day', async () => {
+    const el = await mount('value="2026-01-31"');
+    await openWithClick(el);
+    await openMonths(el);
+    await press(el, '{ArrowRight}');
+    expect(activeMonth(el)).toBe('2026-02');
+    await press(el, '{ArrowDown}');
+    expect(activeMonth(el)).toBe('2026-05');
+    await press(el, '{PageDown}');
+    expect(activeMonth(el)).toBe('2027-05');
+    await press(el, '{ArrowLeft}{ArrowLeft}{ArrowLeft}');
+    expect(activeMonth(el)).toBe('2027-02');
+    await press(el, '{Enter}');
+    expect(title(el)).toBe('February 2027');
+    // February has no 31st: the day clamps to its last.
+    expect(activeDay(el)).toBe('2027-02-28');
+    expect(el.value).toBe('2026-01-31');
+  });
+
+  it('picks a month with a click', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    await openMonths(el);
+    await userEvent.click(month(el, '2026-09'));
+    await el.updateComplete;
+    expect(title(el)).toBe('September 2026');
+    expect(activeDay(el)).toBe('2026-09-16');
+  });
+
+  it('switches to the years and backs out of both with one Esc', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    await openMonths(el);
+    await press(el, '{ArrowRight}');
+    await userEvent.click(yearButton(el));
+    await el.updateComplete;
+    expect(yearButton(el).getAttribute('aria-expanded')).toBe('true');
+    expect(monthButton(el).getAttribute('aria-expanded')).toBe('false');
+    await press(el, '{Escape}');
+    expect(el.open).toBe(true);
+    expect(title(el)).toBe('January 2026');
+    expect(activeDay(el)).toBe('2026-01-16');
+  });
+
+  it('disables months outside min and max', async () => {
+    const el = await mount(
+      'value="2026-05-16" min="2026-03-10" max="2026-10-05"'
+    );
+    await openWithClick(el);
+    await openMonths(el);
+    expect(month(el, '2026-02').getAttribute('aria-disabled')).toBe('true');
+    expect(month(el, '2026-03').hasAttribute('aria-disabled')).toBe(false);
+    expect(month(el, '2026-10').hasAttribute('aria-disabled')).toBe(false);
+    expect(month(el, '2026-11').getAttribute('aria-disabled')).toBe('true');
+    expect(
+      $(el, '.date-picker-calendar__nav--previous').getAttribute(
+        'aria-disabled'
+      )
+    ).toBe('true');
+    month(el, '2026-01').click();
+    await el.updateComplete;
+    expect(monthButton(el).getAttribute('aria-expanded')).toBe('true');
+    await userEvent.click(month(el, '2026-10'));
+    await el.updateComplete;
+    // The 16th is past max: the day clamps to it.
+    expect(activeDay(el)).toBe('2026-10-05');
+  });
+
+  it('keeps the calendar width from month to month', async () => {
+    const el = await mount('value="2026-01-16"');
+    await openWithClick(el);
+    const width = () =>
+      $(el, '.date-picker-calendar').getBoundingClientRect().width;
+    const widths = new Set();
+    for (let i = 0; i < 12; i++) {
+      widths.add(width());
+      $(el, '.date-picker-calendar__nav--next').click();
+      await el.updateComplete;
+    }
+    await openMonths(el);
+    widths.add(width());
+    expect(widths.size).toBe(1);
+  });
+
+  it('opens on the month of the panel whose title was clicked', async () => {
+    const el = await mount('range value="2026-01-16/2026-01-21"');
+    await openWithClick(el);
+    expect(titles(el)).toEqual(['January 2026', 'February 2026']);
+    const second = el.shadowRoot.querySelectorAll(
+      '.date-picker-calendar__title-button--months'
+    )[1];
+    await userEvent.click(second);
+    await el.updateComplete;
+    expect(activeMonth(el)).toBe('2026-02');
+    await press(el, '{ArrowRight}{Enter}');
+    // March comes back in the second panel, where February was.
+    expect(titles(el)).toEqual(['February 2026', 'March 2026']);
   });
 });
 
