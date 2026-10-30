@@ -17,6 +17,7 @@ const preview = {
           'Actionable',
           'Navigation',
           'Form and options',
+          ['Checkbox', ['Checkbox', 'Checkbox Group'], '*'],
           'Content',
           'Typography',
           ['Heading', 'Body', 'Shortcut'],
