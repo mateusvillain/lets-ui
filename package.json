@@ -30,7 +30,8 @@
     "version-packages": "changeset version",
     "release": "changeset publish",
     "playground": "pnpm --prefix playground dev",
-    "state-calculator": "pnpm --prefix apps/state-calculator dev"
+    "state-calculator": "pnpm --prefix apps/state-calculator dev",
+    "brand-studio": "pnpm --prefix apps/brand-studio dev"
   },
   "lint-staged": {
     "*.{js,ts,css,scss,json,md}": [

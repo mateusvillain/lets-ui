@@ -142,6 +142,16 @@ describe('the description', () => {
   });
 });
 
+describe('the visible content', () => {
+  it('stays out of the accessibility tree while the trigger is described', async () => {
+    const { tooltip } = await mount(
+      `<lui-icon-button aria-label="Editar"><svg aria-hidden="true"></svg></lui-icon-button>`
+    );
+
+    expect(content(tooltip).getAttribute('aria-hidden')).toBe('true');
+  });
+});
+
 describe('with a trigger that has nothing focusable', () => {
   const wrapper = (tooltip) =>
     tooltip.shadowRoot.querySelector('[data-tooltip-trigger]');

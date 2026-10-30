@@ -251,7 +251,15 @@ export class LuiTooltip extends HostAriaMixin(LitElement) {
                 @slotchange="${this._syncTrigger}"
               ></slot>
             `}
-        <span id="${describedBy}" class="tooltip__content" role="tooltip"
+        <span
+          id="${describedBy}"
+          class="tooltip__content"
+          role="tooltip"
+          aria-hidden="${ifDefined(
+            this._hasCustomTrigger && !this._wrapperFocusable
+              ? 'true'
+              : undefined
+          )}"
           >${this.text}</span
         >
       </span>

@@ -2,22 +2,26 @@
  * The Brand Studio interface: builds the controls from the schema, holds the
  * brand state and projects every change into the preview iframe.
  *
- * The controls are Let's UI components themselves. `lui-tabs` is used purely as
- * a navigation bar — it serializes the content of its `lui-tab`s to HTML, which
- * would discard the fields' listeners, so the panel is rendered outside it and
- * swapped on the `tab-change` event.
+ * The controls are Let's UI components themselves, rendered as one scrolling
+ * column of categories (Colors, then the foundation sections).
  */
 
-import { FAMILIES, STEPS, SECTIONS, FONT_STACKS, brandVar } from './schema.js';
+import {
+  FAMILIES,
+  STEPS,
+  SECTIONS,
+  GOOGLE_FONTS,
+  googleFontOf,
+  brandVar,
+} from './schema.js';
 import {
   createDefaultState,
   toCssVars,
   changedPaths,
   toFiles,
-  resolverSnippet,
+  registrationGuide,
   save,
   load,
-  clear,
   fromFiles,
 } from './state.js';
 import {
@@ -33,15 +37,10 @@ import {
   BREAKPOINT_PREFIX,
   breakpointError,
   breakpointBounds,
-  viewportModel,
-  viewportSelection,
-  viewportWidth,
 } from './breakpoints.js';
 import { parseClamp, buildClamp } from './clamp.js';
 import { zip } from './zip.js';
 import { randomBrand } from './random.js';
-
-const THEME_LABEL = { light: 'light', dark: 'dark' };
 
 /* ── DOM helpers ────────────────────────────────────────────── */
 
@@ -60,9 +59,29 @@ const el = (tag, attrs = {}, children = []) => {
   return node;
 };
 
-/** A design system field with the "changed" marker on its wrapper. */
-const field = (token, control) =>
-  el('div', { class: 'st-field', 'data-token': token }, control);
+/**
+ * A compact property row: a muted label on the left, the control on the
+ * right — the inspector layout of Figma/Framer/Penpot, rather than the
+ * design system's own stacked form field. The control is named through
+ * `aria-label` rather than its own `label`, so the row's label is the only
+ * visible one, and the wrapper still carries the "changed" marker.
+ *
+ * `wide` is for controls that need the row's full width to stay usable — a
+ * pair of bounds, or a text input next to a presets select — rather than the
+ * ~55% a single stepper or select is comfortable with.
+ */
+const field = (token, label, control, { wide = false } = {}) =>
+  el(
+    'div',
+    {
+      class: `st-field${wide ? ' st-field--wide' : ''}`,
+      'data-token': token,
+    },
+    [
+      el('span', { class: 'st-field__label', text: label }),
+      el('div', { class: 'st-field__control' }, control),
+    ]
+  );
 
 const caption = (text) =>
   el('lui-body', {
@@ -97,14 +116,33 @@ export function slugify(value) {
     .replace(/^-+|-+$/g, '');
 }
 
+/** Every font-family token the schema exposes. */
+const FONT_PATHS = SECTIONS.flatMap((section) => section.groups)
+  .flatMap((entry) => entry.fields)
+  .filter((item) => item.control === 'font-family')
+  .map((item) => item.path);
+
 export function mountStudio({ root, templates, meta }) {
   const defaults = createDefaultState(templates, meta);
   const stored = load();
 
   let state = stored ?? structuredClone(defaults);
   let theme = 'light';
-  let scene = 'landing';
-  let activeTab = 'color';
+  /* Whether the Families fields pick from Google Fonts or take a typed stack.
+     Chrome, not brand: the token is a font stack either way. It starts on
+     when every family in the brand is already a Google Font, so reopening the
+     studio on such a brand shows the selects it was built with. */
+  let googleFontsMode = FONT_PATHS.every((path) =>
+    googleFontOf(state.foundation[path])
+  );
+
+  // The standalone preview's "Tokens" specimen sheet is reachable by URL but
+  // no longer has a studio control; the brand is only ever composed as the
+  // landing page here.
+  const scene = 'landing';
+  // Whether the Grid category is on screen in the panel: the column ruler in
+  // the preview follows it, so it shows up while grid tokens are in reach.
+  let gridInView = false;
 
   /* As long as the identifier is exactly what the name would generate, it is
      derived and follows the name field. The moment it diverges, it has been
@@ -116,7 +154,6 @@ export function mountStudio({ root, templates, meta }) {
   const dom = {
     frame: root.querySelector('[data-preview]'),
     panel: root.querySelector('[data-panel]'),
-    tabs: root.querySelector('[data-tabs]'),
     status: root.querySelector('[data-status]'),
     brandName: root.querySelector('[data-brand-name]'),
     brandSlug: root.querySelector('[data-brand-slug]'),
@@ -147,23 +184,54 @@ export function mountStudio({ root, templates, meta }) {
       element.style.setProperty(name, value);
     }
 
+    syncGoogleFonts(document_);
+
     document_.dispatchEvent(
       new document_.defaultView.Event('lui-brand-update')
     );
   }
 
+  /**
+   * A Google Font only renders once its stylesheet is in the document, so
+   * the preview gets one `<link>` per family in use. One per family rather
+   * than a combined request: the css2 API rejects the whole URL when any
+   * family in it lacks a requested weight, and a single bad entry should not
+   * blank out the other two.
+   */
+  function syncGoogleFonts(document_) {
+    const wanted = new Set(
+      FONT_PATHS.map(
+        (path) => googleFontOf(state.foundation[path])?.label
+      ).filter(Boolean)
+    );
+
+    for (const link of document_.head.querySelectorAll('[data-google-font]')) {
+      if (wanted.has(link.dataset.googleFont))
+        wanted.delete(link.dataset.googleFont);
+      else link.remove();
+    }
+
+    for (const family of wanted) {
+      const link = document_.createElement('link');
+      link.rel = 'stylesheet';
+      link.dataset.googleFont = family;
+      link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
+        family
+      ).replace(/%20/g, '+')}:wght@300;400;500;600;700&display=swap`;
+      document_.head.append(link);
+    }
+  }
+
   /** The column ruler follows the Grid tab. */
   function syncOverlay() {
     const element = previewDocument()?.documentElement;
-    if (element)
-      element.dataset.gridOverlay = activeTab === 'grid' ? 'on' : 'off';
+    if (element) element.dataset.gridOverlay = gridInView ? 'on' : 'off';
   }
 
   /** Single source of truth: persists, projects and refreshes the indicators. */
   function commit({ rerender = false } = {}) {
     save(state);
     apply();
-    syncViewportOptions();
     updateStatus();
     if (rerender) renderPanel();
     else refreshIndicators();
@@ -193,66 +261,165 @@ export function mountStudio({ root, templates, meta }) {
     }
   }
 
+  /* ── Groups ───────────────────────────────────────────────
+   *
+   * Every section is a flat list of groups, each always open and headed by
+   * its label over a rule.
+   */
+  function group(label, content) {
+    return el('section', { class: 'st-group' }, [
+      el('div', { class: 'st-group__head' }, [
+        el('span', { class: 'st-group__label', text: label }),
+        el('span', { class: 'st-group__rule' }),
+      ]),
+      ...[content].flat().filter(Boolean),
+    ]);
+  }
+
   /* ── Colors ──────────────────────────────────────────────── */
 
   function colorSection() {
     return el('div', { class: 'st-section' }, [
-      caption(
-        `Editing the ${THEME_LABEL[theme]} theme. Use the theme button in the preview bar to switch.`
-      ),
+      themeSwitch(),
       ...FAMILIES.map((family) =>
-        el('div', { class: 'st-group' }, [
-          el('lui-divider', { label: family }),
-          rampGenerator(family),
-          el(
-            'div',
-            { class: 'st-ramp' },
-            STEPS.map((step) => colorRow(family, step))
-          ),
-          contrastBadges(family),
+        group(family, [
+          el('div', { class: 'st-group' }, [
+            ramp(family),
+            rampGenerator(family),
+            contrastBadges(family),
+          ]),
         ])
       ),
     ]);
   }
 
-  function colorRow(family, step) {
-    const path = `${family}.${step}`;
-    const hex = tokenValueToHex(state.colors[theme][path]);
+  /* The theme belongs to the preview, not to the chrome, and only the colors
+     differ between the two — so the switch lives with the ramps it swaps. */
+  function themeSwitch() {
+    return el('div', { class: 'st-field' }, [
+      el('span', { class: 'st-field__label', text: 'Dark mode' }),
+      el('lui-switch', {
+        size: 'md',
+        'aria-label': 'Dark mode',
+        checked: theme === 'dark',
+        onchange: (event) => {
+          theme = event.target.checked ? 'dark' : 'light';
+          renderPanel();
+          apply();
+        },
+      }),
+    ]);
+  }
+
+  /**
+   * Black or white, whichever reads better on the swatch — the step number
+   * and the changed marker sit on top of the color itself.
+   */
+  const inkOn = (hex) =>
+    contrastRatio(hex, '#ffffff') >= contrastRatio(hex, '#000000')
+      ? '#ffffff'
+      : '#000000';
+
+  /** Which step each family's editor shows; chrome, not brand state. */
+  const selectedSteps = new Map();
+
+  /**
+   * A ramp is read as a whole — eight rows of hex codes hide the very
+   * progression the user is tuning. The steps sit side by side as one strip,
+   * and a single editor below works on whichever step is selected.
+   */
+  function ramp(family) {
+    const selected = selectedSteps.get(family) ?? 5;
+    const hexOf = (step) =>
+      tokenValueToHex(state.colors[theme][`${family}.${step}`]);
+
+    const paint = (swatch, hex) => {
+      swatch.style.setProperty('--st-step-color', hex);
+      swatch.style.setProperty('--st-step-ink', inkOn(hex));
+      swatch.setAttribute(
+        'aria-label',
+        `${family} ${swatch.dataset.step}, ${hex}`
+      );
+      swatch.title = hex;
+    };
+
+    const swatches = STEPS.map((step) => {
+      const swatch = el('button', {
+        type: 'button',
+        class: 'st-step',
+        'data-step': String(step),
+        'data-token': `${theme}:color.${family}.${step}`,
+        'aria-pressed': String(step === selected),
+        text: String(step),
+        onclick: () => select(step),
+      });
+      paint(swatch, hexOf(step));
+      return swatch;
+    });
+
+    const label = el('span', { class: 'st-field__label' });
 
     const picker = el('input', {
       type: 'color',
       class: 'st-swatch',
-      value: hex,
-      'aria-label': `${family} ${step}`,
     });
 
     const input = el('lui-input', {
       size: 'md',
-      value: hex,
-      'aria-label': `${family} ${step} em hexadecimal`,
       class: 'st-hex',
     });
 
+    let current = selected;
+
+    function select(step) {
+      current = step;
+      selectedSteps.set(family, step);
+      const hex = hexOf(step);
+
+      for (const swatch of swatches) {
+        swatch.setAttribute(
+          'aria-pressed',
+          String(swatch.dataset.step === String(step))
+        );
+      }
+
+      label.textContent = `Step ${step}`;
+      picker.value = hex;
+      picker.setAttribute('aria-label', `${family} ${step}`);
+      input.value = hex;
+      input.setAttribute('aria-label', `${family} ${step} in hexadecimal`);
+    }
+
     const write = (value) => {
       if (!isValidHex(value)) return;
-      state.colors[theme][path] = hexToTokenValue(value);
-      picker.value = normalizeHex(value);
-      input.value = normalizeHex(value);
+      const hex = normalizeHex(value);
+      state.colors[theme][`${family}.${current}`] = hexToTokenValue(hex);
+      picker.value = hex;
+      input.value = hex;
+      paint(swatches[current - 1], hex);
       commit();
     };
 
     picker.addEventListener('input', (event) => write(event.target.value));
     input.addEventListener('change', (event) => write(event.target.value));
 
-    return el(
-      'div',
-      { class: 'st-color', 'data-token': `${theme}:color.${path}` },
-      [
-        el('span', { class: 'st-color__step', text: String(step) }),
-        picker,
-        input,
-      ]
-    );
+    select(selected);
+
+    return el('div', { class: 'st-ramp' }, [
+      el(
+        'div',
+        {
+          class: 'st-ramp__strip',
+          role: 'group',
+          'aria-label': `${family} ramp`,
+        },
+        swatches
+      ),
+      el('div', { class: 'st-field st-field--wide' }, [
+        label,
+        el('div', { class: 'st-field__control st-color' }, [picker, input]),
+      ]),
+    ]);
   }
 
   /** Generates the family's 8 steps from a base color. */
@@ -338,14 +505,14 @@ export function mountStudio({ root, templates, meta }) {
     return el(
       'div',
       { class: 'st-section' },
-      section.groups.map((group) =>
-        el('div', { class: 'st-group' }, [
-          el('lui-divider', { label: group.label }),
-          group.hint ? caption(group.hint) : null,
+      section.groups.map((entry) =>
+        group(entry.label, [
+          entry.googleFonts ? googleFontsSwitch() : null,
+          entry.hint ? caption(entry.hint) : null,
           el(
             'div',
             { class: 'st-fields' },
-            group.fields.map((item) => control(item))
+            entry.fields.map((item) => control(item))
           ),
         ])
       )
@@ -374,10 +541,46 @@ export function mountStudio({ root, templates, meta }) {
     }
   }
 
+  function googleFontsSwitch() {
+    return el('div', { class: 'st-field' }, [
+      el('span', { class: 'st-field__label', text: 'Google Fonts' }),
+      el('lui-switch', {
+        size: 'md',
+        'aria-label': 'Google Fonts',
+        checked: googleFontsMode,
+        onchange: (event) => {
+          googleFontsMode = event.target.checked;
+          renderPanel();
+        },
+      }),
+    ]);
+  }
+
+  /** Picking a family writes its two-item stack; a typed stack is untouched
+   *  until a family is picked, so toggling the switch alone changes nothing. */
+  function googleFontControl(item, value, write) {
+    const select = el('lui-native-select', {
+      size: 'md',
+      'aria-label': item.label,
+      placeholder: 'Select a font',
+      options: GOOGLE_FONTS.map((font) => font.label).join(','),
+      selected: String(selectIndex(GOOGLE_FONTS, googleFontOf(value)?.value)),
+    });
+
+    select.addEventListener('change', (event) => {
+      const font = GOOGLE_FONTS[event.target.selected - 1];
+      if (font) write([...font.value]);
+    });
+
+    return field(item.path, item.label, select, { wide: true });
+  }
+
   function fontFamilyControl(item, value, write) {
+    if (googleFontsMode) return googleFontControl(item, value, write);
+
     const input = el('lui-input', {
       size: 'md',
-      label: item.label,
+      'aria-label': item.label,
       value: value.join(', '),
     });
 
@@ -390,21 +593,7 @@ export function mountStudio({ root, templates, meta }) {
       )
     );
 
-    const presets = el('lui-native-select', {
-      size: 'md',
-      placeholder: 'Ready-made stacks…',
-      'aria-label': `Ready-made stacks for ${item.label}`,
-      options: FONT_STACKS.map((stack) => stack.label).join(','),
-    });
-
-    presets.addEventListener('change', (event) => {
-      const stack = FONT_STACKS[event.target.selected - 1];
-      if (!stack) return;
-      input.value = stack.value.join(', ');
-      write([...stack.value]);
-    });
-
-    return field(item.path, el('div', { class: 'st-stack' }, [input, presets]));
+    return field(item.path, item.label, input, { wide: true });
   }
 
   /** Precision of the fluid scale's bounds, in rem. */
@@ -428,17 +617,18 @@ export function mountStudio({ root, templates, meta }) {
   function clampControl(item, value, write) {
     const parsed = parseClamp(value) ?? { min: 1, max: 1 };
 
-    // The design system's number input brings its own steppers and ignores
-    // `suffix`, so the unit lives in the label.
-    const bound = (key, label) => {
+    // The number variant of `lui-input` ignores `suffix`, so the unit lives
+    // only in the field's accessible name — the min/max pair reads from
+    // position, the way a design tool's W/H fields do.
+    const bound = (key, ariaLabel) => {
       const input = el('lui-input', {
         size: 'md',
         type: 'number',
+        'aria-label': ariaLabel,
         'increment-label': 'Aumentar valor',
         'decrement-label': 'Diminuir valor',
         step: String(CLAMP_STEP),
         min: '0.1',
-        label,
         value: String(parsed[key]),
       });
 
@@ -452,17 +642,19 @@ export function mountStudio({ root, templates, meta }) {
 
     return field(
       item.path,
+      item.label,
       el('div', { class: 'st-pair' }, [
         bound('min', `${item.label} · min (rem)`),
         bound('max', `${item.label} · max (rem)`),
-      ])
+      ]),
+      { wide: true }
     );
   }
 
   function selectControl(item, value, write) {
     const select = el('lui-native-select', {
       size: 'md',
-      label: item.label,
+      'aria-label': item.label,
       placeholder: 'Select',
       options: item.options.map((option) => option.label).join(','),
       selected: String(selectIndex(item.options, value)),
@@ -473,7 +665,7 @@ export function mountStudio({ root, templates, meta }) {
       if (option) write(option.value);
     });
 
-    return field(item.path, select);
+    return field(item.path, item.label, select);
   }
 
   /**
@@ -539,9 +731,9 @@ export function mountStudio({ root, templates, meta }) {
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
+      'aria-label': `${item.label} (${unit})`,
       'increment-label': 'Aumentar valor',
       'decrement-label': 'Diminuir valor',
-      label: `${item.label} (${unit})`,
       min: String(bounds.min),
       max: String(bounds.max),
       step: String(item.step ?? 1),
@@ -568,16 +760,16 @@ export function mountStudio({ root, templates, meta }) {
       write({ value: snap(input, raw, item.step ?? 1), unit });
     });
 
-    return field(item.path, input);
+    return field(item.path, `${item.label} (${unit})`, input);
   }
 
   function numberControl(item, value, write) {
     const input = el('lui-input', {
       size: 'md',
       type: 'number',
+      'aria-label': item.label,
       'increment-label': 'Aumentar valor',
       'decrement-label': 'Diminuir valor',
-      label: item.label,
       min: String(item.min ?? 0),
       max: String(item.max ?? 100),
       step: String(item.step ?? 1),
@@ -589,35 +781,62 @@ export function mountStudio({ root, templates, meta }) {
       write(item.integer ? Math.round(next) : next);
     });
 
-    return field(item.path, input);
+    return field(item.path, item.label, input);
   }
 
-  /* ── Navigation and rendering ─────────────────────────────── */
+  /* ── Rendering ────────────────────────────────────────────── */
 
-  const TABS = [
-    { id: 'color', label: 'Colors' },
-    ...SECTIONS.map((section) => ({ id: section.id, label: section.label })),
+  /**
+   * Every category sits in one scrolling column instead of behind tabs, so a
+   * change in one never hides the others. Each opens with a heading that
+   * sticks to the top of the panel while its groups scroll past — the
+   * category stays named however deep the scroll — and a full-width rule
+   * marks where the next one starts.
+   */
+  const CATEGORIES = [
+    { id: 'color', label: 'Colors', render: colorSection },
+    ...SECTIONS.map((section) => ({
+      id: section.id,
+      label: section.label,
+      render: () => foundationSection(section),
+    })),
   ];
 
-  function renderTabs() {
-    dom.tabs.replaceChildren(
-      ...TABS.map((tab) =>
-        el('lui-tab', { label: tab.label, active: tab.id === activeTab })
-      )
+  function category({ id, label, render }) {
+    return el(
+      'section',
+      { class: 'st-category', 'data-category': id, 'aria-label': label },
+      [
+        el('lui-heading', {
+          class: 'st-category__title',
+          variant: 'block-title',
+          as: 'h2',
+          label,
+        }),
+        render(),
+      ]
     );
-
-    dom.tabs.addEventListener('tab-change', (event) => {
-      activeTab = TABS[event.detail.index].id;
-      renderPanel();
-    });
   }
 
+  const gridObserver = new IntersectionObserver(
+    ([entry]) => {
+      gridInView = entry.isIntersecting;
+      syncOverlay();
+    },
+    { root: dom.panel }
+  );
+
   function renderPanel() {
-    const section = SECTIONS.find((item) => item.id === activeTab);
-    dom.panel.replaceChildren(
-      section ? foundationSection(section) : colorSection()
-    );
-    dom.panel.scrollTop = 0;
+    // Re-rendering (import, randomize, a regenerated ramp) keeps the user
+    // where they were rather than throwing them back to the top.
+    const { scrollTop } = dom.panel;
+    dom.panel.replaceChildren(...CATEGORIES.map(category));
+    dom.panel.scrollTop = scrollTop;
+
+    gridObserver.disconnect();
+    const grid = dom.panel.querySelector('[data-category="grid"]');
+    if (grid) gridObserver.observe(grid);
+
     syncOverlay();
     refreshIndicators();
     updateStatus();
@@ -652,6 +871,7 @@ export function mountStudio({ root, templates, meta }) {
         `${JSON.stringify(tree, null, 2)}\n`,
       ])
     );
+    files['README.md'] = registrationGuide(slug);
 
     download(`${slug}.zip`, zip(files));
   }
@@ -667,13 +887,6 @@ export function mountStudio({ root, templates, meta }) {
     }
 
     state = fromFiles(incoming, defaults);
-    syncIdentity();
-    commit({ rerender: true });
-  }
-
-  function reset() {
-    state = structuredClone(defaults);
-    clear();
     syncIdentity();
     commit({ rerender: true });
   }
@@ -701,7 +914,6 @@ export function mountStudio({ root, templates, meta }) {
   root
     .querySelector('[data-action="export"]')
     .addEventListener('click', exportTokens);
-  root.querySelector('[data-action="reset"]').addEventListener('click', reset);
   root
     .querySelector('[data-action="randomize"]')
     .addEventListener('click', randomize);
@@ -712,105 +924,172 @@ export function mountStudio({ root, templates, meta }) {
     importTokens([...event.target.files])
   );
 
-  root.querySelector('[data-guide]').addEventListener('click', () => {
-    root.querySelector('[data-resolver]').textContent = resolverSnippet(
-      state.slug || 'lets-ui'
-    );
-  });
-
-  /* The theme belongs to the preview, not to the chrome: `data-preview-theme`
-     exists only so the icon knows which of its two faces to show. */
-  const themeToggle = root.querySelector('[data-theme-toggle]');
-
-  themeToggle.addEventListener('click', () => {
-    theme = theme === 'dark' ? 'light' : 'dark';
-    root.dataset.previewTheme = theme;
-    // The label carries the state: `aria-pressed` on the host never reaches the `button`.
-    themeToggle.setAttribute(
-      'aria-label',
-      theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
-    );
-    if (activeTab === 'color') renderPanel();
-    syncPreviewLink();
-    apply();
-  });
-
-  /* Preview scene: the landing shows the brand in a real composition, and the
-     token sheet gives the raw value of every step. */
-  const SCENES = ['landing', 'tokens'];
-  const sceneSelect = root.querySelector('[data-scene]');
-  const previewLink = root.querySelector('[data-preview-link]');
-
   /**
-   * The standalone preview opens in a tab of its own, with no studio around it
-   * to write the brand onto its `:root`. It reads the saved state instead, so
-   * the link has to carry what the state does not: the scene and the theme,
-   * which belong to the studio's chrome rather than to the brand.
+   * The preview behaves like a canvas: the frame's width is a free-form drag
+   * on its own handles, not a reading of the brand's breakpoints — those are
+   * edited on their own terms in the Grid tab. Zoom is a separate, purely
+   * visual scale, so a canvas wider than the stage can still be dragged
+   * narrower to see all of it at once, or scrolled to at 100%.
    */
-  function syncPreviewLink() {
-    previewLink.setAttribute('href', `/preview?scene=${scene}&theme=${theme}`);
+  const MIN_FRAME_WIDTH = 320;
+  const MAX_FRAME_WIDTH = 2560;
+  const ZOOM_STEP = 0.1;
+  const MIN_ZOOM = 0.25;
+  const MAX_ZOOM = 2;
+
+  const canvas = root.querySelector('[data-canvas]');
+  const artboard = root.querySelector('[data-artboard]');
+  const viewportSize = root.querySelector('[data-viewport-size]');
+  const zoomValue = root.querySelector('[data-zoom-value]');
+
+  let frameWidth = 1280;
+  let zoom = 1;
+
+  function applyFrameWidth() {
+    artboard.style.setProperty('--st-viewport-width', `${frameWidth}px`);
+    viewportSize.textContent = `${Math.round(frameWidth)}px`;
   }
 
-  sceneSelect.addEventListener('change', () => {
-    scene = SCENES[sceneSelect.selected - 1] ?? 'landing';
-    syncPreviewLink();
-    apply();
-  });
-
-  syncPreviewLink();
-
-  /**
-   * The width selector is a reading of the brand's breakpoints, not a fixed
-   * list: editing `md` changes the width the preview then simulates.
-   */
-  const viewport = root.querySelector('[data-viewport]');
-
-  let viewportSteps = ['full'];
-  let viewportSignature = '';
-
-  function syncViewportOptions() {
-    const model = viewportModel(state.foundation);
-    if (model.signature === viewportSignature) return;
-    viewportSignature = model.signature;
-
-    const previous = viewportSteps[viewport.selected - 1];
-    viewportSteps = model.steps;
-
-    viewport.setAttribute('options', model.labels.join(','));
-    viewport.setAttribute(
-      'selected',
-      String(viewportSelection(viewportSteps, previous))
-    );
-    applyViewport();
+  function applyZoom() {
+    artboard.style.setProperty('--st-zoom', String(zoom));
+    zoomValue.textContent = `${Math.round(zoom * 100)}%`;
   }
 
-  function applyViewport() {
-    const width = viewportWidth(
-      state.foundation,
-      viewportSteps[viewport.selected - 1]
-    );
-
-    dom.frame.style.maxWidth = width ? `${width}px` : '';
+  function setFrameWidth(next) {
+    frameWidth = Math.min(MAX_FRAME_WIDTH, Math.max(MIN_FRAME_WIDTH, next));
+    applyFrameWidth();
   }
 
-  viewport.addEventListener('change', applyViewport);
+  function setZoom(next) {
+    zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, next));
+    applyZoom();
+  }
+
+  // The frame is centred (`margin-inline: auto`), so dragging one handle
+  // moves both edges away from the centre — the width changes by twice the
+  // pointer's own delta, unscaled back to canvas pixels so the edge stays
+  // under the pointer at any zoom.
+  for (const handle of root.querySelectorAll('[data-resize-handle]')) {
+    const direction = handle.dataset.resizeHandle === 'left' ? -1 : 1;
+
+    handle.addEventListener('pointerdown', (event) => {
+      handle.setPointerCapture(event.pointerId);
+      const startX = event.clientX;
+      const startWidth = frameWidth;
+
+      const onMove = (moveEvent) => {
+        const delta = (moveEvent.clientX - startX) * direction;
+        setFrameWidth(startWidth + (delta * 2) / zoom);
+      };
+
+      const onUp = () => handle.removeEventListener('pointermove', onMove);
+
+      handle.addEventListener('pointermove', onMove);
+      handle.addEventListener('pointerup', onUp, { once: true });
+      handle.addEventListener('pointercancel', onUp, { once: true });
+    });
+
+    // The handle is a real button, so arrow keys resize without a mouse —
+    // 10px steps, 50px with Shift, each growing the frame toward the side
+    // the key points at.
+    handle.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+
+      const step = event.shiftKey ? 50 : 10;
+      const delta = (event.key === 'ArrowLeft' ? -step : step) * direction;
+      setFrameWidth(frameWidth + delta * 2);
+    });
+  }
+
+  root
+    .querySelector('[data-action="zoom-out"]')
+    .addEventListener('click', () => setZoom(zoom - ZOOM_STEP));
+  root
+    .querySelector('[data-action="zoom-in"]')
+    .addEventListener('click', () => setZoom(zoom + ZOOM_STEP));
+  zoomValue.addEventListener('click', () => setZoom(1));
+
+  // Pinch-to-zoom on a trackpad reads as a `wheel` event with `ctrlKey` set
+  // in Chromium and Firefox — the same event as Ctrl/Cmd+wheel. Safari sends
+  // its own `gesture*` events instead, with the pinch as a running `scale`.
+  // Both are scaled multiplicatively so a pinch feels the same at 25% as at
+  // 200%, and both are cancelled so the browser doesn't zoom the whole page.
+  function onWheel(event) {
+    if (!event.ctrlKey && !event.metaKey) return;
+    event.preventDefault();
+    // A trackpad pinch sends deltas of a few pixels, a mouse wheel notch
+    // around a hundred: capping each event keeps a notch to a ~10% step.
+    const delta = Math.max(-10, Math.min(10, event.deltaY));
+    setZoom(zoom * Math.exp(-delta * 0.01));
+  }
+
+  let gestureStartZoom = zoom;
+
+  function onGestureStart(event) {
+    event.preventDefault();
+    gestureStartZoom = zoom;
+  }
+
+  function onGestureChange(event) {
+    event.preventDefault();
+    setZoom(gestureStartZoom * event.scale);
+  }
+
+  function listenForZoomGestures(target) {
+    target.addEventListener('wheel', onWheel, { passive: false });
+    target.addEventListener('gesturestart', onGestureStart);
+    target.addEventListener('gesturechange', onGestureChange);
+  }
+
+  listenForZoomGestures(canvas);
+
+  // Over the preview, the pointer is in the iframe's document: its events
+  // never bubble up to the canvas, so the gestures are caught there too. The
+  // preview is same-origin, and each load is a fresh window to listen on.
+  const previewFrame = root.querySelector('[data-preview]');
+  const listenInPreview = () => {
+    if (previewFrame.contentWindow) {
+      listenForZoomGestures(previewFrame.contentWindow);
+    }
+  };
+  previewFrame.addEventListener('load', listenInPreview);
+  if (previewFrame.contentDocument?.readyState === 'complete')
+    listenInPreview();
+
+  // The default zoom fits the frame's width into the stage, so the first view
+  // is the whole page rather than its middle — never above 100%, since a
+  // canvas narrower than the stage is already whole.
+  function fitZoom() {
+    const style = getComputedStyle(canvas);
+    const available =
+      canvas.clientWidth -
+      parseFloat(style.paddingLeft) -
+      parseFloat(style.paddingRight);
+    return Math.min(1, available / (frameWidth + 2));
+  }
+
+  zoom = Math.max(MIN_ZOOM, fitZoom());
+
+  applyFrameWidth();
+  applyZoom();
 
   /* Collapsible panel: the preview takes the whole screen when you are not
-     editing. Collapsing starts from the panel itself; expanding comes from the
-     stage bar, because it is the only foothold left on screen. */
-  const collapseButton = root.querySelector('[data-action="collapse-panel"]');
-  const expandButton = root.querySelector('[data-action="expand-panel"]');
+     editing. A single toggle floats on the stage, so it stays in the same spot
+     whether the panel is open or not — and keeps focus across the switch. */
+  const panelToggle = root.querySelector('[data-action="toggle-panel"]');
+  const panelTooltip = root.querySelector('[data-panel-tooltip]');
 
-  function setCollapsed(collapsed) {
+  // The name carries the state instead of `aria-expanded`: the tooltip shows
+  // the same words, and a name that matched it while the state lived apart
+  // would be read as "Editing panel, expanded, Hide panel".
+  panelToggle.addEventListener('click', () => {
+    const collapsed = root.dataset.collapsed !== 'true';
+    const label = collapsed ? 'Show panel' : 'Hide panel';
     root.dataset.collapsed = String(collapsed);
-    // Focus must not land on a button that just left the screen. The target is
-    // the shadow DOM `button`: the component host is not focusable.
-    const next = collapsed ? expandButton : collapseButton;
-    next.shadowRoot?.querySelector('button')?.focus();
-  }
-
-  collapseButton.addEventListener('click', () => setCollapsed(true));
-  expandButton.addEventListener('click', () => setCollapsed(false));
+    panelToggle.setAttribute('aria-label', label);
+    panelTooltip.text = label;
+  });
 
   dom.brandName.addEventListener('input', (event) => {
     state.name = event.target.value;
@@ -843,8 +1122,6 @@ export function mountStudio({ root, templates, meta }) {
   dom.frame.addEventListener('load', apply);
 
   syncIdentity();
-  syncViewportOptions();
-  renderTabs();
   renderPanel();
   if (previewDocument()?.readyState === 'complete') apply();
 }
