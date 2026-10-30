@@ -6,22 +6,30 @@ order: 7
 
 <ComponentEmbed component="Image" variant="default" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Image para **qualquer imagem de conteúdo**: fotos, capas, ilustrações, capturas de tela. Ele reserva o espaço antes do carregamento, mostra um indicador enquanto carrega e oferece uma alternativa se falhar.
-
+<DosDonts variant="do" title="Imagens de conteúdo">
+  Fotos, capas, ilustrações e capturas de tela.
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Carregamento sem saltos">
+  O Image reserva o espaço antes do carregamento e mostra um indicador enquanto carrega.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="do" title="Falha no carregamento">
+  Ele oferece uma alternativa se a imagem não carregar.
+</DosDonts>
 
-- **Ícones.** Use o conjunto de ícones do sistema.
-- **Fotos de pessoas ou marcas pequenas.** Use o [Avatar](../avatar/index.mdx).
-- **Fundos decorativos.** Aplique por CSS.
+<DosDonts variant="dont" title="Ícones">
+  Use o conjunto de ícones do sistema.
+</DosDonts>
 
+<DosDonts variant="dont" title="Fotos de pessoas ou marcas pequenas">
+  Use o [Avatar](../avatar/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Fundos decorativos">
+  Aplique por CSS.
 </DosDonts>
 
 ## Anatomia

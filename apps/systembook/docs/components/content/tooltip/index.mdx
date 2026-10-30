@@ -6,23 +6,34 @@ order: 12
 
 <ComponentEmbed component="Tooltip" variant="top" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Tooltip para **esclarecer rapidamente** um elemento: dar nome a um [Icon Button](../../actionable/icon-button/index.mdx), explicar uma abreviação ou mostrar um atalho.
-
+<DosDonts variant="do" title="Nomear um ícone">
+  Dar nome a um [Icon Button](../../actionable/icon-button/index.mdx).
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Explicar uma abreviação">
+  Um esclarecimento rápido sobre um termo.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="do" title="Mostrar um atalho">
+  O atalho de teclado de uma ação.
+</DosDonts>
 
-- **Informação essencial.** Se a pessoa precisa dela para continuar, mostre na página.
-- **Conteúdo longo, formatado ou com links.** Use um Modal, um Drawer ou texto na própria tela.
-- **Em telas de toque.** Não há hover, e o toque pode acionar o elemento em vez de mostrar a dica.
-- **Mensagens de erro ou validação.** Mostre junto ao campo.
+<DosDonts variant="dont" title="Informação essencial">
+  Se a pessoa precisa dela para continuar, mostre na página.
+</DosDonts>
 
+<DosDonts variant="dont" title="Conteúdo longo, formatado ou com links">
+  Use um Modal, um Drawer ou texto na própria tela.
+</DosDonts>
+
+<DosDonts variant="dont" title="Telas de toque">
+  Não há hover, e o toque pode acionar o elemento em vez de mostrar a dica.
+</DosDonts>
+
+<DosDonts variant="dont" title="Mensagens de erro ou validação">
+  Mostre junto ao campo.
 </DosDonts>
 
 ## Anatomia

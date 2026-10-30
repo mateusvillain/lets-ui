@@ -6,25 +6,34 @@ order: 5
 
 <ComponentEmbed component="Select" variant="default" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Select quando a pessoa precisa escolher **uma opção entre muitas** (mais de sete) e mostrá-las todas ocuparia espaço demais: país, estado, fuso horário, ano.
-
-Como usa o seletor nativo, funciona bem em celulares, com rolagem e busca por digitação.
-
+<DosDonts variant="do" title="Uma opção entre muitas">
+  Com mais de sete opções, como país, estado, fuso horário ou ano.
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Pouco espaço na tela">
+  Quando mostrar todas as opções ocuparia espaço demais.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="do" title="Formulários no celular">
+  Como usa o seletor nativo, funciona bem em celulares, com rolagem e busca por digitação.
+</DosDonts>
 
-- **Poucas opções (até sete).** Use o [Radio Group](../radio-group/index.mdx), que mostra todas de uma vez.
-- **Várias seleções.** Use [Checkboxes](../checkbox/index.mdx).
-- **Lista com busca, tags ou conteúdo rico.** O Select nativo não faz isso.
-- **Ações em vez de valores.** Use o [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
+<DosDonts variant="dont" title="Poucas opções (até sete)">
+  Use o [Radio Group](../radio-group/index.mdx), que mostra todas de uma vez.
+</DosDonts>
 
+<DosDonts variant="dont" title="Várias seleções">
+  Use [Checkboxes](../checkbox/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Lista com busca, tags ou conteúdo rico">
+  O Select nativo não faz isso.
+</DosDonts>
+
+<DosDonts variant="dont" title="Ações em vez de valores">
+  Use o [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
 </DosDonts>
 
 ## Anatomia

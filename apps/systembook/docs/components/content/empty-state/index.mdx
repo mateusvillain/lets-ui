@@ -6,28 +6,38 @@ order: 6
 
 <ComponentEmbed component="EmptyState" variant="center" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Empty State quando uma área da interface **não tem nada para mostrar**:
-
-- a pessoa usa uma funcionalidade pela primeira vez;
-- uma busca ou filtro não retornou resultados;
-- o conteúdo foi excluído ou arquivado;
-- uma fila foi zerada;
-- os dados não podem ser exibidos por permissão ou configuração.
-
+<DosDonts variant="do" title="Primeiro uso">
+  A pessoa usa uma funcionalidade pela primeira vez.
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Busca sem resultados">
+  Uma busca ou filtro não retornou nada.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="do" title="Conteúdo removido">
+  O conteúdo foi excluído ou arquivado.
+</DosDonts>
 
-- **Carregamento.** Use um indicador de carregamento ou skeleton.
-- **Páginas de erro do servidor** (404, 500). Elas pedem uma página própria.
-- **Como decoração.** O Empty State precisa explicar e orientar.
+<DosDonts variant="do" title="Fila zerada">
+  Não há mais nada pendente.
+</DosDonts>
 
+<DosDonts variant="do" title="Acesso restrito">
+  Os dados não podem ser exibidos por permissão ou configuração.
+</DosDonts>
+
+<DosDonts variant="dont" title="Carregamento">
+  Use um indicador de carregamento ou skeleton.
+</DosDonts>
+
+<DosDonts variant="dont" title="Páginas de erro do servidor">
+  Erros como 404 e 500 pedem uma página própria.
+</DosDonts>
+
+<DosDonts variant="dont" title="Como decoração">
+  O Empty State precisa explicar e orientar.
 </DosDonts>
 
 <Callout variant="warning">

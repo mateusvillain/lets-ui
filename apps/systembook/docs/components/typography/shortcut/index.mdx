@@ -6,22 +6,26 @@ order: 3
 
 <ComponentEmbed component="Shortcut" variant="single" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Shortcut para **mostrar um atalho de teclado disponível**: em itens de menu, tooltips, listas de comandos e telas de ajuda.
-
+<DosDonts variant="do" title="Itens de menu e tooltips">
+  O atalho de teclado da ação, ao lado do nome.
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Listas de comandos e telas de ajuda">
+  Os atalhos disponíveis, reunidos em um só lugar.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="dont" title="Ensinar um fluxo inteiro">
+  Escreva o passo a passo em texto.
+</DosDonts>
 
-- **Para ensinar um fluxo inteiro.** Escreva o passo a passo em texto.
-- **Para teclas que não existem no teclado do usuário**, como em telas de toque.
-- **Como botão.** O Shortcut só exibe, não aciona nada.
+<DosDonts variant="dont" title="Teclas que a pessoa não tem">
+  Em telas de toque, por exemplo, o atalho não tem como ser usado.
+</DosDonts>
 
+<DosDonts variant="dont" title="Como botão">
+  O Shortcut só exibe, não aciona nada.
 </DosDonts>
 
 ## Anatomia

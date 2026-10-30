@@ -6,26 +6,30 @@ order: 3
 
 <ComponentEmbed component="Radio" variant="unselected" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
+<DosDonts variant="do" title="Escolha de exatamente uma opção">
+  Entre duas e sete opções, sempre dentro de um [Radio Group](../radio-group/index.mdx).
+</DosDonts>
 
-Use o Radio como parte de um [Radio Group](../radio-group/index.mdx), quando a pessoa precisa escolher **exatamente uma** opção entre duas a sete, e quer ver todas ao mesmo tempo.
-
+<DosDonts variant="do" title="Todas as opções à vista">
+  Quando a pessoa precisa ver as opções ao mesmo tempo para escolher.
 </DosDonts>
 
 <Callout variant="info">
   O Radio não vive sozinho. Para montar uma escolha completa, com título, dica e erro, use o [Radio Group](../radio-group/index.mdx), que organiza os Radios.
 </Callout>
 
-## Quando não usar
+<DosDonts variant="dont" title="Várias opções ao mesmo tempo">
+  Use o [Checkbox](../checkbox/index.mdx).
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="dont" title="Ligar ou desligar">
+  Use o [Switch](../switch/index.mdx).
+</DosDonts>
 
-- **Várias opções ao mesmo tempo.** Use o [Checkbox](../checkbox/index.mdx).
-- **Ligar ou desligar.** Use o [Switch](../switch/index.mdx).
-- **Mais de sete opções.** Use um [Select](../select/index.mdx).
-
+<DosDonts variant="dont" title="Mais de sete opções">
+  Use um [Select](../select/index.mdx).
 </DosDonts>
 
 ## Anatomia

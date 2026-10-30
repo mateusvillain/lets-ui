@@ -6,23 +6,34 @@ order: 2
 
 <ComponentEmbed component="Alert" variant="success" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Alert para **mensagens que ficam na página** e se relacionam com o contexto: sucesso depois de salvar, erro em um formulário, aviso sobre uma limitação, informação importante.
-
+<DosDonts variant="do" title="Sucesso depois de salvar">
+  Uma confirmação que fica na página, junto ao contexto.
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Erro em um formulário">
+  Um resumo do que precisa ser corrigido.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="do" title="Avisos e informações importantes">
+  Uma limitação ou uma informação relacionada ao contexto.
+</DosDonts>
 
-- **Feedback passageiro de uma ação** que some sozinho. Use o [Toast](../toast/index.mdx).
-- **Decisões que bloqueiam a tarefa.** Use um [Modal](../modal/index.mdx).
-- **Texto de apoio em um campo.** Use o hint do campo.
-- **Mensagens decorativas ou promocionais.** O Alert é para informação relevante.
+<DosDonts variant="dont" title="Feedback passageiro de uma ação">
+  Para retorno que some sozinho, use o [Toast](../toast/index.mdx).
+</DosDonts>
 
+<DosDonts variant="dont" title="Decisões que bloqueiam a tarefa">
+  Use um [Modal](../modal/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Texto de apoio em um campo">
+  Use o hint do campo.
+</DosDonts>
+
+<DosDonts variant="dont" title="Mensagens decorativas ou promocionais">
+  O Alert é para informação relevante.
 </DosDonts>
 
 ## Anatomia

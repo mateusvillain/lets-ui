@@ -6,23 +6,26 @@ order: 1
 
 <ComponentEmbed component="Checkbox" variant="unchecked" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-- **Selecionar vários itens** de uma lista: interesses, permissões, filtros.
-- **Confirmar uma opção** de sim ou não que só vale depois de enviar o formulário: "Li e aceito os termos".
-
+<DosDonts variant="do" title="Selecionar vários itens">
+  Interesses, permissões ou filtros de uma lista.
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Confirmar uma opção ao enviar">
+  Um sim ou não que só vale depois de enviar o formulário, como "Li e aceito os termos".
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="dont" title="Escolha de apenas uma opção">
+  Use o [Radio Group](../radio-group/index.mdx).
+</DosDonts>
 
-- **Escolha de apenas uma opção.** Use o [Radio Group](../radio-group/index.mdx).
-- **Efeito imediato** ao alternar, como ligar notificações. Use o [Switch](../switch/index.mdx).
-- **Escolher entre muitas opções** (mais de sete). Use um [Select](../select/index.mdx) ou uma lista com busca.
+<DosDonts variant="dont" title="Efeito imediato ao alternar">
+  Para ligar notificações, por exemplo, use o [Switch](../switch/index.mdx).
+</DosDonts>
 
+<DosDonts variant="dont" title="Escolher entre muitas opções">
+  Com mais de sete opções, use um [Select](../select/index.mdx) ou uma lista com busca.
 </DosDonts>
 
 ## Anatomia

@@ -6,23 +6,30 @@ order: 7
 
 <ComponentEmbed component="Box" variant="surface" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Box para **criar uma superfície simples**: um bloco com fundo, borda e espaçamento interno, sem comportamento próprio. Ele é a base de áreas de destaque, painéis e faixas de conteúdo.
-
+<DosDonts variant="do" title="Superfície simples">
+  Um bloco com fundo, borda e espaçamento interno, sem comportamento próprio.
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Base de áreas de destaque">
+  Painéis, áreas de destaque e faixas de conteúdo.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="dont" title="Conteúdo sobre um item com título e ações">
+  Use o [Card](../../content/card/index.mdx).
+</DosDonts>
 
-- **Conteúdo sobre um item com título e ações.** Use o [Card](../../content/card/index.mdx).
-- **Mensagens de estado.** Use o [Alert](../../content/alert/index.mdx).
-- **Limitar a largura do conteúdo.** Use o [Container](../container/index.mdx).
-- **Organizar elementos.** Use [Stack](../stack/index.mdx) ou [Flex](../flex/index.mdx) **dentro** do Box.
+<DosDonts variant="dont" title="Mensagens de estado">
+  Use o [Alert](../../content/alert/index.mdx).
+</DosDonts>
 
+<DosDonts variant="dont" title="Limitar a largura do conteúdo">
+  Use o [Container](../container/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Organizar elementos">
+  Use [Stack](../stack/index.mdx) ou [Flex](../flex/index.mdx) **dentro** do Box.
 </DosDonts>
 
 ## O que o Box controla

@@ -6,22 +6,26 @@ order: 6
 
 <ComponentEmbed component="Switch" variant="off" />
 
-## Quando usar
+## Boas práticas
 
-<DosDonts variant="do" title="Use quando">
-
-Use o Switch para **ativar ou desativar** algo que passa a valer **na hora**, sem precisar de um botão "Salvar": notificações, modo escuro, recursos opcionais.
-
+<DosDonts variant="do" title="Efeito imediato">
+  A mudança passa a valer na hora, sem um botão "Salvar".
 </DosDonts>
 
-## Quando não usar
+<DosDonts variant="do" title="Preferências de ligar e desligar">
+  Notificações, modo escuro ou recursos opcionais.
+</DosDonts>
 
-<DosDonts variant="dont" title="Evite quando">
+<DosDonts variant="dont" title="Escolhas que só valem ao enviar um formulário">
+  Use o [Checkbox](../checkbox/index.mdx).
+</DosDonts>
 
-- **Escolhas que só valem ao enviar um formulário.** Use o [Checkbox](../checkbox/index.mdx).
-- **Escolher entre duas opções com nomes diferentes** (como "Mensal" ou "Anual"). Use o [Radio Group](../radio-group/index.mdx).
-- **Selecionar vários itens de uma lista.** Use Checkboxes.
+<DosDonts variant="dont" title="Duas opções com nomes diferentes">
+  Para escolher entre "Mensal" ou "Anual", por exemplo, use o [Radio Group](../radio-group/index.mdx).
+</DosDonts>
 
+<DosDonts variant="dont" title="Selecionar vários itens de uma lista">
+  Use Checkboxes.
 </DosDonts>
 
 ## Anatomia
