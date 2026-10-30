@@ -30,7 +30,7 @@ Quem enxerga o ícone também precisa saber o que ele faz. Envolva o Icon Button
 
 O texto do tooltip vira a descrição do botão (`aria-description`), não o nome: o `aria-label` continua obrigatório. O botão continua sendo a única parada de tabulação.
 
-Use no tooltip o mesmo texto do `aria-label`, para que quem enxerga veja o nome que o leitor de tela anuncia. Como o texto é ao mesmo tempo nome e descrição, alguns leitores de tela o leem duas vezes ("Excluir item, botão, Excluir item"). Um tooltip com outro texto, como um complemento ("Excluir item" e "Remove o item da lista"), evita a repetição, mas aí quem enxerga não vê o nome da ação.
+Use no tooltip o mesmo texto do `aria-label`, para que quem enxerga veja o nome que o leitor de tela anuncia. Quando o texto repete o nome, o Tooltip não o define como descrição, e o leitor de tela anuncia "Excluir item, botão" uma vez só. Um tooltip com outro texto, como um complemento ("Remove o item da lista"), vira a descrição do botão.
 
 <Canvas of={IconButtonStories.WithTooltip} />
 
