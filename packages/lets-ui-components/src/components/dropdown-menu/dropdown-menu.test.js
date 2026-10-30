@@ -53,13 +53,16 @@ describe.each(Object.entries(triggers))('with %s as trigger', (_, html) => {
   it('marks the trigger as opening a menu', async () => {
     const { trigger } = await mount(html);
 
-    await expect.poll(() => trigger.getAttribute('aria-haspopup')).toBe('menu');
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    const control = () => focusable(trigger);
+    await expect
+      .poll(() => control().getAttribute('aria-haspopup'))
+      .toBe('menu');
+    expect(control().getAttribute('aria-expanded')).toBe('false');
   });
 
   it('follows the open state on the trigger', async () => {
     const { menu, trigger } = await mount(html);
-    const expanded = () => trigger.getAttribute('aria-expanded');
+    const expanded = () => focusable(trigger).getAttribute('aria-expanded');
 
     menu.open = true;
     await expect.poll(expanded).toBe('true');
@@ -200,5 +203,21 @@ describe('swapped trigger', () => {
     await expect.poll(() => trigger.hasAttribute('aria-haspopup')).toBe(false);
     expect(trigger.hasAttribute('aria-expanded')).toBe(false);
     expect(menu.contains(trigger)).toBe(true);
+  });
+
+  it("clears the state from a Let's UI trigger moved out of the slot", async () => {
+    const { trigger } = await mount(triggers['a lui-button']);
+    const control = () => focusable(trigger);
+    await expect
+      .poll(() => control().getAttribute('aria-haspopup'))
+      .toBe('menu');
+
+    trigger.removeAttribute('slot');
+
+    await expect
+      .poll(() => control().hasAttribute('aria-haspopup'))
+      .toBe(false);
+    expect(control().hasAttribute('aria-expanded')).toBe(false);
+    expect(trigger.hasAttribute('aria-haspopup')).toBe(false);
   });
 });

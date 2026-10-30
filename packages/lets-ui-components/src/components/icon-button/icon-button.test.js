@@ -5,6 +5,7 @@ import iconButtonCss from '../../../../styles/src/components/_icon-button.scss?i
 import { LuiIconButton } from './icon-button.ts';
 import { LuiModal } from '../modal/modal.ts';
 import { LuiDrawer } from '../drawer/drawer.ts';
+import { exposed } from '../../test/ax-tree.js';
 
 customElements.define('lui-icon-button', LuiIconButton);
 customElements.define('lui-modal', LuiModal);
@@ -38,13 +39,21 @@ describe('accessible name', () => {
     expect(control(button).getAttribute('aria-label')).toBe('Fechar');
   });
 
-  it('reflects an aria-label set as a property to the host', async () => {
+  it('takes an aria-label set as a property, without reflecting it', async () => {
     const button = await mount(`<lui-icon-button>${icon}</lui-icon-button>`);
 
     button.ariaLabel = 'Fechar';
     await button.updateComplete;
-    expect(button.getAttribute('aria-label')).toBe('Fechar');
+    expect(button.hasAttribute('aria-label')).toBe(false);
     expect(control(button).getAttribute('aria-label')).toBe('Fechar');
+  });
+
+  it('names the button alone in the accessibility tree', async () => {
+    await mount(
+      `<lui-icon-button aria-label="Fechar">${icon}</lui-icon-button>`
+    );
+
+    expect(await exposed('Fechar')).toEqual(['button "Fechar"']);
   });
 
   it('renders no empty aria-label', async () => {
@@ -110,20 +119,45 @@ describe('state ARIA', () => {
     await button.updateComplete;
     expect(control(button).getAttribute('aria-expanded')).toBe('true');
 
-    button.removeAttribute('aria-expanded');
+    button.setAttribute('aria-expanded', 'false');
     await button.updateComplete;
-    expect(control(button).hasAttribute('aria-expanded')).toBe(false);
+    expect(control(button).getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('reflects the state set as a property to the host attribute', async () => {
+  it('takes the state set as a property, without reflecting it', async () => {
     const button = await mount(
       `<lui-icon-button aria-label="Negrito">${icon}</lui-icon-button>`
     );
 
     button.ariaPressed = 'true';
     await button.updateComplete;
-    expect(button.getAttribute('aria-pressed')).toBe('true');
+    expect(button.hasAttribute('aria-pressed')).toBe(false);
     expect(control(button).getAttribute('aria-pressed')).toBe('true');
+
+    button.ariaPressed = null;
+    await button.updateComplete;
+    expect(control(button).hasAttribute('aria-pressed')).toBe(false);
+  });
+
+  it('removes the ARIA attributes from the host', async () => {
+    const button = await mount(
+      `<lui-icon-button aria-label="Menu" aria-expanded="false" aria-haspopup="menu" aria-pressed="true">${icon}</lui-icon-button>`
+    );
+
+    expect(button.ariaHasPopup).toBe('menu');
+    expect(
+      button.getAttributeNames().filter((n) => n.startsWith('aria-'))
+    ).toEqual([]);
+  });
+
+  it('exposes the state on the button alone in the accessibility tree', async () => {
+    await mount(
+      `<lui-icon-button aria-label="Menu" aria-expanded="false" aria-haspopup="menu">${icon}</lui-icon-button>`
+    );
+
+    expect(await exposed('Menu')).toEqual([
+      'button "Menu" hasPopup=menu expanded=false',
+    ]);
   });
 
   it('renders no attribute for an empty state value', async () => {
@@ -160,8 +194,18 @@ describe('state ARIA', () => {
     await expect.poll(expanded).toBe('false');
     expect(control(button).getAttribute('aria-haspopup')).toBe('dialog');
 
+    expect(await exposed('Settings')).toContain(
+      'button "Settings" hasPopup=dialog expanded=false'
+    );
+    expect(
+      button.getAttributeNames().filter((n) => n.startsWith('aria-'))
+    ).toEqual([]);
+
     modal.open = true;
     await expect.poll(expanded).toBe('true');
+    await expect
+      .poll(() => exposed('Settings'))
+      .toContain('button "Settings" hasPopup=dialog expanded=true');
 
     modal.open = false;
     await modal.updateComplete;
@@ -181,8 +225,18 @@ describe('state ARIA', () => {
     await expect.poll(expanded).toBe('false');
     expect(control(button).getAttribute('aria-haspopup')).toBe('dialog');
 
+    expect(await exposed('Filtros')).toContain(
+      'button "Filtros" hasPopup=dialog expanded=false'
+    );
+    expect(
+      button.getAttributeNames().filter((n) => n.startsWith('aria-'))
+    ).toEqual([]);
+
     drawer.open = true;
     await expect.poll(expanded).toBe('true');
+    await expect
+      .poll(() => exposed('Filtros'))
+      .toContain('button "Filtros" hasPopup=dialog expanded=true');
 
     drawer.open = false;
     await drawer.updateComplete;

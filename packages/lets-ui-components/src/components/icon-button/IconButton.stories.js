@@ -157,8 +157,9 @@ export const Toggle = () => {
   toolbar.addEventListener('click', (event) => {
     const button = event.target.closest('lui-icon-button');
     if (!button || button.disabled) return;
-    const pressed = button.getAttribute('aria-pressed') === 'true';
-    button.setAttribute('aria-pressed', String(!pressed));
+    // The component consumes `aria-pressed` from its host, so the state lives
+    // on the property, not the attribute.
+    button.ariaPressed = String(button.ariaPressed !== 'true');
   });
   return toolbar;
 };

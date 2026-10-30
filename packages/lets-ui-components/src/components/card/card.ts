@@ -1,8 +1,9 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import styles from './card.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 
-export class LuiCard extends LitElement {
+export class LuiCard extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
 
   @property({ attribute: 'aria-label' }) ariaLabel = 'Card';
