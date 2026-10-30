@@ -73,3 +73,44 @@ $gap-md: list.nth(map.get($icon-button-size, md), 2);
 
   @include states(primary, primary, $bg: bg(surface, neutral));
 }
+
+// Pressed (toggle): goes through `--lui-bg`, so hover and press still tint it.
+.icon-button[aria-pressed='true'] {
+  @include state-base(bg(container, neutral));
+}
+
+// Forced colors would repaint the pressed fill away, so it takes `Highlight`.
+// The ring is a pseudo-element: `box-shadow` and `outline` belong to focus.
+@media (forced-colors: active) {
+  .icon-button[aria-pressed='true'] {
+    forced-color-adjust: none;
+    color: HighlightText;
+
+    @include state-base(Highlight);
+
+    ::slotted(*) {
+      color: HighlightText;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: width(2) solid currentcolor;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    &:disabled,
+    &.is-disabled,
+    &[aria-disabled='true'] {
+      color: GrayText;
+
+      @include state-base(ButtonFace);
+
+      ::slotted(*) {
+        color: GrayText;
+      }
+    }
+  }
+}

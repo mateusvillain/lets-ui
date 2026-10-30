@@ -19,6 +19,7 @@ import { LuiDrawer } from './components/drawer/drawer.js';
 import { LuiEmptyState } from './components/empty-state/empty-state.js';
 import { LuiHeading } from './components/heading/heading.js';
 import { LuiTabs, LuiTab } from './components/tabs/tabs.js';
+import { LuiDatePicker } from './components/date-picker/date-picker.js';
 import { LuiDivider } from './components/divider/divider.js';
 import {
   LuiDropdownMenu,
@@ -42,6 +43,7 @@ import { LuiLink } from './components/link/link.js';
 import { LuiModal } from './components/modal/modal.js';
 import { LuiOtpInput } from './components/otp-input/otp-input.js';
 import { LuiPagination } from './components/pagination/pagination.js';
+import { LuiProgressBar } from './components/progress-bar/progress-bar.js';
 import { LuiNativeSelect, LuiSelect } from './components/select/select.js';
 import { LuiShortcut } from './components/shortcut/shortcut.js';
 import { LuiSkeleton } from './components/skeleton/skeleton.js';
@@ -85,6 +87,7 @@ define('lui-drawer', LuiDrawer);
 define('lui-empty-state', LuiEmptyState);
 define('lui-tabs', LuiTabs);
 define('lui-tab', LuiTab);
+define('lui-date-picker', LuiDatePicker);
 define('lui-divider', LuiDivider);
 define('lui-dropdown-menu', LuiDropdownMenu);
 define('lui-menu-item', LuiMenuItem);
@@ -105,6 +108,7 @@ define('lui-link', LuiLink);
 define('lui-modal', LuiModal);
 define('lui-otp-input', LuiOtpInput);
 define('lui-pagination', LuiPagination);
+define('lui-progress-bar', LuiProgressBar);
 define('lui-select', LuiSelect);
 define('lui-native-select', LuiNativeSelect);
 define('lui-shortcut', LuiShortcut);
@@ -144,6 +148,7 @@ export {
   LuiEmptyState,
   LuiTabs,
   LuiTab,
+  LuiDatePicker,
   LuiDivider,
   LuiDropdownMenu,
   LuiMenuItem,
@@ -164,6 +169,7 @@ export {
   LuiModal,
   LuiOtpInput,
   LuiPagination,
+  LuiProgressBar,
   LuiNativeSelect,
   LuiSelect,
   LuiShortcut,

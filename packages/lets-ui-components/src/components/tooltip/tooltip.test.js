@@ -142,37 +142,13 @@ describe('the description', () => {
   });
 });
 
-describe('a text that repeats the trigger name', () => {
-  const iconButton = (label) =>
-    `<lui-icon-button aria-label="${label}"><svg aria-hidden="true"></svg></lui-icon-button>`;
-
-  it('is not added as a description', async () => {
-    const { tooltip } = await mount(iconButton(TEXT));
-    await tooltip.updateComplete;
-
-    const button = (await axNodes()).find(
-      (n) => n.role?.value === 'button' && n.name?.value === TEXT
+describe('the visible content', () => {
+  it('stays out of the accessibility tree while the trigger is described', async () => {
+    const { tooltip } = await mount(
+      `<lui-icon-button aria-label="Editar"><svg aria-hidden="true"></svg></lui-icon-button>`
     );
-    expect(button).toBeDefined();
-    expect(button.description?.value ?? '').toBe('');
-  });
-
-  it('keeps the visible text out of the accessibility tree', async () => {
-    const { tooltip } = await mount(iconButton(TEXT));
 
     expect(content(tooltip).getAttribute('aria-hidden')).toBe('true');
-  });
-
-  it('follows the name changing into and out of the text', async () => {
-    const { trigger } = await mount(iconButton('Editar'));
-
-    trigger.setAttribute('aria-label', TEXT);
-    await expect.poll(() => describedBy(TEXT)).toEqual([]);
-
-    trigger.setAttribute('aria-label', 'Editar');
-    await expect
-      .poll(() => describedBy(TEXT))
-      .toEqual([{ role: 'button', name: 'Editar' }]);
   });
 });
 
@@ -331,5 +307,125 @@ describe('with a trigger not upgraded yet', () => {
       )
       .toBe(TEXT);
     expect(trigger.hasAttribute('aria-description')).toBe(false);
+  });
+});
+
+describe('a tooltip that repeats the trigger name', () => {
+  const NAME = 'Excluir item';
+  const nodeNamed = async (name) =>
+    (await axNodes())
+      .filter((n) => n.role?.value === 'button' && n.name?.value === name)
+      .map((n) => ({ name: n.name.value, description: n.description?.value }));
+
+  it.each([
+    [
+      'a lui-icon-button',
+      `<lui-icon-button aria-label="${NAME}"><svg aria-hidden="true"></svg></lui-icon-button>`,
+    ],
+    ['a lui-button with label', `<lui-button label="${NAME}"></lui-button>`],
+    ['a lui-button with slotted text', `<lui-button>${NAME}</lui-button>`],
+    ['a native button', `<button>${NAME}</button>`],
+  ])('sets no description on %s', async (_, html) => {
+    await mount(html, NAME);
+
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+  });
+
+  it('matches regardless of case and surrounding whitespace', async () => {
+    await mount(`<button>  ${NAME.toUpperCase()} </button>`, NAME);
+
+    await expect
+      .poll(() => nodeNamed(NAME.toUpperCase()))
+      .toEqual([{ name: NAME.toUpperCase() }]);
+  });
+
+  it('describes the trigger once the text stops matching', async () => {
+    const { tooltip } = await mount(`<button>${NAME}</button>`, NAME);
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+
+    tooltip.text = 'Remove o item da lista';
+    await expect
+      .poll(() => nodeNamed(NAME))
+      .toEqual([{ name: NAME, description: 'Remove o item da lista' }]);
+
+    tooltip.text = NAME;
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+  });
+
+  it("follows a change to the trigger's aria-label", async () => {
+    const { trigger } = await mount(
+      `<lui-icon-button aria-label="Editar"><svg aria-hidden="true"></svg></lui-icon-button>`,
+      NAME
+    );
+    await expect
+      .poll(() => nodeNamed('Editar'))
+      .toEqual([{ name: 'Editar', description: NAME }]);
+
+    trigger.setAttribute('aria-label', NAME);
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+
+    trigger.setAttribute('aria-label', 'Editar');
+    await expect
+      .poll(() => nodeNamed('Editar'))
+      .toEqual([{ name: 'Editar', description: NAME }]);
+  });
+
+  it("follows a lui-button's label set as a property", async () => {
+    const { trigger } = await mount(
+      `<lui-button label="${NAME}"></lui-button>`,
+      NAME
+    );
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+
+    trigger.label = 'Editar';
+    await expect
+      .poll(() => nodeNamed('Editar'))
+      .toEqual([{ name: 'Editar', description: NAME }]);
+  });
+
+  it('compares with the loading text a lui-button renders', async () => {
+    await mount(
+      `<lui-button loading loading-text="Salvando">${NAME}</lui-button>`,
+      NAME
+    );
+
+    await expect
+      .poll(() => nodeNamed('Salvando'))
+      .toEqual([{ name: 'Salvando', description: NAME }]);
+  });
+
+  it('leaves hidden text out of the name', async () => {
+    await mount(
+      `<button><span aria-hidden="true">🗑</span>${NAME}</button>`,
+      NAME
+    );
+
+    await expect.poll(() => nodeNamed(NAME)).toEqual([{ name: NAME }]);
+  });
+
+  it('takes the name from aria-labelledby', async () => {
+    await mount(
+      `<span id="lbl">Remover</span><button aria-labelledby="lbl">${NAME}</button>`,
+      NAME
+    );
+
+    await expect
+      .poll(() => nodeNamed('Remover'))
+      .toEqual([{ name: 'Remover', description: NAME }]);
+  });
+
+  it("keeps the author's own description, and restores it on leaving", async () => {
+    const { tooltip, trigger } = await mount(
+      `<button aria-description="Do autor">${NAME}</button>`,
+      NAME
+    );
+    await expect
+      .poll(() => nodeNamed(NAME))
+      .toEqual([{ name: NAME, description: 'Do autor' }]);
+
+    tooltip.after(trigger);
+    await expect
+      .poll(() => trigger.getAttribute('aria-description'))
+      .toBe('Do autor');
   });
 });
