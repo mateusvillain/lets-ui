@@ -826,7 +826,11 @@ export class LuiDatePicker extends LitElement {
     if (!move) return;
     e.preventDefault();
     this._activeDate = clampDate(move(), this._minDate, this._maxDate);
-    if (this._anchor) this._preview = this._activeDate;
+    // Same rule as the pointer: an unavailable day can't end the range, so the
+    // preview waits on the last day that can.
+    if (this._anchor && this._isPickable(this._activeDate)) {
+      this._preview = this._activeDate;
+    }
     this._focusActiveDay = true;
   }
 

@@ -408,6 +408,27 @@ describe('unavailable days', () => {
     );
   });
 
+  it('does not preview an unavailable day reached by the keyboard', async () => {
+    const el = await mount('range value="2026-01-16/2026-01-16"');
+    el.isDateDisabled = (date) => date.getDate() === 18;
+    await el.updateComplete;
+    await openWithClick(el);
+    await userEvent.keyboard('{Enter}{ArrowRight}{ArrowRight}');
+    await el.updateComplete;
+    expect(activeDay(el)).toBe('2026-01-18');
+    expect(dayClasses(el, '2026-01-18')).not.toContain(
+      'date-picker-calendar__day--selected'
+    );
+    expect(dayClasses(el, '2026-01-17')).toContain(
+      'date-picker-calendar__day--selected'
+    );
+    await userEvent.keyboard('{ArrowRight}');
+    await el.updateComplete;
+    expect(dayClasses(el, '2026-01-19')).toContain(
+      'date-picker-calendar__day--selected'
+    );
+  });
+
   it('reports a typed unavailable date as invalid with its own message', async () => {
     const el = await mount(
       'editable locale="pt-BR" name="start"',
