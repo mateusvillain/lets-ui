@@ -133,6 +133,46 @@ DropdownTrigger.parameters = {
   },
 };
 
+// Returns an element rather than a string so the click handler that flips
+// `aria-pressed` travels with the markup.
+export const Toggle = () => {
+  const toolbar = document.createElement('div');
+  toolbar.setAttribute('role', 'toolbar');
+  toolbar.setAttribute('aria-label', 'Filtros da lista');
+  toolbar.style.cssText = 'display: flex; gap: 8px;';
+  toolbar.innerHTML = `
+    <lui-icon-button size="lg" aria-label="Mostrar alertas" aria-pressed="true">
+      ${SVG.alert}
+    </lui-icon-button>
+    <lui-icon-button size="lg" aria-label="Mostrar concluídos" aria-pressed="false">
+      ${SVG['check-circle']}
+    </lui-icon-button>
+    <lui-icon-button size="md" aria-label="Mostrar informativos" aria-pressed="true">
+      ${SVG['info-circle']}
+    </lui-icon-button>
+    <lui-icon-button size="md" aria-label="Mostrar erros" aria-pressed="true" disabled>
+      ${SVG['x-circle']}
+    </lui-icon-button>
+  `;
+  toolbar.addEventListener('click', (event) => {
+    const button = event.target.closest('lui-icon-button');
+    if (!button || button.disabled) return;
+    const pressed = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!pressed));
+  });
+  return toolbar;
+};
+Toggle.storyName = 'Botão alternável (aria-pressed)';
+Toggle.parameters = {
+  controls: { disable: true },
+  docs: {
+    description: {
+      story:
+        'Clique para alternar. Pressionado, o botão ganha o fundo de container neutro. O último está pressionado e desabilitado.',
+    },
+  },
+};
+
 export const CSSClass = () => `
   <button class="icon-button icon-button--lg" aria-label="Fechar">
     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
