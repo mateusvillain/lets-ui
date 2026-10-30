@@ -408,22 +408,22 @@ obrigatório desde o início. Ao enviar o form vazio, vale o `valueMissing`, com
 
 ### Critérios WCAG
 
-| Critério                     | Como o componente atende                                                                 |
-| ---------------------------- | ---------------------------------------------------------------------------------------- |
-| 1.3.1 Info and Relationships | Rótulo ligado ao campo; `grid` com cabeçalhos de coluna; hint e erro ligados             |
-| 1.3.2 Meaningful Sequence    | O calendário vem logo depois do campo no DOM                                             |
-| 1.4.1 Use of Color           | Hoje tem negrito e `aria-current`; a seleção tem preenchimento e `aria-selected`         |
-| 1.4.10 Reflow                | Com `range`, os dois meses ficam um embaixo do outro em telas estreitas                  |
-| 2.1.1 Keyboard               | Todas as ações têm tecla, incluindo seleção de range                                     |
-| 2.1.2 No Keyboard Trap       | Diálogo não modal; `Esc` e `Tab` saem dele                                               |
-| 2.4.3 Focus Order            | Foco entra no dia ativo e volta ao controle que abriu o calendário                       |
-| 2.4.6 Headings and Labels    | Mês anunciado; dias e botões com nome descritivo                                         |
-| 2.4.7 Focus Visible          | Anel de foco no campo, nos dias, nos botões de mês e no botão do calendário              |
-| 2.5.8 Target Size (Minimum)  | Dias com 32 px e botões de mês com 40 px                                                 |
-| 3.3.1 Error Identification   | `aria-invalid` e mensagem de erro; `badInput` com `bad-input-text`                       |
-| 3.3.2 Labels or Instructions | Rótulo e, com `editable`, formato visível abaixo do campo e na descrição                 |
-| 3.3.3 Error Suggestion       | Uma mensagem para cada erro: vazio, fora do período, data inválida e fim antes do início |
-| 4.1.2 Name, Role, Value      | Papéis, nomes e estados nativos ou ARIA em todos os controles                            |
+| Critério                     | Como o componente atende                                                                                          |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1.3.1 Info and Relationships | Rótulo ligado ao campo; `grid` com cabeçalhos de coluna; hint e erro ligados                                      |
+| 1.3.2 Meaningful Sequence    | O calendário vem logo depois do campo no DOM                                                                      |
+| 1.4.1 Use of Color           | Hoje tem negrito e `aria-current`; a seleção tem preenchimento e `aria-selected`; o dia indisponível tem um traço |
+| 1.4.10 Reflow                | Com `range`, os dois meses ficam um embaixo do outro em telas estreitas                                           |
+| 2.1.1 Keyboard               | Todas as ações têm tecla, incluindo seleção de range                                                              |
+| 2.1.2 No Keyboard Trap       | Diálogo não modal; `Esc` e `Tab` saem dele                                                                        |
+| 2.4.3 Focus Order            | Foco entra no dia ativo e volta ao controle que abriu o calendário                                                |
+| 2.4.6 Headings and Labels    | Mês anunciado; dias, meses, anos e botões com nome descritivo                                                     |
+| 2.4.7 Focus Visible          | Anel de foco no campo, nos dias, nos meses e anos, nos botões do cabeçalho e no botão do calendário               |
+| 2.5.8 Target Size (Minimum)  | Dias com 32 px; botões de mês, botões do título e células de mês e ano com 40 px                                  |
+| 3.3.1 Error Identification   | `aria-invalid` e mensagem de erro; `badInput` com `bad-input-text`                                                |
+| 3.3.2 Labels or Instructions | Rótulo e, com `editable`, formato visível abaixo do campo e na descrição                                          |
+| 3.3.3 Error Suggestion       | Uma mensagem para cada erro: vazio, fora do período, dia indisponível, data inválida e fim antes do início        |
+| 4.1.2 Name, Role, Value      | Papéis, nomes e estados nativos ou ARIA em todos os controles                                                     |
 
 ### Status de testes
 
