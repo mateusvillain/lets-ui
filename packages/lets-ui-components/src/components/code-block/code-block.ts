@@ -3,6 +3,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property, state } from 'lit/decorators.js';
 import styles from './code-block.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 
 // A failure asks the reader to do something, so it stays up longer than a
 // confirmation that only reports.
@@ -79,7 +80,7 @@ export type CodeHighlighter = (code: string, language: string) => string | null;
 let highlighter: CodeHighlighter | null = null;
 const instances = new Set<LuiCodeBlock>();
 
-export class LuiCodeBlock extends LitElement {
+export class LuiCodeBlock extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
 
   // One highlighter for the whole page, so the package carries no parser of
@@ -99,7 +100,13 @@ export class LuiCodeBlock extends LitElement {
   // wherever it was. One listener serves every block on the page.
   private static _handleEscape = (event: KeyboardEvent) => {
     if (event.key !== 'Escape') return;
-    instances.forEach((block) => block._dismissTooltip());
+    let dismissed = false;
+    instances.forEach((block) => {
+      if (block._dismissTooltip()) dismissed = true;
+    });
+    // Consumed when it put a tooltip away: a dialog holding the block stays
+    // open until the next Escape.
+    if (dismissed) event.preventDefault();
   };
 
   @property() variant = 'default';
@@ -242,9 +249,14 @@ export class LuiCodeBlock extends LitElement {
     }
   }
 
-  private _dismissTooltip() {
+  // Whether a shown tooltip was put away.
+  private _dismissTooltip(): boolean {
     const copy = this.shadowRoot?.querySelector('.code-block__copy');
-    if (copy?.matches(':hover, :focus-within')) this._tooltipDismissed = true;
+    if (this._tooltipDismissed || !copy?.matches(':hover, :focus-within')) {
+      return false;
+    }
+    this._tooltipDismissed = true;
+    return true;
   }
 
   private _restoreTooltip() {
@@ -336,7 +348,7 @@ export class LuiCodeBlock extends LitElement {
       >
         <lui-icon-button
           size="lg"
-          aria-label="${name}"
+          .ariaLabel="${name}"
           @click="${this._handleCopy}"
         >
           ${copyIcon}

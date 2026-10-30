@@ -103,7 +103,12 @@ export class LuiDropdownMenu extends LitElement {
     this._handleDocumentKeydown = (event: KeyboardEvent) => {
       if (!this.open) return;
       if (event.key === 'Escape') {
+        // Only a menu holding focus takes the key: a dialog around it stays
+        // open, and a menu left open behind a dialog does not pull focus out.
+        const holdsFocus = this.matches(':focus-within');
         this.closeMenu();
+        if (!holdsFocus) return;
+        event.preventDefault();
         this._focusTrigger();
       }
     };
@@ -177,21 +182,25 @@ export class LuiDropdownMenu extends LitElement {
   }
 
   // The state belongs on the control the user focuses, not on the wrapper,
-  // which has no role. `lui-button` and `lui-icon-button` pass it on to their
-  // inner button. No `aria-controls`: the panel's ID lives in this shadow root
-  // and cannot be referenced from the trigger's tree.
+  // which has no role. Set through the ARIA properties, not attributes: a
+  // native trigger reflects them as usual, and `lui-button` and
+  // `lui-icon-button` render them on their inner button without leaving them
+  // on their role-less host. No `aria-controls`: the panel's ID lives in this
+  // shadow root and cannot be referenced from the trigger's tree.
   private _updateSlottedTrigger() {
     const trigger = this._trigger;
     // A trigger swapped out may live on elsewhere in the page; it must not
-    // keep announcing a menu it no longer opens.
+    // keep announcing a menu it no longer opens. Cleared with `null`: a Let's
+    // UI trigger has already consumed the attribute, so removing it would do
+    // nothing.
     if (this._markedTrigger && this._markedTrigger !== trigger) {
-      this._markedTrigger.removeAttribute('aria-haspopup');
-      this._markedTrigger.removeAttribute('aria-expanded');
+      this._markedTrigger.ariaHasPopup = null;
+      this._markedTrigger.ariaExpanded = null;
     }
     this._markedTrigger = trigger;
     if (!trigger) return;
-    trigger.setAttribute('aria-haspopup', 'menu');
-    trigger.setAttribute('aria-expanded', this.open ? 'true' : 'false');
+    trigger.ariaHasPopup = 'menu';
+    trigger.ariaExpanded = this.open ? 'true' : 'false';
   }
 
   // A custom element without `delegatesFocus` ignores `focus()` on its host,

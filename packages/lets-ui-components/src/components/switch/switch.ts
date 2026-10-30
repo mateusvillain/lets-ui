@@ -2,9 +2,10 @@ import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './switch.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
 
-export class LuiSwitch extends LitElement {
+export class LuiSwitch extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
 

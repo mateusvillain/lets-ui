@@ -1,11 +1,10 @@
 /**
- * Breakpoint ordering and the viewport selector built on top of it.
+ * Breakpoint ordering.
  *
- * Both are pure readings of the brand's own foundation values, kept out of
- * `studio.js` so the invariants they enforce can be exercised without a DOM:
+ * A pure reading of the brand's own foundation values, kept out of
+ * `studio.js` so the invariant it enforces can be exercised without a DOM:
  * a breakpoint scale that is not strictly ascending compiles to media queries
- * that never match, and the width selector is only correct as long as it is a
- * reading of that scale rather than a fixed list.
+ * that never match.
  */
 
 import { BREAKPOINTS, FOUNDATION_FIELDS } from './schema.js';
@@ -81,47 +80,4 @@ export function breakpointBounds(foundation, step) {
       : range.min,
     max: larger ? Math.min(range.max, read(foundation, larger) - 1) : range.max,
   };
-}
-
-/** The breakpoints as the selector lists them: widest first. */
-export function viewportEntries(foundation) {
-  return BREAKPOINT_ORDER.map((step) => ({
-    step,
-    width: read(foundation, step),
-  })).sort((a, b) => b.width - a.width);
-}
-
-/**
- * The selector's whole content, derived from the brand. `signature` is what
- * tells the caller the list actually changed — rebuilding it on every commit
- * would reset the selection on edits that have nothing to do with the grid.
- */
-export function viewportModel(foundation) {
-  const entries = viewportEntries(foundation);
-
-  return {
-    steps: ['full', ...entries.map((entry) => entry.step)],
-    labels: [
-      'Fill',
-      ...entries.map((entry) => `${entry.width} — ${entry.step}`),
-    ],
-    signature: entries.map((entry) => `${entry.step}:${entry.width}`).join(','),
-  };
-}
-
-/**
- * The option index to select after a rebuild. The selection follows the
- * breakpoint and not the number: whoever was viewing the preview at `sm` stays
- * at `sm` after `sm`'s value changes. `lui-native-select` reserves index 0 for
- * the placeholder, so a step's position is always `index + 1`.
- */
-export function viewportSelection(steps, previous) {
-  const index = steps.indexOf(previous);
-  return index > 0 ? index + 1 : 1;
-}
-
-/** The width the preview simulates for a step, or `null` for "Fill". */
-export function viewportWidth(foundation, step) {
-  if (!step || step === 'full') return null;
-  return read(foundation, step);
 }

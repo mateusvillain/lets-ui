@@ -203,6 +203,15 @@ $color: (
       neutral: token('lui.color.neutral.icon.default'),
       inverse: token('lui.color.neutral.icon.inverse'),
     ),
+
+    // The two ends of the theme's neutral scale, as the tint a filled
+    // component's states mix in. Not text colours: a brand that colours its
+    // headings must not move every button's hover with them. Both flip with
+    // the theme — `foreground` is near-black in light and near-white in dark.
+    tint: (
+        foreground: token('lui.color.gray.8'),
+        background: token('lui.color.gray.1'),
+      ),
   ),
 );
 $elevation: (
