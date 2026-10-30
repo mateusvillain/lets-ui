@@ -11,10 +11,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import {
   changedPaths,
-  clear,
   createDefaultState,
   fromFiles,
   load,
+  registrationGuide,
   resolverSnippet,
   save,
   toCssVars,
@@ -243,12 +243,6 @@ describe('persistence', () => {
     expect(load()).toBeNull();
   });
 
-  it('clears what was saved', () => {
-    save(defaults());
-    clear();
-    expect(load()).toBeNull();
-  });
-
   it('keeps working when storage throws', () => {
     // Private mode: the studio must not break, it just stops persisting.
     globalThis.localStorage = {
@@ -264,7 +258,6 @@ describe('persistence', () => {
     };
 
     expect(() => save(defaults())).not.toThrow();
-    expect(() => clear()).not.toThrow();
     expect(load()).toBeNull();
   });
 
@@ -287,5 +280,18 @@ describe('resolverSnippet', () => {
     expect(snippet.brandFoundation.contexts['material-design'][0].$ref).toBe(
       './tokens/brand/material-design/foundation.json'
     );
+  });
+});
+
+describe('registrationGuide', () => {
+  it('carries the resolver fragment for the slug', () => {
+    const guide = registrationGuide('material-design');
+    const fragment = guide.match(/```json\n([\s\S]*?)\n```/)[1];
+
+    expect(JSON.parse(fragment)).toEqual(
+      JSON.parse(resolverSnippet('material-design'))
+    );
+    expect(guide).toContain('tokens/brand/material-design/');
+    expect(guide).toContain('data-brand="material-design"');
   });
 });

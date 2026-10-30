@@ -19,6 +19,7 @@ import {
   toCssVars,
   changedPaths,
   toFiles,
+  registrationGuide,
   save,
   load,
   fromFiles,
@@ -870,6 +871,7 @@ export function mountStudio({ root, templates, meta }) {
         `${JSON.stringify(tree, null, 2)}\n`,
       ])
     );
+    files['README.md'] = registrationGuide(slug);
 
     download(`${slug}.zip`, zip(files));
   }

@@ -23,14 +23,19 @@ components have changed.
 
 ## How it works
 
-The left-hand panel builds its controls from the schema in `src/lib/schema.js`;
+The right-hand panel builds its controls from the schema in `src/lib/schema.js`;
 the initial values are read from the reference brand's own files at build time,
-so the interface never drifts out of sync with what is versioned. The controls
-are Let's UI components themselves — `lui-tabs`, `lui-input`,
-`lui-native-select`, `lui-button` — which makes the studio the first consumer of
-what it edits.
+so the interface never drifts out of sync with what is versioned. Every category
+— Colors, Typography, Borders, Grid, Effects — sits in one scrolling column, and
+the controls are Let's UI components themselves — `lui-input`,
+`lui-native-select`, `lui-switch`, `lui-button` — which makes the studio the
+first consumer of what it edits.
 
-The preview on the right is an isolated `<iframe>`. On every edit the studio
+Families can be typed as a font stack or, with the **Google Fonts** switch on,
+picked from a curated list of Google Fonts; the preview loads the stylesheet of
+each one in use.
+
+The preview on the left is an isolated `<iframe>`. On every edit the studio
 writes the `--lui-brand-*` custom properties onto that document's `:root`; since
 the semantic tokens are `var()`s pointing at the brand tokens, every component
 reacts immediately. That isolation is what lets you edit the brand without the
@@ -45,20 +50,13 @@ overwritten. Clearing the field makes it follow the name again.
 
 ### The preview
 
-The preview bar switches between two scenes:
+The preview is a canvas: drag its side handles (or focus one and use the arrow
+keys) to change its width, and zoom with the floating controls, a pinch, or
+Ctrl/Cmd + wheel. **Dark mode**, at the top of Colors, switches the theme the
+preview renders. The panel hides from the floating toggle at the top right,
+letting the preview take the whole screen.
 
-| Scene       | What it is for                                                                                          |
-| ----------- | ------------------------------------------------------------------------------------------------------- |
-| **Landing** | The brand in a real composition, laid out on the brand's own grid, with the whole type scale in use      |
-| **Tokens**  | A specimen sheet: color ramps with hex values, the type scale, the radii and the column ruler           |
-
-The panel collapses from its own header, letting the preview take the whole
-screen; the button to bring it back sits at the start of the preview bar. The
-width selector is not a fixed list: it is built from the brand's breakpoints, so
-editing `sm` changes the width the preview then simulates — and the selection
-follows the breakpoint, not the number.
-
-With the **Grid** tab open, a column ruler appears over the preview along with
+While the **Grid** category is in view in the panel, a column ruler appears over the preview along with
 the column count, gutter and margin of the active breakpoint. The landing scene
 is laid out on those same columns, so content edges land on real column lines.
 Breakpoints are validated as strictly ascending: an `sm` at or below `1xs` would
@@ -85,10 +83,11 @@ media queries only change after a fresh `pnpm build`.
 ## Publishing a brand
 
 1. **Export tokens** downloads the three DTCG files already in the repository's
-   format.
+   format, plus a `README.md` with the steps below and the resolver fragment for
+   the brand's identifier.
 2. Save them under `packages/lets-ui-tokens/tokens/brand/<identifier>/`.
-3. Register the brand in `packages/lets-ui-tokens/letsui.resolver.json` — the
-   studio shows the ready-made fragment under "How to register the brand".
+3. Register the brand in `packages/lets-ui-tokens/letsui.resolver.json`, using
+   the fragment from the exported `README.md`.
 4. Add the new brand's permutations to
    `packages/lets-ui-tokens/terrazzo.config.js`, mirroring those of `lets-ui`.
 5. Run `pnpm build` at the root and set `data-brand="<identifier>"` on the page.
