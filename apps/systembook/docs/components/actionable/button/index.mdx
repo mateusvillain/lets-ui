@@ -32,9 +32,12 @@ Se o controle apenas leva a outra página, ele é um link, não uma ação. O Bu
 
 ## Anatomia
 
+![Anatomia do Button: container, ícone e rótulo no estado padrão, e spinner no estado de carregamento](./anatomy.png)
+
 1. **Container**: define a cor, o raio e a área de toque.
-2. **Rótulo**: o verbo que descreve o resultado da ação.
-3. **Spinner** (opcional): aparece no estado de carregamento, no lugar do rótulo ou junto dele.
+2. **Ícone** (opcional): antes do rótulo (`slot="prefix"`) ou depois dele (`slot="suffix"`). Herda a cor do rótulo.
+3. **Rótulo**: o verbo que descreve o resultado da ação.
+4. **Spinner** (opcional): aparece no estado de carregamento, junto do rótulo.
 
 ## Variantes
 
