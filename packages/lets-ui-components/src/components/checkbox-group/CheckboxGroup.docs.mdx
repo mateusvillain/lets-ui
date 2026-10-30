@@ -1,0 +1,186 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CheckboxGroupStories from './CheckboxGroup.stories';
+
+<Meta of={CheckboxGroupStories} />
+
+# Checkbox Group
+
+Agrupa `lui-checkbox` que respondem à mesma pergunta, para escolha múltipla. Centraliza `name`, `required`, `hint` e `error-text` no elemento pai, e os filhos declaram apenas `value` e `label`.
+
+<Canvas of={CheckboxGroupStories.CheckboxGroup} />
+<Controls of={CheckboxGroupStories.CheckboxGroup} />
+
+## Comportamento
+
+- **Valor**: cada opção marcada entra no `FormData` com a chave `name` do grupo. Leia a lista com `getAll()`, ou pela propriedade `value` do grupo (um array).
+- **`required`**: exige pelo menos uma opção marcada.
+- **Teclado**: cada checkbox é uma parada do Tab e alterna com Espaço, como os checkboxes nativos. Não há navegação por setas.
+- **Papel**: um `fieldset` comum, com papel `group`.
+
+## Hint
+
+Texto auxiliar exibido entre o título e as opções.
+
+<Canvas of={CheckboxGroupStories.WithHint} />
+
+## Erro
+
+A mensagem de `error-text` aparece uma única vez, abaixo das opções. Os checkboxes recebem só o estilo de erro, sem mensagem própria.
+
+<Canvas of={CheckboxGroupStories.ErrorState} />
+
+## Small
+
+`size="md"` aplica `body--md` na label do grupo e repassa `size="md"` aos checkboxes.
+
+<Canvas of={CheckboxGroupStories.Small} />
+
+## Pré-selecionado
+
+Adicione `checked` aos `lui-checkbox` desejados para definir valores iniciais.
+
+<Canvas of={CheckboxGroupStories.PreSelected} />
+
+## Disabled
+
+`disabled` no grupo desabilita todos os filhos e tira os valores da submissão.
+
+<Canvas of={CheckboxGroupStories.Disabled} />
+
+## Integração com formulários
+
+### Required
+
+`required` no grupo bloqueia a submissão enquanto nenhuma opção estiver marcada. O evento `invalid` dispara no grupo e a mensagem de `error-text` aparece abaixo das opções.
+
+<Canvas of={CheckboxGroupStories.Required} />
+
+### Form Integration
+
+<Canvas of={CheckboxGroupStories.FormIntegration} />
+
+## Atributos
+
+| Atributo     | Tipo           | Padrão                          | Descrição                                                                       |
+| ------------ | -------------- | ------------------------------- | ------------------------------------------------------------------------------- |
+| `name`       | `string`       | `''`                            | Chave repassada a cada checkbox; cada opção marcada entra no `FormData` com ela |
+| `label`      | `string`       | `''`                            | Texto exibido como `<legend>` do grupo                                          |
+| `size`       | `'lg' \| 'md'` | `'lg'`                          | Tamanho da label e dos checkboxes                                               |
+| `hint`       | `string`       | `''`                            | Texto auxiliar entre o título e as opções                                       |
+| `required`   | `boolean`      | `false`                         | Exige pelo menos uma opção marcada                                              |
+| `disabled`   | `boolean`      | `false`                         | Desabilita todos os checkboxes filhos                                           |
+| `error`      | `boolean`      | `false`                         | Ativa o estado de erro manualmente                                              |
+| `error-text` | `string`       | `'Select at least one option.'` | Mensagem exibida abaixo das opções quando `error` é verdadeiro                  |
+
+A propriedade `value` (somente leitura) retorna os valores marcados, na ordem do documento.
+
+## Acessibilidade
+
+O grupo segue o padrão
+[Checkbox](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) do WAI-ARIA
+APG: checkboxes independentes reunidos num grupo com nome. Cada opção é um
+`<input type="checkbox">` nativo, dentro do shadow root do `lui-checkbox`.
+
+### Nome do grupo
+
+`label` é obrigatório: ele vira a `<legend>` do `fieldset` e é o nome do grupo.
+Escreva a pergunta que as opções respondem, como "Notificações" ou "Canais de
+contato". Sem `label`, o leitor de tela anuncia as opções soltas, sem saber a
+que pergunta elas pertencem.
+
+Cada `lui-checkbox` precisa do próprio rótulo, por `label` ou pelo conteúdo.
+O rótulo inteiro é clicável e alterna a opção.
+
+### Teclado
+
+| Tecla         | Ação                              |
+| ------------- | --------------------------------- |
+| `Tab`         | Vai para a próxima opção ativa    |
+| `Shift + Tab` | Volta para a opção ativa anterior |
+| `Space`       | Marca ou desmarca a opção focada  |
+
+Cada opção é uma parada do `Tab`, como num grupo de checkboxes nativo. Não há
+tabindex móvel nem navegação por setas: as opções não se excluem, então não há
+uma opção "ativa" do grupo para as setas moverem.
+
+### Foco
+
+- O foco segue a ordem das opções no DOM.
+- Opções desabilitadas ficam fora da ordem de tabulação.
+- Cada opção mostra o anel de foco no próprio quadrado.
+- O grupo não move o foco por conta própria: marcar, desmarcar ou mostrar o erro
+  mantém o foco onde está.
+
+### O que o leitor de tela anuncia
+
+| Elemento      | Anúncio                                                                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Grupo         | `<fieldset>` (papel `group`) nomeado pela `<legend>`, descrito pelo hint e pela mensagem de erro, nessa ordem, por `aria-describedby`                         |
+| Opção         | Checkbox nativo nomeado pelo rótulo, com o estado marcado ou desmarcado                                                                                       |
+| Opção inativa | `disabled` no input nativo                                                                                                                                    |
+| Erro          | `aria-invalid="true"` no `fieldset` e no input de cada opção. A mensagem aparece uma vez, no grupo: dentro dele, o `lui-checkbox` não mostra mensagem própria |
+
+O hint e o erro descrevem o grupo, e o leitor de tela os anuncia ao entrar
+nele. Por isso o erro continua junto do hint, sem substituí-lo: a orientação
+segue disponível enquanto a pessoa corrige.
+
+`required` não é anunciado antes do envio. O papel `group` não aceita
+`aria-required`, e marcar cada opção como obrigatória diria que todas precisam
+ser marcadas. Quando a escolha for obrigatória, diga isso no `label` ou no
+`hint`, como "Escolha pelo menos um canal". Ao enviar sem nenhuma opção marcada,
+o grupo reporta `valueMissing` com `error-text`.
+
+### Critérios WCAG
+
+| Critério                     | Como o componente atende                                                                     |
+| ---------------------------- | -------------------------------------------------------------------------------------------- |
+| 1.3.1 Info and Relationships | `fieldset` e `legend` agrupam as opções; hint e erro ligados ao grupo por `aria-describedby` |
+| 1.4.1 Use of Color           | O erro tem mensagem em texto, além da cor                                                    |
+| 2.1.1 Keyboard               | Todas as opções alcançáveis com `Tab` e alternáveis com `Space`                              |
+| 2.4.3 Focus Order            | Foco na ordem das opções no DOM                                                              |
+| 2.4.6 Headings and Labels    | Grupo nomeado pela pergunta; cada opção com rótulo próprio                                   |
+| 2.4.7 Focus Visible          | Anel de foco em cada opção                                                                   |
+| 2.5.8 Target Size (Minimum)  | O rótulo inteiro é área de clique, além do quadrado de 24 px (`lg`) ou 16 px (`md`)          |
+| 3.3.1 Error Identification   | `aria-invalid` e mensagem de erro quando falta uma escolha obrigatória                       |
+| 3.3.2 Labels or Instructions | `label` com a pergunta e `hint` com a orientação, visíveis antes de escolher                 |
+| 4.1.2 Name, Role, Value      | Checkboxes nativos, com nome e estado expostos pelo navegador                                |
+
+### Status de testes
+
+| Área                           | Status                                                               |
+| ------------------------------ | -------------------------------------------------------------------- |
+| Teclado, foco e atributos ARIA | Testes automatizados, no Chromium                                    |
+| Regras do axe                  | Testes das stories (`--project storybook`), que falham com violações |
+| VoiceOver                      | Ainda não testado manualmente                                        |
+| NVDA                           | Ainda não testado manualmente                                        |
+
+## Classe CSS (sem Web Component)
+
+<Canvas of={CheckboxGroupStories.CSSClass} />
+
+## Uso
+
+### Web Component
+
+```html
+<lui-checkbox-group name="channels" label="Notificações" size="lg">
+  <lui-checkbox value="email" label="E-mail"></lui-checkbox>
+  <lui-checkbox value="sms" label="SMS"></lui-checkbox>
+</lui-checkbox-group>
+```
+
+### Classe CSS
+
+```html
+<fieldset class="checkbox-group checkbox-group--lg">
+  <legend class="checkbox-group__legend">Notificações</legend>
+  <div class="checkbox-group__options">
+    <label class="checkbox checkbox--lg">
+      <input type="checkbox" name="channels" value="email" /> E-mail
+    </label>
+    <label class="checkbox checkbox--lg">
+      <input type="checkbox" name="channels" value="sms" /> SMS
+    </label>
+  </div>
+</fieldset>
+```

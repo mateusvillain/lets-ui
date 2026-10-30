@@ -84,6 +84,11 @@ export class LuiCheckbox extends HostAriaMixin(LitElement) {
 
   render() {
     const ariaLabel = this.ariaLabel || this.label || 'Checkbox';
+    // Inside a group the error belongs to the question, not to one option:
+    // the group renders a single message and describes its fieldset with it,
+    // so each option keeps only the error styling.
+    const showMessage =
+      this.error && this.errorText && !this.closest('lui-checkbox-group');
     return html`
       <div class="checkbox-field${this.error ? ' checkbox-field--error' : ''}">
         <label class="checkbox checkbox--${this._size}">
@@ -100,13 +105,13 @@ export class LuiCheckbox extends HostAriaMixin(LitElement) {
             aria-invalid="${this.error ? 'true' : 'false'}"
             aria-required="${this.required ? 'true' : 'false'}"
             aria-describedby="${ifDefined(
-              this.error ? `${this._baseId}-error` : undefined
+              showMessage ? `${this._baseId}-error` : undefined
             )}"
             @change="${this._handleChange}"
           />
           <slot>${this.label}</slot>
         </label>
-        ${this.error && this.errorText
+        ${showMessage
           ? html`<p id="${this._baseId}-error" class="checkbox-field__message">
               ${this.errorText}
             </p>`
