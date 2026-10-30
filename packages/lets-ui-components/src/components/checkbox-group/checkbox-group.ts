@@ -3,7 +3,7 @@ import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './checkbox-group.scss?inline';
 import { nameProperty } from '../../utils/form.js';
-import { LuiCheckbox } from '../checkbox/checkbox.js';
+import { LuiCheckbox, CHECKED_CHANGE_EVENT } from '../checkbox/checkbox.js';
 
 /**
  * Groups `lui-checkbox` options that answer one question.
@@ -52,13 +52,13 @@ export class LuiCheckboxGroup extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('invalid', this._handleInvalid);
-    this.addEventListener('change', this._handleCheckboxChange);
+    this.addEventListener(CHECKED_CHANGE_EVENT, this._handleCheckedChange);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('invalid', this._handleInvalid);
-    this.removeEventListener('change', this._handleCheckboxChange);
+    this.removeEventListener(CHECKED_CHANGE_EVENT, this._handleCheckedChange);
   }
 
   protected firstUpdated() {
@@ -79,7 +79,11 @@ export class LuiCheckboxGroup extends LitElement {
     ) {
       this._applyToCheckboxes();
     }
-    if (changed.has('required') || changed.has('errorText')) {
+    if (
+      changed.has('required') ||
+      changed.has('disabled') ||
+      changed.has('errorText')
+    ) {
       this._syncValidity();
     }
   }
@@ -104,8 +108,19 @@ export class LuiCheckboxGroup extends LitElement {
   private _syncValidity() {
     // The checked options carry the values; the group itself has none.
     this._internals.setFormValue(null);
-    if (this.required && this.value.length === 0) {
-      this._internals.setValidity({ valueMissing: true }, this.errorText);
+    // A disabled group submits nothing, so it must not block the form either.
+    if (this.required && !this.disabled && this.value.length === 0) {
+      // Anchor the message on the first option a person can check, so the
+      // browser moves focus there and shows the message next to it when the
+      // form is submitted. Before the options render there is no input yet.
+      const anchor = this._getCheckboxes()
+        .find((c) => !c.disabled)
+        ?.shadowRoot?.querySelector('input');
+      this._internals.setValidity(
+        { valueMissing: true },
+        this.errorText,
+        anchor ?? undefined
+      );
     } else {
       this._internals.setValidity({});
     }
@@ -115,7 +130,7 @@ export class LuiCheckboxGroup extends LitElement {
     this.error = true;
   };
 
-  private _handleCheckboxChange = (e: Event) => {
+  private _handleCheckedChange = (e: Event) => {
     const checkbox = e.target;
     if (!(checkbox instanceof LuiCheckbox) || !this.contains(checkbox)) return;
     if (this.value.length > 0) this.error = false;

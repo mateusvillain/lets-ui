@@ -108,7 +108,9 @@ uma opção "ativa" do grupo para as setas moverem.
 - O foco segue a ordem das opções no DOM.
 - Opções desabilitadas ficam fora da ordem de tabulação.
 - Cada opção mostra o anel de foco no próprio quadrado.
-- O grupo não move o foco por conta própria: marcar, desmarcar ou mostrar o erro
+- Ao enviar o form com `required` e nada marcado, o navegador leva o foco à
+  primeira opção ativa e mostra ali a mensagem de `error-text`.
+- Fora isso, o grupo não move o foco: marcar, desmarcar ou mostrar o erro
   mantém o foco onde está.
 
 ### O que o leitor de tela anuncia
@@ -132,18 +134,18 @@ o grupo reporta `valueMissing` com `error-text`.
 
 ### Critérios WCAG
 
-| Critério                     | Como o componente atende                                                                     |
-| ---------------------------- | -------------------------------------------------------------------------------------------- |
-| 1.3.1 Info and Relationships | `fieldset` e `legend` agrupam as opções; hint e erro ligados ao grupo por `aria-describedby` |
-| 1.4.1 Use of Color           | O erro tem mensagem em texto, além da cor                                                    |
-| 2.1.1 Keyboard               | Todas as opções alcançáveis com `Tab` e alternáveis com `Space`                              |
-| 2.4.3 Focus Order            | Foco na ordem das opções no DOM                                                              |
-| 2.4.6 Headings and Labels    | Grupo nomeado pela pergunta; cada opção com rótulo próprio                                   |
-| 2.4.7 Focus Visible          | Anel de foco em cada opção                                                                   |
-| 2.5.8 Target Size (Minimum)  | O rótulo inteiro é área de clique, além do quadrado de 24 px (`lg`) ou 16 px (`md`)          |
-| 3.3.1 Error Identification   | `aria-invalid` e mensagem de erro quando falta uma escolha obrigatória                       |
-| 3.3.2 Labels or Instructions | `label` com a pergunta e `hint` com a orientação, visíveis antes de escolher                 |
-| 4.1.2 Name, Role, Value      | Checkboxes nativos, com nome e estado expostos pelo navegador                                |
+| Critério                     | Como o componente atende                                                                       |
+| ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| 1.3.1 Info and Relationships | `fieldset` e `legend` agrupam as opções; hint e erro ligados ao grupo por `aria-describedby`   |
+| 1.4.1 Use of Color           | O erro tem mensagem em texto, além da cor                                                      |
+| 2.1.1 Keyboard               | Todas as opções alcançáveis com `Tab` e alternáveis com `Space`                                |
+| 2.4.3 Focus Order            | Foco na ordem das opções no DOM                                                                |
+| 2.4.6 Headings and Labels    | Grupo nomeado pela pergunta; cada opção com rótulo próprio                                     |
+| 2.4.7 Focus Visible          | Anel de foco em cada opção                                                                     |
+| 2.5.8 Target Size (Minimum)  | O rótulo inteiro é área de clique, além do quadrado de 24 px (`lg`) ou 16 px (`md`)            |
+| 3.3.1 Error Identification   | `aria-invalid`, mensagem de erro e foco na primeira opção quando falta uma escolha obrigatória |
+| 3.3.2 Labels or Instructions | `label` com a pergunta e `hint` com a orientação, visíveis antes de escolher                   |
+| 4.1.2 Name, Role, Value      | Checkboxes nativos, com nome e estado expostos pelo navegador                                  |
 
 ### Status de testes
 

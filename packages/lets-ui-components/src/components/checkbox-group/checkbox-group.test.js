@@ -204,6 +204,41 @@ describe('validation', () => {
     expect(boxes(el).every((c) => !c.error)).toBe(true);
   });
 
+  it('follows options checked from script, without a change event', async () => {
+    const el = await mount('required error');
+    boxes(el)[0].checked = true;
+    await settle(el);
+    expect(el.matches(':valid')).toBe(true);
+    expect(el.error).toBe(false);
+  });
+
+  it('does not block the form while disabled', async () => {
+    const el = await mount(
+      'required',
+      OPTIONS,
+      (html) => `<form>${html}</form>`
+    );
+    el.disabled = true;
+    await settle(el);
+    expect(el.closest('form').checkValidity()).toBe(true);
+
+    el.disabled = false;
+    await settle(el);
+    expect(el.closest('form').checkValidity()).toBe(false);
+  });
+
+  it('moves focus to the first enabled option when the form is validated', async () => {
+    const el = await mount(
+      'required',
+      `<lui-checkbox label="Email" value="email" disabled></lui-checkbox>
+       <lui-checkbox label="SMS" value="sms"></lui-checkbox>`,
+      (html) => `<form>${html}</form>`
+    );
+    el.closest('form').reportValidity();
+    const sms = boxes(el)[1];
+    expect(sms.shadowRoot.activeElement).toBe(input(sms));
+  });
+
   it('is valid when not required, even with nothing checked', async () => {
     const el = await mount();
     expect(el.matches(':valid')).toBe(true);

@@ -5,6 +5,9 @@ import styles from './checkbox.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
 
+/** Internal: tells an enclosing `lui-checkbox-group` that `checked` changed. */
+export const CHECKED_CHANGE_EVENT = 'lui-checkbox-checked-change';
+
 export class LuiCheckbox extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
@@ -45,6 +48,12 @@ export class LuiCheckbox extends HostAriaMixin(LitElement) {
   protected updated(changed: PropertyValues) {
     if (changed.has('checked') || changed.has('errorText')) {
       this._syncFormValue();
+    }
+    // A checkbox group owns the validity of its options, and `checked` can
+    // change without a `change` event (set from script, form reset). Tell the
+    // group about every change, whatever its source.
+    if (changed.has('checked') && this.closest('lui-checkbox-group')) {
+      this.dispatchEvent(new Event(CHECKED_CHANGE_EVENT, { bubbles: true }));
     }
   }
 
