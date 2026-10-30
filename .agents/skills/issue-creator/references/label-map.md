@@ -49,6 +49,7 @@ Formato: `component: <nome-em-kebab-case>`. Cor padrão: `#f5be58`.
 | `component: button`          | Button          |
 | `component: card`            | Card            |
 | `component: checkbox`        | Checkbox        |
+| `component: checkbox-group`  | Checkbox Group  |
 | `component: close-button`    | Close Button    |
 | `component: code-block`      | Code Block      |
 | `component: command-palette` | Command Palette |
