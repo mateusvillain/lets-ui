@@ -1,0 +1,45 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Rótulo
+
+O rótulo diz **qual tarefa** está andando: "Enviando arquivos", "Importando contatos", "Armazenamento". Escreva no idioma da página e mantenha o mesmo texto do começo ao fim.
+
+## Valor em outras unidades
+
+`value` e `max` podem estar em qualquer unidade. Sem `value-text`, o valor aparece em percentual. Com `value-text`, aparece exatamente o texto que você escrever, como "3,2 GB de 10 GB". Atualize `value-text` junto com `value`.
+
+<ComponentEmbed component="ProgressBar" variant="custom-unit" />
+
+## Legenda
+
+A legenda é por onde a pessoa fica sabendo do avanço e do resultado: ela é lida em voz alta quando muda.
+
+<DosDonts variant="do" title="Marcos e resultado">
+  "Metade dos arquivos enviados", depois "Envio concluído". A pessoa ouve o que importa, sem interrupções.
+</DosDonts>
+
+<DosDonts variant="dont" title="Contagem a cada passo">
+  "1 de 200", "2 de 200", "3 de 200". Cada mudança é anunciada, e a pessoa é interrompida o tempo todo.
+</DosDonts>
+
+- Em `success`, `caution` e `danger`, a legenda diz o desfecho: "Falha no envio: conexão perdida".
+- No modo indeterminado, use a legenda para dizer em que etapa a tarefa está.
+
+## Só a barra
+
+Com `hide-label` e `hide-value`, sobra apenas a trilha. Use essa combinação só quando o valor ou o estado estiverem em texto ao lado, como "Seu perfil está 60% completo" logo acima. O `label` continua sendo o nome acessível, então informe-o mesmo assim.
+
+## Durante a tarefa
+
+- Desabilite os controles que dependem dela, como o botão de enviar.
+- Mantenha a barra na tela até o resultado ser anunciado. Removida junto com a mudança da legenda, o texto não chega a ser lido.
+- Se a tarefa puder ser interrompida, ofereça "Cancelar" perto da barra.
+
+## Boas práticas
+
+- Não mostre uma barra que volta para trás. Se a estimativa mudar, prefira o modo indeterminado até ter uma medida confiável.
+- Não use a cor como única pista do resultado: escreva-o na legenda.
+- Evite várias barras ao mesmo tempo. Se houver muitas tarefas, mostre o progresso total.

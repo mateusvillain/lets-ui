@@ -7,7 +7,7 @@ order: 3
 
 | Tecla | Ação |
 | --- | --- |
-| `Esc` | Fecha o Drawer e devolve o foco a quem o abriu. |
+| `Esc` | Fecha o Drawer e devolve o foco a quem o abriu. Com diálogos empilhados, fecha só o do topo. |
 | `Tab` / `Shift+Tab` | Percorre os elementos do painel. O foco fica **preso** dentro dele. |
 | `Enter` ou `Espaço` | Ativa o botão em foco. |
 
@@ -21,6 +21,18 @@ order: 3
 ## Foco
 
 Ao abrir, o foco vai para dentro do painel. Ao fechar, volta ao elemento que o abriu, sem perder a posição.
+
+Isso vale para todo jeito de fechar: `Esc`, botão de fechar, backdrop, um elemento com `data-drawer-close`, `closeDrawer()` ou removendo `open`.
+
+## Diálogos empilhados
+
+Com um diálogo aberto sobre outro (um Modal aberto de dentro do Drawer, por exemplo), `Esc` fecha só o do topo, e só ele prende o foco. O foco volta ao gatilho dentro do diálogo que continua aberto, e um segundo `Esc` fecha o de baixo.
+
+Um componente dentro do diálogo que usa `Esc`, como um [Dropdown Menu](../../actionable/dropdown-menu/index.mdx) aberto ou um Toast, consome a tecla: ela fecha esse componente, e o diálogo continua aberto.
+
+## Gatilho
+
+O Drawer informa ao gatilho se está aberto (`aria-expanded`) e que abre um diálogo (`aria-haspopup`). Num [Button](../../actionable/button/index.mdx), [Icon Button](../../actionable/icon-button/index.mdx) ou [Link](../../navigation/link/index.mdx), o estado vai pela propriedade ARIA e chega ao controle interno, sem criar um nó extra na árvore de acessibilidade. O gatilho não recebe `aria-controls`: o ID do diálogo fica dentro do shadow root, e a referência não atravessa essa fronteira.
 
 ## Para designers
 

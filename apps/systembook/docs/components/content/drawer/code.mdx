@@ -30,10 +30,21 @@ Por padrão o backdrop não fecha o drawer. Ative `close-on-backdrop` quando o f
 ```html
 <lui-drawer title="Título" size="md" trigger-label="Open drawer" close-on-backdrop>
   <p>Conteúdo do drawer</p>
-  <button slot="actions" data-drawer-close class="btn btn--secondary btn--lg">Cancelar</button>
-  <button slot="actions" class="btn btn--primary btn--lg">Confirmar</button>
+  <lui-button slot="actions" variant="secondary" label="Cancelar" data-drawer-close></lui-button>
+  <lui-button slot="actions" label="Confirmar"></lui-button>
 </lui-drawer>
 ```
+
+### Fechar por uma ação
+
+Marque com `data-drawer-close` o botão que só fecha o drawer, como um "Cancelar". Funciona no slot `actions` e no conteúdo, num elemento nativo ou num `lui-button`, e também quando o clique vem de algo dentro do elemento marcado.
+
+- Fecha o `lui-drawer` mais próximo acima dele: dentro de um `lui-drawer` aninhado, fecha só esse.
+- No slot `trigger`, o atributo é ignorado.
+- Não fecha quando o clique passa por um controle com `aria-disabled="true"` (um `lui-button` em `loading`) ou quando um handler chama `event.preventDefault()`.
+- Ações que fazem algo antes de fechar, como "Confirmar", chamam `closeDrawer()` no próprio handler.
+
+O foco volta a quem abriu o drawer, como em qualquer outro jeito de fechar.
 
 ### Textos acessíveis
 

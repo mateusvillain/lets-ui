@@ -18,15 +18,16 @@ order: 1
 
 ## Cores
 
-| fn | desc | params | note |
-| --- | --- | --- | --- |
-| bg($category, $variant) | Cor de fundo semântica | [object Object],[object Object] | * overlay disponível apenas em container |
-| text($variant) | Cor de texto semântica | [object Object] |  |
-| stroke($variant, $category?) | Cor de borda semântica | [object Object],[object Object] |  |
-| icon($variant) | Cor de ícone semântica | [object Object] |  |
-| color($category, $scale) | Cor primitiva da paleta | [object Object],[object Object] |  |
-| state($state, $bg?) | Background do componente no estado: a cor de conteúdo dele (currentColor) misturada ao fundo de repouso | [object Object] |  |
-| state-amount($state) | Quanto da tinta misturar | [object Object] |  |
+| Função | Descrição | Parâmetros |
+| --- | --- | --- |
+| `bg($category, $variant)` | Cor de fundo semântica. | `$category`: `surface`, `container` · `$variant`: `primary`, `secondary`, `info`, `danger`, `success`, `caution`, `neutral`, `overlay` (só em `container`) |
+| `text($variant)` | Cor de texto semântica. | `$variant`: `heading`, `body`, `caption`, `primary`, `inverse`, `error`, `link`, `link-visited` |
+| `stroke($variant, $category?)` | Cor de borda semântica. | `$variant`: `primary`, `secondary`, `caution`, `danger`, `info`, `success`, `neutral` · `$category`: `default` (padrão), `subtle`, `hover`, `pressed` |
+| `icon($variant)` | Cor de ícone semântica. | `$variant`: `primary`, `secondary`, `info`, `danger`, `success`, `caution`, `neutral`, `inverse` |
+| `color($category, $scale)` | Cor primitiva da paleta. | `$category`: `primary`, `secondary`, `blue`, `gray`, `green`, `orange`, `red`, `violet` · `$scale`: `1` a `8` |
+| `state($state, $bg?)` | Fundo do componente no estado: a tinta misturada ao fundo de repouso. | `$state`: `hover`, `pressed` |
+| `tint($role)` | Tinta de estado de um componente preenchido, para o parâmetro `$tint` de `states()`, `state-layer()` e `state-base()`. São os extremos da escala neutra e se invertem com o tema. | `$role`: `foreground` (quase preto no claro, quase branco no escuro), `background` (o oposto) |
+| `state-amount($state)` | Quanto da tinta misturar. | `$state`: `hover`, `pressed` |
 
 ### Exemplo de uso — cores
 
@@ -43,10 +44,11 @@ order: 1
   color: text(inverse);
 
   // A camada de estado é a mesma para toda variante e marca: o fundo de
-  // repouso entra pelo mixin e as regras de estado misturam nele a cor de
-  // conteúdo declarada acima — clareando fundos escuros e escurecendo os
-  // claros sem medir nada. `states()` já embute tudo isso.
-  @include state-layer(bg(container, primary));
+  // repouso entra pelo mixin e as regras de estado misturam nele uma tinta.
+  // Num componente preenchido, essa tinta é a cor oposta à do rótulo, para o
+  // fundo se afastar do texto e o contraste subir no hover e no pressed.
+  // `states()` já embute a camada; `$tint` troca a tinta.
+  @include state-layer(bg(container, primary), tint(foreground));
 
   &:hover {
     background-color: state(hover);
@@ -62,10 +64,18 @@ order: 1
 
 ## Borda
 
-| fn | desc | rows |
+| Função | Valor | Uso |
 | --- | --- | --- |
-| radius($size) | Border radius | [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] |
-| width($size) | Border width | [object Object],[object Object],[object Object] |
+| `radius($size)` | `none` | Sem arredondamento. |
+| | `xs` | Tags, badges, chips. |
+| | `sm` | Botões, inputs. |
+| | `md` | Cards, modais. |
+| | `lg` | Drawers, superfícies grandes. |
+| | `xl` | Contêineres de destaque. |
+| | `circle` | Avatares, ícones circulares. |
+| `width($size)` | `0` | Sem borda. |
+| | `1` | Borda padrão, 1px. |
+| | `2` | Ênfase e foco, 2px. |
 
 ```scss
 .card    { border-radius: radius(md); border-width: width(1); }
@@ -93,7 +103,7 @@ Use `fluid()` para espaçamentos de layout (margens, gaps entre blocos) e `fixed
 
 | fn | prop | values |
 | --- | --- | --- |
-| font($font) | font-family | heading,body |
+| font($font) | font-family | heading,body,code |
 | size($size) | font-size | 3xl,2xl,1xl,lg,md,sm,1xs,2xs,3xs |
 | weight($weight) | font-weight | regular,medium,semibold,bold |
 | line-height($lh) | line-height | heading,body |
@@ -137,16 +147,7 @@ Para aplicar escalas tipográficas completas, prefira o mixin `font-scale($scale
 ```
 
 <Callout variant="tip">
-Para responsividade, prefira os mixins `media-up()` e `media-down()` em vez de chamar `breakpoint()` diretamente.
-</Callout>
-<Callout variant="tip">
-Eles são complementos exatos um do outro — `media-down()` para estritamente
-</Callout>
-<Callout variant="tip">
-abaixo do piso do step —, enquanto um `max-width` escrito à mão costuma deixar
-</Callout>
-<Callout variant="tip">
-uma fresta em larguras fracionárias.
+  Para responsividade, prefira os mixins `media-up()` e `media-down()` em vez de chamar `breakpoint()` diretamente. Eles são complementos exatos um do outro (`media-down()` vale estritamente abaixo do piso do step), enquanto um `max-width` escrito à mão costuma deixar uma fresta em larguras fracionárias.
 </Callout>
 
 `breakpoint()` e `grid(columns, …)` são as duas únicas funções que devolvem um

@@ -23,6 +23,7 @@ declare module 'react' {
       'lui-checkbox': LuiElement;
       'lui-close-button': LuiElement;
       'lui-container': LuiElement;
+      'lui-date-picker': LuiElement;
       'lui-divider': LuiElement;
       'lui-drawer': LuiElement;
       'lui-dropdown-menu': LuiElement;
@@ -61,6 +62,7 @@ declare module 'react' {
       'lui-avatar': LuiElement;
       'lui-avatar-group': LuiElement;
       'lui-pagination': LuiElement;
+      'lui-progress-bar': LuiElement;
       'lui-table': LuiElement;
     }
   }

@@ -1,0 +1,148 @@
+---
+title: "Code"
+order: 4
+---
+
+## Valor
+
+O `value` é uma string ISO 8601 em qualquer idioma: `YYYY-MM-DD` para uma data e `YYYY-MM-DD/YYYY-MM-DD` para um período. As duas pontas fazem parte do período. O `locale` muda só a exibição.
+
+## Digitação
+
+Com `editable`, o `value` só muda quando o texto forma uma data completa e que existe. Enquanto isso, ele fica vazio e o campo reporta `badInput`. Colar uma data em ISO 8601, como `2026-01-16`, também funciona. Para traduzir as letras do formato, use `format-text="dd / mm / aaaa"`.
+
+Com `editable range`, `range-fields="two"` separa as pontas em duas caixas no mesmo campo, nomeadas por `start-label` e `end-label`.
+
+## Datas indisponíveis
+
+`isDateDisabled` recebe uma função, só em JavaScript, chamada com cada dia do mês mostrado. Um dia em que ela retorna `true` não pode ser escolhido. Com `editable`, digitar uma data indisponível deixa o campo inválido.
+
+```html
+<lui-date-picker id="check-in" label="Check-in"></lui-date-picker>
+
+<script>
+  const unavailable = new Set(['2026-01-18', '2026-01-19', '2026-01-25']);
+
+  const iso = (date) =>
+    [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+
+  document.querySelector('#check-in').isDateDisabled = (date) =>
+    unavailable.has(iso(date));
+</script>
+```
+
+Compare as datas pelas partes locais: `toISOString()` lê UTC e, a leste de Greenwich, cai no dia anterior. A função roda uma vez por dia na tela a cada renderização, então mantenha-a rápida.
+
+## Integração com formulários
+
+O `lui-date-picker` é form-associated: o valor entra no `FormData` com o `name` do campo, em ISO 8601. Cada erro tem a sua mensagem:
+
+| Validade | Quando | Mensagem |
+| --- | --- | --- |
+| `valueMissing` | `required` e sem data | `error-text` |
+| `rangeUnderflow` / `rangeOverflow` | A data começa antes de `min` ou termina depois de `max` | `range-error-text` |
+| `badInput` | Com `editable`, o texto está incompleto ou a data não existe | `bad-input-text` |
+| `badInput` | Com `editable range`, a data final vem antes da inicial | `range-order-text` |
+| `customError` | Uma ponta cai num dia de `isDateDisabled` | `unavailable-date-text` |
+
+## Eventos
+
+| Evento | `detail` | Quando |
+| --- | --- | --- |
+| `change` | `{ value }` | A pessoa escolhe ou digita uma data. |
+| `change` | `{ value, start, end }` | Com `range`, a pessoa fecha um período. |
+
+## Propriedades
+
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `value` | `string` | `''` | Data em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`. |
+| `range` | `boolean` | `false` | Escolhe um período, com dois meses lado a lado. |
+| `editable` | `boolean` | `false` | Permite digitar a data, com máscara no formato do `locale`. |
+| `range-fields` | `string` | `one` | Com `editable range`, `two` usa uma caixa para cada ponta. |
+| `min` | `string` | `''` | Primeira data que pode ser escolhida. |
+| `max` | `string` | `''` | Última data que pode ser escolhida. |
+| `isDateDisabled` | `(date: Date) => boolean` | `null` | Só em JavaScript. Marca dias indisponíveis. |
+| `open` | `boolean` | `false` | Calendário aberto. |
+| `locale` | `string` | `en-US` | Idioma de exibição (tag BCP 47). |
+| `first-day-of-week` | `number` | `0` | Primeira coluna do calendário: `0` domingo … `6` sábado. |
+| `size` | `string` | `lg` | `lg` ou `md`. |
+| `label` | `string` | `''` | Rótulo do campo. Obrigatório, ou `aria-label` sem rótulo visível. |
+| `hint` | `string` | `''` | Texto de apoio. Com `editable`, substitui o formato. |
+| `error` | `boolean` | `false` | Estado de erro, com a mensagem de `error-text`. |
+| `disabled` | `boolean` | `false` | Desabilita o campo. |
+| `optional` | `boolean` | `false` | Marcador de opcional ao lado do rótulo. |
+| `name` | `string` | `''` | Nome do campo no `FormData`. |
+| `required` | `boolean` | `false` | Bloqueia o envio sem data. |
+
+## Textos padrão
+
+Os textos que o componente gera estão em inglês. Troque-os para o idioma do produto.
+
+| Atributo | Padrão | Uso |
+| --- | --- | --- |
+| `placeholder` | `Select a date` | Campo sem data. Com `editable`, o padrão é o formato. |
+| `optional-text` | `(optional)` | Marcador de opcional. |
+| `error-text` | `This field is required.` | Erro de `error` e de `valueMissing`. |
+| `bad-input-text` | `Enter a valid date.` | Texto que não forma uma data. |
+| `range-error-text` | `Enter a date within the allowed period.` | Data fora de `min` e `max`. |
+| `range-order-text` | `The end date can't be before the start date.` | Fim antes do início. |
+| `unavailable-date-text` | `This date is unavailable.` | Ponta num dia indisponível. |
+| `start-label` / `end-label` | `Start date` / `End date` | Nomes das caixas com `range-fields="two"`. |
+| `required-text` | `Required` | Descrição oculta de obrigatório, sem `editable`. |
+| `range-start-text` | `Start date selected. Choose the end date.` | Anúncio depois da primeira ponta. |
+| `selected-day-text` | `selected` | Estado do dia escolhido. |
+| `range-start-day-text` / `in-range-day-text` / `range-end-day-text` | `start of period` / `in period` / `end of period` | Estado dos dias do período. |
+| `unavailable-day-text` | `unavailable` | Estado do dia indisponível. |
+| `format-text` | Formato do `locale` | Placeholder, texto abaixo do campo e descrição, com `editable`. |
+| `dialog-label` | `Choose date` | Nome do calendário e do botão que o abre. |
+| `previous-month-label` / `next-month-label` | `Previous month` / `Next month` | Botões de mês. |
+| `choose-month-label` / `choose-year-label` | `choose month` / `choose year` | Texto oculto nos botões do título. |
+| `previous-year-label` / `next-year-label` | `Previous year` / `Next year` | Botões da grade de meses. |
+| `previous-years-label` / `next-years-label` | `Previous years` / `Next years` | Botões da grade de anos. |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-date-picker
+  name="check-in"
+  label="Check-in"
+  locale="pt-BR"
+  min="2026-01-12"
+  max="2026-01-28"
+></lui-date-picker>
+
+<script>
+  document
+    .querySelector('lui-date-picker')
+    .addEventListener('change', (e) => console.log(e.detail.value));
+</script>
+```
+
+### Classe CSS
+
+Sem o Web Component, só o campo funciona: abrir o calendário, navegar e escolher dependem do JavaScript do componente. As classes `.date-picker-calendar__*` ficam disponíveis para quem montar o próprio calendário.
+
+```html
+<div class="date-picker date-picker--lg">
+  <div class="date-picker__head">
+    <div class="date-picker__label-wrap">
+      <label for="due-date">Data de entrega</label>
+    </div>
+  </div>
+  <div class="date-picker__anchor">
+    <button id="due-date" type="button" class="date-picker__control" aria-haspopup="dialog" aria-expanded="false">
+      <span class="date-picker__value">16 de jan. de 2026</span>
+      <span class="date-picker__icon" aria-hidden="true">
+        <svg ...>...</svg>
+      </span>
+    </button>
+  </div>
+</div>
+```

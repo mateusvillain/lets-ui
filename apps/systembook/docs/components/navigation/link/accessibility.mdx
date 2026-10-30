@@ -18,6 +18,7 @@ Um link desabilitado continua focável, para que quem usa teclado ou leitor de t
 - Se o texto não descreve o destino ("Leia mais"), use `aria-label` com uma descrição completa, como "Leia mais sobre acessibilidade".
 - Links desabilitados são anunciados como indisponíveis (`aria-disabled`).
 - Ao abrir em nova aba, o link recebe `rel="noopener noreferrer"` automaticamente, por segurança.
+- Como gatilho de um Modal ou Drawer, o link recebe `aria-expanded` e `aria-haspopup` do próprio componente e os leva ao `<a>` interno.
 
 ## Visual
 

@@ -15,14 +15,19 @@ order: 3
 - O `aria-label` é **obrigatório**: sem texto visível, ele é o único nome do botão. Um `aria-label` ausente ou vazio é uma falha.
 - O ícone SVG é decorativo e fica fora da árvore de acessibilidade, para não ser lido duas vezes.
 - Um botão desabilitado é anunciado como indisponível e sai da ordem de tabulação.
+- Num botão alternável, `aria-pressed` anuncia "pressionado" ou "não pressionado". Mantenha o mesmo `aria-label` nos dois estados: um nome que muda com o estado confunde.
+- Quando o botão abre algo, `aria-expanded` e `aria-haspopup` informam o estado. Como gatilho de Modal, Drawer ou Dropdown Menu, o botão recebe esse estado do próprio componente.
+- `aria-label`, `aria-expanded`, `aria-haspopup` e `aria-pressed` vão para o `<button>` interno e saem do `<lui-icon-button>`, para não criar um nó extra na árvore de acessibilidade.
 
 ## Visual
 
 - Ícone e fundo precisam de contraste de pelo menos 3:1 (WCAG 2.2 AA para componentes de interface).
 - O anel de foco aparece ao navegar por teclado.
 - A área de toque de 32px (`md`) e 40px (`lg`) é maior que o mínimo de 24px do WCAG 2.2.
+- Em modo de alto contraste (`forced-colors`), o botão pressionado usa as cores de destaque do sistema e ganha um anel interno, e o desabilitado usa `GrayText`.
 
 ## Para designers
 
 - Nunca entregue um Icon Button sem definir o texto do `aria-label`. Faça isso parte da especificação do componente.
 - Não confie só no ícone: um tooltip ajuda quem tem dificuldade de reconhecer símbolos.
+- Num botão alternável, mostre o estado também na forma, não só na cor de fundo, quando o estado for importante para a tarefa.

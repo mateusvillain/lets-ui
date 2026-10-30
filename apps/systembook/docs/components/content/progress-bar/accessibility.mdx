@@ -1,0 +1,30 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Teclado
+
+A barra não é interativa e não recebe foco.
+
+## Leitor de tela
+
+- A trilha é anunciada como **barra de progresso**, com o rótulo como nome. Com `hide-label`, o rótulo continua sendo o nome, por `aria-label`.
+- O valor vai em `aria-valuenow`, entre `0` e `max`. Com `value-text`, o leitor de tela anuncia esse texto ("3,2 GB de 10 GB") em vez de um percentual.
+- O valor visível repete o que a barra já anuncia, então fica fora da árvore de acessibilidade para não ser lido duas vezes.
+- No modo indeterminado, não há valor: o leitor de tela anuncia só a barra.
+- A legenda descreve a barra e é uma região **viva educada** (`aria-live="polite"`). Os leitores de tela não anunciam com confiança a mudança do valor, então é pela legenda que a pessoa fica sabendo do avanço e do resultado.
+- Sem `label`, o nome é "Progress bar", em inglês. É uma rede de segurança, não um padrão de uso.
+
+## Visual
+
+- O preenchimento tem contraste de pelo menos 3:1 com a trilha e com a página nas quatro variantes, nos dois temas, com a marca padrão. Outra marca (`data-brand`) pode mudar essa razão: confira ao criar uma marca.
+- Com "reduzir movimento" ativo, o preenchimento não anima e o modo indeterminado deixa de correr pela trilha: a barra inteira só pulsa, devagar.
+- Em modo de alto contraste (`forced-colors`), a trilha ganha contorno e o preenchimento usa a cor de destaque do sistema.
+
+## Para designers
+
+- Defina o texto do rótulo, mesmo quando ele ficar escondido.
+- Especifique a legenda de cada marco e do resultado, inclusive da falha.
+- Não use `hide-value` sem o avanço em texto por perto: quem não distingue bem o preenchimento fica sem a informação.
+- Quando a barra indica o carregamento de uma área da tela, essa área deve ser marcada como ocupada (`aria-busy="true"`) até o fim.

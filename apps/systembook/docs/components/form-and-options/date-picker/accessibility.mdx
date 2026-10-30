@@ -1,0 +1,68 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+O calendário segue o padrão [Date Picker Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/) do WAI-ARIA APG: um diálogo **não modal** com os dias numa grade.
+
+## Teclado no campo
+
+| Tecla | Ação |
+| --- | --- |
+| `Enter` ou `Espaço` | Abre ou fecha o calendário. |
+| `Seta para baixo` ou `para cima` | Abre o calendário no dia escolhido ou em hoje. |
+| `Alt` + `Seta para baixo` | Com `editable`, abre o calendário a partir da caixa de texto. |
+| `0` a `9` | Com `editable`, digita a data. A máscara põe os separadores. |
+| `Esc` | Com o calendário aberto, fecha sem alterar. |
+
+## Teclado no calendário
+
+| Tecla | Ação |
+| --- | --- |
+| `Setas` | Dia anterior ou seguinte; mesma coluna na semana anterior ou seguinte. |
+| `Home` / `End` | Início ou fim da semana. |
+| `Page Up` / `Page Down` | Mês anterior ou seguinte. |
+| `Shift` + `Page Up` / `Page Down` | Ano anterior ou seguinte. |
+| `Enter` ou `Espaço` | Escolhe o dia e fecha. Com `range`, o primeiro marca uma ponta e o segundo, a outra. |
+| `Tab` | Passa pelos botões do cabeçalho e pela grade. Ao sair, fecha. |
+| `Esc` | Fecha sem alterar. Com `range`, descarta a seleção incompleta. |
+
+Nas grades de mês e de ano, as setas, `Home`, `End` e `Page Up` / `Page Down` funcionam do mesmo jeito. `Enter` escolhe e volta aos dias, e `Esc` volta aos dias sem alterar.
+
+## Foco
+
+- Ao abrir, o foco vai para o dia escolhido ou, sem valor, para hoje.
+- A grade tem um único ponto de tabulação, mesmo com dois meses lado a lado.
+- Ao escolher ou fechar com `Esc`, o foco volta a quem abriu o calendário.
+- O calendário não prende o foco: fecha com `Tab` para fora ou com um clique fora.
+- Dentro de um [Modal](../../content/modal/index.mdx), `Esc` fecha só o calendário.
+
+## Leitor de tela
+
+- O campo é nomeado pela label e pela data exibida, e anuncia se o calendário está aberto. Com `editable`, a caixa de texto é descrita pelo formato, pelo hint ou pelo erro. O botão do calendário diz a data escolhida: "Escolher data, 16 de jan. de 2026".
+- Cada dia é lido por extenso: "sexta-feira, 16 de janeiro de 2026". Hoje é marcado como data atual.
+- O estado do dia entra no nome: "selecionado", "início do período", "no período", "fim do período" ou "indisponível". Assim ele é anunciado até no VoiceOver, que não lê a seleção numa célula de grade.
+- A troca de mês é anunciada. Com `range`, depois da primeira escolha, um aviso pede a data final.
+- Os dias da semana têm o nome completo, mesmo quando a tela mostra só a inicial.
+- Em erro, o campo é anunciado como inválido, com a mensagem do caso.
+
+## Visual
+
+- Hoje tem negrito, a seleção tem preenchimento e o dia indisponível tem um traço: nenhum desses estados depende só da cor.
+- Os dias têm 32px, e os botões do cabeçalho e as células de mês e ano, 40px, acima do mínimo de 24px do WCAG 2.2.
+- Com `range`, os dois meses ficam um embaixo do outro em telas estreitas.
+
+## Para designers
+
+- Defina a label de todo Date Picker. Sem label visível, especifique o `aria-label`.
+- Traduza todos os textos do componente para o idioma do produto: o padrão é inglês.
+- Especifique uma mensagem para cada erro.
+- Não confie só no calendário para datas distantes: ofereça a digitação.
+
+## Testes
+
+| Área | Status |
+| --- | --- |
+| Teclado, foco e atributos ARIA | Testes automatizados, no Chromium. |
+| VoiceOver, no Safari | Testado manualmente. |
+| NVDA | Ainda não testado manualmente. |

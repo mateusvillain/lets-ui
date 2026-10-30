@@ -1,0 +1,47 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Calendário ou digitação?
+
+| Situação | Use |
+| --- | --- |
+| Data próxima, ou o dia da semana importa | Calendário (padrão) |
+| Data distante que a pessoa já sabe | `editable` |
+| Período, como uma estadia | `range` |
+| Período que a pessoa já sabe, como datas de um contrato | `editable range` |
+
+Com `editable`, a pessoa ainda pode abrir o calendário. O contrário não vale: sem `editable`, não dá para digitar, e chegar a 1985 mês a mês é cansativo, mesmo com as grades de mês e ano.
+
+## Limite as datas
+
+- Use `min` e `max` para cortar as pontas: uma reserva que não pode ser no passado, um prazo que não pode passar do fim do trimestre.
+- Para buracos no meio, como feriados ou dias já reservados, marque os dias como **indisponíveis**. Eles ganham um traço, não só uma cor mais fraca, para não se confundirem com os dias fora do limite.
+- Num período, só as pontas precisam estar disponíveis: uma estadia pode atravessar um dia indisponível.
+
+<DosDonts variant="do" title="Limites visíveis antes do erro">
+  Um check-in que só aceita datas a partir de hoje: os dias passados nem podem ser escolhidos.
+</DosDonts>
+
+<DosDonts variant="dont" title="Aceitar e recusar depois">
+  Deixar escolher qualquer data e só dizer, ao enviar, que ela não pode ser no passado.
+</DosDonts>
+
+## Idioma e semana
+
+- Defina o `locale` do produto. Ele muda o idioma do mês, dos dias da semana e o formato do campo, mas não o valor enviado, que fica sempre em ISO 8601 (`2026-01-16`).
+- O campo escreve o mês abreviado: "16 de jan. de 2026". `10/11/2026` é outubro nos Estados Unidos e novembro no Brasil; o mês escrito evita a confusão.
+- Defina o primeiro dia da semana conforme o público: domingo no Brasil e nos Estados Unidos, segunda na maior parte da Europa.
+
+## Label, hint e erros
+
+- A label diz **qual data**: "Data de entrega", "Check-in". Com `range`, nomeie o período: "Estadia".
+- Com `editable`, o formato aparece abaixo do campo. Se você usar um hint, inclua o formato nele.
+- Escreva uma mensagem para cada erro, dizendo o que fazer: "Escolha uma data a partir de hoje", "A data final não pode ser antes da inicial".
+
+## Boas práticas
+
+- Não use três Selects (dia, mês, ano) quando o Date Picker resolve.
+- Não pré-preencha com a data de hoje se a pessoa precisa escolher de verdade: muita gente envia sem perceber.
+- Em períodos, mostre o total ao lado quando ele importa, como "5 noites".

@@ -20,7 +20,8 @@ Botões desabilitados saem da ordem de tabulação. Em carregamento, o foco é m
 
 ## Cor e contraste
 
-- O sistema tem como meta o WCAG 2.2 AA: texto com contraste de pelo menos 4,5:1 com o fundo. No tema claro, as variantes `primary` (2,96:1) e `success` (3,82:1) ainda ficam abaixo disso; veja os débitos em [Accessibility](../../../foundations/accessibility/overview.mdx).
+- O sistema tem como meta o WCAG 2.2 AA: texto com contraste de pelo menos 4,5:1 com o fundo. Todas as variantes passam nos dois temas.
+- No hover e no pressed, o fundo se afasta da cor do rótulo, então o contraste **aumenta** nos estados em vez de cair: as variantes cheias escurecem no tema claro e clareiam no escuro, e a `neutral` faz o inverso.
 - O significado nunca depende só da cor: o rótulo do botão `danger` continua dizendo "Excluir".
 
 ## Foco

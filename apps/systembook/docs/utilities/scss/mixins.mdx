@@ -111,23 +111,37 @@ Aplica estilos abaixo de um breakpoint máximo.
 
 Aplica estados interativos completos: disabled, hover, active e focus-visible. Ideal para botões e controles interativos.
 
+Num componente **preenchido** (fundo sólido com rótulo por cima), passe em `$tint` a cor oposta à do rótulo: o hover e o pressed misturam essa cor, o fundo se afasta do texto e o contraste aumenta nos estados. Sem `$tint`, os estados misturam a cor do próprio conteúdo, como num componente de superfície. O mesmo `$tint` existe em `state-layer()` e `state-base()`.
+
 ```scss
-@include states($variant, $focus-visible, $focus?)
+@include states($focus-visible, $focus?, $bg?, $tint?)
 ```
 
 | Parâmetro | Padrão | Valores |
 | --- | --- | --- |
-| `$variant` | `—` | primary \| secondary \| danger \| success \| neutral |
 | `$focus-visible` | `—` | primary \| secondary \| danger \| success \| neutral |
 | `$focus` | `null` | primary \| secondary \| danger \| success \| neutral |
+| `$bg` | `transparent` | Cor de fundo em repouso, ex.: `bg(container, primary)` |
+| `$tint` | `null` | `tint(foreground)` para rótulo claro · `tint(background)` para rótulo escuro |
 
 ```scss
-.btn--primary {
-  @include states(primary, primary);
+.menu-item {
+  // Superfície: os estados misturam a cor do próprio conteúdo.
+  @include states(primary);
 }
 
-.btn--danger {
-  @include states(danger, danger);
+.btn--primary {
+  color: text(inverse);
+
+  // Preenchido, rótulo claro: tinta oposta ao rótulo.
+  @include states(primary, primary, $bg: bg(container, primary), $tint: tint(foreground));
+}
+
+.btn--neutral {
+  color: text(body);
+
+  // Preenchido, rótulo escuro.
+  @include states(neutral, neutral, $bg: bg(container, neutral), $tint: tint(background));
 }
 ```
 

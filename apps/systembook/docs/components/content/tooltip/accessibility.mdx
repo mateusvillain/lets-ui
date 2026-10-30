@@ -20,6 +20,8 @@ O Tooltip ainda **não fecha com `Esc`**, e o WCAG 1.4.13 pede que conteúdo exi
 - O balão é anunciado como **dica** (`tooltip`) e está ligado ao gatilho com `aria-describedby`, então o texto é lido como **descrição** do elemento.
 - O gatilho precisa ser **focável**. Se o conteúdo que você colocar não for, o Tooltip torna o contêiner focável.
 - O Tooltip não substitui o nome acessível do elemento. Um Icon Button continua precisando de `aria-label`.
+- **Um texto igual ao nome do gatilho não vira descrição.** Quando o texto repete o nome do controle (ignorando maiúsculas e espaços), o Tooltip não o liga como descrição, e o leitor de tela anuncia "Excluir item, botão" uma vez só. Se o texto ou o nome mudar depois, a descrição acompanha.
+- Enquanto o Tooltip descreve o gatilho, o texto do balão fica fora da árvore de acessibilidade, para não ser lido de novo na navegação por leitura.
 
 ## Para designers
 

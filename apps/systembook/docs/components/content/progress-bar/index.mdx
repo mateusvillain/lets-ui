@@ -1,0 +1,84 @@
+---
+title: "Progress Bar"
+subtitle: "Barra que mostra quanto de uma tarefa já foi feito, como um envio de arquivos ou uma importação."
+order: 9
+---
+
+<ComponentEmbed component="ProgressBar" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Esperas longas">
+  Quando a tarefa demora o bastante para a pessoa querer saber quanto falta, como enviar arquivos ou importar dados.
+</DosDonts>
+
+<DosDonts variant="do" title="Avanço medido em qualquer unidade">
+  Porcentagem, GB, etapas: a barra preenche na proporção do valor sobre o máximo.
+</DosDonts>
+
+<DosDonts variant="do" title="Uso de uma cota">
+  Armazenamento ou limite de um plano, com `caution` quando estiver perto do fim.
+</DosDonts>
+
+<DosDonts variant="dont" title="Área que carrega com formato conhecido">
+  Use um skeleton, que mostra a forma do conteúdo que vai chegar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Passos com nome próprio">
+  Para etapas de um fluxo, como cadastro ou checkout, use um indicador de passos.
+</DosDonts>
+
+<DosDonts variant="dont" title="Esperas curtas">
+  Uma barra que aparece e some em menos de um segundo só pisca na tela.
+</DosDonts>
+
+## Anatomia
+
+1. **Rótulo**: nomeia a tarefa.
+2. **Valor**: o avanço em percentual, ou no texto de `value-text`.
+3. **Trilha**: o total da tarefa.
+4. **Preenchimento**: a parte já feita.
+5. **Legenda** (opcional): o andamento e o resultado, como "8 de 20 arquivos" ou "Envio concluído".
+
+## Determinado e indeterminado
+
+Com `value`, a barra preenche na proporção de `value` sobre `max`. Sem `value`, ela fica **indeterminada**: um trecho percorre a trilha enquanto não há como medir o avanço. Assim que a medida existir, a barra passa para o modo determinado.
+
+<ComponentEmbed component="ProgressBar" variant="indeterminate" />
+
+## Variantes
+
+| Variante | Quando usar |
+| --- | --- |
+| `primary` (padrão) | A tarefa está em andamento. |
+| `success` | A tarefa terminou bem. |
+| `caution` | A tarefa segue, mas pede atenção, como uma cota quase cheia. |
+| `danger` | A tarefa falhou ou passou do limite. |
+
+<ComponentEmbed component="ProgressBar" variant="success" />
+
+<ComponentEmbed component="ProgressBar" variant="danger" />
+
+Toda barra `success`, `caution` ou `danger` leva o desfecho na legenda. A cor sozinha não informa o estado a quem não a distingue nem ao leitor de tela.
+
+## Posição do rótulo
+
+Em `top` (padrão), rótulo e valor ficam acima da trilha. Em `inline`, rótulo, trilha e valor ficam na mesma linha, o que economiza altura em listas e tabelas. A legenda fica sempre abaixo.
+
+<ComponentEmbed component="ProgressBar" variant="inline" />
+
+## Tamanhos
+
+| Tamanho | Espessura da trilha |
+| --- | --- |
+| `sm` | 4px |
+| `md` (padrão) | 8px |
+| `lg` | 12px |
+
+Só a trilha muda: o texto continua o mesmo.
+
+## Relacionados
+
+- [Toast](../toast/index.mdx): avisar que uma tarefa em segundo plano terminou.
+- [Alert](../alert/index.mdx): explicar uma falha que precisa de ação.
+- [Empty State](../empty-state/index.mdx): o que mostrar quando a tarefa termina sem resultado.

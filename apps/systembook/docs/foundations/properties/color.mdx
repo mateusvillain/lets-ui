@@ -74,6 +74,8 @@ Cada família primitiva é uma rampa de **8 degraus**. O número do degrau não 
 
 No tema escuro a rampa se inverte por inteiro. É por isso que `text.heading → gray.8` é escuro no tema claro e claro no tema escuro, sem que ninguém precise escrever uma regra para o tema escuro.
 
+As rampas `blue`, `green` e a `primary` da marca `lets-ui` são definidas em **OKLCH**, com um `hex` de fallback. Em OKLCH a luminosidade percebida é um eixo próprio, então dá para fixar o degrau `4` no ponto em que o texto branco por cima chega a 4,5 : 1 sem mexer no matiz. O `blue`, que alimenta `info`, usa um azul-ciano, para não se confundir com a primária.
+
 ### O papel de cada degrau
 
 | Degrau | Papel típico | Tokens semânticos que apontam para ele |
@@ -200,7 +202,7 @@ Os estados de interação **não têm cor própria por variante**. O sistema res
 
 | Estado | Como é resolvido | Onde |
 | --- | --- | --- |
-| **Hover** | Uma camada de 8% da cor de conteúdo do componente, misturada ao fundo de repouso. | `state(hover)`, mixin `state-layer()` |
+| **Hover** | Uma camada de 8% de tinta misturada ao fundo de repouso. A tinta depende do tipo de componente (veja abaixo). | `state(hover)`, mixin `state-layer()` |
 | **Pressed** | A mesma camada, em 16%. | `state(pressed)` |
 | **Focus** | Um anel de 3px na cor `focus-ring` da família. | `focus-ring($família)` em `:focus-visible` |
 | **Selected** | O componente troca o fundo de repouso (`--lui-bg`) para `background.container` e o texto para `text.inverse`. Hover e pressed continuam funcionando por cima. | Tabs `card` |
@@ -210,19 +212,23 @@ Os estados de interação **não têm cor própria por variante**. O sistema res
 
 ### A camada de interação
 
-A tinta do hover é a **cor de conteúdo do próprio componente** (`currentColor`). Como conteúdo e fundo já precisam ter contraste entre si, misturar o conteúdo ao fundo clareia o que é escuro e escurece o que é claro, sem medir nada e sem saber sobre que superfície um componente transparente está apoiado.
+A cor da camada depende do tipo de componente:
+
+- **Componentes de superfície**, transparentes ou sobre o fundo neutro (um item de menu, uma aba, um Icon Button), misturam a **cor do próprio conteúdo** (`currentColor`). Como conteúdo e fundo já contrastam entre si, a camada clareia o que é escuro e escurece o que é claro, sem medir nada e sem saber sobre que superfície o componente está apoiado.
+- **Componentes preenchidos**, com fundo sólido e rótulo por cima (Button, a página atual da Pagination, a aba `card` selecionada, o círculo do Stepper, Checkbox, Radio e Switch marcados), misturam a **cor oposta à do rótulo**, com a função `tint()`. Um preenchimento colorido já nasce perto do contraste mínimo, e misturar nele a cor do rótulo aproximaria os dois: o texto perderia contraste justamente no hover. Com a cor oposta, o contraste **aumenta** no hover e no pressed. Na prática, um preenchimento com rótulo claro escurece no tema claro e clareia no escuro; um com rótulo escuro, como o botão neutro, faz o inverso.
 
 As quantidades (8% e 16%) não variam por tema nem por marca, então **não são tokens**: vivem como constantes em `_functions.scss`, junto da lógica que as usa.
 
 ```scss
 .meu-controle {
   color: text(inverse);
-  @include states(primary, null, bg(container, primary));
+  // Preenchido, rótulo claro: a tinta é a cor oposta.
+  @include states(primary, null, bg(container, primary), tint(foreground));
 }
 ```
 
 <Callout variant="tip">
-  Defina o fundo de repouso com o mixin `state-layer($bg)` ou `state-base($bg)`, nunca com `background-color` direto. Assim as regras de hover e pressed continuam valendo.
+  Defina o fundo de repouso com o mixin `state-layer($bg, $tint)` ou `state-base($bg, $tint)`, nunca com `background-color` direto. Assim as regras de hover e pressed continuam valendo. Em componentes de superfície, omita o `$tint`.
 </Callout>
 
 ## Contraste
@@ -239,7 +245,7 @@ Os valores abaixo foram calculados a partir dos tokens, com a fórmula do WCAG. 
 | `text.error` sobre `neutral.background.surface` | 4,86 | 5,07 | AA |
 | `text.body` sobre `neutral.background.container` | 8,65 | 5,30 | AA (AAA no claro) |
 | `text.inverse` sobre `neutral.background.overlay` | 18,28 | 16,07 | AAA |
-| `text.body` sobre `{success, caution, danger, info}.background.surface` | 11,06 a 13,00 | 9,43 a 10,85 | AAA |
+| `text.body` sobre `{success, caution, danger, info}.background.surface` | 11,06 a 12,84 | 9,43 a 10,85 | AAA |
 
 ### Texto inverso sobre contêineres
 
@@ -247,10 +253,10 @@ Os valores abaixo foram calculados a partir dos tokens, com a fórmula do WCAG. 
 | --- | --- | --- | --- |
 | `text.inverse` sobre `secondary.background.container` | 4,92 | 4,52 | AA |
 | `text.inverse` sobre `danger.background.container` | 4,86 | 5,07 | AA |
-| `text.inverse` sobre `success.background.container` | 3,82 | 5,69 | Claro: só texto grande |
+| `text.inverse` sobre `primary.background.container` | 4,53 | 5,35 | AA |
+| `text.inverse` sobre `info.background.container` | 4,56 | 5,56 | AA |
+| `text.inverse` sobre `success.background.container` | 4,53 | 5,80 | AA |
 | `text.inverse` sobre `caution.background.container` | 3,83 | 5,38 | Claro: só texto grande |
-| `text.inverse` sobre `primary.background.container` | 2,96 | 5,29 | Claro: **reprova** |
-| `text.inverse` sobre `info.background.container` | 2,96 | 5,29 | Claro: **reprova** |
 
 ### Elementos de interface (mínimo 3 : 1)
 
@@ -258,16 +264,15 @@ Os valores abaixo foram calculados a partir dos tokens, com a fórmula do WCAG. 
 | --- | --- | --- | --- |
 | `neutral.border.default` sobre a superfície | 4,92 | 4,52 | Aprova |
 | `danger.border.default` sobre a superfície | 4,86 | 5,07 | Aprova |
-| `primary.border.default` sobre a superfície | 2,96 | 5,29 | Claro: reprova |
+| `primary.border.default` sobre a superfície | 4,53 | 5,35 | Aprova |
 | `neutral.border.subtle` sobre a superfície | 1,17 | 1,51 | Só decorativa |
-| Anel de foco `primary` | 3,65 | 6,90 | Aprova |
-| Anel de foco `neutral`, `danger`, `success` | 6,33 a 7,07 | 4,59 a 7,54 | Aprova |
-| Ícones `success`, `caution`, `danger` sobre a superfície | 3,82 a 4,86 | 5,07 a 5,69 | Aprova |
-| Ícone `info` sobre a superfície | 2,96 | 5,29 | Claro: reprova |
-| Link (`link.default`) sobre a superfície | 2,96 | 5,29 | Claro: reprova |
+| Anel de foco `primary` | 6,33 | 6,67 | Aprova |
+| Anel de foco `neutral`, `danger`, `success` | 6,25 a 7,07 | 4,59 a 6,97 | Aprova |
+| Ícones `success`, `caution`, `danger`, `info` sobre a superfície | 3,83 a 4,86 | 5,07 a 5,80 | Aprova |
+| Link (`link.default`) sobre a superfície | 4,53 | 5,35 | Aprova |
 
 <Callout variant="warning">
-  No tema claro, o degrau `4` da marca `lets-ui` (`#339bf0`) fica abaixo de 3 : 1 contra o branco. Isso afeta o botão primário, o link, a borda e o ícone `primary` e `info`. Enquanto a rampa não for ajustada, não use `primary.background.container` com texto pequeno em telas novas sem conferir, e prefira `secondary` ou `neutral` quando o contraste for crítico. A dívida está registrada em [Accessibility](../accessibility/overview.mdx).
+  No tema claro, o texto branco sobre `caution.background.container` fica em 3,83 : 1: só serve para texto grande. Prefira a variante `surface` para avisos com texto pequeno. A dívida está registrada em [Accessibility](../accessibility/overview.mdx).
 </Callout>
 
 ## Gráficos, tags, status e dados categóricos
@@ -301,7 +306,7 @@ Os valores abaixo foram calculados a partir dos tokens, com a fórmula do WCAG. 
 </DosDonts>
 
 <DosDonts variant="dont" title="Hexadecimal ou primitiva no componente">
-  `background-color: #339bf0` ou `color(blue, 4)`. Não acompanha a troca de marca, e a próxima revisão de cor não chega nele.
+  `background-color: #0a7ac8` ou `color(blue, 4)`. Não acompanha a troca de marca, e a próxima revisão de cor não chega nele.
 </DosDonts>
 
 - **Cor própria para hover.** Criar `primary.background.hover` duplica o que a camada de interação já resolve para todas as famílias.

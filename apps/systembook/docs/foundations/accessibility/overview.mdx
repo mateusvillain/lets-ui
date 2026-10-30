@@ -147,6 +147,7 @@ Muito do que a tela mostra com cor e forma precisa ser dito em código para a te
 | `aria-describedby` | Ligar uma **descrição** complementar: dica, erro, tooltip. | Campo com a mensagem de erro. |
 | `aria-invalid`, `aria-required` | Anunciar erro e obrigatoriedade. | Input com erro. |
 | `aria-expanded`, `aria-selected`, `aria-checked` | Anunciar estado de abrir, selecionar e marcar. | Accordion, Tabs, Switch. |
+| `aria-pressed` | Anunciar se um botão alternável está ligado. | Icon Button de filtro ou formatação. |
 | `aria-disabled` | Manter o anúncio de um controle indisponível. | Usado junto com `disabled`. |
 | `aria-live`, `role="status"`, `role="alert"` | Anunciar mudanças que acontecem sozinhas. | Alert, Toast. |
 | `aria-hidden="true"` | Esconder o que é decorativo. Nunca em algo focável. | Ícones ao lado de texto. |
@@ -154,6 +155,17 @@ Muito do que a tela mostra com cor e forma precisa ser dito em código para a te
 <Callout variant="tip">
   Prefira não desabilitar. Um botão desabilitado não explica o motivo e some da navegação por teclado. Muitas vezes é melhor deixá-lo ativo e mostrar o erro quando a pessoa tentar avançar.
 </Callout>
+
+### ARIA no elemento do componente
+
+O elemento de um componente (`<lui-button>`, `<lui-input>`) não tem papel próprio. Um atributo ARIA deixado nele faria o navegador mostrar um nó extra, sem papel, ao lado do controle de verdade. Por isso, o componente **consome** o ARIA que aceita: lê o atributo, leva o valor ao controle interno e o remove do elemento externo.
+
+Isso vale para Breadcrumb, Button, Card, Checkbox, Code Block, Icon Button, Input, Link, Radio, Select, Shortcut, Switch, Textarea e Tooltip. Para quem desenvolve:
+
+- Seletores no atributo (`lui-button[aria-expanded="true"]`) e `getAttribute('aria-*')` no elemento não encontram mais o valor. Leia a propriedade (`el.ariaExpanded`), ou estilize a partir do dono do estado (`lui-modal[open]`).
+- Para limpar um estado, use um valor explícito (`aria-expanded="false"`) ou a propriedade com `null`. Remover um atributo que já foi consumido não tem efeito. Em frameworks, ligue a propriedade: `.ariaPressed=${pressed}` no Lit, `ariaPressed={pressed}` no React 19.
+- `cloneNode()` e `outerHTML` não levam o ARIA consumido. Defina de novo na cópia.
+- Não coloque no elemento um `aria-*` que o componente não documenta.
 
 ## Como testar
 
@@ -182,10 +194,8 @@ O sistema registra o que ainda não cumpre o compromisso, em vez de esconder. Ca
 
 | Débito | Critério | Impacto | Enquanto isso |
 | --- | --- | --- | --- |
-| **Contraste do degrau 4 da marca no tema claro.** Texto branco sobre `primary` e `info` (2,96 : 1), link (2,96 : 1), borda `primary` e ícone `info`. | 1.4.3, 1.4.11 | Botão primário, links, ícones de informação. | Use rótulos curtos e em `body--lg`; confira o contraste em telas novas. |
-| **Texto branco sobre `success` e `caution`** no tema claro (3,8 : 1). | 1.4.3 | Botões e tags com cor cheia. | Só para texto grande; prefira a variante `surface`. |
+| **Texto branco sobre `caution`** no tema claro (3,83 : 1). | 1.4.3 | Tags e alertas com cor cheia. | Só para texto grande; prefira a variante `surface`. |
 | **Borda dos campos em repouso** (`neutral.border.subtle`, 1,17 : 1). | 1.4.11 | Limite de Input, Select e Textarea. | Label sempre visível; campo sobre a superfície neutra. |
-| **Anel de foco feito de `box-shadow`.** O modo de cores forçadas remove sombras, e os componentes zeram o `outline`. | 2.4.7 | Quem usa alto contraste não vê o foco. | — |
 | **Movimento reduzido** ainda não cobre o spinner do Button, as transições de estado e as entradas de Tooltip, Dropdown Menu e Modal. | 2.3.3 | Animações continuam com a preferência ativa. | Evite animações próprias sem `prefers-reduced-motion`. |
 | **Indicador de status do Avatar** abaixo de 3 : 1 contra o anel. | 1.4.11 | Status percebido só pela forma. | Veja [Avatar](../../components/content/avatar/accessibility.mdx). |
 | **Tooltip não fecha com `Esc`.** | 1.4.13 | Conteúdo por hover não pode ser dispensado. | Textos curtos, sem cobrir conteúdo. Veja [Tooltip](../../components/content/tooltip/accessibility.mdx). |

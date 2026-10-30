@@ -34,6 +34,17 @@ Slot any element with `slot="trigger"` to replace the default trigger button.
 </lui-modal>
 ```
 
+### Fechar por uma ação
+
+Marque com `data-modal-close` o botão que só fecha o modal, como um "Cancelar". Funciona no slot `actions` e no conteúdo, num elemento nativo ou num `lui-button`, e também quando o clique vem de algo dentro do elemento marcado.
+
+- Fecha o `lui-modal` mais próximo acima dele: dentro de um `lui-modal` aninhado, fecha só esse.
+- No slot `trigger`, o atributo é ignorado.
+- Não fecha quando o clique passa por um controle com `aria-disabled="true"` (um `lui-button` em `loading`) ou quando um handler chama `event.preventDefault()`.
+- Ações que fazem algo antes de fechar, como "Confirmar", chamam `closeModal()` no próprio handler.
+
+O foco volta a quem abriu o modal, como em qualquer outro jeito de fechar.
+
 ### Textos acessíveis
 
 O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close modal"`). Troque-o para o idioma do projeto.
