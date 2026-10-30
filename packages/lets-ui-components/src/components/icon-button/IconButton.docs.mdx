@@ -30,7 +30,7 @@ Quem enxerga o ícone também precisa saber o que ele faz. Envolva o Icon Button
 
 O texto do tooltip vira a descrição do botão (`aria-description`), não o nome: o `aria-label` continua obrigatório. O botão continua sendo a única parada de tabulação.
 
-Use no tooltip o mesmo texto do `aria-label`, para que quem enxerga veja o nome que o leitor de tela anuncia. Como o texto é ao mesmo tempo nome e descrição, alguns leitores de tela o leem duas vezes ("Excluir item, botão, Excluir item"). Um tooltip com outro texto, como um complemento ("Excluir item" e "Remove o item da lista"), evita a repetição, mas aí quem enxerga não vê o nome da ação.
+Use no tooltip o mesmo texto do `aria-label`, para que quem enxerga veja o nome que o leitor de tela anuncia. Quando o texto repete o nome, o Tooltip não o define como descrição, e o leitor de tela anuncia "Excluir item, botão" uma vez só. Um tooltip com outro texto, como um complemento ("Remove o item da lista"), vira a descrição do botão.
 
 <Canvas of={IconButtonStories.WithTooltip} />
 
@@ -65,8 +65,6 @@ Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão
 
 <Canvas of={IconButtonStories.ModalTrigger} />
 
-O Icon Button ainda não tem estilo visual para `aria-pressed="true"`: o estado é anunciado pelo leitor de tela, mas não aparece na tela. Até que exista, mostre o estado alternado também de forma visível, por exemplo trocando o ícone.
-
 ```html
 <lui-icon-button
   aria-label="Mais opções"
@@ -76,6 +74,20 @@ O Icon Button ainda não tem estilo visual para `aria-pressed="true"`: o estado 
   <svg aria-hidden="true" ...>...</svg>
 </lui-icon-button>
 <lui-icon-button aria-label="Negrito" aria-pressed="true">
+  <svg aria-hidden="true" ...>...</svg>
+</lui-icon-button>
+```
+
+## Botão alternável
+
+Para ligar e desligar uma opção, como um filtro ou uma formatação, use `aria-pressed="true"` ou `"false"` e troque o valor a cada clique. Pressionado, o botão ganha o fundo de container neutro. Hover, foco e `disabled` continuam funcionando sobre o estado pressionado. Em modo de alto contraste (`forced-colors`), o botão pressionado usa as cores de destaque do sistema e ganha um anel interno.
+
+Mantenha o mesmo `aria-label` nos dois estados: o leitor de tela anuncia "pressionado" ou "não pressionado", e um nome que muda com o estado confunde. `aria-pressed="mixed"` não tem estilo próprio e aparece como não pressionado.
+
+<Canvas of={IconButtonStories.Toggle} />
+
+```html
+<lui-icon-button aria-label="Mostrar alertas" aria-pressed="true">
   <svg aria-hidden="true" ...>...</svg>
 </lui-icon-button>
 ```

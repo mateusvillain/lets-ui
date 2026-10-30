@@ -1,4 +1,0 @@
-interface:
-  display_name: "Changelog Generator"
-  short_description: "Atualiza changelog e publica release com tag"
-  default_prompt: "Gerar changelog a partir dos commits, versionar, criar tag e publicar release no GitHub com seguranca."
