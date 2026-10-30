@@ -210,6 +210,43 @@ export default {
       description: '`aria-label` do botão de próximo mês',
       table: { category: 'Textos', defaultValue: { summary: 'Next month' } },
     },
+    chooseMonthLabel: {
+      control: 'text',
+      description:
+        'Texto oculto depois do mês no botão do título que abre a grade de meses',
+      table: { category: 'Textos', defaultValue: { summary: 'choose month' } },
+    },
+    chooseYearLabel: {
+      control: 'text',
+      description:
+        'Texto oculto depois do ano no botão do título que abre a grade de anos',
+      table: { category: 'Textos', defaultValue: { summary: 'choose year' } },
+    },
+    previousYearLabel: {
+      control: 'text',
+      description: 'Na grade de meses, `aria-label` do botão de ano anterior',
+      table: { category: 'Textos', defaultValue: { summary: 'Previous year' } },
+    },
+    nextYearLabel: {
+      control: 'text',
+      description: 'Na grade de meses, `aria-label` do botão de próximo ano',
+      table: { category: 'Textos', defaultValue: { summary: 'Next year' } },
+    },
+    previousYearsLabel: {
+      control: 'text',
+      description:
+        'Na grade de anos, `aria-label` do botão dos doze anos anteriores',
+      table: {
+        category: 'Textos',
+        defaultValue: { summary: 'Previous years' },
+      },
+    },
+    nextYearsLabel: {
+      control: 'text',
+      description:
+        'Na grade de anos, `aria-label` do botão dos doze anos seguintes',
+      table: { category: 'Textos', defaultValue: { summary: 'Next years' } },
+    },
   },
 };
 
@@ -250,6 +287,12 @@ const Template = ({
   dialogLabel,
   previousMonthLabel,
   nextMonthLabel,
+  chooseMonthLabel,
+  chooseYearLabel,
+  previousYearLabel,
+  nextYearLabel,
+  previousYearsLabel,
+  nextYearsLabel,
 }) => {
   const attrs = [
     editable ? 'editable' : '',
@@ -288,6 +331,12 @@ const Template = ({
     dialogLabel ? `dialog-label="${dialogLabel}"` : '',
     previousMonthLabel ? `previous-month-label="${previousMonthLabel}"` : '',
     nextMonthLabel ? `next-month-label="${nextMonthLabel}"` : '',
+    chooseMonthLabel ? `choose-month-label="${chooseMonthLabel}"` : '',
+    chooseYearLabel ? `choose-year-label="${chooseYearLabel}"` : '',
+    previousYearLabel ? `previous-year-label="${previousYearLabel}"` : '',
+    nextYearLabel ? `next-year-label="${nextYearLabel}"` : '',
+    previousYearsLabel ? `previous-years-label="${previousYearsLabel}"` : '',
+    nextYearsLabel ? `next-years-label="${nextYearsLabel}"` : '',
   ]
     .filter(Boolean)
     .join('\n    ');
@@ -338,6 +387,12 @@ DatePicker.args = {
   dialogLabel: 'Choose date',
   previousMonthLabel: 'Previous month',
   nextMonthLabel: 'Next month',
+  chooseMonthLabel: 'choose month',
+  chooseYearLabel: 'choose year',
+  previousYearLabel: 'Previous year',
+  nextYearLabel: 'Next year',
+  previousYearsLabel: 'Previous years',
+  nextYearsLabel: 'Next years',
 };
 
 export const Open = () => `
@@ -535,6 +590,12 @@ export const Localized = () => `
       dialog-label="Escolher data"
       previous-month-label="Mês anterior"
       next-month-label="Próximo mês"
+      choose-month-label="escolher mês"
+      choose-year-label="escolher ano"
+      previous-year-label="Ano anterior"
+      next-year-label="Próximo ano"
+      previous-years-label="Anos anteriores"
+      next-years-label="Próximos anos"
       error-text="Campo obrigatório."
     ></lui-date-picker>
   </div>

@@ -112,6 +112,19 @@ do trimestre.
 
 <Canvas of={DatePickerStories.MinMax} />
 
+## Mês e ano
+
+O mês e o ano no título do calendário são botões. Um clique no mês troca os
+dias por uma grade com os doze meses do ano; um clique no ano, por uma grade de
+doze anos. As setas do cabeçalho passam um ano na grade de meses e doze anos na
+de anos. Escolher um mês ou um ano volta aos dias no mesmo dia do mês, ajustado
+ao tamanho do mês e a `min` e `max`. É o caminho do ponteiro para uma data
+distante, sem clicar mês a mês.
+
+Meses e anos sem nenhum dia dentro de `min` e `max` ficam desabilitados. `Esc`
+ou um novo clique no botão aberto volta aos dias sem mudar nada. Com `range`, a
+primeira ponta já escolhida continua marcada depois da troca de mês ou ano.
+
 ## Datas indisponíveis
 
 `min` e `max` cortam as pontas, mas não abrem buracos no meio: um feriado, um
@@ -275,6 +288,12 @@ abaixo para usar o idioma do projeto.
 | `dialog-label`          | `'Choose date'`                                  | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida  |
 | `previous-month-label`  | `'Previous month'`                               | `aria-label` do botão de mês anterior                                                           |
 | `next-month-label`      | `'Next month'`                                   | `aria-label` do botão de próximo mês                                                            |
+| `choose-month-label`    | `'choose month'`                                 | Texto oculto depois do mês no botão do título que abre a grade de meses                         |
+| `choose-year-label`     | `'choose year'`                                  | Texto oculto depois do ano no botão do título que abre a grade de anos                          |
+| `previous-year-label`   | `'Previous year'`                                | Na grade de meses, `aria-label` do botão de ano anterior                                        |
+| `next-year-label`       | `'Next year'`                                    | Na grade de meses, `aria-label` do botão de próximo ano                                         |
+| `previous-years-label`  | `'Previous years'`                               | Na grade de anos, `aria-label` do botão dos doze anos anteriores                                |
+| `next-years-label`      | `'Next years'`                                   | Na grade de anos, `aria-label` do botão dos doze anos seguintes                                 |
 
 ## Acessibilidade
 
@@ -307,23 +326,38 @@ calendário abre com `Alt` + `↓`, como num `<select>` nativo.
 
 ### Teclado no calendário
 
-| Tecla                        | Ação                                                   |
-| ---------------------------- | ------------------------------------------------------ |
-| `←` `→`                      | Dia anterior / seguinte                                |
-| `↑` `↓`                      | Mesma coluna na semana anterior / seguinte             |
-| `Home` `End`                 | Início / fim da semana                                 |
-| `Page Up` `Page Down`        | Mês anterior / seguinte                                |
-| `Shift` + `Page Up` / `Down` | Ano anterior / seguinte                                |
-| `Enter`, `Space`             | Seleciona o dia focado e fecha                         |
-| `Tab`                        | Passa pelos botões de mês e pela grade; ao sair, fecha |
-| `Esc`                        | Fecha sem alterar                                      |
+| Tecla                        | Ação                                                         |
+| ---------------------------- | ------------------------------------------------------------ |
+| `←` `→`                      | Dia anterior / seguinte                                      |
+| `↑` `↓`                      | Mesma coluna na semana anterior / seguinte                   |
+| `Home` `End`                 | Início / fim da semana                                       |
+| `Page Up` `Page Down`        | Mês anterior / seguinte                                      |
+| `Shift` + `Page Up` / `Down` | Ano anterior / seguinte                                      |
+| `Enter`, `Space`             | Seleciona o dia focado e fecha                               |
+| `Tab`                        | Passa pelos botões do cabeçalho e pela grade; ao sair, fecha |
+| `Esc`                        | Fecha sem alterar                                            |
 
 Com `range`, o primeiro `Enter` marca uma ponta e o segundo marca a outra.
 Entre os dois, o intervalo acompanha o foco. `Esc` descarta a seleção
 incompleta e mantém o valor anterior. Essa prévia é só visual: até o segundo
 `Enter`, só o primeiro dia escolhido tem `aria-selected` e
 `range-start-day-text` no nome, para que o dia com foco não seja anunciado
-como fim do período antes de ser escolhido.
+como fim do período antes de ser escolhido. A prévia não para num dia marcado
+por `isDateDisabled`: ela fica no último dia que pode ser escolhido.
+
+### Teclado nas grades de mês e ano
+
+| Tecla                 | Ação                                                                 |
+| --------------------- | -------------------------------------------------------------------- |
+| `←` `→`               | Mês ou ano anterior / seguinte                                       |
+| `↑` `↓`               | Mesma coluna na linha anterior / seguinte                            |
+| `Home` `End`          | Início / fim da linha                                                |
+| `Page Up` `Page Down` | Ano anterior / seguinte nos meses; doze anos antes / depois nos anos |
+| `Enter`, `Space`      | Escolhe e volta aos dias                                             |
+| `Esc`                 | Volta aos dias sem alterar; um segundo `Esc` fecha o calendário      |
+
+Ao abrir uma grade, o foco vai para o mês ou o ano do dia ativo. Ao voltar aos
+dias, ele vai para o dia ativo.
 
 ### Foco
 
@@ -341,24 +375,25 @@ como fim do período antes de ser escolhido.
 
 ### O que o leitor de tela anuncia
 
-| Elemento              | Anúncio                                                                                                                                                                                                                                                                               |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Campo                 | `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data exibida, com `aria-expanded`                                                                                                                                                                                        |
-| Range em dois campos  | `role="group"` nomeado pelo rótulo, com duas caixas nomeadas por `start-label` e `end-label`, cada uma descrita pelo formato                                                                                                                                                          |
-| Campo com `editable`  | `<input inputmode="numeric">` nomeado pelo rótulo e descrito pelo formato (`dd / mm / yyyy`), pelo hint ou pelo erro                                                                                                                                                                  |
-| Botão do calendário   | `dialog-label` seguido da data escolhida: `Choose date, Jan 16, 2026`                                                                                                                                                                                                                 |
-| Calendário            | Diálogo nomeado por `dialog-label`                                                                                                                                                                                                                                                    |
-| Mês                   | Uma região `aria-live="polite"`, anunciada ao trocar de mês; com `range`, os dois meses juntos                                                                                                                                                                                        |
-| Primeira ponta        | Com `range`, outra região `aria-live="polite"` anuncia `range-start-text` depois da primeira escolha                                                                                                                                                                                  |
-| Período escolhido     | Ao fechar, o foco volta ao campo, nomeado com o período em ordem: `Stay Jan 12 – 20, 2026`                                                                                                                                                                                            |
-| Dias da semana        | Nome completo ("Sunday"), mesmo quando a tela mostra só "S"                                                                                                                                                                                                                           |
-| Dia                   | Data por extenso: "Friday, January 16, 2026". O próprio botão do dia é a célula da grade (`role="gridcell"`)                                                                                                                                                                          |
-| Hoje                  | `aria-current="date"`                                                                                                                                                                                                                                                                 |
-| Dia selecionado       | `aria-selected="true"` no botão do dia, que é o elemento com foco, e o estado no nome: "Friday, January 16, 2026, selected"; com `range`, "start of period", "in period" ou "end of period". O VoiceOver não anuncia `aria-selected` numa `gridcell`, por isso o nome repete o estado |
-| Dia indisponível      | `aria-disabled="true"` e `unavailable-day-text` no nome: "Sunday, January 18, 2026, unavailable"                                                                                                                                                                                      |
-| Dia fora do intervalo | `aria-disabled="true"`: alcançável pelo teclado, mas não pode ser escolhido                                                                                                                                                                                                           |
-| Botões de mês         | `previous-month-label` e `next-month-label`; `aria-disabled` no limite de `min` e `max`                                                                                                                                                                                               |
-| Erro                  | `aria-invalid`, a mensagem do caso ligada por `aria-describedby`; obrigatório: com `editable`, `aria-required`, e sem ele, `required-text` na descrição                                                                                                                               |
+| Elemento              | Anúncio                                                                                                                                                                                                                                                                                |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Campo                 | `<button aria-haspopup="dialog">` nomeado pelo rótulo e pela data exibida, com `aria-expanded`                                                                                                                                                                                         |
+| Range em dois campos  | `role="group"` nomeado pelo rótulo, com duas caixas nomeadas por `start-label` e `end-label`, cada uma descrita pelo formato                                                                                                                                                           |
+| Campo com `editable`  | `<input inputmode="numeric">` nomeado pelo rótulo e descrito pelo formato (`dd / mm / yyyy`), pelo hint ou pelo erro                                                                                                                                                                   |
+| Botão do calendário   | `dialog-label` seguido da data escolhida: `Choose date, Jan 16, 2026`                                                                                                                                                                                                                  |
+| Calendário            | Diálogo nomeado por `dialog-label`                                                                                                                                                                                                                                                     |
+| Mês                   | Uma região `aria-live="polite"`, anunciada ao trocar de mês; com `range`, os dois meses juntos                                                                                                                                                                                         |
+| Primeira ponta        | Com `range`, outra região `aria-live="polite"` anuncia `range-start-text` depois da primeira escolha                                                                                                                                                                                   |
+| Período escolhido     | Ao fechar, o foco volta ao campo, nomeado com o período em ordem: `Stay Jan 12 – 20, 2026`                                                                                                                                                                                             |
+| Dias da semana        | Nome completo ("Sunday"), mesmo quando a tela mostra só "S"                                                                                                                                                                                                                            |
+| Dia                   | Data por extenso: "Friday, January 16, 2026". A própria célula (`<td role="gridcell">`) recebe o foco, sem botão dentro                                                                                                                                                                |
+| Hoje                  | `aria-current="date"`                                                                                                                                                                                                                                                                  |
+| Dia selecionado       | `aria-selected="true"` na célula do dia, que é o elemento com foco, e o estado no nome: "Friday, January 16, 2026, selected"; com `range`, "start of period", "in period" ou "end of period". O VoiceOver não anuncia `aria-selected` numa `gridcell`, por isso o nome repete o estado |
+| Dia indisponível      | `aria-disabled="true"` e `unavailable-day-text` no nome: "Sunday, January 18, 2026, unavailable"                                                                                                                                                                                       |
+| Dia fora do intervalo | `aria-disabled="true"`: alcançável pelo teclado, mas não pode ser escolhido                                                                                                                                                                                                            |
+| Botões de mês         | `previous-month-label` e `next-month-label`; `aria-disabled` no limite de `min` e `max`                                                                                                                                                                                                |
+| Mês e ano no título   | Dois botões com `aria-expanded`: "January, choose month" e "2026, choose year". Na grade aberta, cada mês ou ano é uma `gridcell`, com `aria-selected` e o estado no nome como nos dias; a região do mês anuncia o ano ou os doze anos na tela                                         |
+| Erro                  | `aria-invalid`, a mensagem do caso ligada por `aria-describedby`; obrigatório: com `editable`, `aria-required`, e sem ele, `required-text` na descrição                                                                                                                                |
 
 O formato faz parte da descrição do campo, não só do placeholder, porque o
 placeholder some quando a pessoa começa a digitar e pode ser trocado por outro
