@@ -3,7 +3,7 @@ import '../../../../../packages/styles/dist/letsui.css';
 import '../../index.js';
 
 export default {
-  title: 'Form and options/Checkbox',
+  title: 'Form and options/Checkbox/Checkbox',
   argTypes: {
     label: { control: 'text' },
     name: { control: 'text' },
