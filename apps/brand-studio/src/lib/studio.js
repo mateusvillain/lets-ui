@@ -6,7 +6,14 @@
  * column of categories (Colors, then the foundation sections).
  */
 
-import { FAMILIES, STEPS, SECTIONS, brandVar } from './schema.js';
+import {
+  FAMILIES,
+  STEPS,
+  SECTIONS,
+  GOOGLE_FONTS,
+  googleFontOf,
+  brandVar,
+} from './schema.js';
 import {
   createDefaultState,
   toCssVars,
@@ -83,15 +90,6 @@ const caption = (text) =>
     class: 'st-caption',
   });
 
-/** No design system equivalent: `el()` creates HTML elements, and an `<svg>`
- * made that way renders inert, so the chevron is parsed from markup instead. */
-function chevronIcon() {
-  const span = el('span', { class: 'st-disclosure__chevron' });
-  span.innerHTML =
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.09473 8.84467C5.38762 8.55178 5.86238 8.55178 6.15527 8.84467L12 14.6894L17.8447 8.84467C18.1376 8.55178 18.6124 8.55178 18.9053 8.84467C19.1982 9.13756 19.1982 9.61232 18.9053 9.90522L12.5303 16.2802C12.2374 16.5731 11.7626 16.5731 11.4697 16.2802L5.09473 9.90522C4.80183 9.61232 4.80183 9.13756 5.09473 8.84467Z"/></svg>';
-  return span;
-}
-
 /**
  * `lui-native-select` reserves index 0 for the placeholder, so a real option's
  * position is always `index + 1`.
@@ -117,12 +115,26 @@ export function slugify(value) {
     .replace(/^-+|-+$/g, '');
 }
 
+/** Every font-family token the schema exposes. */
+const FONT_PATHS = SECTIONS.flatMap((section) => section.groups)
+  .flatMap((entry) => entry.fields)
+  .filter((item) => item.control === 'font-family')
+  .map((item) => item.path);
+
 export function mountStudio({ root, templates, meta }) {
   const defaults = createDefaultState(templates, meta);
   const stored = load();
 
   let state = stored ?? structuredClone(defaults);
   let theme = 'light';
+  /* Whether the Families fields pick from Google Fonts or take a typed stack.
+     Chrome, not brand: the token is a font stack either way. It starts on
+     when every family in the brand is already a Google Font, so reopening the
+     studio on such a brand shows the selects it was built with. */
+  let googleFontsMode = FONT_PATHS.every((path) =>
+    googleFontOf(state.foundation[path])
+  );
+
   // The standalone preview's "Tokens" specimen sheet is reachable by URL but
   // no longer has a studio control; the brand is only ever composed as the
   // landing page here.
@@ -171,9 +183,42 @@ export function mountStudio({ root, templates, meta }) {
       element.style.setProperty(name, value);
     }
 
+    syncGoogleFonts(document_);
+
     document_.dispatchEvent(
       new document_.defaultView.Event('lui-brand-update')
     );
+  }
+
+  /**
+   * A Google Font only renders once its stylesheet is in the document, so
+   * the preview gets one `<link>` per family in use. One per family rather
+   * than a combined request: the css2 API rejects the whole URL when any
+   * family in it lacks a requested weight, and a single bad entry should not
+   * blank out the other two.
+   */
+  function syncGoogleFonts(document_) {
+    const wanted = new Set(
+      FONT_PATHS.map(
+        (path) => googleFontOf(state.foundation[path])?.label
+      ).filter(Boolean)
+    );
+
+    for (const link of document_.head.querySelectorAll('[data-google-font]')) {
+      if (wanted.has(link.dataset.googleFont))
+        wanted.delete(link.dataset.googleFont);
+      else link.remove();
+    }
+
+    for (const family of wanted) {
+      const link = document_.createElement('link');
+      link.rel = 'stylesheet';
+      link.dataset.googleFont = family;
+      link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
+        family
+      ).replace(/%20/g, '+')}:wght@300;400;500;600;700&display=swap`;
+      document_.head.append(link);
+    }
   }
 
   /** The column ruler follows the Grid tab. */
@@ -213,52 +258,21 @@ export function mountStudio({ root, templates, meta }) {
     for (const badge of dom.panel.querySelectorAll('[data-contrast]')) {
       renderContrast(badge);
     }
-
-    for (const details of dom.panel.querySelectorAll('[data-group]')) {
-      const count = details.querySelectorAll(
-        '[data-token][data-changed="true"]'
-      ).length;
-      const badge = details.querySelector('.st-disclosure__badge');
-      badge.textContent = String(count);
-      badge.hidden = count === 0;
-    }
   }
 
-  /* ── Disclosure groups ─────────────────────────────────────
+  /* ── Groups ───────────────────────────────────────────────
    *
-   * Every section is a flat list of groups, and the longer ones (Typography,
-   * Grid) outgrow a single screen fast. Each group collapses independently,
-   * Figma/Framer inspector style, and carries a count of how many of its own
-   * tokens differ from the reference brand — the same signal the per-field
-   * dot already gives, surfaced one level up so a closed group is not a dead
-   * end. Which groups are open is chrome the studio remembers for the
-   * session; it is not part of the brand, so it does not go through `state`.
+   * Every section is a flat list of groups, each always open and headed by
+   * its label over a rule.
    */
-  const collapsedGroups = new Set();
-
-  function disclosure(key, label, content) {
-    const details = el('details', {
-      class: 'st-group st-disclosure',
-      open: !collapsedGroups.has(key),
-      'data-group': key,
-    });
-
-    details.append(
-      el('summary', { class: 'st-disclosure__summary' }, [
-        chevronIcon(),
-        el('span', { class: 'st-disclosure__label', text: label }),
-        el('span', { class: 'st-disclosure__rule' }),
-        el('span', { class: 'st-disclosure__badge', hidden: true }),
+  function group(label, content) {
+    return el('section', { class: 'st-group' }, [
+      el('div', { class: 'st-group__head' }, [
+        el('span', { class: 'st-group__label', text: label }),
+        el('span', { class: 'st-group__rule' }),
       ]),
-      ...[content].flat().filter(Boolean)
-    );
-
-    details.addEventListener('toggle', () => {
-      if (details.open) collapsedGroups.delete(key);
-      else collapsedGroups.add(key);
-    });
-
-    return details;
+      ...[content].flat().filter(Boolean),
+    ]);
   }
 
   /* ── Colors ──────────────────────────────────────────────── */
@@ -267,7 +281,7 @@ export function mountStudio({ root, templates, meta }) {
     return el('div', { class: 'st-section' }, [
       themeSwitch(),
       ...FAMILIES.map((family) =>
-        disclosure(`color:${family}`, family, [
+        group(family, [
           el('div', { class: 'st-group' }, [
             ramp(family),
             rampGenerator(family),
@@ -490,13 +504,14 @@ export function mountStudio({ root, templates, meta }) {
     return el(
       'div',
       { class: 'st-section' },
-      section.groups.map((group) =>
-        disclosure(`${section.id}:${group.label}`, group.label, [
-          group.hint ? caption(group.hint) : null,
+      section.groups.map((entry) =>
+        group(entry.label, [
+          entry.googleFonts ? googleFontsSwitch() : null,
+          entry.hint ? caption(entry.hint) : null,
           el(
             'div',
             { class: 'st-fields' },
-            group.fields.map((item) => control(item))
+            entry.fields.map((item) => control(item))
           ),
         ])
       )
@@ -525,7 +540,43 @@ export function mountStudio({ root, templates, meta }) {
     }
   }
 
+  function googleFontsSwitch() {
+    return el('div', { class: 'st-field' }, [
+      el('span', { class: 'st-field__label', text: 'Google Fonts' }),
+      el('lui-switch', {
+        size: 'md',
+        'aria-label': 'Google Fonts',
+        checked: googleFontsMode,
+        onchange: (event) => {
+          googleFontsMode = event.target.checked;
+          renderPanel();
+        },
+      }),
+    ]);
+  }
+
+  /** Picking a family writes its two-item stack; a typed stack is untouched
+   *  until a family is picked, so toggling the switch alone changes nothing. */
+  function googleFontControl(item, value, write) {
+    const select = el('lui-native-select', {
+      size: 'md',
+      'aria-label': item.label,
+      placeholder: 'Select a font',
+      options: GOOGLE_FONTS.map((font) => font.label).join(','),
+      selected: String(selectIndex(GOOGLE_FONTS, googleFontOf(value)?.value)),
+    });
+
+    select.addEventListener('change', (event) => {
+      const font = GOOGLE_FONTS[event.target.selected - 1];
+      if (font) write([...font.value]);
+    });
+
+    return field(item.path, item.label, select, { wide: true });
+  }
+
   function fontFamilyControl(item, value, write) {
+    if (googleFontsMode) return googleFontControl(item, value, write);
+
     const input = el('lui-input', {
       size: 'md',
       'aria-label': item.label,

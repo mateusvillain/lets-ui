@@ -140,83 +140,31 @@ body {
   margin-bottom: var(--lui-spacing-fixed-8);
 }
 
-/* ── Disclosure groups ─────────────────────────────────────── */
+/* ── Group headings ─────────────────────────────────────────── */
 
-/* `<details>` carries its own accessible expand/collapse semantics, so the
-   chrome only needs to restyle the marker and lay the summary row out —
-   nothing here replaces behaviour the element doesn't already have. */
-.st-disclosure__summary {
+.st-group__head {
   display: flex;
   align-items: center;
   gap: var(--lui-spacing-fixed-8);
-  padding-block: var(--lui-spacing-fixed-8);
-  border-radius: var(--lui-brand-border-radius-sm);
-  cursor: pointer;
-  list-style: none;
 }
 
-.st-disclosure__summary::-webkit-details-marker {
-  display: none;
-}
-
-.st-disclosure__summary:hover {
-  background: var(--lui-color-neutral-background-container);
-}
-
-.st-disclosure__summary:focus-visible {
-  outline: none;
-  box-shadow: var(--lui-focus-ring-neutral);
-}
-
-.st-disclosure__chevron {
-  display: flex;
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  color: var(--lui-color-neutral-icon-default);
-  transition: transform 0.15s ease;
-}
-
-.st-disclosure:not([open]) .st-disclosure__chevron {
-  transform: rotate(-90deg);
-}
-
-.st-disclosure__label {
+.st-group__label {
   flex-shrink: 0;
   color: var(--lui-color-neutral-text-body);
   font-size: var(--lui-brand-typography-font-size-1xs);
   font-weight: var(--lui-typography-weight-medium);
 }
 
-.st-disclosure__rule {
+.st-group__rule {
   flex: 1;
   height: var(--lui-border-width-1);
   background: var(--lui-color-neutral-border-subtle);
-}
-
-.st-disclosure__badge {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 var(--lui-spacing-fixed-8);
-  border-radius: var(--lui-border-radius-circle);
-  background: var(--lui-color-neutral-background-container);
-  color: var(--lui-color-neutral-text-caption);
-  font-size: var(--lui-brand-typography-font-size-2xs);
-}
-
-.st-disclosure__badge[hidden] {
-  display: none;
 }
 
 /* ── Panel sections ─────────────────────────────────────────── */
 
 .st-section,
 .st-group,
-.st-fields,
 .st-stack {
   display: flex;
   flex-direction: column;
@@ -233,9 +181,28 @@ body {
 /* Tighter than `.st-group`: once a field is a single compact row rather than
    a stacked floating-label input, 16px between rows reads as gaps in a form
    rather than rows in an inspector. Still enough that two label/control rows
-   don't read as glued together. */
+   don't read as glued together.
+
+   Wide controls take whatever the label leaves, so rows with labels of
+   different lengths ("Headings", "Code") would end up with controls of
+   different widths. A two-column grid gives every wide row in the list the
+   same label column — sized by the longest label — through subgrid. Regular
+   rows still span the whole row and keep their own flex layout; spanning a
+   flexible track, they don't feed into the label column's size. */
 .st-fields {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
   gap: var(--lui-spacing-fixed-8);
+}
+
+.st-fields > * {
+  grid-column: 1 / -1;
+}
+
+.st-fields > .st-field--wide {
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: var(--lui-spacing-fixed-16);
 }
 
 .st-stack {
