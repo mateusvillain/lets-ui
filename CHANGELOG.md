@@ -1,5 +1,36 @@
 # Changelog
 
+## v1.13.0
+
+### Added
+
+- New `lui-date-picker` Web Component and CSS-only `.date-picker` styles for picking a date or a date range from a calendar.
+  - `range` shows two months side by side and picks the range in two steps, with a live preview. `min`, `max`, `locale` and `first-day-of-week` shape the calendar, and `isDateDisabled` marks days as unavailable. The calendar title opens a month and year grid.
+  - `editable` turns the field into a text box with a calendar button beside it. Only digits are typed, and the mask adds the separators in the locale's order (`dd / mm / yyyy` in `pt-BR`, `mm / dd / yyyy` in `en-US`). `value` changes only when the text is a whole, real date. Otherwise the field reports `badInput` with `bad-input-text`. Pasting an ISO date also works.
+  - `value` is ISO 8601 in every locale: `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` for a range.
+  - It is form-associated and reports `valueMissing`, `rangeUnderflow`, `rangeOverflow` and `badInput`. The calendar follows the WAI-ARIA Date Picker Dialog pattern with full keyboard support. The format is part of the input's accessible description, and the chosen date is part of the calendar button's name.
+- New `lui-progress-bar` Web Component and CSS-only `.progress-bar` styles for showing how much of a task is done.
+  - `value`, `max`, `variant` (`primary`, `success`, `caution`, `danger`), `size` (`sm`, `md`, `lg`), `label-placement` (`top`, `inline`), `label`, `caption`, `hide-label` and `hide-value`.
+  - Without `value` the bar is indeterminate: a segment sweeps the track, and under `prefers-reduced-motion` the whole bar pulses instead.
+  - `value-text` replaces the computed percentage with a value in its own unit ("3.2 GB of 10 GB") and becomes `aria-valuetext`. In the CSS-only version, `--lui-progress-bar-value` sets the fill width.
+- Icon Button has a visual pressed state. With `aria-pressed="true"` it takes the neutral container fill, and hover, focus and `disabled` still apply on top of it. In forced-colors mode a pressed button uses the system `Highlight` colours and an inner ring, and `GrayText` when disabled.
+- Modal and Drawer close when an element marked `data-modal-close` or `data-drawer-close` inside them is clicked, as the docs already showed. A click that calls `preventDefault()`, or comes from a loading `lui-button`, leaves the dialog open, and focus returns as on every other close path.
+- New `tint($role)` function (`foreground`, `background`), and a `$tint` parameter on `states()`, `state-layer()` and `state-base()`. See Changed.
+
+### Changed
+
+- The primary, green and info (blue) palettes are rebuilt in OKLCH, so white text on their containers reaches 4.5:1. In light mode, `primary.4` moves from `#339bf0` (2.96:1) to `#0a7ac8`, `green.4` from `#23963b` (3.82:1) to `#0b892e`, and `blue.4` from `#339bf0` to `#0080a2`. The info hue moves from the primary's indigo to a distinct cyan-blue, so the two no longer read as the same colour. Dark mode stays close to the previous values. The tokens are authored as `colorSpace: "oklch"` with a `hex` fallback.
+- Filled components now tint their hover and pressed states with the colour opposite their label, so the label gains contrast instead of losing it. Filled buttons darken on hover in light mode and lighten in dark mode, and the neutral button does the opposite. This applies to Button, the current Pagination page, the selected card Tab, the Stepper circle, and checked Checkbox, Radio and Switch. Surface components keep their content tint. Previously the danger button fell to 4.40:1 on hover and the dark neutral button to 3.87:1 when pressed.
+- Component hosts are no longer exposed as extra `generic` nodes in the accessibility tree. Breadcrumb, Button, Card, Checkbox, Code Block, Icon Button, Input, Link, Radio, Select, Shortcut, Switch, Textarea and Tooltip read the `aria-*` attributes they accept into a property and remove them from the host.
+  - Host attribute selectors such as `lui-button[aria-expanded="true"]`, and `getAttribute('aria-*')` on the host, no longer match. Read the property instead (`el.ariaExpanded`), or style from the state's owner (`lui-modal[open]`).
+  - Modal and Drawer set their trigger's state through ARIA properties, and no longer add an `aria-controls` that pointed into their shadow root. Link now takes `aria-expanded` and `aria-haspopup`, so it works as their trigger.
+- **Brand Studio** (`apps/brand-studio`) has a new layout. The preview is a canvas with drag handles for its width and floating zoom controls. Every category sits in one scrolling column, each color ramp is a single strip of steps, and Dark mode is a switch in Colors. Font families can be picked from a curated list of Google Fonts, and the export includes a `README.md` with the registration steps and resolver fragment. Restore defaults and the width and scene selects are removed. It is a standalone app, and no published package changes.
+
+### Fixed
+
+- Escape closed every open Modal and Drawer at once when they were stacked. One Escape now closes only the topmost dialog, and only that dialog traps focus. Focus goes back to the opener inside the dialog that stays open. A Dropdown Menu, Toast or Code Block tooltip inside a dialog keeps its own Escape, and the dialog stays open.
+- Tooltip described an icon-only button with its own name, so screen readers announced it twice. A tooltip whose text repeats the trigger's name now leaves the trigger's description alone, and checks again when the name changes. While the tooltip describes a slotted trigger, its visible text is hidden from the accessibility tree, so browse mode does not read it again.
+
 ## v1.12.1
 
 ### Fixed
