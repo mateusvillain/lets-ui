@@ -29,6 +29,7 @@ afterEach(() => {
 
 const frame = () => new Promise((r) => requestAnimationFrame(r));
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const lockCount = () => document.body.dataset.luiLockCount ?? '0';
 
 const MARKUP = `
   <button id="opener">Open</button>
@@ -434,5 +435,133 @@ describe('lui-command-palette trigger slot', () => {
     await settle(palette);
     expect(trigger.hasAttribute('aria-haspopup')).toBe(false);
     expect(trigger.hasAttribute('aria-expanded')).toBe(false);
+  });
+});
+
+describe('lui-command-palette review fixes', () => {
+  it('ignores a held ⌘K', async () => {
+    const { palette } = await mount();
+    press(document, 'k', { metaKey: true });
+    await palette.updateComplete;
+    press(document, 'k', { metaKey: true, repeat: true });
+    await palette.updateComplete;
+    expect(palette.open).toBe(true);
+  });
+
+  it('does not open over an open Modal', async () => {
+    if (!customElements.get('lui-modal')) {
+      const { LuiModal } = await import('../modal/modal.ts');
+      customElements.define('lui-modal', LuiModal);
+    }
+    const { host, palette } = await mount();
+    const modal = document.createElement('lui-modal');
+    modal.hideTrigger = true;
+    host.append(modal);
+    modal.openModal();
+    await modal.updateComplete;
+
+    press(document, 'k', { ctrlKey: true });
+    await palette.updateComplete;
+    expect(palette.open).toBe(false);
+    modal.closeModal();
+    await modal.updateComplete;
+  });
+
+  it('tells the application the query was dropped when it reopens', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    await type(palette, 'cal');
+    $$(palette, '.command-palette__tag')[0].click();
+    palette.hide();
+    await settle(palette);
+
+    const queries = [];
+    palette.addEventListener('lui-search', (e) => queries.push(e.detail.query));
+    palette.show();
+    await settle(palette);
+    expect(queries).toEqual(['']);
+    expect(input(palette).value).toBe('');
+    expect(
+      $$(palette, '.command-palette__tag').every(
+        (t) => t.getAttribute('aria-pressed') === 'false'
+      )
+    ).toBe(true);
+  });
+
+  it('clears the search for a next step with clearSearch()', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    await type(palette, 'set');
+    const queries = [];
+    palette.addEventListener('lui-search', (e) => queries.push(e.detail.query));
+
+    palette.clearSearch();
+    await palette.updateComplete;
+    expect(queries).toEqual(['']);
+    expect(input(palette).value).toBe('');
+    expect(labels(palette)).toHaveLength(3);
+  });
+
+  it('stays open after a drag that ends on the backdrop', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const backdrop = $(palette, '[data-palette-backdrop]');
+    input(palette).dispatchEvent(
+      new PointerEvent('pointerdown', { bubbles: true, composed: true })
+    );
+    backdrop.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await palette.updateComplete;
+    expect(palette.open).toBe(true);
+
+    backdrop.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    backdrop.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await palette.updateComplete;
+    expect(palette.open).toBe(false);
+  });
+
+  it('leaves the icon text out of a title taken from the content', async () => {
+    const { palette } = await mount(`
+      <lui-command-palette>
+        <lui-command-item><span slot="icon">home</span>Dashboard</lui-command-item>
+      </lui-command-palette>
+    `);
+    palette.show();
+    await settle(palette);
+    expect(labels(palette)).toEqual(['Dashboard']);
+  });
+
+  it('does not re-read the items when it marks the trigger', async () => {
+    const { palette } = await mount(`
+      <lui-command-palette>
+        <button slot="trigger">Search</button>
+        <lui-command-item label="Calendar"><svg slot="icon"></svg></lui-command-item>
+      </lui-command-palette>
+    `);
+    await settle(palette);
+    const before = $(palette, '.command-palette__leading svg');
+    palette.show();
+    await settle(palette);
+    await frame();
+    expect($(palette, '.command-palette__leading svg')).toBe(before);
+  });
+
+  it('keeps the lock and the inert page when moved while open', async () => {
+    const { host, palette } = await mount();
+    palette.show();
+    await settle(palette);
+    expect(lockCount()).toBe('1');
+
+    host.append(palette);
+    await settle(palette);
+    expect(lockCount()).toBe('1');
+    expect(host.querySelector('#opener').inert).toBe(true);
+
+    palette.hide();
+    await settle(palette);
+    expect(lockCount()).toBe('0');
+    expect(host.querySelector('#opener').inert).toBe(false);
   });
 });

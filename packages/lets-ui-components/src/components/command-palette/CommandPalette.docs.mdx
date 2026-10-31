@@ -49,9 +49,15 @@ Com `no-filter`, o palette mostra todos os itens que recebe e deixa a busca para
 ```js
 palette.addEventListener('lui-search', async ({ detail: { query } }) => {
   const results = await api.search(query);
-  palette.replaceChildren(...results.map(toCommandItem));
+  // Troque só os resultados: `replaceChildren()` levaria junto o trigger.
+  palette
+    .querySelectorAll(':scope > :not([slot])')
+    .forEach((child) => child.remove());
+  palette.append(...results.map(toCommandItem));
 });
 ```
+
+Cada abertura começa uma busca nova: o campo e a tag voltam ao vazio, e, se havia texto digitado, `lui-search` é emitido com `query: ''` para a aplicação limpar os resultados que mostrava.
 
 Itens e grupos adicionados, removidos ou alterados depois da renderização são lidos de novo automaticamente.
 
@@ -100,7 +106,7 @@ Um elemento em `slot="trigger"` abre o palette ao ser clicado. Ele recebe `aria-
 
 ## Eventos
 
-- **`lui-select`**: um item foi ativado (Enter ou clique). `detail`: `{ value, label, item }`, onde `item` é o `lui-command-item` de origem. O palette fecha em seguida; chame `preventDefault()` para mantê-lo aberto, por exemplo para uma segunda etapa.
+- **`lui-select`**: um item foi ativado (Enter ou clique). `detail`: `{ value, label, item }`, onde `item` é o `lui-command-item` de origem. O palette fecha em seguida; chame `preventDefault()` para mantê-lo aberto, por exemplo para uma segunda etapa. Nesse caso, chame `clearSearch()` antes de trocar os itens, para que a etapa seguinte não herde a busca anterior.
 - **`lui-search`**: a busca mudou, ao digitar ou ao limpar o campo. `detail`: `{ query }`. Com `no-filter`, use-o para trocar os itens conforme a busca.
 
 Os dois borbulham e atravessam o shadow DOM.
@@ -124,6 +130,7 @@ Sem o Web Component, o visual fica disponível, mas abrir e fechar, filtrar, mov
 | Atributo         | Tipo      | Padrão  | Descrição                                                             |
 | ---------------- | --------- | ------- | --------------------------------------------------------------------- |
 | `open`           | `boolean` | `false` | Abre o palette. Também por `show()`, `hide()` e `toggle()`.           |
+| `clearSearch()`  | método    | —       | Esvazia a busca e solta a tag, como numa nova abertura.               |
 | `no-hotkey`      | `boolean` | `false` | Desliga o atalho ⌘K / Ctrl+K.                                         |
 | `no-filter`      | `boolean` | `false` | Desliga o filtro embutido, para resultados filtrados pela aplicação.  |
 | `slot="trigger"` | slot      | —       | Elemento que abre o palette ao ser clicado (ver [Trigger](#trigger)). |
@@ -199,7 +206,7 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 | Esc             | Fecha o palette.                               |
 | Tab / Shift+Tab | Circula entre campo, botão de limpar e tags.   |
 
-Com vários palettes na página, só o primeiro responde ao atalho. Use `no-hotkey` nos demais ou abra-os com `show()`.
+Com vários palettes na página, só o primeiro responde ao atalho. Use `no-hotkey` nos demais ou abra-os com `show()`. Com um Modal ou Drawer aberto, o atalho não abre o palette; segurar as teclas também não o faz abrir e fechar em sequência.
 
 ### Responsabilidades de quem usa
 

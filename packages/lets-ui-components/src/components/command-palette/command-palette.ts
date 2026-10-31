@@ -1,7 +1,10 @@
 import { LitElement, html, nothing, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
-import { DialogStackController } from '../../utils/dialog-stack.js';
+import {
+  DialogStackController,
+  hasOpenDialog,
+} from '../../utils/dialog-stack.js';
 import { FOCUSABLE, syncDialogTriggers } from '../../utils/dialog-trigger.js';
 import { FocusReturnController } from '../../utils/focus-return.js';
 import { inertOutside } from '../../utils/inert-outside.js';
@@ -80,6 +83,8 @@ interface ItemData {
   avatarSrc: string;
   tag: string;
   keywords: string;
+  /** Label, caption, description and keywords, normalized for the search. */
+  haystack: string;
   icon: Node | null;
   source: Element;
 }
@@ -101,6 +106,21 @@ function normalize(text: string): string {
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase();
+}
+
+// An item's own text, without the text of its icon (a ligature icon font, an
+// SVG <title>): the fallback title when there is no `label`.
+function ownText(el: Element): string {
+  return Array.from(el.childNodes)
+    .filter(
+      (node) =>
+        node.nodeType === Node.TEXT_NODE ||
+        (node instanceof Element && !node.hasAttribute('slot'))
+    )
+    .map((node) => node.textContent)
+    .join('')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export class LuiCommandPalette extends LitElement {
@@ -135,10 +155,17 @@ export class LuiCommandPalette extends LitElement {
   @query('[data-palette-input]') private _input!: HTMLInputElement;
 
   private _baseId = `lui-command-palette-${Math.random().toString(36).slice(2, 9)}`;
-  // The host's own attributes (`open`, the labels) are not item data.
+  // The host's own attributes (`open`, the labels) are not item data, and
+  // neither is the slotted trigger, whose ARIA the palette writes itself.
   private _observer = new MutationObserver((records) => {
-    const isItemData = (record: MutationRecord) =>
-      record.type !== 'attributes' || record.target !== this;
+    const isItemData = (record: MutationRecord) => {
+      if (record.type === 'attributes' && record.target === this) return false;
+      const el =
+        record.target instanceof Element
+          ? record.target
+          : record.target.parentElement;
+      return !el?.closest('[slot="trigger"]');
+    };
     if (records.some(isItemData)) this._readChildren();
   });
   private _visibleGroups: GroupData[] = [];
@@ -146,6 +173,9 @@ export class LuiCommandPalette extends LitElement {
   private _restoreInert: (() => void) | null = null;
   private _triggerTargets: Set<HTMLElement> = new Set();
   private _statusTimer: ReturnType<typeof setTimeout> | undefined;
+  // Where the last press on the backdrop began: a drag out of the dialog
+  // ends on the backdrop too, and must not close it.
+  private _pressedBackdrop = false;
 
   constructor() {
     super();
@@ -168,6 +198,13 @@ export class LuiCommandPalette extends LitElement {
       characterData: true,
     });
     this._readChildren();
+    // Moved in the DOM while open: disconnecting released the lock and the
+    // inert page, so they are taken again. The first connection leaves this
+    // to updated().
+    if (this.open && this.hasUpdated) {
+      lockBodyScroll();
+      this._restoreInert = inertOutside(this);
+    }
   }
 
   disconnectedCallback() {
@@ -193,9 +230,8 @@ export class LuiCommandPalette extends LitElement {
 
   willUpdate(changed: Map<string, unknown>) {
     if (changed.has('open') && this.open) {
-      // Every opening starts a new search.
-      this._query = '';
-      this._activeIndex = 0;
+      // Every opening starts a new search, filters included.
+      this._resetSearch();
     }
     // Before the update, not after: focus goes back to the opener while the
     // update finishes, and an inert opener cannot take it.
@@ -204,13 +240,22 @@ export class LuiCommandPalette extends LitElement {
       clearTimeout(this._statusTimer);
       this._status = '';
     }
-    this._visibleGroups = this._groups
-      .map((group) => ({
-        ...group,
-        items: group.items.filter((item) => this._matches(item)),
-      }))
-      .filter((group) => group.items.length > 0);
-    this._visible = this._visibleGroups.flatMap((group) => group.items);
+    // Only what changes the results filters them again: moving the highlight
+    // does not.
+    if (
+      ['open', '_query', '_tag', '_groups', 'noFilter'].some((key) =>
+        changed.has(key)
+      )
+    ) {
+      const query = normalize(this._query.trim());
+      this._visibleGroups = this._groups
+        .map((group) => ({
+          ...group,
+          items: group.items.filter((item) => this._matches(item, query)),
+        }))
+        .filter((group) => group.items.length > 0);
+      this._visible = this._visibleGroups.flatMap((group) => group.items);
+    }
     // Results shrank under the highlight: back to the first one.
     if (this._activeIndex >= this._visible.length) this._activeIndex = 0;
   }
@@ -287,10 +332,13 @@ export class LuiCommandPalette extends LitElement {
 
   // The first palette on the page takes the shortcut; the rest see it handled.
   private _handleHotkey = (event: KeyboardEvent) => {
-    if (this.noHotkey || event.defaultPrevented) return;
+    if (this.noHotkey || event.defaultPrevented || event.repeat) return;
     if (event.altKey || event.shiftKey) return;
     if (!(event.metaKey || event.ctrlKey)) return;
     if (event.key.toLowerCase() !== 'k') return;
+    // Not over a Modal or Drawer: the palette would open beneath it, with
+    // the dialog made inert and focus in a field nobody can see.
+    if (!this.open && hasOpenDialog()) return;
     event.preventDefault();
     this.toggle();
   };
@@ -298,22 +346,27 @@ export class LuiCommandPalette extends LitElement {
   private _readChildren() {
     let count = 0;
     const toItem = (el: Element): ItemData => {
-      const label = el.getAttribute('label') ?? el.textContent?.trim() ?? '';
+      const label = el.getAttribute('label') ?? ownText(el);
       const icon = el.querySelector(':scope > [slot="icon"]');
       const clone = icon?.cloneNode(true) as Element | undefined;
       clone?.removeAttribute('slot');
+      const caption = el.getAttribute('caption') ?? '';
+      const description = el.getAttribute('description') ?? '';
+      const keywords = el.getAttribute('keywords') ?? '';
       return {
         id: `${this._baseId}-option-${count++}`,
         value: el.getAttribute('value') ?? label,
         label,
-        caption: el.getAttribute('caption') ?? '',
-        description: el.getAttribute('description') ?? '',
+        caption,
+        description,
         shortcut: el.getAttribute('shortcut') ?? '',
         shortcutLabel: el.getAttribute('shortcut-label') ?? '',
         avatar: el.getAttribute('avatar') ?? '',
         avatarSrc: el.getAttribute('avatar-src') ?? '',
         tag: el.getAttribute('tag') ?? '',
-        keywords: el.getAttribute('keywords') ?? '',
+        keywords,
+        // Normalized once here, not on every search.
+        haystack: normalize([label, caption, description, keywords].join(' ')),
         icon: clone ?? null,
         source: el,
       };
@@ -357,14 +410,10 @@ export class LuiCommandPalette extends LitElement {
     if (this._tag && !tags.some((t) => t.value === this._tag)) this._tag = '';
   }
 
-  private _matches(item: ItemData): boolean {
+  private _matches(item: ItemData, query: string): boolean {
     if (this._tag && item.tag !== this._tag) return false;
-    if (this.noFilter) return true;
-    const query = normalize(this._query.trim());
-    if (!query) return true;
-    return normalize(
-      [item.label, item.caption, item.description, item.keywords].join(' ')
-    ).includes(query);
+    if (this.noFilter || !query) return true;
+    return item.haystack.includes(query);
   }
 
   private _activate(item: ItemData | undefined) {
@@ -411,9 +460,27 @@ export class LuiCommandPalette extends LitElement {
   }
 
   private _clear() {
-    this._query = '';
-    this._activeIndex = 0;
+    this.clearSearch();
     this._input.focus();
+  }
+
+  /**
+   * Empties the search field and drops the tag filter, as on a new opening.
+   * For a next step that keeps the palette open: call it from the
+   * `lui-select` listener that cancels the event, then swap the items.
+   */
+  clearSearch() {
+    this._resetSearch();
+  }
+
+  // Tells the application, through `lui-search`, whenever a query it may be
+  // showing results for is dropped: with `no-filter`, the items are its own.
+  private _resetSearch() {
+    const hadQuery = this._query !== '';
+    this._query = '';
+    this._tag = '';
+    this._activeIndex = 0;
+    if (!hadQuery) return;
     this.dispatchEvent(
       new CustomEvent('lui-search', {
         bubbles: true,
@@ -453,8 +520,14 @@ export class LuiCommandPalette extends LitElement {
     }
   }
 
+  private _handleBackdropPointerDown(event: PointerEvent) {
+    this._pressedBackdrop = event.target === this._backdrop;
+  }
+
   private _handleBackdropClick(event: MouseEvent) {
-    if (event.target === this._backdrop) this.hide();
+    const pressed = this._pressedBackdrop;
+    this._pressedBackdrop = false;
+    if (pressed && event.target === this._backdrop) this.hide();
   }
 
   private _renderItem(item: ItemData, index: number) {
@@ -575,6 +648,7 @@ export class LuiCommandPalette extends LitElement {
         class="command-palette__backdrop"
         data-palette-backdrop
         style="${this.open ? '' : 'display:none'}"
+        @pointerdown="${this._handleBackdropPointerDown}"
         @click="${this._handleBackdropClick}"
       >
         <div

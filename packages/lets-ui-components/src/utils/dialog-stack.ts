@@ -29,6 +29,11 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
+/** Whether any Modal, Drawer or Command Palette is open. */
+export function hasOpenDialog(): boolean {
+  return stack.length > 0;
+}
+
 /**
  * Gives keyboard handling to the topmost open dialog only.
  *

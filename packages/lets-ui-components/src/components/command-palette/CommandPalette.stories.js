@@ -355,6 +355,14 @@ const searchArticles = (query) =>
     );
   });
 
+// Swaps the results only: the slotted trigger stays where it is.
+const setResults = (palette, ...results) => {
+  palette
+    .querySelectorAll(':scope > :not([slot])')
+    .forEach((child) => child.remove());
+  palette.append(...results);
+};
+
 export const AsyncResults = () => {
   const root = document.createElement('div');
   root.innerHTML = palette(
@@ -369,7 +377,7 @@ export const AsyncResults = () => {
     const query = event.detail.query;
     latest = query;
     if (!query.trim()) {
-      el.replaceChildren();
+      setResults(el);
       el.emptyText = 'Type to search the documentation';
       return;
     }
@@ -388,7 +396,7 @@ export const AsyncResults = () => {
       item.innerHTML = icon('file-text');
       group.append(item);
     }
-    el.replaceChildren(group);
+    setResults(el, group);
   });
   return root;
 };
