@@ -437,6 +437,48 @@ export const ItemAnatomy = () =>
   );
 ItemAnatomy.storyName = 'Item anatomy';
 
+// Stories for the Command Item docs page.
+
+export const ItemText = () =>
+  palette(
+    '',
+    `
+    <lui-command-item value="title" label="Title only">${icon('folder')}</lui-command-item>
+    <lui-command-item value="caption" label="Q3 report" caption="Finance">${icon('file-text')}</lui-command-item>
+    <lui-command-item value="description" label="Invite member" description="Send an invitation by email">${icon('user-plus')}</lui-command-item>
+    <lui-command-item value="all" label="Product roadmap" caption="Product" description="Edited yesterday by you">${icon('file-text')}</lui-command-item>
+    <lui-command-item value="no-icon" label="No leading icon"></lui-command-item>
+  `,
+    'Open text examples'
+  );
+ItemText.storyName = 'Item: text';
+
+export const ItemShortcut = () =>
+  palette(
+    '',
+    `
+    <lui-command-item value="new-file" label="New file" shortcut="⌘N" shortcut-label="Command N">${icon('file-plus')}</lui-command-item>
+    <lui-command-item value="new-folder" label="New folder" shortcut="⇧,⌘,N" shortcut-label="Shift Command N">${icon('folder-plus')}</lui-command-item>
+    <lui-command-item value="theme" label="Toggle dark mode" shortcut="Ctrl,Alt,T" shortcut-label="Control Alt T">${icon('moon')}</lui-command-item>
+  `,
+    'Open shortcut examples'
+  );
+ItemShortcut.storyName = 'Item: shortcut';
+
+export const ItemKeywords = () =>
+  withSelection(
+    palette(
+      'placeholder="Try “agenda” or “mail”"',
+      `
+    <lui-command-item value="/calendar" label="Calendar" keywords="agenda events schedule">${icon('calendar')}</lui-command-item>
+    <lui-command-item value="/inbox" label="Inbox" keywords="mail messages">${icon('inbox')}</lui-command-item>
+    <lui-command-item value="/settings" label="Settings" keywords="preferences account">${icon('gear')}</lui-command-item>
+  `,
+      'Open keyword examples'
+    )
+  );
+ItemKeywords.storyName = 'Item: keywords and value';
+
 export const FieldWithClear = () => palette('', `${RECENT}${USERS}`);
 FieldWithClear.storyName = 'Field with clear';
 FieldWithClear.play = openWith('Cal');

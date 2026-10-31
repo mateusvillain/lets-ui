@@ -1,0 +1,206 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CommandPaletteStories from './CommandPalette.stories';
+
+<Meta of={CommandPaletteStories} name="Command Item" />
+
+# Command Item
+
+Cada resultado do [Command Palette](?path=/docs/navigation-command-palette--docs) é um `lui-command-item`. O elemento é só dados: não tem visual próprio e só funciona como filho de um `lui-command-palette`, direto ou dentro de um `lui-command-group`. O palette lê os atributos e renderiza a linha no próprio shadow root.
+
+Uma linha reúne um ícone ou avatar à esquerda, um título, uma `caption` ao lado dele, uma `description` abaixo e um atalho à direita. Só o título é obrigatório.
+
+<Canvas of={CommandPaletteStories.Default} />
+<Controls
+  of={CommandPaletteStories.Default}
+  include={[
+    'label',
+    'caption',
+    'description',
+    'shortcut',
+    'shortcut-label',
+    'avatar',
+    'avatar-src',
+    'value',
+    'tag',
+    'keywords',
+    'icon',
+  ]}
+/>
+
+Os controles editam o primeiro resultado (Calendar) da story acima. Abra o palette para ver o efeito.
+
+## Anatomia
+
+Um item com ícone e todas as partes, um com avatar e um só com o título.
+
+<Canvas of={CommandPaletteStories.ItemAnatomy} />
+
+## Título, caption e descrição
+
+O título vem de `label` ou, sem ele, do conteúdo de texto do elemento. A `caption` é um complemento curto na mesma linha, como uma categoria ou um local; a `description` ocupa uma linha abaixo, para um detalhe que ajude a escolher entre resultados parecidos.
+
+<Canvas of={CommandPaletteStories.ItemText} />
+
+## Ícone
+
+Qualquer elemento filho com `slot="icon"` vira o ícone à esquerda, em geral um SVG. Use `fill="currentColor"` (ou `stroke`) para que ele siga a cor de ícone do item. Sem ícone e sem avatar, a linha começa direto pelo título.
+
+```html
+<lui-command-item label="Calendar">
+  <svg slot="icon" viewBox="0 0 24 24" fill="currentColor">…</svg>
+</lui-command-item>
+```
+
+Os ícones dos exemplos são do [Let's UI Icons](https://icons.lets-ui.com/).
+
+## Avatar
+
+Para resultados que são pessoas, `avatar` (o nome) troca o ícone por um [Avatar](?path=/docs/content-avatar--docs) com as iniciais, e `avatar-src` mostra uma foto. Passe os dois: se a foto falhar ao carregar, as iniciais aparecem no lugar. Com avatar, o slot `icon` é ignorado.
+
+Na story: Alex e James têm foto; Maria só tem o nome; a foto de Emily falha e ela volta às iniciais.
+
+<Canvas of={CommandPaletteStories.UserResults} />
+
+## Atalho
+
+`shortcut` exibe as teclas à direita da linha, com o mesmo formato do [Shortcut](?path=/docs/typography-shortcut--docs): uma tecla por item, separadas por vírgula (`"⇧,⌘,N"`). Uma tecla combinada pode vir num item só (`"⌘N"`).
+
+O atalho é só informativo: o palette não registra a combinação na página. Quem usa é responsável por fazê-la funcionar fora do palette.
+
+`shortcut-label` dá o atalho por extenso para leitores de tela, já que símbolos como `⌘` e `⇧` são lidos de formas diferentes por cada um.
+
+<Canvas of={CommandPaletteStories.ItemShortcut} />
+
+## Palavras-chave e valor
+
+`keywords` são termos extras que a busca considera sem mostrá-los na tela: sinônimos, nomes antigos, termos em outro idioma. Na story, "agenda" encontra Calendar e "mail" encontra Inbox.
+
+`value` é o que a aplicação recebe em `lui-select`, em `event.detail.value`; sem ele, vale o título. O evento traz também `event.detail.item`, o próprio `lui-command-item`, para ler outros atributos dele. A linha abaixo do trigger mostra o que foi enviado.
+
+<Canvas of={CommandPaletteStories.ItemKeywords} />
+
+## Filtro por tag
+
+`tag` liga o item a uma `lui-command-tag` do palette pelo `value` dela. Com a tag pressionada, só os itens com o mesmo `tag` aparecem. Um item aceita uma tag; sem `tag`, ele some sempre que alguma tag está pressionada. Veja [Tags](?path=/docs/navigation-command-palette--docs#tags) no Command Palette.
+
+## Atualização dinâmica
+
+Itens adicionados, removidos ou alterados depois da renderização são lidos de novo automaticamente: basta mudar o DOM. É assim que [resultados assíncronos](?path=/docs/navigation-command-palette--docs#resultados-assíncronos) trocam a lista a cada busca.
+
+```js
+const item = document.createElement('lui-command-item');
+item.setAttribute('label', 'Q3 report');
+item.setAttribute('caption', 'Finance');
+palette.querySelector('lui-command-group').append(item);
+```
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a linha é montada com as classes abaixo, dentro do `role="listbox"` do palette. O destaque (`is-active` e `aria-selected`) e os IDs de `aria-labelledby` e `aria-describedby` ficam a cargo de quem usa.
+
+```html
+<div
+  id="option-calendar"
+  class="command-palette__item is-active"
+  role="option"
+  aria-selected="true"
+  aria-labelledby="option-calendar-label"
+  aria-describedby="option-calendar-caption option-calendar-shortcut"
+>
+  <span class="command-palette__leading" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="currentColor">…</svg>
+  </span>
+  <span class="command-palette__text">
+    <span class="command-palette__title-row">
+      <span id="option-calendar-label" class="command-palette__title"
+        >Calendar</span
+      >
+      <span id="option-calendar-caption" class="command-palette__caption"
+        >Page</span
+      >
+    </span>
+  </span>
+  <span class="shortcut command-palette__shortcut" aria-hidden="true">
+    <kbd class="shortcut__key">⌘1</kbd>
+  </span>
+  <span id="option-calendar-shortcut" class="command-palette__sr-only"
+    >Command 1</span
+  >
+</div>
+```
+
+## Propriedades
+
+| Atributo         | Tipo     | Padrão     | Descrição                                                                          |
+| ---------------- | -------- | ---------- | ---------------------------------------------------------------------------------- |
+| `label`          | `string` | conteúdo   | Título do item.                                                                    |
+| `value`          | `string` | `label`    | Valor enviado em `event.detail.value` de `lui-select`.                             |
+| `caption`        | `string` | `''`       | Texto curto ao lado do título.                                                     |
+| `description`    | `string` | `''`       | Linha abaixo do título.                                                            |
+| `shortcut`       | `string` | `''`       | Teclas do atalho exibido à direita, separadas por vírgula, como em `lui-shortcut`. |
+| `shortcut-label` | `string` | `shortcut` | Atalho por extenso para leitores de tela, como `"Command 1"`.                      |
+| `avatar`         | `string` | `''`       | Nome da pessoa. Troca o ícone por um Avatar com as iniciais.                       |
+| `avatar-src`     | `string` | `''`       | Foto do Avatar.                                                                    |
+| `tag`            | `string` | `''`       | Valor da `lui-command-tag` que filtra este item.                                   |
+| `keywords`       | `string` | `''`       | Termos extras considerados pela busca, sem aparecer na tela.                       |
+| `slot="icon"`    | slot     | —          | Ícone à esquerda. Ignorado quando há `avatar` ou `avatar-src`.                     |
+
+A busca compara o texto digitado com `label`, `caption`, `description` e `keywords`, ignorando maiúsculas e acentos.
+
+## Acessibilidade
+
+- Cada item vira um `role="option"` dentro do `role="listbox"` do palette.
+- O nome acessível é só o título, por `aria-labelledby`. Caption, descrição e atalho entram como descrição, por `aria-describedby`, e são lidos depois do nome.
+- O item não recebe foco: o foco fica no campo de busca, e o item destacado é indicado por `aria-activedescendant` no campo e `aria-selected="true"` no item. Assim a pessoa continua digitando enquanto navega pelas setas.
+- Ícone e avatar são decorativos (`aria-hidden="true"`): o título já diz o que o item é. O avatar não repete o nome da pessoa.
+- As teclas visíveis do atalho são escondidas da árvore de acessibilidade; o leitor de tela recebe `shortcut-label` (ou o próprio `shortcut`) num texto oculto.
+- O destaque do teclado e o hover do mouse usam o mesmo estado visual; o clique pressionado usa o estado `pressed`. Em modo de alto contraste, o item destacado ganha um contorno na cor de seleção do sistema.
+
+### Responsabilidades de quem usa
+
+- Escreva títulos curtos e distintos: o nome acessível é só o título, então dois itens com o mesmo título soam iguais. Diferencie-os pela caption ou pela descrição.
+- Não ponha no ícone uma informação que falte no texto: ele é escondido do leitor de tela.
+- Em atalhos com símbolos, informe `shortcut-label` por extenso.
+- Faça o atalho exibido funcionar de fato na página; o palette só o mostra.
+- Use `keywords` para sinônimos e termos que as pessoas realmente buscam, não para repetir o título.
+- Dê a `value` um identificador estável (uma rota, um ID), não um texto que pode ser traduzido.
+
+## Uso
+
+```html
+<lui-command-palette>
+  <lui-command-group label="Pages">
+    <lui-command-item
+      value="/calendar"
+      label="Calendar"
+      caption="Page"
+      shortcut="⌘,1"
+      shortcut-label="Command 1"
+      keywords="agenda events"
+      tag="pages"
+    >
+      <svg slot="icon" viewBox="0 0 24 24" fill="currentColor">…</svg>
+    </lui-command-item>
+  </lui-command-group>
+
+  <lui-command-group label="People">
+    <lui-command-item
+      value="user-42"
+      label="Maria Smith"
+      caption="Finance"
+      description="maria@example.com"
+      avatar="Maria Smith"
+      avatar-src="/avatars/maria.jpg"
+      tag="people"
+    ></lui-command-item>
+  </lui-command-group>
+</lui-command-palette>
+
+<script>
+  document
+    .querySelector('lui-command-palette')
+    .addEventListener('lui-select', (event) => {
+      console.log(event.detail.value, event.detail.item);
+    });
+</script>
+```
