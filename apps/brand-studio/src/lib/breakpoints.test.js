@@ -1,5 +1,5 @@
 /**
- * The breakpoint scale and the width selector read from it. The messages are
+ * The breakpoint scale. The messages are
  * checked on a synthetic scale, where the neighbours are far enough apart to
  * tell the two directions of the failure apart; the invariants are checked
  * again on the reference brand's real files, so a versioned scale that stops
@@ -16,10 +16,6 @@ import {
   BREAKPOINT_PREFIX,
   breakpointBounds,
   breakpointError,
-  viewportEntries,
-  viewportModel,
-  viewportSelection,
-  viewportWidth,
 } from './breakpoints.js';
 import { FOUNDATION_FIELDS } from './schema.js';
 import { createDefaultState } from './state.js';
@@ -160,76 +156,6 @@ describe('breakpointBounds', () => {
   });
 });
 
-describe('viewport selector', () => {
-  it('lists the brand own breakpoints, widest first', () => {
-    expect(viewportEntries(foundation)).toEqual([
-      { step: '1xl', width: 1440 },
-      { step: 'lg', width: 1024 },
-      { step: 'md', width: 768 },
-      { step: 'sm', width: 640 },
-      { step: '1xs', width: 320 },
-    ]);
-  });
-
-  it('puts Fill first and labels every step with its width', () => {
-    const model = viewportModel(foundation);
-
-    expect(model.steps).toEqual(['full', '1xl', 'lg', 'md', 'sm', '1xs']);
-    expect(model.labels).toEqual([
-      'Fill',
-      '1440 — 1xl',
-      '1024 — lg',
-      '768 — md',
-      '640 — sm',
-      '320 — 1xs',
-    ]);
-  });
-
-  it('changes its signature only when a breakpoint changes', () => {
-    const edited = foundationOf({ ...DEFAULTS, sm: 700 });
-
-    expect(viewportModel(foundation).signature).toBe(
-      viewportModel(foundationOf(DEFAULTS)).signature
-    );
-    expect(viewportModel(edited).signature).not.toBe(
-      viewportModel(foundation).signature
-    );
-  });
-
-  it('keeps the selection on the breakpoint after an edit', () => {
-    const model = viewportModel(foundation);
-    const selected = viewportSelection(model.steps, 'sm');
-    expect(model.steps[selected - 1]).toBe('sm');
-
-    // `sm` moves; the label changes but the selection is still `sm`.
-    const edited = viewportModel(foundationOf({ ...DEFAULTS, sm: 700 }));
-    const next = viewportSelection(edited.steps, 'sm');
-
-    expect(edited.steps[next - 1]).toBe('sm');
-    expect(edited.labels[next - 1]).toBe('700 — sm');
-  });
-
-  it('falls back to Fill when the previous step is gone or unset', () => {
-    const { steps } = viewportModel(foundation);
-
-    expect(viewportSelection(steps, 'full')).toBe(1);
-    expect(viewportSelection(steps, undefined)).toBe(1);
-    expect(viewportSelection(steps, '3xl')).toBe(1);
-  });
-
-  it('simulates the width the edited breakpoint now holds', () => {
-    expect(viewportWidth(foundation, 'sm')).toBe(640);
-    expect(viewportWidth(foundationOf({ ...DEFAULTS, sm: 700 }), 'sm')).toBe(
-      700
-    );
-  });
-
-  it('simulates no width at all for Fill', () => {
-    expect(viewportWidth(foundation, 'full')).toBeNull();
-    expect(viewportWidth(foundation, undefined)).toBeNull();
-  });
-});
-
 describe('the reference brand', () => {
   const brandFile = (name) =>
     JSON.parse(
@@ -271,17 +197,6 @@ describe('the reference brand', () => {
 
     for (let index = 1; index < widths.length; index += 1) {
       expect(widths[index]).toBeGreaterThan(widths[index - 1]);
-    }
-  });
-
-  it('feeds the selector its own widths, widest first', () => {
-    const model = viewportModel(reference);
-
-    expect(model.steps).toEqual(['full', ...[...BREAKPOINT_ORDER].reverse()]);
-    for (const step of BREAKPOINT_ORDER) {
-      expect(viewportWidth(reference, step)).toBe(
-        reference[`${BREAKPOINT_PREFIX}${step}`].value
-      );
     }
   });
 });

@@ -3,6 +3,7 @@ import { property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
 import styles from './input.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
 
 const EYE_CLOSED = html`
@@ -42,7 +43,7 @@ const ICON_PLUS = html`
   </svg>
 `;
 
-export class LuiInput extends LitElement {
+export class LuiInput extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
 

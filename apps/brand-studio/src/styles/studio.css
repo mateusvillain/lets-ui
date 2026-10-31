@@ -28,9 +28,9 @@ body {
 .st {
   display: grid;
 
-  /* Wide enough for the five tab labels to sit on one line without the strip
-     scrolling — a tab clipped at rest reads as a bug, not as an affordance. */
-  grid-template-columns: 464px minmax(0, 1fr);
+  /* Preview first, inspector second — canvas on the left, properties on the
+     right, the way Figma, Framer and Penpot all lay out an editor. */
+  grid-template-columns: minmax(0, 1fr) 360px;
   height: 100dvh;
 }
 
@@ -40,7 +40,7 @@ body {
   min-height: 0;
   min-width: 0;
   background: var(--lui-color-neutral-background-surface);
-  border-right: var(--lui-border-width-1) solid
+  border-left: var(--lui-border-width-1) solid
     var(--lui-color-neutral-border-subtle);
 }
 
@@ -48,7 +48,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--lui-spacing-fixed-16);
-  padding: var(--lui-spacing-fixed-24) var(--lui-spacing-fixed-24) 0;
+  padding: var(--lui-spacing-fixed-24);
+  border-bottom: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-subtle);
 }
 
 /* Field hints do not wrap, so the panel clips whatever still overflows instead
@@ -62,7 +64,33 @@ body {
 .st-panel__body {
   min-height: 0;
   overflow: clip auto;
-  padding: var(--lui-spacing-fixed-24);
+}
+
+/* ── Categories ─────────────────────────────────────────────── */
+
+/* One scrolling column, so the categories need a stronger break than the
+   groups inside them: a rule across the panel's full width between them,
+   and a heading that sticks to the top while its own groups scroll past. */
+.st-category {
+  padding: 0 var(--lui-spacing-fixed-24) var(--lui-spacing-fixed-32);
+}
+
+.st-category + .st-category {
+  border-top: var(--lui-border-width-1) solid
+    var(--lui-color-neutral-border-subtle);
+}
+
+/* The surface background hides the groups sliding underneath. Negative
+   margins stretch it to the panel's edges, so a scrolled group never peeks
+   out beside the heading. */
+.st-category__title {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: block;
+  margin: 0 calc(-1 * var(--lui-spacing-fixed-24)) var(--lui-spacing-fixed-8);
+  padding: var(--lui-spacing-fixed-16) var(--lui-spacing-fixed-24);
+  background: var(--lui-color-neutral-background-surface);
 }
 
 .st-panel__foot {
@@ -83,53 +111,28 @@ body {
   display: none;
 }
 
-/* Collapsing is an action of the panel; expanding can only live in the stage
-   bar, which is all that is left on screen. Each button shows up in the state
-   where it makes sense. */
-.st[data-collapsed='false'] [data-action='expand-panel'] {
+/* The toggle's icon points where the panel goes: right to hide it, left to
+   bring it back. */
+.st[data-collapsed='false'] .st-icon--show,
+.st[data-collapsed='true'] .st-icon--hide {
   display: none;
 }
 
+/* No bar on top: the canvas takes the whole stage and its controls float
+   over it, anchored to the stage rather than scrolling with the canvas. */
 .st-stage {
+  position: relative;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   min-width: 0;
 }
 
 /* ── Panel header and footer ────────────────────────────────── */
 
-/* The tabs do not shrink: if the brand has long labels, the bar scrolls. */
-.st-panel__head lui-tabs {
-  overflow-x: auto;
-}
-
-.st-panel__title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--lui-spacing-fixed-8);
-}
-
-.st-brandmark {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  gap: var(--lui-spacing-fixed-8);
-}
-
 .st-identity {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--lui-spacing-fixed-16);
-}
-
-.st-foot__row {
-  display: flex;
-  gap: var(--lui-spacing-fixed-8);
-}
-
-.st-foot__row > * {
-  flex: 1;
 }
 
 .st-panel__foot lui-tag {
@@ -137,11 +140,31 @@ body {
   margin-bottom: var(--lui-spacing-fixed-8);
 }
 
+/* ── Group headings ─────────────────────────────────────────── */
+
+.st-group__head {
+  display: flex;
+  align-items: center;
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-group__label {
+  flex-shrink: 0;
+  color: var(--lui-color-neutral-text-body);
+  font-size: var(--lui-brand-typography-font-size-1xs);
+  font-weight: var(--lui-typography-weight-medium);
+}
+
+.st-group__rule {
+  flex: 1;
+  height: var(--lui-border-width-1);
+  background: var(--lui-color-neutral-border-subtle);
+}
+
 /* ── Panel sections ─────────────────────────────────────────── */
 
 .st-section,
 .st-group,
-.st-fields,
 .st-stack {
   display: flex;
   flex-direction: column;
@@ -151,9 +174,35 @@ body {
   gap: var(--lui-spacing-fixed-32);
 }
 
-.st-group,
-.st-fields {
+.st-group {
   gap: var(--lui-spacing-fixed-16);
+}
+
+/* Tighter than `.st-group`: once a field is a single compact row rather than
+   a stacked floating-label input, 16px between rows reads as gaps in a form
+   rather than rows in an inspector. Still enough that two label/control rows
+   don't read as glued together.
+
+   Wide controls take whatever the label leaves, so rows with labels of
+   different lengths ("Headings", "Code") would end up with controls of
+   different widths. A two-column grid gives every wide row in the list the
+   same label column — sized by the longest label — through subgrid. Regular
+   rows still span the whole row and keep their own flex layout; spanning a
+   flexible track, they don't feed into the label column's size. */
+.st-fields {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--lui-spacing-fixed-8);
+}
+
+.st-fields > * {
+  grid-column: 1 / -1;
+}
+
+.st-fields > .st-field--wide {
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: var(--lui-spacing-fixed-16);
 }
 
 .st-stack {
@@ -173,30 +222,48 @@ body {
   display: block;
 }
 
-/* The dot marks a token that is no longer the reference brand's default. */
+/* A property row: a muted label on the left, the control hugging the right
+   edge — the inspector layout of Figma/Framer/Penpot. The control is capped
+   under half the row on purpose, so it reads as a compact value box rather
+   than a form field stretched to the panel's width; `--wide` lifts the cap
+   for controls that need the room (a bounds pair, or a value next to a
+   presets select). */
 .st-field {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lui-spacing-fixed-16);
+  padding-block: var(--lui-spacing-fixed-4);
 }
 
-.st-field[data-changed='true']::before,
-.st-color[data-changed='true'] .st-color__step::after {
+.st-field__label {
+  flex-shrink: 0;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: var(--lui-brand-typography-font-size-1xs);
+}
+
+.st-field__control {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 55%;
+  margin-left: auto;
+}
+
+.st-field--wide .st-field__control {
+  max-width: 100%;
+}
+
+/* The dot marks a token that is no longer the reference brand's default. */
+.st-field[data-changed='true']::before {
   content: '';
   position: absolute;
+  top: 0;
+  right: 0;
   width: 6px;
   height: 6px;
   border-radius: var(--lui-border-radius-circle);
   background: var(--lui-color-primary-icon-default);
-}
-
-.st-field[data-changed='true']::before {
-  top: 6px;
-  right: 0;
-}
-
-.st-color[data-changed='true'] .st-color__step::after {
-  top: 50%;
-  right: -2px;
-  transform: translateY(-50%);
 }
 
 /* ── Colors ────────────────────────────────────────────────── */
@@ -207,23 +274,74 @@ body {
   gap: var(--lui-spacing-fixed-8);
 }
 
-.st-color {
+/* The eight steps as one continuous strip, so the ramp reads as a
+   progression. Each step is a button selecting what the editor below works
+   on; its number and marker take black or white, whichever the step's own
+   color lets read. */
+.st-ramp__strip {
   display: grid;
-  grid-template-columns: 20px 40px minmax(0, 1fr);
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-brand-border-radius-md);
+  overflow: hidden;
+}
+
+.st-step {
+  position: relative;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--st-step-color);
+  color: var(--st-step-ink);
+  font: inherit;
+  font-size: var(--lui-brand-typography-font-size-2xs);
+  cursor: pointer;
+}
+
+.st-step[aria-pressed='true'] {
+  z-index: 1;
+  box-shadow:
+    inset 0 0 0 2px var(--st-step-ink),
+    inset 0 0 0 3px var(--st-step-color);
+}
+
+.st-step:focus-visible {
+  z-index: 2;
+  outline: 2px solid var(--lui-color-primary-border-default);
+  outline-offset: -2px;
+}
+
+/* The ink color rather than the primary dot: on a primary ramp the primary
+   dot would vanish into its own swatch. */
+.st-step[data-changed='true']::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--lui-border-radius-circle);
+  background: currentcolor;
+}
+
+/* Swatch and hex edit the same value, so they sit together as one control. */
+.st-color {
+  display: flex;
   align-items: center;
   gap: var(--lui-spacing-fixed-8);
 }
 
-.st-color__step {
-  position: relative;
-  color: var(--lui-color-neutral-text-caption);
-  font-size: var(--lui-brand-typography-font-size-2xs);
+.st-color lui-input {
+  flex: 1;
+  min-width: 0;
 }
 
 /* No design system equivalent: the browser's native color picker. */
 .st-swatch {
-  width: 40px;
-  height: 40px;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: var(--lui-border-width-1) solid
     var(--lui-color-neutral-border-default);
@@ -255,62 +373,171 @@ body {
 
 /* ── Stage ──────────────────────────────────────────────────── */
 
+.st-float {
+  position: absolute;
+  z-index: 1;
+}
+
+/* The panel toggle hugs the edge the panel docks to. */
+.st-float--top-end {
+  top: var(--lui-spacing-fixed-16);
+  right: var(--lui-spacing-fixed-16);
+}
+
+.st-float--bottom-end {
+  right: var(--lui-spacing-fixed-16);
+  bottom: var(--lui-spacing-fixed-16);
+}
+
+/* Floating over the canvas, the controls need their own surface to stay
+   legible on top of whatever the preview shows beneath it. */
 .st-toolbar {
   display: flex;
   align-items: center;
-  gap: var(--lui-spacing-fixed-24);
-  padding: var(--lui-spacing-fixed-16) var(--lui-spacing-fixed-24);
+  gap: var(--lui-spacing-fixed-4);
+  padding: var(--lui-spacing-fixed-4);
+  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-brand-border-radius-md);
   background: var(--lui-color-neutral-background-surface);
-  border-bottom: var(--lui-border-width-1) solid
-    var(--lui-color-neutral-border-subtle);
+  box-shadow: var(--lui-elevation-floating);
 }
 
-/* The guide is not a preview control: it hugs the opposite corner to stay out
-   of the way of the ones that are. `lui-modal` is `display: contents`, so what
-   occupies the row is the trigger itself. */
-.st-toolbar [slot='trigger'] {
-  margin-left: auto;
+/* Separate surfaces stacked down the stage's edge, one per action. */
+.st-float-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--lui-spacing-fixed-8);
 }
 
-/* The icon announces the theme the click turns on, not the one already on. */
-.st[data-preview-theme='light'] .st-icon--sun,
-.st[data-preview-theme='dark'] .st-icon--moon {
-  display: none;
+.st-zoom__value {
+  min-width: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--lui-brand-border-radius-sm);
+  background: none;
+  color: var(--lui-color-neutral-text-body);
+  font: inherit;
+  font-size: var(--lui-brand-typography-font-size-2xs);
+  text-align: center;
+  cursor: pointer;
 }
 
+.st-zoom__value:hover,
+.st-zoom__value:focus-visible {
+  color: var(--lui-color-primary-icon-default);
+}
+
+.st-zoom__value:focus-visible {
+  outline: none;
+  box-shadow: var(--lui-focus-ring-primary);
+}
+
+/* The canvas: `.st-frame` is the scrollable stage around `.st-artboard`,
+   which takes up exactly the room the scaled preview does. Zoom is a
+   transform on `.st-viewport` inside it — a transform alone never changes
+   layout, so without the artboard a zoomed-out preview would keep scrolling
+   as if it were full size. */
 .st-frame {
+  display: flex;
   min-height: 0;
   padding: var(--lui-spacing-fixed-24);
   overflow: auto;
 }
 
+/* `margin-inline: auto` rather than `justify-content: center` on the frame:
+   it centres the artboard while it fits and stops at the start edge once it
+   overflows, where `center` would push the left side out of scroll reach.
+   `flex-shrink: 0` makes the stage scroll instead of squeezing the canvas.
+   Handles and the size label live here, outside the transform, so they keep
+   their size at every zoom. */
+.st-artboard {
+  --st-viewport-border: var(--lui-border-width-1);
+  --st-viewport-outer: calc(
+    var(--st-viewport-width, 1280px) + 2 * var(--st-viewport-border)
+  );
+
+  position: relative;
+  flex-shrink: 0;
+  width: calc(var(--st-viewport-outer) * var(--st-zoom, 1));
+  margin-inline: auto;
+}
+
 /* `content-box` so the chosen width is genuinely the viewport: with
    `border-box` the border would eat 2px and the preview would switch
-   breakpoints early. */
-.st-frame iframe {
+   breakpoints early. Its height is the artboard's divided by the zoom, so the
+   scaled preview always fills the stage top to bottom — zooming out shows more
+   of the page, not a shorter box. */
+.st-viewport {
   box-sizing: content-box;
+  width: var(--st-viewport-width, 1280px);
+  height: calc(100% / var(--st-zoom, 1) - 2 * var(--st-viewport-border));
+  border: var(--st-viewport-border) solid var(--lui-color-neutral-border-subtle);
+  border-radius: var(--lui-brand-border-radius-lg);
+  background: var(--lui-color-neutral-background-surface);
+  transform: scale(var(--st-zoom, 1));
+  transform-origin: top left;
+}
+
+.st-viewport__size {
+  position: absolute;
+  top: calc(-1 * var(--lui-spacing-fixed-24));
+  left: 50%;
+  color: var(--lui-color-neutral-text-caption);
+  font-size: var(--lui-brand-typography-font-size-2xs);
+  white-space: nowrap;
+  transform: translate(-50%, -100%);
+}
+
+.st-viewport iframe {
   display: block;
   width: 100%;
   height: 100%;
-  margin: 0 auto;
-  border: var(--lui-border-width-1) solid var(--lui-color-neutral-border-subtle);
-  border-radius: var(--lui-brand-border-radius-lg);
-  background: var(--lui-color-neutral-background-surface);
+  border: 0;
+  background: transparent;
 }
 
-/* ── The guide's code block ─────────────────────────────────── */
+/* Visible on hover/focus only — a canvas's resize handles are not meant to
+   compete with its content at rest. */
+.st-viewport__handle {
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--lui-brand-border-radius-sm);
+  background: var(--lui-color-neutral-border-default);
+  cursor: ew-resize;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease;
+}
 
-.st-code {
-  margin: var(--lui-spacing-fixed-16) 0 0;
-  padding: var(--lui-spacing-fixed-16);
-  max-height: 320px;
-  overflow: auto;
-  border-radius: var(--lui-brand-border-radius-md);
-  background: var(--lui-color-neutral-background-container);
-  color: var(--lui-color-neutral-text-body);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: var(--lui-brand-typography-font-size-2xs);
-  white-space: pre;
+.st-viewport__handle:hover,
+.st-viewport__handle:focus-visible {
+  opacity: 1;
+  background: var(--lui-color-primary-icon-default);
+}
+
+.st-viewport__handle:focus-visible {
+  outline: none;
+  box-shadow: var(--lui-focus-ring-primary);
+}
+
+.st-artboard:hover .st-viewport__handle {
+  opacity: 1;
+}
+
+.st-viewport__handle--left {
+  left: -3px;
+}
+
+.st-viewport__handle--right {
+  right: -3px;
 }
 
 @media (width <= 1023px) {
@@ -321,12 +548,12 @@ body {
   }
 
   .st-panel {
-    border-right: 0;
-    border-bottom: var(--lui-border-width-1) solid
+    border-left: 0;
+    border-top: var(--lui-border-width-1) solid
       var(--lui-color-neutral-border-subtle);
   }
 
-  .st-frame iframe {
+  .st-artboard {
     height: 70dvh;
   }
 }

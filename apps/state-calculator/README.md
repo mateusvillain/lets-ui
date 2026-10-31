@@ -3,11 +3,19 @@
 Shows the hover and pressed colours the Let's UI state layer derives from a
 colour pair.
 
-Let's UI does not pick state colours. A component mixes its content colour into
-its resting colour with `color-mix()`: 8% (hover) and 16% (pressed) into a
-background, 40% and 56% into a border. The calculator runs that mix for any
-pair, shows the contrast each state keeps, and renders a sample you can hover
-and press.
+Let's UI does not pick state colours. A component mixes a tint into its resting
+colour with `color-mix()`: 8% (hover) and 16% (pressed) into a background, 40%
+and 56% into a border. The tint depends on the component:
+
+- **Surface components** (a menu item, a line tab, a field border) tint with
+  their own content colour.
+- **Filled components** (a button, the current page, a checked box) tint with
+  the colour opposite their label — the `$tint` of `states()` in
+  `packages/styles/src/utilities/_mixins.scss` — so the fill moves away from the
+  label and the label gains contrast on hover and press.
+
+The calculator runs that mix for any colours, shows the contrast the label (or
+the border) keeps in each state, and renders a sample you can hover and press.
 
 ## Running it
 
@@ -24,8 +32,10 @@ first.
 ## How it works
 
 - **Applies to** picks the amounts. Background measures each state against the
-  content colour (text must stay at 4.5:1). Border measures it against the
+  label colour (text must stay at 4.5:1). Border measures it against the
   surface behind it (a component boundary needs 3:1).
+- **Label colour** and **State tint** are separate: on a filled component they
+  are opposites, on a surface component the same colour.
 - **Start from** loads the tokens a real component uses, resolved in the theme
   selected at the top. Editing any colour switches back to custom colours.
 - **Live sample** can be pinned to rest, hover or pressed; while it is live,

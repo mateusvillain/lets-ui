@@ -136,15 +136,28 @@ Escalas de 8 tons, do mais claro ao mais escuro. Use a função SCSS `color($pal
 
 Hover e pressed não têm cor própria — nem por marca, nem por variante, nem por
 tema. São uma única camada translúcida em 8% e 16% misturada ao background de
-repouso do componente, e a tinta dessa camada é a **cor de conteúdo do próprio
-componente** (`currentColor`), a on-color do seu fundo. Use a função SCSS
-`state($state)` ou o mixin `state-layer($bg)`.
+repouso do componente. Use a função SCSS `state($state)` ou o mixin
+`state-layer($bg)`. Não há token aqui: as duas quantidades não variam por tema
+nem por marca, então vivem como constantes em `_functions.scss`, junto da lógica
+que as usa.
 
-Como conteúdo e fundo já precisam ter contraste entre si, a camada clareia o que
-é escuro e escurece o que é claro sem medir nada — e sem precisar saber sobre
-que superfície um componente transparente está apoiado. Não há token aqui: as
-duas quantidades não variam por tema nem por marca, então vivem como constantes
-em `_functions.scss`, junto da lógica que as usa.
+A cor dessa camada depende do tipo de componente:
+
+- **Componentes de superfície** — transparentes ou sobre o fundo neutro, como um
+  item de menu, uma aba ou um botão de ícone — misturam a **cor do próprio
+  conteúdo** (`currentColor`). Como conteúdo e fundo já contrastam entre si, a
+  camada escurece o que é claro e clareia o que é escuro sem medir nada, e sem
+  precisar saber sobre que superfície o componente está apoiado.
+- **Componentes preenchidos** — um fundo sólido com rótulo por cima, como um
+  botão, a página atual, uma aba card selecionada ou uma caixa marcada —
+  misturam a **cor oposta à do rótulo**, pelo parâmetro `$tint` de `states()`
+  (ou de `state-layer()` / `state-base()`), declarado junto com o fundo. Um
+  preenchimento colorido já nasce perto do contraste mínimo, e misturar nele a
+  cor do rótulo aproxima um do outro: o texto perderia contraste justamente no
+  hover. Com a cor oposta, o fundo se afasta do rótulo e o contraste **aumenta**
+  no hover e no pressed. Na prática, um preenchimento com rótulo claro escurece
+  no tema claro e clareia no escuro; um com rótulo escuro, como o botão neutro,
+  faz o inverso.
 
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '32px' }}>
   {[
@@ -168,6 +181,38 @@ em `_functions.scss`, junto da lógica que as usa.
               border: '1px solid var(--lui-color-neutral-border-subtle)',
               backgroundColor: `color-mix(in srgb, currentColor ${amount}, ${bg})`,
             }} />
+            <span style={{ display: 'block', fontSize: '10px', marginTop: '4px' }}>
+              {label} · {amount}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '32px' }}>
+  {[
+    ['primary', 'var(--lui-color-primary-background-container)', 'Preenchido · tinta oposta ao rótulo'],
+    ['danger', 'var(--lui-color-danger-background-container)', 'Preenchido · tinta oposta ao rótulo'],
+  ].map(([key, bg, title]) => (
+    <div key={key} style={{
+      padding: '12px',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <span style={{ display: 'block', fontSize: '11px', marginBottom: '8px' }}>{title} ({key})</span>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+        {[['0%', 'rest'], ['8%', 'hover'], ['16%', 'pressed']].map(([amount, label]) => (
+          <div key={label}>
+            <div style={{
+              height: '40px',
+              borderRadius: '6px',
+              display: 'grid',
+              placeItems: 'center',
+              color: 'var(--lui-color-neutral-text-inverse)',
+              backgroundColor: `color-mix(in srgb, var(--lui-color-gray-8) ${amount}, ${bg})`,
+            }}>Aa</div>
             <span style={{ display: 'block', fontSize: '10px', marginTop: '4px' }}>
               {label} · {amount}
             </span>

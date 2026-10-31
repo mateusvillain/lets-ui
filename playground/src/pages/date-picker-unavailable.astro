@@ -1,0 +1,446 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+
+// One string per scenario feeds both the live picker and its code block, so
+// the preview never drifts from what is on screen.
+const SETUP = `const unavailable = new Set([
+  '2026-01-18',
+  '2026-01-19',
+  '2026-01-25',
+  '2026-02-06',
+]);
+
+// Local date parts: toISOString() reads UTC and lands on the
+// previous day east of Greenwich.
+const iso = (date) =>
+  [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-');
+
+document.querySelectorAll('lui-date-picker').forEach((picker) => {
+  picker.isDateDisabled = (date) => unavailable.has(iso(date));
+});`;
+
+const scenarios = [
+  {
+    title: '1. Calendário: clique bloqueado',
+    description:
+      'Abrir o calendário. Dias 18, 19 e 25 riscados, com <code>aria-disabled</code>. Clicar neles não muda o valor.',
+    code: `<lui-date-picker
+  name="checkin"
+  label="Check-in"
+  locale="pt-BR"
+  value="2026-01-16"
+  dialog-label="Escolher data"
+  previous-month-label="Mês anterior"
+  next-month-label="Próximo mês"
+  choose-month-label="escolher mês"
+  choose-year-label="escolher ano"
+  previous-years-label="Anos anteriores"
+  next-years-label="Próximos anos"
+  previous-year-label="Ano anterior"
+  next-year-label="Próximo ano"
+  selected-day-text="selecionado"
+  unavailable-day-text="indisponível"
+></lui-date-picker>`,
+  },
+  {
+    title: '2. Indisponível × fora de min/max',
+    description:
+      '<code>min="2026-01-12"</code>, <code>max="2026-01-28"</code>. Dias fora dos limites só ficam opacos; os indisponíveis também são riscados.',
+    code: `<lui-date-picker
+  name="checkin"
+  label="Check-in"
+  locale="pt-BR"
+  value="2026-01-16"
+  min="2026-01-12"
+  max="2026-01-28"
+  dialog-label="Escolher data"
+  previous-month-label="Mês anterior"
+  next-month-label="Próximo mês"
+  choose-month-label="escolher mês"
+  choose-year-label="escolher ano"
+  previous-years-label="Anos anteriores"
+  next-years-label="Próximos anos"
+  previous-year-label="Ano anterior"
+  next-year-label="Próximo ano"
+  selected-day-text="selecionado"
+  unavailable-day-text="indisponível"
+></lui-date-picker>`,
+  },
+  {
+    title: '3. Digitar uma data indisponível',
+    description:
+      'Digitar <code>18/01/2026</code> e submeter: erro com <code>unavailable-date-text</code>. Comparar com <code>30/02/2026</code> (data inválida) e <code>01/02/2027</code> (fora de <code>max</code>).',
+    reset: true,
+    code: `<lui-date-picker
+  editable
+  required
+  name="checkin"
+  label="Check-in"
+  locale="pt-BR"
+  max="2026-12-31"
+  format-text="dd / mm / aaaa"
+  error-text="Informe a data de check-in."
+  bad-input-text="Digite uma data válida."
+  range-error-text="Escolha uma data até 31/12/2026."
+  unavailable-date-text="Não há vagas nesta data."
+  dialog-label="Escolher data"
+  previous-month-label="Mês anterior"
+  next-month-label="Próximo mês"
+  choose-month-label="escolher mês"
+  choose-year-label="escolher ano"
+  previous-years-label="Anos anteriores"
+  next-years-label="Próximos anos"
+  previous-year-label="Ano anterior"
+  next-year-label="Próximo ano"
+  selected-day-text="selecionado"
+  unavailable-day-text="indisponível"
+></lui-date-picker>`,
+  },
+  {
+    title: '4. Range atravessando um dia indisponível',
+    description:
+      '<code>16–21/01</code> passa pelos dias 18 e 19 e é válido: só as pontas são checadas. No calendário, os dias 18, 19 e 25 não podem ser início nem fim.',
+    code: `<lui-date-picker
+  range
+  name="stay"
+  label="Estadia"
+  locale="pt-BR"
+  value="2026-01-16/2026-01-21"
+  unavailable-date-text="Não há vagas em uma das datas."
+  dialog-label="Escolher datas"
+  previous-month-label="Mês anterior"
+  next-month-label="Próximo mês"
+  choose-month-label="escolher mês"
+  choose-year-label="escolher ano"
+  previous-years-label="Anos anteriores"
+  next-years-label="Próximos anos"
+  previous-year-label="Ano anterior"
+  next-year-label="Próximo ano"
+  range-start-text="Data de entrada escolhida. Escolha a data de saída."
+  selected-day-text="selecionado"
+  range-start-day-text="início do período"
+  in-range-day-text="no período"
+  range-end-day-text="fim do período"
+  unavailable-day-text="indisponível"
+></lui-date-picker>`,
+  },
+  {
+    title: '5. Range com a ponta num dia indisponível',
+    description:
+      '<code>value="2026-01-16/2026-01-25"</code> definido no HTML: o fim cai no dia 25. Submeter mostra o erro.',
+    code: `<lui-date-picker
+  range
+  name="stay"
+  label="Estadia"
+  locale="pt-BR"
+  value="2026-01-16/2026-01-25"
+  unavailable-date-text="Não há vagas em uma das datas."
+  dialog-label="Escolher datas"
+  previous-month-label="Mês anterior"
+  next-month-label="Próximo mês"
+  choose-month-label="escolher mês"
+  choose-year-label="escolher ano"
+  previous-years-label="Anos anteriores"
+  next-years-label="Próximos anos"
+  previous-year-label="Ano anterior"
+  next-year-label="Próximo ano"
+  range-start-text="Data de entrada escolhida. Escolha a data de saída."
+  selected-day-text="selecionado"
+  range-start-day-text="início do período"
+  in-range-day-text="no período"
+  range-end-day-text="fim do período"
+  unavailable-day-text="indisponível"
+></lui-date-picker>`,
+  },
+  {
+    title: '6. Range em dois campos',
+    description:
+      'Digitar <code>16/01/2026</code> no início e <code>18/01/2026</code> no fim, e submeter: só a caixa do fim fica com <code>aria-invalid="true"</code>.',
+    reset: true,
+    code: `<lui-date-picker
+  editable
+  range
+  range-fields="two"
+  name="stay"
+  label="Estadia"
+  locale="pt-BR"
+  format-text="dd / mm / aaaa"
+  start-label="Data de entrada"
+  end-label="Data de saída"
+  unavailable-date-text="Não há vagas nesta data."
+  dialog-label="Escolher datas"
+  previous-month-label="Mês anterior"
+  next-month-label="Próximo mês"
+  choose-month-label="escolher mês"
+  choose-year-label="escolher ano"
+  previous-years-label="Anos anteriores"
+  next-years-label="Próximos anos"
+  previous-year-label="Ano anterior"
+  next-year-label="Próximo ano"
+  range-start-text="Data de entrada escolhida. Escolha a data de saída."
+  selected-day-text="selecionado"
+  range-start-day-text="início do período"
+  in-range-day-text="no período"
+  range-end-day-text="fim do período"
+  unavailable-day-text="indisponível"
+></lui-date-picker>`,
+  },
+  {
+    title: '7. Mês e ano pelo título',
+    description:
+      'Clicar em <code>janeiro</code> troca os dias pelos 12 meses do ano; em <code>2026</code>, por 12 anos. <code>min="2015-03-01"</code> e <code>max="2030-12-31"</code>: meses e anos fora ficam desabilitados e as setas param. Escolher 2015 cai em março, o primeiro mês permitido. Esc volta aos dias; um segundo Esc fecha.',
+    code: `<lui-date-picker
+  name="checkin"
+  label="Check-in"
+  locale="pt-BR"
+  value="2026-01-16"
+  min="2015-03-01"
+  max="2030-12-31"
+  dialog-label="Escolher data"
+  previous-month-label="Mês anterior"
+  next-month-label="Próximo mês"
+  choose-month-label="escolher mês"
+  choose-year-label="escolher ano"
+  previous-years-label="Anos anteriores"
+  next-years-label="Próximos anos"
+  previous-year-label="Ano anterior"
+  next-year-label="Próximo ano"
+  selected-day-text="selecionado"
+  unavailable-day-text="indisponível"
+></lui-date-picker>`,
+  },
+  {
+    title: '8. Em inglês',
+    description:
+      'Sem <code>locale</code> nem textos: tudo vem dos padrões em inglês (<code>en-US</code>). O título fica <code>January 2026</code>, a semana começa no domingo e o leitor de tela ouve <code>January, choose month</code> e <code>2026, choose year</code>. Mesmos <code>min</code> e <code>max</code> do cenário 7.',
+    code: `<lui-date-picker
+  name="checkin"
+  label="Check-in"
+  value="2026-01-16"
+  min="2015-03-01"
+  max="2030-12-31"
+></lui-date-picker>`,
+  },
+];
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Picker — datas indisponíveis — Let's UI Playground</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--lui-brand-typography-font-family-body);
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+        margin: 0;
+        padding: 40px 24px 80px;
+      }
+
+      .page-header {
+        margin-bottom: 40px;
+        max-width: 640px;
+      }
+
+      .page-header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+
+      .page-header p,
+      .card p.description {
+        font-size: 0.875rem;
+        color: var(--lui-color-neutral-text-subtle);
+        margin: 0 0 8px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 24px;
+        align-items: start;
+      }
+
+      .card {
+        background: var(--lui-color-neutral-background-default);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-height: 520px;
+      }
+
+      .card h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .card form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+
+      .output {
+        background: var(--lui-color-neutral-background-subtle);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.8125rem;
+        font-family: monospace;
+        min-height: 48px;
+        white-space: pre-wrap;
+      }
+
+      code {
+        font-size: 0.8125rem;
+      }
+
+      .page-header lui-code-block {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>Date Picker — datas indisponíveis</h1>
+      <p>
+        Dias indisponíveis em todos os exemplos: <code>18</code>,
+        <code>19</code> e <code>25</code> de janeiro de 2026, mais
+        <code>06</code> de fevereiro. Definidos por <code>isDateDisabled</code>,
+        em JS, com o mesmo script para todos os campos:
+      </p>
+      <lui-code-block label="script.js" language="javascript" set:text={SETUP} />
+      <p>
+        Submeter o form dispara a validação: a mensagem do erro aparece abaixo
+        do campo, e a saída mostra a <code>validity</code>.
+      </p>
+    </header>
+
+    <div class="grid">
+      {
+        scenarios.map((scenario) => (
+          <section class="card">
+            <h2>{scenario.title}</h2>
+            <p class="description" set:html={scenario.description} />
+            <form data-demo>
+              <Fragment set:html={scenario.code} />
+              <div class="actions">
+                {scenario.reset && (
+                  <lui-button type="reset" variant="secondary" size="md">
+                    Reset
+                  </lui-button>
+                )}
+                <lui-button type="submit" variant="primary" size="md">
+                  Submit
+                </lui-button>
+              </div>
+            </form>
+            <div class="output" />
+            <lui-code-block label="index.html" language="html" set:text={scenario.code} />
+          </section>
+        ))
+      }
+    </div>
+
+    <script>
+      import '@lets-ui/components';
+      import { LuiCodeBlock } from '@lets-ui/components';
+      import hljs from 'highlight.js/lib/core';
+      import javascript from 'highlight.js/lib/languages/javascript';
+      import xml from 'highlight.js/lib/languages/xml';
+
+      hljs.registerLanguage('javascript', javascript);
+      hljs.registerLanguage('xml', xml);
+      LuiCodeBlock.highlighter = (code: string, language: string) =>
+        hljs.getLanguage(language)
+          ? hljs.highlight(code, { language }).value
+          : null;
+
+      // The same setup the header shows.
+      const unavailable = new Set([
+        '2026-01-18',
+        '2026-01-19',
+        '2026-01-25',
+        '2026-02-06',
+      ]);
+      const iso = (date: Date) =>
+        [
+          date.getFullYear(),
+          String(date.getMonth() + 1).padStart(2, '0'),
+          String(date.getDate()).padStart(2, '0'),
+        ].join('-');
+
+      document
+        .querySelectorAll<HTMLElement & { isDateDisabled: unknown }>(
+          'lui-date-picker'
+        )
+        .forEach((picker) => {
+          picker.isDateDisabled = (date: Date) => unavailable.has(iso(date));
+        });
+
+      // `_internals` is private in TS but readable at runtime: enough for a
+      // test page.
+      const describe = (picker: any) => {
+        const internals = picker._internals as ElementInternals;
+        const flags = [
+          'valueMissing',
+          'badInput',
+          'rangeUnderflow',
+          'rangeOverflow',
+          'customError',
+        ].filter((flag) => internals.validity[flag as keyof ValidityState]);
+        return [
+          `value: ${picker.value || '(vazio)'}`,
+          `válido: ${internals.validity.valid}`,
+          flags.length ? `flags: ${flags.join(', ')}` : '',
+          internals.validationMessage
+            ? `mensagem: ${internals.validationMessage}`
+            : '',
+        ]
+          .filter(Boolean)
+          .join('\n');
+      };
+
+      document
+        .querySelectorAll<HTMLFormElement>('form[data-demo]')
+        .forEach((form) => {
+          const output = form.nextElementSibling as HTMLElement;
+          const picker = form.querySelector('lui-date-picker')!;
+          const show = () => (output.textContent = describe(picker));
+
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            show();
+          });
+          // Submit does not fire on an invalid form; the `invalid` event does.
+          picker.addEventListener('invalid', show);
+          picker.addEventListener('change', show);
+          form.addEventListener('reset', () => (output.textContent = ''));
+        });
+    </script>
+  </body>
+</html>

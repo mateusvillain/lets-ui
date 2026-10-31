@@ -130,6 +130,30 @@ export function resolverSnippet(slug) {
   );
 }
 
+/**
+ * The README shipped inside the export. The studio no longer has a screen for
+ * the registration steps, and the zip is the one thing that is sure to travel
+ * with the files — so the steps, and the resolver fragment for this very
+ * slug, go with them.
+ */
+export function registrationGuide(slug) {
+  return `# ${slug}
+
+Brand exported from Let's UI Brand Studio.
+
+1. Save these files under \`packages/lets-ui-tokens/tokens/brand/${slug}/\`.
+2. Add the contexts below to \`packages/lets-ui-tokens/letsui.resolver.json\`.
+3. Mirror the \`lets-ui\` permutations in
+   \`packages/lets-ui-tokens/terrazzo.config.js\` for \`${slug}\`.
+4. Run \`pnpm build\` at the repository root and set
+   \`data-brand="${slug}"\` on the page.
+
+\`\`\`json
+${resolverSnippet(slug)}
+\`\`\`
+`;
+}
+
 export function save(state) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -144,14 +168,6 @@ export function load() {
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
-  }
-}
-
-export function clear() {
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    /* nothing to clear */
   }
 }
 

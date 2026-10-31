@@ -1,0 +1,5 @@
+@use 'packages/styles/src/components/progress-bar' as *;
+
+:host {
+  display: block;
+}

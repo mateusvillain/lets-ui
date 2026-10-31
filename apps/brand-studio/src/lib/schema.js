@@ -66,6 +66,64 @@ export const FONT_STACKS = [
 ];
 
 /**
+ * Google Fonts offered when the Families group is switched to them. Curated
+ * rather than fetched: the full catalogue needs an API key, and every family
+ * here ships all five weights the brand can alias (300–700), so no weight the
+ * user picks falls back to a synthesized one. Each is written as a two-item
+ * stack — the family, then its generic category.
+ */
+const googleFonts = (category, names) =>
+  names.map((name) => ({ label: name, value: [name, category] }));
+
+export const GOOGLE_FONTS = [
+  ...googleFonts('sans-serif', [
+    'DM Sans',
+    'Figtree',
+    'Geist',
+    'IBM Plex Sans',
+    'Inter',
+    'Lexend',
+    'Manrope',
+    'Montserrat',
+    'Nunito Sans',
+    'Open Sans',
+    'Outfit',
+    'Plus Jakarta Sans',
+    'Poppins',
+    'Raleway',
+    'Roboto',
+    'Rubik',
+    'Sora',
+    'Source Sans 3',
+    'Space Grotesk',
+    'Urbanist',
+    'Work Sans',
+  ]),
+  ...googleFonts('serif', [
+    'Fraunces',
+    'IBM Plex Serif',
+    'Literata',
+    'Newsreader',
+    'Noto Serif',
+    'Roboto Serif',
+    'Source Serif 4',
+  ]),
+  ...googleFonts('monospace', [
+    'Fira Code',
+    'Geist Mono',
+    'IBM Plex Mono',
+    'JetBrains Mono',
+    'Red Hat Mono',
+    'Roboto Mono',
+    'Source Code Pro',
+  ]),
+];
+
+/** The Google Fonts entry a stack was picked from, if it was. */
+export const googleFontOf = (stack) =>
+  GOOGLE_FONTS.find((font) => font.label === stack?.[0]);
+
+/**
  * The three smallest steps are a single fixed size: they already sit at the
  * floor of the readable range, so interpolating them down on narrow screens
  * only costs legibility. Everything from `sm` up stays fluid.
@@ -94,6 +152,7 @@ export const SECTIONS = [
     groups: [
       {
         label: 'Families',
+        googleFonts: true,
         fields: [
           field('typography.font-family.heading', 'Headings', 'font-family'),
           field('typography.font-family.body', 'Body', 'font-family'),

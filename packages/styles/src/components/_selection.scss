@@ -16,7 +16,7 @@
   border: width(1) solid;
 
   // The on-colour the unchecked border tints with. `checked-base` replaces it
-  // with the mark colour, which is what its background layer needs instead.
+  // with the mark colour, and tints its fill with the opposite of the mark.
   color: text(body);
 
   @include state-border-layer(stroke(neutral, subtle), all 0.2s ease);
@@ -49,14 +49,18 @@
   outline-offset: 3px;
 }
 
-// A checked control has no text, so `currentColor` would otherwise be whatever
-// the label inherits — dark, which would darken the filled background instead
-// of lightening it. Declaring the colour here states the pair the state layer
-// needs and gives the mark (check, dot, thumb) a single source: `currentColor`.
+// Checked, the control is a filled one: the mark (check, dot, thumb) takes the
+// surface colour through `currentColor`, and the states tint the fill with the
+// theme's foreground so the mark keeps its contrast on hover and press.
 @mixin checked-base {
   color: bg(surface, neutral);
 
-  @include states(primary, primary, $bg: bg(container, primary));
+  @include states(
+    primary,
+    primary,
+    $bg: bg(container, primary),
+    $tint: tint(foreground)
+  );
 }
 
 // $input-type-sel = full native input selector, e.g. "input[type='checkbox']"

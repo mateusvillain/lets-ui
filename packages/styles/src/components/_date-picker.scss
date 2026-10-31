@@ -1,0 +1,389 @@
+@use 'sass:map';
+@use '../utilities/functions' as *;
+@use '../utilities/tokens.map' as *;
+@use '../utilities/mixins' as *;
+@use 'field';
+
+// The trigger is a field like any other — same border, states and sizes as the
+// Input — but a button, since the value is picked rather than typed. With
+// `editable`, the control holds a text box and a button that opens the
+// calendar.
+.date-picker {
+  @include field.wrapper;
+
+  &__head {
+    @include field.head;
+  }
+
+  &__label-wrap {
+    @include field.label-wrap;
+  }
+
+  &__optional,
+  &__message {
+    @include field.secondary-text;
+  }
+
+  // The popover is positioned against the control alone, so a hint or an
+  // error message below it does not push the calendar down.
+  &__anchor {
+    position: relative;
+  }
+
+  &__control {
+    @include field.control;
+
+    font: inherit;
+    text-align: start;
+    margin: 0;
+    outline: 0;
+
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+  }
+
+  &__value {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: text(body);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__input {
+    @include field.input-element;
+
+    &::placeholder {
+      color: text(caption);
+    }
+  }
+
+  // `range-fields="two"`: a text box per end in one control. Each box is as
+  // wide as its date, so the ends sit as close as in the single-field range.
+  // `field-sizing` is not everywhere yet; where it is missing, 14ch fits the
+  // 14 characters of `dd / mm / yyyy`. The focused box takes a tint of its
+  // own, since the ring lights the whole control and would not say which end
+  // is being typed.
+  &__control--split {
+    gap: fixed(0);
+  }
+
+  &__control--split &__input {
+    flex: 0 1 auto;
+    padding-inline: fluid(2);
+    border-radius: radius(xs);
+    field-sizing: content;
+
+    @supports not (field-sizing: content) {
+      width: 14ch;
+    }
+
+    &:focus {
+      background-color: bg(surface, primary);
+    }
+  }
+
+  &__separator {
+    flex-shrink: 0;
+    padding-inline: fluid(4);
+    color: text(body);
+  }
+
+  &__toggle {
+    @include center;
+
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    border-radius: radius(xs);
+    outline: 0;
+    cursor: pointer;
+
+    // A ring of its own, so focus on the button reads apart from focus on the
+    // text box, which lights the whole control.
+    &:focus-visible {
+      box-shadow: focus-ring(primary);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  // The calendar button keeps the far end of a two-box control.
+  &__control--split &__toggle {
+    margin-inline-start: auto;
+  }
+
+  &__sr-only {
+    @include sr-only;
+  }
+
+  &--placeholder .date-picker__value {
+    color: text(caption);
+  }
+
+  &__icon {
+    display: flex;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: icon(neutral);
+
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: currentcolor;
+    }
+  }
+
+  &__popover {
+    position: absolute;
+    top: calc(100% + fluid(8));
+    left: 0;
+    z-index: 100;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  @include field.states(
+    'date-picker',
+    ':is(.date-picker__control, .date-picker__input)'
+  );
+}
+
+@each $key, $props in field.$size {
+  .date-picker--#{$key} {
+    @include field.size-body('date-picker', $props);
+
+    .date-picker__value,
+    .date-picker__input {
+      @include font-scale(map.get($props, body));
+    }
+  }
+}
+
+// One surface holding one month, or two side by side for a range.
+.date-picker-calendar {
+  @include flex(row, flex-start, flex-start, fluid(16));
+
+  width: max-content;
+  box-sizing: border-box;
+  padding: fluid(8);
+  background-color: bg(surface, secondary);
+  border-radius: radius(md);
+  box-shadow: elevation(base);
+
+  // Two months side by side are about 500px wide, more than a phone has, so
+  // a range stacks them on the mobile range.
+  @include media-down('1xs') {
+    flex-direction: column;
+  }
+
+  &__month {
+    @include flex(column, stretch, flex-start, fluid(8));
+  }
+
+  &__header {
+    @include flex(row, center, space-between, fluid(8));
+  }
+
+  &__nav,
+  &__nav-spacer {
+    flex-shrink: 0;
+    width: fixed(40);
+    height: fixed(40);
+  }
+
+  &__nav {
+    @include center;
+
+    box-sizing: border-box;
+    padding: fluid(8);
+    margin: 0;
+    border: 0;
+    border-radius: radius(md);
+    color: icon(neutral);
+    cursor: pointer;
+
+    @include states(primary);
+
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: currentcolor;
+    }
+  }
+
+  // The month and the year, side by side, between the arrows. The buttons and
+  // their invisible copy share one cell, so the copy sets the width.
+  &__title {
+    display: grid;
+    flex: 1 1 auto;
+    justify-items: center;
+  }
+
+  &__title-buttons {
+    @include flex(row, center, center, fluid(2));
+
+    grid-area: 1 / 1;
+  }
+
+  &__title-sizer {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  // Every month name in one cell: the widest decides the width.
+  &__title-stack {
+    display: inline-grid;
+
+    > * {
+      grid-area: 1 / 1;
+    }
+  }
+
+  // Each opens its grid. The chevron says it is a button: as plain text the
+  // title gives no hint it can be clicked.
+  &__title-button {
+    @include font-scale(body--lg);
+    @include flex(row, center, center, fluid(4));
+
+    box-sizing: border-box;
+    min-height: fixed(40);
+    padding: 0 fluid(8);
+    margin: 0;
+    border: 0;
+    border-radius: radius(md);
+    color: text(body);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+
+    @include states(primary);
+
+    svg {
+      flex-shrink: 0;
+      width: fixed(16);
+      height: fixed(16);
+      fill: icon(neutral);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    &[aria-expanded='true'] svg {
+      transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      svg {
+        transition: none;
+      }
+    }
+  }
+
+  // Stretched to the panel, which the title makes wider than a week in most
+  // languages: a grid centred under it would leave a gap on either side. The
+  // days keep 32px as their base width, so the spare width splits evenly
+  // across the columns. A fixed layout at 100% would set the panel's own
+  // width to a million pixels, since the panel sizes to its content.
+  &__grid {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  &__weekday {
+    @include font-scale(body--md);
+
+    padding: fluid(4);
+    color: text(caption);
+    text-align: center;
+  }
+
+  &__cell {
+    padding: 0;
+  }
+
+  // A month or a year shares every state of a day: selected, current, out of
+  // range.
+  &__day,
+  &__option {
+    @include font-scale(body--lg);
+
+    // The cell itself is the interactive gridcell now, not a button nested
+    // inside it (see date-picker.ts), so it keeps the browser's table-cell
+    // display instead of switching to block — overriding it would drop the
+    // cell out of the table's column layout.
+    display: table-cell;
+    width: fixed(32);
+    height: fixed(32);
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: radius(md);
+    color: text(body);
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+
+    @include states(primary);
+
+    // Not in the prototype, which has no today variant. Primary text keeps it
+    // apart from its neighbours without competing with the selected fill.
+    &--today {
+      color: text(primary);
+      font-weight: weight(semibold);
+    }
+
+    // The days between the two ends of a range.
+    &--in-range {
+      @include state-base(bg(surface, primary));
+    }
+
+    &--selected {
+      @include state-base(bg(container, primary));
+
+      color: text(inverse);
+    }
+
+    // Corners shared with the next highlighted day in the row. Logical
+    // properties, so the band joins the right way in right-to-left too.
+    &--join-start {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+
+    &--join-end {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+
+    // A holiday or sold-out day, set through `isDateDisabled`. Opacity alone
+    // repeats the cue an out-of-range day already carries; the strikethrough
+    // says this day specifically is off-limits, not just muted. Paired with
+    // `aria-disabled` so it outranks the `text-decoration: none` of `states`.
+    // Accepted as-is: the opacity dims the range fill under an unavailable
+    // day in the middle of a period. The fade reinforces that the day is
+    // off-limits even though the range spanning it stays valid, so it is
+    // left alone rather than special-cased to stay fully opaque.
+    &--unavailable[aria-disabled='true'] {
+      text-decoration: line-through;
+    }
+  }
+
+  // Three months or years fill the width of a week, so the calendar keeps its
+  // size when the title swaps the days for them.
+  // A third of the row each, whatever the length of the month's name.
+  &__option {
+    width: calc(100% / 3);
+    height: fixed(40);
+  }
+
+  &__sr-only {
+    @include sr-only;
+  }
+}

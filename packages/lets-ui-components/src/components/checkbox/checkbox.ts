@@ -2,9 +2,10 @@ import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './checkbox.scss?inline';
+import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
 
-export class LuiCheckbox extends LitElement {
+export class LuiCheckbox extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
   static formAssociated = true;
 

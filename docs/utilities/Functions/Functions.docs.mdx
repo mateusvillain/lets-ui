@@ -50,6 +50,13 @@ export const colorFns = [
     ],
   },
   {
+    fn: 'tint($role)',
+    desc: 'Extremos da escala neutra do tema, como tinta de estado de componentes preenchidos (parâmetro $tint de states(), state-layer() e state-base()). foreground: quase preto no claro, quase branco no escuro; background: o oposto',
+    params: [
+      { label: '$role', values: ['foreground', 'background'] },
+    ],
+  },
+  {
     fn: 'state-amount($state)',
     desc: 'Quanto da tinta misturar',
     params: [
@@ -175,10 +182,11 @@ Funções SCSS definidas em `packages/styles/src/utilities/_functions.scss`. Use
   color: text(inverse);
 
   // A camada de estado é a mesma para toda variante e marca: o fundo de
-  // repouso entra pelo mixin e as regras de estado misturam nele a cor de
-  // conteúdo declarada acima — clareando fundos escuros e escurecendo os
-  // claros sem medir nada. `states()` já embute tudo isso.
-  @include state-layer(bg(container, primary));
+  // repouso entra pelo mixin e as regras de estado misturam nele uma tinta.
+  // Num componente preenchido, essa tinta é a cor oposta à do rótulo, para o
+  // fundo se afastar do texto e o contraste subir no hover e no pressed.
+  // `states()` já embute a camada; `$tint` troca a tinta.
+  @include state-layer(bg(container, primary), tint(foreground));
 
   &:hover {
     background-color: state(hover);

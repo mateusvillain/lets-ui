@@ -336,11 +336,15 @@ describe('size, radius and variant', () => {
   });
 
   it('keeps the initials readable on every variant', async () => {
-    const channels = (colour) =>
-      colour
-        .match(/[\d.]+/g)
-        .slice(0, 3)
-        .map(Number);
+    // Through a canvas, which resolves any colour space to sRGB bytes: tokens
+    // authored in OKLCH come back from getComputedStyle as `oklch(...)`.
+    const ctx = document.createElement('canvas').getContext('2d');
+    const channels = (colour) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = colour;
+      ctx.fillRect(0, 0, 1, 1);
+      return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3);
+    };
     const luminance = (colour) => {
       const [r, g, b] = channels(colour).map((c) => {
         const v = c / 255;
