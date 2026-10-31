@@ -35,12 +35,10 @@ const TAGS = `
 // Each story renders its own trigger: a page shows several palettes at once,
 // and only the first takes ⌘K / Ctrl+K.
 const palette = (attrs, content, label = 'Open command palette') => `
-  <lui-button
-    label="${label}"
-    variant="secondary"
-    onclick="this.nextElementSibling.show()"
-  ></lui-button>
-  <lui-command-palette ${attrs}>${content}</lui-command-palette>
+  <lui-command-palette ${attrs}>
+    <lui-button slot="trigger" label="${label}" variant="secondary"></lui-button>
+    ${content}
+  </lui-command-palette>
 `;
 
 // Opens the palette and types `query` into it, for the states that need one.

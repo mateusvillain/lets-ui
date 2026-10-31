@@ -283,8 +283,22 @@ Os atributos do `lui-command-palette` e do `lui-command-item` estão na tabela d
 | Elemento              | Atributo         | Descrição                                                                |
 | --------------------- | ---------------- | ------------------------------------------------------------------------ |
 | `lui-command-palette` | `open`           | Abre o palette. Também por `show()`, `hide()` e `toggle()`.              |
+| `lui-command-palette` | `slot="trigger"` | Elemento que abre o palette ao ser clicado (ver abaixo).                 |
 | `lui-command-group`   | `label`          | Cabeçalho da seção.                                                      |
 | `lui-command-tag`     | `value`, `label` | Valor comparado ao `tag` dos itens e texto exibido (padrão: o conteúdo). |
+
+### Trigger
+
+Um elemento em `slot="trigger"` abre o palette ao ser clicado. Ele recebe `aria-haspopup="dialog"` e `aria-expanded`, que acompanha o estado aberto/fechado, e o foco volta a ele ao fechar. Sem trigger, o palette abre pelo atalho ou por `show()`.
+
+```html
+<lui-command-palette>
+  <lui-button slot="trigger" label="Search"></lui-button>
+  <lui-command-item label="Calendar"></lui-command-item>
+</lui-command-palette>
+```
+
+Enquanto o palette está aberto, o trigger fica `inert`, como o resto da página.
 
 ### Eventos
 

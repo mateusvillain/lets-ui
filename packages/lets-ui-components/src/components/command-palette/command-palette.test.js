@@ -366,3 +366,73 @@ describe('lui-command-palette', () => {
     expect(palette.shadowRoot.activeElement).toBe(input(palette));
   });
 });
+
+describe('lui-command-palette trigger slot', () => {
+  const TRIGGERED = `
+    <lui-command-palette>
+      <button slot="trigger">Search</button>
+      <lui-command-item value="calendar" label="Calendar"></lui-command-item>
+    </lui-command-palette>
+  `;
+
+  it('opens on a click on the slotted trigger', async () => {
+    const { palette } = await mount(TRIGGERED);
+    palette.querySelector('[slot="trigger"]').click();
+    await settle(palette);
+    expect(palette.open).toBe(true);
+  });
+
+  it('gives the trigger the dialog-trigger ARIA and keeps it in sync', async () => {
+    const { palette } = await mount(TRIGGERED);
+    const trigger = palette.querySelector('[slot="trigger"]');
+    await settle(palette);
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+
+    palette.show();
+    await settle(palette);
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+    palette.hide();
+    await settle(palette);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('makes the trigger inert while open', async () => {
+    const { palette } = await mount(TRIGGERED);
+    palette.show();
+    await settle(palette);
+    expect($(palette, '.command-palette__trigger').inert).toBe(true);
+    // Inert through the flat tree: the slotted button cannot take focus.
+    const trigger = palette.querySelector('[slot="trigger"]');
+    trigger.focus();
+    expect(document.activeElement).not.toBe(trigger);
+
+    palette.hide();
+    await settle(palette);
+    expect($(palette, '.command-palette__trigger').inert).toBe(false);
+  });
+
+  it('returns focus to the trigger on close', async () => {
+    const { palette } = await mount(TRIGGERED);
+    const trigger = palette.querySelector('[slot="trigger"]');
+    trigger.focus();
+    trigger.click();
+    await settle(palette);
+    expect(palette.shadowRoot.activeElement).toBe(input(palette));
+
+    palette.hide();
+    await settle(palette);
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('drops the ARIA from a trigger taken out of the slot', async () => {
+    const { palette } = await mount(TRIGGERED);
+    const trigger = palette.querySelector('[slot="trigger"]');
+    await settle(palette);
+    trigger.removeAttribute('slot');
+    await settle(palette);
+    expect(trigger.hasAttribute('aria-haspopup')).toBe(false);
+    expect(trigger.hasAttribute('aria-expanded')).toBe(false);
+  });
+});

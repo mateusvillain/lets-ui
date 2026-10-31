@@ -2,7 +2,7 @@ import { LitElement, html, nothing, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { DialogStackController } from '../../utils/dialog-stack.js';
-import { FOCUSABLE } from '../../utils/dialog-trigger.js';
+import { FOCUSABLE, syncDialogTriggers } from '../../utils/dialog-trigger.js';
 import { FocusReturnController } from '../../utils/focus-return.js';
 import { inertOutside } from '../../utils/inert-outside.js';
 import { lockBodyScroll, unlockBodyScroll } from '../../utils/scroll-lock.js';
@@ -144,13 +144,14 @@ export class LuiCommandPalette extends LitElement {
   private _visibleGroups: GroupData[] = [];
   private _visible: ItemData[] = [];
   private _restoreInert: (() => void) | null = null;
+  private _triggerTargets: Set<HTMLElement> = new Set();
   private _statusTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     super();
-    // No trigger of its own: with no opener to go back to, focus is left
-    // where the closing put it.
-    new FocusReturnController(this, () => null);
+    // Focus goes back to the opener; when that is gone, to the slotted
+    // trigger, if there is one.
+    new FocusReturnController(this, () => this._trigger);
     new DialogStackController(this, {
       escape: () => this.hide(),
       tab: (event) => this._trapFocus(event),
@@ -226,6 +227,7 @@ export class LuiCommandPalette extends LitElement {
         });
       }
       if (!this.open && wasOpen) unlockBodyScroll();
+      this._updateSlottedTrigger();
     }
     if (changed.has('_activeIndex') || changed.has('_query')) {
       this.shadowRoot
@@ -245,6 +247,21 @@ export class LuiCommandPalette extends LitElement {
     ) {
       this._scheduleStatus();
     }
+  }
+
+  private get _trigger(): HTMLElement | null {
+    return this._triggerTargets.values().next().value ?? null;
+  }
+
+  private _updateSlottedTrigger() {
+    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="trigger"]'
+    );
+    this._triggerTargets = syncDialogTriggers(
+      slot,
+      this.open,
+      this._triggerTargets
+    );
   }
 
   private _releaseInert() {
@@ -545,6 +562,15 @@ export class LuiCommandPalette extends LitElement {
     const listboxId = `${this._baseId}-listbox`;
 
     return html`
+      <!-- Inside the host, so inertOutside() leaves it alone: made inert here
+           while the palette is open, like the rest of the page. -->
+      <span class="command-palette__trigger" ?inert="${this.open}">
+        <slot
+          name="trigger"
+          @click="${this.show}"
+          @slotchange="${this._updateSlottedTrigger}"
+        ></slot>
+      </span>
       <div
         class="command-palette__backdrop"
         data-palette-backdrop
