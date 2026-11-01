@@ -31,6 +31,7 @@ import { LuiBreadcrumbItem } from './components/breadcrumb/breadcrumb-item.js';
 import { LuiButton } from './components/button/button.js';
 import { LuiCard } from './components/card/card.js';
 import { LuiCheckbox } from './components/checkbox/checkbox.js';
+import { LuiCheckboxGroup } from './components/checkbox-group/checkbox-group.js';
 import { LuiRadio } from './components/radio/radio.js';
 import { LuiRadioGroup } from './components/radio-group/radio-group.js';
 import { LuiSwitch } from './components/switch/switch.js';
@@ -97,6 +98,7 @@ define('lui-breadcrumb-item', LuiBreadcrumbItem);
 define('lui-button', LuiButton);
 define('lui-card', LuiCard);
 define('lui-checkbox', LuiCheckbox);
+define('lui-checkbox-group', LuiCheckboxGroup);
 define('lui-radio', LuiRadio);
 define('lui-radio-group', LuiRadioGroup);
 define('lui-switch', LuiSwitch);
@@ -158,6 +160,7 @@ export {
   LuiButton,
   LuiCard,
   LuiCheckbox,
+  LuiCheckboxGroup,
   LuiRadio,
   LuiRadioGroup,
   LuiSwitch,
