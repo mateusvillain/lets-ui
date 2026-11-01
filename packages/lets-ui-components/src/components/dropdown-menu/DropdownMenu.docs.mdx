@@ -188,21 +188,21 @@ Não tem atributos. Também aceita `lui-divider` no slot `items`, com o mesmo re
 
 ### Teclado
 
-| Tecla             | Ação                                                               |
-| ----------------- | ------------------------------------------------------------------ |
-| `Enter` / `Space` | No gatilho, abre e fecha o menu                                    |
-| `Enter` / `Space` | Num item, executa a ação, fecha o menu e devolve o foco ao gatilho |
-| `↓` / `↑`         | Move entre os itens, voltando ao início ou ao fim                  |
-| `→`               | Abre o submenu do item focado                                      |
-| `←`               | Fecha o submenu e volta ao item pai                                |
-| `Escape`          | Fecha o menu e devolve o foco ao gatilho                           |
-| `Tab`             | Com o foco no painel, fecha o menu                                 |
+| Tecla             | Ação                                                                  |
+| ----------------- | --------------------------------------------------------------------- |
+| `Enter` / `Space` | No gatilho, abre o menu e move o foco para o primeiro item habilitado |
+| `Enter` / `Space` | Num item, executa a ação, fecha o menu e devolve o foco ao gatilho    |
+| `↓` / `↑`         | Move entre os itens, voltando ao início ou ao fim                     |
+| `→`               | Abre o submenu do item focado                                         |
+| `←`               | Fecha o submenu e volta ao item pai                                   |
+| `Escape`          | Fecha o menu e devolve o foco ao gatilho                              |
+| `Tab`             | Com o foco no painel, fecha o menu                                    |
 
-Limitações conhecidas no teclado, tratadas em
-[#152](https://github.com/mateusvillain/lets-ui/issues/152): ao abrir, o foco ainda não vai para o
-primeiro item, então é preciso usar `Tab` para entrar no menu antes das setas; e, ao fechar com
-`Tab`, o foco passa ao item seguinte do menu em vez de sair dele. Além disso, `Home` e `End` ainda
-não movem o foco entre os itens.
+Ao abrir, pelo teclado, pelo mouse ou por código, o foco vai para o primeiro item habilitado, e as
+setas funcionam em seguida.
+
+Limitações conhecidas no teclado: ao fechar com `Tab`, o foco passa ao item seguinte do menu em vez
+de sair dele; e `Home` e `End` ainda não movem o foco entre os itens.
 
 ### Responsabilidades de quem usa
 

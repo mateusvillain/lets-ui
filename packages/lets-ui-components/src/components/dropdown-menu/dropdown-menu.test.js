@@ -49,7 +49,29 @@ const deepActive = () => {
   return el;
 };
 
+// Focus moves on its own, once: these assertions only wait for it, they never
+// call `focus()`, so a menu that leaves focus on the trigger fails them.
+// Opened from a user event, as on a page: the panel then appears in the same
+// frame the menu tries to focus. Set from a plain script, `open` lands a frame
+// earlier and would pass even with the item still hidden on the opening frame.
+const firstItem = (menu) => menu.shadowRoot.querySelector('.menu-item');
+
 describe.each(Object.entries(triggers))('with %s as trigger', (_, html) => {
+  it.each(['Enter', 'Space'])(
+    'focuses the first item when opened with %s',
+    async (key) => {
+      const { menu, trigger } = await mount(html);
+      focusable(trigger).focus();
+
+      await userEvent.keyboard(key === 'Space' ? '[Space]' : `{${key}}`);
+
+      expect(menu.open).toBe(true);
+      await expect
+        .poll(() => menu.shadowRoot.activeElement)
+        .toBe(firstItem(menu));
+    }
+  );
+
   it('marks the trigger as opening a menu', async () => {
     const { trigger } = await mount(html);
 
@@ -107,6 +129,58 @@ describe.each(Object.entries(triggers))('with %s as trigger', (_, html) => {
 
     expect(menu.open).toBe(false);
     expect(deepActive()).toBe(focusable(trigger));
+  });
+});
+
+describe('opening', () => {
+  it('focuses the first item when open is set', async () => {
+    const { menu } = await mount(triggers['a native button']);
+    const opener = document.createElement('button');
+    // As the docs prescribe: the click is outside the menu and would close it.
+    opener.addEventListener('click', (event) => {
+      event.stopPropagation();
+      menu.open = true;
+    });
+    document.body.append(opener);
+    mounted.push(opener);
+    opener.focus();
+
+    await userEvent.keyboard('{Enter}');
+
+    await expect
+      .poll(() => menu.shadowRoot.activeElement)
+      .toBe(firstItem(menu));
+  });
+
+  it('skips a disabled first item', async () => {
+    // Slotted after the trigger and before the shared items, so it comes first.
+    const { menu, trigger } = await mount(
+      `${triggers['a native button']}<lui-menu-item slot="items" label="Arquivar" disabled></lui-menu-item>`
+    );
+    await expect
+      .poll(() => firstItem(menu)?.hasAttribute('disabled'))
+      .toBe(true);
+    trigger.focus();
+
+    await userEvent.keyboard('{Enter}');
+
+    const enabled = menu.shadowRoot.querySelectorAll('.menu-item')[1];
+    await expect.poll(() => menu.shadowRoot.activeElement).toBe(enabled);
+  });
+
+  it('moves between items with the arrow keys right after opening', async () => {
+    const { menu, trigger } = await mount(triggers['a native button']);
+    trigger.focus();
+
+    await userEvent.keyboard('{Enter}');
+    await expect
+      .poll(() => menu.shadowRoot.activeElement)
+      .toBe(firstItem(menu));
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(menu.shadowRoot.activeElement).toBe(
+      menu.shadowRoot.querySelectorAll('.menu-item')[1]
+    );
   });
 });
 
