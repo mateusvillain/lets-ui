@@ -3,14 +3,15 @@
  *
  * Storybook builds the sidebar from `index.json`, so a story name (`storyName`
  * in the story file) is the same in both languages. This map translates the
- * names written in Portuguese; the manager applies it to the index whenever the
- * language global changes. Names that do not appear here stay as they are in
+ * names written in Portuguese; the manager applies it to the sidebar labels
+ * whenever the language global changes. Names that do not appear here stay as they are in
  * both languages — which is what most of them do, since they are API terms
  * (`Primary`, `Loading`, `compact`, `close-on-backdrop: false`, …).
  *
  * Keys are the exact `storyName` strings from the `*.stories.*` files.
  */
 export const storyNamesEn = {
+  'Ação destrutiva': 'Destructive action',
   'Botão alternável (aria-pressed)': 'Toggle button (aria-pressed)',
   Carregando: 'Loading',
   'Classe CSS': 'CSS class',
@@ -27,11 +28,13 @@ export const storyNamesEn = {
   'Com seleção': 'With selection',
   'Como link (href)': 'As a link (href)',
   Comprimentos: 'Lengths',
+  'Controle por código': 'Programmatic control',
   Cores: 'Colors',
   'Decorativo, ao lado do nome': 'Decorative, next to the name',
   'Dentro do Alert (dismissible)': 'Inside the Alert (dismissible)',
   'Dentro do Modal': 'Inside the Modal',
   Desabilitado: 'Disabled',
+  Divisor: 'Divider',
   'Em parágrafo': 'In a paragraph',
   'Em tabela': 'In a table',
   Erro: 'Error',
@@ -41,6 +44,8 @@ export const storyNamesEn = {
   'Evento lui-page-change': 'lui-page-change event',
   'Evento lui-step-change': 'lui-step-change event',
   'Evento lui-toggle': 'lui-toggle event',
+  'Evento menu-select': 'menu-select event',
+  'Fechado (interativo)': 'Closed (interactive)',
   Feedback: 'Feedback',
   Formatos: 'Shapes',
   Foto: 'Photo',
