@@ -1,0 +1,15 @@
+/*
+ * Language switching for stories and docs that opt in.
+ *
+ * A block declares its language with `data-lang="pt-BR"` or `data-lang="en-US"`.
+ * The active language — set by the preview decorator on `<html>` — closes the
+ * others. Unmarked blocks are language-agnostic and stay visible in both.
+ *
+ * Blocks wrapped in `data-lang` must not themselves rely on `display`; use an
+ * outer element if a layout needs one.
+ */
+
+html[data-language='pt-BR'] [data-lang]:not([data-lang='pt-BR']),
+html[data-language='en-US'] [data-lang]:not([data-lang='en-US']) {
+  display: none;
+}
