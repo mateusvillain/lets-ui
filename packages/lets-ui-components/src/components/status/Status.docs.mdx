@@ -1,14 +1,29 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as StatusStories from './Status.stories';
 
 <Meta of={StatusStories} />
+
+<Lang lang="pt-BR">
 
 # Status
 
 Indicador pequeno do estado de um sistema, de uma pessoa ou de um item: um ícone ou um ponto colorido, com um rótulo e uma descrição opcionais.
 
+</Lang>
+
+<Lang lang="en-US">
+
+# Status
+
+Small indicator of the state of a system, a person or an item: an icon or a colored dot, with an optional label and description.
+
+</Lang>
+
 <Canvas of={StatusStories.Default} />
 <Controls of={StatusStories.Default} />
+
+<Lang lang="pt-BR">
 
 ## Quando usar
 
@@ -18,65 +33,217 @@ Use o Status para mostrar um estado que alguém confere de relance: o resultado 
 - Para uma etiqueta que classifica um item, use a [Tag](?path=/docs/content-tag--docs).
 - O Status não é interativo e não avisa quando muda. Se o estado muda na tela e a mudança precisa ser anunciada, coloque o Status dentro de uma região com `aria-live`.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## When to use
+
+Use Status to show a state that someone checks at a glance: the result of an operation in a list, the health of a service in a table, a person's availability.
+
+- For a message that asks for reading or action, use [Alert](?path=/docs/content-alert--docs). Status only names the state.
+- For a tag that classifies an item, use [Tag](?path=/docs/content-tag--docs).
+- Status is not interactive and does not announce when it changes. If the state changes on screen and the change needs to be announced, put Status inside a region with `aria-live`.
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## Feedback
 
 `success`, `caution`, `danger` e `info` usam as cores semânticas do sistema. Por padrão mostram um ícone de 20px. Com `dot`, mostram um ponto de 8px, mais discreto, bom para listas e tabelas com muitas linhas.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Feedback
+
+`success`, `caution`, `danger` and `info` use the system semantic colors. By default they show a 20px icon. With `dot`, they show an 8px dot, more discreet, good for lists and tables with many rows.
+
+</Lang>
+
 <Canvas of={StatusStories.Feedback} />
+
+<Lang lang="pt-BR">
 
 ## Social
 
 `online`, `away`, `busy` e `offline` são os status de presença de uma pessoa, os mesmos que o [Avatar](?path=/docs/content-avatar--docs) desenha no canto. O ponto mede 16px e tem uma forma própria além da cor, para que quem não distingue as cores ainda distinga os estados: `online` fica cheio, `away` mostra ponteiros de relógio, `busy` uma barra e `offline` um centro vazio.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Social
+
+`online`, `away`, `busy` and `offline` are a person's presence statuses, the same ones [Avatar](?path=/docs/content-avatar--docs) draws in the corner. The dot measures 16px and has its own shape beyond color, so that people who cannot distinguish colors can still distinguish the states: `online` is filled, `away` shows clock hands, `busy` a bar and `offline` an empty center.
+
+</Lang>
+
 <Canvas of={StatusStories.Social} />
+
+<Lang lang="pt-BR">
 
 ### No Avatar
 
 O Avatar usa estes mesmos status pelo atributo `status`. As cores e as formas vêm do Status, então os dois nunca ficam diferentes. No Avatar o ponto ganha um anel na cor da superfície, que o separa da foto.
 
+</Lang>
+
+<Lang lang="en-US">
+
+### On Avatar
+
+Avatar uses these same statuses through the `status` attribute. Colors and shapes come from Status, so the two never look different. On Avatar the dot gains a ring in the surface color, which separates it from the photo.
+
+</Lang>
+
 <Canvas of={StatusStories.WithAvatar} />
+
+<Lang lang="pt-BR">
 
 ## Rótulo e descrição
 
 `label` é o texto do status e `description` uma segunda linha, em cor de legenda. O indicador fica centralizado nas letras maiúsculas da primeira linha do rótulo, e não no meio da caixa da linha: o texto não fica no centro da própria linha, e um indicador centralizado na caixa parece baixo demais.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Label and description
+
+`label` is the status text and `description` a second line, in caption color. The indicator is centered on the uppercase letters of the first line of the label, and not in the middle of the line box: the text is not centered in its own line, and an indicator centered on the box looks too low.
+
+</Lang>
+
 <Canvas of={StatusStories.WithDescription} />
+
+<Lang lang="pt-BR">
 
 ### Tamanhos
 
 `size` muda só o tamanho do rótulo: `md` (padrão) ou `lg`. A descrição, o ícone e os pontos mantêm o tamanho. O indicador continua centralizado nas maiúsculas da primeira linha nos dois tamanhos, e também quando o rótulo quebra em mais de uma linha.
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Sizes
+
+`size` changes only the label size: `md` (default) or `lg`. The description, the icon and the dots keep their size. The indicator stays centered on the uppercase letters of the first line in both sizes, and also when the label wraps to more than one line.
+
+</Lang>
+
 <Canvas of={StatusStories.Sizes} />
 
+<Lang lang="pt-BR">
+
 Escreva o rótulo de forma que ele diga o estado sozinho ("Pagamento aprovado", "Em reunião"): o indicador fica fora da árvore de acessibilidade, e o rótulo é o que o leitor de tela anuncia.
+
+</Lang>
+
+<Lang lang="en-US">
+
+Write the label so that it states the state on its own ("Payment approved", "In a meeting"): the indicator is outside the accessibility tree, and the label is what the screen reader announces.
+
+</Lang>
+
+<Lang lang="pt-BR">
 
 ## Só o indicador
 
 Sem `label`, o Status mostra só o indicador e entrega ao leitor de tela o nome da variante, em inglês: "Success", "Caution", "Danger", "Info", "Online", "Away", "Busy" ou "Offline".
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Indicator only
+
+Without a `label`, Status shows only the indicator and delivers the variant name to the screen reader, in English: "Success", "Caution", "Danger", "Info", "Online", "Away", "Busy" or "Offline".
+
+</Lang>
+
 <Canvas of={StatusStories.IndicatorOnly} />
+
+<Lang lang="pt-BR">
 
 Para outro texto sem mostrá-lo, passe `label` com `hide-label`. O rótulo continua para o leitor de tela e sai da tela.
 
+</Lang>
+
+<Lang lang="en-US">
+
+For another text without showing it, pass `label` with `hide-label`. The label stays for the screen reader and leaves the screen.
+
+</Lang>
+
 <Canvas of={StatusStories.HiddenLabel} />
+
+<Lang lang="pt-BR">
 
 ## Pulso
 
 `pulse` faz um anel na cor do status crescer e sumir em volta do indicador. Use para um estado ao vivo: uma gravação, uma chamada, um serviço voltando. Com `prefers-reduced-motion: reduce`, o anel fica parado, como um halo, e a ênfase se mantém sem movimento.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Pulse
+
+`pulse` makes a ring in the status color grow and fade around the indicator. Use it for a live state: a recording, a call, a service coming back. With `prefers-reduced-motion: reduce`, the ring stays still, like a halo, and the emphasis is kept without motion.
+
+</Lang>
+
 <Canvas of={StatusStories.Pulse} />
+
+<Lang lang="pt-BR">
 
 Use o pulso com moderação: vários indicadores pulsando na mesma tela competem entre si e cansam.
 
+</Lang>
+
+<Lang lang="en-US">
+
+Use the pulse sparingly: several indicators pulsing on the same screen compete with each other and tire the eye.
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## Em tabela
 
+</Lang>
+
+<Lang lang="en-US">
+
+## In a table
+
+</Lang>
+
 <Canvas of={StatusStories.InTable} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, a marcação fica a cargo de quem usa. O indicador leva `aria-hidden="true"`. Os ícones de feedback não fazem parte da folha de estilo: sem o Web Component, use o ponto (`status__dot`), ou traga o seu SVG com a classe `status__icon`. Um status sem rótulo visível precisa de um `status__label status__label--hidden` com o texto.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+Without the Web Component, the markup is the responsibility of the consumer. The indicator carries `aria-hidden="true"`. The feedback icons are not part of the stylesheet: without the Web Component, use the dot (`status__dot`), or bring your own SVG with the `status__icon` class. A status without a visible label needs a `status__label status__label--hidden` with the text.
+
+</Lang>
+
 <Canvas of={StatusStories.CSSClass} />
+
+<Lang lang="pt-BR">
 
 ## Propriedades
 
@@ -90,6 +257,26 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O indicador leva `ar
 | `pulse`       | `boolean` | `false`   | Anima um anel em volta do indicador. Parado com `prefers-reduced-motion`.                       |
 | `hide-label`  | `boolean` | `false`   | Tira o `label` da tela e o mantém para o leitor de tela.                                        |
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Properties
+
+| Attribute     | Type      | Default   | Description                                                                                     |
+| ------------- | --------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `variant`     | `string`  | `success` | `success`, `caution`, `danger`, `info`, `online`, `away`, `busy` or `offline`.                  |
+| `label`       | `string`  | `''`      | Status text. If omitted, the screen reader gets the variant name and nothing appears on screen. |
+| `description` | `string`  | `''`      | Second line, in caption color.                                                                  |
+| `size`        | `string`  | `md`      | Label size: `md` or `lg`. The description and the indicator do not change.                      |
+| `dot`         | `boolean` | `false`   | Replaces the feedback icon with an 8px dot. Social statuses are always a dot.                   |
+| `pulse`       | `boolean` | `false`   | Animates a ring around the indicator. Still with `prefers-reduced-motion`.                      |
+| `hide-label`  | `boolean` | `false`   | Removes the `label` from the screen and keeps it for the screen reader.                         |
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## Acessibilidade
 
 - O Status não tem comportamento, então não entra na ordem de foco e não responde a teclado.
@@ -98,6 +285,23 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O indicador leva `ar
 - O Status não é `role="status"`. Esse papel é de uma região viva, que anuncia cada mudança, e um indicador estático numa tabela anunciaria ruído. Para anunciar uma mudança, envolva-o numa região com `aria-live="polite"`.
 - Em modo de alto contraste (`forced-colors`), o indicador mantém as cores, porque a cor é a informação.
 - O pulso respeita `prefers-reduced-motion`.
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Accessibility
+
+- Status has no behavior, so it does not enter the focus order and does not respond to the keyboard.
+- The indicator (icon or dot) carries `aria-hidden="true"`. The state reaches the screen reader through the text: the `label`, or the variant name when there is no `label`.
+- The state does not depend on color alone: the feedback icons have different shapes, and the social dots have a shape inside. The feedback dots (`dot`) are distinguished only by color, so put the visible label when they carry the information.
+- Status is not `role="status"`. That role belongs to a live region, which announces every change, and a static indicator in a table would announce noise. To announce a change, wrap it in a region with `aria-live="polite"`.
+- In high contrast mode (`forced-colors`), the indicator keeps the colors, because color is the information.
+- The pulse respects `prefers-reduced-motion`.
+
+</Lang>
+
+<Lang lang="pt-BR">
 
 ## Uso
 
@@ -129,3 +333,40 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O indicador leva `ar
   </span>
 </span>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Usage
+
+### Web Component
+
+```html
+<lui-status variant="success" label="Payment approved"></lui-status>
+
+<lui-status
+  variant="danger"
+  dot
+  label="Sync failed"
+  description="5 minutes ago"
+></lui-status>
+
+<lui-status variant="online" pulse label="Live"></lui-status>
+```
+
+### CSS class
+
+```html
+<span class="status status--success status--lg">
+  <span class="status__indicator" aria-hidden="true">
+    <span class="status__dot"></span>
+  </span>
+  <span class="status__text">
+    <span class="status__label">Payment approved</span>
+    <span class="status__description">2 minutes ago</span>
+  </span>
+</span>
+```
+
+</Lang>

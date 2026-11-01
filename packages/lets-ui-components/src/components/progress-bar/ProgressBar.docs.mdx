@@ -1,57 +1,135 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as ProgressBarStories from './ProgressBar.stories';
 
 <Meta of={ProgressBarStories} />
 
+<Lang lang="pt-BR">
 # Progress Bar
 
 O Progress Bar mostra quanto de uma tarefa já foi feito, como o envio de arquivos ou uma importação. Com `value`, a barra preenche na proporção de `value` sobre `max` e o valor aparece ao lado do rótulo, em percentual ou no texto passado em `value-text`. Sem `value`, a barra fica indeterminada e um trecho percorre a trilha enquanto a duração não é conhecida.
 
 Use quando a espera é longa o bastante para a pessoa querer saber quanto falta. Para um trecho de tela que carrega com formato já conhecido, use Skeleton. Para um passo entre vários com nome próprio, use Stepper.
 
+</Lang>
+
+<Lang lang="en-US">
+# Progress Bar
+
+Progress Bar shows how much of a task has already been done, such as a file upload or an import. With `value`, the bar fills in the proportion of `value` over `max` and the value appears next to the label, as a percentage or in the text passed in `value-text`. Without `value`, the bar is indeterminate and a segment travels along the track while the duration is unknown.
+
+Use it when the wait is long enough for the person to want to know how much is left. For a portion of the screen that loads with an already known shape, use Skeleton. For one step among several with its own name, use Stepper.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.ProgressBar} />
 <Controls of={ProgressBarStories.ProgressBar} />
 
+<Lang lang="pt-BR">
 ## Posição do rótulo
 
 Em `top` (padrão), o rótulo e o valor ficam numa linha acima da trilha. Em `inline`, rótulo, trilha e valor ficam na mesma linha, o que economiza altura em listas e tabelas. Nos dois casos a legenda (`caption`) fica abaixo.
 
+</Lang>
+
+<Lang lang="en-US">
+## Label placement
+
+In `top` (default), the label and the value sit on a row above the track. In `inline`, label, track and value sit on the same row, which saves height in lists and tables. In both cases the caption (`caption`) sits below.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.LabelPlacement} />
 
+<Lang lang="pt-BR">
 ## Variantes
 
 `primary` é o padrão. Use `success` quando a tarefa terminou bem, `caution` quando ela segue mas pede atenção (cota quase cheia, por exemplo) e `danger` quando falhou ou passou do limite.
 
 Toda barra `success`, `caution` ou `danger` leva o desfecho na legenda, como "Envio concluído" ou "Falha no envio: conexão perdida". A cor sozinha não informa o estado a quem não a distingue nem ao leitor de tela, e a legenda é anunciada quando muda.
 
+</Lang>
+
+<Lang lang="en-US">
+## Variants
+
+`primary` is the default. Use `success` when the task finished well, `caution` when it continues but calls for attention (a nearly full quota, for example) and `danger` when it failed or went over the limit.
+
+Every `success`, `caution` or `danger` bar carries the outcome in the caption, such as "Upload complete" or "Upload failed: connection lost". Color alone does not report the state to those who cannot tell it apart or to the screen reader, and the caption is announced when it changes.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.Variants} />
 
+<Lang lang="pt-BR">
 ## Outras unidades
 
 `value` e `max` podem estar em qualquer unidade, como GB ou etapas. A barra sempre preenche na proporção `value / max`. Sem `value-text`, o texto ao lado do rótulo é essa proporção em percentual; com `value-text`, ele mostra exatamente o que você escrever, como "3.2 GB of 10 GB". Atualize `value-text` junto com `value`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Other units
+
+`value` and `max` can be in any unit, such as GB or steps. The bar always fills in the proportion `value / max`. Without `value-text`, the text next to the label is that proportion as a percentage; with `value-text`, it shows exactly what you write, such as "3.2 GB of 10 GB". Update `value-text` together with `value`.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.CustomUnit} />
 
+<Lang lang="pt-BR">
 ## Tamanhos
 
 `sm` (4px), `md` (8px, padrão) e `lg` (12px). Só a espessura da trilha muda; o texto continua o mesmo.
 
+</Lang>
+
+<Lang lang="en-US">
+## Sizes
+
+`sm` (4px), `md` (8px, default) and `lg` (12px). Only the track thickness changes; the text stays the same.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.Sizes} />
 
+<Lang lang="pt-BR">
 ## Indeterminado
 
 Omita `value` quando não há como medir o avanço. O valor some e o leitor de tela não anuncia número, apenas a barra de progresso. O `value-text` também é ignorado nesse modo; para dizer em que etapa a tarefa está, use `caption`. Assim que a medida existir, passe `value` e a barra muda para o modo determinado.
 
+</Lang>
+
+<Lang lang="en-US">
+## Indeterminate
+
+Omit `value` when there is no way to measure progress. The value disappears and the screen reader announces no number, only the progress bar. `value-text` is also ignored in this mode; to say at which stage the task is, use `caption`. As soon as the measurement exists, pass `value` and the bar switches to the determinate mode.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.Indeterminate} />
 
+<Lang lang="pt-BR">
 ## Só a barra
 
 Com `hide-label` e `hide-value`, sobra apenas a trilha. Use essa combinação **só quando o valor ou o estado estiver em texto ao lado da barra**, como "Seu perfil está 60% completo" logo acima. Sem esse texto, a trilha sozinha não basta para quem não distingue bem o preenchimento.
 
 O `label` continua sendo o nome acessível da barra, então informe-o mesmo assim, no idioma da página.
 
+</Lang>
+
+<Lang lang="en-US">
+## Bar only
+
+With `hide-label` and `hide-value`, only the track remains. Use that combination **only when the value or the state is in text next to the bar**, such as "Your profile is 60% complete" right above it. Without that text, the track alone is not enough for people who do not distinguish the fill well.
+
+`label` remains the accessible name of the bar, so provide it anyway, in the page language.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.BarOnly} />
 
+<Lang lang="pt-BR">
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value` e os atributos ARIA ficam por sua conta. Confira:
@@ -62,12 +140,38 @@ Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value
 - A legenda com `aria-live="polite"` no HTML desde o início, mesmo vazia, ligada à trilha por `aria-describedby` quando tiver texto.
   A variável é sempre um percentual da trilha: para outras unidades, calcule `value / max` e use `aria-valuetext` com o texto exibido. A legenda precisa existir desde o início para que as mudanças nela sejam anunciadas. Vazia, escreva-a sem espaço nem quebra de linha entre as tags (`<span …></span>`); só assim ela deixa de ocupar espaço abaixo da trilha.
 
+</Lang>
+
+<Lang lang="en-US">
+## CSS class (without Web Component)
+
+Without the Web Component, the fill width comes from `--lui-progress-bar-value` and the ARIA attributes are up to you. Check:
+
+- `role="progressbar"` on the track (`.progress-bar__track`).
+- `aria-valuemin`, `aria-valuemax` and `aria-valuenow`. In the indeterminate mode, omit `aria-valuenow`.
+- A name: `aria-labelledby` pointing to the visible label, or `aria-label` when there is no label.
+- The caption with `aria-live="polite"` in the HTML from the start, even empty, linked to the track through `aria-describedby` when it has text.
+  The variable is always a percentage of the track: for other units, compute `value / max` and use `aria-valuetext` with the displayed text. The caption must exist from the start so that changes in it are announced. Empty, write it without space or line break between the tags (`<span …></span>`); only that way it stops taking space below the track.
+
+</Lang>
+
 <Canvas of={ProgressBarStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Por que `div` + ARIA e não `<progress>`
 
 O elemento nativo `<progress>` não segue os temas e as marcas do Let's UI: a aparência da trilha e do preenchimento muda de navegador para navegador e mal aceita estilo. Ele também não oferece os três tamanhos, as variantes de cor nem a varredura do modo indeterminado com movimento reduzido. Por isso o Progress Bar usa uma `div` com `role="progressbar"` e os atributos `aria-value*`, que leitores de tela anunciam da mesma forma que o `<progress>`. Em HTML próprio, sem os estilos do Let's UI, o `<progress>` nativo continua sendo a primeira opção.
 
+</Lang>
+
+<Lang lang="en-US">
+## Why `div` + ARIA and not `<progress>`
+
+The native `<progress>` element does not follow the Let's UI themes and brands: the appearance of the track and of the fill changes from browser to browser and barely accepts styling. It also does not offer the three sizes, the color variants or the indeterminate mode sweep with reduced motion. That is why Progress Bar uses a `div` with `role="progressbar"` and the `aria-value*` attributes, which screen readers announce the same way as `<progress>`. In your own HTML, without the Let's UI styles, the native `<progress>` is still the first option.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Propriedades
 
 | Atributo          | Tipo                                              | Padrão      | Descrição                                                                                           |
@@ -82,6 +186,26 @@ O elemento nativo `<progress>` não segue os temas e as marcas do Let's UI: a ap
 | `hide-label`      | `boolean`                                         | `false`     | Esconde o rótulo visível; `label` continua nomeando a barra.                                        |
 | `hide-value`      | `boolean`                                         | `false`     | Esconde o valor ao lado do rótulo.                                                                  |
 
+</Lang>
+
+<Lang lang="en-US">
+## Properties
+
+| Attribute         | Type                                              | Default     | Description                                                                                           |
+| ----------------- | ------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------- |
+| `value`           | `number`                                          | —           | Current progress, limited between `0` and `max`. Without it, the bar is indeterminate.                |
+| `max`             | `number`                                          | `100`       | Value that completes the bar. Zero, negative or invalid becomes `100`.                                |
+| `variant`         | `'primary' \| 'success' \| 'caution' \| 'danger'` | `'primary'` | Color of the fill.                                                                                    |
+| `size`            | `'sm' \| 'md' \| 'lg'`                            | `'md'`      | Track thickness: 4px, 8px or 12px.                                                                    |
+| `label-placement` | `'top' \| 'inline'`                               | `'top'`     | Label and value above the track or on the same row as it.                                             |
+| `value-text`      | `string`                                          | `''`        | Text shown instead of the percentage and used as `aria-valuetext`. Ignored in the indeterminate mode. |
+| `caption`         | `string`                                          | `''`        | Caption below the track, announced when it changes.                                                   |
+| `hide-label`      | `boolean`                                         | `false`     | Hides the visible label; `label` keeps naming the bar.                                                |
+| `hide-value`      | `boolean`                                         | `false`     | Hides the value next to the label.                                                                    |
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Textos padrão
 
 Os textos que o componente gera são em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
@@ -90,6 +214,20 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 | -------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
 | `label`  | `string` | `'Progress bar'` | Rótulo visível e nome acessível da barra. O padrão só é usado como `aria-label` e não aparece na tela. |
 
+</Lang>
+
+<Lang lang="en-US">
+## Default texts
+
+The texts the component generates are in English and can be replaced by attribute, to follow the project language.
+
+| Attribute | Type     | Default          | Description                                                                                                           |
+| --------- | -------- | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `label`   | `string` | `'Progress bar'` | Visible label and accessible name of the bar. The default is only used as `aria-label` and does not appear on screen. |
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 ### O que o componente faz
@@ -114,6 +252,36 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 - Enquanto a tarefa roda, desabilite os controles que dependem dela, como o botão de enviar.
 - Quando a barra indica o carregamento de uma área da tela, marque essa área com `aria-busy="true"` até o fim e retire o atributo depois.
 
+</Lang>
+
+<Lang lang="en-US">
+## Accessibility
+
+### What the component does
+
+- The track has `role="progressbar"`, `aria-valuemin="0"`, `aria-valuemax` equal to `max` and `aria-valuenow` with the value already limited to the range. In the indeterminate mode, `aria-valuenow` and `aria-valuetext` do not exist.
+- The visible label names the bar through `aria-labelledby`. With `hide-label`, the same text goes to `aria-label`. Without `label`, the name is "Progress bar", in English: it is a safety net so the bar never stays without a name, not a usage pattern.
+- With `value-text`, the same text becomes `aria-valuetext`, and the screen reader announces "3.2 GB of 10 GB" instead of a percentage. Without it, only `aria-valuenow` is exposed.
+- The visible value repeats `aria-valuenow` (or `aria-valuetext`), so it stays out of the accessibility tree to avoid being read twice.
+- The caption describes the bar through `aria-describedby` and is an `aria-live="polite"` region. Screen readers do not reliably announce changes to `aria-valuenow`, so it is through the caption that the person learns about the progress and the result. The region exists even without `caption`, because a region inserted together with the text is often not announced.
+- The bar is not interactive and does not receive focus.
+- With `prefers-reduced-motion: reduce`, the fill does not animate and the indeterminate mode stops traveling along the track: the whole bar only pulses, slowly. The pulse only indicates that the task is active; the caption is the main channel to say where it is and how it ended.
+- The fill has a contrast of at least 3:1 with the track and with the page in all four variants, in the light and dark themes, with the default brand. Another brand (`data-brand`) changes the `primary` color and can change that ratio: check it when creating a brand.
+- In `forced-colors`, the track gains an outline and the fill uses the system highlight color.
+
+### What stays with the application
+
+- Always pass a `label` in the page language, even with `hide-label`. The default name "Progress bar" serves only as a last resort.
+- Update the caption at milestones and at the result ("Half of the files uploaded", "Upload complete"), not at every step. Every change is read aloud, and a count that changes with each file interrupts the person all the time.
+- Report the result in the caption, especially in the indeterminate mode and in the `success`, `caution` and `danger` variants. The color and the indeterminate mode have no ARIA attribute of their own, and the label is not announced when it changes, so without the caption the person does not know that the task finished or failed.
+- Keep the bar on the page until the announcement. If it is removed together with the caption change, the text is never read.
+- Use `hide-value` only when the progress is also in text, in the caption or around the bar. Without the value, those who do not distinguish the fill from the track are left without the information.
+- While the task runs, disable the controls that depend on it, such as the submit button.
+- When the bar indicates the loading of an area of the screen, mark that area with `aria-busy="true"` until the end and remove the attribute afterwards.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -186,3 +354,81 @@ updateStorage(2.7, 10);
 ```
 
 Modificadores: `progress-bar--{primary|success|caution|danger}`, `progress-bar--{sm|md|lg}`, `progress-bar--inline` e `progress-bar--indeterminate`.
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-progress-bar
+  value="40"
+  label="Uploading files"
+  caption="8 of 20 files"
+></lui-progress-bar>
+<lui-progress-bar
+  value="3"
+  max="4"
+  variant="success"
+  value-text="3 of 4 steps"
+  label-placement="inline"
+  label="Steps"
+></lui-progress-bar>
+<lui-progress-bar
+  value="3.2"
+  max="10"
+  value-text="3.2 GB of 10 GB"
+  label="Storage"
+></lui-progress-bar>
+<lui-progress-bar label="Loading"></lui-progress-bar>
+```
+
+### Updating the value
+
+The component updates the bar when the properties change, but it does not generate `value-text`. The text depends on the unit and on the system language, so update `value` and `valueText` together.
+
+```js
+const bar = document.querySelector('lui-progress-bar');
+
+function updateStorage(usedGB, totalGB) {
+  bar.value = usedGB;
+  bar.max = totalGB;
+  bar.valueText = `${usedGB} GB of ${totalGB} GB`;
+}
+
+updateStorage(3.2, 10);
+// The person deletes a 0.5 GB file
+updateStorage(2.7, 10);
+```
+
+### CSS class
+
+```html
+<div class="progress-bar progress-bar--md progress-bar--primary">
+  <span class="progress-bar__label" id="upload-label">Uploading files</span>
+  <span class="progress-bar__value" aria-hidden="true">40%</span>
+  <div
+    class="progress-bar__track"
+    role="progressbar"
+    aria-labelledby="upload-label"
+    aria-describedby="upload-caption"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="40"
+  >
+    <span
+      class="progress-bar__indicator"
+      style="--lui-progress-bar-value: 40%"
+    ></span>
+  </div>
+  <span class="progress-bar__caption" id="upload-caption" aria-live="polite"
+    >8 of 20 files</span
+  >
+</div>
+```
+
+Modifiers: `progress-bar--{primary|success|caution|danger}`, `progress-bar--{sm|md|lg}`, `progress-bar--inline` and `progress-bar--indeterminate`.
+
+</Lang>

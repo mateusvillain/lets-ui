@@ -1,15 +1,27 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as HeadingStories from './Heading.stories';
 
 <Meta of={HeadingStories} />
 
+<Lang lang="pt-BR">
 # Heading
 
 Componente para títulos e hierarquia textual. Encapsula o par semântico elemento/classe de tipografia, garantindo que o elemento HTML correto seja sempre renderizado para acessibilidade e SEO.
 
+</Lang>
+
+<Lang lang="en-US">
+# Heading
+
+Component for headings and textual hierarchy. Encapsulates the semantic element/typography class pair, ensuring that the correct HTML element is always rendered for accessibility and SEO.
+
+</Lang>
+
 <Canvas of={HeadingStories.Heading} />
 <Controls of={HeadingStories.Heading} />
 
+<Lang lang="pt-BR">
 ## Variantes
 
 Cada variante mapeia para uma escala tipográfica e um elemento HTML semântico padrão.
@@ -24,34 +36,98 @@ Cada variante mapeia para uma escala tipográfica e um elemento HTML semântico 
 | `block-title` | `h5`       | `block-title` |
 | `overtitle`   | `h6`       | `overtitle`   |
 
+</Lang>
+
+<Lang lang="en-US">
+## Variants
+
+Each variant maps to a typographic scale and a default semantic HTML element.
+
+| Variant       | Default tag | Scale         |
+| ------------- | ----------- | ------------- |
+| `display`     | `div`       | `display`     |
+| `title`       | `h1`        | `title`       |
+| `subtitle`    | `h2`        | `subtitle`    |
+| `headline`    | `h3`        | `headline`    |
+| `subheadline` | `h4`        | `subheadline` |
+| `block-title` | `h5`        | `block-title` |
+| `overtitle`   | `h6`        | `overtitle`   |
+
+</Lang>
+
 <Canvas of={HeadingStories.AllVariants} />
+
+<Lang lang="pt-BR">
 
 ## Cores
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Colors
+
+</Lang>
+
 <Canvas of={HeadingStories.ColorVariants} />
 
+<Lang lang="pt-BR">
 ## Alinhamento
 
 Use `align` com `left`, `center`, `right` ou `justify`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Alignment
+
+Use `align` with `left`, `center`, `right` or `justify`.
+
+</Lang>
+
 <Canvas of={HeadingStories.Aligned} />
 
+<Lang lang="pt-BR">
 ## Line Clamp
 
 O atributo `line-clamp` recebe um número inteiro e limita a exibição do texto.
 
+</Lang>
+
+<Lang lang="en-US">
+## Line Clamp
+
+The `line-clamp` attribute receives an integer and limits the text display.
+
+</Lang>
+
 <Canvas of={HeadingStories.WithLineClamp} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={HeadingStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
 
 ```html
-<lui-heading variant="title" color="heading" label="Título da página"></lui-heading>
+<lui-heading
+  variant="title"
+  color="heading"
+  label="Título da página"
+></lui-heading>
 ```
 
 ### Classe CSS
@@ -59,3 +135,22 @@ O atributo `line-clamp` recebe um número inteiro e limita a exibição do texto
 ```html
 <h1 class="title text--color-heading">Título da página</h1>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-heading variant="title" color="heading" label="Page title"></lui-heading>
+```
+
+### CSS class
+
+```html
+<h1 class="title text--color-heading">Page title</h1>
+```
+
+</Lang>

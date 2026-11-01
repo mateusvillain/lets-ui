@@ -1,8 +1,10 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as DatePickerStories from './DatePicker.stories';
 
 <Meta of={DatePickerStories} />
 
+<Lang lang="pt-BR">
 # Date Picker
 
 O Date Picker seleciona uma data num calendário. Com `range`, seleciona um
@@ -13,14 +15,35 @@ como a data de nascimento, ative `editable` para que a data possa ser digitada.
 O campo tem a mesma anatomia, os mesmos estados e os mesmos tamanhos do Input.
 O valor é uma string ISO 8601 em qualquer idioma: `YYYY-MM-DD` para uma data e
 `YYYY-MM-DD/YYYY-MM-DD` para um intervalo.
+</Lang>
+
+<Lang lang="en-US">
+# Date Picker
+
+The Date Picker selects a date in a calendar. With `range`, it selects a range.
+Use it when the date is near or when the day of the week matters, such as in
+scheduling, bookings and deadlines. For distant dates the person already knows,
+such as the birth date, turn on `editable` so the date can be typed.
+
+The field has the same anatomy, the same states and the same sizes as Input.
+The value is an ISO 8601 string in any language: `YYYY-MM-DD` for a date and
+`YYYY-MM-DD/YYYY-MM-DD` for a range.
+</Lang>
 
 <Canvas of={DatePickerStories.DatePicker} />
 <Controls of={DatePickerStories.DatePicker} />
 
+<Lang lang="pt-BR">
 ## Calendário aberto
+</Lang>
+
+<Lang lang="en-US">
+## Open calendar
+</Lang>
 
 <Canvas of={DatePickerStories.Open} />
 
+<Lang lang="pt-BR">
 ## Range
 
 Use `range` para escolher um período, como uma hospedagem, férias ou o filtro
@@ -40,9 +63,33 @@ outro.
 
 O campo mostra as duas pontas com `Intl.DateTimeFormat.formatRange`, que não
 repete o que elas têm em comum: `Jan 16 – 21, 2026`.
+</Lang>
+
+<Lang lang="en-US">
+## Range
+
+Use `range` to choose a period, such as a stay, a vacation or a report filter.
+The calendar shows two months side by side, so a range that crosses from one
+month to the next appears in full. The first click marks one end and the second
+marks the other, in any order. Between the two clicks, the range follows the
+pointer or the keyboard focus. `Esc` cancels the incomplete selection and keeps
+the previous value.
+
+If the second date comes before the first, it becomes the start and the first
+becomes the end. On close, focus returns to the field, which is announced with
+the period already in order. Both ends are part of the period: in
+`2026-01-16/2026-01-21`, day 21 is included.
+
+On screens smaller than the `sm` breakpoint, the two months stack one below the
+other.
+
+The field shows both ends with `Intl.DateTimeFormat.formatRange`, which does
+not repeat what they have in common: `Jan 16 – 21, 2026`.
+</Lang>
 
 <Canvas of={DatePickerStories.Range} />
 
+<Lang lang="pt-BR">
 ## Digitação
 
 Com `editable`, o campo vira uma caixa de texto e o calendário abre pelo botão
@@ -73,9 +120,44 @@ Para traduzir as letras do formato, use `format-text`, como em
 `format-text="dd / mm / aaaa"`. Ele vale para o placeholder, para o texto
 abaixo do campo e para a descrição acessível. Com `hint`, inclua o formato no
 texto do hint, já que ele toma o lugar do formato abaixo do campo.
+</Lang>
+
+<Lang lang="en-US">
+## Typing
+
+With `editable`, the field becomes a text box and the calendar opens from the
+button next to it. The person types only the numbers. The mask adds the slashes,
+dots or hyphens in the order of the `locale`. The expected format appears in the
+placeholder and, without `hint`, also below the field, to stay visible after the
+person starts typing. Slashes and hyphens get a space on each side, to separate
+the fields:
+
+| `locale` | Mask             |
+| -------- | ---------------- |
+| `pt-BR`  | `dd / mm / yyyy` |
+| `en-US`  | `mm / dd / yyyy` |
+| `de-DE`  | `dd.mm.yyyy`     |
+| `ja-JP`  | `yyyy / mm / dd` |
+
+With `range`, the field receives both dates: `dd / mm / yyyy – dd / mm / yyyy`.
+
+`value` only changes when the text forms a complete and valid date, and each
+change emits `change`. While the text is incomplete or forms a date that does
+not exist, such as 30/02, `value` stays empty and the field reports `badInput`,
+with the message from `bad-input-text`. With `range`, two valid dates where the
+end comes before the start also report `badInput`, but with the message from
+`range-order-text`. In every case, the typed text stays in the field to be
+corrected. Pasting a date in ISO 8601, such as `2026-01-16`, also works.
+
+To translate the letters of the format, use `format-text`, as in
+`format-text="dd / mm / aaaa"`. It applies to the placeholder, to the text
+below the field and to the accessible description. With `hint`, include the
+format in the hint text, since it takes the place of the format below the field.
+</Lang>
 
 <Canvas of={DatePickerStories.Editable} />
 
+<Lang lang="pt-BR">
 ### Range em dois campos
 
 Com `editable range`, `range-fields="two"` separa as duas pontas em duas caixas
@@ -101,17 +183,59 @@ Colar um intervalo em ISO 8601 em qualquer uma das caixas preenche as duas.
 Sem `editable`, o range continua um botão só, e `range-fields` não tem efeito.
 Cada caixa tem a largura da data, então as duas ficam tão próximas quanto no
 range em um campo.
+</Lang>
+
+<Lang lang="en-US">
+### Range in two fields
+
+With `editable range`, `range-fields="two"` splits the two ends into two text
+boxes inside the same field. Visually it remains a single field, with a dash
+between the dates and the calendar button at the end. Structurally, there are
+two fields: the label names the group, and each box has its own name,
+`start-label` and `end-label`, so that the screen reader says which date is
+being typed.
+
+Each box uses the mask of a single date, such as `dd / mm / yyyy`. The `Tab`
+order is start, end and calendar button. Focus does not jump to the end on its
+own when the start is completed. `Alt` + `↓` opens the calendar from any of the
+boxes, and choosing the period in the calendar fills both.
+
+`value` remains the same as the range in one field,
+`YYYY-MM-DD/YYYY-MM-DD`, and only changes when both dates are complete and in
+order. On error, only the box with the problem is marked with `aria-invalid`
+and described by the message: the end, when it comes before the start or goes
+past `max`; the start, when it comes before `min`; the one with an incomplete
+or nonexistent date (`badInput`). An empty box is not `badInput`: with
+`required`, the missing one reports `valueMissing`; without `required`, the
+field stays valid and `value` stays empty until both dates. Pasting a range in
+ISO 8601 in any of the boxes fills both.
+
+Without `editable`, range remains a single button, and `range-fields` has no
+effect. Each box is the width of the date, so the two sit as close as in the
+range in one field.
+</Lang>
 
 <Canvas of={DatePickerStories.RangeTwoFields} />
 
+<Lang lang="pt-BR">
 ## Min e max
 
 Use `min` e `max` para limitar as datas que podem ser escolhidas. Por exemplo,
 uma reserva que não pode ser no passado ou um prazo que não pode passar do fim
 do trimestre.
+</Lang>
+
+<Lang lang="en-US">
+## Min and max
+
+Use `min` and `max` to limit the dates that can be chosen. For example, a
+booking that cannot be in the past or a deadline that cannot go past the end of
+the quarter.
+</Lang>
 
 <Canvas of={DatePickerStories.MinMax} />
 
+<Lang lang="pt-BR">
 ## Mês e ano
 
 O mês e o ano no título do calendário são botões. Um clique no mês troca os
@@ -124,7 +248,26 @@ distante, sem clicar mês a mês.
 Meses e anos sem nenhum dia dentro de `min` e `max` ficam desabilitados. `Esc`
 ou um novo clique no botão aberto volta aos dias sem mudar nada. Com `range`, a
 primeira ponta já escolhida continua marcada depois da troca de mês ou ano.
+</Lang>
 
+<Lang lang="en-US">
+## Month and year
+
+The month and year in the calendar title are buttons. A click on the month
+swaps the days for a grid with the twelve months of the year; a click on the
+year, for a grid of twelve years. The header arrows move one year in the months
+grid and twelve years in the years grid. Choosing a month or a year returns to
+the days on the same day of the month, adjusted to the month length and to
+`min` and `max`. It is the pointer path to a distant date, without clicking
+month by month.
+
+Months and years with no day within `min` and `max` are disabled. `Esc` or a
+new click on the open button returns to the days without changing anything.
+With `range`, the first end already chosen stays marked after changing the
+month or year.
+</Lang>
+
+<Lang lang="pt-BR">
 ## Datas indisponíveis
 
 `min` e `max` cortam as pontas, mas não abrem buracos no meio: um feriado, um
@@ -169,21 +312,88 @@ leste de Greenwich, cai no dia anterior.
 
 A função roda a cada renderização, uma vez por dia do mês na tela. Mantenha-a
 rápida: uma consulta a um `Set`, não uma requisição.
+</Lang>
+
+<Lang lang="en-US">
+## Unavailable dates
+
+`min` and `max` cut the ends, but do not open holes in the middle: a holiday, a
+day already booked, a date with no availability. For that, `isDateDisabled`
+receives a function, only in JS (it is not an HTML attribute), called with each
+day of the shown month. A day for which it returns `true` gets `aria-disabled`,
+cannot be chosen and gains a dash, which does not depend only on opacity — the
+same opacity as a day outside `min`/`max` would not be enough to tell the two
+reasons apart.
+
+With `editable`, typing or pasting a date that falls on a day marked by
+`isDateDisabled` also leaves the field invalid, with the message from
+`unavailable-date-text`, specific to that case and different from
+`range-error-text` (outside `min`/`max`). This applies even without the
+calendar open, since typing bypasses the blocked click. With `range`, the check
+is only on the two ends: a period can cross an unavailable day in the middle,
+the same way it already crosses a weekend or a holiday without a problem — only
+the date chosen as start or end cannot fall on an unavailable day. With
+`range-fields="two"`, only the box of the end in question is marked.
+
+Since it is not an attribute, the function is assigned through JS, after the
+element exists. Compare dates by their local parts: `toISOString()` reads UTC
+and, east of Greenwich, falls on the previous day.
+
+```html
+<lui-date-picker id="check-in" label="Check-in"></lui-date-picker>
+
+<script>
+  const unavailable = new Set(['2026-01-18', '2026-01-19', '2026-01-25']);
+
+  const iso = (date) =>
+    [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+
+  document.querySelector('#check-in').isDateDisabled = (date) =>
+    unavailable.has(iso(date));
+</script>
+```
+
+The function runs on every render, once per day of the month on screen. Keep it
+fast: a query to a `Set`, not a request.
+</Lang>
 
 <Canvas of={DatePickerStories.UnavailableDates} />
 
+<Lang lang="pt-BR">
 ## Error
+</Lang>
+
+<Lang lang="en-US">
+## Error
+</Lang>
 
 <Canvas of={DatePickerStories.Error} />
 
+<Lang lang="pt-BR">
 ## Disabled
+</Lang>
+
+<Lang lang="en-US">
+## Disabled
+</Lang>
 
 <Canvas of={DatePickerStories.Disabled} />
 
+<Lang lang="pt-BR">
 ## Sizes
+</Lang>
+
+<Lang lang="en-US">
+## Sizes
+</Lang>
 
 <Canvas of={DatePickerStories.Sizes} />
 
+<Lang lang="pt-BR">
 ## Idioma e início da semana
 
 `locale` recebe uma tag BCP 47 e define o idioma do mês no cabeçalho, dos dias
@@ -208,9 +418,39 @@ Se o navegador não reconhecer a tag, o campo usa o idioma do navegador.
 `first-day-of-week` define a primeira coluna do calendário. Nos Estados Unidos
 e no Brasil a semana começa no domingo, e na maior parte da Europa começa na
 segunda.
+</Lang>
+
+<Lang lang="en-US">
+## Language and first day of week
+
+`locale` receives a BCP 47 tag and defines the language of the month in the
+header, of the days of the week, of the accessible names of the days and of the
+field text. The field text follows the convention of each language. The order
+of day, month and year, the month abbreviation and the punctuation change
+according to the `locale`:
+
+| `locale` | Date               | Range                   |
+| -------- | ------------------ | ----------------------- |
+| `en-US`  | Oct 16, 2026       | Oct 16 – 21, 2026       |
+| `en-GB`  | 16 Oct 2026        | 16 – 21 Oct 2026        |
+| `pt-BR`  | 16 de out. de 2026 | 16 – 21 de out. de 2026 |
+| `de-DE`  | 16. Okt. 2026      | 16.–21. Okt. 2026       |
+
+In every language, the day and the year appear as numbers and the month appears
+abbreviated. The written month avoids confusion: `10/11/2026` is October in the
+United States and November in Brazil. The `locale` does not change `value`,
+which stays in ISO 8601.
+
+If the browser does not recognize the tag, the field uses the browser language.
+
+`first-day-of-week` defines the first column of the calendar. In the United
+States and Brazil the week starts on Sunday, and in most of Europe it starts on
+Monday.
+</Lang>
 
 <Canvas of={DatePickerStories.Localized} />
 
+<Lang lang="pt-BR">
 ## Integração com formulários
 
 O `lui-date-picker` é um form-associated custom element. O valor entra no
@@ -228,16 +468,49 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 | `badInput`                         | Com `editable`, o texto está incompleto ou a data não existe | `bad-input-text`        |
 | `badInput`                         | Com `editable range`, a data final vem antes da inicial      | `range-order-text`      |
 | `customError`                      | Uma ponta cai num dia de `isDateDisabled`                    | `unavailable-date-text` |
+</Lang>
+
+<Lang lang="en-US">
+## Form integration
+
+`lui-date-picker` is a form-associated custom element. The value enters the form
+`FormData` with the field `name`, in ISO 8601.
+
+Validation uses `ElementInternals.setValidity()`, as in native elements. With
+`required` and no date, the field reports `valueMissing`. A `value` that starts
+before `min` reports `rangeUnderflow`, and one that ends after `max` reports
+`rangeOverflow`. Each case has its own message:
+
+| Validity                           | When                                                               | Message                 |
+| ---------------------------------- | ------------------------------------------------------------------ | ----------------------- |
+| `valueMissing`                     | `required` and no date                                             | `error-text`            |
+| `rangeUnderflow` / `rangeOverflow` | The date starts before `min` or ends after `max`                   | `range-error-text`      |
+| `badInput`                         | With `editable`, the text is incomplete or the date does not exist | `bad-input-text`        |
+| `badInput`                         | With `editable range`, the end date comes before the start         | `range-order-text`      |
+| `customError`                      | An end falls on a day of `isDateDisabled`                          | `unavailable-date-text` |
+</Lang>
 
 <Canvas of={DatePickerStories.FormIntegration} />
 
+<Lang lang="pt-BR">
 ## Eventos
 
 | Evento   | `detail`                                        | Quando                                    |
 | -------- | ----------------------------------------------- | ----------------------------------------- |
 | `change` | `{ value: string }`                             | O usuário escolhe ou digita uma data      |
 | `change` | `{ value: string, start: string, end: string }` | Com `range`, o usuário fecha um intervalo |
+</Lang>
 
+<Lang lang="en-US">
+## Events
+
+| Event    | `detail`                                        | When                                  |
+| -------- | ----------------------------------------------- | ------------------------------------- |
+| `change` | `{ value: string }`                             | The user chooses or types a date      |
+| `change` | `{ value: string, start: string, end: string }` | With `range`, the user closes a range |
+</Lang>
+
+<Lang lang="pt-BR">
 ## Atributos
 
 | Atributo            | Tipo                      | Padrão    | Descrição                                                                          |
@@ -260,7 +533,34 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 | `optional`          | `boolean`                 | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                              |
 | `name`              | `string`                  | `''`      | Nome do campo no `FormData`                                                        |
 | `required`          | `boolean`                 | `false`   | Bloqueia a submissão sem data                                                      |
+</Lang>
 
+<Lang lang="en-US">
+## Attributes
+
+| Attribute           | Type                      | Default   | Description                                                                      |
+| ------------------- | ------------------------- | --------- | -------------------------------------------------------------------------------- |
+| `value`             | `string`                  | `''`      | Selected date in `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` with `range`           |
+| `range`             | `boolean`                 | `false`   | Selects a range, with two months side by side                                    |
+| `editable`          | `boolean`                 | `false`   | Allows typing the date, with a mask in the `locale` format                       |
+| `range-fields`      | `string`                  | `'one'`   | With `editable range`, `two` uses a text box for each end, in the same field     |
+| `min`               | `string`                  | `''`      | First selectable date, `YYYY-MM-DD`                                              |
+| `max`               | `string`                  | `''`      | Last selectable date, `YYYY-MM-DD`                                               |
+| `isDateDisabled`    | `(date: Date) => boolean` | `null`    | Only in JS, no attribute. Marks unavailable days outside the `min`/`max` pattern |
+| `open`              | `boolean`                 | `false`   | Calendar open, reflected as an attribute                                         |
+| `locale`            | `string`                  | `'en-US'` | Display language (BCP 47 tag), through `Intl.DateTimeFormat`                     |
+| `first-day-of-week` | `number`                  | `0`       | First column of the calendar: `0` Sunday … `6` Saturday                          |
+| `size`              | `string`                  | `'lg'`    | `lg` or `md`                                                                     |
+| `label`             | `string`                  | `''`      | Field label. Required, or `aria-label` when there is no visible label            |
+| `hint`              | `string`                  | `''`      | Support text below the field. With `editable`, replaces the format               |
+| `error`             | `boolean`                 | `false`   | Shows the error state and the message from `error-text`                          |
+| `disabled`          | `boolean`                 | `false`   | Disables the field                                                               |
+| `optional`          | `boolean`                 | `false`   | Shows the `optional-text` marker next to the label                               |
+| `name`              | `string`                  | `''`      | Field name in `FormData`                                                         |
+| `required`          | `boolean`                 | `false`   | Blocks submission without a date                                                 |
+</Lang>
+
+<Lang lang="pt-BR">
 ## Textos padrão
 
 Os textos gerados pelo componente estão em inglês. Troque-os pelos atributos
@@ -294,7 +594,45 @@ abaixo para usar o idioma do projeto.
 | `next-year-label`       | `'Next year'`                                    | Na grade de meses, `aria-label` do botão de próximo ano                                         |
 | `previous-years-label`  | `'Previous years'`                               | Na grade de anos, `aria-label` do botão dos doze anos anteriores                                |
 | `next-years-label`      | `'Next years'`                                   | Na grade de anos, `aria-label` do botão dos doze anos seguintes                                 |
+</Lang>
 
+<Lang lang="en-US">
+## Default texts
+
+The texts generated by the component are in English. Replace them with the
+attributes below to use the project language.
+
+| Attribute               | Default                                          | Description                                                                                                    |
+| ----------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `placeholder`           | `'Select a date'`                                | Field text without a date. With `editable`, the default is `format-text`                                       |
+| `optional-text`         | `'(optional)'`                                   | Marker shown when `optional` is active                                                                         |
+| `error-text`            | `'This field is required.'`                      | Message shown when `error` is active, and for `valueMissing`                                                   |
+| `bad-input-text`        | `'Enter a valid date.'`                          | Error message, with `editable`, when the text does not form a date                                             |
+| `range-error-text`      | `'Enter a date within the allowed period.'`      | Error message when the date falls outside `min` and `max`                                                      |
+| `range-order-text`      | `'The end date can't be before the start date.'` | Error message, with `editable range`, when the end date comes before the start                                 |
+| `unavailable-date-text` | `'This date is unavailable.'`                    | Error message when an end falls on a day marked by `isDateDisabled`                                            |
+| `start-label`           | `'Start date'`                                   | With `range-fields="two"`, accessible name of the start date box                                               |
+| `end-label`             | `'End date'`                                     | With `range-fields="two"`, accessible name of the end date box                                                 |
+| `required-text`         | `'Required'`                                     | Without `editable`, hidden text that describes the field as required when `required` is active                 |
+| `range-start-text`      | `'Start date selected. Choose the end date.'`    | Announcement, with `range`, after the first end is chosen                                                      |
+| `selected-day-text`     | `'selected'`                                     | Along with the name of the selected day, without `range` or in a one-day period                                |
+| `range-start-day-text`  | `'start of period'`                              | With `range`, along with the name of the first day of the period                                               |
+| `in-range-day-text`     | `'in period'`                                    | With `range`, along with the name of the days between the ends                                                 |
+| `range-end-day-text`    | `'end of period'`                                | With `range`, along with the name of the last day of the period                                                |
+| `unavailable-day-text`  | `'unavailable'`                                  | Along with the name of a day marked by `isDateDisabled`                                                        |
+| `format-text`           | `locale` format, such as `dd / mm / yyyy`        | With `editable`: placeholder, text below the field without `hint` and accessible description                   |
+| `dialog-label`          | `'Choose date'`                                  | Accessible name of the calendar and, with `editable`, of the button that opens it, followed by the chosen date |
+| `previous-month-label`  | `'Previous month'`                               | `aria-label` of the previous month button                                                                      |
+| `next-month-label`      | `'Next month'`                                   | `aria-label` of the next month button                                                                          |
+| `choose-month-label`    | `'choose month'`                                 | Hidden text after the month in the title button that opens the months grid                                     |
+| `choose-year-label`     | `'choose year'`                                  | Hidden text after the year in the title button that opens the years grid                                       |
+| `previous-year-label`   | `'Previous year'`                                | In the months grid, `aria-label` of the previous year button                                                   |
+| `next-year-label`       | `'Next year'`                                    | In the months grid, `aria-label` of the next year button                                                       |
+| `previous-years-label`  | `'Previous years'`                               | In the years grid, `aria-label` of the button for the previous twelve years                                    |
+| `next-years-label`      | `'Next years'`                                   | In the years grid, `aria-label` of the button for the next twelve years                                        |
+</Lang>
+
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 O calendário segue o padrão
@@ -433,11 +771,160 @@ obrigatório desde o início. Ao enviar o form vazio, vale o `valueMissing`, com
 | Regras do axe                  | Painel Accessibility do Storybook, sem bloquear o build |
 | VoiceOver, no Safari           | Testado manualmente                                     |
 | NVDA                           | Ainda não testado manualmente                           |
+</Lang>
 
+<Lang lang="en-US">
+## Accessibility
+
+The calendar follows the WAI-ARIA APG
+[Date Picker Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/)
+pattern: a non-modal dialog with the days in a `grid`.
+
+### Field name
+
+`label` is required. When there is no visible label, use `aria-label` in its
+place. Without both, the field has no accessible name: without `editable`, the
+name is only the date or the placeholder; with `editable`, only the placeholder
+remains, which screen readers do not announce reliably. In that case, the
+component warns in the console once per field.
+With `range`, use a label that describes the period, such as "Stay" or "Report
+period".
+
+### Keyboard in the field
+
+| Key              | Action                                                            |
+| ---------------- | ----------------------------------------------------------------- |
+| `Enter`, `Space` | On the button, opens or closes the calendar                       |
+| `↓`, `↑`         | On the button, opens the calendar on the selected day or on today |
+| `Alt` + `↓`      | With `editable`, in the text box, opens the calendar              |
+| `Esc`            | With the calendar open, closes without changing                   |
+| `0`–`9`          | With `editable`, types the date; the mask adds the separators     |
+
+With `editable`, the text box arrows move the cursor, so the calendar opens
+with `Alt` + `↓`, as in a native `<select>`.
+
+### Keyboard in the calendar
+
+| Key                          | Action                                                           |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `←` `→`                      | Previous / next day                                              |
+| `↑` `↓`                      | Same column in the previous / next week                          |
+| `Home` `End`                 | Start / end of the week                                          |
+| `Page Up` `Page Down`        | Previous / next month                                            |
+| `Shift` + `Page Up` / `Down` | Previous / next year                                             |
+| `Enter`, `Space`             | Selects the focused day and closes                               |
+| `Tab`                        | Goes through the header buttons and the grid; on leaving, closes |
+| `Esc`                        | Closes without changing                                          |
+
+With `range`, the first `Enter` marks one end and the second marks the other.
+Between the two, the range follows the focus. `Esc` discards the incomplete
+selection and keeps the previous value. That preview is only visual: until the
+second `Enter`, only the first chosen day has `aria-selected` and
+`range-start-day-text` in the name, so that the focused day is not announced as
+the end of the period before being chosen. The preview does not stop on a day
+marked by `isDateDisabled`: it stays on the last day that can be chosen.
+
+### Keyboard in the month and year grids
+
+| Key                   | Action                                                                       |
+| --------------------- | ---------------------------------------------------------------------------- |
+| `←` `→`               | Previous / next month or year                                                |
+| `↑` `↓`               | Same column in the previous / next row                                       |
+| `Home` `End`          | Start / end of the row                                                       |
+| `Page Up` `Page Down` | Previous / next year in the months; twelve years before / after in the years |
+| `Enter`, `Space`      | Chooses and returns to the days                                              |
+| `Esc`                 | Returns to the days without changing; a second `Esc` closes the calendar     |
+
+When a grid opens, focus goes to the month or year of the active day. When
+returning to the days, it goes to the active day.
+
+### Focus
+
+- On open, focus goes to the selected day or, without a value, to today.
+  The arrows and the month navigation stop at the `min` and `max` limits.
+- The grid has a single tab stop, including with two months side by side.
+- When closing with `Esc` or choosing a day, focus returns to the control that
+  opened the calendar: the field or, with `editable`, the calendar button.
+- The calendar closes with `Tab` out of it or with a click outside. The dialog
+  has `aria-modal="false"` and does not trap focus.
+- Inside a modal, `Esc` closes only the calendar, not the modal.
+- With `open` in the HTML, the calendar appears without taking focus from the page.
+- With `editable`, the calendar button has its own focus ring, so it is not
+  confused with the focus in the text box.
+
+### What the screen reader announces
+
+| Element                     | Announcement                                                                                                                                                                                                                                                                                       |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Field                       | `<button aria-haspopup="dialog">` named by the label and by the displayed date, with `aria-expanded`                                                                                                                                                                                               |
+| Range in two fields         | `role="group"` named by the label, with two boxes named by `start-label` and `end-label`, each described by the format                                                                                                                                                                             |
+| Field with `editable`       | `<input inputmode="numeric">` named by the label and described by the format (`dd / mm / yyyy`), by the hint or by the error                                                                                                                                                                       |
+| Calendar button             | `dialog-label` followed by the chosen date: `Choose date, Jan 16, 2026`                                                                                                                                                                                                                            |
+| Calendar                    | Dialog named by `dialog-label`                                                                                                                                                                                                                                                                     |
+| Month                       | An `aria-live="polite"` region, announced on month change; with `range`, the two months together                                                                                                                                                                                                   |
+| First end                   | With `range`, another `aria-live="polite"` region announces `range-start-text` after the first choice                                                                                                                                                                                              |
+| Chosen period               | On close, focus returns to the field, named with the period in order: `Stay Jan 12 – 20, 2026`                                                                                                                                                                                                     |
+| Days of the week            | Full name ("Sunday"), even when the screen shows only "S"                                                                                                                                                                                                                                          |
+| Day                         | Full date: "Friday, January 16, 2026". The cell itself (`<td role="gridcell">`) receives focus, with no button inside                                                                                                                                                                              |
+| Today                       | `aria-current="date"`                                                                                                                                                                                                                                                                              |
+| Selected day                | `aria-selected="true"` in the day cell, which is the focused element, and the state in the name: "Friday, January 16, 2026, selected"; with `range`, "start of period", "in period" or "end of period". VoiceOver does not announce `aria-selected` in a `gridcell`, so the name repeats the state |
+| Unavailable day             | `aria-disabled="true"` and `unavailable-day-text` in the name: "Sunday, January 18, 2026, unavailable"                                                                                                                                                                                             |
+| Day outside the range       | `aria-disabled="true"`: reachable by keyboard, but cannot be chosen                                                                                                                                                                                                                                |
+| Month buttons               | `previous-month-label` and `next-month-label`; `aria-disabled` at the `min` and `max` limits                                                                                                                                                                                                       |
+| Month and year in the title | Two buttons with `aria-expanded`: "January, choose month" and "2026, choose year". In the open grid, each month or year is a `gridcell`, with `aria-selected` and the state in the name as in the days; the month region announces the year or the twelve years on screen                          |
+| Error                       | `aria-invalid`, the case message linked by `aria-describedby`; required: with `editable`, `aria-required`, and without it, `required-text` in the description                                                                                                                                      |
+
+The format is part of the field description, not only of the placeholder,
+because the placeholder disappears when the person starts typing and can be
+replaced by another text. Without `hint`, the description points only to the
+text below the field, which already shows the format, so that it is read once.
+
+The field without `editable` is a `<button>`, which does not accept
+`aria-required`. With `required`, a hidden text (`required-text`, "Required" by
+default) enters the button description, before the message, so that the field
+is announced as required from the start. On submitting the empty form,
+`valueMissing` applies, with `error-text`.
+
+### WCAG criteria
+
+| Criterion                    | How the component meets it                                                                                      |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| 1.3.1 Info and Relationships | Label linked to the field; `grid` with column headers; hint and error linked                                    |
+| 1.3.2 Meaningful Sequence    | The calendar comes right after the field in the DOM                                                             |
+| 1.4.1 Use of Color           | Today has bold and `aria-current`; the selection has a fill and `aria-selected`; the unavailable day has a dash |
+| 1.4.10 Reflow                | With `range`, the two months stack on narrow screens                                                            |
+| 2.1.1 Keyboard               | All actions have a key, including range selection                                                               |
+| 2.1.2 No Keyboard Trap       | Non-modal dialog; `Esc` and `Tab` leave it                                                                      |
+| 2.4.3 Focus Order            | Focus enters the active day and returns to the control that opened the calendar                                 |
+| 2.4.6 Headings and Labels    | Month announced; days, months, years and buttons with descriptive names                                         |
+| 2.4.7 Focus Visible          | Focus ring on the field, on the days, on the months and years, on the header buttons and on the calendar button |
+| 2.5.8 Target Size (Minimum)  | Days with 32 px; month buttons, title buttons and month and year cells with 40 px                               |
+| 3.3.1 Error Identification   | `aria-invalid` and error message; `badInput` with `bad-input-text`                                              |
+| 3.3.2 Labels or Instructions | Label and, with `editable`, format visible below the field and in the description                               |
+| 3.3.3 Error Suggestion       | One message for each error: empty, outside the period, unavailable day, invalid date and end before the start   |
+| 4.1.2 Name, Role, Value      | Native or ARIA roles, names and states in every control                                                         |
+
+### Test status
+
+| Area                                | Status                                                    |
+| ----------------------------------- | --------------------------------------------------------- |
+| Keyboard, focus and ARIA attributes | Automated tests, in Chromium                              |
+| axe rules                           | Storybook Accessibility panel, without blocking the build |
+| VoiceOver, in Safari                | Manually tested                                           |
+| NVDA                                | Not manually tested yet                                   |
+</Lang>
+
+<Lang lang="pt-BR">
 ## Classe CSS (sem Web Component)
+</Lang>
+
+<Lang lang="en-US">
+## CSS class (without Web Component)
+</Lang>
 
 <Canvas of={DatePickerStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ```html
@@ -454,3 +941,23 @@ obrigatório desde o início. Ao enviar o form vazio, vale o `valueMissing`, com
     .addEventListener('change', (e) => console.log(e.detail.value));
 </script>
 ```
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+```html
+<lui-date-picker
+  name="check-in"
+  label="Check-in"
+  min="2026-01-12"
+  max="2026-01-28"
+></lui-date-picker>
+
+<script>
+  document
+    .querySelector('lui-date-picker')
+    .addEventListener('change', (e) => console.log(e.detail.value));
+</script>
+```
+</Lang>

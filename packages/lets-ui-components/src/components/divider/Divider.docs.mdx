@@ -1,35 +1,87 @@
 import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as DividerStories from './Divider.stories';
 
 <Meta of={DividerStories} />
 
+<Lang lang="pt-BR">
 # Divider
 
 Separador visual para dividir seções de conteúdo. Suporta orientação horizontal (padrão) e vertical, com ou sem label. Pode ser usado standalone em layouts ou dentro de menus para agrupar itens relacionados.
 
+</Lang>
+
+<Lang lang="en-US">
+# Divider
+
+Visual separator to divide content sections. Supports horizontal (default) and vertical orientation, with or without a label. It can be used standalone in layouts or inside menus to group related items.
+
+</Lang>
+
 <Canvas of={DividerStories.Divider} />
 <Controls of={DividerStories.Divider} />
 
+<Lang lang="pt-BR">
 ## Com label
 
 Use quando precisar de um separador textual entre seções — comum em fluxos de autenticação (ex.: "ou") ou para nomear grupos de conteúdo.
 
+</Lang>
+
+<Lang lang="en-US">
+## With label
+
+Use it when you need a textual separator between sections — common in authentication flows (e.g.: "or") or to name content groups.
+
+</Lang>
+
 <Canvas of={DividerStories.WithLabel} />
 
+<Lang lang="pt-BR">
 ## Vertical
 
 Use `orientation="vertical"` (web component) ou a classe `.divider--vertical` (HTML) para separar itens em layouts horizontais como toolbars e grupos de ações inline.
 
+</Lang>
+
+<Lang lang="en-US">
+## Vertical
+
+Use `orientation="vertical"` (web component) or the `.divider--vertical` class (HTML) to separate items in horizontal layouts such as toolbars and inline action groups.
+
+</Lang>
+
 <Canvas of={DividerStories.Vertical} />
+
+<Lang lang="pt-BR">
 
 ## Vertical com label
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Vertical with label
+
+</Lang>
+
 <Canvas of={DividerStories.VerticalWithLabel} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={DividerStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -48,7 +100,7 @@ Use `orientation="vertical"` (web component) ou a classe `.divider--vertical` (H
 ### Classe CSS
 
 ```html
-<hr class="divider">
+<hr class="divider" />
 <!-- Vertical: -->
 <div class="divider divider--vertical"></div>
 <!-- Com label: -->
@@ -56,3 +108,35 @@ Use `orientation="vertical"` (web component) ou a classe `.divider--vertical` (H
   <span class="divider__label">ou</span>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<!-- Horizontal -->
+<lui-divider></lui-divider>
+
+<!-- Horizontal with label -->
+<lui-divider label="or"></lui-divider>
+
+<!-- Vertical -->
+<lui-divider orientation="vertical"></lui-divider>
+```
+
+### CSS class
+
+```html
+<hr class="divider" />
+<!-- Vertical: -->
+<div class="divider divider--vertical"></div>
+<!-- With label: -->
+<div class="divider divider--labeled">
+  <span class="divider__label">or</span>
+</div>
+```
+
+</Lang>

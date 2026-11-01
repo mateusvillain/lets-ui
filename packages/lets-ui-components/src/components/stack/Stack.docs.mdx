@@ -1,27 +1,69 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as StackStories from './Stack.stories';
 
 <Meta of={StackStories} />
 
+<Lang lang="pt-BR">
 # Stack
 
 Vertical flex layout that stacks children with consistent spacing.
 
+</Lang>
+
+<Lang lang="en-US">
+# Stack
+
+Vertical flex layout that stacks children with consistent spacing.
+
+</Lang>
+
 <Canvas of={StackStories.Default} />
 <Controls of={StackStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## Small Gap
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Small Gap
+
+</Lang>
 
 <Canvas of={StackStories.SmallGap} />
 
+<Lang lang="pt-BR">
+
 ## Centered Items
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Centered Items
+
+</Lang>
 
 <Canvas of={StackStories.Centered} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={StackStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -43,3 +85,30 @@ Vertical flex layout that stacks children with consistent spacing.
   <div>Item 3</div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-stack gap="md" align="stretch" justify="start">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</lui-stack>
+```
+
+### CSS class
+
+```html
+<div class="stack stack--gap-md">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</div>
+```
+
+</Lang>

@@ -1,27 +1,69 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as FlexStories from './Flex.stories';
 
 <Meta of={FlexStories} />
 
+<Lang lang="pt-BR">
 # Flex
 
 Raw flexbox primitive. Use `lui-flex-item` to control individual item properties.
 
+</Lang>
+
+<Lang lang="en-US">
+# Flex
+
+Raw flexbox primitive. Use `lui-flex-item` to control individual item properties.
+
+</Lang>
+
 <Canvas of={FlexStories.Default} />
 <Controls of={FlexStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## Column Direction
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Column Direction
+
+</Lang>
 
 <Canvas of={FlexStories.Column} />
 
+<Lang lang="pt-BR">
+
 ## With Flex Grow
+
+</Lang>
+
+<Lang lang="en-US">
+
+## With Flex Grow
+
+</Lang>
 
 <Canvas of={FlexStories.WithGrow} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={FlexStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -41,3 +83,28 @@ Raw flexbox primitive. Use `lui-flex-item` to control individual item properties
   <div class="flex-item--shrink-0">Fixo</div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-flex gap="md" align="stretch" justify="start">
+  <lui-flex-item grow="1">Grows</lui-flex-item>
+  <lui-flex-item>Fixed</lui-flex-item>
+</lui-flex>
+```
+
+### CSS class
+
+```html
+<div class="flex flex--gap-md flex--align-center">
+  <div class="flex-item--grow">Grows</div>
+  <div class="flex-item--shrink-0">Fixed</div>
+</div>
+```
+
+</Lang>

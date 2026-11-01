@@ -1,51 +1,153 @@
-import { Meta, Canvas, Controls, ArgTypes } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as AlertStories from './Alert.stories';
 
 <Meta of={AlertStories} />
 
+<Lang lang="pt-BR">
+
 # Alert
+
+</Lang>
+
+<Lang lang="en-US">
+
+# Alert
+
+</Lang>
 
 <Canvas of={AlertStories.Alert} />
 <Controls of={AlertStories.Alert} />
 
+<Lang lang="pt-BR">
+
 ## Caution
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Caution
+
+</Lang>
+
 <Canvas of={AlertStories.Caution} />
 
+<Lang lang="pt-BR">
+
 ## Danger
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Danger
+
+</Lang>
+
 <Canvas of={AlertStories.Danger} />
 
+<Lang lang="pt-BR">
+
 ## Info
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Info
+
+</Lang>
+
 <Canvas of={AlertStories.Info} />
 
+<Lang lang="pt-BR">
+
 ## Success
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Success
+
+</Lang>
+
 <Canvas of={AlertStories.Success} />
 
+<Lang lang="pt-BR">
 ## Dismissible
 
 Adicione o atributo `dismissible` para exibir um botão de fechar no canto do alert. Ao ser clicado, o componente emite o evento `lui-dismiss` — use-o para remover o alert do DOM ou atualizar o estado da aplicação.
 
 O label acessível do botão pode ser customizado com o atributo `close-label` (padrão: `"Close"`).
 
+</Lang>
+
+<Lang lang="en-US">
+## Dismissible
+
+Add the `dismissible` attribute to show a close button in the alert corner. When clicked, the component emits the `lui-dismiss` event — use it to remove the alert from the DOM or update the application state.
+
+The button accessible label can be customized with the `close-label` attribute (default: `"Close"`).
+
+</Lang>
+
 <Canvas of={AlertStories.Dismissible} />
+
+<Lang lang="pt-BR">
 
 ### Dismissible com ações
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Dismissible with actions
+
+</Lang>
+
 <Canvas of={AlertStories.DismissibleWithActions} />
+
+<Lang lang="pt-BR">
 
 ### Todos os variants
 
+</Lang>
+
+<Lang lang="en-US">
+
+### All variants
+
+</Lang>
+
 <Canvas of={AlertStories.DismissibleAllVariants} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={AlertStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
 
 ```html
-<lui-alert variant="info" title="Título" content="Informação importante"></lui-alert>
+<lui-alert
+  variant="info"
+  title="Título"
+  content="Informação importante"
+></lui-alert>
 ```
 
 ### Dismissible
@@ -77,3 +179,50 @@ O label acessível do botão pode ser customizado com o atributo `close-label` (
   </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-alert
+  variant="info"
+  title="Title"
+  content="Important information"
+></lui-alert>
+```
+
+### Dismissible
+
+```html
+<lui-alert
+  variant="caution"
+  title="Warning"
+  content="This action cannot be undone."
+  dismissible
+  close-label="Close alert"
+></lui-alert>
+
+<script>
+  document.querySelector('lui-alert').addEventListener('lui-dismiss', (e) => {
+    e.target.remove();
+  });
+</script>
+```
+
+### CSS class
+
+```html
+<div class="alert alert--info">
+  <div class="alert__content">
+    <div class="alert__text">
+      <p>Important information</p>
+    </div>
+  </div>
+</div>
+```
+
+</Lang>

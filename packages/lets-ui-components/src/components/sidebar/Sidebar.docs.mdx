@@ -1,33 +1,81 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as SidebarStories from './Sidebar.stories';
 
 <Meta of={SidebarStories} />
 
+<Lang lang="pt-BR">
 # Sidebar
 
 Two-panel layout with a fixed-width sidebar and flexible content area. Uses named slots: `sidebar` and `content`.
 
+</Lang>
+
+<Lang lang="en-US">
+# Sidebar
+
+Two-panel layout with a fixed-width sidebar and flexible content area. Uses named slots: `sidebar` and `content`.
+
+</Lang>
+
 <Canvas of={SidebarStories.Default} />
 <Controls of={SidebarStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## Sidebar on End
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Sidebar on End
+
+</Lang>
 
 <Canvas of={SidebarStories.End} />
 
+<Lang lang="pt-BR">
+
 ## Narrow Sidebar
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Narrow Sidebar
+
+</Lang>
 
 <Canvas of={SidebarStories.NarrowSidebar} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={SidebarStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
 
 ```html
-<lui-sidebar side="start" side-width="240px" content-min-width="50%" gap="lg" align="stretch">
+<lui-sidebar
+  side="start"
+  side-width="240px"
+  content-min-width="50%"
+  gap="lg"
+  align="stretch"
+>
   <div slot="sidebar">Navegação ou metadados</div>
   <div slot="content">Conteúdo principal</div>
 </lui-sidebar>
@@ -41,3 +89,34 @@ Two-panel layout with a fixed-width sidebar and flexible content area. Uses name
   <div class="sidebar__content">Conteúdo principal</div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-sidebar
+  side="start"
+  side-width="240px"
+  content-min-width="50%"
+  gap="lg"
+  align="stretch"
+>
+  <div slot="sidebar">Navigation or metadata</div>
+  <div slot="content">Main content</div>
+</lui-sidebar>
+```
+
+### CSS class
+
+```html
+<div class="sidebar sidebar--gap-md">
+  <div class="sidebar__side">Sidebar (240px)</div>
+  <div class="sidebar__content">Main content</div>
+</div>
+```
+
+</Lang>

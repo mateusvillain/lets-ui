@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Foundations/Color" />
 
@@ -97,6 +98,95 @@ export const semanticGroups = [
     ],
   },
 ];
+
+export const semanticGroupsEn = [
+  {
+    label: 'Primary',
+    prefix: 'primary',
+    tokens: [
+      { role: 'background-surface',   desc: 'Soft background'        },
+      { role: 'background-container', desc: 'Highlight background'   },
+      { role: 'border-default',       desc: 'Border'                 },
+      { role: 'text-body',            desc: 'Text'                   },
+      { role: 'icon-default',         desc: 'Icon'                   },
+      { role: 'focus-ring',           desc: 'Focus ring color'       },
+    ],
+  },
+  {
+    label: 'Secondary',
+    prefix: 'secondary',
+    tokens: [
+      { role: 'background-surface',   desc: 'Soft background'        },
+      { role: 'background-container', desc: 'Highlight background'   },
+      { role: 'border-default',       desc: 'Border'                 },
+      { role: 'icon-default',         desc: 'Icon'                   },
+      { role: 'focus-ring',           desc: 'Focus ring color'       },
+    ],
+  },
+  {
+    label: 'Danger',
+    prefix: 'danger',
+    tokens: [
+      { role: 'background-surface',   desc: 'Soft background'        },
+      { role: 'background-container', desc: 'Highlight background'   },
+      { role: 'border-default',       desc: 'Border'                 },
+      { role: 'text-error',           desc: 'Error text'             },
+      { role: 'icon-default',         desc: 'Icon'                   },
+      { role: 'focus-ring',           desc: 'Focus ring color'       },
+    ],
+  },
+  {
+    label: 'Success',
+    prefix: 'success',
+    tokens: [
+      { role: 'background-surface',   desc: 'Soft background'        },
+      { role: 'background-container', desc: 'Highlight background'   },
+      { role: 'border-default',       desc: 'Border'                 },
+      { role: 'icon-default',         desc: 'Icon'                   },
+      { role: 'focus-ring',           desc: 'Focus ring color'       },
+    ],
+  },
+  {
+    label: 'Caution',
+    prefix: 'caution',
+    tokens: [
+      { role: 'background-surface',   desc: 'Soft background'        },
+      { role: 'background-container', desc: 'Highlight background'   },
+      { role: 'border-default',       desc: 'Border'                 },
+      { role: 'icon-default',         desc: 'Icon'                   },
+    ],
+  },
+  {
+    label: 'Info',
+    prefix: 'info',
+    tokens: [
+      { role: 'background-surface',   desc: 'Soft background'        },
+      { role: 'background-container', desc: 'Highlight background'   },
+      { role: 'border-default',       desc: 'Border'                 },
+      { role: 'icon-default',         desc: 'Icon'                   },
+    ],
+  },
+  {
+    label: 'Neutral',
+    prefix: 'neutral',
+    tokens: [
+      { role: 'background-surface',   desc: 'Default background'     },
+      { role: 'background-container', desc: 'Highlight background'   },
+      { role: 'background-overlay',   desc: 'Overlay'                },
+      { role: 'border-subtle',        desc: 'Subtle border'          },
+      { role: 'border-default',       desc: 'Default border'         },
+      { role: 'text-heading',         desc: 'Heading'                },
+      { role: 'text-body',            desc: 'Text'                   },
+      { role: 'text-caption',         desc: 'Caption'                },
+      { role: 'text-inverse',         desc: 'Inverse text'           },
+      { role: 'icon-default',         desc: 'Icon'                   },
+      { role: 'icon-inverse',         desc: 'Inverse icon'           },
+      { role: 'focus-ring',           desc: 'Focus ring color'       },
+    ],
+  },
+];
+
+<Lang lang="pt-BR">
 
 # Color
 
@@ -335,3 +425,248 @@ Cores para elementos de link. Herdam da cor primária da marca e mudam por tema.
     </div>
   ))}
 </div>
+
+</Lang>
+
+<Lang lang="en-US">
+
+# Color
+
+Color tokens for the design system. Colors are organized in three layers: **primitives** (raw scales), **brand** (brand palette) and **semantic** (usage roles).
+
+---
+
+## Primitive colors
+
+Scales of 8 shades, from lightest to darkest. Use the SCSS function `color($palette, $scale)` to access them.
+
+{primitives.map(({ name, key, shades }) => (
+  <div key={key} style={{ marginBottom: '32px' }}>
+    <p style={{ margin: '0 0 8px', fontWeight: 500, fontSize: '14px' }}>{name}</p>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '6px' }}>
+      {shades.map((hex, i) => (
+        <div key={i}>
+          <div style={{
+            height: '48px',
+            background: `var(--lui-color-${key}-${i + 1})`,
+            borderRadius: '6px',
+            border: '1px solid rgba(0,0,0,0.08)',
+          }} />
+          <code style={{ display: 'block', fontSize: '10px', marginTop: '4px', lineHeight: 1.3 }}>
+            {`--lui-color-${key}-${i + 1}`}
+          </code>
+          <span style={{ display: 'block', fontSize: '10px', color: 'var(--lui-color-neutral-text-caption)' }}>
+            {hex}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+))}
+
+### Interaction state
+
+Hover and pressed have no color of their own — not per brand, not per variant,
+not per theme. They are a single translucent layer at 8% and 16% mixed into the
+component's resting background. Use the SCSS function `state($state)` or the
+`state-layer($bg)` mixin. There is no token here: the two amounts do not vary by
+theme or brand, so they live as constants in `_functions.scss`, together with the
+logic that uses them.
+
+The color of that layer depends on the component type:
+
+- **Surface components** — transparent or over the neutral background, such as a
+  menu item, a tab or an icon button — mix the **color of their own content**
+  (`currentColor`). Since content and background already contrast with each
+  other, the layer darkens what is light and lightens what is dark without
+  measuring anything, and without needing to know which surface the component
+  sits on.
+- **Filled components** — a solid background with a label on top, such as a
+  button, the current page, a selected card tab or a checked box — mix the
+  **color opposite to the label**, through the `$tint` parameter of `states()`
+  (or `state-layer()` / `state-base()`), declared together with the background.
+  A colored fill already starts near the minimum contrast, and mixing the label
+  color into it brings the two closer: the text would lose contrast exactly on
+  hover. With the opposite color, the background moves away from the label and
+  contrast **increases** on hover and pressed. In practice, a fill with a light
+  label darkens in the light theme and lightens in the dark one; one with a dark
+  label, like the neutral button, does the opposite.
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '32px' }}>
+  {[
+    ['light', 'var(--lui-color-neutral-background-surface)', 'var(--lui-color-neutral-text-body)', 'Light background · dark ink'],
+    ['dark', 'var(--lui-color-neutral-background-overlay)', 'var(--lui-color-neutral-text-inverse)', 'Dark background · light ink'],
+  ].map(([key, bg, fg, title]) => (
+    <div key={key} style={{
+      padding: '12px',
+      background: bg,
+      color: fg,
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <span style={{ display: 'block', fontSize: '11px', marginBottom: '8px' }}>{title}</span>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+        {[['0%', 'rest'], ['8%', 'hover'], ['16%', 'pressed']].map(([amount, label]) => (
+          <div key={label}>
+            <div style={{
+              height: '40px',
+              borderRadius: '6px',
+              border: '1px solid var(--lui-color-neutral-border-subtle)',
+              backgroundColor: `color-mix(in srgb, currentColor ${amount}, ${bg})`,
+            }} />
+            <span style={{ display: 'block', fontSize: '10px', marginTop: '4px' }}>
+              {label} · {amount}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '32px' }}>
+  {[
+    ['primary', 'var(--lui-color-primary-background-container)', 'Filled · ink opposite to the label'],
+    ['danger', 'var(--lui-color-danger-background-container)', 'Filled · ink opposite to the label'],
+  ].map(([key, bg, title]) => (
+    <div key={key} style={{
+      padding: '12px',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <span style={{ display: 'block', fontSize: '11px', marginBottom: '8px' }}>{title} ({key})</span>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+        {[['0%', 'rest'], ['8%', 'hover'], ['16%', 'pressed']].map(([amount, label]) => (
+          <div key={label}>
+            <div style={{
+              height: '40px',
+              borderRadius: '6px',
+              display: 'grid',
+              placeItems: 'center',
+              color: 'var(--lui-color-neutral-text-inverse)',
+              backgroundColor: `color-mix(in srgb, var(--lui-color-gray-8) ${amount}, ${bg})`,
+            }}>Aa</div>
+            <span style={{ display: 'block', fontSize: '10px', marginTop: '4px' }}>
+              {label} · {amount}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+---
+
+## Brand colors
+
+The primary and secondary colors are defined by theme file and can vary per brand (`data-brand`). The default theme (`lets-ui`) uses blue as primary and gray as secondary.
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginBottom: '32px' }}>
+  <div>
+    <p style={{ margin: '0 0 8px', fontWeight: 500, fontSize: '14px' }}>Primary</p>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '4px' }}>
+      {[1,2,3,4,5,6,7,8].map(n => (
+        <div key={n}>
+          <div style={{
+            height: '40px',
+            background: `var(--lui-brand-color-primary-${n})`,
+            borderRadius: '4px',
+            border: '1px solid rgba(0,0,0,0.06)',
+          }} />
+          <code style={{ display: 'block', fontSize: '9px', marginTop: '3px' }}>{n}</code>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div>
+    <p style={{ margin: '0 0 8px', fontWeight: 500, fontSize: '14px' }}>Secondary</p>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '4px' }}>
+      {[1,2,3,4,5,6,7,8].map(n => (
+        <div key={n}>
+          <div style={{
+            height: '40px',
+            background: `var(--lui-brand-color-secondary-${n})`,
+            borderRadius: '4px',
+            border: '1px solid rgba(0,0,0,0.06)',
+          }} />
+          <code style={{ display: 'block', fontSize: '9px', marginTop: '3px' }}>{n}</code>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+---
+
+## Semantic colors
+
+Colors with a defined usage role. Use the SCSS functions `bg()`, `text()`, `stroke()`, `icon()` to access them in components.
+
+{semanticGroupsEn.map(({ label, prefix, tokens }) => (
+  <div key={prefix} style={{ marginBottom: '32px' }}>
+    <p style={{ margin: '0 0 10px', fontWeight: 500, fontSize: '14px' }}>{label}</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      {tokens.map(({ role, desc }) => (
+        <div key={role} style={{
+          display: 'grid',
+          gridTemplateColumns: '32px 1fr auto',
+          alignItems: 'center',
+          gap: '12px',
+          padding: '8px 12px',
+          background: 'var(--lui-color-neutral-background-surface)',
+          border: '1px solid var(--lui-color-neutral-border-subtle)',
+          borderRadius: '6px',
+        }}>
+          <div style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '4px',
+            background: `var(--lui-color-${prefix}-${role})`,
+            border: '1px solid rgba(0,0,0,0.08)',
+            flexShrink: 0,
+          }} />
+          <code style={{ fontSize: '12px' }}>{`--lui-color-${prefix}-${role}`}</code>
+          <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)', textAlign: 'right' }}>{desc}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+))}
+
+---
+
+## Link
+
+Colors for link elements. They inherit from the brand primary color and change per theme.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '16px' }}>
+  {[
+    { token: '--lui-color-link-default', desc: 'Default link' },
+    { token: '--lui-color-link-visited', desc: 'Visited link' },
+  ].map(({ token, desc }) => (
+    <div key={token} style={{
+      display: 'grid',
+      gridTemplateColumns: '32px 1fr auto',
+      alignItems: 'center',
+      gap: '12px',
+      padding: '8px 12px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <div style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '4px',
+        background: `var(${token})`,
+        border: '1px solid rgba(0,0,0,0.08)',
+        flexShrink: 0,
+      }} />
+      <code style={{ fontSize: '12px' }}>{token}</code>
+      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)', textAlign: 'right' }}>{desc}</span>
+    </div>
+  ))}
+</div>
+
+</Lang>

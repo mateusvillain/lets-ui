@@ -1,15 +1,27 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as BodyStories from './Body.stories';
 
 <Meta of={BodyStories} />
 
+<Lang lang="pt-BR">
 # Body
 
 Componente para texto de conteúdo. Cobre textos de parágrafo, legendas e notas com variações de tamanho, cor, estilo e decoração.
 
+</Lang>
+
+<Lang lang="en-US">
+# Body
+
+Component for content text. Covers paragraph texts, captions and notes with size, color, style and decoration variations.
+
+</Lang>
+
 <Canvas of={BodyStories.Body} />
 <Controls of={BodyStories.Body} />
 
+<Lang lang="pt-BR">
 ## Tamanhos
 
 | Variant | Tag padrão | Uso sugerido                     |
@@ -18,32 +30,96 @@ Componente para texto de conteúdo. Cobre textos de parágrafo, legendas e notas
 | `md`    | `p`        | Conteúdo geral (padrão)          |
 | `sm`    | `p`        | Legendas, notas e texto auxiliar |
 
+</Lang>
+
+<Lang lang="en-US">
+## Sizes
+
+| Variant | Default tag | Suggested usage                   |
+| ------- | ----------- | --------------------------------- |
+| `lg`    | `p`         | Introduction and highlighted text |
+| `md`    | `p`         | General content (default)         |
+| `sm`    | `p`         | Captions, notes and helper text   |
+
+</Lang>
+
 <Canvas of={BodyStories.AllSizes} />
+
+<Lang lang="pt-BR">
 
 ## Cores
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Colors
+
+</Lang>
+
 <Canvas of={BodyStories.ColorVariants} />
 
+<Lang lang="pt-BR">
+
 ## Estilos de texto
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Text styles
+
+</Lang>
 
 <Canvas of={BodyStories.Italic} />
 <Canvas of={BodyStories.Underline} />
 <Canvas of={BodyStories.ItalicUnderline} />
 
+<Lang lang="pt-BR">
 ## Alinhamento
 
 Use `align` com `left`, `center`, `right` ou `justify`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Alignment
+
+Use `align` with `left`, `center`, `right` or `justify`.
+
+</Lang>
+
 <Canvas of={BodyStories.Aligned} />
+
+<Lang lang="pt-BR">
 
 ## Line Clamp
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Line Clamp
+
+</Lang>
+
 <Canvas of={BodyStories.WithLineClamp} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={BodyStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -57,3 +133,22 @@ Use `align` com `left`, `center`, `right` ou `justify`.
 ```html
 <p class="body--md">Texto com escala tipográfica body médio.</p>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-body variant="md" color="body" label="Content text."></lui-body>
+```
+
+### CSS class
+
+```html
+<p class="body--md">Text with medium body typographic scale.</p>
+```
+
+</Lang>

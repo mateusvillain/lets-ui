@@ -1,41 +1,113 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as TabsStories from './Tabs.stories';
 
 <Meta of={TabsStories} />
 
+<Lang lang="pt-BR">
 # Tabs
 
 Componente de navegação por abas. Suporta dois estilos visuais — **Line** (indicador de linha) e **Card** (segmento fechado) — e a prop `expand` para ocupar a largura total do contêiner. Acessível com navegação por teclado (← → Home End).
 
+</Lang>
+
+<Lang lang="en-US">
+# Tabs
+
+Tab navigation component. Supports two visual styles — **Line** (line indicator) and **Card** (enclosed segment) — and the `expand` prop to take the full width of the container. Accessible with keyboard navigation (← → Home End).
+
+</Lang>
+
 <Canvas of={TabsStories.Default} />
 <Controls of={TabsStories.Default} />
 
+<Lang lang="pt-BR">
 ## Variantes
 
 ### Line
 
+</Lang>
+
+<Lang lang="en-US">
+## Variants
+
+### Line
+
+</Lang>
+
 <Canvas of={TabsStories.Line} />
+
+<Lang lang="pt-BR">
 
 ### Card
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Card
+
+</Lang>
+
 <Canvas of={TabsStories.Card} />
+
+<Lang lang="pt-BR">
 
 ### Line — expand
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Line — expand
+
+</Lang>
+
 <Canvas of={TabsStories.LineExpand} />
+
+<Lang lang="pt-BR">
 
 ### Card — expand
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Card — expand
+
+</Lang>
+
 <Canvas of={TabsStories.CardExpand} />
+
+<Lang lang="pt-BR">
 
 ## Com aba desabilitada
 
+</Lang>
+
+<Lang lang="en-US">
+
+## With disabled tab
+
+</Lang>
+
 <Canvas of={TabsStories.WithDisabledTab} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={TabsStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -56,6 +128,37 @@ Componente de navegação por abas. Suporta dois estilos visuais — **Line** (i
     <button class="tab" role="tab" aria-selected="false">Segurança</button>
   </div>
   <div class="tabs__panel" role="tabpanel">Conteúdo da tab Geral</div>
-  <div class="tabs__panel" role="tabpanel" hidden>Conteúdo da tab Segurança</div>
+  <div class="tabs__panel" role="tabpanel" hidden>
+    Conteúdo da tab Segurança
+  </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-tabs variant="line">
+  <lui-tab label="General" active><p>General tab content.</p></lui-tab>
+  <lui-tab label="Security"><p>Security tab content.</p></lui-tab>
+</lui-tabs>
+```
+
+### CSS class
+
+```html
+<div class="tabs tabs--line">
+  <div class="tabs__list">
+    <button class="tab" role="tab" aria-selected="true">General</button>
+    <button class="tab" role="tab" aria-selected="false">Security</button>
+  </div>
+  <div class="tabs__panel" role="tabpanel">General tab content</div>
+  <div class="tabs__panel" role="tabpanel" hidden>Security tab content</div>
+</div>
+```
+
+</Lang>

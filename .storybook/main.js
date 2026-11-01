@@ -73,6 +73,13 @@ const config = {
             find: '@lets-ui/tokens/static',
             replacement: `${tokensDist}/letsui.tokens.static.json`,
           },
+          // Language helpers for MDX docs and stories — a stable import path
+          // that doesn't depend on the file's depth in the repo. The namespace
+          // is deliberately outside `@storybook/`, which resolves internally.
+          {
+            find: /^@docs-lang\/(.+)$/,
+            replacement: `${resolve(__dirname, 'language')}/$1`,
+          },
         ],
       },
       css: {

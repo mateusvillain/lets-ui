@@ -1,17 +1,44 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as ScrollAreaStories from './ScrollArea.stories';
 
 <Meta of={ScrollAreaStories} />
 
+<Lang lang="pt-BR">
+# ScrollArea
+
+Uma região rolável acessível por teclado que abstrai o comportamento de overflow, os indicadores visuais de overflow, o scroll snap e os eventos de rolagem numa API consistente e independente de framework.
+
+O componente envolve o conteúdo num viewport div em Shadow DOM. Overflow, snap e dimensões são aplicados como estilos inline por JavaScript; os indicadores visuais são atualizados automaticamente conforme o usuário rola.
+
+</Lang>
+
+<Lang lang="en-US">
 # ScrollArea
 
 A keyboard-accessible scrollable region that abstracts overflow behavior, visual overflow indicators, scroll snap, and scroll events into a consistent, framework-agnostic API.
 
 The component wraps content in a Shadow DOM viewport div. Overflow, snap, and dimensions are applied as inline styles by JavaScript; visual indicators update automatically as the user scrolls.
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.Default} />
 <Controls of={ScrollAreaStories.Default} />
 
+<Lang lang="pt-BR">
+## orientation
+
+Controla qual eixo rola. O padrão é `vertical`.
+
+```html
+<lui-scroll-area orientation="vertical">…</lui-scroll-area>
+<lui-scroll-area orientation="horizontal">…</lui-scroll-area>
+<lui-scroll-area orientation="both">…</lui-scroll-area>
+```
+
+</Lang>
+
+<Lang lang="en-US">
 ## orientation
 
 Controls which axis scrolls. Defaults to `vertical`.
@@ -22,22 +49,70 @@ Controls which axis scrolls. Defaults to `vertical`.
 <lui-scroll-area orientation="both">…</lui-scroll-area>
 ```
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.Horizontal} />
 <Canvas of={ScrollAreaStories.Both} />
 
+<Lang lang="pt-BR">
+## scrollbar-visibility
+
+Controla quando a barra de rolagem fica visível.
+
+| Valor    | Comportamento                                              |
+| -------- | ---------------------------------------------------------- |
+| `auto`   | Padrão do navegador — aparece quando o conteúdo transborda |
+| `always` | Barra de rolagem sempre renderizada (`overflow: scroll`)   |
+| `hover`  | Oculta em repouso, visível quando a área está em hover     |
+| `hidden` | Nunca exibida, mas o conteúdo continua rolável             |
+
+</Lang>
+
+<Lang lang="en-US">
 ## scrollbar-visibility
 
 Controls when the scrollbar is visible.
 
-| Value | Behavior |
-|---|---|
-| `auto` | Browser default — appears when content overflows |
-| `always` | Scrollbar always rendered (`overflow: scroll`) |
-| `hover` | Hidden at rest, visible when the area is hovered |
-| `hidden` | Never shown, but content is still scrollable |
+| Value    | Behavior                                         |
+| -------- | ------------------------------------------------ |
+| `auto`   | Browser default — appears when content overflows |
+| `always` | Scrollbar always rendered (`overflow: scroll`)   |
+| `hover`  | Hidden at rest, visible when the area is hovered |
+| `hidden` | Never shown, but content is still scrollable     |
+
+</Lang>
 
 <Canvas of={ScrollAreaStories.ScrollbarVisibilityVariants} />
 
+<Lang lang="pt-BR">
+## fade
+
+Renderiza sobreposições em gradiente para indicar conteúdo oculto. Ativa e desativa automaticamente conforme o usuário rola.
+
+Use como booleano para habilitar o fade em todos os lados relevantes para a `orientation`:
+
+```html
+<lui-scroll-area fade>…</lui-scroll-area>
+```
+
+Ou especifique de quais lados deve haver fade:
+
+```html
+<lui-scroll-area fade="top bottom">…</lui-scroll-area>
+<lui-scroll-area fade="bottom">…</lui-scroll-area>
+```
+
+O gradiente vai da cor de fundo da superfície (token `bg(surface, neutral)`) ao transparente. Substitua com a propriedade customizada de CSS `--lui-scroll-area-fade-color` ao colocar o componente em outro fundo:
+
+```css
+lui-scroll-area {
+  --lui-scroll-area-fade-color: var(--my-card-background);
+}
+```
+
+</Lang>
+
+<Lang lang="en-US">
 ## fade
 
 Renders gradient overlays to indicate hidden content. Activates and deactivates automatically as the user scrolls.
@@ -63,9 +138,23 @@ lui-scroll-area {
 }
 ```
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.Fade} />
 <Canvas of={ScrollAreaStories.FadeDirections} />
 
+<Lang lang="pt-BR">
+## scroll-shadow
+
+Uma alternativa ao `fade` que usa um gradiente escuro semitransparente em vez da cor da superfície. Funciona independentemente do fundo, o que o torna útil em superfícies que não são brancas.
+
+```html
+<lui-scroll-area scroll-shadow>…</lui-scroll-area>
+```
+
+</Lang>
+
+<Lang lang="en-US">
 ## scroll-shadow
 
 An alternative to `fade` that uses a dark semi-transparent gradient instead of the surface color. Works independently of the background, making it useful on non-white surfaces.
@@ -74,8 +163,24 @@ An alternative to `fade` that uses a dark semi-transparent gradient instead of t
 <lui-scroll-area scroll-shadow>…</lui-scroll-area>
 ```
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.ScrollShadow} />
 
+<Lang lang="pt-BR">
+## snap
+
+Habilita o CSS Scroll Snap usando o `scroll-snap-type` nativo. Os filhos recebem automaticamente `scroll-snap-align` de acordo com o atributo `snap-align`.
+
+```html
+<lui-scroll-area snap snap-align="start">…</lui-scroll-area>
+```
+
+`snap-align` aceita `start` (padrão), `center` ou `end`.
+
+</Lang>
+
+<Lang lang="en-US">
 ## snap
 
 Enables CSS Scroll Snap using native `scroll-snap-type`. Children automatically receive `scroll-snap-align` matching the `snap-align` attribute.
@@ -86,9 +191,23 @@ Enables CSS Scroll Snap using native `scroll-snap-type`. Children automatically 
 
 `snap-align` accepts `start` (default), `center`, or `end`.
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.Snap} />
 <Canvas of={ScrollAreaStories.SnapCenter} />
 
+<Lang lang="pt-BR">
+## overscroll
+
+Mapeia para `overscroll-behavior`. Use `contain` para impedir que a cadeia de rolagem se propague para a página quando a área chega ao limite — útil para sidebars, modals e painéis flutuantes.
+
+```html
+<lui-scroll-area overscroll="contain">…</lui-scroll-area>
+```
+
+</Lang>
+
+<Lang lang="en-US">
 ## overscroll
 
 Maps to `overscroll-behavior`. Use `contain` to prevent the scroll chain from propagating to the page when the area reaches its limit — useful for sidebars, modals, and floating panels.
@@ -97,8 +216,22 @@ Maps to `overscroll-behavior`. Use `contain` to prevent the scroll chain from pr
 <lui-scroll-area overscroll="contain">…</lui-scroll-area>
 ```
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.Overscroll} />
 
+<Lang lang="pt-BR">
+## max-height
+
+A área se expande naturalmente até o valor de `max-height` e então passa a rolar. Combine com `fade` para sugerir conteúdo oculto.
+
+```html
+<lui-scroll-area max-height="200">…</lui-scroll-area>
+```
+
+</Lang>
+
+<Lang lang="en-US">
 ## max-height
 
 The area expands naturally up to the `max-height` value, then becomes scrollable. Pair with `fade` to hint at hidden content.
@@ -107,8 +240,22 @@ The area expands naturally up to the `max-height` value, then becomes scrollable
 <lui-scroll-area max-height="200">…</lui-scroll-area>
 ```
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.MaxHeight} />
 
+<Lang lang="pt-BR">
+## disabled
+
+Impede toda interação de rolagem (mouse, toque, teclado). O viewport recebe `tabindex="-1"` e `overflow: hidden`.
+
+```html
+<lui-scroll-area disabled>…</lui-scroll-area>
+```
+
+</Lang>
+
+<Lang lang="en-US">
 ## disabled
 
 Prevents all scroll interaction (mouse, touch, keyboard). The viewport receives `tabindex="-1"` and `overflow: hidden`.
@@ -117,21 +264,24 @@ Prevents all scroll interaction (mouse, touch, keyboard). The viewport receives 
 <lui-scroll-area disabled>…</lui-scroll-area>
 ```
 
+</Lang>
+
 <Canvas of={ScrollAreaStories.Disabled} />
 
-## Events
+<Lang lang="pt-BR">
+## Eventos
 
-The component emits Custom Events on the host element. All events bubble and are composed (they cross Shadow DOM boundaries).
+O componente emite Eventos Customizados no elemento host. Todos os eventos borbulham e são compostos (atravessam os limites do Shadow DOM).
 
-| Event | When | `detail` payload |
-|---|---|---|
-| `scroll` | Every scroll tick | `{ scrollTop, scrollLeft, scrollHeight, scrollWidth, clientHeight, clientWidth }` |
-| `scroll-start` | First tick of a new scroll gesture | — |
-| `scroll-end` | 150 ms after the last scroll tick | — |
-| `reach-top` | Scroll position reaches the top edge | — |
-| `reach-bottom` | Scroll position reaches the bottom edge | — |
-| `reach-left` | Scroll position reaches the left edge | — |
-| `reach-right` | Scroll position reaches the right edge | — |
+| Evento         | Quando                                      | `detail` payload                                                                  |
+| -------------- | ------------------------------------------- | --------------------------------------------------------------------------------- |
+| `scroll`       | A cada tick de rolagem                      | `{ scrollTop, scrollLeft, scrollHeight, scrollWidth, clientHeight, clientWidth }` |
+| `scroll-start` | Primeiro tick de um novo gesto de rolagem   | —                                                                                 |
+| `scroll-end`   | 150 ms após o último tick de rolagem        | —                                                                                 |
+| `reach-top`    | A posição de rolagem chega à borda superior | —                                                                                 |
+| `reach-bottom` | A posição de rolagem chega à borda inferior | —                                                                                 |
+| `reach-left`   | A posição de rolagem chega à borda esquerda | —                                                                                 |
+| `reach-right`  | A posição de rolagem chega à borda direita  | —                                                                                 |
 
 ```js
 const area = document.querySelector('lui-scroll-area');
@@ -145,11 +295,55 @@ area.addEventListener('scroll-end', () => {
 });
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+## Events
+
+The component emits Custom Events on the host element. All events bubble and are composed (they cross Shadow DOM boundaries).
+
+| Event          | When                                    | `detail` payload                                                                  |
+| -------------- | --------------------------------------- | --------------------------------------------------------------------------------- |
+| `scroll`       | Every scroll tick                       | `{ scrollTop, scrollLeft, scrollHeight, scrollWidth, clientHeight, clientWidth }` |
+| `scroll-start` | First tick of a new scroll gesture      | —                                                                                 |
+| `scroll-end`   | 150 ms after the last scroll tick       | —                                                                                 |
+| `reach-top`    | Scroll position reaches the top edge    | —                                                                                 |
+| `reach-bottom` | Scroll position reaches the bottom edge | —                                                                                 |
+| `reach-left`   | Scroll position reaches the left edge   | —                                                                                 |
+| `reach-right`  | Scroll position reaches the right edge  | —                                                                                 |
+
+```js
+const area = document.querySelector('lui-scroll-area');
+
+area.addEventListener('reach-bottom', () => {
+  loadMoreItems();
+});
+
+area.addEventListener('scroll-end', () => {
+  saveScrollPosition(area);
+});
+```
+
+</Lang>
+
 <Canvas of={ScrollAreaStories.WithEvents} />
 
+<Lang lang="pt-BR">
+## Propriedades customizadas de CSS
+
+| Propriedade                    | Padrão                 | Descrição                                      |
+| ------------------------------ | ---------------------- | ---------------------------------------------- |
+| `--lui-scroll-area-fade-color` | `bg(surface, neutral)` | Cor do gradiente no modo `fade`                |
+| `--lui-scroll-area-fade-size`  | `80px`                 | Altura/largura dos indicadores de sobreposição |
+
+</Lang>
+
+<Lang lang="en-US">
 ## CSS custom properties
 
-| Property | Default | Description |
-|---|---|---|
-| `--lui-scroll-area-fade-color` | `bg(surface, neutral)` | Gradient color for `fade` mode |
-| `--lui-scroll-area-fade-size` | `80px` | Height/width of overlay indicators |
+| Property                       | Default                | Description                        |
+| ------------------------------ | ---------------------- | ---------------------------------- |
+| `--lui-scroll-area-fade-color` | `bg(surface, neutral)` | Gradient color for `fade` mode     |
+| `--lui-scroll-area-fade-size`  | `80px`                 | Height/width of overlay indicators |
+
+</Lang>

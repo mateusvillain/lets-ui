@@ -1,27 +1,69 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as ContainerStories from './Container.stories';
 
 <Meta of={ContainerStories} />
 
+<Lang lang="pt-BR">
 # Container
 
 Max-width centering wrapper. Controls the readable width of page content.
 
+</Lang>
+
+<Lang lang="en-US">
+# Container
+
+Max-width centering wrapper. Controls the readable width of page content.
+
+</Lang>
+
 <Canvas of={ContainerStories.Default} />
 <Controls of={ContainerStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## Small Container
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Small Container
+
+</Lang>
 
 <Canvas of={ContainerStories.Small} />
 
+<Lang lang="pt-BR">
+
 ## Full Width
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Full Width
+
+</Lang>
 
 <Canvas of={ContainerStories.Full} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={ContainerStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -35,7 +77,24 @@ Max-width centering wrapper. Controls the readable width of page content.
 ### Classe CSS
 
 ```html
-<div class="container container--md">
-  Conteúdo centralizado
-</div>
+<div class="container container--md">Conteúdo centralizado</div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-container size="md" padding="xl" center> Centered content </lui-container>
+```
+
+### CSS class
+
+```html
+<div class="container container--md">Centered content</div>
+```
+
+</Lang>

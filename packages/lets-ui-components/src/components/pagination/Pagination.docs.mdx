@@ -1,46 +1,129 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as PaginationStories from './Pagination.stories';
 
 <Meta of={PaginationStories} />
+
+<Lang lang="pt-BR">
 
 # Pagination
 
 Componente de navegação entre páginas de um conteúdo paginado. Renderiza os botões de página anterior e próxima e os números de página, destacando a página atual com `aria-current="page"`. Quando há mais páginas do que cabem no intervalo visível, as lacunas são substituídas por reticências (`…`), mantendo sempre a primeira e a última página.
 
+</Lang>
+
+<Lang lang="en-US">
+
+# Pagination
+
+Navigation component between pages of paginated content. Renders the previous and next page buttons and the page numbers, highlighting the current page with `aria-current="page"`. When there are more pages than fit in the visible range, gaps are replaced by an ellipsis (`…`), always keeping the first and the last page.
+
+</Lang>
+
 <Canvas of={PaginationStories.Default} />
 <Controls of={PaginationStories.Default} />
+
+<Lang lang="pt-BR">
 
 ## Poucas páginas
 
 Quando o total cabe no intervalo visível, todas as páginas aparecem sem truncamento.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Few pages
+
+When the total fits in the visible range, all pages appear without truncation.
+
+</Lang>
+
 <Canvas of={PaginationStories.FewPages} />
+
+<Lang lang="pt-BR">
 
 ## Muitas páginas
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Many pages
+
+</Lang>
+
 <Canvas of={PaginationStories.ManyPages} />
+
+<Lang lang="pt-BR">
 
 ## Truncamento com reticências
 
 A primeira e a última página ficam sempre visíveis; a página atual mantém `sibling-count` vizinhas de cada lado, e cada lacuna vira uma reticência. Depois de truncada, a lista tem sempre o mesmo número de itens, então a largura não muda durante a navegação.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Truncation with ellipsis
+
+The first and the last page are always visible; the current page keeps `sibling-count` neighbors on each side, and each gap becomes an ellipsis. After truncation, the list always has the same number of items, so the width does not change during navigation.
+
+</Lang>
+
 <Canvas of={PaginationStories.Truncation} />
+
+<Lang lang="pt-BR">
 
 ## Quantidade de vizinhas
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Number of neighbors
+
+</Lang>
+
 <Canvas of={PaginationStories.SiblingCount} />
+
+<Lang lang="pt-BR">
 
 ## Evento `lui-page-change`
 
 Ao navegar, o componente atualiza `current-page` e emite `lui-page-change` com a nova página em `event.detail.page`. O evento borbulha e atravessa o shadow DOM.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Event `lui-page-change`
+
+On navigation, the component updates `current-page` and emits `lui-page-change` with the new page in `event.detail.page`. The event bubbles and crosses the shadow DOM.
+
+</Lang>
+
 <Canvas of={PaginationStories.PageChangeEvent} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com links para uma paginação do lado do servidor.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+Without the Web Component, the markup is the responsibility of the consumer — for example, with links for server-side pagination.
+
+</Lang>
+
 <Canvas of={PaginationStories.CSSClass} />
+
+<Lang lang="pt-BR">
 
 ## Propriedades
 
@@ -56,6 +139,28 @@ Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com 
 | `page-label`            | `string` | `Page`                      | Prefixo do nome acessível de cada página ("Page 3").                                                              |
 | `status-label`          | `string` | `Page {current} of {total}` | Texto anunciado por leitores de tela após a troca de página.                                                      |
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Properties
+
+| Attribute               | Type     | Default                     | Description                                                                                            |
+| ----------------------- | -------- | --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `current-page`          | `number` | `1`                         | Current page. Reflected in the attribute on navigation.                                                |
+| `total-pages`           | `number` | `1`                         | Total number of pages.                                                                                 |
+| `sibling-count`         | `number` | `1`                         | Neighbor pages shown on each side of the current one.                                                  |
+| `compact-sibling-count` | `number` | `0`                         | Neighbors on each side below 768px (limited to `sibling-count`). First, last and current stay visible. |
+| `label`                 | `string` | `Pagination`                | Accessible name of the `<nav>` landmark.                                                               |
+| `previous-label`        | `string` | `Previous page`             | Accessible name of the previous page button.                                                           |
+| `next-label`            | `string` | `Next page`                 | Accessible name of the next page button.                                                               |
+| `page-label`            | `string` | `Page`                      | Prefix of each page's accessible name ("Page 3").                                                      |
+| `status-label`          | `string` | `Page {current} of {total}` | Text announced by screen readers after the page changes.                                               |
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## Acessibilidade
 
 - Renderizado como `<nav>` com uma lista (`<ul>`) de botões nativos: navegável com `Tab`, e `Enter` ou `Espaço` ativam a página.
@@ -63,6 +168,22 @@ Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com 
 - O botão de página anterior fica desabilitado (`disabled` e `aria-disabled="true"`) na primeira página, e o de próxima página, na última.
 - As reticências são decorativas (`aria-hidden="true"`).
 - Depois de navegar, o foco permanece no controle usado; se ele ficar desabilitado ou deixar de existir, o foco vai para a página atual.
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Accessibility
+
+- Rendered as a `<nav>` with a list (`<ul>`) of native buttons: reachable with `Tab`, and `Enter` or `Space` activate the page.
+- The current page receives `aria-current="page"`.
+- The previous page button is disabled (`disabled` and `aria-disabled="true"`) on the first page, and the next page button on the last.
+- The ellipsis is decorative (`aria-hidden="true"`).
+- After navigating, focus stays on the control used; if it becomes disabled or no longer exists, focus goes to the current page.
+
+</Lang>
+
+<Lang lang="pt-BR">
 
 ## Uso
 
@@ -111,3 +232,57 @@ Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com 
   </ul>
 </nav>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Usage
+
+### Web Component
+
+```html
+<lui-pagination current-page="1" total-pages="20"></lui-pagination>
+
+<script>
+  document
+    .querySelector('lui-pagination')
+    .addEventListener('lui-page-change', (event) => {
+      console.log(event.detail.page);
+    });
+</script>
+```
+
+### CSS class
+
+```html
+<nav class="pagination" aria-label="Pagination">
+  <ul class="pagination__list">
+    <li>
+      <a
+        class="pagination__item pagination__item--direction"
+        href="?page=1"
+        aria-label="Previous page"
+      >
+        <!-- icon -->
+      </a>
+    </li>
+    <li><a class="pagination__item" href="?page=1">1</a></li>
+    <li>
+      <a class="pagination__item" href="?page=2" aria-current="page">2</a>
+    </li>
+    <li><a class="pagination__item" href="?page=3">3</a></li>
+    <li>
+      <a
+        class="pagination__item pagination__item--direction"
+        href="?page=3"
+        aria-label="Next page"
+      >
+        <!-- icon -->
+      </a>
+    </li>
+  </ul>
+</nav>
+```
+
+</Lang>

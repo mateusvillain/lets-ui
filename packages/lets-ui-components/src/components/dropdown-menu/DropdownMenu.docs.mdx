@@ -1,38 +1,101 @@
 import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as DropdownMenuStories from './DropdownMenu.stories';
 
 <Meta of={DropdownMenuStories} />
+
+<Lang lang="pt-BR">
 
 # Dropdown Menu
 
 Menu contextual flutuante que agrupa ações relacionadas a um elemento ou contexto. O trigger é livre — um `<button>`, `lui-button` ou `lui-icon-button` pode abrir o menu, sem acoplamento ao componente.
 
+</Lang>
+
+<Lang lang="en-US">
+
+# Dropdown Menu
+
+Floating contextual menu that groups actions related to an element or context. The trigger is free — a `<button>`, `lui-button` or `lui-icon-button` can open the menu, with no coupling to the component.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.Default} />
 <Controls of={DropdownMenuStories.Default} />
+
+<Lang lang="pt-BR">
 
 ## Shortcut
 
 Use quando as ações possuem atalhos de teclado conhecidos pelos usuários. O shortcut é renderizado com as teclas alinhadas à direita do item.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Shortcut
+
+Use it when the actions have keyboard shortcuts known to users. The shortcut is rendered with the keys aligned to the right of the item.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithShortcuts} />
+
+<Lang lang="pt-BR">
 
 ## Submenu
 
 Use para agrupar ações relacionadas em um segundo nível de navegação. O submenu abre ao passar o mouse ou focar no item pai — evite mais de um nível de aninhamento.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Submenu
+
+Use it to group related actions in a second navigation level. The submenu opens on hover or focus on the parent item — avoid more than one level of nesting.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithSubmenu} />
+
+<Lang lang="pt-BR">
 
 ## Divisor
 
 Use divisores para separar visualmente grupos de ações com propósitos distintos dentro do mesmo menu.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Divider
+
+Use dividers to visually separate groups of actions with different purposes within the same menu.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithDivider} />
+
+<Lang lang="pt-BR">
 
 ## Item desabilitado
 
 Use para indicar ações temporariamente indisponíveis sem remover a opção da interface.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Disabled item
+
+Use it to indicate temporarily unavailable actions without removing the option from the interface.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithDisabledItem} />
+
+<Lang lang="pt-BR">
 
 ## Acessibilidade
 
@@ -66,9 +129,59 @@ Duas limitações conhecidas no teclado, tratadas em
 primeiro item, então é preciso usar `Tab` para entrar no menu antes das setas; e, ao fechar com
 `Tab`, o foco passa ao item seguinte do menu em vez de sair dele.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Accessibility
+
+### Trigger
+
+The trigger must be a **button**. Opening a menu is an action on the same screen, not a navigation, so
+do not use a link. Dropdown Menu marks the trigger with `aria-haspopup="menu"` and keeps
+`aria-expanded` in sync with the open state. With `lui-button` and `lui-icon-button`, both
+attributes are forwarded to the inner `<button>`, which is what the screen reader announces.
+
+The menu does not define `aria-controls`: the panel lives in the component shadow root, and an ID cannot be
+referenced from outside it.
+
+A `lui-icon-button` as trigger needs an `aria-label` that describes the menu, such as
+`"More options"` or `"File actions"`.
+
+### Keyboard
+
+| Key               | Action                                                                        |
+| ----------------- | ----------------------------------------------------------------------------- |
+| `Enter` / `Space` | On the trigger, opens and closes the menu                                     |
+| `Enter` / `Space` | On an item, runs the action, closes the menu and returns focus to the trigger |
+| `↓` / `↑`         | Moves between items, wrapping to the beginning or the end                     |
+| `→`               | Opens the submenu of the focused item                                         |
+| `←`               | Closes the submenu and returns to the parent item                             |
+| `Escape`          | Closes the menu and returns focus to the trigger                              |
+| `Tab`             | Closes the menu                                                               |
+
+Two known keyboard limitations, tracked in
+[#152](https://github.com/mateusvillain/lets-ui/issues/152): on open, focus does not go to the
+first item yet, so you need to use `Tab` to enter the menu before the arrow keys; and, when closing with
+`Tab`, focus moves to the next item of the menu instead of leaving it.
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.CSSClass} />
+
+<Lang lang="pt-BR">
 
 ## Uso
 
@@ -109,3 +222,49 @@ primeiro item, então é preciso usar `Tab` para entrar no menu antes das setas;
   </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Usage
+
+### Web Component
+
+```html
+<lui-dropdown-menu>
+  <lui-button
+    slot="trigger"
+    variant="secondary"
+    size="md"
+    label="Options"
+  ></lui-button>
+  <lui-menu-item slot="items" label="Edit" shortcut="⌘,E"></lui-menu-item>
+  <lui-menu-divider slot="items"></lui-menu-divider>
+  <lui-menu-item slot="items" label="Delete" variant="danger"></lui-menu-item>
+</lui-dropdown-menu>
+```
+
+### CSS class
+
+```html
+<div class="dropdown-menu">
+  <button
+    class="btn btn--secondary btn--md"
+    aria-haspopup="menu"
+    aria-expanded="false"
+  >
+    Options
+  </button>
+  <div class="dropdown-menu__panel is-open">
+    <button class="menu-item">
+      <span class="menu-item__label">Edit</span>
+    </button>
+    <button class="menu-item menu-item--danger">
+      <span class="menu-item__label">Delete</span>
+    </button>
+  </div>
+</div>
+```
+
+</Lang>
