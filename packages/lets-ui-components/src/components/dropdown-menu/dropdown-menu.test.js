@@ -49,7 +49,61 @@ const deepActive = () => {
   return el;
 };
 
+// Focus moves on its own, once: the opening assertions only wait for it, they
+// never call `focus()`, so a menu that leaves focus on the trigger fails them.
+// They open the menu from a user event, as on a page: the panel then appears in
+// the same frame the menu tries to focus. Set from a plain script, `open` lands
+// a frame earlier and would pass even with the item still hidden on that frame.
+const firstItem = (menu) => menu.shadowRoot.querySelector('.menu-item');
+
+// Opens the menu from the keyboard, with a button on each side of it to tell
+// where Tab and Shift+Tab take focus.
+async function openBetweenButtons(html) {
+  const { menu, trigger } = await mount(html);
+  const before = document.createElement('button');
+  const after = document.createElement('button');
+  menu.before(before);
+  menu.after(after);
+  focusable(trigger).focus();
+  await userEvent.keyboard('{Enter}');
+  await expect.poll(() => menu.shadowRoot.activeElement).toBe(firstItem(menu));
+  return { menu, trigger, before, after };
+}
+
 describe.each(Object.entries(triggers))('with %s as trigger', (_, html) => {
+  it('closes on Tab and moves focus past the trigger', async () => {
+    const { menu, after } = await openBetweenButtons(html);
+
+    await userEvent.keyboard('{Tab}');
+
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(after);
+  });
+
+  it('closes on Shift+Tab and moves focus before the trigger', async () => {
+    const { menu, before } = await openBetweenButtons(html);
+
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}');
+
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(before);
+  });
+
+  it.each(['Enter', 'Space'])(
+    'focuses the first item when opened with %s',
+    async (key) => {
+      const { menu, trigger } = await mount(html);
+      focusable(trigger).focus();
+
+      await userEvent.keyboard(key === 'Space' ? '[Space]' : `{${key}}`);
+
+      expect(menu.open).toBe(true);
+      await expect
+        .poll(() => menu.shadowRoot.activeElement)
+        .toBe(firstItem(menu));
+    }
+  );
+
   it('marks the trigger as opening a menu', async () => {
     const { trigger } = await mount(html);
 
@@ -107,6 +161,84 @@ describe.each(Object.entries(triggers))('with %s as trigger', (_, html) => {
 
     expect(menu.open).toBe(false);
     expect(deepActive()).toBe(focusable(trigger));
+  });
+});
+
+describe('opening', () => {
+  it('focuses the first item when open is set', async () => {
+    const { menu } = await mount(triggers['a native button']);
+    const opener = document.createElement('button');
+    // As the docs prescribe: the click is outside the menu and would close it.
+    opener.addEventListener('click', (event) => {
+      event.stopPropagation();
+      menu.open = true;
+    });
+    document.body.append(opener);
+    mounted.push(opener);
+    opener.focus();
+
+    await userEvent.keyboard('{Enter}');
+
+    await expect
+      .poll(() => menu.shadowRoot.activeElement)
+      .toBe(firstItem(menu));
+  });
+
+  it('skips a disabled first item', async () => {
+    // Slotted after the trigger and before the shared items, so it comes first.
+    const { menu, trigger } = await mount(
+      `${triggers['a native button']}<lui-menu-item slot="items" label="Arquivar" disabled></lui-menu-item>`
+    );
+    await expect
+      .poll(() => firstItem(menu)?.hasAttribute('disabled'))
+      .toBe(true);
+    trigger.focus();
+
+    await userEvent.keyboard('{Enter}');
+
+    const enabled = menu.shadowRoot.querySelectorAll('.menu-item')[1];
+    await expect.poll(() => menu.shadowRoot.activeElement).toBe(enabled);
+  });
+
+  it('moves between items with the arrow keys right after opening', async () => {
+    const { menu, trigger } = await mount(triggers['a native button']);
+    trigger.focus();
+
+    await userEvent.keyboard('{Enter}');
+    await expect
+      .poll(() => menu.shadowRoot.activeElement)
+      .toBe(firstItem(menu));
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(menu.shadowRoot.activeElement).toBe(
+      menu.shadowRoot.querySelectorAll('.menu-item')[1]
+    );
+  });
+});
+
+describe('Tab order', () => {
+  const withSubmenu = `${triggers['a native button']}<lui-menu-item slot="items" label="Compartilhar"><lui-menu-item label="Por e-mail"></lui-menu-item></lui-menu-item>`;
+
+  it('keeps every item, submenus included, out of it', async () => {
+    const { menu } = await mount(withSubmenu);
+    const items = () => menu.shadowRoot.querySelectorAll('.menu-item');
+    await expect.poll(() => items().length).toBe(4);
+
+    for (const item of items()) expect(item.tabIndex).toBe(-1);
+  });
+
+  it('leaves the whole menu on Tab from a submenu item', async () => {
+    const { menu, after } = await openBetweenButtons(withSubmenu);
+    const subItem = menu.shadowRoot.querySelector(
+      '.menu-item--has-submenu .dropdown-menu__panel .menu-item'
+    );
+    await userEvent.keyboard('{ArrowRight}');
+    await expect.poll(() => menu.shadowRoot.activeElement).toBe(subItem);
+
+    await userEvent.keyboard('{Tab}');
+
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(after);
   });
 });
 

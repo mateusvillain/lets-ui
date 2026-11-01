@@ -56,6 +56,7 @@ function buildItemsHtml(items: Element[]): string {
             class="${itemClasses}"
             role="menuitem"
             type="button"
+            tabindex="-1"
             ${disabled ? 'disabled aria-disabled="true"' : ''}
             ${hasSubmenu ? 'aria-haspopup="menu" aria-expanded="false"' : ''}
           >
@@ -309,7 +310,11 @@ export class LuiDropdownMenu extends LitElement {
         }
         break;
       }
+      // The items sit out of the Tab order, so the menu is a single stop. Focus
+      // goes back to the trigger and the key is left to the browser, which
+      // moves on from there: past the trigger on Tab, before it on Shift+Tab.
       case 'Tab':
+        this._focusTrigger();
         this.closeMenu();
         break;
     }

@@ -60,6 +60,17 @@ lui-menu-divider {
   @include font-scale(body--lg);
   @include states(primary);
 
+  // `states()` transitions `all`, which takes in the `visibility` the item
+  // inherits from the panel. A discrete `hidden → visible` transition is still
+  // `hidden` at progress 0 — the frame the menu moves focus in — so `focus()`
+  // did nothing and focus stayed on the trigger. Switching it at once keeps the
+  // item focusable as soon as the panel opens; the panel still fades in.
+  transition:
+    all 0.2s ease-in-out,
+    background-color var(--lui-state-duration, 220ms)
+      var(--lui-state-easing, ease-out),
+    visibility 0s;
+
   &:not(:has(:disabled), [aria-disabled='true']) {
     cursor: pointer;
 
