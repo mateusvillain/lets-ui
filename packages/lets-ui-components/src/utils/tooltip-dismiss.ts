@@ -8,6 +8,9 @@ const controllers = new Set<TooltipDismissController>();
 
 const handleEscape = (event: KeyboardEvent) => {
   if (event.key !== 'Escape') return;
+  // As in the dialog stack: a held key does not keep dismissing, and an
+  // Escape that cancels an IME composition belongs to the input.
+  if (event.repeat || event.isComposing) return;
   let dismissed = false;
   controllers.forEach((controller) => {
     if (controller.dismiss()) dismissed = true;

@@ -510,6 +510,31 @@ describe('Escape', () => {
     await expect.poll(() => isShown(second.tooltip)).toBe('visible');
   });
 
+  it.each([
+    ['that is part of an IME composition', { isComposing: true }],
+    ['held down', { repeat: true }],
+  ])('ignores an Escape %s', async (_, init) => {
+    const { tooltip, trigger } = await mount(triggers['a native button']);
+    trigger.focus();
+    await expect.poll(() => isShown(tooltip)).toBe('visible');
+
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+      ...init,
+    });
+    trigger.dispatchEvent(event);
+    await tooltip.updateComplete;
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(
+      tooltip.shadowRoot.querySelector('.tooltip').classList
+    ).not.toContain('tooltip--dismissed');
+    expect(isShown(tooltip)).toBe('visible');
+  });
+
   it('is consumed only when it put a tooltip away', async () => {
     const { trigger } = await mount(triggers['a native button']);
     const prevented = [];
