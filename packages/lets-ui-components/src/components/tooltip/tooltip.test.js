@@ -1,5 +1,5 @@
 import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { cdp, userEvent } from 'vitest/browser';
 import { LuiTooltip } from './tooltip.ts';
 import { LuiButton } from '../button/button.ts';
@@ -427,5 +427,170 @@ describe('a tooltip that repeats the trigger name', () => {
     await expect
       .poll(() => trigger.getAttribute('aria-description'))
       .toBe('Do autor');
+  });
+});
+
+// The pointer stays where an earlier test left it, possibly over the trigger
+// of a tooltip mounted in the same spot.
+async function parkPointer() {
+  const corner = document.createElement('div');
+  corner.style.cssText =
+    'position: fixed; right: 0; bottom: 0; width: 4px; height: 4px';
+  document.body.append(corner);
+  await userEvent.hover(corner);
+  corner.remove();
+}
+
+describe('Escape', () => {
+  beforeEach(parkPointer);
+
+  it('puts a tooltip opened by focus away, keeping the focus', async () => {
+    const { tooltip, trigger, before } = await mount(
+      triggers['a native button']
+    );
+    before.focus();
+    await userEvent.tab();
+    await expect.poll(() => isShown(tooltip)).toBe('visible');
+
+    await userEvent.keyboard('{Escape}');
+    await expect.poll(() => isShown(tooltip)).toBe('hidden');
+    expect(deepActive()).toBe(trigger);
+  });
+
+  it('shows it again on the next focus', async () => {
+    const { tooltip, before } = await mount(triggers['a lui-button']);
+    before.focus();
+    await userEvent.tab();
+    await userEvent.keyboard('{Escape}');
+    await expect.poll(() => isShown(tooltip)).toBe('hidden');
+
+    await userEvent.tab();
+    await userEvent.tab({ shift: true });
+    await expect.poll(() => isShown(tooltip)).toBe('visible');
+  });
+
+  it('puts a tooltip opened by hover away, and shows it on the next hover', async () => {
+    const { tooltip, trigger, before } = await mount(
+      triggers['a native button']
+    );
+    await userEvent.hover(trigger);
+    await expect.poll(() => isShown(tooltip)).toBe('visible');
+
+    await userEvent.keyboard('{Escape}');
+    await expect.poll(() => isShown(tooltip)).toBe('hidden');
+
+    await userEvent.hover(before);
+    await userEvent.hover(trigger);
+    await expect.poll(() => isShown(tooltip)).toBe('visible');
+  });
+
+  it('works on the default trigger', async () => {
+    const host = document.createElement('div');
+    host.innerHTML = `<lui-tooltip text="${TEXT}" label="Ajuda"></lui-tooltip>`;
+    document.body.append(host);
+    mounted.push(host);
+    const tooltip = host.firstElementChild;
+    await tooltip.updateComplete;
+
+    tooltip.shadowRoot.querySelector('button').focus();
+    await expect.poll(() => isShown(tooltip)).toBe('visible');
+    await userEvent.keyboard('{Escape}');
+    await expect.poll(() => isShown(tooltip)).toBe('hidden');
+  });
+
+  it('puts away only the tooltip that is showing', async () => {
+    const first = await mount(triggers['a native button']);
+    const second = await mount(triggers['a native button']);
+    first.trigger.focus();
+    await expect.poll(() => isShown(first.tooltip)).toBe('visible');
+
+    await userEvent.keyboard('{Escape}');
+    await expect.poll(() => isShown(first.tooltip)).toBe('hidden');
+    second.trigger.focus();
+    await expect.poll(() => isShown(second.tooltip)).toBe('visible');
+  });
+
+  it('is consumed only when it put a tooltip away', async () => {
+    const { trigger } = await mount(triggers['a native button']);
+    const prevented = [];
+    const record = (event) => prevented.push(event.defaultPrevented);
+    window.addEventListener('keydown', record);
+    try {
+      await userEvent.keyboard('{Escape}');
+      trigger.focus();
+      await userEvent.keyboard('{Escape}');
+      await userEvent.keyboard('{Escape}');
+    } finally {
+      window.removeEventListener('keydown', record);
+    }
+    expect(prevented).toEqual([false, true, false]);
+  });
+});
+
+describe('the pointer on the content', () => {
+  it('keeps the tooltip open', async () => {
+    const { tooltip, trigger } = await mount(triggers['a native button']);
+    tooltip.parentElement.style.padding = '80px';
+    await userEvent.hover(trigger);
+    await expect.poll(() => isShown(tooltip)).toBe('visible');
+
+    await userEvent.hover(content(tooltip));
+    await new Promise((r) => setTimeout(r, 100));
+    expect(isShown(tooltip)).toBe('visible');
+  });
+
+  // A point halfway across the gap between trigger and content.
+  const gap = (position, trigger, tip) => {
+    const t = trigger.getBoundingClientRect();
+    const c = tip.getBoundingClientRect();
+    const x = t.left + t.width / 2;
+    const y = t.top + t.height / 2;
+    return {
+      top: [x, (c.bottom + t.top) / 2],
+      bottom: [x, (t.bottom + c.top) / 2],
+      left: [(c.right + t.left) / 2, y],
+      right: [(t.right + c.left) / 2, y],
+    }[position];
+  };
+
+  it.each(['top', 'bottom', 'left', 'right'])(
+    'is bridged across the gap with position %s',
+    async (position) => {
+      const { tooltip, trigger } = await mount(triggers['a native button']);
+      tooltip.parentElement.style.padding = '80px';
+      tooltip.position = position;
+      await tooltip.updateComplete;
+      await userEvent.hover(trigger);
+
+      await expect
+        .poll(() => {
+          const [x, y] = gap(position, trigger, content(tooltip));
+          return tooltip.shadowRoot.elementFromPoint(x, y);
+        })
+        .toBe(content(tooltip));
+    }
+  );
+});
+
+describe('with reduced motion', () => {
+  const emulate = (value) =>
+    cdp().send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'prefers-reduced-motion', value }],
+    });
+
+  afterEach(() => emulate(''));
+
+  const duration = (tooltip) =>
+    getComputedStyle(content(tooltip)).transitionDuration;
+
+  it('animates without the preference', async () => {
+    const { tooltip } = await mount(triggers['a native button']);
+    expect(duration(tooltip)).not.toMatch(/^0s(, 0s)*$/);
+  });
+
+  it('shows and hides without a transition', async () => {
+    await emulate('reduce');
+    const { tooltip } = await mount(triggers['a native button']);
+    expect(duration(tooltip)).toMatch(/^0s(, 0s)*$/);
   });
 });

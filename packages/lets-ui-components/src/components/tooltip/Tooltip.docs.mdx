@@ -110,6 +110,16 @@ Prefira um controle real sempre que o tooltip explicar uma ação.
 Sem conteúdo, o Tooltip renderiza um `<button>` próprio com o texto de `label`, descrito pelo
 conteúdo do tooltip via `aria-describedby`.
 
+### Fechar, passar o ponteiro e movimento
+
+- **`Esc` fecha o tooltip** que estiver aberto, sem mover o ponteiro nem o foco (WCAG 1.4.13). Ele
+  volta a abrir na próxima vez que o ponteiro entrar no trigger ou que o trigger receber foco. Um
+  `Esc` que fecha um tooltip é consumido: um diálogo que contenha o tooltip só fecha no `Esc`
+  seguinte.
+- **O ponteiro pode passar do trigger para o tooltip** sem que ele suma (WCAG 1.4.13), inclusive
+  pelo espaço entre os dois.
+- **Com `prefers-reduced-motion: reduce`**, o tooltip aparece e some sem transição (WCAG 2.3.3).
+
 </Lang>
 
 <Lang lang="en-US">
@@ -169,17 +179,35 @@ Prefer a real control whenever the tooltip explains an action.
 Without content, the Tooltip renders its own `<button>` with the `label` text, described by the
 tooltip content through `aria-describedby`.
 
+### Dismissing, hovering and motion
+
+- **`Esc` closes the open tooltip** without moving the pointer or the focus (WCAG 1.4.13). It opens
+  again the next time the pointer enters the trigger or the trigger receives focus. An `Esc` that
+  closes a tooltip is consumed: a dialog holding the tooltip only closes on the following `Esc`.
+- **The pointer can move from the trigger onto the tooltip** without it disappearing (WCAG 1.4.13),
+  including across the space between them.
+- **With `prefers-reduced-motion: reduce`**, the tooltip appears and disappears without a transition
+  (WCAG 2.3.3).
+
 </Lang>
 
 <Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+Só com a classe, o tooltip já pode receber o ponteiro e respeita `prefers-reduced-motion`. Fechar
+com `Esc` depende de script: adicione `tooltip--dismissed` ao elemento `.tooltip` quando `Esc` for
+pressionado com ele aberto, e remova a classe no próximo `pointerenter` ou `focusin`.
+
 </Lang>
 
 <Lang lang="en-US">
 
 ## CSS class (without Web Component)
+
+With the class alone, the tooltip already takes the pointer and respects `prefers-reduced-motion`.
+Closing on `Esc` needs script: add `tooltip--dismissed` to the `.tooltip` element when `Esc` is
+pressed while it is open, and remove the class on the next `pointerenter` or `focusin`.
 
 </Lang>
 

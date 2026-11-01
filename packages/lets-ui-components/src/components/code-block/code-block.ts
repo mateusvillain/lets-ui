@@ -4,6 +4,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property, state } from 'lit/decorators.js';
 import styles from './code-block.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
+import { TooltipDismissController } from '../../utils/tooltip-dismiss.js';
 
 // A failure asks the reader to do something, so it stays up longer than a
 // confirmation that only reports.
@@ -94,21 +95,6 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
     instances.forEach((block) => block.requestUpdate());
   }
 
-  // The tooltip covers code below the button, so Escape has to put it away
-  // without the reader moving the pointer or the focus (WCAG 1.4.13). The
-  // listener sits on the document because a hovering pointer leaves the focus
-  // wherever it was. One listener serves every block on the page.
-  private static _handleEscape = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape') return;
-    let dismissed = false;
-    instances.forEach((block) => {
-      if (block._dismissTooltip()) dismissed = true;
-    });
-    // Consumed when it put a tooltip away: a dialog holding the block stays
-    // open until the next Escape.
-    if (dismissed) event.preventDefault();
-  };
-
   @property() variant = 'default';
   @property() label = '';
   @property() language = '';
@@ -126,7 +112,6 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
   @state() private _code = '';
   @state() private _copyState: 'idle' | 'copied' | 'failed' = 'idle';
   @state() private _status = '';
-  @state() private _tooltipDismissed = false;
 
   // Highlighting re-tokenises the whole code, so it runs only when the code,
   // the language or the highlighter changes — not on every copy or hover.
@@ -140,6 +125,10 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
   private _mutationObserver = new MutationObserver(() => this._readSource());
   private _resizeObserver = new ResizeObserver(() => this._measure());
   private _copyTimer?: ReturnType<typeof setTimeout>;
+  // The tooltip covers code below the button, so Escape puts it away.
+  private _tooltip = new TooltipDismissController(this, () =>
+    this.shadowRoot?.querySelector('.code-block__copy')
+  );
 
   get _variant(): 'default' | 'snippet' {
     return this.variant === 'snippet' ? 'snippet' : 'default';
@@ -152,9 +141,6 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
 
   connectedCallback() {
     super.connectedCallback();
-    if (!instances.size) {
-      document.addEventListener('keydown', LuiCodeBlock._handleEscape);
-    }
     instances.add(this);
     this._readSource();
     this._mutationObserver.observe(this, {
@@ -167,9 +153,6 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
   disconnectedCallback() {
     super.disconnectedCallback();
     instances.delete(this);
-    if (!instances.size) {
-      document.removeEventListener('keydown', LuiCodeBlock._handleEscape);
-    }
     this._mutationObserver.disconnect();
     this._resizeObserver.disconnect();
     clearTimeout(this._copyTimer);
@@ -249,20 +232,6 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
     }
   }
 
-  // Whether a shown tooltip was put away.
-  private _dismissTooltip(): boolean {
-    const copy = this.shadowRoot?.querySelector('.code-block__copy');
-    if (this._tooltipDismissed || !copy?.matches(':hover, :focus-within')) {
-      return false;
-    }
-    this._tooltipDismissed = true;
-    return true;
-  }
-
-  private _restoreTooltip() {
-    this._tooltipDismissed = false;
-  }
-
   private async _handleCopy() {
     try {
       await navigator.clipboard.writeText(this._code);
@@ -296,7 +265,7 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
     // it would otherwise reset the state this copy is about to show.
     clearTimeout(this._copyTimer);
     this._copyState = state;
-    this._tooltipDismissed = false;
+    this._tooltip.restore();
 
     // A live region speaks only when its text changes. Emptying it first lets
     // a second copy in a row be announced like the first.
@@ -340,11 +309,12 @@ export class LuiCodeBlock extends HostAriaMixin(LitElement) {
 
     return html`
       <span
-        class="code-block__copy tooltip tooltip--bottom ${this._tooltipDismissed
-          ? 'code-block__copy--dismissed'
+        class="code-block__copy tooltip tooltip--bottom ${this._tooltip
+          .dismissed
+          ? 'tooltip--dismissed'
           : ''}"
-        @pointerleave="${this._restoreTooltip}"
-        @focusout="${this._restoreTooltip}"
+        @pointerenter="${this._tooltip.restore}"
+        @focusin="${this._tooltip.restore}"
       >
         <lui-icon-button
           size="lg"

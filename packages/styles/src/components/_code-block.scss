@@ -123,28 +123,9 @@ $copy-room: fixed(40);
     transform: translateX(50%);
   }
 
-  // WCAG 1.4.13 asks that the pointer can move onto the tooltip without it
-  // vanishing, and that Escape can put it away. The bridge spans the gap
-  // between button and tooltip, so crossing it does not count as leaving.
   & &__copy:hover .tooltip__content,
   & &__copy:focus-within .tooltip__content {
     transform: none;
-    pointer-events: auto;
-  }
-
-  & &__copy .tooltip__content::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    height: fixed(8);
-  }
-
-  & &__copy#{&}__copy--dismissed .tooltip__content {
-    opacity: opacity(hidden);
-    visibility: hidden;
-    pointer-events: none;
   }
 
   // One line of code is shorter than the button and its 8px inset, so the body
@@ -256,12 +237,6 @@ $copy-room: fixed(40);
 
   &--snippet &__body {
     position: static;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    &__copy .tooltip__content {
-      transition: none;
-    }
   }
 
   // Forced colours drop box-shadow, which is all the focus ring is. An outline
