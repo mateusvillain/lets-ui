@@ -3,6 +3,7 @@ import { property, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './tooltip.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
+import { TooltipDismissController } from '../../utils/tooltip-dismiss.js';
 
 const VALID_POSITIONS = new Set(['top', 'bottom', 'left', 'right']);
 const FOCUSABLE_SELECTOR =
@@ -83,6 +84,10 @@ export class LuiTooltip extends HostAriaMixin(LitElement) {
   @state() private _hasCustomTrigger = false;
 
   private _baseId: string;
+
+  private _dismiss = new TooltipDismissController(this, () =>
+    this.shadowRoot?.querySelector('.tooltip')
+  );
 
   constructor() {
     super();
@@ -225,7 +230,13 @@ export class LuiTooltip extends HostAriaMixin(LitElement) {
       (this._hasCustomTrigger ? '' : `${this.label}: ${this.text}`);
 
     return html`
-      <span class="tooltip tooltip--${position}">
+      <span
+        class="tooltip tooltip--${position} ${this._dismiss.dismissed
+          ? 'tooltip--dismissed'
+          : ''}"
+        @pointerenter="${this._dismiss.restore}"
+        @focusin="${this._dismiss.restore}"
+      >
         ${this._hasCustomTrigger
           ? html`<span
               class="tooltip__trigger"

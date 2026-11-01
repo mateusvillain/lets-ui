@@ -3,6 +3,7 @@
 
 $arrow-size: fluid(4);
 $background: bg(container, overlay);
+$gap: fixed(8); // between trigger and content
 
 .tooltip {
   position: relative;
@@ -54,10 +55,47 @@ $background: bg(container, overlay);
     border-style: solid;
   }
 
+  // WCAG 1.4.13 asks that the pointer can move onto the tooltip without it
+  // vanishing. The bridge spans the gap between trigger and content, so
+  // crossing it does not count as leaving. It takes pointer events only while
+  // the content does.
+  &__content::before {
+    content: '';
+    position: absolute;
+  }
+
+  &--top &__content::before {
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: $gap;
+  }
+
+  &--bottom &__content::before {
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: $gap;
+  }
+
+  &--left &__content::before {
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    width: $gap;
+  }
+
+  &--right &__content::before {
+    right: 100%;
+    top: 0;
+    bottom: 0;
+    width: $gap;
+  }
+
   &--top &__content {
     text-align: center;
     left: 50%;
-    bottom: calc(100% + fixed(8));
+    bottom: calc(100% + $gap);
     transform: translate(-50%, fixed(8));
   }
 
@@ -72,7 +110,7 @@ $background: bg(container, overlay);
   &--bottom &__content {
     text-align: center;
     left: 50%;
-    top: calc(100% + fixed(8));
+    top: calc(100% + $gap);
     transform: translate(-50%, calc(fixed(8) * -1));
   }
 
@@ -86,7 +124,7 @@ $background: bg(container, overlay);
 
   &--left &__content {
     text-align: left;
-    right: calc(100% + fixed(8));
+    right: calc(100% + $gap);
     top: 50%;
     transform: translate(fixed(8), -50%);
   }
@@ -101,7 +139,7 @@ $background: bg(container, overlay);
 
   &--right &__content {
     text-align: left;
-    left: calc(100% + fixed(8));
+    left: calc(100% + $gap);
     top: 50%;
     transform: translate(calc(fixed(8) * -1), -50%);
   }
@@ -144,6 +182,23 @@ $background: bg(container, overlay);
   &--right:focus-within &__content {
     opacity: opacity(visible);
     visibility: visible;
+    pointer-events: auto;
     transition-delay: 0s, 0s, 0s;
+  }
+
+  // Escape puts a shown tooltip away without the pointer or the focus moving
+  // (WCAG 1.4.13). Script sets the class and clears it on the next hover or
+  // focus. The doubled class matches the specificity of the rules above, and
+  // coming after them, wins.
+  &#{&}--dismissed &__content {
+    opacity: opacity(hidden);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__content {
+      transition: none;
+    }
   }
 }
