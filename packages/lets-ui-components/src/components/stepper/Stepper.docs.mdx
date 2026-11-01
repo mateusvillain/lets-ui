@@ -1,67 +1,173 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as StepperStories from './Stepper.stories';
 
 <Meta of={StepperStories} />
 
+<Lang lang="pt-BR">
 # Stepper
 
 Indica o progresso por um fluxo dividido em etapas — um checkout, um cadastro, um assistente de configuração. Cada etapa mostra um número e, opcionalmente, um rótulo e uma descrição; as etapas anteriores à atual aparecem como concluídas, e o conector entre elas é preenchido até a etapa atual.
 
+</Lang>
+
+<Lang lang="en-US">
+# Stepper
+
+Indicates progress through a flow split into steps — a checkout, a sign-up, a setup wizard. Each step shows a number and, optionally, a label and a description; steps before the current one appear as completed, and the connector between them is filled up to the current step.
+
+</Lang>
+
 <Canvas of={StepperStories.Default} />
 <Controls of={StepperStories.Default} />
 
+<Lang lang="pt-BR">
 ## Quando usar
 
 - Fluxos com um número pequeno e conhecido de etapas (de 3 a 6), em que saber onde se está e quanto falta ajuda a concluir a tarefa.
 - Para navegar entre seções independentes, sem ordem, prefira [Tabs](?path=/docs/navigation-tabs--docs).
 - Para conteúdo paginado, prefira [Pagination](?path=/docs/navigation-pagination--docs).
 
+</Lang>
+
+<Lang lang="en-US">
+## When to use
+
+- Flows with a small, known number of steps (3 to 6), where knowing where you are and how much is left helps complete the task.
+- To navigate between independent sections, with no order, prefer [Tabs](?path=/docs/navigation-tabs--docs).
+- For paged content, prefer [Pagination](?path=/docs/navigation-pagination--docs).
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Vertical
 
 Com `orientation="vertical"`, as etapas se empilham e o conector desce do centro do indicador. Quando o stepper recebe uma altura, os conectores se esticam para ocupá-la; sem altura, mantêm um comprimento mínimo.
 
+</Lang>
+
+<Lang lang="en-US">
+## Vertical
+
+With `orientation="vertical"`, the steps stack and the connector goes down from the center of the indicator. When the stepper receives a height, the connectors stretch to fill it; without a height, they keep a minimum length.
+
+</Lang>
+
 <Canvas of={StepperStories.Vertical} />
 
+<Lang lang="pt-BR">
 ## Telas estreitas
 
 Um stepper horizontal que não cabe no espaço disponível passa a ser exibido na vertical, em vez de criar rolagem horizontal (WCAG 1.4.10 Reflow). Quando o espaço volta a ser suficiente, ele retorna à horizontal. A decisão depende da largura real do contêiner, não da viewport, então também vale para um stepper dentro de uma coluna estreita. O atributo `orientation` não muda.
 
+</Lang>
+
+<Lang lang="en-US">
+## Narrow screens
+
+A horizontal stepper that does not fit the available space is displayed vertically instead of creating horizontal scrolling (WCAG 1.4.10 Reflow). When there is enough space again, it returns to horizontal. The decision depends on the actual container width, not the viewport, so it also applies to a stepper inside a narrow column. The `orientation` attribute does not change.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Rótulos abaixo do indicador
 
 Com `label-placement="bottom"`, o rótulo e a descrição ficam centralizados abaixo do número. Só se aplica à orientação horizontal.
 
+</Lang>
+
+<Lang lang="en-US">
+## Labels below the indicator
+
+With `label-placement="bottom"`, the label and the description are centered below the number. It only applies to the horizontal orientation.
+
+</Lang>
+
 <Canvas of={StepperStories.LabelsBottom} />
 
+<Lang lang="pt-BR">
 ## Somente números
 
 Sem `label` e `description`, cada etapa mostra apenas o indicador. Nesse caso, dê ao stepper um `label` descritivo.
 
+</Lang>
+
+<Lang lang="en-US">
+## Numbers only
+
+Without `label` and `description`, each step shows only the indicator. In that case, give the stepper a descriptive `label`.
+
+</Lang>
+
 <Canvas of={StepperStories.NumbersOnly} />
 
+<Lang lang="pt-BR">
 ## Carregando
 
 `loading` troca o número da etapa por um indicador de progresso — enquanto a etapa é salva ou validada, por exemplo. O botão recebe `aria-busy="true"` e o texto de `loading-label` é anunciado. A posição ("Step 2 of 4") continua no nome acessível, mesmo sem o número visível.
 
+</Lang>
+
+<Lang lang="en-US">
+## Loading
+
+`loading` replaces the step number with a progress indicator — while the step is saved or validated, for example. The button receives `aria-busy="true"` and the `loading-label` text is announced. The position ("Step 2 of 4") stays in the accessible name, even without the visible number.
+
+</Lang>
+
 <Canvas of={StepperStories.Loading} />
 
+<Lang lang="pt-BR">
 ## Linear
 
 Com `linear`, só é possível voltar para etapas concluídas: as etapas à frente da atual não respondem ao clique e recebem `aria-disabled="true"`, mas mantêm a cor normal — não estão desabilitadas, só ainda não foram alcançadas. Avance por código, alterando `current-step`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Linear
+
+With `linear`, you can only go back to completed steps: steps ahead of the current one do not respond to clicks and receive `aria-disabled="true"`, but keep their normal color — they are not disabled, just not reached yet. Advance through code, by changing `current-step`.
+
+</Lang>
+
 <Canvas of={StepperStories.Linear} />
 
+<Lang lang="pt-BR">
 ## Evento `lui-step-change`
 
 Ao clicar em uma etapa, o stepper emite `lui-step-change` com a etapa escolhida em `event.detail.step` e a anterior em `event.detail.previous`. O evento borbulha, atravessa o shadow DOM e é cancelável: chamar `event.preventDefault()` mantém a etapa atual — útil para impedir o avanço enquanto um formulário é inválido.
 
+</Lang>
+
+<Lang lang="en-US">
+## Event `lui-step-change`
+
+When a step is clicked, the stepper emits `lui-step-change` with the chosen step in `event.detail.step` and the previous one in `event.detail.previous`. The event bubbles, crosses the shadow DOM and is cancelable: calling `event.preventDefault()` keeps the current step — useful to prevent advancing while a form is invalid.
+
+</Lang>
+
 <Canvas of={StepperStories.StepChangeEvent} />
 
+<Lang lang="pt-BR">
 ### Anúncio da troca
 
 Toda troca de etapa, seja pelo clique ou por código, é anunciada por uma região viva (`role="status"`) com a posição e o rótulo da nova etapa ("Step 3 of 4, Payment"). Uma troca cancelada não é anunciada.
 
 O stepper indica só a etapa. Quando a troca muda o conteúdo da página, atualize também o `<title>` (por exemplo, "Payment — Step 3 of 4 — Checkout") e leve o foco ao heading da nova etapa, como recomenda o [tutorial de formulários em várias etapas do W3C](https://www.w3.org/WAI/tutorials/forms/multi-page/).
 
+</Lang>
+
+<Lang lang="en-US">
+### Change announcement
+
+Every step change, whether by click or by code, is announced by a live region (`role="status"`) with the position and the label of the new step ("Step 3 of 4, Payment"). A canceled change is not announced.
+
+The stepper indicates only the step. When the change also changes the page content, update the `<title>` (for example, "Payment — Step 3 of 4 — Checkout") and move focus to the new step heading, as the [W3C multi-step forms tutorial](https://www.w3.org/WAI/tutorials/forms/multi-page/) recommends.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, a marcação fica a cargo de quem usa: mova `stepper__item--completed`, `stepper__item--active` e `aria-current="step"` à mão e deixe o conector fora do último item. Use `stepper--vertical` e `stepper--labels-bottom` no `<ol>` para as outras disposições.
@@ -72,8 +178,24 @@ Sem o Web Component, também ficam a cargo de quem usa:
 - o `aria-hidden="true"` no indicador;
 - a troca para `stepper--vertical` quando a linha não cabe.
 
+</Lang>
+
+<Lang lang="en-US">
+## CSS class (without Web Component)
+
+Without the Web Component, the markup becomes the responsibility of the consumer: move `stepper__item--completed`, `stepper__item--active` and `aria-current="step"` by hand and leave the connector outside the last item. Use `stepper--vertical` and `stepper--labels-bottom` on the `<ol>` for the other layouts.
+
+Without the Web Component, these also become the responsibility of the consumer:
+
+- the position text (`stepper__position`), which is visually hidden;
+- the `aria-hidden="true"` on the indicator;
+- switching to `stepper--vertical` when the row does not fit.
+
+</Lang>
+
 <Canvas of={StepperStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Propriedades
 
 ### `lui-stepper`
@@ -104,6 +226,42 @@ Sem o Web Component, também ficam a cargo de quem usa:
 | ----------------- | ------------------------------------ | --------------------------------------------- |
 | `lui-step-change` | `{ step: number, previous: number }` | Emitido antes de trocar de etapa. Cancelável. |
 
+</Lang>
+
+<Lang lang="en-US">
+## Properties
+
+### `lui-stepper`
+
+| Attribute         | Type                         | Default                  | Description                                                              |
+| ----------------- | ---------------------------- | ------------------------ | ------------------------------------------------------------------------ |
+| `current-step`    | `number`                     | `1`                      | Current step, starting at 1. Reflected in the attribute on navigation.   |
+| `orientation`     | `'horizontal' \| 'vertical'` | `horizontal`             | Layout of the steps.                                                     |
+| `label-placement` | `'end' \| 'bottom'`          | `end`                    | Label beside or below the indicator. `bottom` only applies horizontally. |
+| `linear`          | `boolean`                    | `false`                  | Prevents jumping to steps ahead of the current one.                      |
+| `label`           | `string`                     | `Progress`               | Accessible name of the step list.                                        |
+| `completed-label` | `string`                     | `Completed`              | Text announced by screen readers on completed steps.                     |
+| `loading-label`   | `string`                     | `Loading`                | Text announced by screen readers on steps with `loading`.                |
+| `step-label`      | `string`                     | `Step {step} of {total}` | Position announced on each step and on step change.                      |
+
+### `lui-step`
+
+| Attribute     | Type      | Default | Description                                   |
+| ------------- | --------- | ------- | --------------------------------------------- |
+| `label`       | `string`  | `''`    | Step title.                                   |
+| `description` | `string`  | `''`    | Supporting text below the title.              |
+| `loading`     | `boolean` | `false` | Replaces the number with a loading indicator. |
+| `disabled`    | `boolean` | `false` | Disables the step.                            |
+
+### Events
+
+| Event             | `detail`                             | Description                                |
+| ----------------- | ------------------------------------ | ------------------------------------------ |
+| `lui-step-change` | `{ step: number, previous: number }` | Emitted before changing steps. Cancelable. |
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 - As etapas formam uma lista (`role="list"` / `role="listitem"`) com o nome acessível de `label`.
@@ -115,6 +273,23 @@ Sem o Web Component, também ficam a cargo de quem usa:
 - O estado que a cor do indicador transmite também é anunciado: as etapas concluídas levam o texto de `completed-label`, e as que estão carregando, o de `loading-label`, além de `aria-busy="true"`.
 - Os conectores são decorativos (`aria-hidden="true"`).
 
+</Lang>
+
+<Lang lang="en-US">
+## Accessibility
+
+- The steps form a list (`role="list"` / `role="listitem"`) with the accessible name from `label`.
+- Each step is a native button: reachable with `Tab`, and `Enter` or `Space` select it.
+- The current step receives `aria-current="step"`.
+- The name of each step starts with the position and the total (`step-label`, for example "Step 2 of 4 Address Shipping"). The visible number is `aria-hidden="true"`, so it is not read twice.
+- A live region (`role="status"`) announces the new step on every change.
+- When it does not fit the available width, the horizontal stepper switches to vertical, with no horizontal scrolling.
+- The state conveyed by the indicator color is also announced: completed steps carry the `completed-label` text, and loading steps carry the `loading-label` text, plus `aria-busy="true"`.
+- The connectors are decorative (`aria-hidden="true"`).
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -162,3 +337,56 @@ Sem o Web Component, também ficam a cargo de quem usa:
   </li>
 </ol>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-stepper current-step="1" label="Checkout">
+  <lui-step label="Account" description="Your details"></lui-step>
+  <lui-step label="Address" description="Shipping"></lui-step>
+  <lui-step label="Payment" description="Card or PIX"></lui-step>
+</lui-stepper>
+
+<script>
+  document
+    .querySelector('lui-stepper')
+    .addEventListener('lui-step-change', (event) => {
+      console.log(event.detail.step, event.detail.previous);
+    });
+</script>
+```
+
+### CSS class
+
+```html
+<ol class="stepper" aria-label="Checkout">
+  <li class="stepper__item stepper__item--completed">
+    <button class="stepper__trigger" type="button">
+      <span class="stepper__position">Step 1 of 3</span>
+      <span class="stepper__indicator" aria-hidden="true">
+        <span class="stepper__circle">
+          <span class="stepper__number">1</span>
+        </span>
+      </span>
+      <span class="stepper__text">
+        <span class="stepper__label">Account</span>
+        <span class="stepper__description">Your details</span>
+      </span>
+      <span class="stepper__status">Completed</span>
+    </button>
+    <span class="stepper__connector" aria-hidden="true"></span>
+  </li>
+  <li class="stepper__item stepper__item--active">
+    <button class="stepper__trigger" type="button" aria-current="step">
+      <!-- indicator and text -->
+    </button>
+  </li>
+</ol>
+```
+
+</Lang>

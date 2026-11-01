@@ -1,31 +1,83 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as CenterStories from './Center.stories';
 
 <Meta of={CenterStories} />
 
+<Lang lang="pt-BR">
 # Center
 
 Centering layout with axis control. Useful for hero sections and empty states.
 
+</Lang>
+
+<Lang lang="en-US">
+# Center
+
+Centering layout with axis control. Useful for hero sections and empty states.
+
+</Lang>
+
 <Canvas of={CenterStories.Default} />
 <Controls of={CenterStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## Horizontal Only
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Horizontal Only
+
+</Lang>
 
 <Canvas of={CenterStories.Horizontal} />
 
+<Lang lang="pt-BR">
+
 ## Vertical Only
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Vertical Only
+
+</Lang>
 
 <Canvas of={CenterStories.Vertical} />
 
+<Lang lang="pt-BR">
+
 ## With Max Width
+
+</Lang>
+
+<Lang lang="en-US">
+
+## With Max Width
+
+</Lang>
 
 <Canvas of={CenterStories.WithMaxWidth} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={CenterStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -40,6 +92,31 @@ Centering layout with axis control. Useful for hero sections and empty states.
 
 ```html
 <div class="center center--horizontal">
-  <div class="center__inner" style="max-width: 400px;">Conteúdo centralizado</div>
+  <div class="center__inner" style="max-width: 400px;">
+    Conteúdo centralizado
+  </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-center axis="both" style="height: 300px;">
+  <div>Centered content</div>
+</lui-center>
+```
+
+### CSS class
+
+```html
+<div class="center center--horizontal">
+  <div class="center__inner" style="max-width: 400px;">Centered content</div>
+</div>
+```
+
+</Lang>

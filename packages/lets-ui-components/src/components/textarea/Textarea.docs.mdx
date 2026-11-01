@@ -1,39 +1,91 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as TextareaStories from './Textarea.stories';
 
 <Meta of={TextareaStories} />
 
+<Lang lang="pt-BR">
 # Textarea
 
 Campo de texto multilinha para entradas longas como descrições, comentários e observações. Segue o mesmo modelo visual do Input — com suporte a label, hint, contador de caracteres, estados de erro e disabled.
 
+</Lang>
+
+<Lang lang="en-US">
+# Textarea
+
+Multiline text field for long inputs such as descriptions, comments and notes. It follows the same visual model as Input — with support for label, hint, character counter, error and disabled states.
+
+</Lang>
+
 <Canvas of={TextareaStories.Textarea} />
 <Controls of={TextareaStories.Textarea} />
 
+<Lang lang="pt-BR">
 ## Com contador
 
 Use o atributo `maxlength` para ativar o contador de caracteres. Ideal quando há um limite explícito de entrada, como bio de perfil ou campo de descrição.
 
+</Lang>
+
+<Lang lang="en-US">
+## With counter
+
+Use the `maxlength` attribute to enable the character counter. Ideal when there is an explicit input limit, such as a profile bio or a description field.
+
+</Lang>
+
 <Canvas of={TextareaStories.WithCounter} />
 
+<Lang lang="pt-BR">
 ## Error
 
 Use o estado de erro para indicar que o campo não passou na validação. O `error-text` substitui o hint e é lido por leitores de tela via `aria-describedby`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Error
+
+Use the error state to indicate that the field did not pass validation. `error-text` replaces the hint and is read by screen readers through `aria-describedby`.
+
+</Lang>
+
 <Canvas of={TextareaStories.Error} />
 
+<Lang lang="pt-BR">
 ## Disabled
 
 Use quando o conteúdo deve ser exibido mas não editado no contexto atual.
 
+</Lang>
+
+<Lang lang="en-US">
+## Disabled
+
+Use when the content must be displayed but not edited in the current context.
+
+</Lang>
+
 <Canvas of={TextareaStories.Disabled} />
 
+<Lang lang="pt-BR">
 ## Resize: None
 
 Use `resize="none"` quando o layout não deve ser perturbado pelo redimensionamento — como em caixas de mensagem embutidas em formulários fixos.
 
+</Lang>
+
+<Lang lang="en-US">
+## Resize: None
+
+Use `resize="none"` when the layout must not be disturbed by resizing — such as message boxes embedded in fixed forms.
+
+</Lang>
+
 <Canvas of={TextareaStories.NoResize} />
 
+<Lang lang="pt-BR">
 ## Integração com formulários
 
 O `lui-textarea` é form-associated — seu valor é capturado automaticamente pelo `FormData` do form pai através do atributo `name`. O atributo `form` permite associá-lo a um form por ID mesmo estando fora do elemento `<form>`.
@@ -42,24 +94,72 @@ O `lui-textarea` é form-associated — seu valor é capturado automaticamente p
 
 Com `required`, o campo bloqueia a submissão quando está vazio via `ElementInternals.setValidity()`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Form integration
+
+`lui-textarea` is form-associated — its value is automatically captured by the parent form `FormData` through the `name` attribute. The `form` attribute lets you associate it with a form by ID even when it is outside the `<form>` element.
+
+### Required
+
+With `required`, the field blocks submission when empty through `ElementInternals.setValidity()`.
+
+</Lang>
+
 <Canvas of={TextareaStories.Required} />
+
+<Lang lang="pt-BR">
 
 ### Form Integration
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Form Integration
+
+</Lang>
+
 <Canvas of={TextareaStories.FormIntegration} />
 
+<Lang lang="pt-BR">
 ## Atributos de formulário
 
-| Atributo   | Tipo      | Padrão | Descrição                                                                     |
-| ---------- | --------- | ------ | ----------------------------------------------------------------------------- |
-| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`    |
-| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o textarea fora do elemento form       |
-| `required` | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals` |
+| Atributo   | Tipo      | Padrão  | Descrição                                                                     |
+| ---------- | --------- | ------- | ----------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`    | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`    |
+| `form`     | `string`  | `''`    | ID do `<form>` associado; permite usar o textarea fora do elemento form       |
+| `required` | `boolean` | `false` | Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals` |
+
+</Lang>
+
+<Lang lang="en-US">
+## Form attributes
+
+| Attribute  | Type      | Default | Description                                                                       |
+| ---------- | --------- | ------- | --------------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`    | Field name in the submitted data; required to appear in `FormData`                |
+| `form`     | `string`  | `''`    | ID of the associated `<form>`; lets you use the textarea outside the form element |
+| `required` | `boolean` | `false` | Blocks submission when the field is empty; validates through `ElementInternals`   |
+
+</Lang>
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={TextareaStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -81,7 +181,46 @@ Com `required`, o campo bloqueia a submissão quando está vazio via `ElementInt
     <label class="textarea-field__label">Mensagem</label>
   </div>
   <div class="textarea-field__control">
-    <textarea class="textarea-field__input" rows="4" placeholder="Digite..."></textarea>
+    <textarea
+      class="textarea-field__input"
+      rows="4"
+      placeholder="Digite..."
+    ></textarea>
   </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-textarea
+  label="Message"
+  placeholder="Type..."
+  size="lg"
+  rows="4"
+></lui-textarea>
+```
+
+### CSS class
+
+```html
+<div class="textarea-field textarea-field--lg">
+  <div class="textarea-field__head">
+    <label class="textarea-field__label">Message</label>
+  </div>
+  <div class="textarea-field__control">
+    <textarea
+      class="textarea-field__input"
+      rows="4"
+      placeholder="Type..."
+    ></textarea>
+  </div>
+</div>
+```
+
+</Lang>

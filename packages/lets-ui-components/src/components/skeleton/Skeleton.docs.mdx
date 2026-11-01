@@ -1,8 +1,10 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as SkeletonStories from './Skeleton.stories';
 
 <Meta of={SkeletonStories} />
 
+<Lang lang="pt-BR">
 # Skeleton
 
 O Skeleton ocupa o lugar do conteúdo enquanto ele carrega. A forma segue o layout final, então a página não salta quando os dados chegam e a espera parece mais curta.
@@ -11,49 +13,133 @@ Use no lugar de um spinner quando o formato do que vai aparecer já é conhecido
 
 Cada osso é decorativo. Quem anuncia o carregamento é a região que será substituída (`role="status"`, `aria-busy="true"` e um `aria-label`). Passe `label` só quando um único Skeleton representa essa região sozinho.
 
+</Lang>
+
+<Lang lang="en-US">
+# Skeleton
+
+The Skeleton takes the place of content while it loads. The shape follows the final layout, so the page does not jump when the data arrives and the wait feels shorter.
+
+Use it in place of a spinner when the shape of what will appear is already known: a line of text, an avatar, a cover, a list item. Do not use it when there is no data to show — that is Empty State — nor for an error.
+
+Each bone is decorative. The region that will be replaced announces the loading (`role="status"`, `aria-busy="true"` and an `aria-label`). Pass `label` only when a single Skeleton represents that region on its own.
+
+</Lang>
+
 <Canvas of={SkeletonStories.Skeleton} />
 <Controls of={SkeletonStories.Skeleton} />
 
+<Lang lang="pt-BR">
 ## Text
 
 Use para parágrafos, títulos e metadados. A altura acompanha o tamanho da fonte do contexto (`1em`); a largura padrão preenche a linha. Encurte as últimas linhas com `width` para sugerir texto de verdade.
 
+</Lang>
+
+<Lang lang="en-US">
+## Text
+
+Use for paragraphs, headings and metadata. The height follows the context font size (`1em`); the default width fills the line. Shorten the last lines with `width` to suggest real text.
+
+</Lang>
+
 <Canvas of={SkeletonStories.Text} />
 
+<Lang lang="pt-BR">
 ## Circle
 
 Use no lugar de um avatar ou de qualquer marca redonda. Sem medida, o círculo tem 40px, o mesmo tamanho do avatar grande. Se só um lado for informado, o outro acompanha e o círculo continua quadrado.
 
+</Lang>
+
+<Lang lang="en-US">
+## Circle
+
+Use in place of an avatar or any round brand mark. Without a measurement, the circle is 40px, the same size as the large avatar. If only one side is provided, the other follows and the circle stays square.
+
+</Lang>
+
 <Canvas of={SkeletonStories.Circle} />
 
+<Lang lang="pt-BR">
 ## Rectangle
 
 Use para capas, mapas, gráficos e qualquer bloco que não seja uma linha de texto. A altura padrão é o maior passo fluido da escala; passe `height` quando o bloco final for mais alto.
 
+</Lang>
+
+<Lang lang="en-US">
+## Rectangle
+
+Use for covers, maps, charts and any block that is not a line of text. The default height is the largest fluid step in the scale; pass `height` when the final block is taller.
+
+</Lang>
+
 <Canvas of={SkeletonStories.Rectangle} />
 
+<Lang lang="pt-BR">
 ## Cartão
 
 Use várias formas juntas para antecipar um cartão: capa retangular e linhas de texto com larguras diferentes. A região inteira anuncia o carregamento uma vez.
 
+</Lang>
+
+<Lang lang="en-US">
+## Card
+
+Use several shapes together to anticipate a card: a rectangular cover and text lines with different widths. The entire region announces the loading once.
+
+</Lang>
+
 <Canvas of={SkeletonStories.Card} />
 
+<Lang lang="pt-BR">
 ## Item de lista
 
 Use a mesma composição repetida quando a lista ainda não chegou. O círculo fica no lugar do avatar e as duas linhas no lugar do nome e do detalhe.
 
+</Lang>
+
+<Lang lang="en-US">
+## List item
+
+Use the same composition repeated when the list has not arrived yet. The circle takes the avatar place and the two lines take the name and detail places.
+
+</Lang>
+
 <Canvas of={SkeletonStories.ListItem} />
 
+<Lang lang="pt-BR">
 ## Perfil
 
 Use quando o cabeçalho de um perfil carrega antes do restante da página.
 
+</Lang>
+
+<Lang lang="en-US">
+## Profile
+
+Use when a profile header loads before the rest of the page.
+
+</Lang>
+
 <Canvas of={SkeletonStories.Profile} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={SkeletonStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 - Sem `label`, o componente sai da árvore de acessibilidade (`aria-hidden="true"`). Vários ossos dentro de um layout não são lidos um a um.
@@ -61,7 +147,19 @@ Use quando o cabeçalho de um perfil carrega antes do restante da página.
 - A região que será trocada pelo conteúdo real deve ter `aria-busy="true"` enquanto os Skeletons estão visíveis, e perder o atributo quando o conteúdo entrar.
 - Com `prefers-reduced-motion: reduce`, o brilho para e resta só a forma estática.
 - Em `forced-colors`, a forma ganha um contorno do sistema para continuar visível.
+</Lang>
 
+<Lang lang="en-US">
+## Accessibility
+
+- Without `label`, the component leaves the accessibility tree (`aria-hidden="true"`). Several bones inside a layout are not read one by one.
+- With `label`, it becomes `role="status"` and the accessible name is read once.
+- The region that will be replaced by the real content must have `aria-busy="true"` while the Skeletons are visible, and lose the attribute when the content enters.
+- With `prefers-reduced-motion: reduce`, the shimmer stops and only the static shape remains.
+- In `forced-colors`, the shape gains a system outline to stay visible.
+</Lang>
+
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -86,3 +184,33 @@ Use quando o cabeçalho de um perfil carrega antes do restante da página.
 <span class="skeleton skeleton--circle"></span>
 <span class="skeleton skeleton--rectangle"></span>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-skeleton></lui-skeleton>
+<lui-skeleton width="64%"></lui-skeleton>
+<lui-skeleton shape="circle"></lui-skeleton>
+<lui-skeleton shape="rectangle" height="10rem"></lui-skeleton>
+
+<div role="status" aria-busy="true" aria-label="Loading profile">
+  <lui-skeleton shape="circle"></lui-skeleton>
+  <lui-skeleton width="48%"></lui-skeleton>
+</div>
+```
+
+### CSS class
+
+```html
+<span class="skeleton"></span>
+<span class="skeleton" style="--lui-skeleton-width: 64%"></span>
+<span class="skeleton skeleton--circle"></span>
+<span class="skeleton skeleton--rectangle"></span>
+```
+
+</Lang>

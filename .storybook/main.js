@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import remarkGfm from 'remark-gfm';
 
+import rehypeLangSlug from './language/rehypeLangSlug.js';
+
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type { import('@storybook/html-vite').StorybookConfig } */
@@ -22,6 +24,7 @@ const config = {
         mdxPluginOptions: {
           mdxCompileOptions: {
             remarkPlugins: [remarkGfm],
+            rehypePlugins: [rehypeLangSlug],
           },
         },
       },
@@ -72,6 +75,13 @@ const config = {
           {
             find: '@lets-ui/tokens/static',
             replacement: `${tokensDist}/letsui.tokens.static.json`,
+          },
+          // Language helpers for MDX docs and stories — a stable import path
+          // that doesn't depend on the file's depth in the repo. The namespace
+          // is deliberately outside `@storybook/`, which resolves internally.
+          {
+            find: /^@docs-lang\/(.+)$/,
+            replacement: `${resolve(__dirname, 'language')}/$1`,
           },
         ],
       },

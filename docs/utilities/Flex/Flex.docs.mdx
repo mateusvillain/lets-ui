@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Utilities/Flex" />
 
@@ -51,6 +52,7 @@ export const Section = ({ title, children }) => (
   </div>
 );
 
+<Lang lang="pt-BR">
 # Flex Utilities
 
 Classes utilitárias de flexbox geradas em `packages/styles/src/utilities/_flex.scss` e incluídas no bundle `letsui.css`. Cobrem display, direção, wrap, alinhamento e grow/shrink.
@@ -62,6 +64,21 @@ Classes utilitárias de flexbox geradas em `packages/styles/src/utilities/_flex.
   <div>Item B</div>
 </div>
 ```
+</Lang>
+
+<Lang lang="en-US">
+# Flex Utilities
+
+Flexbox utility classes generated in `packages/styles/src/utilities/_flex.scss` and included in the `letsui.css` bundle. They cover display, direction, wrap, alignment and grow/shrink.
+
+```html
+<!-- Example of direct use in HTML -->
+<div class="flex flex-col items-center justify-between" style="gap: 16px">
+  <div>Item A</div>
+  <div>Item B</div>
+</div>
+```
+</Lang>
 
 ---
 
@@ -243,13 +260,13 @@ Classes utilitárias de flexbox geradas em `packages/styles/src/utilities/_flex.
   <Demo label="flex-grow-0" css="flex-grow: 0">
     <div style={{ display: 'flex', gap: '8px' }}>
       <Box style={{ flexGrow: 0 }}>grow-0</Box>
-      <Box style={{ flexGrow: 1, background: 'var(--lui-color-neutral-background-container)', color: 'var(--lui-color-neutral-text-body)', border: '1px dashed var(--lui-color-neutral-border-subtle)' }}>outro</Box>
+      <Box style={{ flexGrow: 1, background: 'var(--lui-color-neutral-background-container)', color: 'var(--lui-color-neutral-text-body)', border: '1px dashed var(--lui-color-neutral-border-subtle)' }}><span data-lang="pt-BR">outro</span><span data-lang="en-US">other</span></Box>
     </div>
   </Demo>
   <Demo label="flex-grow-1" css="flex-grow: 1">
     <div style={{ display: 'flex', gap: '8px' }}>
       <Box style={{ flexGrow: 1 }}>grow-1</Box>
-      <Box>fixo</Box>
+      <Box><span data-lang="pt-BR">fixo</span><span data-lang="en-US">fixed</span></Box>
     </div>
   </Demo>
 </Section>
@@ -271,6 +288,7 @@ Classes utilitárias de flexbox geradas em `packages/styles/src/utilities/_flex.
 
 ---
 
+<Lang lang="pt-BR">
 ## Referência rápida
 
 | Classe              | Propriedade CSS                     |
@@ -308,3 +326,44 @@ Classes utilitárias de flexbox geradas em `packages/styles/src/utilities/_flex.
 | `.flex-grow-1`      | `flex-grow: 1`                      |
 | `.flex-shrink-0`    | `flex-shrink: 0`                    |
 | `.flex-shrink-1`    | `flex-shrink: 1`                    |
+</Lang>
+
+<Lang lang="en-US">
+## Quick reference
+
+| Class               | CSS property                        |
+|---------------------|-------------------------------------|
+| `.flex`             | `display: flex`                     |
+| `.inline-flex`      | `display: inline-flex`              |
+| `.flex-row`         | `flex-direction: row`               |
+| `.flex-row-reverse` | `flex-direction: row-reverse`       |
+| `.flex-col`         | `flex-direction: column`            |
+| `.flex-col-reverse` | `flex-direction: column-reverse`    |
+| `.flex-wrap`        | `flex-wrap: wrap`                   |
+| `.flex-nowrap`      | `flex-wrap: nowrap`                 |
+| `.flex-wrap-reverse`| `flex-wrap: wrap-reverse`           |
+| `.justify-start`    | `justify-content: flex-start`       |
+| `.justify-center`   | `justify-content: center`           |
+| `.justify-end`      | `justify-content: flex-end`         |
+| `.justify-between`  | `justify-content: space-between`    |
+| `.justify-around`   | `justify-content: space-around`     |
+| `.justify-evenly`   | `justify-content: space-evenly`     |
+| `.items-start`      | `align-items: flex-start`           |
+| `.items-center`     | `align-items: center`               |
+| `.items-end`        | `align-items: flex-end`             |
+| `.items-stretch`    | `align-items: stretch`              |
+| `.items-baseline`   | `align-items: baseline`             |
+| `.content-start`    | `align-content: flex-start`         |
+| `.content-center`   | `align-content: center`             |
+| `.content-end`      | `align-content: flex-end`           |
+| `.content-between`  | `align-content: space-between`      |
+| `.content-around`   | `align-content: space-around`       |
+| `.self-start`       | `align-self: flex-start`            |
+| `.self-center`      | `align-self: center`                |
+| `.self-end`         | `align-self: flex-end`              |
+| `.self-stretch`     | `align-self: stretch`               |
+| `.flex-grow-0`      | `flex-grow: 0`                      |
+| `.flex-grow-1`      | `flex-grow: 1`                      |
+| `.flex-shrink-0`    | `flex-shrink: 0`                    |
+| `.flex-shrink-1`    | `flex-shrink: 1`                    |
+</Lang>

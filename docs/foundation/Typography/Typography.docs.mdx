@@ -1,40 +1,220 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Foundations/Typography" />
 
 export const scales = [
-  { name: 'display',     className: 'display',     weight: 'Light',    size: '3xl', use: 'Herói, banners de destaque' },
-  { name: 'title',       className: 'title',        weight: 'Bold',     size: '2xl', use: 'Título de página'           },
-  { name: 'headline',    className: 'headline',     weight: 'Semibold', size: '1xl', use: 'Cabeçalho de seção'         },
-  { name: 'subtitle',    className: 'subtitle',     weight: 'Regular',  size: 'lg',  use: 'Subtítulo, lead'            },
-  { name: 'block-title', className: 'block-title',  weight: 'Medium',   size: 'md',  use: 'Título de bloco ou card'    },
-  { name: 'subheadline', className: 'subheadline',  weight: 'Regular',  size: 'sm',  use: 'Cabeçalho de grupo menor'   },
-  { name: 'overtitle',   className: 'overtitle',    weight: 'Medium',   size: '3xs', use: 'Rótulo acima do título (UPPERCASE)' },
-  { name: 'body--lg',    className: 'body--lg',     weight: 'Regular',  size: '1xs', use: 'Corpo de texto padrão'      },
-  { name: 'body--md',    className: 'body--md',     weight: 'Regular',  size: '2xs', use: 'Texto secundário'           },
-  { name: 'body--sm',    className: 'body--sm',     weight: 'Regular',  size: '3xs', use: 'Legenda, auxiliar'          },
+  {
+    name: 'display',
+    className: 'display',
+    weight: 'Light',
+    size: '3xl',
+    use: 'Herói, banners de destaque',
+  },
+  {
+    name: 'title',
+    className: 'title',
+    weight: 'Bold',
+    size: '2xl',
+    use: 'Título de página',
+  },
+  {
+    name: 'headline',
+    className: 'headline',
+    weight: 'Semibold',
+    size: '1xl',
+    use: 'Cabeçalho de seção',
+  },
+  {
+    name: 'subtitle',
+    className: 'subtitle',
+    weight: 'Regular',
+    size: 'lg',
+    use: 'Subtítulo, lead',
+  },
+  {
+    name: 'block-title',
+    className: 'block-title',
+    weight: 'Medium',
+    size: 'md',
+    use: 'Título de bloco ou card',
+  },
+  {
+    name: 'subheadline',
+    className: 'subheadline',
+    weight: 'Regular',
+    size: 'sm',
+    use: 'Cabeçalho de grupo menor',
+  },
+  {
+    name: 'overtitle',
+    className: 'overtitle',
+    weight: 'Medium',
+    size: '3xs',
+    use: 'Rótulo acima do título (UPPERCASE)',
+  },
+  {
+    name: 'body--lg',
+    className: 'body--lg',
+    weight: 'Regular',
+    size: '1xs',
+    use: 'Corpo de texto padrão',
+  },
+  {
+    name: 'body--md',
+    className: 'body--md',
+    weight: 'Regular',
+    size: '2xs',
+    use: 'Texto secundário',
+  },
+  {
+    name: 'body--sm',
+    className: 'body--sm',
+    weight: 'Regular',
+    size: '3xs',
+    use: 'Legenda, auxiliar',
+  },
+];
+
+export const scalesEn = [
+  {
+    name: 'display',
+    className: 'display',
+    weight: 'Light',
+    size: '3xl',
+    use: 'Hero, highlight banners',
+  },
+  {
+    name: 'title',
+    className: 'title',
+    weight: 'Bold',
+    size: '2xl',
+    use: 'Page title',
+  },
+  {
+    name: 'headline',
+    className: 'headline',
+    weight: 'Semibold',
+    size: '1xl',
+    use: 'Section heading',
+  },
+  {
+    name: 'subtitle',
+    className: 'subtitle',
+    weight: 'Regular',
+    size: 'lg',
+    use: 'Subtitle, lead',
+  },
+  {
+    name: 'block-title',
+    className: 'block-title',
+    weight: 'Medium',
+    size: 'md',
+    use: 'Block or card title',
+  },
+  {
+    name: 'subheadline',
+    className: 'subheadline',
+    weight: 'Regular',
+    size: 'sm',
+    use: 'Smaller group heading',
+  },
+  {
+    name: 'overtitle',
+    className: 'overtitle',
+    weight: 'Medium',
+    size: '3xs',
+    use: 'Label above the title (UPPERCASE)',
+  },
+  {
+    name: 'body--lg',
+    className: 'body--lg',
+    weight: 'Regular',
+    size: '1xs',
+    use: 'Default body text',
+  },
+  {
+    name: 'body--md',
+    className: 'body--md',
+    weight: 'Regular',
+    size: '2xs',
+    use: 'Secondary text',
+  },
+  {
+    name: 'body--sm',
+    className: 'body--sm',
+    weight: 'Regular',
+    size: '3xs',
+    use: 'Caption, auxiliary',
+  },
 ];
 
 export const fontSizes = [
-  { token: '3xs', var: '--lui-brand-typography-font-size-3xs', min: '0.691rem', max: '0.694rem' },
-  { token: '2xs', var: '--lui-brand-typography-font-size-2xs', min: '0.778rem', max: '0.833rem' },
-  { token: '1xs', var: '--lui-brand-typography-font-size-1xs', min: '0.875rem', max: '1rem'     },
-  { token: 'sm',  var: '--lui-brand-typography-font-size-sm',  min: '0.984rem', max: '1.2rem'   },
-  { token: 'md',  var: '--lui-brand-typography-font-size-md',  min: '1.107rem', max: '1.44rem'  },
-  { token: 'lg',  var: '--lui-brand-typography-font-size-lg',  min: '1.246rem', max: '1.728rem' },
-  { token: '1xl', var: '--lui-brand-typography-font-size-1xl', min: '1.402rem', max: '2.074rem' },
-  { token: '2xl', var: '--lui-brand-typography-font-size-2xl', min: '1.577rem', max: '2.488rem' },
-  { token: '3xl', var: '--lui-brand-typography-font-size-3xl', min: '2.245rem', max: '4.3rem'   },
+  {
+    token: '3xs',
+    var: '--lui-brand-typography-font-size-3xs',
+    min: '0.691rem',
+    max: '0.694rem',
+  },
+  {
+    token: '2xs',
+    var: '--lui-brand-typography-font-size-2xs',
+    min: '0.778rem',
+    max: '0.833rem',
+  },
+  {
+    token: '1xs',
+    var: '--lui-brand-typography-font-size-1xs',
+    min: '0.875rem',
+    max: '1rem',
+  },
+  {
+    token: 'sm',
+    var: '--lui-brand-typography-font-size-sm',
+    min: '0.984rem',
+    max: '1.2rem',
+  },
+  {
+    token: 'md',
+    var: '--lui-brand-typography-font-size-md',
+    min: '1.107rem',
+    max: '1.44rem',
+  },
+  {
+    token: 'lg',
+    var: '--lui-brand-typography-font-size-lg',
+    min: '1.246rem',
+    max: '1.728rem',
+  },
+  {
+    token: '1xl',
+    var: '--lui-brand-typography-font-size-1xl',
+    min: '1.402rem',
+    max: '2.074rem',
+  },
+  {
+    token: '2xl',
+    var: '--lui-brand-typography-font-size-2xl',
+    min: '1.577rem',
+    max: '2.488rem',
+  },
+  {
+    token: '3xl',
+    var: '--lui-brand-typography-font-size-3xl',
+    min: '2.245rem',
+    max: '4.3rem',
+  },
 ];
 
 export const weights = [
-  { label: 'Light',    token: '--lui-typography-weight-light',    value: 300 },
-  { label: 'Regular',  token: '--lui-typography-weight-regular',  value: 400 },
-  { label: 'Medium',   token: '--lui-typography-weight-medium',   value: 500 },
+  { label: 'Light', token: '--lui-typography-weight-light', value: 300 },
+  { label: 'Regular', token: '--lui-typography-weight-regular', value: 400 },
+  { label: 'Medium', token: '--lui-typography-weight-medium', value: 500 },
   { label: 'Semibold', token: '--lui-typography-weight-semibold', value: 600 },
-  { label: 'Bold',     token: '--lui-typography-weight-bold',     value: 700 },
+  { label: 'Bold', token: '--lui-typography-weight-bold', value: 700 },
 ];
 
+<Lang lang="pt-BR">
 # Typography
 
 Sistema tipográfico do design system. As escalas compostas combinam família, tamanho, peso e capitalização — use a função SCSS `font-scale($name)` ou a classe CSS `.{name}`.
@@ -45,27 +225,55 @@ Sistema tipográfico do design system. As escalas compostas combinam família, t
 
 Cada escala define um papel tipográfico completo. A classe CSS correspondente pode ser aplicada diretamente no HTML.
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '32px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    marginBottom: '32px',
+  }}
+>
   {scales.map(({ name, className, weight, size, use }) => (
-    <div key={name} style={{
-      display: 'grid',
-      gridTemplateColumns: '140px 1fr 200px',
-      alignItems: 'center',
-      gap: '16px',
-      padding: '16px',
-      border: '1px solid var(--lui-color-neutral-border-subtle)',
-      borderRadius: '6px',
-    }}>
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '140px 1fr 200px',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '16px',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
       <div>
         <code style={{ fontSize: '12px', display: 'block' }}>.{name}</code>
-        <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>
+        <span
+          style={{
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
           {weight} · {size}
         </span>
       </div>
-      <div className={className} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+      <div
+        className={className}
+        style={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }}
+      >
         O design system cuida dos detalhes.
       </div>
-      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)', textAlign: 'right' }}>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+          textAlign: 'right',
+        }}
+      >
         {use}
       </span>
     </div>
@@ -78,21 +286,46 @@ Cada escala define um papel tipográfico completo. A classe CSS correspondente p
 
 Escala fluida com `clamp()` — os tamanhos se adaptam proporcionalmente entre os breakpoints mínimo e máximo.
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
   {fontSizes.map(({ token, var: cssVar, min, max }) => (
-    <div key={token} style={{
-      display: 'grid',
-      gridTemplateColumns: '60px 260px 1fr',
-      alignItems: 'center',
-      gap: '16px',
-      padding: '8px 12px',
-      background: 'var(--lui-color-neutral-background-surface)',
-      border: '1px solid var(--lui-color-neutral-border-subtle)',
-      borderRadius: '6px',
-    }}>
+    <div
+      key={token}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '60px 260px 1fr',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '8px 12px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
       <code style={{ fontSize: '12px' }}>{token}</code>
-      <code style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>{cssVar}</code>
-      <span style={{ fontSize: `var(${cssVar})`, lineHeight: 1, overflow: 'hidden' }}>Aa</span>
+      <code
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+        }}
+      >
+        {cssVar}
+      </code>
+      <span
+        style={{
+          fontSize: `var(${cssVar})`,
+          lineHeight: 1,
+          overflow: 'hidden',
+        }}
+      >
+        Aa
+      </span>
     </div>
   ))}
 </div>
@@ -101,21 +334,39 @@ Escala fluida com `clamp()` — os tamanhos se adaptam proporcionalmente entre o
 
 ## Pesos Tipográficos
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
   {weights.map(({ label, token, value }) => (
-    <div key={value} style={{
-      display: 'grid',
-      gridTemplateColumns: '100px 280px 1fr',
-      alignItems: 'center',
-      gap: '16px',
-      padding: '12px',
-      background: 'var(--lui-color-neutral-background-surface)',
-      border: '1px solid var(--lui-color-neutral-border-subtle)',
-      borderRadius: '6px',
-    }}>
+    <div
+      key={value}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '100px 280px 1fr',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '12px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
       <div>
         <span style={{ fontSize: '13px', fontWeight: value }}>{label}</span>
-        <span style={{ display: 'block', fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>{value}</span>
+        <span
+          style={{
+            display: 'block',
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
+          {value}
+        </span>
       </div>
       <code style={{ fontSize: '12px' }}>{token}</code>
       <span style={{ fontSize: '20px', fontWeight: value, lineHeight: 1 }}>
@@ -129,42 +380,74 @@ Escala fluida com `clamp()` — os tamanhos se adaptam proporcionalmente entre o
 
 ## Alturas de Linha
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
-  <div style={{
-    display: 'grid',
-    gridTemplateColumns: '120px 1fr',
-    alignItems: 'start',
-    gap: '24px',
-    padding: '16px',
-    background: 'var(--lui-color-neutral-background-surface)',
-    border: '1px solid var(--lui-color-neutral-border-subtle)',
-    borderRadius: '6px',
-    marginBottom: '4px',
-  }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: '120px 1fr',
+      alignItems: 'start',
+      gap: '24px',
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+      marginBottom: '4px',
+    }}
+  >
     <div>
-      <code style={{ fontSize: '12px', display: 'block' }}>--lui-brand-typography-line-height-heading</code>
-      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>1.2 · Heading</span>
+      <code style={{ fontSize: '12px', display: 'block' }}>
+        --lui-brand-typography-line-height-heading
+      </code>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+        }}
+      >
+        1.2 · Heading
+      </span>
     </div>
     <p style={{ margin: 0, lineHeight: 1.2, fontSize: '1.25rem' }}>
-      Design systems criam consistência e agilidade na criação de produtos digitais.
+      Design systems criam consistência e agilidade na criação de produtos
+      digitais.
     </p>
   </div>
-  <div style={{
-    display: 'grid',
-    gridTemplateColumns: '120px 1fr',
-    alignItems: 'start',
-    gap: '24px',
-    padding: '16px',
-    background: 'var(--lui-color-neutral-background-surface)',
-    border: '1px solid var(--lui-color-neutral-border-subtle)',
-    borderRadius: '6px',
-  }}>
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: '120px 1fr',
+      alignItems: 'start',
+      gap: '24px',
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}
+  >
     <div>
-      <code style={{ fontSize: '12px', display: 'block' }}>--lui-brand-typography-line-height-body</code>
-      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>1.5 · Body</span>
+      <code style={{ fontSize: '12px', display: 'block' }}>
+        --lui-brand-typography-line-height-body
+      </code>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+        }}
+      >
+        1.5 · Body
+      </span>
     </div>
     <p style={{ margin: 0, lineHeight: 1.5 }}>
-      Design systems criam consistência e agilidade na criação de produtos digitais. Um bom sistema de tipografia garante legibilidade em qualquer contexto.
+      Design systems criam consistência e agilidade na criação de produtos
+      digitais. Um bom sistema de tipografia garante legibilidade em qualquer
+      contexto.
     </p>
   </div>
 </div>
@@ -210,3 +493,284 @@ As três famílias utilizam pilhas de fontes do sistema operacional (`system fon
     </span>
   </div>
 </div>
+</Lang>
+
+<Lang lang="en-US">
+# Typography
+
+Typography system of the design system. Composite scales combine family, size, weight and capitalization — use the SCSS `font-scale($name)` function or the CSS class `.{name}`.
+
+---
+
+## Composite Scales
+
+Each scale defines a complete typographic role. The corresponding CSS class can be applied directly in the HTML.
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    marginBottom: '32px',
+  }}
+>
+  {scalesEn.map(({ name, className, weight, size, use }) => (
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '140px 1fr 200px',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '16px',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
+      <div>
+        <code style={{ fontSize: '12px', display: 'block' }}>.{name}</code>
+        <span
+          style={{
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
+          {weight} · {size}
+        </span>
+      </div>
+      <div
+        className={className}
+        style={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        The design system takes care of the details.
+      </div>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+          textAlign: 'right',
+        }}
+      >
+        {use}
+      </span>
+    </div>
+  ))}
+</div>
+
+---
+
+## Font Sizes
+
+Fluid scale with `clamp()` — sizes adapt proportionally between the minimum and maximum breakpoints.
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
+  {fontSizes.map(({ token, var: cssVar, min, max }) => (
+    <div
+      key={token}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '60px 260px 1fr',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '8px 12px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
+      <code style={{ fontSize: '12px' }}>{token}</code>
+      <code
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+        }}
+      >
+        {cssVar}
+      </code>
+      <span
+        style={{
+          fontSize: `var(${cssVar})`,
+          lineHeight: 1,
+          overflow: 'hidden',
+        }}
+      >
+        Aa
+      </span>
+    </div>
+  ))}
+</div>
+
+---
+
+## Font Weights
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
+  {weights.map(({ label, token, value }) => (
+    <div
+      key={value}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '100px 280px 1fr',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '12px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
+      <div>
+        <span style={{ fontSize: '13px', fontWeight: value }}>{label}</span>
+        <span
+          style={{
+            display: 'block',
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
+          {value}
+        </span>
+      </div>
+      <code style={{ fontSize: '12px' }}>{token}</code>
+      <span style={{ fontSize: '20px', fontWeight: value, lineHeight: 1 }}>
+        The design system takes care of the details.
+      </span>
+    </div>
+  ))}
+</div>
+
+---
+
+## Line Heights
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: '120px 1fr',
+      alignItems: 'start',
+      gap: '24px',
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+      marginBottom: '4px',
+    }}
+  >
+    <div>
+      <code style={{ fontSize: '12px', display: 'block' }}>
+        --lui-brand-typography-line-height-heading
+      </code>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+        }}
+      >
+        1.2 · Heading
+      </span>
+    </div>
+    <p style={{ margin: 0, lineHeight: 1.2, fontSize: '1.25rem' }}>
+      Design systems create consistency and agility in building digital
+      products.
+    </p>
+  </div>
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: '120px 1fr',
+      alignItems: 'start',
+      gap: '24px',
+      padding: '16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}
+  >
+    <div>
+      <code style={{ fontSize: '12px', display: 'block' }}>
+        --lui-brand-typography-line-height-body
+      </code>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+        }}
+      >
+        1.5 · Body
+      </span>
+    </div>
+    <p style={{ margin: 0, lineHeight: 1.5 }}>
+      Design systems create consistency and agility in building digital
+      products. A good typography system ensures legibility in any context.
+    </p>
+  </div>
+</div>
+
+---
+
+## Font Families
+
+The three families use operating system font stacks (`system font stack`), ensuring native rendering with no external dependencies. The `code` family is monospaced, for code snippets such as the Code Block.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '16px' }}>
+  <div style={{
+    padding: '16px',
+    background: 'var(--lui-color-neutral-background-surface)',
+    border: '1px solid var(--lui-color-neutral-border-subtle)',
+    borderRadius: '6px',
+  }}>
+    <code style={{ fontSize: '12px', display: 'block', marginBottom: '8px' }}>--lui-brand-typography-font-family-heading</code>
+    <span style={{ fontFamily: 'var(--lui-brand-typography-font-family-heading)', fontSize: '1.5rem', lineHeight: 1.2 }}>
+      Heading — The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+  <div style={{
+    padding: '16px',
+    background: 'var(--lui-color-neutral-background-surface)',
+    border: '1px solid var(--lui-color-neutral-border-subtle)',
+    borderRadius: '6px',
+  }}>
+    <code style={{ fontSize: '12px', display: 'block', marginBottom: '8px' }}>--lui-brand-typography-font-family-body</code>
+    <span style={{ fontFamily: 'var(--lui-brand-typography-font-family-body)', fontSize: '1rem', lineHeight: 1.5 }}>
+      Body — The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+  <div style={{
+    padding: '16px',
+    background: 'var(--lui-color-neutral-background-surface)',
+    border: '1px solid var(--lui-color-neutral-border-subtle)',
+    borderRadius: '6px',
+  }}>
+    <code style={{ fontSize: '12px', display: 'block', marginBottom: '8px' }}>--lui-brand-typography-font-family-code</code>
+    <span style={{ fontFamily: 'var(--lui-brand-typography-font-family-code)', fontSize: '1rem', lineHeight: 1.5 }}>
+      Code — const fox = 'quick brown'; // 0O 1lI
+    </span>
+  </div>
+</div>
+</Lang>

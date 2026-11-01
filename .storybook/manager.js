@@ -1,6 +1,13 @@
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming/create';
 
+import {
+  DEFAULT_LANGUAGE,
+  LANGUAGE_GLOBAL,
+  normalizeLanguage,
+} from './language/language.js';
+import { localizedStoryName, localizedTitle } from './language/storyNames.js';
+
 addons.setConfig({
   theme: create({
     base: 'light',
@@ -52,4 +59,52 @@ addons.setConfig({
     inputTextColor: '#282b33',
     inputBorderRadius: 4,
   }),
+});
+
+/**
+ * Translates the menu (groups, pages and story names) in the sidebar.
+ *
+ * Only the label is translated, through `sidebar.renderLabel`; the index itself
+ * is left alone. Sidebar ids are derived from the title segments, so rewriting
+ * the titles would change them on every language switch — and the sidebar keys
+ * its expanded/collapsed state by id, so every translated group would come back
+ * collapsed. Keeping the ids also keeps URLs, the selection and search stable.
+ */
+let language = DEFAULT_LANGUAGE;
+
+const languageOf = (globals = {}) =>
+  normalizeLanguage(
+    globals.userGlobals?.[LANGUAGE_GLOBAL] ?? globals[LANGUAGE_GLOBAL]
+  );
+
+addons.setConfig({
+  sidebar: {
+    renderLabel: (item) => {
+      if (item.type !== 'story' && item.type !== 'docs') {
+        return localizedTitle(item.name, language);
+      }
+      const name = localizedStoryName(item.name, language, item.type);
+      // A component with a single entry is shown as a leaf under the
+      // component's name, which is a title segment rather than a story name.
+      return name === item.name ? localizedTitle(item.name, language) : name;
+    },
+  },
+});
+
+addons.register('lets-ui/sidebar-language', (api) => {
+  const channel = addons.getChannel();
+
+  const onGlobals = (globals) => {
+    const next = languageOf(globals);
+    if (next === language) return;
+    language = next;
+    // Rebuilding the hash from the same index re-renders every label with the
+    // new language; the ids do not change, so neither does the expanded state.
+    const index = api.getIndex();
+    if (index) api.setIndex(index);
+  };
+
+  language = languageOf(api.getGlobals?.());
+  channel.on('setGlobals', onGlobals);
+  channel.on('globalsUpdated', onGlobals);
 });

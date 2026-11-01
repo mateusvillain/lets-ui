@@ -1,10 +1,11 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Foundations/Spacing" />
 
 export const fixedTokens = [
-  { name: '0',  token: '--lui-spacing-fixed-0',  value: '0',    px: 0  },
-  { name: '8',  token: '--lui-spacing-fixed-8',  value: '8px',  px: 8  },
+  { name: '0', token: '--lui-spacing-fixed-0', value: '0', px: 0 },
+  { name: '8', token: '--lui-spacing-fixed-8', value: '8px', px: 8 },
   { name: '16', token: '--lui-spacing-fixed-16', value: '16px', px: 16 },
   { name: '24', token: '--lui-spacing-fixed-24', value: '24px', px: 24 },
   { name: '32', token: '--lui-spacing-fixed-32', value: '32px', px: 32 },
@@ -12,22 +13,107 @@ export const fixedTokens = [
 ];
 
 export const fluidTokens = [
-  { name: '2',  token: '--lui-spacing-fluid-2',  clamp: 'clamp(0.1125rem, 0.109rem + 0.001vw, 0.125rem)',   min: '1.8px',  max: '2px'   },
-  { name: '4',  token: '--lui-spacing-fluid-4',  clamp: 'clamp(0.225rem, 0.218rem + 0.002vw, 0.25rem)',     min: '3.6px',  max: '4px'   },
-  { name: '8',  token: '--lui-spacing-fluid-8',  clamp: 'clamp(0.45rem, 0.436rem + 0.004vw, 0.5rem)',       min: '7.2px',  max: '8px'   },
-  { name: '12', token: '--lui-spacing-fluid-12', clamp: 'clamp(0.675rem, 0.655rem + 0.006vw, 0.75rem)',     min: '10.8px', max: '12px'  },
-  { name: '16', token: '--lui-spacing-fluid-16', clamp: 'clamp(0.9rem, 0.874rem + 0.008vw, 1rem)',          min: '14.4px', max: '16px'  },
-  { name: '20', token: '--lui-spacing-fluid-20', clamp: 'clamp(1.125rem, 1.093rem + 0.01vw, 1.25rem)',      min: '18px',   max: '20px'  },
-  { name: '24', token: '--lui-spacing-fluid-24', clamp: 'clamp(1.35rem, 1.311rem + 0.012vw, 1.5rem)',       min: '21.6px', max: '24px'  },
-  { name: '32', token: '--lui-spacing-fluid-32', clamp: 'clamp(1.8rem, 1.748rem + 0.016vw, 2rem)',          min: '28.8px', max: '32px'  },
-  { name: '40', token: '--lui-spacing-fluid-40', clamp: 'clamp(2.25rem, 2.186rem + 0.02vw, 2.5rem)',        min: '36px',   max: '40px'  },
-  { name: '48', token: '--lui-spacing-fluid-48', clamp: 'clamp(2.7rem, 2.623rem + 0.024vw, 3rem)',          min: '43.2px', max: '48px'  },
-  { name: '56', token: '--lui-spacing-fluid-56', clamp: 'clamp(3.15rem, 3.061rem + 0.028vw, 3.5rem)',       min: '50.4px', max: '56px'  },
-  { name: '64', token: '--lui-spacing-fluid-64', clamp: 'clamp(3.6rem, 3.498rem + 0.032vw, 4rem)',          min: '57.6px', max: '64px'  },
-  { name: '72', token: '--lui-spacing-fluid-72', clamp: 'clamp(4.05rem, 3.936rem + 0.036vw, 4.5rem)',       min: '64.8px', max: '72px'  },
-  { name: '80', token: '--lui-spacing-fluid-80', clamp: 'clamp(4.5rem, 4.374rem + 0.04vw, 5rem)',           min: '72px',   max: '80px'  },
+  {
+    name: '2',
+    token: '--lui-spacing-fluid-2',
+    clamp: 'clamp(0.1125rem, 0.109rem + 0.001vw, 0.125rem)',
+    min: '1.8px',
+    max: '2px',
+  },
+  {
+    name: '4',
+    token: '--lui-spacing-fluid-4',
+    clamp: 'clamp(0.225rem, 0.218rem + 0.002vw, 0.25rem)',
+    min: '3.6px',
+    max: '4px',
+  },
+  {
+    name: '8',
+    token: '--lui-spacing-fluid-8',
+    clamp: 'clamp(0.45rem, 0.436rem + 0.004vw, 0.5rem)',
+    min: '7.2px',
+    max: '8px',
+  },
+  {
+    name: '12',
+    token: '--lui-spacing-fluid-12',
+    clamp: 'clamp(0.675rem, 0.655rem + 0.006vw, 0.75rem)',
+    min: '10.8px',
+    max: '12px',
+  },
+  {
+    name: '16',
+    token: '--lui-spacing-fluid-16',
+    clamp: 'clamp(0.9rem, 0.874rem + 0.008vw, 1rem)',
+    min: '14.4px',
+    max: '16px',
+  },
+  {
+    name: '20',
+    token: '--lui-spacing-fluid-20',
+    clamp: 'clamp(1.125rem, 1.093rem + 0.01vw, 1.25rem)',
+    min: '18px',
+    max: '20px',
+  },
+  {
+    name: '24',
+    token: '--lui-spacing-fluid-24',
+    clamp: 'clamp(1.35rem, 1.311rem + 0.012vw, 1.5rem)',
+    min: '21.6px',
+    max: '24px',
+  },
+  {
+    name: '32',
+    token: '--lui-spacing-fluid-32',
+    clamp: 'clamp(1.8rem, 1.748rem + 0.016vw, 2rem)',
+    min: '28.8px',
+    max: '32px',
+  },
+  {
+    name: '40',
+    token: '--lui-spacing-fluid-40',
+    clamp: 'clamp(2.25rem, 2.186rem + 0.02vw, 2.5rem)',
+    min: '36px',
+    max: '40px',
+  },
+  {
+    name: '48',
+    token: '--lui-spacing-fluid-48',
+    clamp: 'clamp(2.7rem, 2.623rem + 0.024vw, 3rem)',
+    min: '43.2px',
+    max: '48px',
+  },
+  {
+    name: '56',
+    token: '--lui-spacing-fluid-56',
+    clamp: 'clamp(3.15rem, 3.061rem + 0.028vw, 3.5rem)',
+    min: '50.4px',
+    max: '56px',
+  },
+  {
+    name: '64',
+    token: '--lui-spacing-fluid-64',
+    clamp: 'clamp(3.6rem, 3.498rem + 0.032vw, 4rem)',
+    min: '57.6px',
+    max: '64px',
+  },
+  {
+    name: '72',
+    token: '--lui-spacing-fluid-72',
+    clamp: 'clamp(4.05rem, 3.936rem + 0.036vw, 4.5rem)',
+    min: '64.8px',
+    max: '72px',
+  },
+  {
+    name: '80',
+    token: '--lui-spacing-fluid-80',
+    clamp: 'clamp(4.5rem, 4.374rem + 0.04vw, 5rem)',
+    min: '72px',
+    max: '80px',
+  },
 ];
 
+<Lang lang="pt-BR">
 # Spacing
 
 Tokens de espaçamento do sistema de design. Existem duas escalas: **fixo** (valores absolutos em px) e **fluido** (valores responsivos com `clamp()` que se adaptam entre breakpoints). Use as funções SCSS `fixed($size)` e `fluid($size)` para acessá-los nos componentes.
@@ -38,34 +124,59 @@ Tokens de espaçamento do sistema de design. Existem duas escalas: **fixo** (val
 
 Valores absolutos em pixels — ideais para espaçamentos internos de componentes que não devem mudar com o viewport.
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
   {fixedTokens.map(({ name, token, value, px }) => (
-    <div key={name} style={{
-      display: 'grid',
-      gridTemplateColumns: '200px 80px 1fr',
-      alignItems: 'center',
-      gap: '16px',
-      padding: '10px 16px',
-      background: 'var(--lui-color-neutral-background-surface)',
-      border: '1px solid var(--lui-color-neutral-border-subtle)',
-      borderRadius: '6px',
-    }}>
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '200px 80px 1fr',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '10px 16px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
       <div>
         <code style={{ display: 'block', fontSize: '12px' }}>{token}</code>
-        <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>
+        <span
+          style={{
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
           fixed({name})
         </span>
       </div>
-      <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-body)', fontVariantNumeric: 'tabular-nums' }}>{value}</span>
+      <span
+        style={{
+          fontSize: '12px',
+          color: 'var(--lui-color-neutral-text-body)',
+          fontVariantNumeric: 'tabular-nums',
+        }}
+      >
+        {value}
+      </span>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{
-          height: '12px',
-          width: `${Math.max(px, 2)}px`,
-          background: 'var(--lui-color-primary-background-container)',
-          borderRadius: '2px',
-          minWidth: px === 0 ? '2px' : undefined,
-          opacity: px === 0 ? 0.3 : 1,
-        }} />
+        <div
+          style={{
+            height: '12px',
+            width: `${Math.max(px, 2)}px`,
+            background: 'var(--lui-color-primary-background-container)',
+            borderRadius: '2px',
+            minWidth: px === 0 ? '2px' : undefined,
+            opacity: px === 0 ? 0.3 : 1,
+          }}
+        />
       </div>
     </div>
   ))}
@@ -113,3 +224,117 @@ Valores responsivos com `clamp()` — escalam proporcionalmente entre o breakpoi
     </div>
   ))}
 </div>
+</Lang>
+
+<Lang lang="en-US">
+# Spacing
+
+Spacing tokens of the design system. There are two scales: **fixed** (absolute values in px) and **fluid** (responsive values with `clamp()` that adapt between breakpoints). Use the SCSS `fixed($size)` and `fluid($size)` functions to access them in components.
+
+---
+
+## Fixed Spacing
+
+Absolute values in pixels — ideal for internal component spacing that should not change with the viewport.
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
+  {fixedTokens.map(({ name, token, value, px }) => (
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '200px 80px 1fr',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '10px 16px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
+      <div>
+        <code style={{ display: 'block', fontSize: '12px' }}>{token}</code>
+        <span
+          style={{
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
+          fixed({name})
+        </span>
+      </div>
+      <span
+        style={{
+          fontSize: '12px',
+          color: 'var(--lui-color-neutral-text-body)',
+          fontVariantNumeric: 'tabular-nums',
+        }}
+      >
+        {value}
+      </span>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{
+            height: '12px',
+            width: `${Math.max(px, 2)}px`,
+            background: 'var(--lui-color-primary-background-container)',
+            borderRadius: '2px',
+            minWidth: px === 0 ? '2px' : undefined,
+            opacity: px === 0 ? 0.3 : 1,
+          }}
+        />
+      </div>
+    </div>
+  ))}
+</div>
+
+---
+
+## Fluid Spacing
+
+Responsive values with `clamp()` — they scale proportionally between the minimum (320 px) and maximum (1440 px) breakpoints. Ideal for section padding, layout gaps and margins between blocks.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '16px' }}>
+  {fluidTokens.map(({ name, token, clamp, min, max }) => (
+    <div key={name} style={{
+      display: 'grid',
+      gridTemplateColumns: '200px 120px 80px 1fr',
+      alignItems: 'center',
+      gap: '16px',
+      padding: '10px 16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <div>
+        <code style={{ display: 'block', fontSize: '12px' }}>{token}</code>
+        <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>
+          fluid({name})
+        </span>
+      </div>
+      <span style={{ fontSize: '10px', color: 'var(--lui-color-neutral-text-caption)', fontVariantNumeric: 'tabular-nums' }}>
+        {min} → {max}
+      </span>
+      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-body)', fontVariantNumeric: 'tabular-nums' }}>
+        ~{name}px
+      </span>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{
+          height: '12px',
+          width: `var(${token})`,
+          maxWidth: '100%',
+          background: 'var(--lui-color-primary-background-container)',
+          borderRadius: '2px',
+        }} />
+      </div>
+    </div>
+  ))}
+</div>
+</Lang>

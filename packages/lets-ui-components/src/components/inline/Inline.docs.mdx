@@ -1,27 +1,69 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as InlineStories from './Inline.stories';
 
 <Meta of={InlineStories} />
 
+<Lang lang="pt-BR">
 # Inline
 
 Horizontal flex layout with wrapping support. Great for tags, chips, and button groups.
 
+</Lang>
+
+<Lang lang="en-US">
+# Inline
+
+Horizontal flex layout with wrapping support. Great for tags, chips, and button groups.
+
+</Lang>
+
 <Canvas of={InlineStories.Default} />
 <Controls of={InlineStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## Space Between
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Space Between
+
+</Lang>
 
 <Canvas of={InlineStories.SpaceBetween} />
 
+<Lang lang="pt-BR">
+
 ## No Wrap
+
+</Lang>
+
+<Lang lang="en-US">
+
+## No Wrap
+
+</Lang>
 
 <Canvas of={InlineStories.NoWrap} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={InlineStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -43,3 +85,30 @@ Horizontal flex layout with wrapping support. Great for tags, chips, and button 
   <span>Product</span>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-inline gap="sm" align="center" justify="start" wrap="wrap">
+  <span>Design</span>
+  <span>Engineering</span>
+  <span>Product</span>
+</lui-inline>
+```
+
+### CSS class
+
+```html
+<div class="inline inline--gap-sm">
+  <span>Design</span>
+  <span>Engineering</span>
+  <span>Product</span>
+</div>
+```
+
+</Lang>

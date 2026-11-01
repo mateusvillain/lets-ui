@@ -1,61 +1,184 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as FloatStories from './Float.stories';
 
 <Meta of={FloatStories} />
 
+<Lang lang="pt-BR">
 # Float
 
 Absolutely positions a child element relative to its anchor. Use it to overlay badges, status dots, or any decorative element on top of another component — avatars, cards, icons.
 
 The host element becomes an `inline-block` relative container, so no wrapper is needed.
 
+</Lang>
+
+<Lang lang="en-US">
+# Float
+
+Absolutely positions a child element relative to its anchor. Use it to overlay badges, status dots, or any decorative element on top of another component — avatars, cards, icons.
+
+The host element becomes an `inline-block` relative container, so no wrapper is needed.
+
+</Lang>
+
 <Canvas of={FloatStories.Default} />
 <Controls of={FloatStories.Default} />
 
+<Lang lang="pt-BR">
 ## All Placements
 
 Nine positions from the `placement` attribute: combinations of `top / middle / bottom` × `start / center / end`.
 
+</Lang>
+
+<Lang lang="en-US">
+## All Placements
+
+Nine positions from the `placement` attribute: combinations of `top / middle / bottom` × `start / center / end`.
+
+</Lang>
+
 <Canvas of={FloatStories.AllPlacements} />
+
+<Lang lang="pt-BR">
 
 ## top-end
 
+</Lang>
+
+<Lang lang="en-US">
+
+## top-end
+
+</Lang>
+
 <Canvas of={FloatStories.TopEnd} />
+
+<Lang lang="pt-BR">
 
 ## top-start
 
+</Lang>
+
+<Lang lang="en-US">
+
+## top-start
+
+</Lang>
+
 <Canvas of={FloatStories.TopStart} />
+
+<Lang lang="pt-BR">
 
 ## top-center
 
+</Lang>
+
+<Lang lang="en-US">
+
+## top-center
+
+</Lang>
+
 <Canvas of={FloatStories.TopCenter} />
+
+<Lang lang="pt-BR">
 
 ## middle-center
 
+</Lang>
+
+<Lang lang="en-US">
+
+## middle-center
+
+</Lang>
+
 <Canvas of={FloatStories.MiddleCenter} />
+
+<Lang lang="pt-BR">
 
 ## middle-start
 
+</Lang>
+
+<Lang lang="en-US">
+
+## middle-start
+
+</Lang>
+
 <Canvas of={FloatStories.MiddleStart} />
+
+<Lang lang="pt-BR">
 
 ## middle-end
 
+</Lang>
+
+<Lang lang="en-US">
+
+## middle-end
+
+</Lang>
+
 <Canvas of={FloatStories.MiddleEnd} />
+
+<Lang lang="pt-BR">
 
 ## bottom-start
 
+</Lang>
+
+<Lang lang="en-US">
+
+## bottom-start
+
+</Lang>
+
 <Canvas of={FloatStories.BottomStart} />
+
+<Lang lang="pt-BR">
 
 ## bottom-center
 
+</Lang>
+
+<Lang lang="en-US">
+
+## bottom-center
+
+</Lang>
+
 <Canvas of={FloatStories.BottomCenter} />
 
+<Lang lang="pt-BR">
 ## With Offset
 
 `offset-x` and `offset-y` shift the floating element from its anchor point. Accepts px values with or without the `px` unit (`"8"` or `"8px"`).
 
+</Lang>
+
+<Lang lang="en-US">
+## With Offset
+
+`offset-x` and `offset-y` shift the floating element from its anchor point. Accepts px values with or without the `px` unit (`"8"` or `"8px"`).
+
+</Lang>
+
 <Canvas of={FloatStories.WithOffset} />
 
+<Lang lang="pt-BR">
+
 ## Avatar with Status / Badge
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Avatar with Status / Badge
+
+</Lang>
 
 <Canvas of={FloatStories.AvatarWithStatus} />

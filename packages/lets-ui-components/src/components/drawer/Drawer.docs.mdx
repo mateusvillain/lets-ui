@@ -1,46 +1,114 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as DrawerStories from './Drawer.stories';
 
 <Meta of={DrawerStories} />
+
+<Lang lang="pt-BR">
 
 # Drawer
 
 Painel deslizante que emerge pela direita da tela sobre um backdrop escuro. Use para exibir detalhes, formulários ou configurações contextuais sem remover o usuário da página atual. Fecha via botão X no cabeçalho, botão Cancelar no rodapé, tecla Escape, ou clique no backdrop (opcional).
 
+</Lang>
+
+<Lang lang="en-US">
+
+# Drawer
+
+Sliding panel that emerges from the right of the screen over a dark backdrop. Use it to show details, forms or contextual settings without removing the user from the current page. Closes via the X button in the header, the Cancel button in the footer, the Escape key, or a click on the backdrop (optional).
+
+</Lang>
+
 <Canvas of={DrawerStories.Drawer} />
 <Controls of={DrawerStories.Drawer} />
+
+<Lang lang="pt-BR">
 
 ## Tamanhos
 
 Três tamanhos disponíveis — os mesmos da Modal. Use `sm` para painéis simples, `md` (padrão) para a maioria dos casos e `lg` para conteúdo com mais informação.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Sizes
+
+Three sizes available — the same as Modal. Use `sm` for simple panels, `md` (default) for most cases and `lg` for content with more information.
+
+</Lang>
+
 <Canvas of={DrawerStories.Small} />
 <Canvas of={DrawerStories.Large} />
+
+<Lang lang="pt-BR">
 
 ## Sem ações
 
 Omita `primary-button` e `secondary-button` quando o drawer for apenas informativo ou quando as ações forem parte do conteúdo interno (slot).
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Without actions
+
+Omit `primary-button` and `secondary-button` when the drawer is informational only or when the actions are part of the inner content (slot).
+
+</Lang>
+
 <Canvas of={DrawerStories.WithoutActions} />
+
+<Lang lang="pt-BR">
 
 ## close-on-backdrop: false
 
 Por padrão o backdrop não fecha o drawer. Ative `close-on-backdrop` quando o fluxo permitir descarte acidental. Desative em formulários ou fluxos onde o usuário deve tomar uma decisão explícita.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## close-on-backdrop: false
+
+By default the backdrop does not close the drawer. Enable `close-on-backdrop` when the flow allows accidental dismissal. Disable it in forms or flows where the user must make an explicit decision.
+
+</Lang>
+
 <Canvas of={DrawerStories.CloseOnBackdropOff} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={DrawerStories.CSSClass} />
+
+<Lang lang="pt-BR">
 
 ## Uso
 
 ### Web Component
 
 ```html
-<lui-drawer title="Título" size="md" trigger-label="Open drawer" close-on-backdrop>
+<lui-drawer
+  title="Título"
+  size="md"
+  trigger-label="Open drawer"
+  close-on-backdrop
+>
   <p>Conteúdo do drawer</p>
-  <button slot="actions" data-drawer-close class="btn btn--secondary btn--lg">Cancelar</button>
+  <button slot="actions" data-drawer-close class="btn btn--secondary btn--lg">
+    Cancelar
+  </button>
   <button slot="actions" class="btn btn--primary btn--lg">Confirmar</button>
 </lui-drawer>
 ```
@@ -60,7 +128,12 @@ Marque com `data-drawer-close` o botão que só fecha o drawer — um "Cancelar"
 ```html
 <lui-drawer title="Título">
   <p>Conteúdo</p>
-  <lui-button slot="actions" variant="secondary" label="Cancelar" data-drawer-close></lui-button>
+  <lui-button
+    slot="actions"
+    variant="secondary"
+    label="Cancelar"
+    data-drawer-close
+  ></lui-button>
   <lui-button slot="actions" label="Confirmar"></lui-button>
 </lui-drawer>
 ```
@@ -108,3 +181,97 @@ Um componente dentro do diálogo que usa Escape — um Dropdown Menu aberto, o t
   </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Usage
+
+### Web Component
+
+```html
+<lui-drawer
+  title="Title"
+  size="md"
+  trigger-label="Open drawer"
+  close-on-backdrop
+>
+  <p>Drawer content</p>
+  <button slot="actions" data-drawer-close class="btn btn--secondary btn--lg">
+    Cancel
+  </button>
+  <button slot="actions" class="btn btn--primary btn--lg">Confirm</button>
+</lui-drawer>
+```
+
+### Accessible texts
+
+The close button uses `close-label` as its `aria-label` (default: `"Close drawer"`). Change it to the project language.
+
+```html
+<lui-drawer title="Title" close-label="Close drawer"></lui-drawer>
+```
+
+### Close by an action
+
+Mark the button that only closes the drawer — a "Cancel", for example — with `data-drawer-close`. It works in the `actions` slot and in the content, on a native element or a `lui-button`, and also when the click comes from something inside the marked element.
+
+```html
+<lui-drawer title="Title">
+  <p>Content</p>
+  <lui-button
+    slot="actions"
+    variant="secondary"
+    label="Cancel"
+    data-drawer-close
+  ></lui-button>
+  <lui-button slot="actions" label="Confirm"></lui-button>
+</lui-drawer>
+```
+
+- The attribute closes the closest `lui-drawer` above it: inside a nested `lui-drawer`, only that one closes.
+- In the `trigger` slot, the attribute is ignored.
+- It does not close when the click passes through a control with `aria-disabled="true"` (a `lui-button` in `loading`) or when a handler calls `event.preventDefault()`.
+- Actions that do something before closing (such as "Confirm") call `closeDrawer()` in their own handler.
+
+### Trigger ARIA contract
+
+The trigger receives `aria-haspopup="dialog"` and `aria-expanded`, which follows the open/closed state. That is what the screen reader announces.
+
+- **Default trigger** (the button generated by `trigger-label`): also receives `aria-controls`, because it lives in the same shadow root as the panel and the IDREF resolves.
+- **Custom trigger** (`slot="trigger"`): does not receive `aria-controls`. The panel lives in the shadow root of `lui-drawer`, and neither an IDREF nor `ariaControlsElements` reach the inside of another shadow root from the light DOM — the browser discards the reference. The trigger → panel relationship is absent from the accessibility tree, due to a platform limitation. The expanded state is still announced.
+
+### Focus
+
+On open, focus goes to the panel. On close — via Escape, the close button, a backdrop click, an element with `data-drawer-close`, `closeDrawer()` or by removing `open` — focus returns to the element that was focused when the panel opened: the default trigger, the slot trigger or the external button that changed `open`.
+
+- If that element left the page, focus goes to the component trigger. Without a trigger (`hide-trigger`), focus is not moved.
+- If something already moved focus outside `lui-drawer` before closing, the component does not return it.
+- In Safari, clicking with the mouse does not focus buttons. An external button that opens the component by click (with `hide-trigger`) is not recorded as the origin, and focus does not return to it. The component's own triggers do not have this limitation: they are the fallback destination.
+- Removing the component from the page while it is open also returns focus.
+
+### Stacked dialogs
+
+With dialogs open on top of each other (a Drawer opened from inside another Modal or Drawer, for example), Escape closes only the top one. Focus returns to the trigger inside the dialog that remains open; a second Escape closes the one below.
+
+A component inside the dialog that uses Escape — an open Dropdown Menu, the copy button tooltip of a Code Block — consumes the key: Escape closes that component, and the dialog remains open.
+
+### CSS class
+
+```html
+<div class="drawer-backdrop is-open"></div>
+<div class="drawer drawer--md is-open" role="dialog" aria-modal="true">
+  <div class="drawer__header">
+    <span class="drawer__title">Title</span>
+    <button class="drawer__close" aria-label="Close">×</button>
+  </div>
+  <div class="drawer__body">Drawer content</div>
+  <div class="drawer__footer">
+    <button class="btn btn--secondary btn--lg">Cancel</button>
+    <button class="btn btn--primary btn--lg">Confirm</button>
+  </div>
+</div>
+```
+
+</Lang>

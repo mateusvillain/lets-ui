@@ -1,15 +1,27 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as DropdownMenuStories from './DropdownMenu.stories';
 
 <Meta of={DropdownMenuStories} />
 
+<Lang lang="pt-BR">
 # Dropdown Menu
 
 Agrupa ações relacionadas a um elemento ou contexto num painel que abre a partir de um gatilho. O gatilho é livre — um `<button>` nativo, `lui-button` ou `lui-icon-button` —, e o componente cuida do estado aberto, do retorno do foco e da navegação por teclado.
 
+</Lang>
+
+<Lang lang="en-US">
+# Dropdown Menu
+
+Groups actions related to an element or context in a panel that opens from a trigger. The trigger is free — a native `<button>`, `lui-button` or `lui-icon-button` —, and the component takes care of the open state, returning focus and keyboard navigation.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.Default} />
 <Controls of={DropdownMenuStories.Default} />
 
+<Lang lang="pt-BR">
 ## Quando usar
 
 Use o Dropdown Menu para ações secundárias que não cabem na tela: editar, duplicar, exportar, excluir. O menu mantém a interface limpa e revela as opções só quando a pessoa precisa delas.
@@ -19,30 +31,89 @@ Use o Dropdown Menu para ações secundárias que não cabem na tela: editar, du
 - Para navegar entre páginas, use o [componente Link](?path=/docs/navigation-link--docs) ou uma lista de navegação. Os itens do menu são `<button>` e não têm os comportamentos nativos de um link.
 - Para confirmar uma ação destrutiva escolhida no menu, use um [Modal](?path=/docs/content-modal--docs). O menu fecha assim que a pessoa escolhe o item.
 
+</Lang>
+
+<Lang lang="en-US">
+## When to use
+
+Use the Dropdown Menu for secondary actions that don't fit on the screen: edit, duplicate, export, delete. The menu keeps the interface clean and reveals the options only when the person needs them.
+
+- To choose a value in a form, use the [Native Select](?path=/docs/form-and-options-native-select--docs). The Dropdown Menu doesn't keep a selected value.
+- For a single, always visible action, use the [Button](?path=/docs/actionable-button--docs). Hiding the only action behind a menu adds a click without saving space.
+- To navigate between pages, use the [Link component](?path=/docs/navigation-link--docs) or a navigation list. Menu items are `<button>` elements and lack the native behaviors of a link.
+- To confirm a destructive action chosen in the menu, use a [Modal](?path=/docs/content-modal--docs). The menu closes as soon as the person picks the item.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Trigger
 
 O gatilho vai no slot `trigger` e pode ser um controle focável: um `<button>` nativo, `lui-button` ou `lui-icon-button`. Use um único controle no slot. O componente encontra o primeiro controle focável dentro dele e marca nele `aria-haspopup="menu"` e `aria-expanded`, sincronizado com o estado aberto.
 
 Use um **botão**, não um link: abrir um menu é uma ação na mesma tela, não uma navegação. Com `lui-icon-button`, o `aria-label` do gatilho precisa nomear o menu, como `"Mais opções"` ou `"Ações do arquivo"`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Trigger
+
+The trigger goes in the `trigger` slot and can be any focusable control: a native `<button>`, `lui-button` or `lui-icon-button`. Use a single control in the slot. The component finds the first focusable control inside it and sets `aria-haspopup="menu"` and `aria-expanded` on it, in sync with the open state.
+
+Use a **button**, not a link: opening a menu is an action on the same screen, not a navigation. With `lui-icon-button`, the trigger's `aria-label` must name the menu, such as `"More options"` or `"File actions"`.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.Triggers} />
 
+<Lang lang="pt-BR">
 O componente ignora o clique num gatilho `disabled` ou `aria-disabled="true"`. Para um gatilho desabilitado, explique o motivo num texto visível: um botão desabilitado não recebe foco e o leitor de tela não chega até ele.
 
+</Lang>
+
+<Lang lang="en-US">
+The component ignores clicks on a `disabled` or `aria-disabled="true"` trigger. For a disabled trigger, explain the reason in visible text: a disabled button doesn't receive focus and screen readers don't reach it.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Itens
 
 Cada ação é um `lui-menu-item` com `slot="items"`, filho direto do `lui-dropdown-menu`. O componente renderiza os itens como `<button role="menuitem">` e usa o `label` como nome acessível e como texto exibido.
 
 Apenas `lui-menu-item` e os divisores são renderizados. Outros elementos no slot `items` são ignorados, então não conte com wrappers próprios dentro do menu. Os `lui-menu-item` ficam ocultos na light DOM e são reproduzidos no painel do shadow root: o elemento que você escreve no HTML não é o que aparece na tela, e a aparência vem dos tokens do componente ou da versão por classe CSS.
 
+</Lang>
+
+<Lang lang="en-US">
+## Items
+
+Each action is a `lui-menu-item` with `slot="items"`, a direct child of `lui-dropdown-menu`. The component renders the items as `<button role="menuitem">` and uses `label` as both the accessible name and the displayed text.
+
+Only `lui-menu-item` and dividers are rendered. Other elements in the `items` slot are ignored, so don't rely on your own wrappers inside the menu. The `lui-menu-item` elements stay hidden in the light DOM and are reproduced in the shadow root's panel: the element you write in the HTML is not the one shown on screen, and the appearance comes from the component's tokens or from the CSS class version.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Shortcut
 
 `shortcut` mostra o atalho de teclado alinhado à direita do item. Liste as teclas separadas por vírgula (`"⌘,Shift,S"`): cada tecla vira um `<kbd>` e o conjunto é anunciado como um grupo, com as teclas unidas por "+".
 
 O componente **só exibe** o atalho — ele não registra o listener de teclado. Se mostrar um atalho, implemente-o na aplicação; um atalho anunciado que não funciona é pior do que nenhum atalho. Use a convenção da plataforma (`⌘` no macOS, `Ctrl` no Windows e no Linux).
 
+</Lang>
+
+<Lang lang="en-US">
+## Shortcut
+
+`shortcut` shows the keyboard shortcut aligned to the right of the item. List the keys separated by commas (`"⌘,Shift,S"`): each key becomes a `<kbd>` and the set is announced as a group, with the keys joined by "+".
+
+The component **only displays** the shortcut — it doesn't register the keyboard listener. If you show a shortcut, implement it in the application; an announced shortcut that doesn't work is worse than no shortcut. Follow the platform convention (`⌘` on macOS, `Ctrl` on Windows and Linux).
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithShortcuts} />
 
+<Lang lang="pt-BR">
 ## Submenu
 
 Para agrupar ações relacionadas num segundo nível, aninhe `lui-menu-item` dentro do item pai. O item com filhos ganha um chevron, `aria-haspopup="menu"` e `aria-expanded`, e o submenu abre ao passar o mouse ou ao focar o item pai.
@@ -53,30 +124,80 @@ O `aria-expanded` do item pai é atualizado por `→` e `←`. Abrir o submenu c
 
 Evite mais de um nível de aninhamento: menus fundos são difíceis de percorrer com o teclado e de manter na tela.
 
+</Lang>
+
+<Lang lang="en-US">
+## Submenu
+
+To group related actions in a second level, nest `lui-menu-item` inside the parent item. The item with children gets a chevron, `aria-haspopup="menu"` and `aria-expanded`, and the submenu opens when hovering or focusing the parent item.
+
+With the keyboard, `→` opens the submenu on its first item and `←` returns to the parent item. The parent item doesn't run an action: only the submenu items are actionable.
+
+The parent item's `aria-expanded` is updated by `→` and `←`. Opening the submenu with the mouse or with focus doesn't update this state: the submenu shows, but screen readers still announce the parent item as collapsed.
+
+Avoid more than one level of nesting: deep menus are hard to move through with the keyboard and to keep on screen.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithSubmenu} />
 
+<Lang lang="pt-BR">
 ## Divisor
 
 Separe grupos de ações com `lui-menu-divider` (ou `lui-divider`) no slot `items`. O divisor é renderizado como `role="separator"` e não recebe foco.
 
 Use divisores para separar categorias — por exemplo, ações do arquivo e ações da conta —, não entre cada item.
 
+</Lang>
+
+<Lang lang="en-US">
+## Divider
+
+Separate groups of actions with `lui-menu-divider` (or `lui-divider`) in the `items` slot. The divider is rendered as `role="separator"` and doesn't receive focus.
+
+Use dividers to separate categories — for example, file actions and account actions —, not between every item.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithDivider} />
 
+<Lang lang="pt-BR">
 ## Ação destrutiva
 
 `variant="danger"` colore o item como ação destrutiva, como "Excluir projeto". A cor não basta para comunicar o risco: o texto precisa dizer o que será feito, e a ação deve ser confirmada, por exemplo num [Modal](?path=/docs/content-modal--docs).
 
+</Lang>
+
+<Lang lang="en-US">
+## Destructive action
+
+`variant="danger"` colors the item as a destructive action, such as "Delete project". Color alone doesn't convey the risk: the text must say what will be done, and the action should be confirmed, for example in a [Modal](?path=/docs/content-modal--docs).
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.DangerItem} />
 
+<Lang lang="pt-BR">
 ## Item desabilitado
 
 `disabled` mantém o item visível, mas bloqueia o clique e o tira da navegação por setas e do foco inicial. Use quando a ação existe, mas está temporariamente indisponível.
 
 Quem usa teclado ou leitor de tela não chega ao item desabilitado. Se a pessoa precisa saber por que a ação está indisponível, explique o motivo em texto visível perto do menu.
 
+</Lang>
+
+<Lang lang="en-US">
+## Disabled item
+
+`disabled` keeps the item visible, but blocks clicks and removes it from arrow key navigation and from the initial focus. Use it when the action exists but is temporarily unavailable.
+
+Keyboard and screen reader users don't reach the disabled item. If the person needs to know why the action is unavailable, explain the reason in visible text near the menu.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.WithDisabledItem} />
 
+<Lang lang="pt-BR">
 ## Estado aberto
 
 `open` controla o painel e é refletido como atributo: `<lui-dropdown-menu open>` já abre com o painel visível. Por código, use a propriedade ou os métodos `openMenu()`, `closeMenu()` e `toggleMenu()`.
@@ -100,10 +221,39 @@ botao.addEventListener('click', (event) => {
 });
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+## Open state
+
+`open` controls the panel and is reflected as an attribute: `<lui-dropdown-menu open>` starts with the panel visible. From code, use the property or the `openMenu()`, `closeMenu()` and `toggleMenu()` methods.
+
+```js
+const menu = document.querySelector('lui-dropdown-menu');
+
+menu.open = true; // same as menu.openMenu()
+menu.closeMenu();
+menu.toggleMenu();
+```
+
+The menu closes on a click outside it, on `Escape`, on `Tab` with focus in the panel and when an item is picked. There is no state change event: read the `open` property or observe the reflected attribute, as in the example below.
+
+Opening from code on a click outside the menu requires stopping that click's propagation (`event.stopPropagation()`): the menu closes on any click outside it, and the same click that called `openMenu()` would reach the `document` and close it.
+
+```js
+button.addEventListener('click', (event) => {
+  event.stopPropagation();
+  menu.openMenu();
+});
+```
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.Programmatic} />
 
 <Canvas of={DropdownMenuStories.Interactive} />
 
+<Lang lang="pt-BR">
 ## Evento `menu-select`
 
 Escolher um item emite `menu-select` com o texto do item em `event.detail.label`. O evento borbulha e atravessa o shadow DOM, então pode ser ouvido no próprio `lui-dropdown-menu` ou num ancestral.
@@ -112,14 +262,40 @@ Antes do evento, o foco já voltou ao gatilho. Um listener pode mover o foco par
 
 O evento não é emitido ao clicar no item pai de um submenu, que só abre o submenu. Também não há evento de mudança de estado do menu.
 
+</Lang>
+
+<Lang lang="en-US">
+## `menu-select` event
+
+Picking an item emits `menu-select` with the item's text in `event.detail.label`. The event bubbles and crosses the shadow DOM, so it can be listened to on the `lui-dropdown-menu` itself or on an ancestor.
+
+Before the event, focus has already returned to the trigger. A listener can move focus elsewhere — to the first field of a Modal it just opened, for example — without the component bringing it back.
+
+The event isn't emitted when clicking a submenu's parent item, which only opens the submenu. There is also no event for the menu's state change.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.MenuSelect} />
 
+<Lang lang="pt-BR">
 ## Posicionamento
 
 O painel é posicionado em `position: absolute`, logo abaixo do gatilho e alinhado à esquerda, com `min-width` de 200px. O submenu abre à direita do item pai.
 
 O componente não faz detecção de colisão: perto da borda direita ou inferior da janela, o painel pode sair da tela. Um ancestral com `overflow: hidden` também corta o painel, porque ele não é movido para um portal. Garanta espaço ao redor do gatilho ou ajuste o posicionamento no layout que usa o componente.
 
+</Lang>
+
+<Lang lang="en-US">
+## Positioning
+
+The panel uses `position: absolute`, right below the trigger and aligned to the left, with a `min-width` of 200px. The submenu opens to the right of the parent item.
+
+The component doesn't detect collisions: near the right or bottom edge of the window, the panel can leave the screen. An ancestor with `overflow: hidden` also clips the panel, since it isn't moved to a portal. Leave room around the trigger or adjust the positioning in the layout that uses the component.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, o painel só aparece com a classe `is-open`. Também ficam a cargo de quem usa:
@@ -131,8 +307,25 @@ Sem o Web Component, o painel só aparece com a classe `is-open`. Também ficam 
 - a navegação por setas e a abertura dos submenus pelo teclado, com `menu-item--has-submenu` e um painel aninhado;
 - fechar ao clicar fora do menu.
 
+</Lang>
+
+<Lang lang="en-US">
+## CSS class (without Web Component)
+
+Without the Web Component, the panel only shows with the `is-open` class. The following are also up to you:
+
+- toggling `is-open` and syncing `aria-haspopup` and `aria-expanded` on the trigger;
+- the `menu`, `menuitem` and `separator` roles;
+- taking the items out of the `Tab` order with `tabindex="-1"`;
+- moving focus on open, closing with `Escape` and `Tab` and returning focus to the trigger;
+- arrow key navigation and opening submenus from the keyboard, with `menu-item--has-submenu` and a nested panel;
+- closing on a click outside the menu.
+
+</Lang>
+
 <Canvas of={DropdownMenuStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Propriedades
 
 ### `lui-dropdown-menu`
@@ -177,6 +370,56 @@ Não tem atributos. Também aceita `lui-divider` no slot `items`, com o mesmo re
 | ------------- | ------------------- | -------- | ---------------------- |
 | `menu-select` | `{ label: string }` | Sim      | Sim                    |
 
+</Lang>
+
+<Lang lang="en-US">
+## Properties
+
+### `lui-dropdown-menu`
+
+| Attribute | Type      | Default | Description                                 |
+| --------- | --------- | ------- | ------------------------------------------- |
+| `open`    | `boolean` | `false` | Opens the panel. Reflected as an attribute. |
+
+### Methods
+
+| Method         | Description                                                                 |
+| -------------- | --------------------------------------------------------------------------- |
+| `openMenu()`   | Opens the panel. See the focus behavior in [Accessibility](#accessibility). |
+| `closeMenu()`  | Closes the panel.                                                           |
+| `toggleMenu()` | Toggles between open and closed.                                            |
+
+### `lui-menu-item`
+
+| Attribute  | Type       | Default | Description                                                        |
+| ---------- | ---------- | ------- | ------------------------------------------------------------------ |
+| `label`    | `string`   | `''`    | Item text and accessible name. Without it the item shows empty.    |
+| `shortcut` | `string`   | `''`    | Shortcut keys separated by commas (`"⌘,E"`). Display only.         |
+| `disabled` | `boolean`  | `false` | Blocks the item and removes it from keyboard navigation.           |
+| `variant`  | `'danger'` | `''`    | Colors the item as a destructive action. Other values are ignored. |
+
+Items nested inside a `lui-menu-item` form a submenu and don't take a `slot`.
+
+### `lui-menu-divider`
+
+Has no attributes. `lui-divider` is also accepted in the `items` slot, with the same result.
+
+### Slots
+
+| Slot      | Description                                                                          |
+| --------- | ------------------------------------------------------------------------------------ |
+| `trigger` | Control that opens the menu. The first focusable element in the slot gets the state. |
+| `items`   | Items (`lui-menu-item`) and dividers (`lui-menu-divider` or `lui-divider`).          |
+
+### Events
+
+| Event         | Detail              | Bubbles | Crosses the shadow DOM |
+| ------------- | ------------------- | ------- | ---------------------- |
+| `menu-select` | `{ label: string }` | Yes     | Yes                    |
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 - O painel é um `<ul role="menu">`; cada item é um `<button role="menuitem">` dentro de um `<li role="presentation">`; divisores são `role="separator"`.
@@ -215,6 +458,50 @@ Limitação conhecida no teclado: `Home` e `End` ainda não movem o foco entre o
 - Explique em texto visível por que um item está desabilitado, quando isso importa para a pessoa.
 - O `label` e o `shortcut` são montados como HTML e atributo no painel. Não os preencha com texto vindo de entrada do usuário sem escapar.
 
+</Lang>
+
+<Lang lang="en-US">
+## Accessibility
+
+- The panel is a `<ul role="menu">`; each item is a `<button role="menuitem">` inside an `<li role="presentation">`; dividers are `role="separator"`.
+- Items are out of the `Tab` order (`tabindex="-1"`): the menu is a single stop, and focus moves between items with the arrow keys.
+- The trigger gets `aria-haspopup="menu"` and `aria-expanded` on the control that receives focus. With `lui-button` and `lui-icon-button`, the attributes are forwarded to the inner `<button>`, which is the node screen readers announce. In these two components, the outer element carries no ARIA.
+- The menu doesn't set `aria-controls`: the panel lives in the component's shadow root, and an ID can't be referenced from outside it.
+- Items with `disabled` get native `disabled` and `aria-disabled="true"`, and are skipped by the initial focus and by the arrow keys.
+- A submenu's parent item gets `aria-haspopup="menu"` and `aria-expanded`, updated by keyboard navigation with `→` and `←`.
+- The menu closes on an outside click without moving focus back to the trigger. In a Modal or Drawer, `Escape` first closes the menu, returns focus to the trigger and keeps the dialog open; the next `Escape` closes the dialog.
+- With focus outside the menu, `Escape` only closes the panel: focus stays where it is.
+
+### Keyboard
+
+| Key               | Action                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------ |
+| `Enter` / `Space` | On the trigger, opens the menu and moves focus to the first enabled item                   |
+| `Enter` / `Space` | On an item, runs the action, closes the menu and returns focus to the trigger              |
+| `↓` / `↑`         | Moves between items, wrapping to the start or the end                                      |
+| `→`               | Opens the focused item's submenu                                                           |
+| `←`               | Closes the submenu and returns to the parent item                                          |
+| `Escape`          | Closes the menu and returns focus to the trigger                                           |
+| `Tab`             | With focus in the panel, closes the menu and moves focus to the element after the trigger  |
+| `Shift` + `Tab`   | With focus in the panel, closes the menu and moves focus to the element before the trigger |
+
+On open, whether by keyboard, mouse or code, focus moves to the first enabled item, and the arrow
+keys work right away.
+
+Known keyboard limitation: `Home` and `End` don't move focus between items yet.
+
+### Your responsibilities
+
+- Write labels that name the action ("Delete project", not "Delete"). In menus with similar actions, make each label distinct: `menu-select` only delivers the item's text.
+- Use the menu for actions, not navigation. Items are buttons; an item that changes pages loses the native behaviors of a link.
+- Confirm destructive actions in a Modal and keep them away from frequent actions, preferably after a divider.
+- Only show a `shortcut` if the application actually responds to it.
+- Explain in visible text why an item is disabled, when that matters to the person.
+- `label` and `shortcut` are built as HTML and an attribute in the panel. Don't fill them with user input without escaping it.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -291,3 +578,81 @@ Limitação conhecida no teclado: `Home` e `End` ainda não movem o foco entre o
   </ul>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-dropdown-menu id="file-menu">
+  <lui-button
+    slot="trigger"
+    variant="secondary"
+    size="md"
+    label="File"
+  ></lui-button>
+  <lui-menu-item slot="items" label="New file" shortcut="⌘,N"></lui-menu-item>
+  <lui-menu-item slot="items" label="Open" shortcut="⌘,O"></lui-menu-item>
+  <lui-menu-divider slot="items"></lui-menu-divider>
+  <lui-menu-item slot="items" label="Export as">
+    <lui-menu-item label="PDF"></lui-menu-item>
+    <lui-menu-item label="PNG"></lui-menu-item>
+  </lui-menu-item>
+</lui-dropdown-menu>
+
+<script>
+  const menu = document.querySelector('#file-menu');
+
+  menu.addEventListener('menu-select', (event) => {
+    console.log(event.detail.label);
+  });
+</script>
+```
+
+### CSS class
+
+```html
+<div class="dropdown-menu">
+  <button
+    class="btn btn--secondary btn--md"
+    type="button"
+    aria-haspopup="menu"
+    aria-expanded="false"
+  >
+    Options
+  </button>
+  <ul class="dropdown-menu__panel is-open" role="menu">
+    <li role="presentation">
+      <button class="menu-item" type="button" role="menuitem" tabindex="-1">
+        <span class="menu-item__label">Edit</span>
+        <span class="shortcut" role="group" aria-label="⌘ + E">
+          <kbd class="shortcut__key">⌘</kbd>
+          <span class="shortcut__sep" aria-hidden="true">+</span>
+          <kbd class="shortcut__key">E</kbd>
+        </span>
+      </button>
+    </li>
+    <li role="presentation">
+      <button class="menu-item" type="button" role="menuitem" tabindex="-1">
+        <span class="menu-item__label">Duplicate</span>
+      </button>
+    </li>
+    <li role="separator"><hr class="divider" /></li>
+    <li role="presentation">
+      <button
+        class="menu-item menu-item--danger"
+        type="button"
+        role="menuitem"
+        tabindex="-1"
+      >
+        <span class="menu-item__label">Delete</span>
+      </button>
+    </li>
+  </ul>
+</div>
+```
+
+</Lang>

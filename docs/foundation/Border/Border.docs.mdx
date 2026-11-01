@@ -1,24 +1,175 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Foundations/Border" />
 
 export const radii = [
-  { name: 'none',   token: '--lui-border-radius-none',   value: '0',         px: 0,       use: 'Sem arredondamento'              },
-  { name: 'xs',     token: '--lui-border-radius-xs',     value: '2px',       px: 2,       use: 'Tags, badges, chips'             },
-  { name: 'sm',     token: '--lui-border-radius-sm',     value: '4px',       px: 4,       use: 'Botões, inputs, selects'         },
-  { name: 'md',     token: '--lui-border-radius-md',     value: '8px',       px: 8,       use: 'Cards, painéis, modais'          },
-  { name: 'lg',     token: '--lui-border-radius-lg',     value: '12px',      px: 12,      use: 'Superfícies maiores, drawers'    },
-  { name: 'xl',     token: '--lui-border-radius-xl',     value: '16px',      px: 16,      use: 'Contêineres de destaque'         },
-  { name: 'circle', token: '--lui-border-radius-circle', value: '1000000px', px: 999999,  use: 'Avatares, ícones circulares'     },
+  {
+    name: 'none',
+    token: '--lui-border-radius-none',
+    value: '0',
+    px: 0,
+    use: 'Sem arredondamento',
+  },
+  {
+    name: 'xs',
+    token: '--lui-border-radius-xs',
+    value: '2px',
+    px: 2,
+    use: 'Tags, badges, chips',
+  },
+  {
+    name: 'sm',
+    token: '--lui-border-radius-sm',
+    value: '4px',
+    px: 4,
+    use: 'Botões, inputs, selects',
+  },
+  {
+    name: 'md',
+    token: '--lui-border-radius-md',
+    value: '8px',
+    px: 8,
+    use: 'Cards, painéis, modais',
+  },
+  {
+    name: 'lg',
+    token: '--lui-border-radius-lg',
+    value: '12px',
+    px: 12,
+    use: 'Superfícies maiores, drawers',
+  },
+  {
+    name: 'xl',
+    token: '--lui-border-radius-xl',
+    value: '16px',
+    px: 16,
+    use: 'Contêineres de destaque',
+  },
+  {
+    name: 'circle',
+    token: '--lui-border-radius-circle',
+    value: '1000000px',
+    px: 999999,
+    use: 'Avatares, ícones circulares',
+  },
+];
+
+export const radiiEn = [
+  {
+    name: 'none',
+    token: '--lui-border-radius-none',
+    value: '0',
+    px: 0,
+    use: 'No rounding',
+  },
+  {
+    name: 'xs',
+    token: '--lui-border-radius-xs',
+    value: '2px',
+    px: 2,
+    use: 'Tags, badges, chips',
+  },
+  {
+    name: 'sm',
+    token: '--lui-border-radius-sm',
+    value: '4px',
+    px: 4,
+    use: 'Buttons, inputs, selects',
+  },
+  {
+    name: 'md',
+    token: '--lui-border-radius-md',
+    value: '8px',
+    px: 8,
+    use: 'Cards, panels, modals',
+  },
+  {
+    name: 'lg',
+    token: '--lui-border-radius-lg',
+    value: '12px',
+    px: 12,
+    use: 'Larger surfaces, drawers',
+  },
+  {
+    name: 'xl',
+    token: '--lui-border-radius-xl',
+    value: '16px',
+    px: 16,
+    use: 'Highlight containers',
+  },
+  {
+    name: 'circle',
+    token: '--lui-border-radius-circle',
+    value: '1000000px',
+    px: 999999,
+    use: 'Avatars, circular icons',
+  },
 ];
 
 export const widths = [
-  { name: '0', token: '--lui-border-width-0', value: '0',   px: 0, use: 'Sem borda'                              },
-  { name: '1', token: '--lui-border-width-1', value: '1px', px: 1, use: 'Borda padrão — inputs, cards, dividers' },
-  { name: '2', token: '--lui-border-width-2', value: '2px', px: 2, use: 'Borda de ênfase — foco, seleção'        },
-  { name: '4', token: '--lui-border-width-4', value: '4px', px: 4, use: 'Borda forte — indicadores, destacados'  },
+  {
+    name: '0',
+    token: '--lui-border-width-0',
+    value: '0',
+    px: 0,
+    use: 'Sem borda',
+  },
+  {
+    name: '1',
+    token: '--lui-border-width-1',
+    value: '1px',
+    px: 1,
+    use: 'Borda padrão — inputs, cards, dividers',
+  },
+  {
+    name: '2',
+    token: '--lui-border-width-2',
+    value: '2px',
+    px: 2,
+    use: 'Borda de ênfase — foco, seleção',
+  },
+  {
+    name: '4',
+    token: '--lui-border-width-4',
+    value: '4px',
+    px: 4,
+    use: 'Borda forte — indicadores, destacados',
+  },
 ];
 
+export const widthsEn = [
+  {
+    name: '0',
+    token: '--lui-border-width-0',
+    value: '0',
+    px: 0,
+    use: 'No border',
+  },
+  {
+    name: '1',
+    token: '--lui-border-width-1',
+    value: '1px',
+    px: 1,
+    use: 'Default border — inputs, cards, dividers',
+  },
+  {
+    name: '2',
+    token: '--lui-border-width-2',
+    value: '2px',
+    px: 2,
+    use: 'Emphasis border — focus, selection',
+  },
+  {
+    name: '4',
+    token: '--lui-border-width-4',
+    value: '4px',
+    px: 4,
+    use: 'Strong border — indicators, highlighted',
+  },
+];
+
+<Lang lang="pt-BR">
 # Border
 
 Tokens de borda do sistema de design. Controlam o arredondamento e a espessura das bordas — use as funções SCSS `radius($size)` e `width($size)` para acessá-los nos componentes.
@@ -29,33 +180,65 @@ Tokens de borda do sistema de design. Controlam o arredondamento e a espessura d
 
 Escala de arredondamento, do reto ao completamente circular. Aplicado via `radius($size)`.
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
   {radii.map(({ name, token, value, px, use }) => (
-    <div key={name} style={{
-      display: 'grid',
-      gridTemplateColumns: '64px 200px 1fr auto',
-      alignItems: 'center',
-      gap: '16px',
-      padding: '12px 16px',
-      background: 'var(--lui-color-neutral-background-surface)',
-      border: '1px solid var(--lui-color-neutral-border-subtle)',
-      borderRadius: '6px',
-    }}>
-      <div style={{
-        width: '48px',
-        height: '48px',
-        background: 'var(--lui-color-primary-background-container)',
-        borderRadius: `var(${token})`,
-        flexShrink: 0,
-      }} />
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '64px 200px 1fr auto',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '12px 16px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
+      <div
+        style={{
+          width: '48px',
+          height: '48px',
+          background: 'var(--lui-color-primary-background-container)',
+          borderRadius: `var(${token})`,
+          flexShrink: 0,
+        }}
+      />
       <div>
         <code style={{ display: 'block', fontSize: '12px' }}>{token}</code>
-        <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>
+        <span
+          style={{
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
           radius({name})
         </span>
       </div>
-      <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-body)' }}>{value}</span>
-      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)', textAlign: 'right' }}>{use}</span>
+      <span
+        style={{
+          fontSize: '12px',
+          color: 'var(--lui-color-neutral-text-body)',
+        }}
+      >
+        {value}
+      </span>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+          textAlign: 'right',
+        }}
+      >
+        {use}
+      </span>
     </div>
   ))}
 </div>
@@ -97,3 +280,117 @@ Espessuras de borda disponíveis. Aplicado via `width($size)`.
     </div>
   ))}
 </div>
+</Lang>
+
+<Lang lang="en-US">
+# Border
+
+Border tokens of the design system. They control border rounding and thickness — use the SCSS `radius($size)` and `width($size)` functions to access them in components.
+
+---
+
+## Border Radius
+
+Rounding scale, from straight to fully circular. Applied via `radius($size)`.
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    marginBottom: '32px',
+  }}
+>
+  {radiiEn.map(({ name, token, value, px, use }) => (
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '64px 200px 1fr auto',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '12px 16px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '6px',
+      }}
+    >
+      <div
+        style={{
+          width: '48px',
+          height: '48px',
+          background: 'var(--lui-color-primary-background-container)',
+          borderRadius: `var(${token})`,
+          flexShrink: 0,
+        }}
+      />
+      <div>
+        <code style={{ display: 'block', fontSize: '12px' }}>{token}</code>
+        <span
+          style={{
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+          }}
+        >
+          radius({name})
+        </span>
+      </div>
+      <span
+        style={{
+          fontSize: '12px',
+          color: 'var(--lui-color-neutral-text-body)',
+        }}
+      >
+        {value}
+      </span>
+      <span
+        style={{
+          fontSize: '11px',
+          color: 'var(--lui-color-neutral-text-caption)',
+          textAlign: 'right',
+        }}
+      >
+        {use}
+      </span>
+    </div>
+  ))}
+</div>
+
+---
+
+## Border Width
+
+Available border widths. Applied via `width($size)`.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '16px' }}>
+  {widthsEn.map(({ name, token, value, px, use }) => (
+    <div key={name} style={{
+      display: 'grid',
+      gridTemplateColumns: '64px 200px 1fr auto',
+      alignItems: 'center',
+      gap: '16px',
+      padding: '12px 16px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '6px',
+    }}>
+      <div style={{
+        width: '48px',
+        height: '48px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: `${value} solid var(--lui-color-primary-border-default)`,
+        borderRadius: '6px',
+        flexShrink: 0,
+      }} />
+      <div>
+        <code style={{ display: 'block', fontSize: '12px' }}>{token}</code>
+        <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>
+          width({name})
+        </span>
+      </div>
+      <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-body)' }}>{value}</span>
+      <span style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)', textAlign: 'right' }}>{use}</span>
+    </div>
+  ))}
+</div>
+</Lang>
