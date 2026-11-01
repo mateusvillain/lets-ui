@@ -4,9 +4,11 @@
  * Storybook builds the sidebar from `index.json`, so a story name (`storyName`
  * in the story file) is the same in both languages. This map translates the
  * names written in Portuguese; the manager applies it to the sidebar labels
- * whenever the language global changes. Names that do not appear here stay as they are in
- * both languages — which is what most of them do, since they are API terms
- * (`Primary`, `Loading`, `compact`, `close-on-backdrop: false`, …).
+ * whenever the language global changes.
+ *
+ * Every story name is in exactly one of `storyNamesEn`, `storyNamesPt` or
+ * `untranslatedStoryNames` — `storyNames.test.js` checks it against the story
+ * files, so a new story has to pick one.
  *
  * Keys are the exact `storyName` strings from the `*.stories.*` files.
  */
@@ -110,8 +112,7 @@ export const storyNamesEn = {
  *
  * The counterpart of `storyNamesEn`: many stories take their name from the export
  * key (`AllSizes` → "All Sizes"), which is English. Terms that are API or
- * component vocabulary (`Primary`, `Danger`, `Body`, `Button`, attribute names in
- * lowercase, …) are left out on purpose and stay as they are.
+ * component vocabulary are listed in `untranslatedStoryNames` instead.
  */
 export const storyNamesPt = {
   Aligned: 'Alinhado',
@@ -230,8 +231,6 @@ export const storyNamesPt = {
   'With Counter': 'Com contador',
   'With Cover': 'Com capa',
   'With Custom Trigger': 'Com trigger customizado',
-  'With Disabled Item': 'Com item desabilitado',
-  'With Divider': 'Com divisor',
   'With Grow': 'Com grow',
   'With Hint': 'Com dica',
   'With Icon': 'Com ícone',
@@ -239,8 +238,6 @@ export const storyNamesPt = {
   'With Line Clamp': 'Com line clamp',
   'With Max Width': 'Com largura máxima',
   'With Offset': 'Com deslocamento',
-  'With Shortcuts': 'Com atalhos',
-  'With Submenu': 'Com submenu',
   'With action (replaces close button)':
     'Com ação (substitui o botão de fechar)',
   'With action — all variants': 'Com ação — todas as variantes',
@@ -254,6 +251,86 @@ export const storyNamesPt = {
   'border-radius — scale': 'border-radius — escala',
   'fade — directions': 'fade — direções',
 };
+
+/**
+ * Story names that read the same in both languages.
+ *
+ * Component names, variants, attribute names and values, and other product or
+ * API vocabulary. Listed so `storyNames.test.js` can tell a deliberate
+ * "no translation" from a name nobody looked at.
+ */
+export const untranslatedStoryNames = new Set([
+  // Components
+  'Alert',
+  'Button',
+  'Card',
+  'Checkbox',
+  'Close Button',
+  'Date Picker',
+  'Divider',
+  'Drawer',
+  'Empty State',
+  'Icon Button',
+  'Input',
+  'Native Select',
+  'Progress Bar',
+  'Radio',
+  'Radio Group',
+  'Skeleton',
+  'Snippet',
+  'Textarea',
+  'Toast',
+  'Tooltip',
+  // Variants, parts and typography styles
+  'Block',
+  'Body',
+  'Bordered',
+  'Caution',
+  'Danger',
+  'Display',
+  'Heading',
+  'Info',
+  'Neutral',
+  'Overtitle',
+  'Primary',
+  'Secondary',
+  'Shortcut',
+  'Subheadline',
+  'Submenu',
+  'Success',
+  'Trigger',
+  // Words shared by both languages
+  'Download',
+  'Horizontal',
+  'Linear',
+  'Social',
+  'Status',
+  'Vertical',
+  // Attributes, values and CSS terms
+  'Autofocus',
+  'Image',
+  'Object Fit',
+  'Pattern',
+  'bottom-center',
+  'bottom-start',
+  'close-on-backdrop: false',
+  'disabled',
+  'fade (boolean)',
+  'max-height',
+  'middle-center',
+  'middle-end',
+  'middle-start',
+  'orientation="both"',
+  'orientation="horizontal"',
+  'overscroll',
+  'scroll-shadow',
+  'scrollbar-visibility',
+  'snap',
+  'snap snap-align="center"',
+  'top-center',
+  'top-end',
+  'top-start',
+]);
 
 /**
  * Menu labels (groups and non-component pages) in Portuguese.

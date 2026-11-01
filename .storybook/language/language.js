@@ -23,11 +23,26 @@ export const LANGUAGES = [
 export const LANGUAGE_ATTRIBUTE = 'data-language';
 
 /**
+ * Narrows any value to a supported language.
+ *
+ * The global can arrive from the URL (`globals=language:…`), so it is not
+ * guaranteed to be one of `LANGUAGES`; anything else falls back to the default.
+ *
+ * @param {unknown} value
+ * @returns {'pt-BR' | 'en-US'}
+ */
+export function normalizeLanguage(value) {
+  return LANGUAGES.some((language) => language.value === value)
+    ? /** @type {'pt-BR' | 'en-US'} */ (value)
+    : DEFAULT_LANGUAGE;
+}
+
+/**
  * Reads the active language in a story or docs context.
  *
  * @param {Record<string, unknown>} globals The `context.globals` of the story.
  * @returns {'pt-BR' | 'en-US'}
  */
 export function activeLanguage(globals = {}) {
-  return globals[LANGUAGE_GLOBAL] ?? DEFAULT_LANGUAGE;
+  return normalizeLanguage(globals[LANGUAGE_GLOBAL]);
 }

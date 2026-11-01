@@ -35,6 +35,15 @@ export default defineConfig({
         },
       },
       {
+        // Storybook's language support: the sidebar name maps against the
+        // story files, and the per-language heading ids for docs pages.
+        test: {
+          name: 'storybook-language',
+          environment: 'node',
+          include: ['.storybook/language/**/*.test.js'],
+        },
+      },
+      {
         // Web Components behave through the real DOM — shadow roots, focus,
         // computed styles — so they run in a browser rather than a simulated
         // one. The components' own Vite config supplies the Sass load paths

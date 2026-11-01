@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import remarkGfm from 'remark-gfm';
 
+import rehypeLangSlug from './language/rehypeLangSlug.js';
+
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type { import('@storybook/html-vite').StorybookConfig } */
@@ -22,6 +24,7 @@ const config = {
         mdxPluginOptions: {
           mdxCompileOptions: {
             remarkPlugins: [remarkGfm],
+            rehypePlugins: [rehypeLangSlug],
           },
         },
       },

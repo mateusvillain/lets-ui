@@ -75,6 +75,9 @@ importers:
       gh-pages:
         specifier: ^6.3.0
         version: 6.3.0
+      github-slugger:
+        specifier: ^2.0.0
+        version: 2.0.0
       globals:
         specifier: ^17.0.0
         version: 17.4.0

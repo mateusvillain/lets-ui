@@ -1,7 +1,11 @@
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming/create';
 
-import { DEFAULT_LANGUAGE, LANGUAGE_GLOBAL } from './language/language.js';
+import {
+  DEFAULT_LANGUAGE,
+  LANGUAGE_GLOBAL,
+  normalizeLanguage,
+} from './language/language.js';
 import { localizedStoryName, localizedTitle } from './language/storyNames.js';
 
 addons.setConfig({
@@ -69,9 +73,9 @@ addons.setConfig({
 let language = DEFAULT_LANGUAGE;
 
 const languageOf = (globals = {}) =>
-  globals.userGlobals?.[LANGUAGE_GLOBAL] ??
-  globals[LANGUAGE_GLOBAL] ??
-  DEFAULT_LANGUAGE;
+  normalizeLanguage(
+    globals.userGlobals?.[LANGUAGE_GLOBAL] ?? globals[LANGUAGE_GLOBAL]
+  );
 
 addons.setConfig({
   sidebar: {
