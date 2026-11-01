@@ -101,13 +101,211 @@ export const storyNamesEn = {
 };
 
 /**
- * Returns the display name of a story in a given language.
+ * Story names written in English, translated to Portuguese for the sidebar.
  *
- * @param {string} name The name in the index (`storyName`, or the export key).
+ * The counterpart of `storyNamesEn`: many stories take their name from the export
+ * key (`AllSizes` → "All Sizes"), which is English. Terms that are API or
+ * component vocabulary (`Primary`, `Danger`, `Body`, `Button`, attribute names in
+ * lowercase, …) are left out on purpose and stay as they are.
+ */
+export const storyNamesPt = {
+  Aligned: 'Alinhado',
+  'All Icons': 'Todos os ícones',
+  'All Placements': 'Todas as posições',
+  'All Sizes': 'Todos os tamanhos',
+  'All Variants': 'Todas as variantes',
+  'All Variants Loading': 'Todas as variantes em loading',
+  'As Picture': 'Como picture',
+  'Aspect Ratios': 'Proporções',
+  'Auto Dismiss': 'Fechamento automático',
+  'Avatar with Status / Badge': 'Avatar com status / badge',
+  'Block Title': 'Título de bloco',
+  'Border Radii': 'Raios de borda',
+  'Calendar open': 'Calendário aberto',
+  'Card (semantic tokens)': 'Card (tokens semânticos)',
+  'Card — expand': 'Card — expandir',
+  'Center alignment': 'Alinhamento ao centro',
+  Centered: 'Centralizado',
+  Checked: 'Marcado',
+  Circle: 'Círculo',
+  'Color Variants': 'Variantes de cor',
+  Column: 'Coluna',
+  'Content via attribute (content="")': 'Conteúdo via atributo (content="")',
+  'Copy Event': 'Evento de cópia',
+  'Custom Icon': 'Ícone customizado',
+  'Custom icon (icon slot)': 'Ícone customizado (slot icon)',
+  'Custom trigger (slot)': 'Trigger customizado (slot)',
+  'Danger never auto-dismisses': 'Danger nunca fecha sozinho',
+  Default: 'Padrão',
+  Disabled: 'Desabilitado',
+  'Disabled Checked': 'Desabilitado e marcado',
+  Dismissible: 'Dispensável',
+  'Dismissible with actions': 'Dispensável com ações',
+  'Dismissible — all variants': 'Dispensável — todas as variantes',
+  End: 'Fim',
+  Error: 'Erro',
+  'Error State': 'Estado de erro',
+  Events: 'Eventos',
+  'Extra Large (xl)': 'Extra grande (xl)',
+  'Fallback Color': 'Cor de fallback',
+  'Fallback Src': 'Src de fallback',
+  'Form Integration': 'Integração com formulários',
+  Full: 'Completo',
+  Group: 'Grupo',
+  'Headline Variant': 'Variante headline',
+  'In Context': 'Em contexto',
+  Indeterminate: 'Indeterminado',
+  'Input Mode': 'Modo de entrada',
+  Italic: 'Itálico',
+  'Italic Underline': 'Itálico sublinhado',
+  Label: 'Rótulo',
+  'Label Placement': 'Posição do rótulo',
+  Large: 'Grande',
+  'Left alignment': 'Alinhamento à esquerda',
+  Line: 'Linha',
+  'Line Numbers': 'Números de linha',
+  'Line — expand': 'Linha — expandir',
+  'List Item': 'Item de lista',
+  Loading: 'Carregando',
+  'Loading With Text': 'Carregando com texto',
+  'Locale and first day of week': 'Idioma e primeiro dia da semana',
+  'Long Lines': 'Linhas longas',
+  'Min and max': 'Mínimo e máximo',
+  'Multi Line': 'Várias linhas',
+  'Multiple Keys': 'Várias teclas',
+  'Narrow Sidebar': 'Sidebar estreita',
+  'No Avatar': 'Sem avatar',
+  'No Copy Button': 'Sem botão de copiar',
+  'No Wrap': 'Sem quebra de linha',
+  'Number Input': 'Input numérico',
+  Password: 'Senha',
+  'Pattern + Input Mode': 'Pattern + modo de entrada',
+  'Persistent (duration="0")': 'Persistente (duration="0")',
+  Positions: 'Posições',
+  'Pre-selected': 'Pré-selecionado',
+  Profile: 'Perfil',
+  Range: 'Intervalo',
+  'Range in two fields': 'Intervalo em dois campos',
+  'Raw CSS fallback': 'Fallback com CSS bruto',
+  Rectangle: 'Retângulo',
+  Required: 'Obrigatório',
+  'Resize: None': 'Redimensionar: nenhum',
+  Scrollable: 'Rolável',
+  'Single Key': 'Tecla única',
+  'Single Line': 'Linha única',
+  'Size Lg': 'Tamanho Lg',
+  'Size Md': 'Tamanho Md',
+  'Size Sm': 'Tamanho Sm',
+  'Size: Large': 'Tamanho: grande',
+  'Size: Medium': 'Tamanho: médio',
+  'Size: Small': 'Tamanho: pequeno',
+  Sizes: 'Tamanhos',
+  'Slotted content with rich markup': 'Conteúdo em slot com markup rico',
+  Small: 'Pequeno',
+  'Small Gap': 'Espaçamento pequeno',
+  'Space Between': 'Espaço entre',
+  'Space Between (fixed height)': 'Espaço entre (altura fixa)',
+  Square: 'Quadrado',
+  'Stacked (collapsed, scales to 95%)': 'Empilhado (recolhido, escala a 95%)',
+  Subtitle: 'Subtítulo',
+  'Syntax Highlighting': 'Destaque de sintaxe',
+  Text: 'Texto',
+  Title: 'Título',
+  'Title only': 'Somente título',
+  'Typed entry': 'Entrada digitada',
+  Underline: 'Sublinhado',
+  'Unavailable dates': 'Datas indisponíveis',
+  Variants: 'Variantes',
+  'Vertical With Label': 'Vertical com rótulo',
+  'Via label': 'Via label',
+  'Via slot': 'Via slot',
+  'Wide Threshold': 'Limite largo',
+  'With Actions': 'Com ações',
+  'With Caption': 'Com caption',
+  'With Counter': 'Com contador',
+  'With Cover': 'Com capa',
+  'With Custom Trigger': 'Com trigger customizado',
+  'With Disabled Item': 'Com item desabilitado',
+  'With Divider': 'Com divisor',
+  'With Grow': 'Com grow',
+  'With Hint': 'Com dica',
+  'With Icon': 'Com ícone',
+  'With Label': 'Com rótulo',
+  'With Line Clamp': 'Com line clamp',
+  'With Max Width': 'Com largura máxima',
+  'With Offset': 'Com deslocamento',
+  'With Shortcuts': 'Com atalhos',
+  'With Submenu': 'Com submenu',
+  'With action (replaces close button)':
+    'Com ação (substitui o botão de fechar)',
+  'With action — all variants': 'Com ação — todas as variantes',
+  'Without actions': 'Sem ações',
+  'Without cover': 'Sem capa',
+  'XSS-safe content (content attribute)':
+    'Conteúdo seguro contra XSS (atributo content)',
+  'background — all semantic aliases':
+    'background — todos os aliases semânticos',
+  'border-color — semantic aliases': 'border-color — aliases semânticos',
+  'border-radius — scale': 'border-radius — escala',
+  'fade — directions': 'fade — direções',
+};
+
+/**
+ * Menu labels (groups and non-component pages) in Portuguese.
+ *
+ * The titles in the story files are written in English because the sidebar
+ * hierarchy comes from them. Component names (`Button`, `Dropdown Menu`,
+ * `Radio Group`, …), API terms (`Heading`, `Body`, `Mixins`, …) and `Layout` are
+ * product vocabulary and stay in English in both languages, so they are simply
+ * absent from this map. Keys are single title segments, not full paths.
+ */
+export const titleSegmentsPt = {
+  'Get started': 'Primeiros passos',
+  Introduction: 'Introdução',
+  Foundations: 'Fundamentos',
+  Border: 'Bordas',
+  Color: 'Cores',
+  Elevation: 'Elevação',
+  Spacing: 'Espaçamento',
+  Typography: 'Tipografia',
+  Actionable: 'Ações',
+  Navigation: 'Navegação',
+  'Form and options': 'Formulários e opções',
+  Content: 'Conteúdo',
+  Utilities: 'Utilitários',
+  Functions: 'Funções',
+};
+
+/** Name of the auto-generated documentation entry, per language. */
+const docsEntryName = { 'pt-BR': 'Documentação', 'en-US': 'Docs' };
+
+/**
+ * Returns the display title (the sidebar hierarchy) of an entry.
+ *
+ * @param {string} title The `/`-separated title in the index.
  * @param {string} language The active language (`pt-BR` or `en-US`).
+ * @returns {string} The title to show in the sidebar.
+ */
+export function localizedTitle(title, language) {
+  if (language !== 'pt-BR') return title;
+  return title
+    .split('/')
+    .map((segment) => titleSegmentsPt[segment] ?? segment)
+    .join('/');
+}
+
+/**
+ * Returns the display name of an entry in a given language.
+ *
+ * @param {string} name The name in the index (`storyName`, the export key, or `Docs`).
+ * @param {string} language The active language (`pt-BR` or `en-US`).
+ * @param {string} [type] The entry type (`story` or `docs`).
  * @returns {string} The name to show in the sidebar.
  */
-export function localizedStoryName(name, language) {
-  if (language !== 'en-US') return name;
-  return storyNamesEn[name] ?? name;
+export function localizedStoryName(name, language, type = 'story') {
+  if (type === 'docs' && name === 'Docs') {
+    return docsEntryName[language] ?? name;
+  }
+  const names = language === 'en-US' ? storyNamesEn : storyNamesPt;
+  return names[name] ?? name;
 }

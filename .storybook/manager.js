@@ -2,7 +2,7 @@ import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming/create';
 
 import { DEFAULT_LANGUAGE, LANGUAGE_GLOBAL } from './language/language.js';
-import { localizedStoryName } from './language/storyNames.js';
+import { localizedStoryName, localizedTitle } from './language/storyNames.js';
 
 addons.setConfig({
   theme: create({
@@ -58,53 +58,49 @@ addons.setConfig({
 });
 
 /**
- * Translates the story names in the sidebar.
+ * Translates the menu (groups, pages and story names) in the sidebar.
  *
- * Story names are baked into `index.json`, so the language toolbar cannot change
- * them on its own. This addon keeps a pristine copy of the index, rewrites the
- * `name` of every entry through `storyNames.js` and hands the result back to the
- * manager, which rebuilds the sidebar. Ids, titles and the current selection are
- * untouched: only what is displayed changes.
+ * Only the label is translated, through `sidebar.renderLabel`; the index itself
+ * is left alone. Sidebar ids are derived from the title segments, so rewriting
+ * the titles would change them on every language switch — and the sidebar keys
+ * its expanded/collapsed state by id, so every translated group would come back
+ * collapsed. Keeping the ids also keeps URLs, the selection and search stable.
  */
+let language = DEFAULT_LANGUAGE;
+
+const languageOf = (globals = {}) =>
+  globals.userGlobals?.[LANGUAGE_GLOBAL] ??
+  globals[LANGUAGE_GLOBAL] ??
+  DEFAULT_LANGUAGE;
+
+addons.setConfig({
+  sidebar: {
+    renderLabel: (item) => {
+      if (item.type !== 'story' && item.type !== 'docs') {
+        return localizedTitle(item.name, language);
+      }
+      const name = localizedStoryName(item.name, language, item.type);
+      // A component with a single entry is shown as a leaf under the
+      // component's name, which is a title segment rather than a story name.
+      return name === item.name ? localizedTitle(item.name, language) : name;
+    },
+  },
+});
+
 addons.register('lets-ui/sidebar-language', (api) => {
   const channel = addons.getChannel();
-  let sourceIndex;
-  let appliedLanguage;
-  let localized = false;
 
-  const apply = (globals = {}) => {
-    const language =
-      globals.userGlobals?.[LANGUAGE_GLOBAL] ??
-      globals[LANGUAGE_GLOBAL] ??
-      DEFAULT_LANGUAGE;
-    if (!sourceIndex || language === appliedLanguage) return;
-    appliedLanguage = language;
-    // The index already carries the names for the default language, so the
-    // first render in it needs no rewrite at all.
-    if (!localized && language === DEFAULT_LANGUAGE) return;
-    localized = language !== DEFAULT_LANGUAGE;
-
-    const entries = {};
-    for (const [id, entry] of Object.entries(sourceIndex.entries)) {
-      entries[id] = {
-        ...entry,
-        name: localizedStoryName(entry.name, language),
-      };
-    }
-
-    api.setIndex({ v: sourceIndex.v, entries });
+  const onGlobals = (globals) => {
+    const next = languageOf(globals);
+    if (next === language) return;
+    language = next;
+    // Rebuilding the hash from the same index re-renders every label with the
+    // new language; the ids do not change, so neither does the expanded state.
+    const index = api.getIndex();
+    if (index) api.setIndex(index);
   };
 
-  fetch('index.json')
-    .then((response) => response.json())
-    .then((index) => {
-      sourceIndex = index;
-      apply(api.getGlobals());
-    })
-    .catch(() => {
-      // No index to rewrite: the sidebar keeps the names from the story files.
-    });
-
-  channel.on('setGlobals', apply);
-  channel.on('globalsUpdated', apply);
+  language = languageOf(api.getGlobals?.());
+  channel.on('setGlobals', onGlobals);
+  channel.on('globalsUpdated', onGlobals);
 });
