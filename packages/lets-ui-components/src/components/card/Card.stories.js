@@ -10,6 +10,7 @@ export default {
     cover: { control: 'boolean' },
     primaryButton: { control: 'text' },
     secondaryButton: { control: 'text' },
+    actionsLabel: { control: 'text', name: 'actions-label' },
   },
 };
 
@@ -22,9 +23,10 @@ const Template = ({
   cover,
   primaryButton,
   secondaryButton,
+  actionsLabel,
 }) => `
   <div style="width: 320px;">
-    <lui-card>
+    <lui-card ${actionsLabel ? `actions-label="${actionsLabel}"` : ''}>
       ${cover ? `<img slot="cover" src="${coverPlaceholder}" alt="">` : ''}
       ${title ? `<p class="body--lg" style="font-weight:600">${title}</p>` : ''}
       ${content ? `<p class="body--lg">${content}</p>` : ''}
@@ -40,6 +42,7 @@ const baseArgs = {
   cover: false,
   primaryButton: '',
   secondaryButton: '',
+  actionsLabel: 'Card actions',
 };
 
 export const Card = Template.bind({});
