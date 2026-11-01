@@ -8,6 +8,9 @@ export class LuiCard extends HostAriaMixin(LitElement) {
 
   @property({ attribute: 'aria-label' }) ariaLabel = 'Card';
 
+  /** Rótulo acessível do grupo de ações. */
+  @property({ attribute: 'actions-label' }) actionsLabel = 'Card actions';
+
   @state() private _hasCover = false;
   @state() private _hasActions = false;
 
@@ -54,7 +57,7 @@ export class LuiCard extends HostAriaMixin(LitElement) {
           <div
             class="card__actions"
             role="group"
-            aria-label="Card actions"
+            aria-label="${this.actionsLabel}"
             style="${this._hasActions ? '' : 'display:none'}"
           >
             <slot
