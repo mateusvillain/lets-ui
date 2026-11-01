@@ -49,14 +49,46 @@ const deepActive = () => {
   return el;
 };
 
-// Focus moves on its own, once: these assertions only wait for it, they never
-// call `focus()`, so a menu that leaves focus on the trigger fails them.
-// Opened from a user event, as on a page: the panel then appears in the same
-// frame the menu tries to focus. Set from a plain script, `open` lands a frame
-// earlier and would pass even with the item still hidden on the opening frame.
+// Focus moves on its own, once: the opening assertions only wait for it, they
+// never call `focus()`, so a menu that leaves focus on the trigger fails them.
+// They open the menu from a user event, as on a page: the panel then appears in
+// the same frame the menu tries to focus. Set from a plain script, `open` lands
+// a frame earlier and would pass even with the item still hidden on that frame.
 const firstItem = (menu) => menu.shadowRoot.querySelector('.menu-item');
 
+// Opens the menu from the keyboard, with a button on each side of it to tell
+// where Tab and Shift+Tab take focus.
+async function openBetweenButtons(html) {
+  const { menu, trigger } = await mount(html);
+  const before = document.createElement('button');
+  const after = document.createElement('button');
+  menu.before(before);
+  menu.after(after);
+  focusable(trigger).focus();
+  await userEvent.keyboard('{Enter}');
+  await expect.poll(() => menu.shadowRoot.activeElement).toBe(firstItem(menu));
+  return { menu, trigger, before, after };
+}
+
 describe.each(Object.entries(triggers))('with %s as trigger', (_, html) => {
+  it('closes on Tab and moves focus past the trigger', async () => {
+    const { menu, after } = await openBetweenButtons(html);
+
+    await userEvent.keyboard('{Tab}');
+
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(after);
+  });
+
+  it('closes on Shift+Tab and moves focus before the trigger', async () => {
+    const { menu, before } = await openBetweenButtons(html);
+
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}');
+
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(before);
+  });
+
   it.each(['Enter', 'Space'])(
     'focuses the first item when opened with %s',
     async (key) => {
@@ -181,6 +213,32 @@ describe('opening', () => {
     expect(menu.shadowRoot.activeElement).toBe(
       menu.shadowRoot.querySelectorAll('.menu-item')[1]
     );
+  });
+});
+
+describe('Tab order', () => {
+  const withSubmenu = `${triggers['a native button']}<lui-menu-item slot="items" label="Compartilhar"><lui-menu-item label="Por e-mail"></lui-menu-item></lui-menu-item>`;
+
+  it('keeps every item, submenus included, out of it', async () => {
+    const { menu } = await mount(withSubmenu);
+    const items = () => menu.shadowRoot.querySelectorAll('.menu-item');
+    await expect.poll(() => items().length).toBe(4);
+
+    for (const item of items()) expect(item.tabIndex).toBe(-1);
+  });
+
+  it('leaves the whole menu on Tab from a submenu item', async () => {
+    const { menu, after } = await openBetweenButtons(withSubmenu);
+    const subItem = menu.shadowRoot.querySelector(
+      '.menu-item--has-submenu .dropdown-menu__panel .menu-item'
+    );
+    await userEvent.keyboard('{ArrowRight}');
+    await expect.poll(() => menu.shadowRoot.activeElement).toBe(subItem);
+
+    await userEvent.keyboard('{Tab}');
+
+    expect(menu.open).toBe(false);
+    expect(document.activeElement).toBe(after);
   });
 });
 

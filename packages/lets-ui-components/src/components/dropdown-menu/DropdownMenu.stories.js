@@ -247,7 +247,7 @@ export const CSSClass = () => `
     <button class="btn btn--secondary btn--md" type="button" aria-haspopup="menu" aria-expanded="false">Opções</button>
     <ul class="dropdown-menu__panel is-open" role="menu">
       <li role="presentation">
-        <button class="menu-item" type="button" role="menuitem">
+        <button class="menu-item" type="button" role="menuitem" tabindex="-1">
           <span class="menu-item__label">Editar</span>
           <span class="shortcut" role="group" aria-label="⌘ + E">
             <kbd class="shortcut__key">⌘</kbd>
@@ -257,13 +257,13 @@ export const CSSClass = () => `
         </button>
       </li>
       <li role="presentation">
-        <button class="menu-item" type="button" role="menuitem">
+        <button class="menu-item" type="button" role="menuitem" tabindex="-1">
           <span class="menu-item__label">Duplicar</span>
         </button>
       </li>
       <li role="separator"><hr class="divider" /></li>
       <li role="presentation">
-        <button class="menu-item menu-item--danger" type="button" role="menuitem">
+        <button class="menu-item menu-item--danger" type="button" role="menuitem" tabindex="-1">
           <span class="menu-item__label">Excluir</span>
         </button>
       </li>

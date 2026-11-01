@@ -126,6 +126,7 @@ Sem o Web Component, o painel só aparece com a classe `is-open`. Também ficam 
 
 - alternar `is-open` e sincronizar `aria-haspopup` e `aria-expanded` no gatilho;
 - os papéis `menu`, `menuitem` e `separator`;
+- tirar os itens da ordem de `Tab` com `tabindex="-1"`;
 - mover o foco ao abrir, fechar com `Escape` e `Tab` e devolver o foco ao gatilho;
 - a navegação por setas e a abertura dos submenus pelo teclado, com `menu-item--has-submenu` e um painel aninhado;
 - fechar ao clicar fora do menu.
@@ -179,6 +180,7 @@ Não tem atributos. Também aceita `lui-divider` no slot `items`, com o mesmo re
 ## Acessibilidade
 
 - O painel é um `<ul role="menu">`; cada item é um `<button role="menuitem">` dentro de um `<li role="presentation">`; divisores são `role="separator"`.
+- Os itens ficam fora da ordem de `Tab` (`tabindex="-1"`): o menu é uma parada só, e entre os itens o foco se move pelas setas.
 - O gatilho recebe `aria-haspopup="menu"` e `aria-expanded` no controle que recebe foco. Com `lui-button` e `lui-icon-button`, os atributos são repassados ao `<button>` interno, que é o nó anunciado pelo leitor de tela. Nesses dois componentes, o elemento externo não carrega ARIA.
 - O menu não define `aria-controls`: o painel fica no shadow root do componente, e um ID não pode ser referenciado de fora dele.
 - Itens com `disabled` recebem `disabled` nativo e `aria-disabled="true"`, e são pulados pelo foco inicial e pelas setas.
@@ -188,21 +190,21 @@ Não tem atributos. Também aceita `lui-divider` no slot `items`, com o mesmo re
 
 ### Teclado
 
-| Tecla             | Ação                                                                  |
-| ----------------- | --------------------------------------------------------------------- |
-| `Enter` / `Space` | No gatilho, abre o menu e move o foco para o primeiro item habilitado |
-| `Enter` / `Space` | Num item, executa a ação, fecha o menu e devolve o foco ao gatilho    |
-| `↓` / `↑`         | Move entre os itens, voltando ao início ou ao fim                     |
-| `→`               | Abre o submenu do item focado                                         |
-| `←`               | Fecha o submenu e volta ao item pai                                   |
-| `Escape`          | Fecha o menu e devolve o foco ao gatilho                              |
-| `Tab`             | Com o foco no painel, fecha o menu                                    |
+| Tecla             | Ação                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------ |
+| `Enter` / `Space` | No gatilho, abre o menu e move o foco para o primeiro item habilitado                |
+| `Enter` / `Space` | Num item, executa a ação, fecha o menu e devolve o foco ao gatilho                   |
+| `↓` / `↑`         | Move entre os itens, voltando ao início ou ao fim                                    |
+| `→`               | Abre o submenu do item focado                                                        |
+| `←`               | Fecha o submenu e volta ao item pai                                                  |
+| `Escape`          | Fecha o menu e devolve o foco ao gatilho                                             |
+| `Tab`             | Com o foco no painel, fecha o menu e move o foco para o elemento seguinte ao gatilho |
+| `Shift` + `Tab`   | Com o foco no painel, fecha o menu e move o foco para o elemento anterior ao gatilho |
 
 Ao abrir, pelo teclado, pelo mouse ou por código, o foco vai para o primeiro item habilitado, e as
 setas funcionam em seguida.
 
-Limitações conhecidas no teclado: ao fechar com `Tab`, o foco passa ao item seguinte do menu em vez
-de sair dele; e `Home` e `End` ainda não movem o foco entre os itens.
+Limitação conhecida no teclado: `Home` e `End` ainda não movem o foco entre os itens.
 
 ### Responsabilidades de quem usa
 
@@ -261,7 +263,7 @@ de sair dele; e `Home` e `End` ainda não movem o foco entre os itens.
   </button>
   <ul class="dropdown-menu__panel is-open" role="menu">
     <li role="presentation">
-      <button class="menu-item" type="button" role="menuitem">
+      <button class="menu-item" type="button" role="menuitem" tabindex="-1">
         <span class="menu-item__label">Editar</span>
         <span class="shortcut" role="group" aria-label="⌘ + E">
           <kbd class="shortcut__key">⌘</kbd>
@@ -271,13 +273,18 @@ de sair dele; e `Home` e `End` ainda não movem o foco entre os itens.
       </button>
     </li>
     <li role="presentation">
-      <button class="menu-item" type="button" role="menuitem">
+      <button class="menu-item" type="button" role="menuitem" tabindex="-1">
         <span class="menu-item__label">Duplicar</span>
       </button>
     </li>
     <li role="separator"><hr class="divider" /></li>
     <li role="presentation">
-      <button class="menu-item menu-item--danger" type="button" role="menuitem">
+      <button
+        class="menu-item menu-item--danger"
+        type="button"
+        role="menuitem"
+        tabindex="-1"
+      >
         <span class="menu-item__label">Excluir</span>
       </button>
     </li>
