@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.13.1
+
+### Added
+
+- Card takes an `actions-label` attribute for the accessible name of its actions group, so it can be translated. It defaults to the previous hardcoded "Card actions".
+
+### Fixed
+
+- Dropdown Menu left focus on the trigger when it opened, because the item's state transition also animated the `visibility` it inherits from the panel and kept it hidden on the opening frame. Opening the menu now focuses the first enabled item.
+- Dropdown Menu items were Tab stops, and Tab closed the menu and sent focus to an item of the closing panel, where it was lost. Following the WAI-ARIA Menu Button pattern, items are now reached with the arrow keys only. Tab closes the menu and moves focus past the trigger, and Shift+Tab before it.
+- Tooltip did not meet WCAG 1.4.13 and 2.3.3, which only the Code Block tooltip handled. Every tooltip now:
+  - Closes on Escape without moving the pointer or focus, and shows again on the next hover or focus. An Escape that closes a tooltip is consumed, so a surrounding Modal or Drawer closes only on the next one. An Escape that is part of an IME composition, or a held key, is ignored.
+  - Can be hovered: the content takes pointer events while shown, with a bridge across the gap to the trigger in all four positions.
+  - Has no transitions under `prefers-reduced-motion: reduce`.
+  - The CSS-only `.tooltip` gets a `.tooltip--dismissed` state, which a bit of script can toggle on Escape.
+- Code Block's tooltip came back as soon as the pointer left or focus moved out after Escape. It now comes back on the next hover or focus, like every other tooltip.
+
 ## v1.13.0
 
 ### Added
