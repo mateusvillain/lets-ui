@@ -1,0 +1,16 @@
+@use 'packages/styles/src/components/file-upload' as *;
+@use 'packages/styles/src/utilities/mixins' as *;
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.file-upload__input,
+.file-upload__live,
+.file-upload__sr {
+  @include sr-only;
+}

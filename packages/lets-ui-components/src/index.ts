@@ -17,6 +17,13 @@ import { LuiBody } from './components/body/body.js';
 import { LuiImage } from './components/image/image.js';
 import { LuiDrawer } from './components/drawer/drawer.js';
 import { LuiEmptyState } from './components/empty-state/empty-state.js';
+import { LuiFileUpload } from './components/file-upload/file-upload.js';
+export type {
+  FileUploadChangeDetail,
+  FileUploadErrorDetail,
+  FileUploadMessages,
+  FileUploadRejectReason,
+} from './components/file-upload/file-upload.js';
 import { LuiHeading } from './components/heading/heading.js';
 import { LuiTabs, LuiTab } from './components/tabs/tabs.js';
 import { LuiDatePicker } from './components/date-picker/date-picker.js';
@@ -85,6 +92,7 @@ define('lui-heading', LuiHeading);
 define('lui-image', LuiImage);
 define('lui-drawer', LuiDrawer);
 define('lui-empty-state', LuiEmptyState);
+define('lui-file-upload', LuiFileUpload);
 define('lui-tabs', LuiTabs);
 define('lui-tab', LuiTab);
 define('lui-date-picker', LuiDatePicker);
@@ -146,6 +154,7 @@ export {
   LuiImage,
   LuiDrawer,
   LuiEmptyState,
+  LuiFileUpload,
   LuiTabs,
   LuiTab,
   LuiDatePicker,

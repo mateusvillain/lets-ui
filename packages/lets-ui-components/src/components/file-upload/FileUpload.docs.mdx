@@ -1,0 +1,248 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
+import * as FileUploadStories from './FileUpload.stories';
+
+<Meta of={FileUploadStories} />
+
+<Lang lang="pt-BR">
+# File Upload
+
+Campo para anexar arquivos a um formulário. Combina uma área de soltar (drag-and-drop) com um botão que abre o seletor nativo, lista os arquivos escolhidos com nome e tamanho, valida tipo, tamanho e quantidade localmente e permite remover cada arquivo.
+
+O escopo do componente é **seleção, lista, validação local e remoção**. Envio assíncrono, progresso, cancelamento e nova tentativa são **composição da aplicação** — veja a [receita de envio](#receita-envio-progresso-e-nova-tentativa).
+
+</Lang>
+
+<Lang lang="en-US">
+# File Upload
+
+Field for attaching files to a form. It combines a drop zone (drag-and-drop) with a button that opens the native picker, lists the chosen files with name and size, validates type, size and count locally, and lets each file be removed.
+
+The component's scope is **selection, list, local validation and removal**. Asynchronous sending, progress, cancelling and retrying are **app composition** — see the [send recipe](#recipe-send-progress-and-retry).
+
+</Lang>
+
+<Canvas of={FileUploadStories.FileUpload} />
+<Controls of={FileUploadStories.FileUpload} />
+
+<Lang lang="pt-BR">
+## Atributos
+
+| Atributo       | Tipo      | Padrão                               | Descrição                                                                            |
+| -------------- | --------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
+| `label`        | `string`  | `Upload files`                       | Título da área — é o nome acessível do campo.                                        |
+| `description`  | `string`  | `Drop files here or click to browse` | Instrução abaixo do título.                                                          |
+| `hint`         | `string`  | gerado                               | Linha de restrições. Vazio = montada a partir de `accept`, `max-size` e `max-files`. |
+| `accept`       | `string`  | —                                    | Tipos aceitos, como no `<input type="file">` (`.pdf`, `image/*`, `image/png`).       |
+| `multiple`     | `boolean` | `false`                              | Permite mais de um arquivo.                                                          |
+| `max-size`     | `number`  | `0`                                  | Tamanho máximo **por arquivo**, em bytes. `0` = sem limite.                          |
+| `max-files`    | `number`  | `0`                                  | Quantidade máxima com `multiple`. `0` = sem limite.                                  |
+| `name`         | `string`  | —                                    | Nome do campo no `FormData`. Cada arquivo é enviado sob esse nome.                   |
+| `required`     | `boolean` | `false`                              | Exige ao menos um arquivo (`valueMissing`).                                          |
+| `optional`     | `boolean` | `false`                              | Mostra `optional-text` ao lado do título.                                            |
+| `error`        | `boolean` | `false`                              | Estado de erro do campo; mostra `error-text`.                                        |
+| `error-text`   | `string`  | `Select at least one file.`          | Mensagem de erro do campo.                                                           |
+| `remove-label` | `string`  | `Remove`                             | Prefixo do nome acessível de cada botão Remover: “Remove recibo.pdf”.                |
+| `disabled`     | `boolean` | `false`                              | Bloqueia clique, teclado, soltar e remoção.                                          |
+
+A propriedade JS `messages` sobrescreve os textos gerados em tempo de execução (erros, anúncios, linha de restrições) — use-a para traduzir. A propriedade `files` devolve os arquivos aceitos como `FileList`; `clear()` esvazia o campo.
+
+### Eventos
+
+| Evento       | `detail`                                                               | Quando                                           |
+| ------------ | ---------------------------------------------------------------------- | ------------------------------------------------ |
+| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Arquivos aceitos foram adicionados ou removidos. |
+| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | Um arquivo foi recusado (um evento por arquivo). |
+
+</Lang>
+
+<Lang lang="en-US">
+## Attributes
+
+| Attribute      | Type      | Default                              | Description                                                                   |
+| -------------- | --------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `label`        | `string`  | `Upload files`                       | Zone title — it is the field's accessible name.                               |
+| `description`  | `string`  | `Drop files here or click to browse` | Instruction below the title.                                                  |
+| `hint`         | `string`  | generated                            | Constraints line. Empty = built from `accept`, `max-size` and `max-files`.    |
+| `accept`       | `string`  | —                                    | Accepted types, as on `<input type="file">` (`.pdf`, `image/*`, `image/png`). |
+| `multiple`     | `boolean` | `false`                              | Allows more than one file.                                                    |
+| `max-size`     | `number`  | `0`                                  | Maximum size **per file**, in bytes. `0` = no limit.                          |
+| `max-files`    | `number`  | `0`                                  | Maximum count with `multiple`. `0` = no limit.                                |
+| `name`         | `string`  | —                                    | Field name in `FormData`. Each file is submitted under this name.             |
+| `required`     | `boolean` | `false`                              | Requires at least one file (`valueMissing`).                                  |
+| `optional`     | `boolean` | `false`                              | Shows `optional-text` next to the title.                                      |
+| `error`        | `boolean` | `false`                              | Field error state; shows `error-text`.                                        |
+| `error-text`   | `string`  | `Select at least one file.`          | Field error message.                                                          |
+| `remove-label` | `string`  | `Remove`                             | Prefix of each Remove button's accessible name: “Remove receipt.pdf”.         |
+| `disabled`     | `boolean` | `false`                              | Blocks click, keyboard, drop and removal.                                     |
+
+The `messages` JS property overrides the strings built at runtime (errors, announcements, constraints line) — use it to translate. The `files` property returns the accepted files as a `FileList`; `clear()` empties the field.
+
+### Events
+
+| Event        | `detail`                                                               | When                                      |
+| ------------ | ---------------------------------------------------------------------- | ----------------------------------------- |
+| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Accepted files were added or removed.     |
+| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | A file was rejected (one event per file). |
+
+</Lang>
+
+<Lang lang="pt-BR">
+## Comportamento
+
+- **Antes de escolher:** título, marcação de opcional e restrições (formatos, tamanho, quantidade) ficam visíveis na área e associados a ela via `aria-describedby`. Com `required`, um texto oculto “Required.” também é lido.
+- **Soltar não é o único caminho:** a área inteira é um `<button>` — Tab chega nela, Enter/Espaço e toque abrem o seletor.
+- **Acumula ou substitui:** com `multiple`, cada nova seleção **soma** aos arquivos já presentes; sem `multiple`, um arquivo válido **substitui** o atual.
+- **Duplicatas:** um arquivo idêntico a um da lista (nome, tamanho, tipo e data de modificação) é ignorado e anunciado como “already in the list”.
+- **Seletor cancelado:** fechar o seletor do sistema sem escolher nada não altera a lista.
+- **Arquivo inválido não derruba os válidos:** cada arquivo é validado sozinho. Os recusados aparecem na lista com borda de erro e uma mensagem que diz **qual arquivo**, **o problema** e **como resolver** — e não entram no `FormData` nem em `files`. Eles saem com o botão Remover ou na próxima seleção.
+- **Nomes longos** quebram linha em qualquer ponto em vez de serem truncados, para continuarem identificáveis em telas pequenas e com zoom.
+
+</Lang>
+
+<Lang lang="en-US">
+## Behaviour
+
+- **Before choosing:** title, optional marker and constraints (formats, size, count) are visible in the zone and tied to it through `aria-describedby`. With `required`, a hidden “Required.” note is read too.
+- **Dropping is not the only way:** the whole zone is a `<button>` — Tab reaches it, Enter/Space and touch open the picker.
+- **Accumulate or replace:** with `multiple`, each new selection is **added** to the files already there; without `multiple`, a valid file **replaces** the current one.
+- **Duplicates:** a file identical to one in the list (name, size, type and last-modified date) is skipped and announced as “already in the list”.
+- **Cancelled picker:** closing the system picker without choosing leaves the list unchanged.
+- **An invalid file does not drop the valid ones:** each file is validated on its own. Rejected files appear in the list with an error border and a message that names **the file**, **the problem** and **how to fix it** — and they are not in `FormData` or `files`. They leave with their Remove button or on the next selection.
+- **Long names** wrap at any point instead of being truncated, so they stay identifiable on small screens and under zoom.
+
+</Lang>
+
+<Lang lang="pt-BR">
+## Múltiplos arquivos
+
+</Lang>
+
+<Lang lang="en-US">
+## Multiple files
+
+</Lang>
+
+<Canvas of={FileUploadStories.MultipleFiles} />
+
+<Lang lang="pt-BR">
+## Tipos restritos
+
+`accept` filtra o seletor do sistema e é revalidado quando o arquivo é solto ou escolhido. Ele **não substitui a validação no servidor**: tipo (pelo conteúdo, não só pela extensão), tamanho, quantidade e conteúdo precisam ser verificados de novo no backend — o navegador aceita o que o usuário renomear.
+
+</Lang>
+
+<Lang lang="en-US">
+## Restricted accept
+
+`accept` filters the system picker and is re-checked when a file is dropped or picked. It **does not replace server-side validation**: type (by content, not just extension), size, count and content must be checked again on the backend — the browser accepts whatever the user renames.
+
+</Lang>
+
+<Canvas of={FileUploadStories.RestrictedAccept} />
+
+<Lang lang="pt-BR">
+## Error
+
+Estado de erro do campo, como em formulário enviado sem arquivo obrigatório. Também é ligado automaticamente pelo evento `invalid` do formulário.
+
+</Lang>
+
+<Lang lang="en-US">
+## Error
+
+Field error state, as when a form is submitted without a required file. It is also turned on automatically by the form's `invalid` event.
+
+</Lang>
+
+<Canvas of={FileUploadStories.Error} />
+
+<Lang lang="pt-BR">
+## Drag active
+
+Borda primária enquanto arquivos são arrastados sobre a área.
+
+</Lang>
+
+<Lang lang="en-US">
+## Drag active
+
+Primary border while files are dragged over the zone.
+
+</Lang>
+
+<Canvas of={FileUploadStories.DragActive} />
+
+<Lang lang="pt-BR">
+## Disabled
+
+</Lang>
+
+<Lang lang="en-US">
+## Disabled
+
+</Lang>
+
+<Canvas of={FileUploadStories.Disabled} />
+
+<Lang lang="pt-BR">
+## Teclado e leitor de tela
+
+| Tecla           | Ação                                                          |
+| --------------- | ------------------------------------------------------------- |
+| Tab / Shift+Tab | Percorre a área e o botão Remover de **cada** arquivo.        |
+| Enter / Espaço  | Na área, abre o seletor. Num botão Remover, remove o arquivo. |
+
+- Cada botão Remover tem o nome do arquivo no nome acessível (“Remove comprovante.pdf”).
+- Depois de remover, o foco vai para o botão Remover do arquivo que tomou o lugar, senão o anterior, senão a área — nunca para um elemento que sumiu.
+- A lista é um `<ul>` rotulado; cada item expõe nome, tamanho e, se recusado, a mensagem de erro.
+- Adições, recusas e remoções são anunciadas numa região `role="status"` educada, sem mover o foco.
+
+</Lang>
+
+<Lang lang="en-US">
+## Keyboard and screen reader
+
+| Key             | Action                                                               |
+| --------------- | -------------------------------------------------------------------- |
+| Tab / Shift+Tab | Moves through the zone and the Remove button of **each** file.       |
+| Enter / Space   | On the zone, opens the picker. On a Remove button, removes the file. |
+
+- Each Remove button carries the file name in its accessible name (“Remove receipt.pdf”).
+- After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone — never to an element that is gone.
+- The list is a labelled `<ul>`; each item exposes name, size and, if rejected, the error message.
+- Additions, rejections and removals are announced in a polite `role="status"` region, without moving focus.
+
+</Lang>
+
+<Lang lang="pt-BR">
+## Receita: envio, progresso e nova tentativa
+
+O componente não envia arquivos. Para enviar, a aplicação escuta `lui-change`, lê `files` e monta a própria lista de envio com as classes globais `file-upload__item`, `file-upload__row`, `file-upload__status` e o [Progress Bar](?path=/docs/content-progress-bar--docs). O exemplo abaixo simula a rede; arquivos com “fail” no nome falham na metade.
+
+Regras da receita:
+
+- **Envio explícito.** Os arquivos são enviados pelo botão **Send**, não ao serem escolhidos — a pessoa revisa a lista antes. Se o produto enviar imediatamente, diga isso no `description`.
+- **Anuncie início, sucesso e falha** numa região `role="status"`, **sem** mover o foco e **sem** anunciar cada passo do progresso.
+- **Cada barra identifica o arquivo** (`label="Sending recibo.pdf"`), para que o progresso seja associado à operação certa.
+- **Falha:** o item ganha `file-upload__item--error`, a mensagem diz o que houve e o que fazer, e um botão **Retry** distinto do Remover, com o nome do arquivo (“Retry recibo.pdf”).
+- **Não prometa** retomar envio interrompido nem manter arquivos depois de recarregar a página, a menos que o backend realmente suporte isso.
+
+</Lang>
+
+<Lang lang="en-US">
+## Recipe: send, progress and retry
+
+The component does not send files. To send, the app listens to `lui-change`, reads `files` and builds its own sending list with the global classes `file-upload__item`, `file-upload__row`, `file-upload__status` and the [Progress Bar](?path=/docs/content-progress-bar--docs). The example below simulates the network; files with “fail” in the name fail halfway.
+
+Recipe rules:
+
+- **Explicit send.** Files are sent by the **Send** button, not when chosen — the person reviews the list first. If the product sends immediately, say so in `description`.
+- **Announce start, success and failure** in a `role="status"` region, **without** moving focus and **without** announcing every progress tick.
+- **Each bar names its file** (`label="Sending receipt.pdf"`), so progress is tied to the right operation.
+- **Failure:** the item gets `file-upload__item--error`, the message says what happened and what to do, and a **Retry** button distinct from Remove, carrying the file name (“Retry receipt.pdf”).
+- **Do not promise** resuming an interrupted upload or keeping files after a reload unless the backend really supports it.
+
+</Lang>
+
+<Canvas of={FileUploadStories.SendRecipe} />
