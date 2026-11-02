@@ -1,11 +1,9 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
 
-// File Upload — a drop zone that opens the file picker, followed by the list of files the
-// field holds. The list item also carries the progress and failure parts an
-// app renders when it composes sending on top of the field (see the docs
-// recipe) — the Web Component itself only uses the selected and the
-// rejected states.
+// File Upload — a drop zone that opens the file picker, followed by the list
+// of files the field holds. Each item shows its sending state as reported by
+// the app: selected, uploading (with a Progress Bar), complete or failed.
 
 .file-upload {
   @include flex(column, stretch, flex-start, fluid(8), nowrap);
@@ -219,8 +217,9 @@
     }
   }
 
-  // Status line under the name: local validation error, or — in a composition
-  // — sending progress / failure. Indented to line up with the name.
+  // Status line under the name: a local validation error or a failed send.
+  // The text stays in the body colour, as in the prototype; the red icon and
+  // the item border carry the error. Indented to line up with the name.
   &__status {
     @include flex(row, flex-start, flex-start, fluid(8), nowrap);
     @include font-scale(body--md);
@@ -236,8 +235,11 @@
     }
   }
 
-  &__item--error &__status {
-    color: text(error);
+  // Sending progress, drawn with the Progress Bar's own classes so the bar
+  // looks and behaves the same everywhere. Indented to line up with the name.
+  &__progress {
+    box-sizing: border-box;
+    padding-inline-start: calc(1.5rem + #{fluid(12)});
   }
 }
 

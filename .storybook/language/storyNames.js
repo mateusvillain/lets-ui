@@ -225,6 +225,7 @@ export const storyNamesPt = {
   'Typed entry': 'Entrada digitada',
   Underline: 'Sublinhado',
   'Unavailable dates': 'Datas indisponíveis',
+  'Upload States': 'Estados de envio',
   Variants: 'Variantes',
   'Vertical With Label': 'Vertical com rótulo',
   'Via label': 'Via label',

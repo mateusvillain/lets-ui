@@ -23,6 +23,9 @@ export type {
   FileUploadErrorDetail,
   FileUploadMessages,
   FileUploadRejectReason,
+  FileUploadRetryDetail,
+  FileUploadStatus,
+  FileUploadStatusOptions,
 } from './components/file-upload/file-upload.js';
 import { LuiHeading } from './components/heading/heading.js';
 import { LuiTabs, LuiTab } from './components/tabs/tabs.js';

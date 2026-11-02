@@ -9,7 +9,7 @@ import * as FileUploadStories from './FileUpload.stories';
 
 Campo para anexar arquivos a um formulário. Combina uma área de soltar (drag-and-drop) com um botão que abre o seletor nativo, lista os arquivos escolhidos com nome e tamanho, valida tipo, tamanho e quantidade localmente e permite remover cada arquivo.
 
-O escopo do componente é **seleção, lista, validação local e remoção**. Envio assíncrono, progresso, cancelamento e nova tentativa são **composição da aplicação** — veja a [receita de envio](#receita-envio-progresso-e-nova-tentativa).
+O componente **não envia** arquivos: a aplicação faz a requisição e informa o andamento de cada arquivo com `setFileStatus()`. O campo mostra progresso, falha e o botão de nova tentativa na mesma lista — veja [Envio](#envio-progresso-falha-e-nova-tentativa).
 
 </Lang>
 
@@ -18,7 +18,7 @@ O escopo do componente é **seleção, lista, validação local e remoção**. E
 
 Field for attaching files to a form. It combines a drop zone (drag-and-drop) with a button that opens the native picker, lists the chosen files with name and size, validates type, size and count locally, and lets each file be removed.
 
-The component's scope is **selection, list, local validation and removal**. Asynchronous sending, progress, cancelling and retrying are **app composition** — see the [send recipe](#recipe-send-progress-and-retry).
+The component **does not send** files: the app makes the request and reports each file's progress with `setFileStatus()`. The field shows progress, failure and the retry button in the same list — see [Sending](#sending-progress-failure-and-retry).
 
 </Lang>
 
@@ -43,16 +43,27 @@ The component's scope is **selection, list, local validation and removal**. Asyn
 | `error`        | `boolean` | `false`                              | Estado de erro do campo; mostra `error-text`.                                        |
 | `error-text`   | `string`  | `Select at least one file.`          | Mensagem de erro do campo.                                                           |
 | `remove-label` | `string`  | `Remove`                             | Prefixo do nome acessível de cada botão Remover: “Remove recibo.pdf”.                |
+| `retry-label`  | `string`  | `Retry`                              | Prefixo do nome acessível de cada botão de nova tentativa: “Retry recibo.pdf”.       |
 | `disabled`     | `boolean` | `false`                              | Bloqueia clique, teclado, soltar e remoção.                                          |
 
-A propriedade JS `messages` sobrescreve os textos gerados em tempo de execução (erros, anúncios, linha de restrições) — use-a para traduzir. A propriedade `files` devolve os arquivos aceitos como `FileList`; `clear()` esvazia o campo.
+A propriedade JS `messages` sobrescreve os textos gerados em tempo de execução (erros, anúncios, linha de restrições, rótulo das barras) — use-a para traduzir.
+
+### Propriedades e métodos
+
+| Membro                                  | Descrição                                                                                                                     |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `files`                                 | Arquivos aceitos, como `FileList`. São os mesmos objetos `File` de `lui-change`.                                              |
+| `setFileStatus(file, status, options?)` | Informa o andamento do envio: `'selected'`, `'uploading'` (`{ progress }`, 0–100), `'complete'` ou `'error'` (`{ message }`). |
+| `getFileStatus(file)`                   | Último status informado para o arquivo.                                                                                       |
+| `clear()`                               | Esvazia o campo.                                                                                                              |
 
 ### Eventos
 
-| Evento       | `detail`                                                               | Quando                                           |
-| ------------ | ---------------------------------------------------------------------- | ------------------------------------------------ |
-| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Arquivos aceitos foram adicionados ou removidos. |
-| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | Um arquivo foi recusado (um evento por arquivo). |
+| Evento       | `detail`                                                               | Quando                                                |
+| ------------ | ---------------------------------------------------------------------- | ----------------------------------------------------- |
+| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Arquivos aceitos foram adicionados ou removidos.      |
+| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | Um arquivo foi recusado (um evento por arquivo).      |
+| `lui-retry`  | `{ file: File }`                                                       | A pessoa pediu nova tentativa de um envio que falhou. |
 
 </Lang>
 
@@ -74,9 +85,19 @@ A propriedade JS `messages` sobrescreve os textos gerados em tempo de execução
 | `error`        | `boolean` | `false`                              | Field error state; shows `error-text`.                                        |
 | `error-text`   | `string`  | `Select at least one file.`          | Field error message.                                                          |
 | `remove-label` | `string`  | `Remove`                             | Prefix of each Remove button's accessible name: “Remove receipt.pdf”.         |
+| `retry-label`  | `string`  | `Retry`                              | Prefix of each Retry button's accessible name: “Retry receipt.pdf”.           |
 | `disabled`     | `boolean` | `false`                              | Blocks click, keyboard, drop and removal.                                     |
 
-The `messages` JS property overrides the strings built at runtime (errors, announcements, constraints line) — use it to translate. The `files` property returns the accepted files as a `FileList`; `clear()` empties the field.
+The `messages` JS property overrides the strings built at runtime (errors, announcements, constraints line, bar labels) — use it to translate.
+
+### Properties and methods
+
+| Member                                  | Description                                                                                                               |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `files`                                 | Accepted files, as a `FileList`. They are the same `File` objects as in `lui-change`.                                     |
+| `setFileStatus(file, status, options?)` | Reports sending progress: `'selected'`, `'uploading'` (`{ progress }`, 0–100), `'complete'` or `'error'` (`{ message }`). |
+| `getFileStatus(file)`                   | Last status reported for the file.                                                                                        |
+| `clear()`                               | Empties the field.                                                                                                        |
 
 ### Events
 
@@ -84,6 +105,7 @@ The `messages` JS property overrides the strings built at runtime (errors, annou
 | ------------ | ---------------------------------------------------------------------- | ----------------------------------------- |
 | `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Accepted files were added or removed.     |
 | `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | A file was rejected (one event per file). |
+| `lui-retry`  | `{ file: File }`                                                       | The person asked to retry a failed send.  |
 
 </Lang>
 
@@ -188,60 +210,96 @@ Primary border while files are dragged over the zone.
 <Lang lang="pt-BR">
 ## Teclado e leitor de tela
 
-| Tecla           | Ação                                                          |
-| --------------- | ------------------------------------------------------------- |
-| Tab / Shift+Tab | Percorre a área e o botão Remover de **cada** arquivo.        |
-| Enter / Espaço  | Na área, abre o seletor. Num botão Remover, remove o arquivo. |
+| Tecla           | Ação                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------- |
+| Tab / Shift+Tab | Percorre a área e o botão Remover de **cada** arquivo.                                |
+| Enter / Espaço  | Na área, abre o seletor. Em Remover, remove o arquivo; em Retry, pede nova tentativa. |
 
-- Cada botão Remover tem o nome do arquivo no nome acessível (“Remove comprovante.pdf”).
+- Cada botão Remover e Retry tem o nome do arquivo no nome acessível (“Remove comprovante.pdf”, “Retry comprovante.pdf”).
+- Depois de Retry, quando a aplicação volta o arquivo para `uploading` o botão some e o foco vai para o Remover do mesmo arquivo.
 - Depois de remover, o foco vai para o botão Remover do arquivo que tomou o lugar, senão o anterior, senão a área — nunca para um elemento que sumiu.
 - A lista é um `<ul>` rotulado; cada item expõe nome, tamanho e, se recusado, a mensagem de erro.
-- Adições, recusas e remoções são anunciadas numa região `role="status"` educada, sem mover o foco.
+- Adições, recusas, remoções e mudanças de status (início, envio concluído, falha) são anunciadas numa região `role="status"` educada, sem mover o foco. Os passos do progresso **não** são anunciados — a barra (`role="progressbar"`, com o nome do arquivo) pode ser consultada a qualquer momento.
+- Um arquivo enviado é desenhado como um selecionado, como no protótipo; o estado “uploaded” vai em texto oculto no item.
 
 </Lang>
 
 <Lang lang="en-US">
 ## Keyboard and screen reader
 
-| Key             | Action                                                               |
-| --------------- | -------------------------------------------------------------------- |
-| Tab / Shift+Tab | Moves through the zone and the Remove button of **each** file.       |
-| Enter / Space   | On the zone, opens the picker. On a Remove button, removes the file. |
+| Key             | Action                                                                                       |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| Tab / Shift+Tab | Moves through the zone and the Remove button of **each** file.                               |
+| Enter / Space   | On the zone, opens the picker. On Remove, removes the file; on Retry, asks to send it again. |
 
-- Each Remove button carries the file name in its accessible name (“Remove receipt.pdf”).
+- Each Remove and Retry button carries the file name in its accessible name (“Remove receipt.pdf”, “Retry receipt.pdf”).
+- After Retry, when the app sets the file back to `uploading` the button goes away and focus moves to the same file's Remove.
 - After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone — never to an element that is gone.
 - The list is a labelled `<ul>`; each item exposes name, size and, if rejected, the error message.
-- Additions, rejections and removals are announced in a polite `role="status"` region, without moving focus.
+- Additions, rejections, removals and status changes (start, sent, failed) are announced in a polite `role="status"` region, without moving focus. Progress ticks are **not** announced — the bar (`role="progressbar"`, named after the file) can be checked at any time.
+- A sent file is drawn like a selected one, as in the prototype; the “uploaded” state goes in hidden text on the item.
 
 </Lang>
 
 <Lang lang="pt-BR">
-## Receita: envio, progresso e nova tentativa
+## Envio: progresso, falha e nova tentativa
 
-O componente não envia arquivos. Para enviar, a aplicação escuta `lui-change`, lê `files` e monta a própria lista de envio com as classes globais `file-upload__item`, `file-upload__row`, `file-upload__status` e o [Progress Bar](?path=/docs/content-progress-bar--docs). O exemplo abaixo simula a rede; arquivos com “fail” no nome falham na metade.
-
-Regras da receita:
-
-- **Envio explícito.** Os arquivos são enviados pelo botão **Send**, não ao serem escolhidos — a pessoa revisa a lista antes. Se o produto enviar imediatamente, diga isso no `description`.
-- **Anuncie início, sucesso e falha** numa região `role="status"`, **sem** mover o foco e **sem** anunciar cada passo do progresso.
-- **Cada barra identifica o arquivo** (`label="Sending recibo.pdf"`), para que o progresso seja associado à operação certa.
-- **Falha:** o item ganha `file-upload__item--error`, a mensagem diz o que houve e o que fazer, e um botão **Retry** distinto do Remover, com o nome do arquivo (“Retry recibo.pdf”).
-- **Não prometa** retomar envio interrompido nem manter arquivos depois de recarregar a página, a menos que o backend realmente suporte isso.
+A aplicação envia; o campo mostra. Ela pega os arquivos em `files` (ou em `lui-change`), faz a requisição e chama `setFileStatus()` a cada mudança. O item exibe uma barra de progresso enquanto `uploading`, borda de erro, mensagem e um botão **Retry** em `error`, e volta ao visual normal em `complete`.
 
 </Lang>
 
 <Lang lang="en-US">
-## Recipe: send, progress and retry
+## Sending: progress, failure and retry
 
-The component does not send files. To send, the app listens to `lui-change`, reads `files` and builds its own sending list with the global classes `file-upload__item`, `file-upload__row`, `file-upload__status` and the [Progress Bar](?path=/docs/content-progress-bar--docs). The example below simulates the network; files with “fail” in the name fail halfway.
+The app sends; the field shows it. It takes the files from `files` (or from `lui-change`), makes the request and calls `setFileStatus()` on every change. The item shows a progress bar while `uploading`, an error border, a message and a **Retry** button on `error`, and goes back to its plain look on `complete`.
 
-Recipe rules:
+</Lang>
 
-- **Explicit send.** Files are sent by the **Send** button, not when chosen — the person reviews the list first. If the product sends immediately, say so in `description`.
-- **Announce start, success and failure** in a `role="status"` region, **without** moving focus and **without** announcing every progress tick.
-- **Each bar names its file** (`label="Sending receipt.pdf"`), so progress is tied to the right operation.
-- **Failure:** the item gets `file-upload__item--error`, the message says what happened and what to do, and a **Retry** button distinct from Remove, carrying the file name (“Retry receipt.pdf”).
+<Canvas of={FileUploadStories.UploadStates} />
+
+```js
+const field = document.querySelector('lui-file-upload');
+
+async function upload(file) {
+  field.setFileStatus(file, 'uploading', { progress: 0 });
+  try {
+    await send(file, (progress) =>
+      field.setFileStatus(file, 'uploading', { progress })
+    );
+    field.setFileStatus(file, 'complete');
+  } catch {
+    field.setFileStatus(file, 'error', {
+      message: 'Failed. Check your connection and retry.',
+    });
+  }
+}
+
+field.addEventListener('lui-retry', (e) => upload(e.detail.file));
+```
+
+<Lang lang="pt-BR">
+Regras:
+
+- **Defina quando o envio acontece.** No exemplo abaixo os arquivos vão pelo botão **Send**, para a pessoa revisar a lista antes. Se o produto enviar ao escolher, diga isso no `description`.
+- **A mensagem de falha diz o que fazer** (“Check your connection and retry”), não só “Failed”.
+- **Remover durante o envio cancela.** O arquivo sai de `files` e vem em `removed` no `lui-change`; aborte a requisição dele (`AbortController`).
+- **`accept`, `max-size` e `max-files` não substituem a validação no servidor.** Revalide tipo pelo conteúdo, tamanho, quantidade e conteúdo no backend.
+- **Não prometa** retomar envio interrompido nem manter arquivos depois de recarregar a página, a menos que o backend realmente suporte isso.
+
+O exemplo simula a rede; arquivos com “fail” no nome falham na metade.
+
+</Lang>
+
+<Lang lang="en-US">
+Rules:
+
+- **Decide when sending happens.** In the example below files go with the **Send** button, so the person reviews the list first. If the product sends on selection, say so in `description`.
+- **The failure message says what to do** (“Check your connection and retry”), not just “Failed”.
+- **Removing during a send cancels it.** The file leaves `files` and comes in `removed` on `lui-change`; abort its request (`AbortController`).
+- **`accept`, `max-size` and `max-files` do not replace server-side validation.** Re-check type by content, size, count and content on the backend.
 - **Do not promise** resuming an interrupted upload or keeping files after a reload unless the backend really supports it.
+
+The example simulates the network; files with “fail” in the name fail halfway.
 
 </Lang>
 

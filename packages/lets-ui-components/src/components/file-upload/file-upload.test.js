@@ -258,3 +258,122 @@ describe('form', () => {
     expect(el.files.length).toBe(0);
   });
 });
+
+describe('sending status', () => {
+  it('shows a progress bar named after the file while uploading', async () => {
+    const el = await mount('<lui-file-upload multiple></lui-file-upload>');
+    await pick(el, [file('a.pdf')]);
+    const [a] = el.files;
+
+    el.setFileStatus(el.files[0], 'uploading', { progress: 42.7 });
+    await el.updateComplete;
+
+    const bar = $(el, '[role="progressbar"]');
+    expect(bar.getAttribute('aria-label')).toBe('Uploading a.pdf');
+    expect(bar.getAttribute('aria-valuenow')).toBe('42');
+    expect($(el, '.progress-bar__value').textContent.trim()).toBe('42%');
+    // `files` hands out the same File objects the status is keyed on.
+    expect(el.getFileStatus(a)).toBe('uploading');
+  });
+
+  it('matches the File objects handed out by lui-change', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+    let added;
+    el.addEventListener('lui-change', (e) => (added = e.detail.added));
+    await pick(el, [file('a.pdf')]);
+
+    el.setFileStatus(added[0], 'uploading');
+    await el.updateComplete;
+
+    expect(el.getFileStatus(added[0])).toBe('uploading');
+    // No progress yet: indeterminate bar, no value.
+    expect($(el, '[role="progressbar"]').hasAttribute('aria-valuenow')).toBe(
+      false
+    );
+  });
+
+  it('shows a failure with Retry and emits lui-retry', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+    let added;
+    el.addEventListener('lui-change', (e) => (added = e.detail.added));
+    await pick(el, [file('a.pdf')]);
+    const retries = [];
+    el.addEventListener('lui-retry', (e) => retries.push(e.detail.file));
+
+    el.setFileStatus(added[0], 'error', {
+      message: 'Connection lost. Try again.',
+    });
+    await el.updateComplete;
+
+    expect($(el, '.file-upload__item--error')).not.toBe(null);
+    expect($(el, '.file-upload__status').textContent).toContain(
+      'Connection lost. Try again.'
+    );
+    const retry = $(el, '.file-upload__action--retry');
+    expect(retry.getAttribute('aria-label')).toBe('Retry a.pdf');
+
+    await userEvent.click(retry);
+    expect(retries).toEqual([added[0]]);
+
+    // The app restarts the upload: Retry goes, focus lands on Remove.
+    el.setFileStatus(added[0], 'uploading', { progress: 0 });
+    await el.updateComplete;
+    expect($(el, '.file-upload__action--retry')).toBe(null);
+    expect(el.shadowRoot.activeElement).toBe(
+      $(el, '.file-upload__action--remove')
+    );
+  });
+
+  it('offers no Retry on a file rejected by local validation', async () => {
+    const el = await mount('<lui-file-upload accept=".pdf"></lui-file-upload>');
+    await pick(el, [file('a.txt')]);
+
+    expect($(el, '.file-upload__item--error')).not.toBe(null);
+    expect($(el, '.file-upload__action--retry')).toBe(null);
+  });
+
+  it('gives a sent file a state for screen readers', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+    let added;
+    el.addEventListener('lui-change', (e) => (added = e.detail.added));
+    await pick(el, [file('a.pdf')]);
+
+    el.setFileStatus(added[0], 'complete');
+    await el.updateComplete;
+
+    expect($(el, '.file-upload__sr').textContent).toBe('“a.pdf” uploaded.');
+    expect($(el, '[role="progressbar"]')).toBe(null);
+  });
+
+  it('announces state changes but not progress ticks', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+    let added;
+    el.addEventListener('lui-change', (e) => (added = e.detail.added));
+    await pick(el, [file('a.pdf')]);
+    const live = () => $(el, '[role="status"]').textContent.trim();
+    const frame = () =>
+      new Promise((r) => requestAnimationFrame(() => r(el.updateComplete)));
+    await frame();
+
+    el.setFileStatus(added[0], 'uploading', { progress: 10 });
+    await frame();
+    expect(live()).toBe('Uploading “a.pdf”.');
+
+    el.setFileStatus(added[0], 'uploading', { progress: 60 });
+    await frame();
+    expect(live()).toBe('Uploading “a.pdf”.');
+
+    el.setFileStatus(added[0], 'complete');
+    await frame();
+    expect(live()).toBe('“a.pdf” uploaded.');
+  });
+
+  it('ignores a file that is not in the list', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+
+    el.setFileStatus(file('ghost.pdf'), 'uploading');
+    await el.updateComplete;
+
+    expect($(el, '[role="progressbar"]')).toBe(null);
+  });
+});

@@ -137,13 +137,47 @@ export const Disabled = () => `
 `;
 
 // ---------------------------------------------------------------------------
-// Composition recipe: explicit Send, per-file progress, failure and retry.
-// The upload itself is simulated; swap `fakeUpload` for a real request.
+// Sending: the app sends, the field shows it. `setFileStatus()` drives each
+// item; `lui-retry` asks the app to send a failed file again.
 // ---------------------------------------------------------------------------
 
-const fileIcon = `<svg class="file-upload__file-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.25 1.5c.2 0 .39.08.53.22l4.5 4.5c.14.14.22.33.22.53V21a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 21V3A1.5 1.5 0 0 1 6 1.5h8.25ZM6 21h12V7.5h-3A1.5 1.5 0 0 1 13.5 6V3H6v18Zm9-15h1.94L15 4.06V6Z"/></svg>`;
+const sampleFile = (name, size) =>
+  new File([new Uint8Array(size)], name, { lastModified: 1 });
 
-function fakeUpload(file, onProgress) {
+/** Puts files in the field as if picked, and returns the File objects. */
+function seed(field, files) {
+  const transfer = new DataTransfer();
+  files.forEach((f) => transfer.items.add(f));
+  const input = field.shadowRoot.querySelector('input[type="file"]');
+  input.files = transfer.files;
+  input.dispatchEvent(new Event('change'));
+  return Array.from(field.files);
+}
+
+export const UploadStates = () => {
+  const root = document.createElement('div');
+  root.style.cssText = 'width: 400px; max-width: 100%;';
+  root.innerHTML = `<lui-file-upload multiple max-files="10" max-size="104857600"></lui-file-upload>`;
+  const field = root.querySelector('lui-file-upload');
+
+  customElements.whenDefined('lui-file-upload').then(async () => {
+    await field.updateComplete;
+    const name = 'Screenshot 2026-11-01 at 15.00.37 Official.png';
+    const [uploading, , failed] = seed(field, [
+      sampleFile(name, 2411724),
+      sampleFile(`${name.slice(0, -4)} (1).png`, 2411724),
+      sampleFile(`${name.slice(0, -4)} (2).png`, 2411724),
+    ]);
+    field.setFileStatus(uploading, 'uploading', { progress: 30 });
+    field.setFileStatus(failed, 'error', {
+      message: 'Failed. Check your connection and retry.',
+    });
+  });
+
+  return root;
+};
+
+function fakeUpload(file, onProgress, signal) {
   return new Promise((resolve, reject) => {
     let value = 0;
     const timer = setInterval(() => {
@@ -158,101 +192,69 @@ function fakeUpload(file, onProgress) {
         resolve();
       }
     }, 300);
+    signal.addEventListener('abort', () => {
+      clearInterval(timer);
+      reject(new globalThis.Error('Aborted'));
+    });
   });
 }
 
 export const SendRecipe = () => {
   const root = document.createElement('div');
   root.style.cssText =
-    'width: 400px; max-width: 100%; display: flex; flex-direction: column; gap: 16px;';
+    'width: 400px; max-width: 100%; display: flex; flex-direction: column; gap: 16px; align-items: flex-start;';
   root.innerHTML = `
-    <lui-file-upload multiple max-files="10" max-size="104857600"></lui-file-upload>
+    <lui-file-upload
+      multiple
+      max-files="10"
+      max-size="104857600"
+      description="Drop files here or click to browse. Files are sent when you press Send."
+    ></lui-file-upload>
     <lui-button variant="primary" disabled>Send</lui-button>
-    <ul class="file-upload__list" aria-label="Sending" hidden></ul>
-    <div role="status" aria-live="polite" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;"></div>
   `;
 
   const field = root.querySelector('lui-file-upload');
   const send = root.querySelector('lui-button');
-  const list = root.querySelector('ul');
-  const live = root.querySelector('[role="status"]');
+  const inFlight = new Map();
 
-  const announce = (text) => {
-    live.textContent = '';
-    requestAnimationFrame(() => (live.textContent = text));
-  };
-
-  field.addEventListener('lui-change', (e) => {
-    send.disabled = e.detail.files.length === 0;
-  });
-
-  function renderItem(file) {
-    const li = document.createElement('li');
-    li.className = 'file-upload__item';
-    li.innerHTML = `
-      <div class="file-upload__row">
-        ${fileIcon}
-        <div class="file-upload__details">
-          <span class="file-upload__name"></span>
-        </div>
-        <div class="file-upload__actions"></div>
-      </div>
-      <lui-progress-bar size="md" value="0" hide-label></lui-progress-bar>
-    `;
-    li.querySelector('.file-upload__name').textContent = file.name;
-    // The bar carries the file name, so each progress is tied to its file.
-    li.querySelector('lui-progress-bar').setAttribute(
-      'label',
-      `Sending ${file.name}`
-    );
-    return li;
-  }
-
-  async function upload(file, li) {
-    const bar = li.querySelector('lui-progress-bar');
-    const actions = li.querySelector('.file-upload__actions');
-    li.classList.remove('file-upload__item--error');
-    li.querySelector('.file-upload__status')?.remove();
-    actions.innerHTML = '';
-    bar.hidden = false;
-    bar.value = 0;
+  async function upload(file) {
+    const controller = new AbortController();
+    inFlight.set(file, controller);
+    field.setFileStatus(file, 'uploading', { progress: 0 });
     try {
-      // Progress ticks update the bar only: no announcement, no focus move.
-      await fakeUpload(file, (v) => (bar.value = v));
-      bar.hidden = true;
-      const done = document.createElement('div');
-      done.className = 'file-upload__status';
-      done.textContent = 'Sent';
-      li.append(done);
-      announce(`${file.name} sent.`);
+      // Progress ticks only move the bar: the field does not announce them.
+      await fakeUpload(
+        file,
+        (progress) => field.setFileStatus(file, 'uploading', { progress }),
+        controller.signal
+      );
+      field.setFileStatus(file, 'complete');
     } catch {
-      bar.hidden = true;
-      li.classList.add('file-upload__item--error');
-      const status = document.createElement('div');
-      status.className = 'file-upload__status';
-      status.textContent = `${file.name} failed to send. Check your connection and retry.`;
-      li.append(status);
-      const retry = document.createElement('lui-button');
-      retry.setAttribute('variant', 'secondary');
-      retry.setAttribute('size', 'md');
-      retry.textContent = 'Retry';
-      retry.setAttribute('aria-label', `Retry ${file.name}`);
-      retry.addEventListener('click', () => upload(file, li));
-      actions.append(retry);
-      announce(`${file.name} failed to send.`);
+      if (!controller.signal.aborted) {
+        field.setFileStatus(file, 'error', {
+          message: 'Failed. Check your connection and retry.',
+        });
+      }
+    } finally {
+      inFlight.delete(file);
     }
   }
 
+  const pending = () =>
+    Array.from(field.files).filter(
+      (f) => (field.getFileStatus(f) ?? 'selected') === 'selected'
+    );
+
+  field.addEventListener('lui-change', (e) => {
+    // Removing a file while it is sending cancels the request.
+    e.detail.removed.forEach((f) => inFlight.get(f)?.abort());
+    send.disabled = pending().length === 0;
+  });
+  field.addEventListener('lui-retry', (e) => upload(e.detail.file));
+
   send.addEventListener('click', () => {
-    const files = Array.from(field.files);
-    list.hidden = false;
-    list.innerHTML = '';
-    announce(`Sending ${files.length} file${files.length === 1 ? '' : 's'}.`);
-    files.forEach((file) => {
-      const li = renderItem(file);
-      list.append(li);
-      upload(file, li);
-    });
+    pending().forEach(upload);
+    send.disabled = true;
   });
 
   return root;
