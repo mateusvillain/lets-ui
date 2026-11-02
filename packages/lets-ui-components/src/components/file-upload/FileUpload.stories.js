@@ -99,6 +99,8 @@ export const MultipleFiles = () => `
     ></lui-file-upload>
   </div>
 `;
+MultipleFiles.storyName = 'Vários arquivos';
+MultipleFiles.parameters = { controls: { disable: true } };
 
 export const RestrictedAccept = () => `
   <div style="width: 400px; max-width: 100%;">
@@ -111,6 +113,8 @@ export const RestrictedAccept = () => `
     ></lui-file-upload>
   </div>
 `;
+RestrictedAccept.storyName = 'Tipos restritos';
+RestrictedAccept.parameters = { controls: { disable: true } };
 
 export const Error = () => `
   <div style="width: 400px; max-width: 100%;">
@@ -123,18 +127,23 @@ export const Error = () => `
     ></lui-file-upload>
   </div>
 `;
+Error.storyName = 'Erro';
+Error.parameters = { controls: { disable: true } };
 
 export const DragActive = () => `
   <div style="width: 400px; max-width: 100%;">
     <lui-file-upload force-state="drag-active" multiple max-files="10" max-size="104857600"></lui-file-upload>
   </div>
 `;
+DragActive.storyName = 'Arrastando arquivos';
+DragActive.parameters = { controls: { disable: true } };
 
 export const Disabled = () => `
   <div style="width: 400px; max-width: 100%;">
     <lui-file-upload disabled multiple max-files="10" max-size="104857600"></lui-file-upload>
   </div>
 `;
+Disabled.parameters = { controls: { disable: true } };
 
 // ---------------------------------------------------------------------------
 // Sending: the app sends, the field shows it. `setFileStatus()` drives each
@@ -176,6 +185,8 @@ export const UploadStates = () => {
 
   return root;
 };
+UploadStates.storyName = 'Estados de envio';
+UploadStates.parameters = { controls: { disable: true } };
 
 function fakeUpload(file, onProgress, signal) {
   return new Promise((resolve, reject) => {
@@ -259,3 +270,84 @@ export const SendRecipe = () => {
 
   return root;
 };
+SendRecipe.storyName = 'Envio com botão Send';
+SendRecipe.parameters = { controls: { disable: true } };
+
+export const Events = () => {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText =
+    'width: 400px; max-width: 100%; display: flex; flex-direction: column; gap: 16px;';
+  wrapper.innerHTML = `
+    <lui-file-upload multiple accept=".pdf,.png" max-size="1048576"></lui-file-upload>
+    <pre style="margin: 0; white-space: pre-wrap;"><output>—</output></pre>
+  `;
+  const output = wrapper.querySelector('output');
+  const log = (line) => {
+    output.textContent =
+      output.textContent === '—' ? line : `${output.textContent}\n${line}`;
+  };
+  wrapper.addEventListener('lui-change', (e) => {
+    const { files, added, removed } = e.detail;
+    log(
+      `lui-change: ${files.length} file(s) · added [${added.map((f) => f.name)}] · removed [${removed.map((f) => f.name)}]`
+    );
+  });
+  wrapper.addEventListener('lui-error', (e) => {
+    log(`lui-error: ${e.detail.file.name} · ${e.detail.reason}`);
+  });
+  return wrapper;
+};
+Events.storyName = 'Eventos lui-change e lui-error';
+Events.parameters = { controls: { disable: true } };
+
+export const FormIntegration = () => {
+  const form = document.createElement('form');
+  form.style.cssText =
+    'width: 400px; max-width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 16px;';
+  form.innerHTML = `
+    <lui-file-upload
+      name="attachments"
+      multiple
+      required
+      max-files="3"
+      error-text="Attach at least one file."
+    ></lui-file-upload>
+    <lui-button type="submit">Enviar</lui-button>
+    <output></output>
+  `;
+  const output = form.querySelector('output');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const names = new FormData(form).getAll('attachments').map((f) => f.name);
+    output.textContent = `attachments = [${names.join(', ')}]`;
+  });
+  return form;
+};
+FormIntegration.storyName = 'Integração com formulários';
+FormIntegration.parameters = { controls: { disable: true } };
+
+const cssUploadIcon = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.25 14.25c.41 0 .75.34.75.75v4.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5V15a.75.75 0 0 1 1.5 0v4.5h15V15c0-.41.34-.75.75-.75ZM11.53 3.17a.75.75 0 0 1 1 .05l3.75 3.75a.75.75 0 1 1-1.06 1.06l-2.47-2.47V15a.75.75 0 0 1-1.5 0V5.56L8.78 8.03a.75.75 0 0 1-1.06-1.06l3.75-3.75.06-.05Z"/></svg>`;
+
+export const CSSClass = () => `
+  <div style="width: 400px; max-width: 100%;">
+    <div class="file-upload">
+      <label class="file-upload__zone">
+        <input
+          class="file-upload__input"
+          type="file"
+          name="attachments"
+          multiple
+          accept=".pdf,.png"
+        />
+        <span class="file-upload__icon" aria-hidden="true">${cssUploadIcon}</span>
+        <span class="file-upload__instructions">
+          <span class="file-upload__title">Upload files</span>
+          <span class="file-upload__description">Click to browse</span>
+        </span>
+        <span class="file-upload__constraints">PDF, PNG · Up to 5 MB</span>
+      </label>
+    </div>
+  </div>
+`;
+CSSClass.storyName = 'Classe CSS (sem Web Component)';
+CSSClass.parameters = { controls: { disable: true } };

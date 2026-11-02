@@ -9,7 +9,7 @@ import * as FileUploadStories from './FileUpload.stories';
 
 Campo para anexar arquivos a um formulário. Combina uma área de soltar (drag-and-drop) com um botão que abre o seletor nativo, lista os arquivos escolhidos com nome e tamanho, valida tipo, tamanho e quantidade localmente e permite remover cada arquivo.
 
-O componente **não envia** arquivos: a aplicação faz a requisição e informa o andamento de cada arquivo com `setFileStatus()`. O campo mostra progresso, falha e o botão de nova tentativa na mesma lista — veja [Envio](#envio-progresso-falha-e-nova-tentativa).
+O componente **não envia** arquivos: a aplicação faz a requisição e informa o andamento de cada um com `setFileStatus()`. O campo mostra progresso, falha e o botão de nova tentativa na mesma lista — veja [Envio](#envio-progresso-falha-e-nova-tentativa).
 
 </Lang>
 
@@ -18,7 +18,7 @@ O componente **não envia** arquivos: a aplicação faz a requisição e informa
 
 Field for attaching files to a form. It combines a drop zone (drag-and-drop) with a button that opens the native picker, lists the chosen files with name and size, validates type, size and count locally, and lets each file be removed.
 
-The component **does not send** files: the app makes the request and reports each file's progress with `setFileStatus()`. The field shows progress, failure and the retry button in the same list — see [Sending](#sending-progress-failure-and-retry).
+The component **does not send** files: the app makes the request and reports each one's progress with `setFileStatus()`. The field shows progress, failure and the retry button in the same list — see [Sending](#sending-progress-failure-and-retry).
 
 </Lang>
 
@@ -26,170 +26,112 @@ The component **does not send** files: the app makes the request and reports eac
 <Controls of={FileUploadStories.FileUpload} />
 
 <Lang lang="pt-BR">
-## Atributos
+## Quando usar
 
-| Atributo       | Tipo      | Padrão                               | Descrição                                                                            |
-| -------------- | --------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
-| `label`        | `string`  | `Upload files`                       | Título da área — é o nome acessível do campo.                                        |
-| `description`  | `string`  | `Drop files here or click to browse` | Instrução abaixo do título.                                                          |
-| `hint`         | `string`  | gerado                               | Linha de restrições. Vazio = montada a partir de `accept`, `max-size` e `max-files`. |
-| `accept`       | `string`  | —                                    | Tipos aceitos, como no `<input type="file">` (`.pdf`, `image/*`, `image/png`).       |
-| `multiple`     | `boolean` | `false`                              | Permite mais de um arquivo.                                                          |
-| `max-size`     | `number`  | `0`                                  | Tamanho máximo **por arquivo**, em bytes. `0` = sem limite.                          |
-| `max-files`    | `number`  | `0`                                  | Quantidade máxima com `multiple`. `0` = sem limite.                                  |
-| `name`         | `string`  | —                                    | Nome do campo no `FormData`. Cada arquivo é enviado sob esse nome.                   |
-| `required`     | `boolean` | `false`                              | Exige ao menos um arquivo (`valueMissing`).                                          |
-| `optional`     | `boolean` | `false`                              | Mostra `optional-text` ao lado do título.                                            |
-| `error`        | `boolean` | `false`                              | Estado de erro do campo; mostra `error-text`.                                        |
-| `error-text`   | `string`  | `Select at least one file.`          | Mensagem de erro do campo.                                                           |
-| `remove-label` | `string`  | `Remove`                             | Prefixo do nome acessível de cada botão Remover: “Remove recibo.pdf”.                |
-| `retry-label`  | `string`  | `Retry`                              | Prefixo do nome acessível de cada botão de nova tentativa: “Retry recibo.pdf”.       |
-| `disabled`     | `boolean` | `false`                              | Bloqueia clique, teclado, soltar e remoção.                                          |
+Use o File Upload quando a pessoa precisa anexar um ou mais arquivos do próprio dispositivo: um comprovante, um currículo, as imagens de um anúncio.
 
-A propriedade JS `messages` sobrescreve os textos gerados em tempo de execução (erros, anúncios, linha de restrições, rótulo das barras) — use-a para traduzir.
-
-### Propriedades e métodos
-
-| Membro                                  | Descrição                                                                                                                     |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `files`                                 | Arquivos aceitos, como `FileList`. São os mesmos objetos `File` de `lui-change`.                                              |
-| `setFileStatus(file, status, options?)` | Informa o andamento do envio: `'selected'`, `'uploading'` (`{ progress }`, 0–100), `'complete'` ou `'error'` (`{ message }`). |
-| `getFileStatus(file)`                   | Último status informado para o arquivo.                                                                                       |
-| `clear()`                               | Esvazia o campo.                                                                                                              |
-
-### Eventos
-
-| Evento       | `detail`                                                               | Quando                                                |
-| ------------ | ---------------------------------------------------------------------- | ----------------------------------------------------- |
-| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Arquivos aceitos foram adicionados ou removidos.      |
-| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | Um arquivo foi recusado (um evento por arquivo).      |
-| `lui-retry`  | `{ file: File }`                                                       | A pessoa pediu nova tentativa de um envio que falhou. |
+- Para um único arquivo num formulário curto, sem lista nem arrastar e soltar, um `<input type="file">` nativo pode bastar — veja [Classe CSS](#classe-css-sem-web-component) para estilizá-lo.
+- Para escolher entre arquivos que já estão no sistema (uma biblioteca de mídia, documentos já enviados), use uma lista ou um [Native Select](?path=/docs/form-and-options-native-select--docs), não o seletor do dispositivo.
+- Para texto colado ou digitado, use o [Textarea](?path=/docs/form-and-options-textarea--docs).
 
 </Lang>
 
 <Lang lang="en-US">
-## Attributes
+## When to use
 
-| Attribute      | Type      | Default                              | Description                                                                   |
-| -------------- | --------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `label`        | `string`  | `Upload files`                       | Zone title — it is the field's accessible name.                               |
-| `description`  | `string`  | `Drop files here or click to browse` | Instruction below the title.                                                  |
-| `hint`         | `string`  | generated                            | Constraints line. Empty = built from `accept`, `max-size` and `max-files`.    |
-| `accept`       | `string`  | —                                    | Accepted types, as on `<input type="file">` (`.pdf`, `image/*`, `image/png`). |
-| `multiple`     | `boolean` | `false`                              | Allows more than one file.                                                    |
-| `max-size`     | `number`  | `0`                                  | Maximum size **per file**, in bytes. `0` = no limit.                          |
-| `max-files`    | `number`  | `0`                                  | Maximum count with `multiple`. `0` = no limit.                                |
-| `name`         | `string`  | —                                    | Field name in `FormData`. Each file is submitted under this name.             |
-| `required`     | `boolean` | `false`                              | Requires at least one file (`valueMissing`).                                  |
-| `optional`     | `boolean` | `false`                              | Shows `optional-text` next to the title.                                      |
-| `error`        | `boolean` | `false`                              | Field error state; shows `error-text`.                                        |
-| `error-text`   | `string`  | `Select at least one file.`          | Field error message.                                                          |
-| `remove-label` | `string`  | `Remove`                             | Prefix of each Remove button's accessible name: “Remove receipt.pdf”.         |
-| `retry-label`  | `string`  | `Retry`                              | Prefix of each Retry button's accessible name: “Retry receipt.pdf”.           |
-| `disabled`     | `boolean` | `false`                              | Blocks click, keyboard, drop and removal.                                     |
+Use File Upload when the person needs to attach one or more files from their own device: a receipt, a résumé, the pictures of a listing.
 
-The `messages` JS property overrides the strings built at runtime (errors, announcements, constraints line, bar labels) — use it to translate.
-
-### Properties and methods
-
-| Member                                  | Description                                                                                                               |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `files`                                 | Accepted files, as a `FileList`. They are the same `File` objects as in `lui-change`.                                     |
-| `setFileStatus(file, status, options?)` | Reports sending progress: `'selected'`, `'uploading'` (`{ progress }`, 0–100), `'complete'` or `'error'` (`{ message }`). |
-| `getFileStatus(file)`                   | Last status reported for the file.                                                                                        |
-| `clear()`                               | Empties the field.                                                                                                        |
-
-### Events
-
-| Event        | `detail`                                                               | When                                      |
-| ------------ | ---------------------------------------------------------------------- | ----------------------------------------- |
-| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Accepted files were added or removed.     |
-| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | A file was rejected (one event per file). |
-| `lui-retry`  | `{ file: File }`                                                       | The person asked to retry a failed send.  |
+- For a single file in a short form, with no list and no drag-and-drop, a native `<input type="file">` may be enough — see [CSS class](#css-class-without-web-component) to style it.
+- To choose among files already in the system (a media library, documents already sent), use a list or a [Native Select](?path=/docs/form-and-options-native-select--docs), not the device picker.
+- For pasted or typed text, use [Textarea](?path=/docs/form-and-options-textarea--docs).
 
 </Lang>
 
 <Lang lang="pt-BR">
-## Comportamento
+## Restrições visíveis
 
-- **Antes de escolher:** título, marcação de opcional e restrições (formatos, tamanho, quantidade) ficam visíveis na área e associados a ela via `aria-describedby`. Com `required`, um texto oculto “Required.” também é lido.
-- **Soltar não é o único caminho:** a área inteira é um `<button>` — Tab chega nela, Enter/Espaço e toque abrem o seletor.
-- **Acumula ou substitui:** com `multiple`, cada nova seleção **soma** aos arquivos já presentes; sem `multiple`, um arquivo válido **substitui** o atual.
+Formatos, tamanho máximo e quantidade aparecem na área **antes** de abrir o seletor, para a pessoa não descobrir o limite só depois de escolher. Sem `hint`, a linha é montada a partir de `accept`, `max-size` e `max-files` (“PDF, PNG · Max. 3 files · Up to 5 MB”); com `hint`, o texto é o seu. A linha fica ligada à área por `aria-describedby`.
+
+</Lang>
+
+<Lang lang="en-US">
+## Visible constraints
+
+Formats, maximum size and count appear in the zone **before** the picker opens, so the person does not find out about a limit only after choosing. Without `hint`, the line is built from `accept`, `max-size` and `max-files` (“PDF, PNG · Max. 3 files · Up to 5 MB”); with `hint`, the text is yours. The line is tied to the zone through `aria-describedby`.
+
+</Lang>
+
+<Lang lang="pt-BR">
+## Vários arquivos
+
+Com `multiple`, cada nova seleção **soma** aos arquivos já presentes, até `max-files`. Sem `multiple`, um arquivo válido **substitui** o atual.
+
 - **Duplicatas:** um arquivo idêntico a um da lista (nome, tamanho, tipo e data de modificação) é ignorado e anunciado como “already in the list”.
 - **Seletor cancelado:** fechar o seletor do sistema sem escolher nada não altera a lista.
-- **Arquivo inválido não derruba os válidos:** cada arquivo é validado sozinho. Os recusados aparecem na lista com borda de erro e uma mensagem que diz **qual arquivo**, **o problema** e **como resolver** — e não entram no `FormData` nem em `files`. Eles saem com o botão Remover ou na próxima seleção.
 - **Nomes longos** quebram linha em qualquer ponto em vez de serem truncados, para continuarem identificáveis em telas pequenas e com zoom.
-
-</Lang>
-
-<Lang lang="en-US">
-## Behaviour
-
-- **Before choosing:** title, optional marker and constraints (formats, size, count) are visible in the zone and tied to it through `aria-describedby`. With `required`, a hidden “Required.” note is read too.
-- **Dropping is not the only way:** the whole zone is a `<button>` — Tab reaches it, Enter/Space and touch open the picker.
-- **Accumulate or replace:** with `multiple`, each new selection is **added** to the files already there; without `multiple`, a valid file **replaces** the current one.
-- **Duplicates:** a file identical to one in the list (name, size, type and last-modified date) is skipped and announced as “already in the list”.
-- **Cancelled picker:** closing the system picker without choosing leaves the list unchanged.
-- **An invalid file does not drop the valid ones:** each file is validated on its own. Rejected files appear in the list with an error border and a message that names **the file**, **the problem** and **how to fix it** — and they are not in `FormData` or `files`. They leave with their Remove button or on the next selection.
-- **Long names** wrap at any point instead of being truncated, so they stay identifiable on small screens and under zoom.
-
-</Lang>
-
-<Lang lang="pt-BR">
-## Múltiplos arquivos
 
 </Lang>
 
 <Lang lang="en-US">
 ## Multiple files
 
+With `multiple`, each new selection is **added** to the files already there, up to `max-files`. Without `multiple`, a valid file **replaces** the current one.
+
+- **Duplicates:** a file identical to one in the list (name, size, type and last-modified date) is skipped and announced as “already in the list”.
+- **Cancelled picker:** closing the system picker without choosing leaves the list unchanged.
+- **Long names** wrap at any point instead of being truncated, so they stay identifiable on small screens and under zoom.
+
 </Lang>
 
 <Canvas of={FileUploadStories.MultipleFiles} />
 
 <Lang lang="pt-BR">
-## Tipos restritos
+## Validação local
 
-`accept` filtra o seletor do sistema e é revalidado quando o arquivo é solto ou escolhido. Ele **não substitui a validação no servidor**: tipo (pelo conteúdo, não só pela extensão), tamanho, quantidade e conteúdo precisam ser verificados de novo no backend — o navegador aceita o que o usuário renomear.
+Cada arquivo é validado sozinho contra `accept`, `max-size` (bytes, por arquivo) e `max-files`. Um arquivo inválido **não derruba os válidos**: ele aparece na lista com borda de erro e uma mensagem que diz **qual arquivo**, **o problema** e **como resolver**, e não entra no `FormData` nem em `files`. Sai com o botão Remover ou na próxima seleção. Para cada recusa o componente emite `lui-error`.
+
+`accept` também filtra o seletor do sistema, mas **não substitui a validação no servidor**: tipo (pelo conteúdo, não só pela extensão), tamanho, quantidade e conteúdo precisam ser verificados de novo no backend — o navegador aceita o que a pessoa renomear.
 
 </Lang>
 
 <Lang lang="en-US">
-## Restricted accept
+## Local validation
 
-`accept` filters the system picker and is re-checked when a file is dropped or picked. It **does not replace server-side validation**: type (by content, not just extension), size, count and content must be checked again on the backend — the browser accepts whatever the user renames.
+Each file is validated on its own against `accept`, `max-size` (bytes, per file) and `max-files`. An invalid file **does not drop the valid ones**: it appears in the list with an error border and a message that names **the file**, **the problem** and **how to fix it**, and it is not in `FormData` or `files`. It leaves with its Remove button or on the next selection. For each rejection the component emits `lui-error`.
+
+`accept` also filters the system picker, but it **does not replace server-side validation**: type (by content, not just extension), size, count and content must be checked again on the backend — the browser accepts whatever the person renames.
 
 </Lang>
 
 <Canvas of={FileUploadStories.RestrictedAccept} />
 
 <Lang lang="pt-BR">
-## Error
+## Erro
 
-Estado de erro do campo, como em formulário enviado sem arquivo obrigatório. Também é ligado automaticamente pelo evento `invalid` do formulário.
+`error` aplica o estado de erro à área e exibe `error-text` abaixo dela, ligado por `aria-describedby`. Com `required`, o estado também é ligado pelo evento `invalid` quando o formulário é enviado sem arquivo, e é limpo quando um arquivo válido entra.
 
 </Lang>
 
 <Lang lang="en-US">
 ## Error
 
-Field error state, as when a form is submitted without a required file. It is also turned on automatically by the form's `invalid` event.
+`error` applies the error state to the zone and shows `error-text` below it, tied through `aria-describedby`. With `required`, the state is also turned on by the `invalid` event when the form is submitted without a file, and cleared when a valid file comes in.
 
 </Lang>
 
 <Canvas of={FileUploadStories.Error} />
 
 <Lang lang="pt-BR">
-## Drag active
+## Arrastando arquivos
 
-Borda primária enquanto arquivos são arrastados sobre a área.
+Enquanto arquivos são arrastados sobre a área, a borda fica na cor primária. Arrastar e soltar nunca é o único caminho: a área inteira também abre o seletor por clique, toque e teclado.
 
 </Lang>
 
 <Lang lang="en-US">
-## Drag active
+## Dragging files
 
-Primary border while files are dragged over the zone.
+While files are dragged over the zone, the border takes the primary color. Drag-and-drop is never the only way: the whole zone also opens the picker by click, touch and keyboard.
 
 </Lang>
 
@@ -198,60 +140,44 @@ Primary border while files are dragged over the zone.
 <Lang lang="pt-BR">
 ## Disabled
 
+Bloqueia clique, teclado, soltar e remoção. A área sai da ordem de tabulação.
+
 </Lang>
 
 <Lang lang="en-US">
 ## Disabled
+
+Blocks click, keyboard, drop and removal. The zone leaves the tab order.
 
 </Lang>
 
 <Canvas of={FileUploadStories.Disabled} />
 
 <Lang lang="pt-BR">
-## Teclado e leitor de tela
-
-| Tecla           | Ação                                                                                  |
-| --------------- | ------------------------------------------------------------------------------------- |
-| Tab / Shift+Tab | Percorre a área e o botão Remover de **cada** arquivo.                                |
-| Enter / Espaço  | Na área, abre o seletor. Em Remover, remove o arquivo; em Retry, pede nova tentativa. |
-
-- Cada botão Remover e Retry tem o nome do arquivo no nome acessível (“Remove comprovante.pdf”, “Retry comprovante.pdf”).
-- Depois de Retry, quando a aplicação volta o arquivo para `uploading` o botão some e o foco vai para o Remover do mesmo arquivo.
-- Depois de remover, o foco vai para o botão Remover do arquivo que tomou o lugar, senão o anterior, senão a área — nunca para um elemento que sumiu.
-- A lista é um `<ul>` rotulado; cada item expõe nome, tamanho e, se recusado, a mensagem de erro.
-- Adições, recusas, remoções e mudanças de status (início, envio concluído, falha) são anunciadas numa região `role="status"` educada, sem mover o foco. Os passos do progresso **não** são anunciados — a barra (`role="progressbar"`, com o nome do arquivo) pode ser consultada a qualquer momento.
-- Um arquivo enviado é desenhado como um selecionado, como no protótipo; o estado “uploaded” vai em texto oculto no item.
-
-</Lang>
-
-<Lang lang="en-US">
-## Keyboard and screen reader
-
-| Key             | Action                                                                                       |
-| --------------- | -------------------------------------------------------------------------------------------- |
-| Tab / Shift+Tab | Moves through the zone and the Remove button of **each** file.                               |
-| Enter / Space   | On the zone, opens the picker. On Remove, removes the file; on Retry, asks to send it again. |
-
-- Each Remove and Retry button carries the file name in its accessible name (“Remove receipt.pdf”, “Retry receipt.pdf”).
-- After Retry, when the app sets the file back to `uploading` the button goes away and focus moves to the same file's Remove.
-- After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone — never to an element that is gone.
-- The list is a labelled `<ul>`; each item exposes name, size and, if rejected, the error message.
-- Additions, rejections, removals and status changes (start, sent, failed) are announced in a polite `role="status"` region, without moving focus. Progress ticks are **not** announced — the bar (`role="progressbar"`, named after the file) can be checked at any time.
-- A sent file is drawn like a selected one, as in the prototype; the “uploaded” state goes in hidden text on the item.
-
-</Lang>
-
-<Lang lang="pt-BR">
 ## Envio: progresso, falha e nova tentativa
 
-A aplicação envia; o campo mostra. Ela pega os arquivos em `files` (ou em `lui-change`), faz a requisição e chama `setFileStatus()` a cada mudança. O item exibe uma barra de progresso enquanto `uploading`, borda de erro, mensagem e um botão **Retry** em `error`, e volta ao visual normal em `complete`.
+A aplicação envia; o campo mostra. Ela pega os arquivos em `files` (ou em `lui-change`), faz a requisição e chama `setFileStatus()` a cada mudança:
+
+| Status      | Opções         | Na tela                                                                  |
+| ----------- | -------------- | ------------------------------------------------------------------------ |
+| `selected`  | —              | Estado inicial de um arquivo aceito.                                     |
+| `uploading` | `{ progress }` | Barra de progresso com porcentagem. Sem `progress`, barra indeterminada. |
+| `complete`  | —              | Igual a `selected`, como no protótipo; o estado vai em texto oculto.     |
+| `error`     | `{ message }`  | Borda de erro, ícone, mensagem e botão **Retry**, que emite `lui-retry`. |
 
 </Lang>
 
 <Lang lang="en-US">
 ## Sending: progress, failure and retry
 
-The app sends; the field shows it. It takes the files from `files` (or from `lui-change`), makes the request and calls `setFileStatus()` on every change. The item shows a progress bar while `uploading`, an error border, a message and a **Retry** button on `error`, and goes back to its plain look on `complete`.
+The app sends; the field shows it. It takes the files from `files` (or from `lui-change`), makes the request and calls `setFileStatus()` on every change:
+
+| Status      | Options        | On screen                                                                  |
+| ----------- | -------------- | -------------------------------------------------------------------------- |
+| `selected`  | —              | Initial state of an accepted file.                                         |
+| `uploading` | `{ progress }` | Progress bar with percentage. Without `progress`, an indeterminate bar.    |
+| `complete`  | —              | Same as `selected`, as in the prototype; the state goes in hidden text.    |
+| `error`     | `{ message }`  | Error border, icon, message and a **Retry** button that emits `lui-retry`. |
 
 </Lang>
 
@@ -278,29 +204,343 @@ field.addEventListener('lui-retry', (e) => upload(e.detail.file));
 ```
 
 <Lang lang="pt-BR">
-Regras:
+### Envio com botão Send
 
-- **Defina quando o envio acontece.** No exemplo abaixo os arquivos vão pelo botão **Send**, para a pessoa revisar a lista antes. Se o produto enviar ao escolher, diga isso no `description`.
-- **A mensagem de falha diz o que fazer** (“Check your connection and retry”), não só “Failed”.
-- **Remover durante o envio cancela.** O arquivo sai de `files` e vem em `removed` no `lui-change`; aborte a requisição dele (`AbortController`).
-- **`accept`, `max-size` e `max-files` não substituem a validação no servidor.** Revalide tipo pelo conteúdo, tamanho, quantidade e conteúdo no backend.
-- **Não prometa** retomar envio interrompido nem manter arquivos depois de recarregar a página, a menos que o backend realmente suporte isso.
-
-O exemplo simula a rede; arquivos com “fail” no nome falham na metade.
+No exemplo abaixo os arquivos vão pelo botão **Send**, para a pessoa revisar a lista antes. Remover um arquivo durante o envio cancela a requisição dele. A rede é simulada; arquivos com “fail” no nome falham na metade.
 
 </Lang>
 
 <Lang lang="en-US">
-Rules:
+### Sending with a Send button
 
-- **Decide when sending happens.** In the example below files go with the **Send** button, so the person reviews the list first. If the product sends on selection, say so in `description`.
-- **The failure message says what to do** (“Check your connection and retry”), not just “Failed”.
-- **Removing during a send cancels it.** The file leaves `files` and comes in `removed` on `lui-change`; abort its request (`AbortController`).
-- **`accept`, `max-size` and `max-files` do not replace server-side validation.** Re-check type by content, size, count and content on the backend.
-- **Do not promise** resuming an interrupted upload or keeping files after a reload unless the backend really supports it.
-
-The example simulates the network; files with “fail” in the name fail halfway.
+In the example below files go with the **Send** button, so the person reviews the list first. Removing a file while it is sending cancels its request. The network is simulated; files with “fail” in the name fail halfway.
 
 </Lang>
 
 <Canvas of={FileUploadStories.SendRecipe} />
+
+<Lang lang="pt-BR">
+## Eventos `lui-change` e `lui-error`
+
+`lui-change` é emitido quando arquivos aceitos entram ou saem, com `files` (a lista inteira), `added` e `removed` em `event.detail`. `lui-error` é emitido uma vez para cada arquivo recusado, com `file`, `reason` (`'type'`, `'size'` ou `'count'`) e `message`. Os eventos borbulham e atravessam o shadow DOM.
+
+</Lang>
+
+<Lang lang="en-US">
+## Events `lui-change` and `lui-error`
+
+`lui-change` is emitted when accepted files come in or go out, with `files` (the whole list), `added` and `removed` in `event.detail`. `lui-error` is emitted once for each rejected file, with `file`, `reason` (`'type'`, `'size'` or `'count'`) and `message`. The events bubble and cross the shadow DOM.
+
+</Lang>
+
+<Canvas of={FileUploadStories.Events} />
+
+<Lang lang="pt-BR">
+## Integração com formulários
+
+O `lui-file-upload` é um form-associated custom element: cada arquivo aceito é enviado no `FormData` sob o atributo `name`, e arquivos recusados ficam de fora. Com `required`, o formulário não é submetido enquanto não houver arquivo. `form.reset()` esvazia o campo.
+
+</Lang>
+
+<Lang lang="en-US">
+## Form integration
+
+`lui-file-upload` is a form-associated custom element: each accepted file is submitted in the `FormData` under the `name` attribute, and rejected files are left out. With `required`, the form is not submitted while there is no file. `form.reset()` empties the field.
+
+</Lang>
+
+<Canvas of={FileUploadStories.FormIntegration} />
+
+<Lang lang="pt-BR">
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, use um `<label class="file-upload__zone">` em volta de um `<input type="file" class="file-upload__input">`: o input fica fora da vista, mas recebe o foco e abre o seletor nativo por clique, toque e teclado, e o anel de foco aparece na área. Também ficam a cargo de quem usa:
+
+- arrastar e soltar sobre a área e o estado `file-upload--drag-active`;
+- a lista de arquivos (`file-upload__list`, `file-upload__item`), a remoção e a validação de tipo, tamanho e quantidade;
+- as mensagens de erro, os anúncios ao leitor de tela e o foco depois de remover;
+- o progresso, a falha e a nova tentativa de envio.
+
+</Lang>
+
+<Lang lang="en-US">
+## CSS class (without Web Component)
+
+Without the Web Component, use a `<label class="file-upload__zone">` around an `<input type="file" class="file-upload__input">`: the input stays out of sight, but it takes focus and opens the native picker by click, touch and keyboard, and the focus ring shows on the zone. These also become the responsibility of the consumer:
+
+- drag-and-drop over the zone and the `file-upload--drag-active` state;
+- the file list (`file-upload__list`, `file-upload__item`), removal and type, size and count validation;
+- error messages, screen reader announcements and focus after a removal;
+- sending progress, failure and retry.
+
+</Lang>
+
+<Canvas of={FileUploadStories.CSSClass} />
+
+<Lang lang="pt-BR">
+## Propriedades
+
+| Atributo    | Tipo      | Padrão  | Descrição                                                                            |
+| ----------- | --------- | ------- | ------------------------------------------------------------------------------------ |
+| `accept`    | `string`  | `''`    | Tipos aceitos, como no `<input type="file">` (`.pdf`, `image/*`, `image/png`).       |
+| `multiple`  | `boolean` | `false` | Permite mais de um arquivo; cada seleção soma à lista.                               |
+| `max-size`  | `number`  | `0`     | Tamanho máximo **por arquivo**, em bytes. `0` = sem limite.                          |
+| `max-files` | `number`  | `0`     | Quantidade máxima com `multiple`. `0` = sem limite.                                  |
+| `hint`      | `string`  | `''`    | Linha de restrições. Vazio = montada a partir de `accept`, `max-size` e `max-files`. |
+| `name`      | `string`  | `''`    | Nome do campo no `FormData`. Cada arquivo é enviado sob esse nome.                   |
+| `required`  | `boolean` | `false` | Bloqueia a submissão enquanto não houver arquivo.                                    |
+| `optional`  | `boolean` | `false` | Mostra `optional-text` ao lado do título.                                            |
+| `error`     | `boolean` | `false` | Aplica o estado de erro e exibe `error-text`.                                        |
+| `disabled`  | `boolean` | `false` | Bloqueia clique, teclado, soltar e remoção.                                          |
+| `messages`  | `object`  | `{}`    | Só por propriedade JS. Substitui os textos gerados em tempo de execução.             |
+
+### Métodos
+
+| Membro                                  | Descrição                                                                                                                     |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `files`                                 | Getter. Arquivos aceitos, como `FileList`. São os mesmos objetos `File` de `lui-change`.                                      |
+| `setFileStatus(file, status, options?)` | Informa o andamento do envio: `'selected'`, `'uploading'` (`{ progress }`, 0–100), `'complete'` ou `'error'` (`{ message }`). |
+| `getFileStatus(file)`                   | Último status informado para o arquivo.                                                                                       |
+| `clear()`                               | Esvazia o campo e emite `lui-change`.                                                                                         |
+
+### Eventos
+
+| Evento       | `detail`                                                               | Quando                                                |
+| ------------ | ---------------------------------------------------------------------- | ----------------------------------------------------- |
+| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Arquivos aceitos foram adicionados ou removidos.      |
+| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | Um arquivo foi recusado (um evento por arquivo).      |
+| `lui-retry`  | `{ file: File }`                                                       | A pessoa pediu nova tentativa de um envio que falhou. |
+
+</Lang>
+
+<Lang lang="en-US">
+## Properties
+
+| Attribute   | Type      | Default | Description                                                                   |
+| ----------- | --------- | ------- | ----------------------------------------------------------------------------- |
+| `accept`    | `string`  | `''`    | Accepted types, as on `<input type="file">` (`.pdf`, `image/*`, `image/png`). |
+| `multiple`  | `boolean` | `false` | Allows more than one file; each selection adds to the list.                   |
+| `max-size`  | `number`  | `0`     | Maximum size **per file**, in bytes. `0` = no limit.                          |
+| `max-files` | `number`  | `0`     | Maximum count with `multiple`. `0` = no limit.                                |
+| `hint`      | `string`  | `''`    | Constraints line. Empty = built from `accept`, `max-size` and `max-files`.    |
+| `name`      | `string`  | `''`    | Field name in `FormData`. Each file is submitted under this name.             |
+| `required`  | `boolean` | `false` | Blocks submission while there is no file.                                     |
+| `optional`  | `boolean` | `false` | Shows `optional-text` next to the title.                                      |
+| `error`     | `boolean` | `false` | Applies the error state and shows `error-text`.                               |
+| `disabled`  | `boolean` | `false` | Blocks click, keyboard, drop and removal.                                     |
+| `messages`  | `object`  | `{}`    | JS property only. Replaces the strings built at runtime.                      |
+
+### Methods
+
+| Member                                  | Description                                                                                                               |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `files`                                 | Getter. Accepted files, as a `FileList`. They are the same `File` objects as in `lui-change`.                             |
+| `setFileStatus(file, status, options?)` | Reports sending progress: `'selected'`, `'uploading'` (`{ progress }`, 0–100), `'complete'` or `'error'` (`{ message }`). |
+| `getFileStatus(file)`                   | Last status reported for the file.                                                                                        |
+| `clear()`                               | Empties the field and emits `lui-change`.                                                                                 |
+
+### Events
+
+| Event        | `detail`                                                               | When                                      |
+| ------------ | ---------------------------------------------------------------------- | ----------------------------------------- |
+| `lui-change` | `{ files: FileList, added: File[], removed: File[] }`                  | Accepted files were added or removed.     |
+| `lui-error`  | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | A file was rejected (one event per file). |
+| `lui-retry`  | `{ file: File }`                                                       | The person asked to retry a failed send.  |
+
+</Lang>
+
+<Lang lang="pt-BR">
+## Textos padrão
+
+Os textos que o componente gera são em inglês e podem ser trocados para seguir o idioma do projeto: os fixos por atributo, os montados em tempo de execução pela propriedade `messages`.
+
+| Atributo        | Tipo     | Padrão                                 | Descrição                                                                      |
+| --------------- | -------- | -------------------------------------- | ------------------------------------------------------------------------------ |
+| `label`         | `string` | `'Upload files'`                       | Título da área; é o nome acessível do campo.                                   |
+| `description`   | `string` | `'Drop files here or click to browse'` | Instrução abaixo do título.                                                    |
+| `optional-text` | `string` | `'(optional)'`                         | Texto exibido com `optional`.                                                  |
+| `error-text`    | `string` | `'Select at least one file.'`          | Mensagem exibida quando `error` está ativo.                                    |
+| `remove-label`  | `string` | `'Remove'`                             | Prefixo do nome acessível de cada botão Remover: “Remove recibo.pdf”.          |
+| `retry-label`   | `string` | `'Retry'`                              | Prefixo do nome acessível de cada botão de nova tentativa: “Retry recibo.pdf”. |
+
+Chaves de `messages` (cada uma substitui só o texto correspondente): `constraints`, `type`, `size`, `count`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` e `required`. As que recebem dados são funções:
+
+```js
+document.querySelector('lui-file-upload').messages = {
+  type: (file, formats) =>
+    `“${file.name}” não é um tipo aceito. Escolha um arquivo ${formats}.`,
+  removed: (file) => `“${file.name}” removido.`,
+  listLabel: 'Arquivos selecionados',
+};
+```
+
+</Lang>
+
+<Lang lang="en-US">
+## Default texts
+
+The texts the component generates are in English and can be replaced to follow the project language: the fixed ones by attribute, the ones built at runtime through the `messages` property.
+
+| Attribute       | Type     | Default                                | Description                                                           |
+| --------------- | -------- | -------------------------------------- | --------------------------------------------------------------------- |
+| `label`         | `string` | `'Upload files'`                       | Zone title; it is the field's accessible name.                        |
+| `description`   | `string` | `'Drop files here or click to browse'` | Instruction below the title.                                          |
+| `optional-text` | `string` | `'(optional)'`                         | Text shown with `optional`.                                           |
+| `error-text`    | `string` | `'Select at least one file.'`          | Message shown when `error` is active.                                 |
+| `remove-label`  | `string` | `'Remove'`                             | Prefix of each Remove button's accessible name: “Remove receipt.pdf”. |
+| `retry-label`   | `string` | `'Retry'`                              | Prefix of each Retry button's accessible name: “Retry receipt.pdf”.   |
+
+`messages` keys (each replaces only its own text): `constraints`, `type`, `size`, `count`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` and `required`. The ones that receive data are functions:
+
+```js
+document.querySelector('lui-file-upload').messages = {
+  type: (file, formats) =>
+    `“${file.name}” is not accepted. Choose a ${formats} file.`,
+  removed: (file) => `“${file.name}” removed.`,
+  listLabel: 'Attached files',
+};
+```
+
+</Lang>
+
+<Lang lang="pt-BR">
+## Acessibilidade
+
+- A área inteira é um `<button>` nativo nomeado pelo título (`label`): `Tab` chega nela e `Enter`, `Espaço` ou toque abrem o seletor. Descrição, restrições, “Required.” (com `required`) e a mensagem de erro ficam ligados a ela por `aria-describedby`.
+- A lista é um `<ul>` rotulado (“Selected files”); cada item expõe nome, tamanho e, quando houver, a mensagem de erro ou a barra de progresso.
+- `Tab` e `Shift+Tab` percorrem a área e os botões de **cada** arquivo. Remover e Retry são botões distintos, com o nome do arquivo no nome acessível (“Remove comprovante.pdf”, “Retry comprovante.pdf”).
+- Depois de remover, o foco vai para o Remover do arquivo que tomou o lugar, senão o anterior, senão a área. Depois de Retry, quando a aplicação volta o arquivo para `uploading`, o foco vai para o Remover do mesmo arquivo — nunca para um elemento que sumiu.
+- Cada barra de progresso é um `role="progressbar"` com o nome do arquivo (“Uploading comprovante.pdf”).
+- Adições, recusas, remoções e mudanças de status (início, envio concluído, falha) são anunciadas numa região `role="status"` educada, sem mover o foco. Os passos do progresso **não** são anunciados.
+- O ícone de erro é decorativo; a mensagem é texto. O foco da área aparece também em modo de alto contraste (`forced-colors`).
+
+### Responsabilidades de quem usa
+
+- Informe o envio com `setFileStatus()`. Sem isso, o arquivo fica como selecionado para sempre e quem usa leitor de tela não sabe se ele foi enviado.
+- Escreva mensagens de falha que digam o que fazer (“Check your connection and retry”), não só “Failed”.
+- Defina e diga quando o envio acontece: ao escolher ou por um botão de envio. Se for ao escolher, diga isso no `description`.
+- Ao remover um arquivo em envio, cancele a requisição dele (ele vem em `removed` no `lui-change`).
+- Revalide tipo, tamanho, quantidade e conteúdo no servidor.
+- Não prometa retomar envio interrompido nem manter arquivos depois de recarregar a página, a menos que o backend realmente suporte isso.
+
+</Lang>
+
+<Lang lang="en-US">
+## Accessibility
+
+- The whole zone is a native `<button>` named by the title (`label`): `Tab` reaches it and `Enter`, `Space` or touch open the picker. Description, constraints, “Required.” (with `required`) and the error message are tied to it through `aria-describedby`.
+- The list is a labelled `<ul>` (“Selected files”); each item exposes name, size and, when present, the error message or the progress bar.
+- `Tab` and `Shift+Tab` move through the zone and the buttons of **each** file. Remove and Retry are distinct buttons, carrying the file name in their accessible name (“Remove receipt.pdf”, “Retry receipt.pdf”).
+- After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone. After Retry, when the app sets the file back to `uploading`, focus goes to the same file's Remove — never to an element that is gone.
+- Each progress bar is a `role="progressbar"` named after the file (“Uploading receipt.pdf”).
+- Additions, rejections, removals and status changes (start, sent, failed) are announced in a polite `role="status"` region, without moving focus. Progress ticks are **not** announced.
+- The error icon is decorative; the message is text. The zone's focus also shows in high contrast mode (`forced-colors`).
+
+### Consumer responsibilities
+
+- Report sending with `setFileStatus()`. Without it, the file stays selected forever and screen reader users cannot tell whether it was sent.
+- Write failure messages that say what to do (“Check your connection and retry”), not just “Failed”.
+- Decide and say when sending happens: on selection or through a send button. If on selection, say so in `description`.
+- When a file is removed while sending, cancel its request (it comes in `removed` on `lui-change`).
+- Re-check type, size, count and content on the server.
+- Do not promise resuming an interrupted upload or keeping files after a reload unless the backend really supports it.
+
+</Lang>
+
+<Lang lang="pt-BR">
+## Uso
+
+### Web Component
+
+```html
+<lui-file-upload
+  name="attachments"
+  multiple
+  accept=".pdf,.png"
+  max-size="5242880"
+  max-files="3"
+></lui-file-upload>
+
+<script>
+  const field = document.querySelector('lui-file-upload');
+  field.addEventListener('lui-change', (event) => {
+    console.log(event.detail.files);
+  });
+  field.addEventListener('lui-error', (event) => {
+    console.log(event.detail.reason, event.detail.message);
+  });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="file-upload">
+  <label class="file-upload__zone">
+    <input
+      class="file-upload__input"
+      type="file"
+      name="attachments"
+      multiple
+      accept=".pdf,.png"
+    />
+    <span class="file-upload__icon" aria-hidden="true"><!-- ícone --></span>
+    <span class="file-upload__instructions">
+      <span class="file-upload__title">Upload files</span>
+      <span class="file-upload__description">Click to browse</span>
+    </span>
+    <span class="file-upload__constraints">PDF, PNG · Up to 5 MB</span>
+  </label>
+</div>
+```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-file-upload
+  name="attachments"
+  multiple
+  accept=".pdf,.png"
+  max-size="5242880"
+  max-files="3"
+></lui-file-upload>
+
+<script>
+  const field = document.querySelector('lui-file-upload');
+  field.addEventListener('lui-change', (event) => {
+    console.log(event.detail.files);
+  });
+  field.addEventListener('lui-error', (event) => {
+    console.log(event.detail.reason, event.detail.message);
+  });
+</script>
+```
+
+### CSS class
+
+```html
+<div class="file-upload">
+  <label class="file-upload__zone">
+    <input
+      class="file-upload__input"
+      type="file"
+      name="attachments"
+      multiple
+      accept=".pdf,.png"
+    />
+    <span class="file-upload__icon" aria-hidden="true"><!-- icon --></span>
+    <span class="file-upload__instructions">
+      <span class="file-upload__title">Upload files</span>
+      <span class="file-upload__description">Click to browse</span>
+    </span>
+    <span class="file-upload__constraints">PDF, PNG · Up to 5 MB</span>
+  </label>
+</div>
+```
+
+</Lang>

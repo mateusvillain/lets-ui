@@ -13,6 +13,7 @@
  * Keys are the exact `storyName` strings from the `*.stories.*` files.
  */
 export const storyNamesEn = {
+  'Arrastando arquivos': 'Dragging files',
   'Ação destrutiva': 'Destructive action',
   'Botão alternável (aria-pressed)': 'Toggle button (aria-pressed)',
   Carregando: 'Loading',
@@ -39,10 +40,13 @@ export const storyNamesEn = {
   Divisor: 'Divider',
   'Em parágrafo': 'In a paragraph',
   'Em tabela': 'In a table',
+  'Envio com botão Send': 'Sending with a Send button',
   Erro: 'Error',
   'Erro de sistema (announce="assertive")':
     'System error (announce="assertive")',
+  'Estados de envio': 'Upload states',
   'Evento lui-complete': 'lui-complete event',
+  'Eventos lui-change e lui-error': 'lui-change and lui-error events',
   'Evento lui-page-change': 'lui-page-change event',
   'Evento lui-step-change': 'lui-step-change event',
   'Evento lui-toggle': 'lui-toggle event',
@@ -96,6 +100,7 @@ export const storyNamesEn = {
   'Status em cada tamanho': 'Status in every size',
   Tamanhos: 'Sizes',
   'Texto do status': 'Status text',
+  'Tipos restritos': 'Restricted types',
   'Todos os tamanhos': 'All sizes',
   'Trigger customizado (slot)': 'Custom trigger (slot)',
   'Trigger de Dropdown Menu': 'Dropdown Menu trigger',
@@ -105,6 +110,7 @@ export const storyNamesEn = {
   'Valores e situação': 'Values and status',
   'Variante bordered': 'bordered variant',
   'Variante highlighted': 'highlighted variant',
+  'Vários arquivos': 'Multiple files',
 };
 
 /**
@@ -148,7 +154,6 @@ export const storyNamesPt = {
   Dismissible: 'Dispensável',
   'Dismissible with actions': 'Dispensável com ações',
   'Dismissible — all variants': 'Dispensável — todas as variantes',
-  'Drag Active': 'Arrastando arquivos',
   End: 'Fim',
   Error: 'Erro',
   'Error State': 'Estado de erro',
@@ -179,7 +184,6 @@ export const storyNamesPt = {
   'Long Lines': 'Linhas longas',
   'Min and max': 'Mínimo e máximo',
   'Multi Line': 'Várias linhas',
-  'Multiple Files': 'Vários arquivos',
   'Multiple Keys': 'Várias teclas',
   'Narrow Sidebar': 'Sidebar estreita',
   'No Avatar': 'Sem avatar',
@@ -197,10 +201,8 @@ export const storyNamesPt = {
   'Raw CSS fallback': 'Fallback com CSS bruto',
   Rectangle: 'Retângulo',
   Required: 'Obrigatório',
-  'Restricted Accept': 'Tipos restritos',
   'Resize: None': 'Redimensionar: nenhum',
   Scrollable: 'Rolável',
-  'Send Recipe': 'Receita de envio',
   'Single Key': 'Tecla única',
   'Single Line': 'Linha única',
   'Size Lg': 'Tamanho Lg',
@@ -225,7 +227,6 @@ export const storyNamesPt = {
   'Typed entry': 'Entrada digitada',
   Underline: 'Sublinhado',
   'Unavailable dates': 'Datas indisponíveis',
-  'Upload States': 'Estados de envio',
   Variants: 'Variantes',
   'Vertical With Label': 'Vertical com rótulo',
   'Via label': 'Via label',

@@ -30,7 +30,8 @@
     text-align: center;
     cursor: pointer;
 
-    &:disabled {
+    &:disabled,
+    .file-upload--disabled & {
       cursor: not-allowed;
     }
 
@@ -38,13 +39,17 @@
       outline: none;
     }
 
-    &:focus-visible {
+    // Without the Web Component the zone is a <label> around the native
+    // input, which is what takes focus — so the ring follows it.
+    &:focus-visible,
+    &:has(.file-upload__input:focus-visible) {
       border-color: stroke(primary);
       box-shadow: focus-ring(primary);
     }
 
     @media (forced-colors: active) {
-      &:focus-visible {
+      &:focus-visible,
+      &:has(.file-upload__input:focus-visible) {
         outline: width(2) solid CanvasText;
         outline-offset: width(2);
       }
@@ -119,7 +124,8 @@
     @include state-border-base(stroke(danger));
   }
 
-  &--error &__zone:focus-visible {
+  &--error &__zone:focus-visible,
+  &--error &__zone:has(.file-upload__input:focus-visible) {
     border-color: stroke(danger);
     box-shadow: focus-ring(danger);
   }
@@ -131,6 +137,17 @@
   // State: disabled ---------------------------------------------------------
   &--disabled {
     opacity: opacity(disabled);
+  }
+
+  // Kept for keyboard and screen reader users, out of sight. The Web
+  // Component hides its own input entirely and opens it from the zone.
+  &__input {
+    @include sr-only;
+
+    // The zone draws the ring; the 1px input would add a stray dot.
+    &:focus {
+      outline: none;
+    }
   }
 
   // File list ---------------------------------------------------------------
@@ -245,7 +262,7 @@
 
 // Hover and press come last: they mix into whatever resting border the state
 // modifiers above set through `--lui-border`.
-.file-upload__zone:enabled {
+.file-upload:not(.file-upload--disabled) .file-upload__zone:not(:disabled) {
   &:hover {
     border-color: state-border(hover);
 
