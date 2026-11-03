@@ -3,26 +3,26 @@ title: "Code"
 order: 4
 ---
 
-## Tecla única
+## Single key
 
-Use quando o atalho corresponde a uma única tecla — como teclas de ação (`Enter`, `Esc`, `Tab`). Ideal para indicar confirmação ou cancelamento em formulários e modais.
+Use it when the shortcut is a single key — such as action keys (`Enter`, `Esc`, `Tab`). Ideal for indicating confirmation or cancellation in forms and modals.
 
-## Múltiplas teclas
+## Multiple keys
 
-Use quando o atalho exige uma combinação de teclas simultâneas. Passe as teclas separadas por vírgula no atributo `keys` (ex.: `keys="Ctrl,K"`). A ordem deve seguir a convenção da plataforma: modificadores primeiro (`Ctrl`, `Shift`, `Cmd`, `Alt`), depois a tecla principal.
+Use it when the shortcut requires a combination of keys pressed together. Pass the keys separated by commas in the `keys` attribute (e.g. `keys="Ctrl,K"`). The order should follow the platform convention: modifiers first (`Ctrl`, `Shift`, `Cmd`, `Alt`), then the main key.
 
-## Em contexto
+## In context
 
-Combine com listas de ações ou menus para documentar atalhos disponíveis na interface. O componente se alinha naturalmente em layouts `flex` com `justify-content: space-between`.
+Combine it with action lists or menus to document the shortcuts available in the interface. The component aligns naturally in `flex` layouts with `justify-content: space-between`.
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `keys` | `string` | `''` |
 | `aria-label` | `string` | `''` |
 
-## Uso
+## Usage
 
 ### Web Component
 
@@ -30,7 +30,7 @@ Combine com listas de ações ou menus para documentar atalhos disponíveis na i
 <lui-shortcut keys="⌘,K"></lui-shortcut>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <span class="shortcut">

@@ -1,59 +1,59 @@
 ---
 title: "Scroll Area"
-subtitle: "Região com rolagem, com indicadores de conteúdo oculto e acessível por teclado."
+subtitle: "Scrollable region with indicators for hidden content, accessible by keyboard."
 order: 10
 ---
 
 <ComponentEmbed component="ScrollArea" variant="vertical" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Listas longas em painéis">
-  Itens que não cabem na altura de um painel ou de uma área lateral.
+<DosDonts variant="do" title="Long lists in panels">
+  Items that do not fit in the height of a panel or a side area.
 </DosDonts>
 
-<DosDonts variant="do" title="Trechos de código">
-  Linhas longas que rolam sem quebrar o layout.
+<DosDonts variant="do" title="Code snippets">
+  Long lines that scroll without breaking the layout.
 </DosDonts>
 
-<DosDonts variant="do" title="Carrosséis">
-  Conteúdo que rola dentro de um espaço fixo.
+<DosDonts variant="do" title="Carousels">
+  Content that scrolls within a fixed space.
 </DosDonts>
 
-<DosDonts variant="dont" title="A página inteira">
-  Deixe a rolagem do navegador cuidar.
+<DosDonts variant="dont" title="The whole page">
+  Let the browser's scrolling handle it.
 </DosDonts>
 
-<DosDonts variant="dont" title="Evitar rolagem horizontal em tabelas">
-  A [Table](../../content/table/index.mdx) já cuida da rolagem dela.
+<DosDonts variant="dont" title="Avoiding horizontal scrolling in tables">
+  [Table](../../content/table/index.mdx) already handles its own scrolling.
 </DosDonts>
 
-<DosDonts variant="dont" title="Esconder conteúdo importante">
-  Conteúdo que exige rolagem pode passar despercebido.
+<DosDonts variant="dont" title="Hiding important content">
+  Content that requires scrolling can go unnoticed.
 </DosDonts>
 
-## Opções
+## Options
 
-| Opção | O que controla |
+| Option | What it controls |
 | --- | --- |
-| `orientation` | Eixo da rolagem: vertical (padrão) ou horizontal. |
-| `scrollbar-visibility` | Quando a barra aparece: `auto`, `always`, `hover` ou `hidden`. |
-| `fade` | Gradiente nas bordas, na cor do fundo, que indica conteúdo oculto. |
-| `scroll-shadow` | Sombra nas bordas, que funciona sobre qualquer fundo. |
-| `snap` | A rolagem "encaixa" nos itens, bom para carrosséis. |
-| `overscroll` | Impede que a rolagem passe para a página ao chegar ao limite. |
-| `height`, `max-height`, `max-width` | O tamanho da região. |
+| `orientation` | Scroll axis: vertical (default) or horizontal. |
+| `scrollbar-visibility` | When the scrollbar appears: `auto`, `always`, `hover` or `hidden`. |
+| `fade` | Gradient at the edges, in the background color, that signals hidden content. |
+| `scroll-shadow` | Shadow at the edges, which works on any background. |
+| `snap` | Scrolling "snaps" to the items, good for carousels. |
+| `overscroll` | Prevents scrolling from passing to the page when it reaches the limit. |
+| `height`, `max-height`, `max-width` | The size of the region. |
 
-## Indicadores de rolagem
+## Scroll indicators
 
-Os indicadores mostram que há **mais conteúdo** além da borda visível. Eles aparecem e somem sozinhos conforme a rolagem.
+The indicators show that there is **more content** past the visible edge. They appear and disappear on their own as you scroll.
 
 <ComponentEmbed component="ScrollArea" variant="faded" />
 
 <ComponentEmbed component="ScrollArea" variant="shadow" />
 
-## Relacionados
+## Related
 
-- [Table](../../content/table/index.mdx): rolagem de tabelas.
-- [Sidebar](../sidebar/index.mdx): painéis laterais com rolagem.
+- [Table](../../content/table/index.mdx): table scrolling.
+- [Sidebar](../sidebar/index.mdx): side panels with scrolling.
 - [Drawer](../../content/drawer/index.mdx).

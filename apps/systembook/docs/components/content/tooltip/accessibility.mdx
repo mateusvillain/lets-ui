@@ -3,33 +3,33 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Foca o gatilho, e o Tooltip aparece. |
-| `Esc` | Fecha o Tooltip aberto, sem mover o ponteiro nem o foco. |
+| `Tab` | Focuses the trigger, and the Tooltip appears. |
+| `Esc` | Closes the open Tooltip, without moving the pointer or the focus. |
 
-O Tooltip aparece tanto no hover quanto no foco por teclado, e some quando o foco sai.
+The Tooltip appears both on hover and on keyboard focus, and disappears when focus leaves.
 
-## Fechar, passar o ponteiro e movimento
+## Dismissing, hovering and motion
 
-- **`Esc` fecha o Tooltip** sem mover o ponteiro nem o foco (WCAG 1.4.13). Ele volta a aparecer na próxima vez que o ponteiro entrar no gatilho ou que o gatilho receber foco.
-- **Um `Esc` que fecha o Tooltip é consumido.** Se o Tooltip está dentro de um [Modal](../modal/index.mdx) ou [Drawer](../drawer/index.mdx), a janela só fecha no `Esc` seguinte.
-- Um `Esc` que faz parte de uma composição de texto (IME), ou uma tecla mantida pressionada, é ignorado: não fecha o Tooltip nem é consumido.
-- **O ponteiro pode passar do gatilho para o balão** sem que ele suma (WCAG 1.4.13), inclusive pelo espaço entre os dois, em qualquer posição.
-- **Com "reduzir movimento" ativo** (`prefers-reduced-motion: reduce`), o Tooltip aparece e some sem transição (WCAG 2.3.3).
+- **`Esc` closes the Tooltip** without moving the pointer or the focus (WCAG 1.4.13). It appears again the next time the pointer enters the trigger or the trigger receives focus.
+- **An `Esc` that closes the Tooltip is consumed.** If the Tooltip is inside a [Modal](../modal/index.mdx) or [Drawer](../drawer/index.mdx), the window only closes on the following `Esc`.
+- An `Esc` that is part of a text composition (IME), or a key held down, is ignored: it does not close the Tooltip and is not consumed.
+- **The pointer can move from the trigger to the bubble** without it disappearing (WCAG 1.4.13), including across the gap between the two, in any position.
+- **With "reduce motion" on** (`prefers-reduced-motion: reduce`), the Tooltip appears and disappears without a transition (WCAG 2.3.3).
 
-## Leitor de tela
+## Screen reader
 
-- O balão é anunciado como **dica** (`tooltip`) e está ligado ao gatilho com `aria-describedby`, então o texto é lido como **descrição** do elemento.
-- O gatilho precisa ser **focável**. Se o conteúdo que você colocar não for, o Tooltip torna o contêiner focável.
-- O Tooltip não substitui o nome acessível do elemento. Um Icon Button continua precisando de `aria-label`.
-- **Um texto igual ao nome do gatilho não vira descrição.** Quando o texto repete o nome do controle (ignorando maiúsculas e espaços), o Tooltip não o liga como descrição, e o leitor de tela anuncia "Excluir item, botão" uma vez só. Se o texto ou o nome mudar depois, a descrição acompanha.
-- Enquanto o Tooltip descreve o gatilho, o texto do balão fica fora da árvore de acessibilidade, para não ser lido de novo na navegação por leitura.
+- The bubble is announced as a **tooltip** (`tooltip`) and is linked to the trigger with `aria-describedby`, so the text is read as the element's **description**.
+- The trigger must be **focusable**. If the content you put in it is not, the Tooltip makes the container focusable.
+- The Tooltip does not replace the element's accessible name. An Icon Button still needs an `aria-label`.
+- **Text identical to the trigger's name does not become a description.** When the text repeats the control's name (ignoring case and spaces), the Tooltip does not link it as a description, and the screen reader announces "Delete item, button" only once. If the text or the name changes later, the description follows.
+- While the Tooltip describes the trigger, the bubble text is kept out of the accessibility tree, so it is not read again when browsing in reading mode.
 
-## Para designers
+## For designers
 
-- Garanta contraste de 4,5:1 entre o texto do balão e o fundo.
-- Não use o Tooltip como único meio de transmitir informação.
-- Pense na alternativa para quem usa toque: onde o texto aparece?
+- Ensure a contrast of 4.5:1 between the bubble text and the background.
+- Do not use the Tooltip as the only way to convey information.
+- Think of the alternative for touch users: where does the text appear?

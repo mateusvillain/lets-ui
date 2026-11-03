@@ -1,0 +1,45 @@
+---
+title: "Inline"
+subtitle: "Dispõe elementos lado a lado e quebra para a linha seguinte quando falta espaço."
+---
+
+<ComponentEmbed component="Inline" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Elementos pequenos em fila">
+  Grupos de [Tags](../../content/tag/index.mdx), filtros aplicados ou ícones.
+</DosDonts>
+
+<DosDonts variant="do" title="Grupos de ações">
+  Botões lado a lado que quebram de linha quando falta espaço.
+</DosDonts>
+
+<DosDonts variant="dont" title="Elementos que devem ficar sempre em coluna">
+  Use [Stack](../stack/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Alinhar conteúdo em colunas de largura definida">
+  Use [Grid](../grid/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Alternar entre coluna e linha conforme o espaço">
+  Use [Switcher](../switcher/index.mdx).
+</DosDonts>
+
+## Opções
+
+| Opção | O que controla | Padrão |
+| --- | --- | --- |
+| `gap` (`gap-x`, `gap-y`) | Espaço entre os itens. | 8 |
+| `align` | Alinhamento vertical. | Centro |
+| `justify` | Distribuição horizontal. | Início |
+| `wrap` | Se os itens quebram de linha. | Quebra |
+
+<ComponentEmbed component="Inline" variant="spread" />
+
+## Relacionados
+
+- [Stack](../stack/index.mdx): na vertical.
+- [Flex](../flex/index.mdx): controle total de flexbox.
+- [Button](../../actionable/button/index.mdx), [Tag](../../content/tag/index.mdx): o que costuma ficar dentro.

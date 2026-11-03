@@ -1,11 +1,11 @@
 ---
 title: "Functions"
-subtitle: "Funções SCSS definidas em `packages/styles/src/utilities/_functions.scss`. Use-as nos componentes para acessar tokens de design de forma segura — cada função valida o argumento e lança um erro de compilação se o valor não existir no mapa de tokens."
+subtitle: "SCSS functions defined in `packages/styles/src/utilities/_functions.scss`. Use them in components to reach design tokens safely — each function validates its argument and throws a compile error if the value does not exist in the token map."
 order: 1
 ---
 
 ```scss
-// No arquivo de componente
+// In the component file
 @use '../utilities/functions' as *;
 
 .my-component {
@@ -16,20 +16,20 @@ order: 1
 }
 ```
 
-## Cores
+## Colors
 
-| Função | Descrição | Parâmetros |
+| Function | Description | Parameters |
 | --- | --- | --- |
-| `bg($category, $variant)` | Cor de fundo semântica. | `$category`: `surface`, `container` · `$variant`: `primary`, `secondary`, `info`, `danger`, `success`, `caution`, `neutral`, `overlay` (só em `container`) |
-| `text($variant)` | Cor de texto semântica. | `$variant`: `heading`, `body`, `caption`, `primary`, `inverse`, `error`, `link`, `link-visited` |
-| `stroke($variant, $category?)` | Cor de borda semântica. | `$variant`: `primary`, `secondary`, `caution`, `danger`, `info`, `success`, `neutral` · `$category`: `default` (padrão), `subtle`, `hover`, `pressed` |
-| `icon($variant)` | Cor de ícone semântica. | `$variant`: `primary`, `secondary`, `info`, `danger`, `success`, `caution`, `neutral`, `inverse` |
-| `color($category, $scale)` | Cor primitiva da paleta. | `$category`: `primary`, `secondary`, `blue`, `gray`, `green`, `orange`, `red`, `violet` · `$scale`: `1` a `8` |
-| `state($state, $bg?)` | Fundo do componente no estado: a tinta misturada ao fundo de repouso. | `$state`: `hover`, `pressed` |
-| `tint($role)` | Tinta de estado de um componente preenchido, para o parâmetro `$tint` de `states()`, `state-layer()` e `state-base()`. São os extremos da escala neutra e se invertem com o tema. | `$role`: `foreground` (quase preto no claro, quase branco no escuro), `background` (o oposto) |
-| `state-amount($state)` | Quanto da tinta misturar. | `$state`: `hover`, `pressed` |
+| `bg($category, $variant)` | Semantic background color. | `$category`: `surface`, `container` · `$variant`: `primary`, `secondary`, `info`, `danger`, `success`, `caution`, `neutral`, `overlay` (only in `container`) |
+| `text($variant)` | Semantic text color. | `$variant`: `heading`, `body`, `caption`, `primary`, `inverse`, `error`, `link`, `link-visited` |
+| `stroke($variant, $category?)` | Semantic border color. | `$variant`: `primary`, `secondary`, `caution`, `danger`, `info`, `success`, `neutral` · `$category`: `default` (default), `subtle`, `hover`, `pressed` |
+| `icon($variant)` | Semantic icon color. | `$variant`: `primary`, `secondary`, `info`, `danger`, `success`, `caution`, `neutral`, `inverse` |
+| `color($category, $scale)` | Primitive palette color. | `$category`: `primary`, `secondary`, `blue`, `gray`, `green`, `orange`, `red`, `violet` · `$scale`: `1` to `8` |
+| `state($state, $bg?)` | Component background in a state: the tint mixed into the resting background. | `$state`: `hover`, `pressed` |
+| `tint($role)` | State tint of a filled component, for the `$tint` parameter of `states()`, `state-layer()` and `state-base()`. They are the ends of the neutral scale and flip with the theme. | `$role`: `foreground` (near black in light, near white in dark), `background` (the opposite) |
+| `state-amount($state)` | How much of the tint to mix. | `$state`: `hover`, `pressed` |
 
-### Exemplo de uso — cores
+### Usage example — colors
 
 ```scss
 .alert--danger {
@@ -43,11 +43,11 @@ order: 1
 .btn--primary {
   color: text(inverse);
 
-  // A camada de estado é a mesma para toda variante e marca: o fundo de
-  // repouso entra pelo mixin e as regras de estado misturam nele uma tinta.
-  // Num componente preenchido, essa tinta é a cor oposta à do rótulo, para o
-  // fundo se afastar do texto e o contraste subir no hover e no pressed.
-  // `states()` já embute a camada; `$tint` troca a tinta.
+  // The state layer is the same for every variant and brand: the resting
+  // background comes in through the mixin and the state rules mix a tint into it.
+  // In a filled component, that tint is the color opposite to the label, so the
+  // background moves away from the text and contrast goes up on hover and pressed.
+  // `states()` already includes the layer; `$tint` swaps the tint.
   @include state-layer(bg(container, primary), tint(foreground));
 
   &:hover {
@@ -62,20 +62,20 @@ order: 1
 }
 ```
 
-## Borda
+## Border
 
-| Função | Valor | Uso |
+| Function | Value | Use |
 | --- | --- | --- |
-| `radius($size)` | `none` | Sem arredondamento. |
+| `radius($size)` | `none` | No rounding. |
 | | `xs` | Tags, badges, chips. |
-| | `sm` | Botões, inputs. |
-| | `md` | Cards, modais. |
-| | `lg` | Drawers, superfícies grandes. |
-| | `xl` | Contêineres de destaque. |
-| | `circle` | Avatares, ícones circulares. |
-| `width($size)` | `0` | Sem borda. |
-| | `1` | Borda padrão, 1px. |
-| | `2` | Ênfase e foco, 2px. |
+| | `sm` | Buttons, inputs. |
+| | `md` | Cards, modals. |
+| | `lg` | Drawers, large surfaces. |
+| | `xl` | Highlight containers. |
+| | `circle` | Avatars, circular icons. |
+| `width($size)` | `0` | No border. |
+| | `1` | Default border, 1px. |
+| | `2` | Emphasis and focus, 2px. |
 
 ```scss
 .card    { border-radius: radius(md); border-width: width(1); }
@@ -83,12 +83,12 @@ order: 1
 .focused { border-width: width(2); }
 ```
 
-## Espaçamento
+## Spacing
 
 | fn | desc | values |
 | --- | --- | --- |
-| fixed($size) | Espaçamento fixo em px | 0,8,16,24,32,40 |
-| fluid($size) | Espaçamento fluido com clamp() | 2,4,8,12,16,20,24,32,40,48,56,64,72,80 |
+| fixed($size) | Fixed spacing in px | 0,8,16,24,32,40 |
+| fluid($size) | Fluid spacing with clamp() | 2,4,8,12,16,20,24,32,40,48,56,64,72,80 |
 
 ```scss
 .section { padding: fluid(40); }
@@ -96,10 +96,10 @@ order: 1
 ```
 
 <Callout variant="tip">
-Use `fluid()` para espaçamentos de layout (margens, gaps entre blocos) e `fixed()` para espaçamentos internos de componentes que não devem mudar com o viewport.
+Use `fluid()` for layout spacing (margins, gaps between blocks) and `fixed()` for the inner spacing of components that should not change with the viewport.
 </Callout>
 
-## Tipografia
+## Typography
 
 | fn | prop | values |
 | --- | --- | --- |
@@ -120,19 +120,19 @@ Use `fluid()` para espaçamentos de layout (margens, gaps entre blocos) e `fixed
 ```
 
 <Callout variant="tip">
-Para aplicar escalas tipográficas completas, prefira o mixin `font-scale($scale-name)`.
+To apply full type scales, prefer the `font-scale($scale-name)` mixin.
 </Callout>
 
-## Estados e elevação
+## States and elevation
 
 | fn | desc | values |
 | --- | --- | --- |
-| focus-ring($variant) | Box-shadow de foco | primary,secondary,danger,success,neutral |
-| elevation($layer) | Box-shadow de elevação | base,hovered,floating,overlay |
-| opacity($category) | Opacidade semântica | disabled,hidden,visible |
-| breakpoint($name) | Valor de breakpoint responsivo | 1xs (767px, teto),sm (768px),md (1024px),lg (1280px),1xl (1440px) |
-| step-above($name) | Próximo step da escala de breakpoints | 1xs,sm,md,lg |
-| grid($category, $name) | Valor da tabela do grid | columns,gap,margin,container |
+| focus-ring($variant) | Focus box-shadow | primary,secondary,danger,success,neutral |
+| elevation($layer) | Elevation box-shadow | base,hovered,floating,overlay |
+| opacity($category) | Semantic opacity | disabled,hidden,visible |
+| breakpoint($name) | Responsive breakpoint value | 1xs (767px, ceiling),sm (768px),md (1024px),lg (1280px),1xl (1440px) |
+| step-above($name) | Next step of the breakpoint scale | 1xs,sm,md,lg |
+| grid($category, $name) | Value from the grid table | columns,gap,margin,container |
 
 ```scss
 .modal   { box-shadow: elevation(overlay); }
@@ -147,12 +147,11 @@ Para aplicar escalas tipográficas completas, prefira o mixin `font-scale($scale
 ```
 
 <Callout variant="tip">
-  Para responsividade, prefira os mixins `media-up()` e `media-down()` em vez de chamar `breakpoint()` diretamente. Eles são complementos exatos um do outro (`media-down()` vale estritamente abaixo do piso do step), enquanto um `max-width` escrito à mão costuma deixar uma fresta em larguras fracionárias.
+  For responsiveness, prefer the `media-up()` and `media-down()` mixins over calling `breakpoint()` directly. They are exact complements of each other (`media-down()` applies strictly below the step's floor), while a hand-written `max-width` tends to leave a gap at fractional widths.
 </Callout>
 
-`breakpoint()` e `grid(columns, …)` são as duas únicas funções que devolvem um
-valor literal em vez de um `var()`. Elas são lidas em tempo de compilação — por
-um prelúdio de media query e pelo `@for` que gera as classes `.col-*` — e nenhum
-dos dois consegue ler uma custom property. As demais categorias de `grid()`
-(`gap`, `margin`, `container`) devolvem `var()` e continuam acompanhando
-`data-brand` em runtime.
+`breakpoint()` and `grid(columns, …)` are the only two functions that return a
+literal value instead of a `var()`. They are read at compile time — by a media
+query prelude and by the `@for` that generates the `.col-*` classes — and
+neither can read a custom property. The other `grid()` categories (`gap`,
+`margin`, `container`) return `var()` and keep following `data-brand` at runtime.

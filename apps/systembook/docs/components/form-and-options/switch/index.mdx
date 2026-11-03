@@ -1,58 +1,58 @@
 ---
 title: "Switch"
-subtitle: "Liga ou desliga uma configuração, com efeito imediato."
+subtitle: "Turns a setting on or off, with immediate effect."
 order: 7
 ---
 
 <ComponentEmbed component="Switch" variant="off" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Efeito imediato">
-  A mudança passa a valer na hora, sem um botão "Salvar".
+<DosDonts variant="do" title="Immediate effect">
+  The change takes effect right away, without a "Save" button.
 </DosDonts>
 
-<DosDonts variant="do" title="Preferências de ligar e desligar">
-  Notificações, modo escuro ou recursos opcionais.
+<DosDonts variant="do" title="On and off preferences">
+  Notifications, dark mode or optional features.
 </DosDonts>
 
-<DosDonts variant="dont" title="Escolhas que só valem ao enviar um formulário">
-  Use o [Checkbox](../checkbox/index.mdx).
+<DosDonts variant="dont" title="Choices that only apply when a form is submitted">
+  Use the [Checkbox](../checkbox/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Duas opções com nomes diferentes">
-  Para escolher entre "Mensal" ou "Anual", por exemplo, use o [Radio Group](../radio-group/index.mdx).
+<DosDonts variant="dont" title="Two options with different names">
+  To choose between "Monthly" or "Yearly", for example, use the [Radio Group](../radio-group/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Selecionar vários itens de uma lista">
+<DosDonts variant="dont" title="Selecting several items from a list">
   Use Checkboxes.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Switch: trilho, marcador e label](./anatomy.png)
+![Switch anatomy: track, thumb and label](./anatomy.png)
 
-1. **Trilho**: a base do controle.
-2. **Marcador**: o círculo que desliza. Sua posição mostra o estado.
-3. **Label**: descreve o que o Switch controla.
+1. **Track**: the base of the control.
+2. **Thumb**: the circle that slides. Its position shows the state.
+3. **Label**: describes what the Switch controls.
 
-## Estados
+## States
 
-| Estado | Descrição |
+| State | Description |
 | --- | --- |
-| **Desligado** | O recurso está desativado. |
-| **Ligado** | O recurso está ativo. |
-| **Foco** | Anel de foco ao navegar por teclado. |
-| **Erro** | O estado ligado é obrigatório e não foi ativado. |
-| **Desabilitado** | O controle não pode ser alterado agora. |
+| **Off** | The feature is turned off. |
+| **On** | The feature is active. |
+| **Focus** | Focus ring when navigating by keyboard. |
+| **Error** | The on state is required and was not turned on. |
+| **Disabled** | The control cannot be changed right now. |
 
 <ComponentEmbed component="Switch" variant="on" />
 
-## Tamanhos
+## Sizes
 
-`lg` (padrão) e `md`.
+`lg` (default) and `md`.
 
-## Relacionados
+## Related
 
-- [Checkbox](../checkbox/index.mdx): opção que só vale ao enviar o formulário.
-- [Radio Group](../radio-group/index.mdx): escolher entre opções nomeadas.
+- [Checkbox](../checkbox/index.mdx): an option that only applies when the form is submitted.
+- [Radio Group](../radio-group/index.mdx): choosing between named options.

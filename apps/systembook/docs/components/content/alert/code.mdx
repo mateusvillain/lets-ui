@@ -8,13 +8,13 @@ order: 4
 
 ## Dismissible
 
-Adicione o atributo `dismissible` para exibir um botão de fechar no canto do alert. Ao ser clicado, o componente emite o evento `lui-dismiss` — use-o para remover o alert do DOM ou atualizar o estado da aplicação.
+Add the `dismissible` attribute to show a close button in the corner of the alert. When clicked, the component emits the `lui-dismiss` event — use it to remove the alert from the DOM or update the application state.
 
-O label acessível do botão pode ser customizado com o atributo `close-label` (padrão: `"Close"`).
+The button's accessible label can be customized with the `close-label` attribute (default: `"Close"`).
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `variant` | `string` | `success` |
 | `title` | `string` | `''` |
@@ -22,12 +22,12 @@ O label acessível do botão pode ser customizado com o atributo `close-label` (
 | `dismissible` | `boolean` | `false` |
 | `close-label` | `string` | `Close` |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
-<lui-alert variant="info" title="Título" content="Informação importante"></lui-alert>
+<lui-alert variant="info" title="Title" content="Important information"></lui-alert>
 ```
 
 ### Dismissible
@@ -35,10 +35,10 @@ O label acessível do botão pode ser customizado com o atributo `close-label` (
 ```html
 <lui-alert
   variant="caution"
-  title="Atenção"
-  content="Esta ação não pode ser desfeita."
+  title="Warning"
+  content="This action cannot be undone."
   dismissible
-  close-label="Fechar alerta"
+  close-label="Close alert"
 ></lui-alert>
 
 <script>
@@ -48,13 +48,13 @@ O label acessível do botão pode ser customizado com o atributo `close-label` (
 </script>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="alert alert--info">
   <div class="alert__content">
     <div class="alert__text">
-      <p>Informação importante</p>
+      <p>Important information</p>
     </div>
   </div>
 </div>

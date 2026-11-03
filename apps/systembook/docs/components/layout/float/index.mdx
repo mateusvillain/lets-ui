@@ -1,49 +1,49 @@
 ---
 title: "Float"
-subtitle: "Posiciona um elemento sobre outro, em um canto ou borda, como uma insígnia ou um indicador."
+subtitle: "Positions one element over another, at a corner or edge, such as a badge or an indicator."
 order: 9
 ---
 
 <ComponentEmbed component="Float" variant="top-end" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Ponto de notificação">
-  Sobre um ícone, para indicar algo novo.
+<DosDonts variant="do" title="Notification dot">
+  Over an icon, to signal something new.
 </DosDonts>
 
-<DosDonts variant="do" title="Contagem sobre um avatar">
-  Uma insígnia com o número de itens.
+<DosDonts variant="do" title="Count over an avatar">
+  A badge with the number of items.
 </DosDonts>
 
-<DosDonts variant="do" title="Selo sobre uma imagem">
-  Um elemento pequeno no canto de uma foto ou capa.
+<DosDonts variant="do" title="Seal over an image">
+  A small element in the corner of a photo or cover.
 </DosDonts>
 
-<DosDonts variant="dont" title="Organizar conteúdo em fluxo">
-  Use [Stack](../stack/index.mdx), [Inline](../inline/index.mdx) ou [Flex](../flex/index.mdx).
+<DosDonts variant="dont" title="Arranging content in the flow">
+  Use [Stack](../stack/index.mdx), [Inline](../inline/index.mdx) or [Flex](../flex/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Janelas e painéis flutuantes">
-  Use [Modal](../../content/modal/index.mdx), [Drawer](../../content/drawer/index.mdx) ou [Tooltip](../../content/tooltip/index.mdx).
+<DosDonts variant="dont" title="Floating windows and panels">
+  Use [Modal](../../content/modal/index.mdx), [Drawer](../../content/drawer/index.mdx) or [Tooltip](../../content/tooltip/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Conteúdo importante que não pode ser coberto">
-  O Float sobrepõe, então pode esconder o que está embaixo.
+<DosDonts variant="dont" title="Important content that must not be covered">
+  Float overlaps, so it can hide what is underneath.
 </DosDonts>
 
-## Posições
+## Placements
 
-Nove posições, combinando **topo, meio e base** com **início, centro e fim** (`placement`). O padrão é `bottom-end`.
+Nine positions, combining **top, middle and bottom** with **start, center and end** (`placement`). The default is `bottom-end`.
 
 <ComponentEmbed component="Float" variant="bottom-end" />
 
-## Deslocamento
+## Offset
 
-`offset-x` e `offset-y` movem o elemento a partir da posição escolhida, em pixels. Use valores negativos para que ele "saia" do canto, como uma insígnia que ultrapassa o ícone.
+`offset-x` and `offset-y` move the element from the chosen position, in pixels. Use negative values to make it "stick out" of the corner, like a badge that extends past the icon.
 
-## Relacionados
+## Related
 
-- [Avatar](../../content/avatar/index.mdx): indicador de status.
-- [Tag](../../content/tag/index.mdx): rótulos.
-- [Icon Button](../../actionable/icon-button/index.mdx): insígnias de contagem.
+- [Avatar](../../content/avatar/index.mdx): status indicator.
+- [Tag](../../content/tag/index.mdx): labels.
+- [Icon Button](../../actionable/icon-button/index.mdx): count badges.

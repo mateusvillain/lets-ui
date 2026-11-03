@@ -3,39 +3,39 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Esc` | Fecha o Drawer e devolve o foco a quem o abriu. Com diálogos empilhados, fecha só o do topo. |
-| `Tab` / `Shift+Tab` | Percorre os elementos do painel. O foco fica **preso** dentro dele. |
-| `Enter` ou `Espaço` | Ativa o botão em foco. |
+| `Esc` | Closes the Drawer and returns focus to the element that opened it. With stacked dialogs, closes only the top one. |
+| `Tab` / `Shift+Tab` | Moves through the panel's elements. Focus stays **trapped** inside it. |
+| `Enter` or `Space` | Activates the focused button. |
 
-## Leitor de tela
+## Screen reader
 
-- O painel é anunciado como **diálogo modal**, com o título como nome.
-- A página atrás é inacessível enquanto o Drawer está aberto, e o foco não escapa dele.
-- O botão de fechar tem nome acessível (`close-label`, padrão "Close drawer"). Traduza para o idioma do produto.
-- Quando fechado, o painel fica fora da árvore de acessibilidade.
+- The panel is announced as a **modal dialog**, with the title as its name.
+- The page behind is inaccessible while the Drawer is open, and focus does not escape it.
+- The close button has an accessible name (`close-label`, default "Close drawer"). Translate it into the product's language.
+- When closed, the panel stays out of the accessibility tree.
 
-## Foco
+## Focus
 
-Ao abrir, o foco vai para dentro do painel. Ao fechar, volta ao elemento que o abriu, sem perder a posição.
+On opening, focus moves into the panel. On closing, it returns to the element that opened it, without losing the position.
 
-Isso vale para todo jeito de fechar: `Esc`, botão de fechar, backdrop, um elemento com `data-drawer-close`, `closeDrawer()` ou removendo `open`.
+This applies to every way of closing: `Esc`, the close button, the backdrop, an element with `data-drawer-close`, `closeDrawer()` or removing `open`.
 
-## Diálogos empilhados
+## Stacked dialogs
 
-Com um diálogo aberto sobre outro (um Modal aberto de dentro do Drawer, por exemplo), `Esc` fecha só o do topo, e só ele prende o foco. O foco volta ao gatilho dentro do diálogo que continua aberto, e um segundo `Esc` fecha o de baixo.
+With one dialog open over another (a Modal opened from inside the Drawer, for example), `Esc` closes only the top one, and only that one traps focus. Focus returns to the trigger inside the dialog that remains open, and a second `Esc` closes the one below.
 
-Um componente dentro do diálogo que usa `Esc`, como um [Dropdown Menu](../../actionable/dropdown-menu/index.mdx) aberto ou um Toast, consome a tecla: ela fecha esse componente, e o diálogo continua aberto.
+A component inside the dialog that uses `Esc`, such as an open [Dropdown Menu](../../actionable/dropdown-menu/index.mdx) or a Toast, consumes the key: it closes that component, and the dialog stays open.
 
-## Gatilho
+## Trigger
 
-O Drawer informa ao gatilho se está aberto (`aria-expanded`) e que abre um diálogo (`aria-haspopup`). Num [Button](../../actionable/button/index.mdx), [Icon Button](../../actionable/icon-button/index.mdx) ou [Link](../../navigation/link/index.mdx), o estado vai pela propriedade ARIA e chega ao controle interno, sem criar um nó extra na árvore de acessibilidade. O gatilho não recebe `aria-controls`: o ID do diálogo fica dentro do shadow root, e a referência não atravessa essa fronteira.
+The Drawer tells the trigger whether it is open (`aria-expanded`) and that it opens a dialog (`aria-haspopup`). On a [Button](../../actionable/button/index.mdx), [Icon Button](../../actionable/icon-button/index.mdx) or [Link](../../navigation/link/index.mdx), the state goes through the ARIA property and reaches the inner control, without creating an extra node in the accessibility tree. The trigger does not get `aria-controls`: the dialog's ID lives inside the shadow root, and the reference does not cross that boundary.
 
-## Para designers
+## For designers
 
-- Dê sempre um título ao Drawer: é o nome que o leitor de tela anuncia.
-- Garanta que o painel funcione só com teclado, incluindo formulários e ações.
-- Não dependa só do backdrop para fechar: sempre ofereça um botão de fechar.
+- Always give the Drawer a title: it is the name the screen reader announces.
+- Make sure the panel works with the keyboard alone, including forms and actions.
+- Do not rely on the backdrop alone for closing: always offer a close button.

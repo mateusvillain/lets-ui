@@ -3,23 +3,23 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Move o foco para o botão. |
-| `Enter` ou `Espaço` | Fecha ou dispensa o elemento. |
+| `Tab` | Moves focus to the button. |
+| `Enter` or `Space` | Closes or dismisses the element. |
 
-Dentro de Modal e Drawer, `Esc` também fecha o elemento, e o foco volta para quem o abriu.
+Inside Modal and Drawer, `Esc` also closes the element, and focus returns to whatever opened it.
 
-## Leitor de tela
+## Screen reader
 
-- O botão é anunciado com o nome da propriedade `label` (padrão "Close"). Nunca deixe o `label` vazio.
-- O ícone X é decorativo e escondido da tecnologia assistiva.
-- Quando desabilitado, o botão é anunciado como indisponível.
+- The button is announced with the name from the `label` property (default "Close"). Never leave `label` empty.
+- The X icon is decorative and hidden from assistive technology.
+- When disabled, the button is announced as unavailable.
 
-## Para designers
+## For designers
 
-- Especifique o texto do `label` de cada uso, no idioma do produto.
-- Quando o Close Button estiver dentro de outro componente, esse componente é responsável por dar um `label` com sentido ("Fechar modal").
-- O botão é um `<button type="button">`, então não envia formulários por engano.
+- Specify the `label` text for each use, in the product's language.
+- When the Close Button sits inside another component, that component is responsible for giving it a meaningful `label` ("Close modal").
+- The button is a `<button type="button">`, so it does not submit forms by mistake.

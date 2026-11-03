@@ -1,65 +1,65 @@
 ---
 title: "Select"
-subtitle: "Lista suspensa para escolher uma opção entre várias, usando o seletor nativo do navegador."
+subtitle: "A drop-down list for choosing one option among several, using the browser's native picker."
 order: 6
 ---
 
 <ComponentEmbed component="Select" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Uma opção entre muitas">
-  Com mais de sete opções, como país, estado, fuso horário ou ano.
+<DosDonts variant="do" title="One option among many">
+  With more than seven options, such as country, state, time zone or year.
 </DosDonts>
 
-<DosDonts variant="do" title="Pouco espaço na tela">
-  Quando mostrar todas as opções ocuparia espaço demais.
+<DosDonts variant="do" title="Little room on the screen">
+  When showing every option would take up too much space.
 </DosDonts>
 
-<DosDonts variant="do" title="Formulários no celular">
-  Como usa o seletor nativo, funciona bem em celulares, com rolagem e busca por digitação.
+<DosDonts variant="do" title="Forms on mobile">
+  Since it uses the native picker, it works well on phones, with scrolling and type-to-search.
 </DosDonts>
 
-<DosDonts variant="dont" title="Poucas opções (até sete)">
-  Use o [Radio Group](../radio-group/index.mdx), que mostra todas de uma vez.
+<DosDonts variant="dont" title="Few options (up to seven)">
+  Use the [Radio Group](../radio-group/index.mdx), which shows them all at once.
 </DosDonts>
 
-<DosDonts variant="dont" title="Várias seleções">
+<DosDonts variant="dont" title="Multiple selections">
   Use [Checkboxes](../checkbox/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Lista com busca, tags ou conteúdo rico">
-  O Select nativo não faz isso.
+<DosDonts variant="dont" title="List with search, tags or rich content">
+  The native Select does not do that.
 </DosDonts>
 
-<DosDonts variant="dont" title="Ações em vez de valores">
-  Use o [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
+<DosDonts variant="dont" title="Actions instead of values">
+  Use the [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Select: label, marcador de opcional, campo, hint e mensagem de erro](./anatomy.png)
+![Select anatomy: label, optional marker, field, hint and error message](./anatomy.png)
 
-1. **Label**: nomeia o campo.
-2. **Marcador de opcional** (opcional).
-3. **Campo**: mostra a opção atual ou o placeholder, com uma seta.
-4. **Hint**: texto de apoio.
-5. **Mensagem de erro**: substitui o hint quando falta uma escolha.
+1. **Label**: names the field.
+2. **Optional marker** (optional).
+3. **Field**: shows the current option or the placeholder, with an arrow.
+4. **Hint**: helper text.
+5. **Error message**: replaces the hint when a choice is missing.
 
-## Estados
+## States
 
-Padrão, hover, foco, aberto, erro e desabilitado. O **placeholder** ("Selecione uma opção") não é uma escolha válida: com o campo obrigatório, ele precisa ser trocado por uma opção real.
+Default, hover, focus, open, error and disabled. The **placeholder** ("Select an option") is not a valid choice: when the field is required, it must be replaced by a real option.
 
 <ComponentEmbed component="Select" variant="hint" />
 
 <ComponentEmbed component="Select" variant="error" />
 
-## Tamanhos
+## Sizes
 
-`lg` (padrão) e `md`, como no [Input](../input/index.mdx).
+`lg` (default) and `md`, as in the [Input](../input/index.mdx).
 
-## Relacionados
+## Related
 
-- [Radio Group](../radio-group/index.mdx): poucas opções visíveis.
-- [Input](../input/index.mdx): resposta livre.
-- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx): ações em vez de valores.
+- [Radio Group](../radio-group/index.mdx): a few visible options.
+- [Input](../input/index.mdx): free-form answer.
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx): actions instead of values.

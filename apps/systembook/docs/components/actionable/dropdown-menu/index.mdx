@@ -1,71 +1,71 @@
 ---
 title: "Dropdown Menu"
-subtitle: "Menu flutuante que reúne ações relacionadas atrás de um único gatilho."
+subtitle: "A floating menu that gathers related actions behind a single trigger."
 order: 4
 ---
 
 <ComponentEmbed component="DropdownMenu" variant="closed" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Várias ações relacionadas">
-  Ações que ocupariam espaço demais se ficassem todas visíveis.
+<DosDonts variant="do" title="Several related actions">
+  Actions that would take up too much space if they were all visible.
 </DosDonts>
 
-<DosDonts variant="do" title="Menu de conta">
-  As opções da conta agrupadas atrás de um único gatilho.
+<DosDonts variant="do" title="Account menu">
+  The account options grouped behind a single trigger.
 </DosDonts>
 
-<DosDonts variant="do" title="Mais opções de um item">
-  O "Mais opções" de uma linha de tabela ou as ações de um documento.
+<DosDonts variant="do" title="More options for an item">
+  The "More options" of a table row or the actions of a document.
 </DosDonts>
 
-O gatilho é livre: pode ser um [Button](../button/index.mdx), um [Icon Button](../icon-button/index.mdx) ou um link.
+The trigger is up to you: it can be a [Button](../button/index.mdx), an [Icon Button](../icon-button/index.mdx) or a link.
 
-<DosDonts variant="dont" title="Duas ou menos ações">
-  Mostre os botões diretamente.
+<DosDonts variant="dont" title="Two actions or fewer">
+  Show the buttons directly.
 </DosDonts>
 
-<DosDonts variant="dont" title="Navegação principal do site">
-  Use uma barra de navegação ou [Tabs](../../navigation/tabs/index.mdx).
+<DosDonts variant="dont" title="Main site navigation">
+  Use a navigation bar or [Tabs](../../navigation/tabs/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Escolher um valor em um formulário">
-  Use o [Select](../../form-and-options/select/index.mdx).
+<DosDonts variant="dont" title="Choosing a value in a form">
+  Use the [Select](../../form-and-options/select/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Conteúdo rico ou formulários">
-  Menus são para ações curtas; para mais, use um Modal ou Drawer.
+<DosDonts variant="dont" title="Rich content or forms">
+  Menus are for short actions; for more, use a Modal or Drawer.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Dropdown Menu: gatilho, painel, item, divisor, atalho e indicador de submenu](./anatomy.png)
+![Dropdown Menu anatomy: trigger, panel, item, divider, shortcut and submenu indicator](./anatomy.png)
 
-1. **Gatilho**: o elemento que abre e fecha o menu.
-2. **Painel**: a superfície flutuante com elevação.
-3. **Item**: uma ação, com rótulo.
-4. **Divisor**: separa grupos de ações.
-5. **Atalho** (opcional): o atalho de teclado da ação.
-6. **Submenu** (opcional): um segundo nível, indicado por uma seta.
+1. **Trigger**: the element that opens and closes the menu.
+2. **Panel**: the floating surface with elevation.
+3. **Item**: an action, with a label.
+4. **Divider**: separates groups of actions.
+5. **Shortcut** (optional): the keyboard shortcut for the action.
+6. **Submenu** (optional): a second level, indicated by an arrow.
 
-## Elementos
+## Elements
 
-| Elemento | Descrição |
+| Element | Description |
 | --- | --- |
-| **Item** | Executa uma ação e fecha o menu. |
-| **Item com atalho** | Mostra o atalho de teclado alinhado à direita. |
-| **Item perigoso** | Ação destrutiva, destacada em vermelho. |
-| **Item desabilitado** | Ação indisponível agora, mas que continua visível. |
-| **Divisor** | Separa grupos com propósitos diferentes. |
-| **Submenu** | Agrupa ações relacionadas em um segundo nível. |
+| **Item** | Runs an action and closes the menu. |
+| **Item with shortcut** | Shows the keyboard shortcut aligned to the right. |
+| **Dangerous item** | Destructive action, highlighted in red. |
+| **Disabled item** | An action unavailable right now, but still visible. |
+| **Divider** | Separates groups with different purposes. |
+| **Submenu** | Groups related actions in a second level. |
 
-## Estados do menu
+## Menu states
 
-Fechado e aberto. Ao abrir, o foco vai para o primeiro item disponível. Ao fechar com `Esc`, o foco volta para o gatilho.
+Closed and open. When it opens, focus goes to the first available item. When it closes with `Esc`, focus returns to the trigger.
 
-## Relacionados
+## Related
 
-- [Button](../button/index.mdx) e [Icon Button](../icon-button/index.mdx): gatilhos comuns.
-- [Select](../../form-and-options/select/index.mdx): escolha de valor.
-- [Shortcut](../../typography/shortcut/index.mdx): exibe teclas de atalho.
+- [Button](../button/index.mdx) and [Icon Button](../icon-button/index.mdx): common triggers.
+- [Select](../../form-and-options/select/index.mdx): choosing a value.
+- [Shortcut](../../typography/shortcut/index.mdx): displays shortcut keys.

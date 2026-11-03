@@ -1,0 +1,204 @@
+---
+title: "Overview"
+subtitle: "Um produto acessível funciona para todas as pessoas: com mouse, teclado, toque, leitor de tela, zoom ou alto contraste. Este é o compromisso do Let's UI, o que ele garante e o que ainda falta."
+---
+
+## Compromisso
+
+O Let's UI tem como meta a conformidade com o **WCAG 2.2, nível AA**, em todos os componentes e fundamentos. O nível AA é o mínimo: quando um critério AAA sai de graça (como o contraste do texto de corpo), o sistema o atinge.
+
+| Padrão | Nível | Escopo |
+| --- | --- | --- |
+| WCAG 2.2 | AA | Todos os componentes e fundamentos. |
+| HTML | — | Elementos semânticos antes de ARIA. |
+| WAI-ARIA 1.2 | — | Papéis, propriedades e estados, seguindo os padrões do ARIA Authoring Practices. |
+
+A acessibilidade **não é uma etapa final**: faz parte da definição de pronto de cada componente. O contrato técnico completo, por componente, está no arquivo `A11Y.md` do repositório; esta página é a versão para quem desenha e escreve.
+
+<Callout variant="info">
+  O sistema garante a acessibilidade **do componente**. A acessibilidade **da tela** depende de como ele é usado: o rótulo que você escreve, a ordem em que monta a página, a cor que escolhe para um gráfico. As seções de conteúdo e de testes abaixo são para isso.
+</Callout>
+
+## Princípios
+
+O WCAG se organiza em quatro princípios. No Let's UI, cada um vira uma pergunta prática:
+
+| Princípio | A pergunta | Exemplo no sistema |
+| --- | --- | --- |
+| **Perceptível** | Dá para perceber a informação por mais de um sentido? | Status com cor **e** rótulo; imagens com texto alternativo. |
+| **Operável** | Dá para usar tudo com qualquer forma de entrada? | Todos os componentes funcionam só com teclado. |
+| **Compreensível** | A pessoa entende o que aconteceu e o que fazer? | Mensagens de erro que dizem como resolver. |
+| **Robusto** | Funciona com as tecnologias assistivas de hoje e de amanhã? | HTML nativo dentro dos Web Components; ARIA só onde o HTML não basta. |
+
+E três ideias que orientam as decisões:
+
+- **Nativo primeiro.** Um `<button>` já é focável, anunciado e ativado com `Enter` e `Espaço`. O sistema parte do elemento nativo e só acrescenta o que falta.
+- **Nunca uma pista só.** Cor, forma, posição e texto se reforçam. Nenhuma informação depende de um único sentido.
+- **Honestidade sobre o que falta.** Os débitos ficam registrados e visíveis, nesta página e na de cada componente.
+
+## O que o sistema garante
+
+### Contraste
+
+| O que | Mínimo | Critério |
+| --- | --- | --- |
+| Texto normal sobre o fundo | **4,5 : 1** | 1.4.3 |
+| Texto grande (a partir de 24px, ou 18,66px em negrito) | **3 : 1** | 1.4.3 |
+| Bordas de controles, ícones que carregam informação, gráficos | **3 : 1** | 1.4.11 |
+| Anel de foco contra as cores vizinhas | **3 : 1** | 1.4.11, 2.4.7 |
+
+Os pares de tokens foram medidos nos dois temas, com o resultado em [Color](../properties/color.mdx). Texto de corpo e títulos passam em **AAA**; as exceções estão nos débitos abaixo.
+
+### Foco visível
+
+- Todo elemento interativo tem um **anel de foco** de 3px, na cor da família do componente (WCAG 2.4.7).
+- O anel aparece com o teclado (`:focus-visible`), não com o clique do mouse.
+- Overlays que bloqueiam a página prendem o foco enquanto estão abertos e o devolvem ao gatilho ao fechar.
+- Nada fixo na tela (cabeçalho, toast) pode esconder o elemento focado (WCAG 2.4.11).
+
+Veja os detalhes do anel em [Border](../properties/border.mdx).
+
+### Teclado
+
+Tudo o que se faz com o mouse é possível **só com o teclado** (WCAG 2.1.1), sem armadilhas de foco (2.1.2). Os padrões por tipo de componente:
+
+| Componente | Teclas |
+| --- | --- |
+| [Button](../../components/actionable/button/index.mdx), [Link](../../components/navigation/link/index.mdx) | `Enter` ativa; `Espaço` também ativa o botão. |
+| [Checkbox](../../components/form-and-options/checkbox/index.mdx), [Switch](../../components/form-and-options/switch/index.mdx) | `Espaço` alterna. |
+| [Radio Group](../../components/form-and-options/radio-group/index.mdx) | `Setas` movem e selecionam; `Tab` entra e sai do grupo. |
+| [Tabs](../../components/navigation/tabs/index.mdx) | `Setas` trocam de aba; `Home` e `End` vão à primeira e à última. |
+| [Accordion](../../components/content/accordion/index.mdx) | `Enter` e `Espaço` abrem; `Setas` movem entre cabeçalhos. |
+| [Dropdown Menu](../../components/actionable/dropdown-menu/index.mdx) | `Setas` navegam; `Esc` fecha e devolve o foco ao gatilho. |
+| [Modal](../../components/content/modal/index.mdx), [Drawer](../../components/content/drawer/index.mdx) | `Esc` fecha; o foco fica preso na janela. |
+
+### Leitor de tela
+
+- Todo elemento interativo tem **papel**, **nome** e **estado** anunciados corretamente (WCAG 4.1.2).
+- Se há texto visível, ele é o nome. Se **não há** (um [Icon Button](../../components/actionable/icon-button/index.mdx)), o `aria-label` é obrigatório.
+- O nome acessível **contém** o texto visível, para quem usa controle por voz (WCAG 2.5.3).
+- Ícones e imagens decorativas ficam escondidos da tecnologia assistiva.
+- Controles de formulário participam do formulário nativo (`ElementInternals`) e expõem validade, obrigatoriedade e erro.
+
+### Alvo de toque
+
+- Todo alvo interativo tem pelo menos **24 × 24px**, ou espaço livre em volta que complete essa área (WCAG 2.5.8).
+- Controles principais usam **40px**: Icon Button, Close Button, Avatar.
+- Checkbox e Radio `md` têm 16px de caixa e cumprem o mínimo porque a **label faz parte da área clicável**. Não os use sem label.
+
+### Movimento reduzido
+
+O sistema respeita a preferência **"reduzir movimento"** do sistema operacional (`prefers-reduced-motion`). Quando ela está ativa, transições de altura, rotações e entradas animadas são removidas ou trocadas por um esmaecer curto. Accordion, Toast, Tooltip e Scroll Area já seguem essa regra; a cobertura do resto está nos débitos.
+
+Nenhuma animação do sistema pisca mais de três vezes por segundo (WCAG 2.3.1).
+
+### Mensagens de erro e status
+
+- Em erro, o campo é marcado como inválido (`aria-invalid`), a borda muda **e** uma mensagem em texto aparece, ligada ao campo por `aria-describedby` (WCAG 3.3.1).
+- A mensagem diz **como resolver**, não só o que deu errado (WCAG 3.3.3). Veja [Writing](../content/writing.mdx).
+- Campos obrigatórios são anunciados como obrigatórios (`aria-required`).
+- Mudanças que acontecem sem a pessoa pedir são anunciadas por **regiões vivas** (WCAG 4.1.3):
+
+| Componente | Anúncio |
+| --- | --- |
+| [Alert](../../components/content/alert/index.mdx) | Assertivo (`role="alert"`), em todas as variantes: interrompe a leitura. Reserve para o que pede atenção imediata. |
+| [Toast](../../components/content/toast/index.mdx) | Educado (`role="status"`): espera a leitura atual terminar. O de erro é assertivo e não some sozinho. |
+
+## Conteúdo
+
+O componente certo com o conteúdo errado continua inacessível. Estas regras são de quem escreve e monta a tela.
+
+### Hierarquia de títulos
+
+- Um `h1` por página, que diz onde a pessoa está.
+- Títulos em ordem, sem pular níveis (`h2` → `h3`, nunca `h2` → `h4`).
+- O nível semântico é escolhido pela estrutura, e a escala visual à parte. Veja [Typography](../properties/typography.mdx).
+- Use as regiões `header`, `nav`, `main` e `footer`. Leitores de tela navegam por elas.
+
+### Texto alternativo
+
+- Imagem que **informa**: descreva o que ela comunica, não a aparência ("Gráfico: vendas subiram 20% em março").
+- Imagem **decorativa**: `alt=""`, para que seja ignorada.
+- Imagem que é **o conteúdo de um link ou botão**: descreva o destino ou a ação ("Ir para o início").
+- Não comece com "Imagem de" — o leitor de tela já anuncia que é uma imagem.
+
+### Links descritivos
+
+- O texto do link diz **para onde** ele leva, mesmo fora de contexto: "Ver política de privacidade", não "Clique aqui".
+- Links com o mesmo texto levam ao mesmo destino.
+- Avise quando um link abrir em nova aba ou baixar um arquivo.
+
+### Linguagem clara
+
+- Frases curtas, palavras comuns, voz ativa.
+- Uma ideia por frase; uma ação por botão.
+- Declare o idioma da página (`lang`) e de trechos em outro idioma.
+- Os textos que os componentes geram sozinhos ("Close", "Show password") vêm em inglês e podem ser trocados por atributo. Traduza todos.
+
+## Estados não visuais
+
+Muito do que a tela mostra com cor e forma precisa ser dito em código para a tecnologia assistiva.
+
+| Atributo | Para | Exemplo |
+| --- | --- | --- |
+| `aria-label` | Dar nome a um elemento **sem texto visível**. | Icon Button: `aria-label="Fechar"`. |
+| `aria-labelledby` | Usar um texto **já visível** como nome. Prefira a `aria-label`. | Um modal nomeado pelo seu título. |
+| `aria-describedby` | Ligar uma **descrição** complementar: dica, erro, tooltip. | Campo com a mensagem de erro. |
+| `aria-invalid`, `aria-required` | Anunciar erro e obrigatoriedade. | Input com erro. |
+| `aria-expanded`, `aria-selected`, `aria-checked` | Anunciar estado de abrir, selecionar e marcar. | Accordion, Tabs, Switch. |
+| `aria-pressed` | Anunciar se um botão alternável está ligado. | Icon Button de filtro ou formatação. |
+| `aria-disabled` | Manter o anúncio de um controle indisponível. | Usado junto com `disabled`. |
+| `aria-live`, `role="status"`, `role="alert"` | Anunciar mudanças que acontecem sozinhas. | Alert, Toast. |
+| `aria-hidden="true"` | Esconder o que é decorativo. Nunca em algo focável. | Ícones ao lado de texto. |
+
+<Callout variant="tip">
+  Prefira não desabilitar. Um botão desabilitado não explica o motivo e some da navegação por teclado. Muitas vezes é melhor deixá-lo ativo e mostrar o erro quando a pessoa tentar avançar.
+</Callout>
+
+### ARIA no elemento do componente
+
+O elemento de um componente (`<lui-button>`, `<lui-input>`) não tem papel próprio. Um atributo ARIA deixado nele faria o navegador mostrar um nó extra, sem papel, ao lado do controle de verdade. Por isso, o componente **consome** o ARIA que aceita: lê o atributo, leva o valor ao controle interno e o remove do elemento externo.
+
+Isso vale para Breadcrumb, Button, Card, Checkbox, Code Block, Icon Button, Input, Link, Radio, Select, Shortcut, Switch, Textarea e Tooltip. Para quem desenvolve:
+
+- Seletores no atributo (`lui-button[aria-expanded="true"]`) e `getAttribute('aria-*')` no elemento não encontram mais o valor. Leia a propriedade (`el.ariaExpanded`), ou estilize a partir do dono do estado (`lui-modal[open]`).
+- Para limpar um estado, use um valor explícito (`aria-expanded="false"`) ou a propriedade com `null`. Remover um atributo que já foi consumido não tem efeito. Em frameworks, ligue a propriedade: `.ariaPressed=${pressed}` no Lit, `ariaPressed={pressed}` no React 19.
+- `cloneNode()` e `outerHTML` não levam o ARIA consumido. Defina de novo na cópia.
+- Não coloque no elemento um `aria-*` que o componente não documenta.
+
+## Como testar
+
+Nenhuma ferramenta sozinha encontra todos os problemas. O sistema combina quatro camadas, e uma tela nova deve passar por todas:
+
+| Camada | O que encontra | Como |
+| --- | --- | --- |
+| **Automação** | Contraste, nomes ausentes, ARIA inválido, estrutura. Cerca de um terço dos problemas. | axe-core no Storybook (addon A11y) e nos testes de componente. |
+| **Teclado** | Ordem de foco, armadilhas, foco invisível, ações inacessíveis. | Navegue só com `Tab`, `Shift+Tab`, `Setas`, `Enter`, `Espaço` e `Esc`. |
+| **Leitor de tela** | Nomes, papéis, estados e anúncios que não fazem sentido. | VoiceOver (macOS, iOS), NVDA (Windows), TalkBack (Android). |
+| **Validação manual** | O que depende de julgamento: texto alternativo, clareza, hierarquia. | Revisão com a lista abaixo. |
+
+### Lista para cada tela
+
+1. **Teclado**: dá para fazer tudo? O foco está sempre visível e segue a ordem de leitura?
+2. **Leitor de tela**: o papel, o nome e o estado de cada controle fazem sentido? Os erros são anunciados?
+3. **Zoom**: com o texto em 200%, e a 320px de largura, o conteúdo continua legível, sem rolagem horizontal?
+4. **Contraste**: os pares de cor novos passam? Nos dois temas?
+5. **Sem cor**: em escala de cinza, a informação ainda é compreensível?
+6. **Movimento**: com "reduzir movimento" ativo, as animações param?
+7. **Alto contraste**: com as cores forçadas do sistema, os limites e o foco continuam visíveis?
+
+## Exceções e débitos
+
+O sistema registra o que ainda não cumpre o compromisso, em vez de esconder. Cada item tem o impacto e o que fazer enquanto não for resolvido.
+
+| Débito | Critério | Impacto | Enquanto isso |
+| --- | --- | --- | --- |
+| **Texto branco sobre `caution`** no tema claro (3,83 : 1). | 1.4.3 | Tags e alertas com cor cheia. | Só para texto grande; prefira a variante `surface`. |
+| **Borda dos campos em repouso** (`neutral.border.subtle`, 1,17 : 1). | 1.4.11 | Limite de Input, Select e Textarea. | Label sempre visível; campo sobre a superfície neutra. |
+| **Movimento reduzido** ainda não cobre o spinner do Button, as transições de estado e as entradas de Dropdown Menu e Modal. | 2.3.3 | Animações continuam com a preferência ativa. | Evite animações próprias sem `prefers-reduced-motion`. |
+| **Indicador de status do Avatar** abaixo de 3 : 1 contra o anel. | 1.4.11 | Status percebido só pela forma. | Veja [Avatar](../../components/content/avatar/accessibility.mdx). |
+| **Automação não bloqueia.** O addon A11y do Storybook roda em modo de aviso, não de erro. | — | Regressões podem passar sem quebrar o build. | Revise o painel A11y de cada história alterada. |
+
+<Callout variant="warning">
+  Uma exceção nova entra nesta tabela **antes** do componente ser publicado, com o critério, o impacto e a orientação provisória. Débito sem registro é débito escondido.
+</Callout>

@@ -3,40 +3,40 @@ title: "Usage"
 order: 2
 ---
 
-## Escreva textos que descrevem o destino
+## Write text that describes the destination
 
-O texto do link deve fazer sentido **fora do contexto**, porque leitores de tela listam todos os links da página.
+The link text should make sense **out of context**, because screen readers list every link on the page.
 
-<DosDonts variant="do" title="Texto descritivo">
-  "Leia as diretrizes de acessibilidade" ou "Baixar o guia de marca (PDF, 2 MB)". A pessoa sabe para onde vai.
+<DosDonts variant="do" title="Descriptive text">
+  "Read the accessibility guidelines" or "Download the brand guide (PDF, 2 MB)". The person knows where they are going.
 </DosDonts>
 
-<DosDonts variant="dont" title="Textos genéricos">
-  "Clique aqui", "Saiba mais" e "Leia mais" repetidos. Não dizem nada sozinhos. Se for inevitável, complemente com `aria-label`.
+<DosDonts variant="dont" title="Generic text">
+  Repeated "Click here", "Learn more" and "Read more". They say nothing on their own. If it is unavoidable, complement them with `aria-label`.
 </DosDonts>
 
-## Links dentro do texto
+## Links inside text
 
-- Mantenha o link reconhecível: não use só a cor para diferenciá-lo, por isso o sublinhado aparece no hover e no foco.
-- Evite parágrafos cheios de links. Muitos links competem entre si e cansam a leitura.
-- Coloque o link na **parte do texto que descreve o destino**, não na frase inteira.
+- Keep the link recognizable: do not use color alone to tell it apart, which is why the underline appears on hover and focus.
+- Avoid paragraphs full of links. Many links compete with each other and tire the reader.
+- Put the link on the **part of the text that describes the destination**, not on the whole sentence.
 
-## Links externos e downloads
+## External links and downloads
 
-- Use `external` quando o link sair do produto. O ícone avisa a pessoa antes do clique.
-- Abra em nova aba apenas quando houver motivo claro, como não perder um formulário preenchido. Por padrão, navegue na mesma aba.
-- Em downloads, diga o formato e o tamanho no texto: "Baixar relatório (PDF, 1,2 MB)".
+- Use `external` when the link leaves the product. The icon warns the person before the click.
+- Open in a new tab only when there is a clear reason, such as not losing a filled-in form. By default, navigate in the same tab.
+- For downloads, state the format and size in the text: "Download report (PDF, 1.2 MB)".
 
-## Link ou botão?
+## Link or button?
 
-| Se o clique... | Use |
+| If the click... | Use |
 | --- | --- |
-| leva a outra URL | Link |
-| executa uma ação ou envia dados | Button |
-| precisa chamar atenção como CTA | Button com `href` |
+| takes you to another URL | Link |
+| runs an action or sends data | Button |
+| needs to draw attention as a CTA | Button with `href` |
 
-## Boas práticas
+## Best practices
 
-- Não desabilite links sem explicar o motivo. Se a pessoa não pode acessar, diga por quê.
-- Mantenha o mesmo texto para o mesmo destino em todo o produto.
-- Não use "https://..." como texto do link, a não ser que a URL seja a informação.
+- Do not disable links without explaining why. If the person cannot access it, say why.
+- Keep the same text for the same destination across the whole product.
+- Do not use "https://..." as the link text, unless the URL is the information.

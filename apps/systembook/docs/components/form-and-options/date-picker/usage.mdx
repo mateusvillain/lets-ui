@@ -3,45 +3,45 @@ title: "Usage"
 order: 2
 ---
 
-## Calendário ou digitação?
+## Calendar or typing?
 
-| Situação | Use |
+| Situation | Use |
 | --- | --- |
-| Data próxima, ou o dia da semana importa | Calendário (padrão) |
-| Data distante que a pessoa já sabe | `editable` |
-| Período, como uma estadia | `range` |
-| Período que a pessoa já sabe, como datas de um contrato | `editable range` |
+| Upcoming date, or the weekday matters | Calendar (default) |
+| Distant date the person already knows | `editable` |
+| Period, such as a stay | `range` |
+| Period the person already knows, such as contract dates | `editable range` |
 
-Com `editable`, a pessoa ainda pode abrir o calendário. O contrário não vale: sem `editable`, não dá para digitar, e chegar a 1985 mês a mês é cansativo, mesmo com as grades de mês e ano.
+With `editable`, the person can still open the calendar. The reverse does not hold: without `editable`, typing is not possible, and getting to 1985 month by month is tiring, even with the month and year grids.
 
-## Limite as datas
+## Limit the dates
 
-- Use `min` e `max` para cortar as pontas: uma reserva que não pode ser no passado, um prazo que não pode passar do fim do trimestre.
-- Para buracos no meio, como feriados ou dias já reservados, marque os dias como **indisponíveis**. Eles ganham um traço, não só uma cor mais fraca, para não se confundirem com os dias fora do limite.
-- Num período, só as pontas precisam estar disponíveis: uma estadia pode atravessar um dia indisponível.
+- Use `min` and `max` to cut off the ends: a booking that cannot be in the past, a deadline that cannot go past the end of the quarter.
+- For gaps in the middle, such as holidays or days already booked, mark the days as **unavailable**. They get a strikethrough, not just a fainter color, so they are not confused with days outside the limit.
+- In a period, only the ends need to be available: a stay can span an unavailable day.
 
-<DosDonts variant="do" title="Limites visíveis antes do erro">
-  Um check-in que só aceita datas a partir de hoje: os dias passados nem podem ser escolhidos.
+<DosDonts variant="do" title="Limits visible before the error">
+  A check-in that only accepts dates from today onward: past days cannot even be chosen.
 </DosDonts>
 
-<DosDonts variant="dont" title="Aceitar e recusar depois">
-  Deixar escolher qualquer data e só dizer, ao enviar, que ela não pode ser no passado.
+<DosDonts variant="dont" title="Accept and reject later">
+  Letting people choose any date and only saying, on submit, that it cannot be in the past.
 </DosDonts>
 
-## Idioma e semana
+## Language and week
 
-- Defina o `locale` do produto. Ele muda o idioma do mês, dos dias da semana e o formato do campo, mas não o valor enviado, que fica sempre em ISO 8601 (`2026-01-16`).
-- O campo escreve o mês abreviado: "16 de jan. de 2026". `10/11/2026` é outubro nos Estados Unidos e novembro no Brasil; o mês escrito evita a confusão.
-- Defina o primeiro dia da semana conforme o público: domingo no Brasil e nos Estados Unidos, segunda na maior parte da Europa.
+- Set the product's `locale`. It changes the language of the month and the weekdays and the field's format, but not the submitted value, which is always in ISO 8601 (`2026-01-16`).
+- The field writes the month abbreviated: "Jan 16, 2026". `10/11/2026` is October in the United States and November in Brazil; the written month avoids the confusion.
+- Set the first day of the week according to the audience: Sunday in Brazil and the United States, Monday in most of Europe.
 
-## Label, hint e erros
+## Label, hint and errors
 
-- A label diz **qual data**: "Data de entrega", "Check-in". Com `range`, nomeie o período: "Estadia".
-- Com `editable`, o formato aparece abaixo do campo. Se você usar um hint, inclua o formato nele.
-- Escreva uma mensagem para cada erro, dizendo o que fazer: "Escolha uma data a partir de hoje", "A data final não pode ser antes da inicial".
+- The label says **which date**: "Due date", "Check-in". With `range`, name the period: "Stay".
+- With `editable`, the format appears below the field. If you use a hint, include the format in it.
+- Write a message for each error, saying what to do: "Choose a date from today onward", "The end date can't be before the start date".
 
-## Boas práticas
+## Best practices
 
-- Não use três Selects (dia, mês, ano) quando o Date Picker resolve.
-- Não pré-preencha com a data de hoje se a pessoa precisa escolher de verdade: muita gente envia sem perceber.
-- Em períodos, mostre o total ao lado quando ele importa, como "5 noites".
+- Do not use three Selects (day, month, year) when the Date Picker does the job.
+- Do not prefill with today's date if the person really needs to choose: many people submit without noticing.
+- For periods, show the total beside it when it matters, such as "5 nights".

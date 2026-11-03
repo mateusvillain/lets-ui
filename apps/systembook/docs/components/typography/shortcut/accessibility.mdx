@@ -3,17 +3,17 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-O Shortcut apenas **exibe** o atalho: não recebe foco e não aciona nada. O atalho precisa ser implementado na aplicação.
+The Shortcut only **displays** the shortcut: it does not receive focus and does not trigger anything. The shortcut needs to be implemented in the application.
 
-## Leitor de tela
+## Screen reader
 
-- Cada tecla é marcada como tecla de teclado (`kbd`), e a combinação forma um grupo com nome, como "Ctrl + K", lido de uma vez.
-- Use `aria-label` para trocar o nome lido quando os símbolos (como `⌘`) forem pronunciados mal.
+- Each key is marked as a keyboard key (`kbd`), and the combination forms a named group, such as "Ctrl + K", read all at once.
+- Use `aria-label` to change the name that is read when symbols (such as `⌘`) are mispronounced.
 
-## Para designers
+## For designers
 
-- Atalhos de uma só tecla (sem modificador) podem ser **desligados ou remapeados** pelas pessoas, conforme o WCAG 2.1.4. Planeje essa opção.
-- Mostre o atalho junto da ação no texto, para quem usa leitor de tela encontrá-lo.
-- Não dependa de atalhos como única forma de realizar uma ação.
+- Single-key shortcuts (without a modifier) can be **turned off or remapped** by people, per WCAG 2.1.4. Plan for this option.
+- Show the shortcut next to the action in the text, so screen reader users can find it.
+- Do not rely on shortcuts as the only way to perform an action.

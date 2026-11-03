@@ -1,0 +1,59 @@
+---
+title: "Textarea"
+subtitle: "Campo de texto de várias linhas para respostas longas: comentários, descrições, observações."
+---
+
+<ComponentEmbed component="Textarea" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Respostas com mais de uma linha">
+  Mensagens, feedback e justificativas.
+</DosDonts>
+
+<DosDonts variant="do" title="Textos descritivos">
+  Uma biografia ou a descrição de um item.
+</DosDonts>
+
+<DosDonts variant="dont" title="Respostas curtas">
+  Use o [Input](../input/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Texto formatado">
+  Para negrito, listas e links, use um editor de texto rico.
+</DosDonts>
+
+<DosDonts variant="dont" title="Escolhas entre opções">
+  Use [Select](../select/index.mdx) ou [Radio Group](../radio-group/index.mdx).
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Textarea: label, campo, hint, contador e mensagem de erro](./anatomy.png)
+
+1. **Label**: nomeia o campo.
+2. **Campo**: área de várias linhas, com alça de redimensionamento.
+3. **Hint**: texto de ajuda.
+4. **Contador**: caracteres usados, quando há limite.
+5. **Mensagem de erro**: substitui o hint quando o valor é inválido.
+
+## Variações
+
+| Variação | Quando usar |
+| --- | --- |
+| **Padrão** | Resposta aberta, sem limite definido. |
+| **Com contador** (`maxlength`) | Há um limite explícito, como uma bio de 160 caracteres. |
+| **Sem redimensionar** (`resize="none"`) | Quando o layout não pode mudar, como em caixas de mensagem fixas. |
+
+`rows` define a altura inicial. Escolha uma altura que sugira o tamanho esperado da resposta.
+
+## Estados
+
+Padrão, hover, foco, erro e desabilitado, como no [Input](../input/index.mdx).
+
+<ComponentEmbed component="Textarea" variant="error" />
+
+## Relacionados
+
+- [Input](../input/index.mdx): uma linha.
+- [Select](../select/index.mdx), [Checkbox](../checkbox/index.mdx): escolhas.

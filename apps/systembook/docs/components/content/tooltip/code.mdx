@@ -11,33 +11,33 @@ Use the `position` attribute to control where the tooltip appears relative to it
 
 Slot any focusable element inside `<lui-tooltip>` to use it as the trigger. The component automatically wires up `aria-describedby` on focusable children.
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `text` | `string` | `Tooltip` |
 | `position` | `string` | `top` |
 | `label` | `string` | `Show tooltip` |
 | `aria-label` | `string` | `''` |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
-<lui-tooltip text="Texto do tooltip" position="top" label="Hover aqui"></lui-tooltip>
+<lui-tooltip text="Tooltip text" position="top" label="Hover here"></lui-tooltip>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="tooltip tooltip--top">
-  <button class="tooltip__trigger">Hover aqui</button>
-  <div role="tooltip" class="tooltip__content">Texto do tooltip</div>
+  <button class="tooltip__trigger">Hover here</button>
+  <div role="tooltip" class="tooltip__content">Tooltip text</div>
 </div>
 ```
 
-Só com a classe, o tooltip já pode receber o ponteiro e respeita `prefers-reduced-motion`. Fechar com `Esc` depende de script: adicione `tooltip--dismissed` ao elemento `.tooltip` quando `Esc` for pressionado com ele aberto, e remova a classe no próximo `pointerenter` ou `focusin`.
+With the class alone, the tooltip can already receive the pointer and respects `prefers-reduced-motion`. Closing with `Esc` requires a script: add `tooltip--dismissed` to the `.tooltip` element when `Esc` is pressed while it is open, and remove the class on the next `pointerenter` or `focusin`.
 
 ```js
 const tooltip = document.querySelector('.tooltip');

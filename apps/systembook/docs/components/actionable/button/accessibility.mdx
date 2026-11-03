@@ -3,37 +3,37 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Move o foco para o botão. |
-| `Enter` ou `Espaço` | Ativa o botão. |
+| `Tab` | Moves focus to the button. |
+| `Enter` or `Space` | Activates the button. |
 
-Botões desabilitados saem da ordem de tabulação. Em carregamento, o foco é mantido onde estava.
+Disabled buttons leave the tab order. While loading, focus stays where it was.
 
-## Leitor de tela
+## Screen reader
 
-- O nome acessível vem do rótulo. Se o rótulo for curto demais para dar contexto (como "Editar" em uma lista), complemente com `aria-label`: "Editar perfil de Ana Lima".
-- Durante o carregamento o botão é anunciado como ocupado (`aria-busy`).
-- Um botão com `href` é anunciado como **link**, porque é isso que ele é.
+- The accessible name comes from the label. If the label is too short to give context (like "Edit" in a list), complement it with `aria-label`: "Edit Ana Lima's profile".
+- While loading, the button is announced as busy (`aria-busy`).
+- A button with `href` is announced as a **link**, because that is what it is.
 
-## Cor e contraste
+## Color and contrast
 
-- O sistema tem como meta o WCAG 2.2 AA: texto com contraste de pelo menos 4,5:1 com o fundo. Todas as variantes passam nos dois temas.
-- No hover e no pressed, o fundo se afasta da cor do rótulo, então o contraste **aumenta** nos estados em vez de cair: as variantes cheias escurecem no tema claro e clareiam no escuro, e a `neutral` faz o inverso.
-- O significado nunca depende só da cor: o rótulo do botão `danger` continua dizendo "Excluir".
+- The system targets WCAG 2.2 AA: text with a contrast of at least 4.5:1 against the background. Every variant passes in both themes.
+- On hover and pressed, the background moves away from the label color, so contrast **increases** in those states instead of dropping: the filled variants darken in the light theme and lighten in the dark one, and `neutral` does the opposite.
+- Meaning never depends on color alone: the label of the `danger` button still says "Delete".
 
-## Foco
+## Focus
 
-O anel de foco aparece ao navegar com o teclado e deve ter contraste mínimo de 3:1 com o fundo. Nunca remova o contorno de foco.
+The focus ring appears when navigating with the keyboard and must have a minimum contrast of 3:1 against the background. Never remove the focus outline.
 
-## Para designers
+## For designers
 
-- Escreva rótulos que façam sentido fora de contexto, porque leitores de tela listam todos os botões da página.
-- Mantenha a área de toque de pelo menos 24 × 24px, mesmo no tamanho `md`.
-- Não use botões apenas para navegar: use links.
+- Write labels that make sense out of context, because screen readers list every button on the page.
+- Keep the touch target at least 24 × 24px, even at size `md`.
+- Do not use buttons just to navigate: use links.
 
-## Detalhes técnicos
+## Technical details
 
-Detalhes de implementação, como `role="link"` em links desabilitados, estão na aba [Code](./code.mdx).
+Implementation details, such as `role="link"` on disabled links, are in the [Code](./code.mdx) tab.

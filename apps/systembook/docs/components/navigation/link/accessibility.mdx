@@ -3,31 +3,31 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Move o foco para o link. |
-| `Enter` | Segue o link. |
+| `Tab` | Moves focus to the link. |
+| `Enter` | Follows the link. |
 
-Um link desabilitado continua focável, para que quem usa teclado ou leitor de tela saiba que ele existe e está indisponível.
+A disabled link stays focusable, so keyboard and screen reader users know it exists and is unavailable.
 
-## Leitor de tela
+## Screen reader
 
-- O link é anunciado como **link**, com o texto como nome.
-- Se o texto não descreve o destino ("Leia mais"), use `aria-label` com uma descrição completa, como "Leia mais sobre acessibilidade".
-- Links desabilitados são anunciados como indisponíveis (`aria-disabled`).
-- Ao abrir em nova aba, o link recebe `rel="noopener noreferrer"` automaticamente, por segurança.
-- Como gatilho de um Modal ou Drawer, o link recebe `aria-expanded` e `aria-haspopup` do próprio componente e os leva ao `<a>` interno.
+- The link is announced as a **link**, with its text as the name.
+- If the text does not describe the destination ("Read more"), use `aria-label` with a full description, like "Read more about accessibility".
+- Disabled links are announced as unavailable (`aria-disabled`).
+- When opening in a new tab, the link gets `rel="noopener noreferrer"` automatically, for security.
+- As the trigger of a Modal or Drawer, the link gets `aria-expanded` and `aria-haspopup` from the component itself and passes them to the inner `<a>`.
 
 ## Visual
 
-- O texto do link tem contraste mínimo de 4,5:1 com o fundo.
-- O sublinhado e o anel de foco aparecem no hover e no foco por teclado.
-- A cor do link visitado também respeita o contraste.
+- The link text has a minimum contrast of 4.5:1 against the background.
+- The underline and the focus ring appear on hover and on keyboard focus.
+- The visited link color also meets the contrast requirement.
 
-## Para designers
+## For designers
 
-- Não dependa só da cor para identificar links dentro de texto.
-- Evite vários links com o mesmo texto e destinos diferentes na mesma página.
-- Informe quando o link abre em outra aba ou baixa um arquivo.
+- Do not rely on color alone to identify links inside text.
+- Avoid several links with the same text and different destinations on the same page.
+- Say when the link opens in another tab or downloads a file.

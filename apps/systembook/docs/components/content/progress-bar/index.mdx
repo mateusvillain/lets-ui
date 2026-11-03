@@ -1,86 +1,86 @@
 ---
 title: "Progress Bar"
-subtitle: "Barra que mostra quanto de uma tarefa já foi feito, como um envio de arquivos ou uma importação."
+subtitle: "A bar that shows how much of a task is done, such as a file upload or an import."
 order: 9
 ---
 
 <ComponentEmbed component="ProgressBar" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Esperas longas">
-  Quando a tarefa demora o bastante para a pessoa querer saber quanto falta, como enviar arquivos ou importar dados.
+<DosDonts variant="do" title="Long waits">
+  When the task takes long enough that the person wants to know how much is left, such as uploading files or importing data.
 </DosDonts>
 
-<DosDonts variant="do" title="Avanço medido em qualquer unidade">
-  Porcentagem, GB, etapas: a barra preenche na proporção do valor sobre o máximo.
+<DosDonts variant="do" title="Progress measured in any unit">
+  Percentage, GB, steps: the bar fills in proportion to the value over the maximum.
 </DosDonts>
 
-<DosDonts variant="do" title="Uso de uma cota">
-  Armazenamento ou limite de um plano, com `caution` quando estiver perto do fim.
+<DosDonts variant="do" title="Quota usage">
+  Storage or a plan limit, with `caution` when it is close to the end.
 </DosDonts>
 
-<DosDonts variant="dont" title="Área que carrega com formato conhecido">
-  Use um skeleton, que mostra a forma do conteúdo que vai chegar.
+<DosDonts variant="dont" title="Area that loads with a known shape">
+  Use a skeleton, which shows the shape of the content that is coming.
 </DosDonts>
 
-<DosDonts variant="dont" title="Passos com nome próprio">
-  Para etapas de um fluxo, como cadastro ou checkout, use um indicador de passos.
+<DosDonts variant="dont" title="Named steps">
+  For the steps of a flow, such as sign-up or checkout, use a step indicator.
 </DosDonts>
 
-<DosDonts variant="dont" title="Esperas curtas">
-  Uma barra que aparece e some em menos de um segundo só pisca na tela.
+<DosDonts variant="dont" title="Short waits">
+  A bar that appears and disappears in less than a second just flickers on the screen.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Progress Bar: rótulo, valor, trilha, preenchimento e legenda](./anatomy.png)
+![Progress Bar anatomy: label, value, track, fill and caption](./anatomy.png)
 
-1. **Rótulo**: nomeia a tarefa.
-2. **Valor**: o avanço em percentual, ou no texto de `value-text`.
-3. **Trilha**: o total da tarefa.
-4. **Preenchimento**: a parte já feita.
-5. **Legenda** (opcional): o andamento e o resultado, como "8 de 20 arquivos" ou "Envio concluído".
+1. **Label**: names the task.
+2. **Value**: the progress as a percentage, or in the `value-text` text.
+3. **Track**: the whole task.
+4. **Fill**: the part already done.
+5. **Caption** (optional): the progress and the result, such as "8 of 20 files" or "Upload complete".
 
-## Determinado e indeterminado
+## Determinate and indeterminate
 
-Com `value`, a barra preenche na proporção de `value` sobre `max`. Sem `value`, ela fica **indeterminada**: um trecho percorre a trilha enquanto não há como medir o avanço. Assim que a medida existir, a barra passa para o modo determinado.
+With `value`, the bar fills in proportion to `value` over `max`. Without `value`, it is **indeterminate**: a segment runs along the track while there is no way to measure progress. As soon as the measurement exists, the bar switches to determinate mode.
 
 <ComponentEmbed component="ProgressBar" variant="indeterminate" />
 
-## Variantes
+## Variants
 
-| Variante | Quando usar |
+| Variant | When to use |
 | --- | --- |
-| `primary` (padrão) | A tarefa está em andamento. |
-| `success` | A tarefa terminou bem. |
-| `caution` | A tarefa segue, mas pede atenção, como uma cota quase cheia. |
-| `danger` | A tarefa falhou ou passou do limite. |
+| `primary` (default) | The task is in progress. |
+| `success` | The task finished well. |
+| `caution` | The task continues, but needs attention, such as an almost full quota. |
+| `danger` | The task failed or went over the limit. |
 
 <ComponentEmbed component="ProgressBar" variant="success" />
 
 <ComponentEmbed component="ProgressBar" variant="danger" />
 
-Toda barra `success`, `caution` ou `danger` leva o desfecho na legenda. A cor sozinha não informa o estado a quem não a distingue nem ao leitor de tela.
+Every `success`, `caution` or `danger` bar carries the outcome in the caption. Color alone does not convey the state to people who cannot distinguish it, nor to the screen reader.
 
-## Posição do rótulo
+## Label placement
 
-Em `top` (padrão), rótulo e valor ficam acima da trilha. Em `inline`, rótulo, trilha e valor ficam na mesma linha, o que economiza altura em listas e tabelas. A legenda fica sempre abaixo.
+In `top` (default), the label and the value sit above the track. In `inline`, the label, track and value sit on the same line, which saves height in lists and tables. The caption is always below.
 
 <ComponentEmbed component="ProgressBar" variant="inline" />
 
-## Tamanhos
+## Sizes
 
-| Tamanho | Espessura da trilha |
+| Size | Track thickness |
 | --- | --- |
 | `sm` | 4px |
-| `md` (padrão) | 8px |
+| `md` (default) | 8px |
 | `lg` | 12px |
 
-Só a trilha muda: o texto continua o mesmo.
+Only the track changes: the text stays the same.
 
-## Relacionados
+## Related
 
-- [Toast](../toast/index.mdx): avisar que uma tarefa em segundo plano terminou.
-- [Alert](../alert/index.mdx): explicar uma falha que precisa de ação.
-- [Empty State](../empty-state/index.mdx): o que mostrar quando a tarefa termina sem resultado.
+- [Toast](../toast/index.mdx): announce that a background task has finished.
+- [Alert](../alert/index.mdx): explain a failure that needs action.
+- [Empty State](../empty-state/index.mdx): what to show when the task ends with no result.

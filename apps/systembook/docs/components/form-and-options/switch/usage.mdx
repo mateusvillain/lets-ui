@@ -3,32 +3,32 @@ title: "Usage"
 order: 2
 ---
 
-## Efeito imediato
+## Immediate effect
 
-O que define o Switch é o **efeito na hora**. Ao alternar, o sistema já aplica a mudança, sem outra confirmação.
+What defines the Switch is its **immediate effect**. When toggled, the system applies the change right away, with no further confirmation.
 
-<DosDonts variant="do" title="Aplicar a mudança ao alternar">
-  Ligar "Notificações por e-mail" já salva a preferência. A pessoa vê o resultado sem passos extras.
+<DosDonts variant="do" title="Apply the change on toggle">
+  Turning on "Email notifications" saves the preference at once. The person sees the result without extra steps.
 </DosDonts>
 
-<DosDonts variant="dont" title="Switch dentro de um formulário com Salvar">
-  Se a mudança só vale depois de clicar em "Salvar", a pessoa espera efeito imediato e fica confusa. Use um Checkbox.
+<DosDonts variant="dont" title="Switch inside a form with Save">
+  If the change only applies after clicking "Save", the person expects an immediate effect and gets confused. Use a Checkbox.
 </DosDonts>
 
 ## Labels
 
-- Descreva **o recurso**, não a ação: "Notificações por e-mail", não "Ativar notificações".
-- Use **substantivos**, que funcionam nos dois estados.
-- Se o estado atual não for óbvio, mostre texto de apoio: "Ligado" ou "Desligado".
-- Posicione a label ao lado do Switch, preferencialmente à direita.
+- Describe **the feature**, not the action: "Email notifications", not "Turn on notifications".
+- Use **nouns**, which work in both states.
+- If the current state is not obvious, show helper text: "On" or "Off".
+- Place the label next to the Switch, preferably on the right.
 
-## Estado visual
+## Visual state
 
-O estado precisa ser claro sem depender de cor: a posição do marcador (esquerda ou direita) comunica ligado e desligado. Evite usar o vermelho para "desligado": desligado não é um erro.
+The state must be clear without relying on color: the thumb's position (left or right) communicates on and off. Avoid using red for "off": off is not an error.
 
-## Boas práticas
+## Best practices
 
-- Use Switches em **listas de configurações**, com uma label e uma breve descrição.
-- Não use um Switch para confirmar uma ação perigosa.
-- Se a mudança demorar a ser aplicada, mostre um indicador de progresso e trate falhas, revertendo o Switch com uma mensagem.
-- Mantenha o tamanho consistente em uma mesma lista.
+- Use Switches in **settings lists**, with a label and a short description.
+- Do not use a Switch to confirm a dangerous action.
+- If the change takes a while to apply, show a progress indicator and handle failures, reverting the Switch with a message.
+- Keep the size consistent within the same list.

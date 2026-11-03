@@ -1,99 +1,99 @@
 ---
 title: "Grid"
-subtitle: "A grade é o esqueleto invisível que alinha a página. Colunas, gutters, margens e largura máxima mudam por breakpoint, todos definidos por tokens da marca e aplicados pelo componente Grid."
+subtitle: "The grid is the invisible skeleton that aligns the page. Columns, gutters, margins and maximum width change per breakpoint, all defined by brand tokens and applied by the Grid component."
 order: 4
 ---
 
-## Propósito
+## Purpose
 
-A grade divide a largura disponível em **colunas** iguais, separadas por um **gutter**, dentro de uma **margem** lateral. Ela mantém o conteúdo alinhado de uma seção a outra e de uma tela a outra, e transforma "quanto de largura este bloco ocupa" em uma decisão simples: **quantas colunas**.
+The grid divides the available width into equal **columns**, separated by a **gutter**, inside a side **margin**. It keeps content aligned from one section to the next and from one screen to the next, and turns "how much width does this block take" into a simple decision: **how many columns**.
 
-## Princípios
+## Principles
 
-- **Alinhamento acima de tudo.** Tudo se apoia nas mesmas colunas, então nada fica torto entre seções.
-- **Comportamento antes de largura.** Um layout responsivo não é o mesmo layout encolhido: no celular, o que estava lado a lado passa a empilhar.
-- **Mobile-first.** A grade começa com 4 colunas e ganha colunas conforme a tela cresce.
-- **Conteúdo primeiro.** A grade serve o conteúdo, não o força a caber em caixas.
-- **Largura máxima.** Em telas muito largas, o conteúdo para de crescer e centraliza, para que as linhas de texto não fiquem longas demais.
+- **Alignment above all.** Everything rests on the same columns, so nothing is crooked between sections.
+- **Behavior before width.** A responsive layout is not the same layout shrunk: on mobile, what was side by side now stacks.
+- **Mobile-first.** The grid starts with 4 columns and gains columns as the screen grows.
+- **Content first.** The grid serves the content, it does not force it to fit into boxes.
+- **Maximum width.** On very wide screens, content stops growing and centers, so lines of text do not get too long.
 
-## Estrutura
+## Structure
 
-| Peça | O que é | Token |
+| Piece | What it is | Token |
 | --- | --- | --- |
-| **Colunas** | Faixas de largura igual em que os blocos se apoiam. | `lui.brand.grid.column.*` |
-| **Gutter** | O espaço entre colunas (o `gap`). | `lui.brand.grid.gap.*` |
-| **Margem** | O respiro entre a grade e a borda da tela. | `lui.brand.grid.margin.*` |
-| **Largura máxima** | Onde o conteúdo para de crescer e centraliza. | `lui.brand.grid.container.1xl` |
-| **Breakpoints** | As larguras em que colunas, gutter e margem mudam. | `lui.brand.grid.breakpoint.*` |
+| **Columns** | Equal-width bands that blocks rest on. | `lui.brand.grid.column.*` |
+| **Gutter** | The space between columns (the `gap`). | `lui.brand.grid.gap.*` |
+| **Margin** | The breathing room between the grid and the screen edge. | `lui.brand.grid.margin.*` |
+| **Maximum width** | Where the content stops growing and centers. | `lui.brand.grid.container.1xl` |
+| **Breakpoints** | The widths at which columns, gutter and margin change. | `lui.brand.grid.breakpoint.*` |
 
-### A tabela completa
+### The full table
 
-| Breakpoint | Viewport | Colunas | Gutter | Margem lateral | Alvo típico |
+| Breakpoint | Viewport | Columns | Gutter | Side margin | Typical target |
 | --- | --- | --- | --- | --- | --- |
-| `1xs` (base) | até 767px | 4 | 16px | 16px | Celular |
-| `sm` | a partir de 768px | 8 | 16px | 32px | Tablet em pé |
-| `md` | a partir de 1024px | 8 | 16px | 40px | Tablet deitado, notebook pequeno |
-| `lg` | a partir de 1280px | 12 | 24px | 40px | Desktop |
-| `1xl` | a partir de 1440px | 12 | 24px | Centralizado em 1360px | Telas largas |
+| `1xs` (base) | up to 767px | 4 | 16px | 16px | Phone |
+| `sm` | from 768px | 8 | 16px | 32px | Tablet, portrait |
+| `md` | from 1024px | 8 | 16px | 40px | Tablet, landscape; small laptop |
+| `lg` | from 1280px | 12 | 24px | 40px | Desktop |
+| `1xl` | from 1440px | 12 | 24px | Centered at 1360px | Wide screens |
 
-Doze colunas dividem-se em 2, 3, 4 e 6; oito, em 2 e 4; quatro, em 2. Isso dá flexibilidade para dividir a página em qualquer faixa.
+Twelve columns divide into 2, 3, 4 and 6; eight into 2 and 4; four into 2. That gives flexibility to split the page into any band.
 
 ## Tokens
 
 ### Breakpoints
 
-Cada breakpoint é a **largura mínima** a partir da qual sua faixa vale. A exceção é `1xs`, que é o **teto** da faixa de celular: ela é a base da grade e não tem media query.
+Each breakpoint is the **minimum width** from which its band applies. The exception is `1xs`, which is the **ceiling** of the phone band: it is the grid's base and has no media query.
 
 <TokenTable group="lui.brand.grid.breakpoint" />
 
-### Colunas
+### Columns
 
 <TokenTable group="lui.brand.grid.column" />
 
 ### Gutter
 
-O gutter aponta para a [escala fixa de espaçamento](spacing.mdx): a responsividade vem do breakpoint, que troca o valor, e não de uma rampa contínua.
+The gutter points to the [fixed spacing scale](spacing.mdx): responsiveness comes from the breakpoint, which swaps the value, not from a continuous ramp.
 
 <TokenTable group="lui.brand.grid.gap" />
 
-### Margem
+### Margin
 
-Não existe margem no `1xl`. A partir dele, a grade deixa de ter margem e passa a ter largura máxima centralizada. É a ausência do token que faz essa troca.
+There is no margin at `1xl`. From there on, the grid no longer has a margin and has a centered maximum width instead. It is the absence of the token that makes this switch.
 
 <TokenTable group="lui.brand.grid.margin" />
 
-### Largura máxima
+### Maximum width
 
 <TokenTable group="lui.brand.grid.container" />
 
 <Callout variant="info">
-  Gutter, margem e largura máxima viram custom properties e mudam com `data-brand` em tempo real. Breakpoints e número de colunas são **fixados na compilação**, porque uma media query e o laço que gera as classes `.col-*` não leem `var()`. Uma marca que mude esses dois precisa compilar o CSS a partir do código-fonte. Veja [Themes](../tokens/themes.mdx).
+  Gutter, margin and maximum width become custom properties and change with `data-brand` at runtime. Breakpoints and the number of columns are **fixed at compile time**, because a media query and the loop that generates the `.col-*` classes cannot read `var()`. A brand that changes those two needs to compile the CSS from source. See [Themes](../tokens/themes.mdx).
 </Callout>
 
-## Como usar
+## How to use
 
-Você escolhe quantas colunas cada bloco ocupa em cada faixa, e a grade converte isso em largura. Um valor declarado em um breakpoint vale **dali para cima**, até outro substituí-lo.
+You choose how many columns each block takes in each band, and the grid converts that into width. A value declared at a breakpoint applies **from there up**, until another one replaces it.
 
 ```html
 <lui-grid>
-  <lui-grid-item col="full">Cabeçalho</lui-grid-item>
-  <lui-grid-item col="4" col-sm="4" col-lg="8">Conteúdo</lui-grid-item>
-  <lui-grid-item col="4" col-sm="4" col-lg="4">Lateral</lui-grid-item>
+  <lui-grid-item col="full">Header</lui-grid-item>
+  <lui-grid-item col="4" col-sm="4" col-lg="8">Content</lui-grid-item>
+  <lui-grid-item col="4" col-sm="4" col-lg="4">Sidebar</lui-grid-item>
 </lui-grid>
 ```
 
 ```html
 <div class="grid">
-  <div class="col-full">Cabeçalho</div>
-  <div class="col-4 col-sm-4 col-lg-8">Conteúdo</div>
-  <div class="col-4 col-sm-4 col-lg-4">Lateral</div>
+  <div class="col-full">Header</div>
+  <div class="col-4 col-sm-4 col-lg-8">Content</div>
+  <div class="col-4 col-sm-4 col-lg-4">Sidebar</div>
 </div>
 ```
 
-Em SCSS, use os mixins `media-up($bp)` e `media-down($bp)`. Eles são complementos exatos: nenhuma largura, nem fracionada por zoom, fica sem regra.
+In SCSS, use the `media-up($bp)` and `media-down($bp)` mixins. They are exact complements: no width, not even one made fractional by zoom, is left without a rule.
 
 ```scss
-.painel {
+.panel {
   display: block;
 
   @include media-up(md) {
@@ -103,86 +103,86 @@ Em SCSS, use os mixins `media-up($bp)` e `media-down($bp)`. Eles são complement
 ```
 
 <Callout variant="warning">
-  Atenção ao salto de 8 para 12 colunas no `lg`: um bloco `col-sm-4`, que era metade da linha em `sm` e `md`, vira um terço no `lg` se não for redeclarado.
+  Watch out for the jump from 8 to 12 columns at `lg`: a `col-sm-4` block, which was half the row at `sm` and `md`, becomes a third at `lg` if it is not redeclared.
 </Callout>
 
-## Layouts padrão
+## Standard layouts
 
-### Página de conteúdo
+### Content page
 
-Texto longo, como um artigo ou uma página de ajuda. O texto ocupa **8 das 12 colunas** no desktop, centralizado (ou com um índice nas 4 restantes), para manter a linha perto de 75 caracteres. No celular, ocupa as 4 colunas.
+Long text, such as an article or a help page. The text takes **8 of the 12 columns** on desktop, centered (or with a table of contents in the remaining 4), to keep the line close to 75 characters. On mobile, it takes all 4 columns.
 
-| Faixa | Conteúdo | Índice |
+| Band | Content | Table of contents |
 | --- | --- | --- |
-| Celular | 4 | Acima do conteúdo ou recolhido |
-| Tablet | 8 | Acima do conteúdo |
+| Phone | 4 | Above the content or collapsed |
+| Tablet | 8 | Above the content |
 | Desktop | 8 | 4 |
 
 ### Dashboard
 
-Cartões de métricas e gráficos. Métricas em **3 ou 4 por linha** no desktop (`col-lg-3` ou `col-lg-4`), **2 por linha** no tablet (`col-sm-4`) e **1 por linha** no celular (`col-4`). Gráficos largos ocupam a linha inteira ou 8 colunas.
+Metric cards and charts. Metrics **3 or 4 per row** on desktop (`col-lg-3` or `col-lg-4`), **2 per row** on tablet (`col-sm-4`) and **1 per row** on mobile (`col-4`). Wide charts take the full row or 8 columns.
 
-### Formulário
+### Form
 
-Formulários são lidos de cima para baixo, em **uma coluna**. Use no máximo 6 a 8 colunas do desktop, e ponha dois campos lado a lado só quando eles formam uma unidade (cidade e estado, data de início e fim). Os botões ficam alinhados à borda do formulário, não da página.
+Forms are read top to bottom, in **one column**. Use at most 6 to 8 desktop columns, and put two fields side by side only when they form a unit (city and state, start and end date). Buttons are aligned to the edge of the form, not of the page.
 
-### Detalhe
+### Detail
 
-A página de um item: o conteúdo principal em **8 colunas** e um painel de metadados ou ações em **4**. No tablet e no celular, o painel vai para **cima** do conteúdo se tiver ações, ou para baixo se for só informação.
+An item's page: the main content in **8 columns** and a metadata or actions panel in **4**. On tablet and mobile, the panel goes **above** the content if it has actions, or below if it is information only.
 
-### Navegação lateral
+### Side navigation
 
-O app shell com menu fixo à esquerda. A navegação **não faz parte** da grade da página: use o [Sidebar](../../components/layout/sidebar/index.mdx) (lateral de 240px e conteúdo flexível) ou o shell do produto, e coloque a Grid **dentro** da área de conteúdo. Abaixo de `lg`, a navegação vira um menu recolhível.
+The app shell with a fixed menu on the left. The navigation **is not part** of the page grid: use [Sidebar](../../components/layout/sidebar/index.mdx) (240px side panel and flexible content) or the product shell, and place the Grid **inside** the content area. Below `lg`, the navigation becomes a collapsible menu.
 
-## Alinhamento e aninhamento
+## Alignment and nesting
 
-- Todo bloco começa e termina **na borda de uma coluna**. Nada fica a "meia coluna".
-- Elementos dentro de um bloco se alinham pela borda interna do bloco, não pela grade.
-- Uma Grid dentro de outra **não reaplica** margem nem largura máxima: ela divide a largura da célula do pai. No Web Component isso é automático (`flush`).
-- Evite mais de **dois níveis** de grade aninhada. Para alinhar poucos itens dentro de um bloco, use um primitivo de layout.
-- Use `grid--flush` para faixas que vão de borda a borda (um banner com fundo), mantendo as colunas por dentro.
+- Every block starts and ends **at a column edge**. Nothing sits at "half a column".
+- Elements inside a block align to the block's inner edge, not to the grid.
+- A Grid inside another **does not reapply** margin or maximum width: it divides the width of the parent cell. In the Web Component this is automatic (`flush`).
+- Avoid more than **two levels** of nested grid. To align a few items inside a block, use a layout primitive.
+- Use `grid--flush` for edge-to-edge bands (a banner with a background), keeping the columns inside.
 
-## Grid, Flexbox ou Stack?
+## Grid, Flexbox or Stack?
 
-| Precisa de | Use | Por quê |
+| You need to | Use | Why |
 | --- | --- | --- |
-| Estruturar a página em colunas alinhadas | [Grid](../../components/layout/grid/index.mdx) | Duas dimensões, ligada aos tokens da marca. |
-| Limitar a largura e centralizar | [Container](../../components/layout/container/index.mdx) | Largura máxima pelos breakpoints, sem colunas. |
-| Empilhar itens na vertical com espaço uniforme | [Stack](../../components/layout/stack/index.mdx) | Uma dimensão, espaço pela escala. |
-| Itens em linha que quebram (tags, botões) | [Inline](../../components/layout/inline/index.mdx) | Quebra natural, sem breakpoint. |
-| Lateral fixa e conteúdo flexível | [Sidebar](../../components/layout/sidebar/index.mdx) | Empilha sozinho quando falta espaço. |
-| Itens lado a lado que empilham abaixo de uma largura | [Switcher](../../components/layout/switcher/index.mdx) | Responsivo pelo espaço do contêiner, não do viewport. |
-| Alinhar um item no centro | [Center](../../components/layout/center/index.mdx) | Uma tarefa, uma ferramenta. |
-| Controle fino de eixo, ordem e alinhamento | [Flex](../../components/layout/flex/index.mdx) | Flexbox com a escala de espaço. |
+| Structure the page into aligned columns | [Grid](../../components/layout/grid/index.mdx) | Two dimensions, tied to the brand tokens. |
+| Limit the width and center | [Container](../../components/layout/container/index.mdx) | Maximum width by breakpoint, without columns. |
+| Stack items vertically with uniform space | [Stack](../../components/layout/stack/index.mdx) | One dimension, space from the scale. |
+| Items in a row that wrap (tags, buttons) | [Inline](../../components/layout/inline/index.mdx) | Natural wrapping, no breakpoint. |
+| Fixed side panel and flexible content | [Sidebar](../../components/layout/sidebar/index.mdx) | Stacks on its own when space runs out. |
+| Side-by-side items that stack below a width | [Switcher](../../components/layout/switcher/index.mdx) | Responsive to the container's space, not the viewport's. |
+| Align an item in the center | [Center](../../components/layout/center/index.mdx) | One task, one tool. |
+| Fine control of axis, order and alignment | [Flex](../../components/layout/flex/index.mdx) | Flexbox with the spacing scale. |
 
-Regra geral: **Grid para a página, primitivos para os componentes.** Se um card está usando a grade da página para alinhar seu ícone ao texto, a ferramenta está errada.
+General rule: **Grid for the page, primitives for components.** If a card is using the page grid to align its icon with the text, it is the wrong tool.
 
-## Acessibilidade
+## Accessibility
 
-- **Ordem visual = ordem do DOM.** Não use `order` nem posicionamento de grade para reordenar conteúdo: o teclado e o leitor de tela seguem o HTML (WCAG 1.3.2 e 2.4.3).
-- **Reflow.** Em 320px de largura (ou 1280px com zoom de 400%), o conteúdo cabe sem rolagem horizontal (WCAG 1.4.10). A grade de 4 colunas existe para isso.
-- **Zoom.** O zoom do navegador reduz a largura útil e ativa breakpoints menores. Teste o layout com zoom de 200%.
-- **Áreas de referência.** Use `header`, `nav`, `main` e `aside` nas regiões do layout; a grade não substitui a estrutura semântica.
+- **Visual order = DOM order.** Do not use `order` or grid placement to reorder content: the keyboard and the screen reader follow the HTML (WCAG 1.3.2 and 2.4.3).
+- **Reflow.** At 320px wide (or 1280px at 400% zoom), content fits without horizontal scrolling (WCAG 1.4.10). The 4-column grid exists for this.
+- **Zoom.** Browser zoom reduces the usable width and triggers smaller breakpoints. Test the layout at 200% zoom.
+- **Landmark regions.** Use `header`, `nav`, `main` and `aside` for the layout regions; the grid does not replace semantic structure.
 
-## Boas práticas
+## Best practices
 
-- Deixe a Grid aplicar colunas, gutter e margem. Não reproduza esses valores à mão.
-- Pense em colunas, não em pixels.
-- Teste nos **limites** de cada breakpoint: logo antes e logo depois é onde o layout quebra.
-- Mantenha todo texto e controle dentro da margem: nada colado na borda da tela.
-- Prefira layouts que se adaptam ao conteúdo (Switcher, Sidebar, Inline) a regras por breakpoint.
+- Let the Grid apply columns, gutter and margin. Do not reproduce those values by hand.
+- Think in columns, not pixels.
+- Test at the **edges** of each breakpoint: just before and just after is where the layout breaks.
+- Keep all text and controls inside the margin: nothing stuck to the screen edge.
+- Prefer layouts that adapt to the content (Switcher, Sidebar, Inline) to per-breakpoint rules.
 
 ## Anti-patterns
 
-<DosDonts variant="do" title="Estrutura que se adapta">
-  Dois cards em um Switcher: lado a lado quando há espaço, empilhados quando não há, sem nenhuma media query.
+<DosDonts variant="do" title="Structure that adapts">
+  Two cards in a Switcher: side by side when there is room, stacked when there is not, without any media query.
 </DosDonts>
 
-<DosDonts variant="dont" title="Breakpoint para consertar conteúdo">
-  Uma media query em 900px só para um título que estoura. O problema é o título (ou o contêiner), e ele vai estourar de novo em outra largura.
+<DosDonts variant="dont" title="A breakpoint to fix content">
+  A media query at 900px just for a heading that overflows. The problem is the heading (or the container), and it will overflow again at another width.
 </DosDonts>
 
-- **Larguras fixas em pixels** em blocos da página. Elas ignoram as colunas e quebram em telas menores.
-- **Grade dentro de grade dentro de grade.** Três níveis de colunas para posicionar um botão.
-- **Reordenar com CSS.** Uma lateral que aparece primeiro na tela, mas por último no leitor de tela.
-- **Breakpoints próprios.** Uma media query em 900px cria uma faixa que nenhuma outra parte do sistema conhece.
+- **Fixed pixel widths** on page blocks. They ignore the columns and break on smaller screens.
+- **Grid inside grid inside grid.** Three levels of columns to position a button.
+- **Reordering with CSS.** A side panel that appears first on screen, but last for the screen reader.
+- **Custom breakpoints.** A media query at 900px creates a band that no other part of the system knows about.

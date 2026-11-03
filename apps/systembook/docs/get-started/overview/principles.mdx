@@ -1,44 +1,44 @@
 ---
 title: "Principles"
-subtitle: "As ideias que orientam cada decisão do sistema, dos tokens aos componentes."
+subtitle: "The ideas behind every decision in the system, from tokens to components."
 order: 2
 ---
 
-## Decisões vêm de tokens
+## Decisions come from tokens
 
-Cores, espaçamentos, raios e sombras **não são valores soltos**: são tokens com nome e papel. Quando uma marca ou um tema muda, os tokens mudam, e todos os componentes acompanham sem retrabalho.
+Colors, spacing, radii and shadows **are not loose values**: they are tokens with a name and a role. When a brand or a theme changes, the tokens change, and every component follows without rework.
 
-O que **nunca varia** (como o tempo de uma transição) fica no código, e não vira token. Um token existe para o que **pode mudar**.
+What **never varies** (like the duration of a transition) stays in the code and does not become a token. A token exists for what **can change**.
 
-Veja como os tokens se organizam em [Design tokens](../../foundations/tokens/design-tokens.mdx) e como eles mudam por tema e marca em [Themes](../../foundations/tokens/themes.mdx).
+See how tokens are organized in [Design tokens](../../foundations/tokens/design-tokens.mdx) and how they change by theme and brand in [Themes](../../foundations/tokens/themes.mdx).
 
-## Acessível por padrão
+## Accessible by default
 
-A acessibilidade não é uma etapa final: faz parte da definição de pronto.
+Accessibility is not a final step: it is part of the definition of done.
 
-- Todos os componentes têm como meta o **WCAG 2.2 nível AA**.
-- Tudo o que é interativo funciona **só com teclado** e tem foco visível.
-- O significado **nunca depende só da cor**.
-- Respeitamos a preferência por **menos movimento**.
+- Every component aims at **WCAG 2.2 level AA**.
+- Everything interactive works **with the keyboard alone** and has visible focus.
+- Meaning **never depends on color alone**.
+- We respect the preference for **reduced motion**.
 
-Veja os detalhes em [Accessibility](../../foundations/accessibility/overview.mdx).
+See the details in [Accessibility](../../foundations/accessibility/overview.mdx).
 
-## Simples antes de complexo
+## Simple before complex
 
-Cada componente faz **uma coisa bem feita**. Quando a necessidade é maior, combinamos componentes em vez de inflar um só: um [Card](../../components/content/card/index.mdx) com um [Stack](../../components/layout/stack/index.mdx) e dois [Buttons](../../components/actionable/button/index.mdx).
+Each component does **one thing well**. When the need is bigger, we combine components instead of inflating one: a [Card](../../components/content/card/index.mdx) with a [Stack](../../components/layout/stack/index.mdx) and two [Buttons](../../components/actionable/button/index.mdx).
 
-## Hierarquia clara
+## Clear hierarchy
 
-O sistema ajuda a deixar óbvio **o que é mais importante** em cada tela: uma ação primária por contexto, uma escala tipográfica que organiza o conteúdo e espaços que agrupam o que está relacionado. Veja [Typography](../../foundations/properties/typography.mdx) e [Spacing](../../foundations/properties/spacing.mdx).
+The system helps make **what matters most** obvious on every screen: one primary action per context, a type scale that organizes the content and spacing that groups what belongs together. See [Typography](../../foundations/properties/typography.mdx) and [Spacing](../../foundations/properties/spacing.mdx).
 
-## Conteúdo é parte do design
+## Content is part of the design
 
-Um botão com o rótulo errado falha, mesmo com o visual perfeito. Por isso cada componente traz orientação de **escrita**, e há um guia completo em [Content](../../foundations/content/writing.mdx).
+A button with the wrong label fails, even with perfect visuals. That is why every component comes with **writing** guidance, and there is a full guide in [Content](../../foundations/content/writing.mdx).
 
-## Funciona em qualquer lugar
+## Works anywhere
 
-Os componentes são **Web Components** nativos, e a maior parte também funciona só com **CSS**. O sistema não depende de framework e se integra ao que o seu produto já usa. Veja a [Installation](../developers/installation.mdx) e o guia de [Frameworks](../developers/frameworks.mdx).
+The components are native **Web Components**, and most of them also work with **CSS** alone. The system does not depend on a framework and fits into whatever your product already uses. See [Installation](../developers/installation.mdx) and the [Frameworks](../developers/frameworks.mdx) guide.
 
-## Evolui com o uso
+## Evolves with use
 
-O sistema cresce a partir de necessidades reais, e as páginas registram as **limitações conhecidas** com honestidade, como o contraste do indicador de status do [Avatar](../../components/content/avatar/accessibility.mdx), para que o próximo passo seja claro.
+The system grows from real needs, and the pages record **known limitations** honestly, like the contrast of the [Avatar](../../components/content/avatar/accessibility.mdx) status indicator, so the next step is clear.

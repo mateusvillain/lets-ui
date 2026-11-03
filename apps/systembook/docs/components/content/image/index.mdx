@@ -1,64 +1,64 @@
 ---
 title: "Image"
-subtitle: "Exibe imagens com carregamento preguiçoso, espaço reservado e fallback, sem deslocar o layout."
+subtitle: "Displays images with lazy loading, a placeholder and a fallback, without shifting the layout."
 order: 7
 ---
 
 <ComponentEmbed component="Image" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Imagens de conteúdo">
-  Fotos, capas, ilustrações e capturas de tela.
+<DosDonts variant="do" title="Content images">
+  Photos, covers, illustrations and screenshots.
 </DosDonts>
 
-<DosDonts variant="do" title="Carregamento sem saltos">
-  O Image reserva o espaço antes do carregamento e mostra um indicador enquanto carrega.
+<DosDonts variant="do" title="Loading without jumps">
+  Image reserves the space before loading and shows an indicator while it loads.
 </DosDonts>
 
-<DosDonts variant="do" title="Falha no carregamento">
-  Ele oferece uma alternativa se a imagem não carregar.
+<DosDonts variant="do" title="Loading failure">
+  It offers an alternative if the image does not load.
 </DosDonts>
 
-<DosDonts variant="dont" title="Ícones">
-  Use o conjunto de ícones do sistema.
+<DosDonts variant="dont" title="Icons">
+  Use the system icon set.
 </DosDonts>
 
-<DosDonts variant="dont" title="Fotos de pessoas ou marcas pequenas">
-  Use o [Avatar](../avatar/index.mdx).
+<DosDonts variant="dont" title="Photos of people or small logos">
+  Use [Avatar](../avatar/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Fundos decorativos">
-  Aplique por CSS.
+<DosDonts variant="dont" title="Decorative backgrounds">
+  Apply them with CSS.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Image: imagem carregada com legenda, espaço reservado durante o carregamento e fallback após falha](./anatomy.png)
+![Image anatomy: loaded image with a caption, placeholder while loading, and fallback after a failure](./anatomy.png)
 
-1. **Imagem**: o conteúdo principal.
-2. **Espaço reservado**: ocupa a área antes do carregamento, evitando saltos no layout.
-3. **Fallback**: cor ou imagem alternativa quando a principal falha.
-4. **Legenda** (opcional): descreve a imagem abaixo dela.
+1. **Image**: the main content.
+2. **Placeholder**: fills the area before loading, preventing layout jumps.
+3. **Fallback**: an alternative color or image when the main one fails.
+4. **Caption** (optional): describes the image below it.
 
-## Proporção
+## Aspect ratio
 
-Defina `aspect-ratio` (como `16/9`, `4/3` ou `1/1`) para reservar o espaço. Isso evita que o conteúdo da página pule quando a imagem aparece. O ajuste `fit` (`cover` por padrão) define como a imagem preenche a área.
+Set `aspect-ratio` (such as `16/9`, `4/3` or `1/1`) to reserve the space. This keeps the page content from jumping when the image appears. The `fit` setting (`cover` by default) defines how the image fills the area.
 
-## Formato
+## Shape
 
-Com `radius`, a imagem ganha cantos arredondados, ou círculo completo para imagens redondas.
+With `radius`, the image gets rounded corners, or a full circle for round images.
 
 <ComponentEmbed component="Image" variant="circle" />
 
-## Legenda
+## Caption
 
-Com `caption`, a imagem vira uma figura com legenda. Use quando o texto agrega contexto, como fonte, data ou descrição.
+With `caption`, the image becomes a figure with a caption. Use it when the text adds context, such as source, date or description.
 
 <ComponentEmbed component="Image" variant="caption" />
 
-## Relacionados
+## Related
 
-- [Avatar](../avatar/index.mdx): fotos de pessoas.
-- [Card](../card/index.mdx): imagens dentro de cards.
-- [Grid](../../layout/grid/index.mdx): galerias.
+- [Avatar](../avatar/index.mdx): photos of people.
+- [Card](../card/index.mdx): images inside cards.
+- [Grid](../../layout/grid/index.mdx): galleries.

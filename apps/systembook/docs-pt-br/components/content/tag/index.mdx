@@ -1,0 +1,70 @@
+---
+title: "Tag"
+subtitle: "Rótulo curto que classifica ou dá status a um item, como \"Ativo\", \"Beta\" ou \"Falhou\"."
+---
+
+<ComponentEmbed component="Tag" variant="surface" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Status">
+  A situação de um pedido ou o estágio de um recurso.
+</DosDonts>
+
+<DosDonts variant="do" title="Categoria">
+  O tipo de um conteúdo ou a etiqueta de um item.
+</DosDonts>
+
+<DosDonts variant="dont" title="Ações clicáveis">
+  A Tag não é um botão. Use [Button](../../actionable/button/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Mensagens longas">
+  Use um [Alert](../alert/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Contadores e notificações">
+  Use um indicador numérico próprio.
+</DosDonts>
+
+<DosDonts variant="dont" title="Frases">
+  A Tag é para uma ou duas palavras.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Tag: container e rótulo](./anatomy.png)
+
+1. **Container**: define a cor, o raio e o espaçamento.
+2. **Rótulo**: o texto curto.
+
+## Estilos
+
+| Estilo | Descrição | Quando usar |
+| --- | --- | --- |
+| **Surface** (padrão) | Fundo suave. | A maioria dos casos, incluindo tabelas e listas. |
+| **Container** | Fundo de destaque. | Quando a tag precisa de mais ênfase. |
+
+<ComponentEmbed component="Tag" variant="container" />
+
+## Variantes
+
+A cor segue o significado:
+
+| Variante | Significado | Exemplo |
+| --- | --- | --- |
+| **Primary** | Destaque da marca ou categoria principal. | "Novo" |
+| **Success** | Algo positivo ou concluído. | "Ativo", "Pago" |
+| **Caution** | Atenção ou algo pendente. | "Pendente", "Expira em breve" |
+| **Danger** | Problema ou algo negativo. | "Falhou", "Recusado" |
+| **Neutral** | Informação sem carga de significado. | "Rascunho", "Arquivado" |
+
+## Tamanhos e formato
+
+`sm`, `md` (padrão), `lg` e `xl`. Com `circle`, a Tag fica totalmente arredondada, como uma pílula.
+
+## Relacionados
+
+- [Table](../table/index.mdx): onde Tags indicam status.
+- [Avatar](../avatar/index.mdx): status de presença.
+- [Alert](../alert/index.mdx): mensagens com mais contexto.

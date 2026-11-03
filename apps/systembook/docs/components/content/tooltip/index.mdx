@@ -1,60 +1,60 @@
 ---
 title: "Tooltip"
-subtitle: "Dica curta que aparece ao passar o mouse ou focar em um elemento, para explicá-lo."
+subtitle: "A short hint that appears when you hover over or focus an element, to explain it."
 order: 13
 ---
 
 <ComponentEmbed component="Tooltip" variant="top" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Nomear um ícone">
-  Dar nome a um [Icon Button](../../actionable/icon-button/index.mdx).
+<DosDonts variant="do" title="Name an icon">
+  Give a name to an [Icon Button](../../actionable/icon-button/index.mdx).
 </DosDonts>
 
-<DosDonts variant="do" title="Explicar uma abreviação">
-  Um esclarecimento rápido sobre um termo.
+<DosDonts variant="do" title="Explain an abbreviation">
+  A quick clarification about a term.
 </DosDonts>
 
-<DosDonts variant="do" title="Mostrar um atalho">
-  O atalho de teclado de uma ação.
+<DosDonts variant="do" title="Show a shortcut">
+  The keyboard shortcut for an action.
 </DosDonts>
 
-<DosDonts variant="dont" title="Informação essencial">
-  Se a pessoa precisa dela para continuar, mostre na página.
+<DosDonts variant="dont" title="Essential information">
+  If the person needs it to continue, show it on the page.
 </DosDonts>
 
-<DosDonts variant="dont" title="Conteúdo longo, formatado ou com links">
-  Use um Modal, um Drawer ou texto na própria tela.
+<DosDonts variant="dont" title="Long, formatted or linked content">
+  Use a Modal, a Drawer or text on the screen itself.
 </DosDonts>
 
-<DosDonts variant="dont" title="Telas de toque">
-  Não há hover, e o toque pode acionar o elemento em vez de mostrar a dica.
+<DosDonts variant="dont" title="Touch screens">
+  There is no hover, and a tap may activate the element instead of showing the hint.
 </DosDonts>
 
-<DosDonts variant="dont" title="Mensagens de erro ou validação">
-  Mostre junto ao campo.
+<DosDonts variant="dont" title="Error or validation messages">
+  Show them next to the field.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Tooltip: gatilho, balão e seta](./anatomy.png)
+![Tooltip anatomy: trigger, bubble and arrow](./anatomy.png)
 
-1. **Gatilho**: o elemento que a dica explica.
-2. **Balão**: a caixa de texto.
-3. **Seta**: aponta para o gatilho.
+1. **Trigger**: the element the hint explains.
+2. **Bubble**: the text box.
+3. **Arrow**: points to the trigger.
 
-## Posição
+## Position
 
-O balão aparece em `top` (padrão), `bottom`, `left` ou `right` do gatilho. Escolha a posição que **não cubra** informação importante.
+The bubble appears at the `top` (default), `bottom`, `left` or `right` of the trigger. Choose the position that **does not cover** important information.
 
 <ComponentEmbed component="Tooltip" variant="bottom" />
 
-## Gatilho
+## Trigger
 
-O gatilho pode ser qualquer elemento focável. Se você não colocar nenhum, o Tooltip cria um botão com o texto de `label`.
+The trigger can be any focusable element. If you do not provide one, the Tooltip creates a button with the `label` text.
 
-## Relacionados
+## Related
 
-- [Icon Button](../../actionable/icon-button/index.mdx): o parceiro mais comum.
-- [Modal](../modal/index.mdx), [Drawer](../drawer/index.mdx): conteúdo mais longo.
+- [Icon Button](../../actionable/icon-button/index.mdx): the most common partner.
+- [Modal](../modal/index.mdx), [Drawer](../drawer/index.mdx): longer content.

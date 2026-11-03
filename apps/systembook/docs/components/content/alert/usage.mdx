@@ -3,39 +3,39 @@ title: "Usage"
 order: 2
 ---
 
-## Escolha a variante pelo significado
+## Choose the variant by meaning
 
-A cor segue o significado, não o gosto. A pessoa aprende o código e reconhece rápido a gravidade da mensagem.
+Color follows meaning, not taste. The person learns the code and quickly recognizes how serious the message is.
 
-<DosDonts variant="do" title="Variante coerente com a mensagem">
-  Use `danger` para falhas, `caution` para riscos, `success` para confirmações e `info` para o resto.
+<DosDonts variant="do" title="Variant consistent with the message">
+  Use `danger` for failures, `caution` for risks, `success` for confirmations and `info` for everything else.
 </DosDonts>
 
-<DosDonts variant="dont" title="Variante só pela estética">
-  Usar `success` para uma mensagem neutra, ou `danger` para chamar atenção a uma promoção. Isso enfraquece o significado das cores.
+<DosDonts variant="dont" title="Variant for looks only">
+  Using `success` for a neutral message, or `danger` to draw attention to a promotion. This weakens the meaning of the colors.
 </DosDonts>
 
-## Escreva a mensagem
+## Write the message
 
-- **Título curto e direto**, com até cerca de seis palavras: "Pagamento recusado".
-- **Conteúdo** que explica o motivo e **o que fazer**: "Verifique os dados do cartão ou use outra forma de pagamento."
-- Use tom humano e neutro. Não culpe a pessoa.
-- Evite jargão técnico e códigos de erro como única informação.
+- **Short, direct title**, up to about six words: "Payment declined".
+- **Content** that explains the reason and **what to do**: "Check your card details or use another payment method."
+- Use a human, neutral tone. Do not blame the person.
+- Avoid technical jargon and error codes as the only information.
 
-## Posição
+## Position
 
-Coloque o Alert **perto do contexto que ele descreve**: no topo do formulário com erro, acima da tabela afetada, no início da página para avisos globais. Nunca cubra o conteúdo.
+Place the Alert **close to the context it describes**: at the top of the form with the error, above the affected table, at the start of the page for global warnings. Never cover the content.
 
-## Ações
+## Actions
 
-Se a pessoa pode resolver o problema agora, inclua uma ação clara ("Atualizar pagamento"). Limite-se a uma ou duas ações.
+If the person can solve the problem now, include a clear action ("Update payment"). Keep it to one or two actions.
 
-## Quantidade
+## Quantity
 
-Evite mostrar vários Alerts ao mesmo tempo. Eles competem entre si e perdem o efeito. Priorize o mais importante, ou agrupe as mensagens em uma só.
+Avoid showing several Alerts at the same time. They compete with each other and lose their effect. Prioritize the most important one, or group the messages into one.
 
-## Boas práticas
+## Best practices
 
-- Não use o Alert para mensagens que duram só um instante: use o Toast.
-- Não esconda um Alert importante depois de um tempo. Ele deve permanecer até ser resolvido ou dispensado.
-- Garanta que o alerta esteja no DOM quando o problema ocorrer, para que leitores de tela o anunciem.
+- Do not use the Alert for messages that last only a moment: use the Toast.
+- Do not hide an important Alert after a while. It must stay until it is resolved or dismissed.
+- Make sure the alert is in the DOM when the problem happens, so screen readers announce it.

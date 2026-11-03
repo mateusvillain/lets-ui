@@ -3,63 +3,63 @@ title: "Code"
 order: 4
 ---
 
-| Breakpoint | Viewport | Colunas | Gap  | Margem lateral                   |
-| ---------- | -------- | ------- | ---- | -------------------------------- |
-| base       | ≤ 767px  | 4       | 16px | 16px                             |
-| `sm`       | ≥ 768px  | 8       | 16px | 32px                             |
-| `md`       | ≥ 1024px | 8       | 16px | 40px                             |
-| `lg`       | ≥ 1280px | 12      | 24px | 40px                             |
-| `1xl`      | ≥ 1440px | 12      | 24px | `max-width` 1360px, centralizado |
+| Breakpoint | Viewport | Columns | Gap  | Side margin                  |
+| ---------- | -------- | ------- | ---- | ---------------------------- |
+| base       | ≤ 767px  | 4       | 16px | 16px                         |
+| `sm`       | ≥ 768px  | 8       | 16px | 32px                         |
+| `md`       | ≥ 1024px | 8       | 16px | 40px                         |
+| `lg`       | ≥ 1280px | 12      | 24px | 40px                         |
+| `1xl`      | ≥ 1440px | 12      | 24px | `max-width` 1360px, centered |
 
-Toda a tabela vem dos tokens de marca `lui.brand.grid.*` — `breakpoint`,
-`column`, `gap`, `margin` e `container` —, então uma marca redefine o grid
-inteiro redefinindo esses tokens. Gap e margem apontam para `spacing.fixed`: a
-responsividade do grid vem dos breakpoints, que já movem a margem de 16 para 32
-e 40, e não de uma rampa dentro de cada step.
+The whole table comes from the `lui.brand.grid.*` brand tokens — `breakpoint`,
+`column`, `gap`, `margin` and `container` — so a brand redefines the entire
+grid by redefining those tokens. Gap and margin point to `spacing.fixed`: the
+grid's responsiveness comes from the breakpoints, which already move the margin
+from 16 to 32 and 40, not from a ramp inside each step.
 
-Gap, margem e o `max-width` do `1xl` resolvem para custom properties e trocam
-junto com `data-brand` em runtime. Os breakpoints e a contagem de colunas são
-fixados em tempo de compilação — um prelúdio de media query e o `@for` que gera
-as classes `.col-*` não conseguem ler um `var()` —, então uma marca que mude
-esses dois precisa compilar o CSS a partir do fonte.
+Gap, margin and the `1xl` `max-width` resolve to custom properties and change
+with `data-brand` at runtime. Breakpoints and column count are fixed at
+compile time — a media query prelude and the `@for` that generates the
+`.col-*` classes cannot read a `var()` — so a brand that changes those two
+needs to compile the CSS from source.
 
-## Colunas responsivas
+## Responsive columns
 
-As colunas são **mobile-first**: um valor declarado em `sm` vale de `sm` para
-cima até que outro breakpoint o substitua. O passo base não leva prefixo.
+Columns are **mobile-first**: a value declared at `sm` applies from `sm`
+upward until another breakpoint overrides it. The base step has no prefix.
 
-Atenção ao salto de 8 para 12 colunas no `lg`: um `col-sm-4` que era metade da
-linha em `sm` vira um terço em `lg` se não for redeclarado.
+Watch out for the jump from 8 to 12 columns at `lg`: a `col-sm-4` that was half
+the row at `sm` becomes a third at `lg` if it is not redeclared.
 
-## Grid aninhado
+## Nested grid
 
-Um `lui-grid` dentro de um `lui-grid-item` recebe `flush` automaticamente — ele
-reparte a largura da track do pai em vez de reaplicar a margem de página.
+An `lui-grid` inside an `lui-grid-item` gets `flush` automatically — it
+splits the width of the parent's track instead of reapplying the page margin.
 
-## Classe CSS (sem Web Component)
+## CSS class (without Web Component)
 
-Todo filho direto de `.grid` já é uma célula de uma coluna, então um bloco que
-ocupa uma coluna só não precisa de classe nenhuma.
+Every direct child of `.grid` is already a one-column cell, so a block that
+spans a single column needs no class at all.
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
 <lui-grid>
-  <lui-grid-item col="full">Cabeçalho</lui-grid-item>
-  <lui-grid-item col="2" col-sm="4" col-lg="6">Coluna A</lui-grid-item>
-  <lui-grid-item col="2" col-sm="4" col-lg="6">Coluna B</lui-grid-item>
+  <lui-grid-item col="full">Header</lui-grid-item>
+  <lui-grid-item col="2" col-sm="4" col-lg="6">Column A</lui-grid-item>
+  <lui-grid-item col="2" col-sm="4" col-lg="6">Column B</lui-grid-item>
 </lui-grid>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="grid">
-  <div class="col-full">Cabeçalho</div>
-  <div class="col-2 col-sm-4 col-lg-6">Coluna A</div>
-  <div class="col-2 col-sm-4 col-lg-6">Coluna B</div>
+  <div class="col-full">Header</div>
+  <div class="col-2 col-sm-4 col-lg-6">Column A</div>
+  <div class="col-2 col-sm-4 col-lg-6">Column B</div>
 </div>
 ```
 
@@ -67,17 +67,17 @@ ocupa uma coluna só não precisa de classe nenhuma.
 
 ### `lui-grid` / `.grid`
 
-| Atributo | Classe             | Valores                             | Padrão    |
-| -------- | ------------------ | ----------------------------------- | --------- |
-| `align`  | `.grid--align-{v}` | `stretch`, `start`, `center`, `end` | `stretch` |
-| `flush`  | `.grid--flush`     | booleano                            | `false`   |
+| Attribute | Class              | Values                              | Default   |
+| --------- | ------------------ | ----------------------------------- | --------- |
+| `align`   | `.grid--align-{v}` | `stretch`, `start`, `center`, `end` | `stretch` |
+| `flush`   | `.grid--flush`     | boolean                             | `false`   |
 
-`flush` remove a margem lateral e o `max-width`, mantendo colunas e gap do
-breakpoint. Use em seções full-bleed.
+`flush` removes the side margin and the `max-width`, keeping the breakpoint's
+columns and gap. Use it in full-bleed sections.
 
-### `lui-grid-item` / filhos de `.grid`
+### `lui-grid-item` / children of `.grid`
 
-| Atributo   | Classe            | Valores          |
+| Attribute  | Class             | Values           |
 | ---------- | ----------------- | ---------------- |
 | `col`      | `.col-{n}`        | `1`–`4`, `full`  |
 | `col-sm`   | `.col-sm-{n}`     | `1`–`8`, `full`  |
@@ -85,5 +85,5 @@ breakpoint. Use em seções full-bleed.
 | `col-lg`   | `.col-lg-{n}`     | `1`–`12`, `full` |
 | `col-1xl`  | `.col-1xl-{n}`    | `1`–`12`, `full` |
 
-No Web Component o valor é limitado ao número de colunas do breakpoint, então
-`col="8"` no passo base vira `span 4`.
+In the Web Component the value is capped at the breakpoint's column count, so
+`col="8"` at the base step becomes `span 4`.

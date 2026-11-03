@@ -1,61 +1,61 @@
 ---
 title: "Checkbox"
-subtitle: "Permite marcar uma ou mais opções independentes, ou ativar uma opção única de sim ou não."
+subtitle: "Lets people check one or more independent options, or turn on a single yes-or-no option."
 order: 1
 ---
 
 <ComponentEmbed component="Checkbox" variant="unchecked" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Selecionar vários itens">
-  Interesses, permissões ou filtros de uma lista.
+<DosDonts variant="do" title="Select several items">
+  Interests, permissions or filters from a list.
 </DosDonts>
 
-<DosDonts variant="do" title="Confirmar uma opção ao enviar">
-  Um sim ou não que só vale depois de enviar o formulário, como "Li e aceito os termos".
+<DosDonts variant="do" title="Confirm an option on submit">
+  A yes or no that only takes effect after the form is submitted, such as "I have read and accept the terms".
 </DosDonts>
 
-<DosDonts variant="dont" title="Escolha de apenas uma opção">
-  Use o [Radio Group](../radio-group/index.mdx).
+<DosDonts variant="dont" title="Choosing only one option">
+  Use the [Radio Group](../radio-group/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Efeito imediato ao alternar">
-  Para ligar notificações, por exemplo, use o [Switch](../switch/index.mdx).
+<DosDonts variant="dont" title="Immediate effect on toggle">
+  To turn on notifications, for example, use the [Switch](../switch/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Escolher entre muitas opções">
-  Com mais de sete opções, use um [Select](../select/index.mdx) ou uma lista com busca.
+<DosDonts variant="dont" title="Choosing among many options">
+  With more than seven options, use a [Select](../select/index.mdx) or a searchable list.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Checkbox: caixa e label no estado marcado, e mensagem de erro](./anatomy.png)
+![Checkbox anatomy: box and label in the checked state, and error message](./anatomy.png)
 
-1. **Caixa**: mostra o estado marcado ou desmarcado.
-2. **Label**: descreve a opção. Clicar nela também alterna a caixa.
-3. **Mensagem de erro** (opcional): aparece quando a escolha é obrigatória e está faltando.
+1. **Box**: shows the checked or unchecked state.
+2. **Label**: describes the option. Clicking it also toggles the box.
+3. **Error message** (optional): appears when the choice is required and missing.
 
-## Estados
+## States
 
-| Estado | Descrição |
+| State | Description |
 | --- | --- |
-| **Desmarcado** | A opção não está escolhida. |
-| **Marcado** | A opção está escolhida. |
-| **Foco** | A caixa tem anel de foco ao navegar por teclado. |
-| **Erro** | A escolha é obrigatória e não foi feita. |
-| **Desabilitado** | Não pode ser alterado agora. |
+| **Unchecked** | The option is not chosen. |
+| **Checked** | The option is chosen. |
+| **Focus** | The box has a focus ring when navigating by keyboard. |
+| **Error** | The choice is required and was not made. |
+| **Disabled** | It cannot be changed right now. |
 
 <ComponentEmbed component="Checkbox" variant="checked" />
 
 <ComponentEmbed component="Checkbox" variant="error" />
 
-## Tamanhos
+## Sizes
 
-`lg` (padrão) e `md`. Use o mesmo tamanho dentro de um grupo.
+`lg` (default) and `md`. Use the same size within a group.
 
-## Relacionados
+## Related
 
-- [Radio Group](../radio-group/index.mdx): uma única escolha.
-- [Switch](../switch/index.mdx): ligar e desligar com efeito imediato.
-- [Select](../select/index.mdx): uma opção de uma lista longa.
+- [Radio Group](../radio-group/index.mdx): a single choice.
+- [Switch](../switch/index.mdx): turn on and off with immediate effect.
+- [Select](../select/index.mdx): one option from a long list.

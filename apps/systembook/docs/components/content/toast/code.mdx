@@ -11,53 +11,53 @@ order: 4
 
 ## Custom icon
 
-O ícone é personalizável em todas as variantes via o slot `icon`. Cada variante já vem com um ícone padrão em estilo outline — `bell` (`default`), `circle-check` (`success`) e `circle-x` (`danger`) — que é substituído automaticamente quando algo é passado no slot.
+The icon can be customized in every variant through the `icon` slot. Each variant comes with a default outline icon — `bell` (`default`), `circle-check` (`success`) and `circle-x` (`danger`) — which is replaced automatically when something is passed in the slot.
 
-## Conteúdo (slot padrão)
+## Content (default slot)
 
-A descrição secundária pode ser passada de duas formas: como filhos diretos do elemento (slot padrão/sem nome — a forma recomendada, usada na maioria dos exemplos desta página) **ou** pelo atributo `content` (texto puro, sempre escapado). Quando há conteúdo real no slot padrão, ele tem prioridade sobre `content`; caso contrário, `content` é usado como fallback.
+The secondary description can be passed in two ways: as direct children of the element (default/unnamed slot — the recommended way, used in most examples on this page) **or** through the `content` attribute (plain text, always escaped). When there is real content in the default slot, it takes priority over `content`; otherwise, `content` is used as a fallback.
 
 ## Auto-dismiss
 
-Por padrão o toast desaparece sozinho após `duration` milissegundos (padrão `5000`). Passar o mouse sobre o toast, ou mover o foco do teclado para dentro dele, pausa a contagem; ela retoma de onde parou quando o ponteiro sai ou o foco se move para fora.
+By default, the toast disappears on its own after `duration` milliseconds (default `5000`). Hovering over the toast, or moving keyboard focus into it, pauses the countdown; it resumes where it stopped when the pointer leaves or focus moves out.
 
 ## Persistent
 
-Use `duration="0"` para desabilitar o auto-dismiss por completo — o toast permanece até ser fechado manualmente.
+Use `duration="0"` to disable auto-dismiss entirely — the toast stays until it is closed manually.
 
-## Danger nunca desaparece sozinho
+## Danger never disappears on its own
 
-`variant="danger"` sempre se comporta como persistente e ignora qualquer valor de `duration`, mesmo que seja explicitamente definido. Essa é uma decisão de acessibilidade deliberada (ver seção abaixo), não um bug.
+`variant="danger"` always behaves as persistent and ignores any `duration` value, even when explicitly set. This is a deliberate accessibility decision (see the section below), not a bug.
 
-## Com ação
+## With action
 
-O botão de ação é opcional e fica sempre à direita. **Quando um botão de ação está presente, o botão de fechar (X) não é renderizado** — clicar em qualquer lugar da área de ação dispensa o toast (além de disparar o clique normal do botão). Isso significa que, se o consumidor usar um botão de ação em um toast `danger`, essa passa a ser a única forma de dispensá-lo.
+The action button is optional and always sits on the right. **When an action button is present, the close button (X) is not rendered** — clicking anywhere in the action area dismisses the toast (in addition to firing the button's normal click). This means that, if the consumer uses an action button in a `danger` toast, it becomes the only way to dismiss it.
 
-### Com ação — todas as variantes
+### With action — all variants
 
-O `variant` do botão de ação é escolhido pelo consumidor (não é derivado automaticamente do `variant` do toast) — combine-os manualmente para manter a consistência visual, como no exemplo abaixo.
+The `variant` of the action button is chosen by the consumer (it is not derived automatically from the toast's `variant`) — match them manually to keep visual consistency, as in the example below.
 
-## Posicionamento
+## Positioning
 
-Por padrão, `.toast-region` fica fixo na parte inferior central da tela, com ~24px de respiro em relação à borda (padrão mobile/Android — ver `.study/toast.md` §10). Outras posições são opt-in via modificador na própria classe:
+By default, `.toast-region` is fixed at the bottom center of the screen, with ~24px of breathing room from the edge (mobile/Android pattern — see `.study/toast.md` §10). Other positions are opt-in through a modifier on the class itself:
 
 ```html
-<div class="toast-region toast-region--top-right" role="region" aria-label="Notificações">...</div>
+<div class="toast-region toast-region--top-right" role="region" aria-label="Notifications">...</div>
 ```
 
-Modificadores disponíveis: `--top-left`, `--top-center`, `--top-right`, `--bottom-left`, `--bottom-center` (equivalente ao padrão), `--bottom-right`. Em telas `< 768px` a região sempre ocupa a largura toda (menos 16px de margem em cada lado) e fica ancorada embaixo, respeitando `env(safe-area-inset-bottom)`, independentemente do modificador escolhido.
+Available modifiers: `--top-left`, `--top-center`, `--top-right`, `--bottom-left`, `--bottom-center` (same as the default), `--bottom-right`. On screens `< 768px` the region always takes the full width (minus a 16px margin on each side) and is anchored at the bottom, respecting `env(safe-area-inset-bottom)`, regardless of the chosen modifier.
 
-## Empilhado (stacked)
+## Stacked
 
-Múltiplos elementos `<lui-toast>` dentro do mesmo `.toast-region` colapsam visualmente em uma pilha: o último elemento no DOM fica em primeiro plano em escala normal, e os anteriores recuam atrás dele em escala 95%, espiando levemente por cima — sem sobreposição bagunçada. Empilhamento/posicionamento continuam sendo apenas CSS neste release — não há API imperativa de fila (`toast.show()`) ainda (planejada como follow-up).
+Multiple `<lui-toast>` elements inside the same `.toast-region` collapse visually into a stack: the last element in the DOM sits in front at normal scale, and the previous ones recede behind it at 95% scale, peeking slightly over the top — without a messy overlap. Stacking/positioning is still CSS only in this release — there is no imperative queue API (`toast.show()`) yet (planned as a follow-up).
 
 ## XSS-safe content
 
-`title` e o atributo `content` são interpolados como texto puro via o template `html` do Lit (com escape automático) — strings parecidas com HTML são renderizadas literalmente, nunca como marcação ou script. **Essa garantia vale apenas para o atributo `content`.** Se você usar o slot padrão em vez do atributo, o conteúdo passado é HTML real no light DOM e não é escapado — nunca insira texto de origem não confiável diretamente no slot sem sanitizar antes.
+`title` and the `content` attribute are interpolated as plain text through Lit's `html` template (with automatic escaping) — HTML-like strings are rendered literally, never as markup or script. **This guarantee applies only to the `content` attribute.** If you use the default slot instead of the attribute, the content passed is real HTML in the light DOM and is not escaped — never insert text from an untrusted source directly into the slot without sanitizing it first.
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `variant` | `string` | `default` |
 | `title` | `string` | `''` |
@@ -65,61 +65,61 @@ Múltiplos elementos `<lui-toast>` dentro do mesmo `.toast-region` colapsam visu
 | `duration` | `number` | `5000` |
 | `close-label` | `string` | `Close` |
 
-## Uso
+## Usage
 
 ### Web Component
 
-O container `.toast-region` deve ser um landmark de navegação (`role="region"` + `aria-label`) para que usuários de teclado/leitor de tela consigam alcançá-lo via navegação por landmarks (F6):
+The `.toast-region` container must be a navigation landmark (`role="region"` + `aria-label`) so that keyboard/screen reader users can reach it through landmark navigation (F6):
 
 ```html
-<div class="toast-region" role="region" aria-label="Notificações">
-  <lui-toast variant="default" title="Título">Informação importante</lui-toast>
+<div class="toast-region" role="region" aria-label="Notifications">
+  <lui-toast variant="default" title="Title">Important information</lui-toast>
 </div>
 ```
 
-### Ícone customizado
+### Custom icon
 
 ```html
-<lui-toast variant="default" title="Novo seguidor" content="Ana começou a seguir você.">
+<lui-toast variant="default" title="New follower" content="Ana started following you.">
   <svg slot="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">...</svg>
 </lui-toast>
 ```
 
-### Conteúdo via slot (em vez do atributo)
+### Content through the slot (instead of the attribute)
 
 ```html
-<lui-toast variant="success" title="Alterações salvas">
-  Seus dados foram atualizados. <a href="/perfil">Ver perfil</a>.
+<lui-toast variant="success" title="Changes saved">
+  Your data has been updated. <a href="/profile">View profile</a>.
 </lui-toast>
 ```
 
-### Com ação
+### With action
 
 ```html
-<lui-toast variant="success" title="Alterações salvas" content="Seus dados foram atualizados.">
-  <lui-button slot="action" variant="success" label="Ver"></lui-button>
+<lui-toast variant="success" title="Changes saved" content="Your data has been updated.">
+  <lui-button slot="action" variant="success" label="View"></lui-button>
 </lui-toast>
 ```
 
-### Fechamento manual
+### Manual close
 
-O componente emite o evento `lui-close` (`bubbles`, `composed`) no fechamento manual (X ou clique na área de ação) e no auto-dismiss.
+The component emits the `lui-close` event (`bubbles`, `composed`) on manual close (X or a click in the action area) and on auto-dismiss.
 
 ```html
 <script>
   document.querySelector('lui-toast').addEventListener('lui-close', (e) => {
-    // e.target já se remove do DOM sozinho após a animação de saída;
-    // use este evento para sincronizar estado da aplicação (ex: fila de toasts).
+    // e.target removes itself from the DOM after the exit animation;
+    // use this event to sync application state (e.g. a toast queue).
   });
 </script>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="toast">
   <div class="toast__text">
-    <p>Informação importante</p>
+    <p>Important information</p>
   </div>
 </div>
 ```
@@ -128,22 +128,22 @@ O componente emite o evento `lui-close` (`bubbles`, `composed`) no fechamento ma
 
 | Prop/Attribute | Type                              | Default     | Description                                                                      |
 | --------------- | ----------------------------------- | ------------- | ------------------------------------------------------------------------------------ |
-| `variant`       | `default` \| `success` \| `danger` | `default`   | Variante semântica — controla ícone padrão, cor do ícone e role ARIA.               |
-| `title`         | `string`                            | `''`          | Mensagem principal curta.                                                            |
-| `content`       | `string`                            | `''`          | Descrição secundária opcional. Serve como fallback do slot padrão — ignorado se houver conteúdo real slotado. |
-| `duration`      | `number` (ms)                       | `5000`        | Delay de auto-dismiss. `0` desabilita. Ignorado quando `variant="danger"`.            |
-| `close-label`   | `string`                            | `'Close'`     | Label acessível do botão de fechar (só renderizado quando não há `action` slotada). |
+| `variant`       | `default` \| `success` \| `danger` | `default`   | Semantic variant — controls the default icon, the icon color and the ARIA role.     |
+| `title`         | `string`                            | `''`          | Short main message.                                                                  |
+| `content`       | `string`                            | `''`          | Optional secondary description. Serves as the default slot's fallback — ignored if there is real slotted content. |
+| `duration`      | `number` (ms)                       | `5000`        | Auto-dismiss delay. `0` disables it. Ignored when `variant="danger"`.                |
+| `close-label`   | `string`                            | `'Close'`     | Accessible label of the close button (only rendered when there is no slotted `action`). |
 
 ### Slots
 
 | Slot                | Description                                                                                     |
 | ------------------- | --------------------------------------------------------------------------------------------------- |
-| _(padrão/sem nome)_ | Descrição secundária, com suporte a marcação (ex: links). Substitui o atributo `content` quando presente. |
-| `icon`              | Ícone customizado. Fallback outline por variante: bell (`default`), circle-check (`success`), circle-x (`danger`). |
-| `action`            | Botão de ação opcional, alinhado à direita. Quando presente, substitui o botão de fechar (X).       |
+| _(default/unnamed)_ | Secondary description, with markup support (e.g. links). Replaces the `content` attribute when present. |
+| `icon`              | Custom icon. Outline fallback per variant: bell (`default`), circle-check (`success`), circle-x (`danger`). |
+| `action`            | Optional action button, aligned to the right. When present, it replaces the close button (X).       |
 
 ### Events
 
 | Event       | Detail | When                                                                             |
 | ----------- | ------ | ------------------------------------------------------------------------------------ |
-| `lui-close` | —      | Disparado no fechamento manual (X, `Esc`, clique na área de ação) e no auto-dismiss. |
+| `lui-close` | —      | Fired on manual close (X, `Esc`, click in the action area) and on auto-dismiss.    |

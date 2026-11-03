@@ -3,12 +3,12 @@ import type { SystemBookConfig } from '@systembook/cli';
 // Content format: https://github.com/mateusvillain/systembook/blob/main/docs/static-format.md
 export default {
   name: "Let's UI",
-  // The content in `docs/` is the default language; `docs-en/` mirrors it
-  // with the translated files. A page without a translation falls back to
-  // Portuguese, with a notice.
+  // The content in `docs/` is the default language (English); `docs-pt-br/`
+  // mirrors it with the Portuguese files. A page without a translation falls
+  // back to English, with a notice.
   locales: {
-    default: { code: 'pt-BR', label: 'Português' },
-    translations: [{ code: 'en', label: 'English' }],
+    default: { code: 'en', label: 'English' },
+    translations: [{ code: 'pt-BR', label: 'Português' }],
   },
   statusTags: [
     { titulo: 'Stable', cor: '#2e7d32' },

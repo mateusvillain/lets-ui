@@ -1,95 +1,95 @@
 ---
 title: "Date Picker"
-subtitle: "Campo para escolher uma data, ou um período, num calendário. Também aceita a data digitada."
+subtitle: "A field for choosing a date, or a period, on a calendar. It also accepts a typed date."
 order: 2
 ---
 
 <ComponentEmbed component="DatePicker" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Datas próximas">
-  Agendamentos, reservas e prazos, em que ver o calendário ajuda a escolher.
+<DosDonts variant="do" title="Upcoming dates">
+  Appointments, bookings and deadlines, where seeing the calendar helps people choose.
 </DosDonts>
 
-<DosDonts variant="do" title="Quando o dia da semana importa">
-  "Toda segunda", "evitar o fim de semana": o calendário mostra a semana inteira.
+<DosDonts variant="do" title="When the weekday matters">
+  "Every Monday", "avoid the weekend": the calendar shows the whole week.
 </DosDonts>
 
-<DosDonts variant="do" title="Períodos">
-  Uma hospedagem, férias ou o filtro de um relatório, com `range`.
+<DosDonts variant="do" title="Periods">
+  A stay, a vacation or a report filter, with `range`.
 </DosDonts>
 
-<DosDonts variant="do" title="Datas que a pessoa já sabe">
-  Data de nascimento ou de emissão de um documento, com `editable`, para digitar em vez de navegar mês a mês.
+<DosDonts variant="do" title="Dates the person already knows">
+  Date of birth or a document's issue date, with `editable`, to type instead of navigating month by month.
 </DosDonts>
 
-<DosDonts variant="dont" title="Só o mês ou só o ano">
-  Use um [Select](../select/index.mdx).
+<DosDonts variant="dont" title="Only the month or only the year">
+  Use a [Select](../select/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Datas relativas">
-  "Últimos 7 dias", "Este mês": ofereça as opções num [Radio Group](../radio-group/index.mdx) ou num Select.
+<DosDonts variant="dont" title="Relative dates">
+  "Last 7 days", "This month": offer the options in a [Radio Group](../radio-group/index.mdx) or a Select.
 </DosDonts>
 
-<DosDonts variant="dont" title="Horário">
-  O Date Picker escolhe só o dia.
+<DosDonts variant="dont" title="Time of day">
+  The Date Picker only chooses the day.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Date Picker: label, marcador de opcional, campo, hint, mensagem de erro e calendário aberto](./anatomy.png)
+![Date Picker anatomy: label, optional marker, field, hint, error message and open calendar](./anatomy.png)
 
-1. **Label**: nomeia o campo. Com `range`, descreve o período: "Estadia", "Período do relatório".
-2. **Marcador de opcional** (opcional).
-3. **Campo**: mostra a data ou o período escolhido, com o ícone de calendário. Com `editable`, é uma caixa de texto com o botão do calendário ao lado.
-4. **Hint**: texto de apoio. Com `editable` e sem hint, mostra o formato esperado.
-5. **Mensagem de erro**: substitui o hint.
-6. **Calendário**: o mês com os dias, os botões de mês anterior e seguinte e o título, que abre as grades de meses e de anos.
+1. **Label**: names the field. With `range`, describes the period: "Stay", "Report period".
+2. **Optional marker** (optional).
+3. **Field**: shows the chosen date or period, with the calendar icon. With `editable`, it is a text box with the calendar button beside it.
+4. **Hint**: helper text. With `editable` and no hint, shows the expected format.
+5. **Error message**: replaces the hint.
+6. **Calendar**: the month with its days, the previous and next month buttons and the title, which opens the month and year grids.
 
-O campo tem a mesma anatomia, os mesmos estados e os mesmos tamanhos do [Input](../input/index.mdx).
+The field has the same anatomy, the same states and the same sizes as the [Input](../input/index.mdx).
 
-## Variantes
+## Variants
 
-### Data única
+### Single date
 
-O padrão. Um clique no campo abre o calendário, e escolher um dia fecha.
+The default. A click on the field opens the calendar, and choosing a day closes it.
 
-### Período
+### Period
 
-Com `range`, o calendário mostra dois meses lado a lado, então um período que passa de um mês para o outro aparece inteiro. O primeiro clique marca uma ponta e o segundo marca a outra, em qualquer ordem. As duas pontas fazem parte do período. Em telas estreitas, os meses ficam um embaixo do outro.
+With `range`, the calendar shows two months side by side, so a period that crosses from one month to the next appears in full. The first click marks one end and the second marks the other, in any order. Both ends are part of the period. On narrow screens, the months stack one below the other.
 
 <ComponentEmbed component="DatePicker" variant="range" />
 
-### Digitável
+### Editable
 
-Com `editable`, a pessoa digita só os números, e a máscara põe os separadores na ordem do idioma: `dd / mm / yyyy` em português, `mm / dd / yyyy` em inglês americano. O calendário continua disponível pelo botão ao lado.
+With `editable`, the person types only the numbers, and the mask adds the separators in the language's order: `dd / mm / yyyy` in Portuguese, `mm / dd / yyyy` in US English. The calendar remains available through the button beside it.
 
 <ComponentEmbed component="DatePicker" variant="editable" />
 
-Com `editable range`, as duas datas ficam no mesmo campo, ou em duas caixas com `range-fields="two"`.
+With `editable range`, both dates sit in the same field, or in two boxes with `range-fields="two"`.
 
-## Estados
+## States
 
-| Estado | Descrição |
+| State | Description |
 | --- | --- |
-| **Padrão** | Sem data, mostra o placeholder. |
-| **Preenchido** | Mostra a data no formato do idioma, com o mês abreviado. |
-| **Foco** | Anel de foco no campo. Com `editable`, o botão do calendário tem foco próprio. |
-| **Aberto** | O calendário aparece abaixo do campo. |
-| **Erro** | Borda de erro e mensagem: data obrigatória, fora do período, indisponível, inválida ou fim antes do início. |
-| **Desabilitado** | Não pode ser alterado agora. |
+| **Default** | With no date, shows the placeholder. |
+| **Filled** | Shows the date in the language's format, with the month abbreviated. |
+| **Focus** | Focus ring on the field. With `editable`, the calendar button has its own focus. |
+| **Open** | The calendar appears below the field. |
+| **Error** | Error border and message: date required, outside the period, unavailable, invalid or end before start. |
+| **Disabled** | It cannot be changed right now. |
 
 <ComponentEmbed component="DatePicker" variant="error" />
 
-No calendário, **hoje** aparece em negrito, o **dia escolhido** tem preenchimento, dias **fora do período** permitido ficam esmaecidos e dias **indisponíveis** ganham um traço.
+In the calendar, **today** appears in bold, the **chosen day** is filled, days **outside the allowed period** are dimmed and **unavailable** days get a strikethrough.
 
-## Tamanhos
+## Sizes
 
-`lg` (padrão) e `md`, como no [Input](../input/index.mdx).
+`lg` (default) and `md`, as in the [Input](../input/index.mdx).
 
-## Relacionados
+## Related
 
-- [Input](../input/index.mdx): a mesma anatomia, para texto livre.
-- [Select](../select/index.mdx): escolher só o mês ou o ano.
-- [Radio Group](../radio-group/index.mdx): períodos relativos, como "Últimos 7 dias".
+- [Input](../input/index.mdx): the same anatomy, for free text.
+- [Select](../select/index.mdx): choose only the month or the year.
+- [Radio Group](../radio-group/index.mdx): relative periods, such as "Last 7 days".

@@ -3,34 +3,34 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Percorre os controles dentro das células (links, botões, caixas) em ordem de leitura. |
-| `Enter` ou `Espaço` | Ativa o botão de ordenação ou o controle em foco. |
-| `Setas` | Quando a tabela rola, a região recebe foco e as setas rolam o conteúdo. |
+| `Tab` | Moves through the controls inside the cells (links, buttons, checkboxes) in reading order. |
+| `Enter` or `Space` | Activates the sort button or the focused control. |
+| `Arrows` | When the table scrolls, the region receives focus and the arrows scroll the content. |
 
-## Leitor de tela
+## Screen reader
 
-- A Table usa o `<table>` nativo, então o leitor anuncia linhas, colunas e cabeçalhos como em qualquer tabela.
-- Use `<th scope="col">` nos cabeçalhos de coluna e `<th scope="row">` na célula que identifica a linha.
-- Toda tabela precisa de um **nome**: a legenda (`<caption>`), quando o título é visível, ou `aria-label`, quando não é.
-- Colunas ordenáveis informam a ordem atual (`aria-sort`) e têm o nome da coluna.
-- Controles dentro das células precisam de nomes que citem a linha ("Selecionar Base de clientes.csv").
+- Table uses the native `<table>`, so the screen reader announces rows, columns and headers as in any table.
+- Use `<th scope="col">` on column headers and `<th scope="row">` on the cell that identifies the row.
+- Every table needs a **name**: the caption (`<caption>`), when the title is visible, or `aria-label`, when it is not.
+- Sortable columns convey the current order (`aria-sort`) and carry the column name.
+- Controls inside cells need names that mention the row ("Select Customer base.csv").
 
-## Rolagem
+## Scrolling
 
-Quando a tabela é maior que o espaço, a região rolável é anunciada com nome e pode receber foco, para que quem usa teclado também consiga rolar.
+When the table is larger than the space, the scrollable region is announced with a name and can receive focus, so keyboard users can also scroll.
 
 ## Visual
 
-- As setas de ordenação têm contraste acima de 3:1.
-- O destaque da linha no hover é só um auxílio: nenhuma informação depende dele.
-- O status nunca depende só da cor: use texto na tag.
+- The sort arrows have a contrast above 3:1.
+- The row highlight on hover is only an aid: no information depends on it.
+- Status never depends on color alone: use text in the tag.
 
-## Para designers
+## For designers
 
-- Defina o título da tabela e o cabeçalho de cada coluna durante o design.
-- Decida qual célula identifica cada linha (o nome, normalmente).
-- Evite células vazias sem explicação. Use um traço ("—") ou "Sem dados".
+- Define the table title and the header of each column during design.
+- Decide which cell identifies each row (usually the name).
+- Avoid empty cells without explanation. Use a dash ("—") or "No data".

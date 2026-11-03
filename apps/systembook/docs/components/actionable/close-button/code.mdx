@@ -5,25 +5,25 @@ order: 4
 
 ## Disabled
 
-Use o estado desabilitado quando a ação de fechar não está disponível no contexto atual.
+Use the disabled state when the close action is not available in the current context.
 
-## Dentro do Alert
+## Inside the Alert
 
-O atributo `dismissible` no `<lui-alert>` adiciona automaticamente um Close Button. Ao clicar, o componente emite o evento `lui-dismiss` — cabe ao consumidor remover ou ocultar o alert.
+The `dismissible` attribute on `<lui-alert>` adds a Close Button automatically. On click, the component emits the `lui-dismiss` event — it is up to the consumer to remove or hide the alert.
 
-## Dentro do Modal
+## Inside the Modal
 
-O cabeçalho do Modal usa o Close Button no tamanho `lg` para fechar o diálogo.
+The Modal header uses the Close Button at size `lg` to close the dialog.
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `size` | `string` | `md` |
 | `disabled` | `boolean` | `false` |
 | `label` | `string` | `Close` |
 
-## Uso
+## Usage
 
 ### Web Component
 
@@ -31,32 +31,32 @@ O cabeçalho do Modal usa o Close Button no tamanho `lg` para fechar o diálogo.
 <lui-close-button size="md" label="Close"></lui-close-button>
 ```
 
-Personalizando o label:
+Customizing the label:
 
 ```html
-<lui-close-button size="lg" label="Fechar modal"></lui-close-button>
+<lui-close-button size="lg" label="Close modal"></lui-close-button>
 ```
 
-### Alert dismissível
+### Dismissible alert
 
 ```html
 <lui-alert
   variant="info"
-  title="Título"
-  content="Conteúdo"
+  title="Title"
+  content="Content"
   dismissible
 ></lui-alert>
 ```
 
-Escutando o evento de dismiss:
+Listening to the dismiss event:
 
 ```js
 document.querySelector('lui-alert').addEventListener('lui-dismiss', () => {
-  // remover ou ocultar o alert
+  // remove or hide the alert
 });
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <button class="close-button close-button--lg" aria-label="Close">

@@ -3,87 +3,87 @@ title: "Code"
 order: 4
 ---
 
-## Como link (`href`)
+## As a link (`href`)
 
-Quando o controle **navega ou baixa** em vez de executar uma ação, ele é semanticamente um link.
-Passar `href` faz o componente renderizar `<a>` no lugar de `<button>`, mantendo a mesma aparência
-e os mesmos atributos de estilo (`variant`, `size`, `block`).
+When the control **navigates or downloads** instead of running an action, it is semantically a link.
+Passing `href` makes the component render `<a>` instead of `<button>`, keeping the same appearance
+and the same styling attributes (`variant`, `size`, `block`).
 
-Isso preserva os comportamentos nativos que se perdem ao usar um botão com navegação programática:
-abrir em nova aba, botão direito, clique do meio, Ctrl/Cmd + clique e o atributo `download`.
+This preserves the native behaviors that are lost when a button navigates programmatically:
+opening in a new tab, right-click, middle-click, Ctrl/Cmd + click and the `download` attribute.
 
-### Nova aba
+### New tab
 
-Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente.
-Um `rel` informado é somado a essa proteção, não a substitui — `rel="nofollow"`
-com `target="_blank"` resulta em `nofollow noopener noreferrer`.
+With `target="_blank"`, `rel="noopener noreferrer"` is applied automatically.
+A `rel` you provide is added to that protection, it does not replace it — `rel="nofollow"`
+with `target="_blank"` results in `nofollow noopener noreferrer`.
 
-### Desabilitado e loading
+### Disabled and loading
 
-Links não têm `disabled` nativo. Com `disabled` ou `loading`, o `href` é omitido, então o elemento
-não navega por clique, clique do meio ou "abrir em nova aba", e `aria-disabled="true"` mais
-`role="link"` mantêm o anúncio correto em leitores de tela.
+Links have no native `disabled`. With `disabled` or `loading`, `href` is omitted, so the element
+does not navigate on click, middle-click or "open in new tab", and `aria-disabled="true"` plus
+`role="link"` keep the announcement correct in screen readers.
 
-Os dois estados diferem no foco: `disabled` recebe `tabindex="-1"` e sai da ordem de tabulação,
-como um botão nativo desabilitado. `loading` é transitório e recebe `tabindex="0"`, mantendo o
-foco de quem já estava no elemento quando a operação começou — sem `href`, uma âncora não é
-focável nem programaticamente.
+The two states differ in focus: `disabled` gets `tabindex="-1"` and leaves the tab order,
+like a native disabled button. `loading` is transient and gets `tabindex="0"`, keeping the
+focus of whoever was already on the element when the operation started — without `href`, an anchor is not
+focusable, not even programmatically.
 
-Atributos de formulário (`type`, `name`, `value`, `form`) não se aplicam quando há `href`.
+Form attributes (`type`, `name`, `value`, `form`) do not apply when there is an `href`.
 
-## Integração com formulários
+## Form integration
 
-`type="submit"` e `type="reset"` funcionam nativamente com qualquer `<form>` pai.
-Dois botões de submit com `name` e `value` distintos permitem identificar qual ação foi escolhida
-nos dados submetidos. O atributo `form` permite associar o botão a um form pelo ID,
-mesmo que esteja fora do elemento `<form>` no DOM.
+`type="submit"` and `type="reset"` work natively with any parent `<form>`.
+Two submit buttons with different `name` and `value` let you identify which action was chosen
+in the submitted data. The `form` attribute associates the button with a form by ID,
+even when it sits outside the `<form>` element in the DOM.
 
 ## Autofocus
 
-Use `autofocus` para mover o foco do teclado automaticamente para o botão quando o contexto é renderizado.
-O caso de uso mais comum é a ação primária de um diálogo ou modal: ao abrir, o foco já está no botão correto,
-permitindo que o usuário confirme a ação com Enter sem precisar navegar.
+Use `autofocus` to move keyboard focus to the button automatically when its context is rendered.
+The most common use case is the primary action of a dialog or modal: when it opens, focus is already on the right button,
+so the user can confirm the action with Enter without navigating.
 
-**Evite usar em páginas inteiras.** Receber foco automaticamente no meio do conteúdo desorienta leitores de tela e
-usuários de teclado, que esperam começar a navegação pelo topo. Reserve para contextos isolados e transitórios,
-como modais, drawers e alertas de confirmação.
+**Avoid using it on full pages.** Receiving focus automatically in the middle of the content disorients screen reader and
+keyboard users, who expect to start navigating from the top. Reserve it for isolated, transient contexts,
+such as modals, drawers and confirmation alerts.
 
-## Atributos
+## Attributes
 
-| Atributo       | Tipo      | Padrão      | Descrição                                                                           |
+| Attribute      | Type      | Default     | Description                                                                         |
 | -------------- | --------- | ----------- | ----------------------------------------------------------------------------------- |
-| `label`        | `string`  | `''`        | Texto exibido no botão                                                              |
-| `variant`      | `string`  | `'primary'` | Estilo visual: `primary`, `secondary`, `neutral`, `danger`, `success`               |
-| `size`         | `string`  | `'lg'`      | Tamanho: `lg`, `md`                                                                 |
-| `type`         | `string`  | `'button'`  | Tipo HTML: `button`, `submit`, `reset`                                              |
-| `name`         | `string`  | `''`        | Nome submetido com o form ao usar `type="submit"`                                   |
-| `value`        | `string`  | `''`        | Valor submetido junto ao `name`; incluído apenas quando este botão dispara o submit |
-| `form`         | `string`  | `''`        | ID do `<form>` associado; permite usar o botão fora do elemento form                |
-| `disabled`     | `boolean` | `false`     | Desabilita o botão e previne interações                                             |
-| `autofocus`    | `boolean` | `false`     | Move o foco para o botão automaticamente ao renderizar o contexto                   |
-| `block`        | `boolean` | `false`     | Torna o botão full-width dentro do seu container                                    |
-| `loading`      | `boolean` | `false`     | Exibe spinner e bloqueia interações; não aplica opacidade de disabled               |
-| `loading-text` | `string`  | `''`        | Texto alternativo exibido enquanto `loading` estiver ativo                          |
-| `href`         | `string`  | `''`        | Quando preenchido, renderiza `<a>` no lugar de `<button>`                           |
-| `target`       | `string`  | `''`        | Alvo da navegação; só aplicado junto de `href`                                      |
-| `rel`          | `string`  | `''`        | Relação do link; somado a `noopener noreferrer` com `target="_blank"`               |
-| `download`     | `string`  | —           | Baixa o recurso em vez de navegar; aceito sem valor; só junto de `href`             |
-| `aria-label`   | `string`  | `''`        | Label acessível sobrescrevendo o derivado do `label`                                |
+| `label`        | `string`  | `''`        | Text shown on the button                                                            |
+| `variant`      | `string`  | `'primary'` | Visual style: `primary`, `secondary`, `neutral`, `danger`, `success`                |
+| `size`         | `string`  | `'lg'`      | Size: `lg`, `md`                                                                    |
+| `type`         | `string`  | `'button'`  | HTML type: `button`, `submit`, `reset`                                              |
+| `name`         | `string`  | `''`        | Name submitted with the form when using `type="submit"`                             |
+| `value`        | `string`  | `''`        | Value submitted with `name`; included only when this button triggers the submit     |
+| `form`         | `string`  | `''`        | ID of the associated `<form>`; lets you use the button outside the form element     |
+| `disabled`     | `boolean` | `false`     | Disables the button and prevents interactions                                       |
+| `autofocus`    | `boolean` | `false`     | Moves focus to the button automatically when the context is rendered                |
+| `block`        | `boolean` | `false`     | Makes the button full-width inside its container                                    |
+| `loading`      | `boolean` | `false`     | Shows a spinner and blocks interactions; does not apply the disabled opacity        |
+| `loading-text` | `string`  | `''`        | Alternative text shown while `loading` is active                                    |
+| `href`         | `string`  | `''`        | When set, renders `<a>` instead of `<button>`                                       |
+| `target`       | `string`  | `''`        | Navigation target; only applied together with `href`                                |
+| `rel`          | `string`  | `''`        | Link relation; added to `noopener noreferrer` with `target="_blank"`                |
+| `download`     | `string`  | —           | Downloads the resource instead of navigating; accepted without a value; only with `href` |
+| `aria-label`   | `string`  | `''`        | Accessible label overriding the one derived from `label`                            |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
-<lui-button variant="primary" size="lg">Confirmar</lui-button>
-<lui-button variant="secondary" size="lg">Cancelar</lui-button>
-<lui-button variant="primary" size="lg" href="/cursos">Ver curso</lui-button>
+<lui-button variant="primary" size="lg">Confirm</lui-button>
+<lui-button variant="secondary" size="lg">Cancel</lui-button>
+<lui-button variant="primary" size="lg" href="/cursos">View course</lui-button>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
-<button class="btn btn--primary btn--lg">Confirmar</button>
-<button class="btn btn--secondary btn--lg">Cancelar</button>
-<a class="btn btn--primary btn--lg" href="/cursos">Ver curso</a>
+<button class="btn btn--primary btn--lg">Confirm</button>
+<button class="btn btn--secondary btn--lg">Cancel</button>
+<a class="btn btn--primary btn--lg" href="/cursos">View course</a>
 ```

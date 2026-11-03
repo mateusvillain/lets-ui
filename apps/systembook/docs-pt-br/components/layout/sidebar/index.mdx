@@ -1,0 +1,46 @@
+---
+title: "Sidebar"
+subtitle: "Layout de duas áreas: uma lateral de largura fixa e um conteúdo flexível."
+---
+
+<ComponentEmbed component="Sidebar" variant="start" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Área lateral e área principal">
+  Navegação lateral e conteúdo, filtros e resultados, lista e detalhe.
+</DosDonts>
+
+<DosDonts variant="do" title="Lateral de largura fixa">
+  A lateral mantém a largura, e o conteúdo ocupa o resto. Quando falta espaço, as duas áreas **empilham**.
+</DosDonts>
+
+<DosDonts variant="dont" title="Uma grade de várias colunas">
+  Use [Grid](../grid/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Painéis que deslizam sobre a página">
+  Use [Drawer](../../content/drawer/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Duas colunas de mesmo peso">
+  Use [Switcher](../switcher/index.mdx).
+</DosDonts>
+
+## Opções
+
+| Opção | O que controla | Padrão |
+| --- | --- | --- |
+| `side` | Em que lado fica a lateral: `start` ou `end`. | `start` |
+| `side-width` | Largura da lateral. | 240px |
+| `content-min-width` | Largura mínima do conteúdo antes de empilhar. | 50% |
+| `gap` | Espaço entre as áreas. | 24 |
+| `align` | Alinhamento vertical. | Esticar |
+
+<ComponentEmbed component="Sidebar" variant="end" />
+
+## Relacionados
+
+- [Switcher](../switcher/index.mdx): colunas que alternam para linha.
+- [Grid](../grid/index.mdx)
+- [Scroll Area](../scroll-area/index.mdx): lateral com rolagem independente.

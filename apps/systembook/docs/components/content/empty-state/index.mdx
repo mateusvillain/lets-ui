@@ -1,82 +1,82 @@
 ---
 title: "Empty State"
-subtitle: "Ocupa uma área sem dados e explica por que ela está vazia e o que fazer a seguir."
+subtitle: "Fills an area with no data and explains why it is empty and what to do next."
 order: 6
 ---
 
 <ComponentEmbed component="EmptyState" variant="center" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Primeiro uso">
-  A pessoa usa uma funcionalidade pela primeira vez.
+<DosDonts variant="do" title="First use">
+  The person uses a feature for the first time.
 </DosDonts>
 
-<DosDonts variant="do" title="Busca sem resultados">
-  Uma busca ou filtro não retornou nada.
+<DosDonts variant="do" title="Search with no results">
+  A search or filter returned nothing.
 </DosDonts>
 
-<DosDonts variant="do" title="Conteúdo removido">
-  O conteúdo foi excluído ou arquivado.
+<DosDonts variant="do" title="Content removed">
+  The content was deleted or archived.
 </DosDonts>
 
-<DosDonts variant="do" title="Fila zerada">
-  Não há mais nada pendente.
+<DosDonts variant="do" title="Empty queue">
+  There is nothing left pending.
 </DosDonts>
 
-<DosDonts variant="do" title="Acesso restrito">
-  Os dados não podem ser exibidos por permissão ou configuração.
+<DosDonts variant="do" title="Restricted access">
+  The data cannot be shown because of permissions or configuration.
 </DosDonts>
 
-<DosDonts variant="dont" title="Carregamento">
-  Use um indicador de carregamento ou skeleton.
+<DosDonts variant="dont" title="Loading">
+  Use a loading indicator or skeleton.
 </DosDonts>
 
-<DosDonts variant="dont" title="Páginas de erro do servidor">
-  Erros como 404 e 500 pedem uma página própria.
+<DosDonts variant="dont" title="Server error pages">
+  Errors such as 404 and 500 call for a page of their own.
 </DosDonts>
 
-<DosDonts variant="dont" title="Como decoração">
-  O Empty State precisa explicar e orientar.
+<DosDonts variant="dont" title="As decoration">
+  The Empty State needs to explain and guide.
 </DosDonts>
 
 <Callout variant="warning">
-  O Empty State deve **substituir por inteiro** o componente vazio. Não deixe cabeçalho de tabela, rodapé ou paginação "fantasma" ao lado dele.
+  The Empty State must **fully replace** the empty component. Do not leave a "ghost" table header, footer or pagination next to it.
 </Callout>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Empty State: capa, título, descrição e ação](./anatomy.png)
+![Empty State anatomy: cover, title, description and action](./anatomy.png)
 
-1. **Capa** (opcional): imagem, ilustração ou ícone. É decorativa.
-2. **Título**: diz o que está acontecendo.
-3. **Descrição** (opcional): explica o motivo e orienta.
-4. **Ação** (opcional): o próximo passo, em um único botão primário.
+1. **Cover** (optional): image, illustration or icon. It is decorative.
+2. **Title**: says what is happening.
+3. **Description** (optional): explains the reason and guides.
+4. **Action** (optional): the next step, in a single primary button.
 
-## Alinhamento
+## Alignment
 
-| Alinhamento | Quando usar |
+| Alignment | When to use |
 | --- | --- |
-| **Centro** (padrão) | Páginas inteiras e painéis grandes. |
-| **Esquerda** | Conteúdo de leitura alinhado à esquerda, como o corpo de uma tabela. |
+| **Center** (default) | Full pages and large panels. |
+| **Left** | Reading content aligned to the left, such as the body of a table. |
 
 <ComponentEmbed component="EmptyState" variant="left" />
 
-## Tom depende do conteúdo
+## Tone depends on the content
 
-Não há "tipos" visuais de Empty State. O que muda é o **texto** e a **composição**.
+There are no visual "types" of Empty State. What changes is the **text** and the **composition**.
 
-| Situação | Tom | Composição |
+| Situation | Tone | Composition |
 | --- | --- | --- |
-| Primeiro uso | Neutro e positivo | Capa, título, descrição e ação de criar. |
-| Sem resultados | Neutro | Título e descrição com sugestão de ajuste. |
-| Tarefa concluída | Celebratório | Título, ação opcional. |
-| Sem permissão | Neutro e sério | Título, descrição e "Solicitar acesso". |
-| Erro do sistema | Sério, sem humor | Título, descrição e "Tentar de novo". |
-| Configuração pendente | Instrutivo | Título, descrição e ação de configurar. |
+| First use | Neutral and positive | Cover, title, description and create action. |
+| No results | Neutral | Title and description with an adjustment hint. |
+| Task completed | Celebratory | Title, optional action. |
+| No permission | Neutral and serious | Title, description and "Request access". |
+| System error | Serious, no humor | Title, description and "Try again". |
+| Pending configuration | Instructive | Title, description and configure action. |
 
-## Relacionados
+## Related
 
-- [Table](../table/index.mdx): onde aparece com frequência.
-- [Button](../../actionable/button/index.mdx): a ação.
-- [Alert](../alert/index.mdx): mensagens de estado dentro de uma página com conteúdo.
+- [Table](../table/index.mdx): where it often appears.
+- [Button](../../actionable/button/index.mdx): the action.
+- [Alert](../alert/index.mdx): status messages within a page that has content.

@@ -3,71 +3,71 @@ title: "Code"
 order: 4
 ---
 
-## Um aberto por vez
+## One open at a time
 
-Por padrão, abrir um item fecha o que estava aberto. Se mais de um item começar com `open`, só o primeiro fica aberto.
+By default, opening an item closes the one that was open. If more than one item starts with `open`, only the first stays open.
 
-## Múltiplos abertos
+## Multiple open
 
-O atributo `multiple` deixa vários itens abertos ao mesmo tempo.
+The `multiple` attribute lets several items stay open at the same time.
 
 <ComponentEmbed component="Accordion" variant="multiple" />
 
-## Item desabilitado
+## Disabled item
 
-Um item com `disabled` não alterna e sai da ordem de foco.
+An item with `disabled` does not toggle and leaves the focus order.
 
 ## Slots
 
-O ícone à esquerda é o slot `icon`, e a área de descrição é o slot padrão do item. Os dois aceitam qualquer conteúdo. Sem ícone, o espaço dele some. Com ícone, a descrição se alinha à esquerda com o texto do título, e não com o ícone. Na classe CSS, adicione `accordion__item--with-icon` ao item.
+The icon on the left is the `icon` slot, and the description area is the item's default slot. Both accept any content. Without an icon, its space goes away. With an icon, the description aligns on the left with the title text, not with the icon. With the CSS class, add `accordion__item--with-icon` to the item.
 
-## Evento `lui-toggle`
+## `lui-toggle` event
 
-Cada item emite `lui-toggle` com `{ open }` em `event.detail` quando abre ou fecha, seja por clique, porque outro item abriu ou por script. O evento borbulha e atravessa o shadow DOM. O estado inicial vindo do atributo `open` não emite o evento.
+Each item emits `lui-toggle` with `{ open }` in `event.detail` when it opens or closes, whether by click, because another item opened, or by script. The event bubbles and crosses the shadow DOM. The initial state coming from the `open` attribute does not emit the event.
 
-## Classe CSS (sem Web Component)
+## CSS class (without Web Component)
 
-Sem o Web Component, a marcação e o estado ficam a cargo de quem usa: alterne `aria-expanded` no botão e a classe `accordion__item--open` no item.
+Without the Web Component, the markup and the state are up to you: toggle `aria-expanded` on the button and the `accordion__item--open` class on the item.
 
-## Propriedades
+## Properties
 
 ### `lui-accordion`
 
-| Atributo        | Tipo      | Padrão    | Descrição                                                  |
-| --------------- | --------- | --------- | ---------------------------------------------------------- |
-| `variant`       | `string`  | `default` | `default`, `bordered` ou `highlighted`.                    |
-| `multiple`      | `boolean` | `false`   | Permite vários itens abertos ao mesmo tempo.               |
-| `heading-level` | `number`  | `3`       | Nível do heading que envolve o botão de cada item (1 a 6). |
+| Attribute       | Type      | Default   | Description                                                 |
+| --------------- | --------- | --------- | ----------------------------------------------------------- |
+| `variant`       | `string`  | `default` | `default`, `bordered` or `highlighted`.                     |
+| `multiple`      | `boolean` | `false`   | Allows several items to be open at the same time.           |
+| `heading-level` | `number`  | `3`       | Level of the heading that wraps each item's button (1 to 6). |
 
 ### `lui-accordion-item`
 
-| Atributo        | Tipo      | Padrão  | Descrição                                                                           |
-| --------------- | --------- | ------- | ----------------------------------------------------------------------------------- |
-| `label`         | `string`  | `''`    | Título do item, dentro do botão.                                                    |
-| `subtitle`      | `string`  | `''`    | Texto secundário abaixo do título.                                                  |
-| `open`          | `boolean` | `false` | Item aberto.                                                                        |
-| `disabled`      | `boolean` | `false` | Impede o item de alternar.                                                          |
-| `heading-level` | `number`  | —       | Nível do heading deste item. Se omitido, vale o `heading-level` do `lui-accordion`. |
+| Attribute       | Type      | Default | Description                                                                          |
+| --------------- | --------- | ------- | ------------------------------------------------------------------------------------ |
+| `label`         | `string`  | `''`    | Item title, inside the button.                                                       |
+| `subtitle`      | `string`  | `''`    | Secondary text below the title.                                                      |
+| `open`          | `boolean` | `false` | Item open.                                                                           |
+| `disabled`      | `boolean` | `false` | Prevents the item from toggling.                                                     |
+| `heading-level` | `number`  | —       | Heading level of this item. If omitted, the `heading-level` of `lui-accordion` applies. |
 
-| Slot     | Descrição                               |
-| -------- | --------------------------------------- |
-| (padrão) | Descrição: o conteúdo do painel.        |
-| `icon`   | Ícone à esquerda do título. Decorativo. |
+| Slot      | Description                             |
+| --------- | --------------------------------------- |
+| (default) | Description: the panel content.         |
+| `icon`    | Icon to the left of the title. Decorative. |
 
-### Eventos
+### Events
 
-| Evento       | Detalhe             | Descrição                           |
-| ------------ | ------------------- | ----------------------------------- |
-| `lui-toggle` | `{ open: boolean }` | Emitido por item ao abrir e fechar. |
+| Event        | Detail              | Description                            |
+| ------------ | ------------------- | -------------------------------------- |
+| `lui-toggle` | `{ open: boolean }` | Emitted per item on opening and closing. |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
 <lui-accordion variant="bordered" heading-level="3">
   <lui-accordion-item label="Shipping" subtitle="Delivery times" open>
-    <svg slot="icon" aria-hidden="true"><!-- ícone --></svg>
+    <svg slot="icon" aria-hidden="true"><!-- icon --></svg>
     Orders ship in two business days.
   </lui-accordion-item>
   <lui-accordion-item label="Returns">
@@ -84,7 +84,7 @@ Sem o Web Component, a marcação e o estado ficam a cargo de quem usa: alterne 
 </script>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="accordion accordion--bordered">

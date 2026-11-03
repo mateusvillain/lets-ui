@@ -1,62 +1,62 @@
 ---
 title: "Table"
-subtitle: "Organiza dados em linhas e colunas, para comparar e consultar informações."
+subtitle: "Organizes data in rows and columns, for comparing and looking up information."
 order: 10
 ---
 
 <ComponentEmbed component="Table" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Dados comparáveis">
-  Cada linha é um item e cada coluna, um atributo.
+<DosDonts variant="do" title="Comparable data">
+  Each row is an item and each column, an attribute.
 </DosDonts>
 
-<DosDonts variant="do" title="Listagens de registros">
-  Usuários, pedidos, arquivos ou transações.
+<DosDonts variant="do" title="Record listings">
+  Users, orders, files or transactions.
 </DosDonts>
 
-<DosDonts variant="dont" title="Layout de página">
-  Tabelas são para dados, não para posicionar elementos. Use [Grid](../../layout/grid/index.mdx) ou [Flex](../../layout/flex/index.mdx).
+<DosDonts variant="dont" title="Page layout">
+  Tables are for data, not for positioning elements. Use [Grid](../../layout/grid/index.mdx) or [Flex](../../layout/flex/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Poucos dados sem comparação">
-  Uma lista simples ou um [Card](../card/index.mdx) comunica melhor.
+<DosDonts variant="dont" title="Little data with no comparison">
+  A simple list or a [Card](../card/index.mdx) communicates better.
 </DosDonts>
 
-<DosDonts variant="dont" title="Conteúdo muito heterogêneo">
-  Quando as linhas têm estruturas diferentes, prefira cards.
+<DosDonts variant="dont" title="Very heterogeneous content">
+  When the rows have different structures, prefer cards.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Table: legenda, cabeçalho, linha, célula e borda](./anatomy.png)
+![Table anatomy: caption, header, row, cell and border](./anatomy.png)
 
-1. **Legenda** (opcional): o título visível da tabela.
-2. **Cabeçalho**: o nome de cada coluna.
-3. **Linhas**: um item por linha.
-4. **Células**: os dados. Podem conter texto, [Tags](../tag/index.mdx), [Avatars](../avatar/index.mdx), links e ações.
-5. **Borda e divisores**: organizam a leitura.
+1. **Caption** (optional): the visible title of the table.
+2. **Header**: the name of each column.
+3. **Rows**: one item per row.
+4. **Cells**: the data. They can contain text, [Tags](../tag/index.mdx), [Avatars](../avatar/index.mdx), links and actions.
+5. **Border and dividers**: organize the reading.
 
 <ComponentEmbed component="Table" variant="bordered" />
 
-## Recursos
+## Features
 
-| Recurso | O que faz |
+| Feature | What it does |
 | --- | --- |
-| **Borda** (`bordered`) | Desenha a borda externa com cantos arredondados. |
-| **Alinhamento ao fim** | Alinha colunas de valores e ações à direita. |
-| **Coluna justa** | Reduz uma coluna à largura do seu conteúdo (ações, status, ids). |
-| **Colunas ordenáveis** | Botões no cabeçalho, com seta indicando a ordem. |
-| **Cabeçalho fixo** | Mantém o cabeçalho visível ao rolar as linhas. |
-| **Rolagem horizontal** | Quando a tabela é mais larga que o espaço, rola dentro de uma região. |
+| **Border** (`bordered`) | Draws the outer border with rounded corners. |
+| **End alignment** | Aligns value and action columns to the right. |
+| **Fit column** | Shrinks a column to the width of its content (actions, status, ids). |
+| **Sortable columns** | Buttons in the header, with an arrow indicating the order. |
+| **Sticky header** | Keeps the header visible while the rows scroll. |
+| **Horizontal scrolling** | When the table is wider than the space, it scrolls inside a region. |
 
-## Conteúdo das células
+## Cell content
 
-As células aceitam outros componentes, e cada um mantém seu comportamento: [Avatar](../avatar/index.mdx) com nome, [Link](../../navigation/link/index.mdx), [Tag](../tag/index.mdx) de status e [Checkbox](../../form-and-options/checkbox/index.mdx) de seleção.
+Cells accept other components, and each one keeps its behavior: [Avatar](../avatar/index.mdx) with a name, [Link](../../navigation/link/index.mdx), status [Tag](../tag/index.mdx) and selection [Checkbox](../../form-and-options/checkbox/index.mdx).
 
-## Relacionados
+## Related
 
-- [Pagination](../../navigation/pagination/index.mdx): navegar entre páginas de dados.
-- [Empty State](../empty-state/index.mdx): quando não há linhas.
+- [Pagination](../../navigation/pagination/index.mdx): navigate between pages of data.
+- [Empty State](../empty-state/index.mdx): when there are no rows.
 - [Tag](../tag/index.mdx), [Avatar](../avatar/index.mdx).

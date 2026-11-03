@@ -3,37 +3,37 @@ title: "Code"
 order: 4
 ---
 
-## Label (atributo)
+## Label (attribute)
 
-O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
+The `label` attribute renders the text as the slot's default content. Useful for simple cases or programmatic HTML generation.
 
-## Integração com formulários
+## Form integration
 
-O `lui-switch` é form-associated. Use `name` para identificar o campo no `FormData` e `value` para definir o que é submetido quando ativado (padrão `"on"`).
+`lui-switch` is form-associated. Use `name` to identify the field in the `FormData` and `value` to set what is submitted when on (default `"on"`).
 
-## Atributos de formulário
+## Form attributes
 
-| Atributo   | Tipo      | Padrão | Descrição                                                                       |
+| Attribute  | Type      | Default | Description                                                                     |
 | ---------- | --------- | ------ | ------------------------------------------------------------------------------- |
-| `label`    | `string`  | `''`   | Conteúdo padrão do slot; ignorado quando o slot é projetado                     |
-| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos                                              |
-| `value`    | `string`  | `'on'` | Valor submetido quando ativado; omitido quando desativado                       |
-| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o switch fora do elemento form           |
-| `required` | `boolean` | `false`| Bloqueia a submissão quando o switch não está ativado                           |
+| `label`    | `string`  | `''`   | Default slot content; ignored when the slot is projected                        |
+| `name`     | `string`  | `''`   | Field name in the submitted data                                                |
+| `value`    | `string`  | `'on'` | Value submitted when on; omitted when off                                       |
+| `form`     | `string`  | `''`   | ID of the associated `<form>`; lets you use the switch outside the form element |
+| `required` | `boolean` | `false`| Blocks submission when the switch is not on                                     |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
-<lui-switch size="lg">Notificações</lui-switch>
+<lui-switch size="lg">Notifications</lui-switch>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <label class="switch switch--lg">
   <input type="checkbox">
-  Notificações
+  Notifications
 </label>
 ```

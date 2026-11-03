@@ -1,69 +1,69 @@
 ---
 title: "Toast"
-subtitle: "Mensagem curta e temporária que confirma uma ação, sem interromper a tarefa."
+subtitle: "A short, temporary message that confirms an action without interrupting the task."
 order: 12
 ---
 
 <ComponentEmbed component="Toast" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Retorno rápido a uma ação">
-  "Link copiado", "Alterações salvas" ou "Convite enviado".
+<DosDonts variant="do" title="Quick feedback on an action">
+  "Link copied", "Changes saved" or "Invite sent".
 </DosDonts>
 
-<DosDonts variant="do" title="Sem interromper a pessoa">
-  A mensagem aparece e some sem tirá-la do que está fazendo.
+<DosDonts variant="do" title="Without interrupting the person">
+  The message appears and disappears without pulling them away from what they are doing.
 </DosDonts>
 
-<DosDonts variant="dont" title="Mensagens para ler com calma ou decidir">
-  Use um [Alert](../alert/index.mdx) ou um [Modal](../modal/index.mdx).
+<DosDonts variant="dont" title="Messages to read carefully or to decide on">
+  Use an [Alert](../alert/index.mdx) or a [Modal](../modal/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Erros que a pessoa precisa corrigir">
-  Mostre perto do campo ou em um Alert.
+<DosDonts variant="dont" title="Errors the person needs to fix">
+  Show them near the field or in an Alert.
 </DosDonts>
 
-<DosDonts variant="dont" title="Informação essencial">
-  Como o Toast some, ela pode ser perdida.
+<DosDonts variant="dont" title="Essential information">
+  Since the Toast disappears, it can be missed.
 </DosDonts>
 
-<DosDonts variant="dont" title="Notificações do sistema ou histórico">
-  Use uma central de notificações.
+<DosDonts variant="dont" title="System notifications or history">
+  Use a notification center.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Toast: ícone, título, descrição, ação e botão de fechar](./anatomy.png)
+![Toast anatomy: icon, title, description, action and close button](./anatomy.png)
 
-1. **Ícone**: reforça a variante. Pode ser trocado.
-2. **Título**: a mensagem principal.
-3. **Descrição** (opcional): detalhe de apoio.
-4. **Ação** (opcional): um botão, como "Desfazer".
-5. **Botão de fechar**: aparece quando não há ação.
+1. **Icon**: reinforces the variant. It can be replaced.
+2. **Title**: the main message.
+3. **Description** (optional): supporting detail.
+4. **Action** (optional): a button, such as "Undo".
+5. **Close button**: appears when there is no action.
 
-## Variantes
+## Variants
 
-| Variante | Quando usar | Comportamento |
+| Variant | When to use | Behavior |
 | --- | --- | --- |
-| **Default** | Informação neutra. | Some sozinho. |
-| **Success** | Uma ação foi concluída. | Some sozinho. |
-| **Danger** | Algo falhou. | **Não some sozinho.** |
+| **Default** | Neutral information. | Disappears on its own. |
+| **Success** | An action was completed. | Disappears on its own. |
+| **Danger** | Something failed. | **Does not disappear on its own.** |
 
 <ComponentEmbed component="Toast" variant="success" />
 
 <ComponentEmbed component="Toast" variant="danger" />
 
-## Duração
+## Duration
 
-Por padrão, o Toast some após **5 segundos**. Passar o mouse ou focar nele **pausa** a contagem. Com `duration="0"`, ele fica até ser fechado. O Toast `danger` nunca some sozinho, por uma decisão de acessibilidade.
+By default, the Toast disappears after **5 seconds**. Hovering over it or focusing it **pauses** the countdown. With `duration="0"`, it stays until it is closed. The `danger` Toast never disappears on its own, as an accessibility decision.
 
-## Posição
+## Position
 
-Aparece na parte inferior central da tela. Outras posições (cantos e topo) estão disponíveis. Em telas pequenas, ocupa a largura toda. Vários Toasts se empilham.
+It appears at the bottom center of the screen. Other positions (corners and top) are available. On small screens, it takes the full width. Several Toasts stack.
 
-## Relacionados
+## Related
 
-- [Alert](../alert/index.mdx): mensagens que ficam na página.
-- [Modal](../modal/index.mdx): decisões que exigem atenção.
-- [Button](../../actionable/button/index.mdx): a ação do Toast.
+- [Alert](../alert/index.mdx): messages that stay on the page.
+- [Modal](../modal/index.mdx): decisions that require attention.
+- [Button](../../actionable/button/index.mdx): the Toast's action.

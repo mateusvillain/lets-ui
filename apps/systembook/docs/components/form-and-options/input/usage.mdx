@@ -5,56 +5,56 @@ order: 2
 
 ## Labels
 
-Todo campo precisa de uma **label visível**. Ela diz o que digitar e continua visível enquanto a pessoa escreve.
+Every field needs a **visible label**. It says what to type and stays visible while the person writes.
 
-<DosDonts variant="do" title="Label acima do campo, sempre visível">
-  "E-mail" fica no lugar o tempo todo. A pessoa nunca esquece o que o campo pede.
+<DosDonts variant="do" title="Label above the field, always visible">
+  "Email" stays in place the whole time. The person never forgets what the field asks for.
 </DosDonts>
 
-<DosDonts variant="dont" title="Placeholder no lugar da label">
-  O placeholder some ao digitar, tem pouco contraste e não é um nome confiável para leitores de tela. Use-o, no máximo, como exemplo de formato.
+<DosDonts variant="dont" title="Placeholder instead of a label">
+  The placeholder disappears when typing, has low contrast and is not a reliable name for screen readers. Use it, at most, as a format example.
 </DosDonts>
 
-- Escreva labels **curtas**, com substantivos: "Nome completo", "CEP".
-- Capitalização de frase e sem dois-pontos no fim.
+- Write **short** labels, with nouns: "Full name", "ZIP code".
+- Sentence case and no colon at the end.
 
 ## Hints
 
-Use o hint para dizer **o que a pessoa precisa saber antes de errar**: formato, limites, por que você pede o dado. Exemplo: "Use 8 caracteres ou mais, com letras e números."
+Use the hint to say **what the person needs to know before making a mistake**: format, limits, why you ask for the data. Example: "Use 8 or more characters, with letters and numbers."
 
-Prefira o hint a instruções dentro do placeholder.
+Prefer the hint to instructions inside the placeholder.
 
-## Obrigatório ou opcional
+## Required or optional
 
-Marque o que é **opcional** com "(opcional)", em vez de marcar o que é obrigatório com asterisco. Na maior parte dos formulários, a maioria dos campos é obrigatória, e o aviso só precisa aparecer na exceção.
+Mark what is **optional** with "(optional)", instead of marking what is required with an asterisk. In most forms, most fields are required, and the notice only needs to appear on the exception.
 
-## Mensagens de erro
+## Error messages
 
-Uma boa mensagem diz **o que aconteceu e como corrigir**, em tom neutro e sem culpar a pessoa.
+A good message says **what happened and how to fix it**, in a neutral tone and without blaming the person.
 
-<DosDonts variant="do" title="Específica e acionável">
-  "Digite um e-mail válido, como nome@empresa.com."
+<DosDonts variant="do" title="Specific and actionable">
+  "Enter a valid email, such as name@company.com."
 </DosDonts>
 
-<DosDonts variant="dont" title="Vaga ou acusatória">
-  "Entrada inválida." ou "Você errou o e-mail." Não explicam o que corrigir.
+<DosDonts variant="dont" title="Vague or accusatory">
+  "Invalid input." or "You got the email wrong." They do not explain what to fix.
 </DosDonts>
 
-- Mostre o erro **junto ao campo**, depois que a pessoa sair dele ou tentar enviar. Não antes de ela terminar de digitar.
-- A cor vermelha nunca deve ser o único sinal: a mensagem de texto é essencial.
-- Se houver vários erros, liste um resumo no topo do formulário e mantenha cada mensagem no seu campo.
+- Show the error **next to the field**, after the person leaves it or tries to submit. Not before they finish typing.
+- Red must never be the only signal: the text message is essential.
+- If there are several errors, list a summary at the top of the form and keep each message on its field.
 
-## Largura do campo
+## Field width
 
-Ajuste a largura ao conteúdo esperado. Um CEP não precisa ocupar a largura de um endereço. Isso ajuda a pessoa a antecipar o tamanho da resposta.
+Fit the width to the expected content. A ZIP code does not need the width of an address. This helps the person anticipate the length of the answer.
 
-## Prefixo e sufixo
+## Prefix and suffix
 
-Use para unidades e símbolos fixos ("R$", "kg", "@"). Assim a pessoa não precisa digitá-los, e o valor continua limpo.
+Use them for fixed units and symbols ("$", "kg", "@"). That way the person does not need to type them, and the value stays clean.
 
-## Boas práticas
+## Best practices
 
-- Use o **tipo certo** (`email`, `tel`, `number`): o teclado do celular se adapta e a validação melhora.
-- Não bloqueie colar em campos, especialmente senhas.
-- Aceite formatos variados (espaços, pontos, hifens) e normalize depois, em vez de rejeitar.
-- Um formulário por vez: agrupe campos relacionados e mantenha uma coluna.
+- Use the **right type** (`email`, `tel`, `number`): the mobile keyboard adapts and validation improves.
+- Do not block pasting into fields, especially passwords.
+- Accept varied formats (spaces, periods, hyphens) and normalize them afterwards, instead of rejecting them.
+- One form at a time: group related fields and keep a single column.

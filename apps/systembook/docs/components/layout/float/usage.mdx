@@ -3,31 +3,31 @@ title: "Usage"
 order: 2
 ---
 
-## Casos comuns
+## Common cases
 
-| Caso | Posição sugerida |
+| Case | Suggested placement |
 | --- | --- |
-| Ponto de notificação em um ícone | `top-end` |
-| Contador sobre um ícone | `top-end`, com deslocamento |
-| Status em um avatar | `bottom-end` |
-| Selo "Novo" em uma imagem | `top-start` |
+| Notification dot on an icon | `top-end` |
+| Counter over an icon | `top-end`, with offset |
+| Status on an avatar | `bottom-end` |
+| "New" label on an image | `top-start` |
 
-<DosDonts variant="do" title="Elementos pequenos nos cantos">
-  Um ponto ou contador curto no canto de um ícone. Ele chama atenção sem esconder o conteúdo.
+<DosDonts variant="do" title="Small elements in the corners">
+  A dot or a short counter in the corner of an icon. It draws attention without hiding the content.
 </DosDonts>
 
-<DosDonts variant="dont" title="Cobrir conteúdo importante">
-  Um selo grande no meio de uma imagem, escondendo o assunto. O Float deve acompanhar, não competir.
+<DosDonts variant="dont" title="Covering important content">
+  A large label in the middle of an image, hiding the subject. Float should accompany, not compete.
 </DosDonts>
 
-## Tamanho do elemento flutuante
+## Size of the floating element
 
-- Mantenha-o **pequeno** em relação ao alvo.
-- Garanta que ele não seja cortado pelos limites do contêiner.
-- Dê a ele contraste suficiente com o que está embaixo, e um anel na cor do fundo costuma ajudar.
+- Keep it **small** relative to the target.
+- Make sure it is not clipped by the container's edges.
+- Give it enough contrast with what is underneath; a ring in the background color usually helps.
 
-## Boas práticas
+## Best practices
 
-- Não use o Float para informação que só ele comunica. Complemente com texto.
-- Evite vários Floats no mesmo elemento.
-- Teste com textos e tamanhos diferentes: a posição precisa se manter.
+- Do not use Float for information that only it conveys. Add text.
+- Avoid several Floats on the same element.
+- Test with different text and sizes: the position must hold.

@@ -3,37 +3,37 @@ title: "Usage"
 order: 2
 ---
 
-## Escolha ícones reconhecíveis
+## Choose recognizable icons
 
-Use as metáforas que as pessoas já conhecem: lixeira para excluir, lápis para editar, lupa para buscar, três pontos para mais opções.
+Use the metaphors people already know: a trash can to delete, a pencil to edit, a magnifying glass to search, three dots for more options.
 
-<DosDonts variant="do" title="Um ícone, um significado">
-  Use o mesmo ícone para a mesma ação em todo o produto. Quem aprendeu o lápis para "Editar" não precisa reaprender na tela seguinte.
+<DosDonts variant="do" title="One icon, one meaning">
+  Use the same icon for the same action across the whole product. Someone who learned the pencil for "Edit" does not need to relearn it on the next screen.
 </DosDonts>
 
-<DosDonts variant="dont" title="Ícones ambíguos ou inventados">
-  Um ícone sem convenção obriga a pessoa a clicar para descobrir o que ele faz. Se há dúvida, use texto.
+<DosDonts variant="dont" title="Ambiguous or made-up icons">
+  An icon with no convention forces the person to click to find out what it does. When in doubt, use text.
 </DosDonts>
 
-## Sempre dê um nome
+## Always give it a name
 
-Sem texto visível, o nome da ação só existe para leitores de tela, e vem do `aria-label`. Ele é **obrigatório**.
+With no visible text, the action's name only exists for screen readers, and it comes from `aria-label`. It is **required**.
 
-- Descreva a **ação**, não a imagem: "Excluir", não "Lixeira".
-- Em listas, inclua o alvo: "Excluir arquivo relatorio.pdf".
+- Describe the **action**, not the image: "Delete", not "Trash can".
+- In lists, include the target: "Delete file relatorio.pdf".
 
-## Ajude com um tooltip
+## Help with a tooltip
 
-Em ações menos óbvias, combine o Icon Button com um [Tooltip](../../content/tooltip/index.mdx). O tooltip revela o nome ao passar o mouse e ao focar pelo teclado, e ajuda quem está aprendendo a interface.
+For less obvious actions, pair the Icon Button with a [Tooltip](../../content/tooltip/index.mdx). The tooltip reveals the name on hover and on keyboard focus, and helps people who are learning the interface.
 
-## Espaçamento e agrupamento
+## Spacing and grouping
 
-- Mantenha pelo menos 8px entre Icon Buttons vizinhos para evitar toques errados.
-- Agrupe ações relacionadas e separe grupos diferentes com um [Divider](../../layout/divider/index.mdx).
-- Se houver mais de três ou quatro ações, agrupe as menos usadas em um [Dropdown Menu](../dropdown-menu/index.mdx).
+- Keep at least 8px between neighboring Icon Buttons to avoid mistaken taps.
+- Group related actions and separate different groups with a [Divider](../../layout/divider/index.mdx).
+- If there are more than three or four actions, group the less used ones in a [Dropdown Menu](../dropdown-menu/index.mdx).
 
-## Boas práticas
+## Best practices
 
-- Use ícones do mesmo estilo, espessura e tamanho em toda a interface.
-- Não misture Icon Buttons e Buttons com texto na mesma linha de ações sem necessidade.
-- Evite ações destrutivas só com ícone: peça confirmação ou ofereça "Desfazer".
+- Use icons of the same style, stroke weight and size across the whole interface.
+- Do not mix Icon Buttons and text Buttons in the same row of actions without need.
+- Avoid icon-only destructive actions: ask for confirmation or offer "Undo".

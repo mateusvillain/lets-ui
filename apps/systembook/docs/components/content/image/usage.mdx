@@ -3,43 +3,43 @@ title: "Usage"
 order: 2
 ---
 
-## Escolha boas imagens
+## Choose good images
 
-- Use imagens que **agregam informação**, não só enfeite.
-- Mantenha a mesma proporção em imagens do mesmo conjunto (todas 16:9, por exemplo).
-- Garanta qualidade em telas de alta densidade, com versões em duas vezes o tamanho exibido.
+- Use images that **add information**, not just decoration.
+- Keep the same aspect ratio across images in the same set (all 16:9, for example).
+- Ensure quality on high-density screens, with versions at twice the displayed size.
 
-<DosDonts variant="do" title="Reservar o espaço">
-  Defina a proporção para que a página não "pule" quando a imagem carregar.
+<DosDonts variant="do" title="Reserve the space">
+  Set the aspect ratio so the page does not "jump" when the image loads.
 </DosDonts>
 
-<DosDonts variant="dont" title="Esticar ou distorcer">
-  Mudar a proporção da imagem para caber no espaço. Use `fit="cover"` para recortar com cuidado, ou ajuste o enquadramento da imagem.
+<DosDonts variant="dont" title="Stretch or distort">
+  Changing the image's aspect ratio to fit the space. Use `fit="cover"` to crop carefully, or adjust the image framing.
 </DosDonts>
 
-## Texto alternativo
+## Alternative text
 
-Toda imagem de conteúdo precisa de `alt`: uma descrição curta do que ela **comunica**, não do que ela é.
+Every content image needs an `alt`: a short description of what it **communicates**, not of what it is.
 
-| Imagem | Alt ruim | Alt bom |
+| Image | Bad alt | Good alt |
 | --- | --- | --- |
-| Gráfico de vendas | "Gráfico" | "Vendas subiram 20% em março" |
-| Foto de produto | "Imagem" | "Tênis de corrida azul, de lado" |
-| Imagem puramente decorativa | "Fundo azul" | (vazio: `alt=""`) |
+| Sales chart | "Chart" | "Sales rose 20% in March" |
+| Product photo | "Image" | "Blue running shoe, side view" |
+| Purely decorative image | "Blue background" | (empty: `alt=""`) |
 
-## Legenda
+## Caption
 
-Use legenda quando houver informação complementar: autoria, local, data, descrição. Evite legendas que repetem o `alt`.
+Use a caption when there is complementary information: authorship, location, date, description. Avoid captions that repeat the `alt`.
 
-## Carregamento
+## Loading
 
-- Imagens **abaixo da dobra** carregam de forma preguiçosa (padrão).
-- A imagem **principal** da página, que aparece logo no topo, deve carregar de imediato (`loading="eager"`).
-- Escolha uma **cor de fallback** próxima da imagem, para o espaço não parecer vazio.
-- Ofereça uma imagem alternativa (`fallback-src`) para casos importantes.
+- Images **below the fold** load lazily (default).
+- The **main** image of the page, which appears right at the top, should load immediately (`loading="eager"`).
+- Choose a **fallback color** close to the image, so the space does not look empty.
+- Provide an alternative image (`fallback-src`) for important cases.
 
-## Boas práticas
+## Best practices
 
-- Otimize o peso dos arquivos e use formatos modernos.
-- Use `as="picture"` quando precisar de versões diferentes para tamanhos de tela distintos.
-- Não coloque texto importante dentro da imagem. Ele não é lido por leitores de tela nem se adapta ao idioma.
+- Optimize file weight and use modern formats.
+- Use `as="picture"` when you need different versions for different screen sizes.
+- Do not put important text inside the image. Screen readers do not read it, and it does not adapt to the language.

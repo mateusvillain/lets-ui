@@ -7,63 +7,63 @@ order: 4
 
 <ComponentEmbed component="Input" variant="error" />
 
-## Integração com formulários
+## Form integration
 
-O `lui-input` é um form-associated custom element — seus valores são capturados automaticamente
-pelo `FormData` do form pai através do atributo `name`.
+`lui-input` is a form-associated custom element — its values are captured automatically
+by the parent form's `FormData` through the `name` attribute.
 
-Use `form` para associar o input a um form por ID, mesmo que esteja fora do elemento `<form>` no DOM.
+Use `form` to associate the input with a form by ID, even if it sits outside the `<form>` element in the DOM.
 
 ### Required
 
-O atributo `required` bloqueia a submissão do form quando o campo está vazio.
-A validação é implementada via `ElementInternals.setValidity()`, mantendo o comportamento
-consistente com elementos nativos. A mensagem reportada é controlada pelo atributo `error-text`.
+The `required` attribute blocks form submission when the field is empty.
+Validation is implemented via `ElementInternals.setValidity()`, keeping the behavior
+consistent with native elements. The reported message is controlled by the `error-text` attribute.
 
 ### Pattern
 
-O atributo `pattern` aceita uma expressão regular para validar o valor final do campo,
-via Constraint Validation API. Quando o valor não casa com o padrão, o campo reporta
-`patternMismatch` através de `ElementInternals.setValidity()`, exibindo a mensagem de
-`error-text`. Útil para indicar formato esperado de forma declarativa, como CEP ou
-CPF/CNPJ sem máscara.
+The `pattern` attribute accepts a regular expression to validate the field's final value,
+via the Constraint Validation API. When the value does not match the pattern, the field reports
+`patternMismatch` through `ElementInternals.setValidity()`, showing the
+`error-text` message. Useful to indicate the expected format declaratively, such as a ZIP code or
+CPF/CNPJ without a mask.
 
 ### Input Mode
 
-O atributo `inputmode` é refletido no `<input>` nativo e otimiza o teclado virtual
-exibido em dispositivos touch para o tipo de dado esperado, sem alterar o tipo nativo
-do campo (`type`). Aceita os valores padrão: `text`, `numeric`, `decimal`, `tel`,
-`email`, `url`, `search` e `none`.
+The `inputmode` attribute is reflected on the native `<input>` and optimizes the virtual keyboard
+shown on touch devices for the expected data type, without changing the field's native type
+(`type`). It accepts the standard values: `text`, `numeric`, `decimal`, `tel`,
+`email`, `url`, `search` and `none`.
 
 ### Pattern + Input Mode
 
-`pattern` e `inputmode` podem ser combinados — o teclado é otimizado para entrada de
-dados enquanto a regex valida o valor final, útil para campos como CPF/CNPJ sem máscara.
+`pattern` and `inputmode` can be combined — the keyboard is optimized for data
+entry while the regex validates the final value, useful for fields such as CPF/CNPJ without a mask.
 
-## Atributos de formulário
+## Form attributes
 
-| Atributo    | Tipo      | Padrão | Descrição                                                                                  |
+| Attribute   | Type      | Default | Description                                                                                 |
 | ----------- | --------- | ------ | ------------------------------------------------------------------------------------------- |
-| `name`      | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`                 |
-| `form`      | `string`  | `''`   | ID do `<form>` associado; permite usar o input fora do elemento form                       |
-| `required`  | `boolean` | `false`| Bloqueia a submissão quando o campo está vazio; valida via `ElementInternals`              |
-| `pattern`   | `string`  | `''`   | Regex para validar o valor final; reporta `patternMismatch` via `ElementInternals`          |
-| `inputmode` | `string`  | `''`   | Dica de teclado virtual em dispositivos touch (`text`, `numeric`, `decimal`, `tel`, `email`, `url`, `search`, `none`) |
+| `name`      | `string`  | `''`   | Field name in the submitted data; required to appear in the `FormData`                      |
+| `form`      | `string`  | `''`   | ID of the associated `<form>`; lets you use the input outside the form element              |
+| `required`  | `boolean` | `false`| Blocks submission when the field is empty; validates via `ElementInternals`                 |
+| `pattern`   | `string`  | `''`   | Regex to validate the final value; reports `patternMismatch` via `ElementInternals`         |
+| `inputmode` | `string`  | `''`   | Virtual keyboard hint on touch devices (`text`, `numeric`, `decimal`, `tel`, `email`, `url`, `search`, `none`) |
 
-## Textos padrão
+## Default texts
 
-Os textos que o componente gera são em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
+The texts the component generates are in English and can be changed by attribute, to follow the project's language.
 
-| Atributo              | Tipo     | Padrão                      | Descrição                                          |
+| Attribute             | Type     | Default                     | Description                                        |
 | --------------------- | -------- | --------------------------- | -------------------------------------------------- |
-| `optional-text`       | `string` | `'(optional)'`              | Marcador exibido quando `optional` está ativo      |
-| `error-text`          | `string` | `'This field is required.'` | Mensagem exibida quando `error` está ativo         |
-| `show-password-label` | `string` | `'Show password'`           | `aria-label` do botão que revela a senha           |
-| `hide-password-label` | `string` | `'Hide password'`           | `aria-label` do botão que oculta a senha           |
-| `increment-label`     | `string` | `'Increase value'`          | `aria-label` do botão de incremento (`type=number`) |
-| `decrement-label`     | `string` | `'Decrease value'`          | `aria-label` do botão de decremento (`type=number`) |
+| `optional-text`       | `string` | `'(optional)'`              | Marker shown when `optional` is on                 |
+| `error-text`          | `string` | `'This field is required.'` | Message shown when `error` is on                   |
+| `show-password-label` | `string` | `'Show password'`           | `aria-label` of the button that reveals the password |
+| `hide-password-label` | `string` | `'Hide password'`           | `aria-label` of the button that hides the password |
+| `increment-label`     | `string` | `'Increase value'`          | `aria-label` of the increment button (`type=number`) |
+| `decrement-label`     | `string` | `'Decrease value'`          | `aria-label` of the decrement button (`type=number`) |
 
-## Uso
+## Usage
 
 ### Web Component
 
@@ -71,12 +71,12 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
 <lui-input
   type="email"
   label="Email"
-  placeholder="seu@email.com"
+  placeholder="you@email.com"
   size="lg"
 ></lui-input>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="input-field input-field--lg">
@@ -86,7 +86,7 @@ Os textos que o componente gera são em inglês e podem ser trocados por atribut
     </div>
   </div>
   <div class="input-field__control">
-    <input type="email" class="input-field__input" placeholder="seu@email.com">
+    <input type="email" class="input-field__input" placeholder="you@email.com">
   </div>
 </div>
 ```

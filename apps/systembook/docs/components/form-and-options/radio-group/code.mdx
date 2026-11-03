@@ -5,68 +5,68 @@ order: 4
 
 ## Hint
 
-Texto auxiliar exibido abaixo das opções. Substituído pela mensagem de `error-text` quando `error` é `true`.
+Helper text shown below the options. Replaced by the `error-text` message when `error` is `true`.
 
 <ComponentEmbed component="RadioGroup" variant="hint" />
 
 ## Small
 
-`size="md"` aplica `body--md` na label do grupo, seguindo o mesmo padrão do `lui-input`.
+`size="md"` applies `body--md` to the group label, following the same pattern as `lui-input`.
 
-## Pré-selecionado
+## Preselected
 
-Adicione `checked` ao `lui-radio` desejado para definir um valor inicial. O grupo sincroniza o `FormData` automaticamente ao conectar.
+Add `checked` to the desired `lui-radio` to set an initial value. The group syncs the `FormData` automatically on connect.
 
 ## Disabled
 
-`disabled` no grupo propaga o estado para todos os filhos e exclui o campo da submissão.
+`disabled` on the group propagates the state to all children and excludes the field from submission.
 
-## Integração com formulários
+## Form integration
 
 ### Required
 
-`required` no grupo bloqueia a submissão enquanto nenhuma opção estiver selecionada. O evento `invalid` dispara no grupo e a mensagem de `error-text` é exibida abaixo das opções, representando o grupo como um todo.
+`required` on the group blocks submission while no option is selected. The `invalid` event fires on the group and the `error-text` message is shown below the options, representing the group as a whole.
 
 ### Form Integration
 
-O valor selecionado é submetido no `FormData` com a chave `name` do grupo. Múltiplos grupos independentes coexistem no mesmo form sem interferência.
+The selected value is submitted in the `FormData` under the group's `name` key. Multiple independent groups coexist in the same form without interfering.
 
-## Atributos
+## Attributes
 
-| Atributo     | Tipo      | Padrão                  | Descrição                                                         |
+| Attribute    | Type      | Default                 | Description                                                       |
 | ------------ | --------- | ----------------------- | ----------------------------------------------------------------- |
-| `name`       | `string`  | `''`                    | Chave do campo no `FormData`                                      |
-| `label`      | `string`  | `''`                    | Texto exibido como `<legend>` do grupo                            |
-| `size`       | `'lg' \| 'md'` | `'lg'`            | Tamanho da label: `lg` → `body--lg`, `md` → `body--md`           |
-| `hint`       | `string`  | `''`                    | Texto auxiliar abaixo das opções; substituído por `error-text` quando há erro |
-| `required`   | `boolean` | `false`                 | Bloqueia a submissão quando nenhuma opção está selecionada        |
-| `disabled`   | `boolean` | `false`                 | Desabilita todos os radios filhos e exclui o campo da submissão   |
-| `error`      | `boolean` | `false`                 | Ativa o estado de erro manualmente                                |
-| `error-text` | `string`  | `'Select an option.'`| Mensagem exibida abaixo do grupo quando `error` é verdadeiro      |
-| `form`       | `string`  | `''`                    | ID do `<form>` associado; permite usar o grupo fora do `<form>`   |
+| `name`       | `string`  | `''`                    | Field key in the `FormData`                                       |
+| `label`      | `string`  | `''`                    | Text shown as the group's `<legend>`                              |
+| `size`       | `'lg' \| 'md'` | `'lg'`            | Label size: `lg` → `body--lg`, `md` → `body--md`                 |
+| `hint`       | `string`  | `''`                    | Helper text below the options; replaced by `error-text` on error  |
+| `required`   | `boolean` | `false`                 | Blocks submission when no option is selected                      |
+| `disabled`   | `boolean` | `false`                 | Disables all child radios and excludes the field from submission  |
+| `error`      | `boolean` | `false`                 | Turns on the error state manually                                 |
+| `error-text` | `string`  | `'Select an option.'`| Message shown below the group when `error` is true                |
+| `form`       | `string`  | `''`                    | ID of the associated `<form>`; lets you use the group outside the `<form>` |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
-<lui-radio-group name="plano" label="Plano" size="lg">
-  <lui-radio value="basic" label="Básico"></lui-radio>
+<lui-radio-group name="plan" label="Plan" size="lg">
+  <lui-radio value="basic" label="Basic"></lui-radio>
   <lui-radio value="pro" label="Pro"></lui-radio>
 </lui-radio-group>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <fieldset class="radio-group radio-group--lg">
-  <legend class="radio-group__legend">Plano</legend>
+  <legend class="radio-group__legend">Plan</legend>
   <div class="radio-group__options">
     <label class="radio">
-      <input type="radio" name="plano" value="basic"> Básico
+      <input type="radio" name="plan" value="basic"> Basic
     </label>
     <label class="radio">
-      <input type="radio" name="plano" value="pro"> Pro
+      <input type="radio" name="plan" value="pro"> Pro
     </label>
   </div>
 </fieldset>

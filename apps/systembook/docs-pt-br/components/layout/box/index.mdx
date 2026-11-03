@@ -1,0 +1,56 @@
+---
+title: "Box"
+subtitle: "Contêiner genérico com espaçamento interno, fundo, borda e raio, todos vindos dos tokens do sistema."
+---
+
+<ComponentEmbed component="Box" variant="surface" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Superfície simples">
+  Um bloco com fundo, borda e espaçamento interno, sem comportamento próprio.
+</DosDonts>
+
+<DosDonts variant="do" title="Base de áreas de destaque">
+  Painéis, áreas de destaque e faixas de conteúdo.
+</DosDonts>
+
+<DosDonts variant="dont" title="Conteúdo sobre um item com título e ações">
+  Use o [Card](../../content/card/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Mensagens de estado">
+  Use o [Alert](../../content/alert/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Limitar a largura do conteúdo">
+  Use o [Container](../container/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Organizar elementos">
+  Use [Stack](../stack/index.mdx) ou [Flex](../flex/index.mdx) **dentro** do Box.
+</DosDonts>
+
+## O que o Box controla
+
+| Opção | O que controla |
+| --- | --- |
+| `padding`, `padding-x`, `padding-y` | Espaçamento interno, pela escala do sistema. |
+| `background` | Fundo, por um nome semântico como `neutral/surface` ou `primary/container`. |
+| `border-radius` | Arredondamento: `none`, `xs`, `sm`, `md`, `lg`, `xl` ou `circle`. |
+| `border-width`, `border-color` | Espessura (0, 1, 2 ou 4) e cor da borda. |
+| `overflow` | Como o conteúdo que passa do limite é tratado. |
+
+Como usam tokens, o Box muda sozinho com o **tema** (claro e escuro) e a **marca**.
+
+<ComponentEmbed component="Box" variant="outlined" />
+
+## Fundos semânticos
+
+Os fundos seguem papéis: **surface** (suave) e **container** (destaque) para as famílias `neutral`, `primary`, `secondary`, `info`, `success`, `caution` e `danger`. Escolha pelo **significado** do conteúdo.
+
+## Relacionados
+
+- [Card](../../content/card/index.mdx): superfície com estrutura.
+- [Stack](../stack/index.mdx): organiza o conteúdo do Box.
+- [Color](../../../foundations/properties/color.mdx), [Spacing](../../../foundations/properties/spacing.mdx), [Border](../../../foundations/properties/border.mdx): os tokens.

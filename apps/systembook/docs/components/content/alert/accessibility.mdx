@@ -3,32 +3,32 @@ title: "Accessibility"
 order: 3
 ---
 
-## Leitor de tela
+## Screen reader
 
-O Alert é anunciado automaticamente quando aparece na página, sem exigir foco. O nível de urgência depende da variante:
+The Alert is announced automatically when it appears on the page, without requiring focus. The urgency level depends on the variant:
 
-| Variante | Anúncio | Efeito |
+| Variant | Announcement | Effect |
 | --- | --- | --- |
-| `danger`, `caution` | **Assertivo** | Interrompe a leitura atual. |
-| `success`, `info` | **Educado** | Espera a leitura atual terminar. |
+| `danger`, `caution` | **Assertive** | Interrupts the current reading. |
+| `success`, `info` | **Polite** | Waits for the current reading to finish. |
 
-- O título e o conteúdo são lidos juntos, como uma única mensagem.
-- O ícone é decorativo.
+- The title and the content are read together, as a single message.
+- The icon is decorative.
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Move o foco para o botão de fechar e para ações dentro do alerta. |
-| `Enter` ou `Espaço` | Ativa o botão em foco. |
+| `Tab` | Moves focus to the close button and to actions inside the alert. |
+| `Enter` or `Space` | Activates the focused button. |
 
 ## Visual
 
-- O significado nunca depende só da cor: o ícone e o texto da mensagem reforçam a variante.
-- O texto tem contraste mínimo de 4,5:1 com o fundo do alerta.
+- Meaning never depends on color alone: the icon and the message text reinforce the variant.
+- The text has a minimum contrast of 4.5:1 against the alert background.
 
-## Para designers
+## For designers
 
-- Escreva o título e o conteúdo de modo que façam sentido **lidos em voz alta**.
-- Defina o texto do botão de fechar no idioma do produto (`close-label`).
-- Use `danger` e `caution` somente para o que exige atenção, porque eles interrompem a leitura.
+- Write the title and the content so they make sense **read aloud**.
+- Set the close button text in the product's language (`close-label`).
+- Use `danger` and `caution` only for what requires attention, because they interrupt reading.

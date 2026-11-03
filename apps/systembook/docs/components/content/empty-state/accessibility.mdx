@@ -3,27 +3,27 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-O Empty State em si não é interativo. As ações dentro dele seguem o teclado do [Button](../../actionable/button/index.mdx): `Tab` para chegar e `Enter` ou `Espaço` para ativar.
+The Empty State itself is not interactive. The actions inside it follow the [Button](../../actionable/button/index.mdx) keyboard: `Tab` to reach them and `Enter` or `Space` to activate.
 
-## Leitor de tela
+## Screen reader
 
-- O título é um **título real** (`h1` a `h6`). Ajuste o nível com `title-level` (padrão 2) para respeitar a hierarquia da página.
-- A capa é **decorativa** e fica escondida do leitor de tela. Nada pode depender exclusivamente dela.
-- Quando o Empty State aparece depois de uma ação, o leitor precisa ser avisado:
+- The title is a **real heading** (`h1` to `h6`). Adjust the level with `title-level` (default 2) to respect the page hierarchy.
+- The cover is **decorative** and stays hidden from the screen reader. Nothing can depend on it alone.
+- When the Empty State appears after an action, the screen reader needs to be notified:
 
-| `announce` | Efeito | Quando usar |
+| `announce` | Effect | When to use |
 | --- | --- | --- |
-| `off` (padrão) | Sem anúncio. | Já estava na página ao carregar. |
-| `polite` | Anuncia ao fim da leitura atual. | Busca sem resultado, filtro aplicado, último item excluído. |
-| `assertive` | Interrompe a leitura. | Só para erros que exigem atenção imediata. |
+| `off` (default) | No announcement. | It was already on the page at load. |
+| `polite` | Announces at the end of the current reading. | Search with no results, filter applied, last item deleted. |
+| `assertive` | Interrupts reading. | Only for errors that require immediate attention. |
 
-## Foco
+## Focus
 
-Se o Empty State substituiu o elemento que tinha foco (como o item recém-excluído), leve o foco para um lugar previsível. Nunca deixe o foco "perdido" no documento.
+If the Empty State replaced the element that had focus (such as the item just deleted), move focus to a predictable place. Never leave focus "lost" in the document.
 
-## Para designers
+## For designers
 
-- Escreva o texto de modo que ele sirva sozinho, sem a ilustração.
-- Defina quando o Empty State deve ser anunciado, e qual o próximo foco.
+- Write the text so it works on its own, without the illustration.
+- Define when the Empty State should be announced, and where focus goes next.

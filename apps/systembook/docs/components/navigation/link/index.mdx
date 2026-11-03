@@ -1,66 +1,66 @@
 ---
 title: "Link"
-subtitle: "Leva a outra página, seção ou recurso. É o elemento de navegação em texto."
+subtitle: "Takes you to another page, section or resource. It is the text navigation element."
 order: 2
 ---
 
 <ComponentEmbed component="Link" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Navegar">
-  Para outra página ou para uma âncora na mesma página.
+<DosDonts variant="do" title="Navigate">
+  To another page or to an anchor on the same page.
 </DosDonts>
 
-<DosDonts variant="do" title="Recursos externos e downloads">
-  Para abrir um site externo ou baixar um arquivo.
+<DosDonts variant="do" title="External resources and downloads">
+  To open an external site or download a file.
 </DosDonts>
 
-<DosDonts variant="do" title="Texto clicável">
-  Dentro de um parágrafo ou como chamada textual isolada.
+<DosDonts variant="do" title="Clickable text">
+  Inside a paragraph or as a standalone text call to action.
 </DosDonts>
 
-<DosDonts variant="dont" title="Executar uma ação">
-  Para salvar, enviar ou excluir, use um [Button](../../actionable/button/index.mdx).
+<DosDonts variant="dont" title="Run an action">
+  To save, send or delete, use a [Button](../../actionable/button/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Escolher entre opções">
-  Use controles de formulário.
+<DosDonts variant="dont" title="Choose between options">
+  Use form controls.
 </DosDonts>
 
-<DosDonts variant="dont" title="Navegação com muitos itens e estado ativo">
-  Use [Tabs](../tabs/index.mdx) ou um menu.
+<DosDonts variant="dont" title="Navigation with many items and an active state">
+  Use [Tabs](../tabs/index.mdx) or a menu.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Link: texto e sublinhado ao passar o mouse, e ícone de link externo](./anatomy.png)
+![Link anatomy: text and underline on hover, and external link icon](./anatomy.png)
 
-1. **Texto**: descreve o destino.
-2. **Sublinhado**: aparece ao passar o mouse. No foco por teclado, o link ganha o anel de foco.
-3. **Ícone de link externo** (opcional): indica que o destino sai do produto.
+1. **Text**: describes the destination.
+2. **Underline**: appears on hover. On keyboard focus, the link gets the focus ring.
+3. **External link icon** (optional): indicates the destination leaves the product.
 
-## Tipos
+## Types
 
-| Tipo | Quando usar |
+| Type | When to use |
 | --- | --- |
-| **Padrão** | Navegação interna, na mesma aba. |
-| **Externo** (`external`) | Destino fora do produto. Abre em nova aba e mostra um ícone. |
-| **Download** (`download`) | O clique baixa um arquivo em vez de navegar. |
-| **Desabilitado** (`disabled`) | O destino existe, mas não está disponível agora. |
+| **Default** | Internal navigation, in the same tab. |
+| **External** (`external`) | Destination outside the product. Opens in a new tab and shows an icon. |
+| **Download** (`download`) | Clicking downloads a file instead of navigating. |
+| **Disabled** (`disabled`) | The destination exists, but is not available right now. |
 
-## Tamanhos
+## Sizes
 
-`lg`, `md` e `sm` seguem a escala do [Body](../../typography/body/index.mdx). Sem `size`, o link herda o tamanho do texto ao redor, que é o comportamento certo dentro de um parágrafo.
+`lg`, `md` and `sm` follow the [Body](../../typography/body/index.mdx) scale. Without `size`, the link inherits the size of the surrounding text, which is the right behavior inside a paragraph.
 
-## Estados
+## States
 
-Padrão, hover (sublinhado), foco (anel visível), visitado e desabilitado. O estilo de **visitado** vem desligado por padrão e pode ser ativado com o atributo `visited`, útil em listas de artigos e resultados de busca.
+Default, hover (underline), focus (visible ring), visited and disabled. The **visited** style is off by default and can be turned on with the `visited` attribute, useful in article lists and search results.
 
 <ComponentEmbed component="Link" variant="disabled" />
 
-## Relacionados
+## Related
 
-- [Button](../../actionable/button/index.mdx): executar ações.
-- [Breadcrumb](../breadcrumb/index.mdx): links de hierarquia.
-- [Body](../../typography/body/index.mdx): o texto onde o link vive.
+- [Button](../../actionable/button/index.mdx): run actions.
+- [Breadcrumb](../breadcrumb/index.mdx): hierarchy links.
+- [Body](../../typography/body/index.mdx): the text where the link lives.

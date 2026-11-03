@@ -3,29 +3,29 @@ title: "Usage"
 order: 2
 ---
 
-## Padrões comuns
+## Common patterns
 
-| Necessidade | Combinação |
+| Need | Combination |
 | --- | --- |
-| Título à esquerda e ações à direita | `justify="space-between"`, `align="center"` |
-| Centralizar um item nos dois eixos | `justify="center"`, `align="center"` |
-| Um item que ocupa o espaço que sobra | `grow="1"` no item |
-| Rodapé empurrado para o fim | Coluna com `grow="1"` no corpo |
+| Title on the left and actions on the right | `justify="space-between"`, `align="center"` |
+| Center an item on both axes | `justify="center"`, `align="center"` |
+| An item that fills the remaining space | `grow="1"` on the item |
+| Footer pushed to the end | Column with `grow="1"` on the body |
 
-<DosDonts variant="do" title="Deixar um item crescer">
-  Em uma linha com um campo de busca e um botão, dê `grow` ao campo. Ele ocupa o espaço que sobrar.
+<DosDonts variant="do" title="Let an item grow">
+  In a row with a search field and a button, give the field `grow`. It takes up the remaining space.
 </DosDonts>
 
-<DosDonts variant="dont" title="Larguras fixas em pixels">
-  Definir larguras fixas para os itens quebra em telas menores. Use `basis` e `grow` para se adaptar.
+<DosDonts variant="dont" title="Fixed pixel widths">
+  Setting fixed widths on items breaks on smaller screens. Use `basis` and `grow` to adapt.
 </DosDonts>
 
-## Responsividade
+## Responsiveness
 
-O Flex não muda sozinho conforme a tela. Para alternar entre linha e coluna de acordo com o espaço, use o [Switcher](../switcher/index.mdx).
+Flex does not change on its own with the screen size. To switch between row and column depending on the space, use [Switcher](../switcher/index.mdx).
 
-## Boas práticas
+## Best practices
 
-- Não use margens para espaçar. Use `gap`.
-- Evite aninhar muitos Flex: se precisar de mais de dois níveis, reveja a estrutura.
-- Teste com textos longos e curtos para ver como o alinhamento reage.
+- Do not use margins for spacing. Use `gap`.
+- Avoid nesting many Flex containers: if you need more than two levels, review the structure.
+- Test with long and short text to see how the alignment responds.

@@ -3,17 +3,17 @@ title: "Code"
 order: 4
 ---
 
-## Sem ações
+## No actions
 
-Omita `primary-button` e `secondary-button` quando o drawer for apenas informativo ou quando as ações forem parte do conteúdo interno (slot).
+Omit `primary-button` and `secondary-button` when the drawer is only informative or when the actions are part of the inner content (slot).
 
 ## close-on-backdrop: false
 
-Por padrão o backdrop não fecha o drawer. Ative `close-on-backdrop` quando o fluxo permitir descarte acidental. Desative em formulários ou fluxos onde o usuário deve tomar uma decisão explícita.
+By default the backdrop does not close the drawer. Turn on `close-on-backdrop` when the flow allows accidental dismissal. Turn it off in forms or flows where the user must make an explicit decision.
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `title` | `string` | `Drawer title` |
 | `size` | `string` | `md` |
@@ -23,50 +23,50 @@ Por padrão o backdrop não fecha o drawer. Ative `close-on-backdrop` quando o f
 | `hide-trigger` | `boolean` | `false` |
 | `close-on-backdrop` | `boolean` | `false` |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
-<lui-drawer title="Título" size="md" trigger-label="Open drawer" close-on-backdrop>
-  <p>Conteúdo do drawer</p>
-  <lui-button slot="actions" variant="secondary" label="Cancelar" data-drawer-close></lui-button>
-  <lui-button slot="actions" label="Confirmar"></lui-button>
+<lui-drawer title="Title" size="md" trigger-label="Open drawer" close-on-backdrop>
+  <p>Drawer content</p>
+  <lui-button slot="actions" variant="secondary" label="Cancel" data-drawer-close></lui-button>
+  <lui-button slot="actions" label="Confirm"></lui-button>
 </lui-drawer>
 ```
 
-### Fechar por uma ação
+### Closing from an action
 
-Marque com `data-drawer-close` o botão que só fecha o drawer, como um "Cancelar". Funciona no slot `actions` e no conteúdo, num elemento nativo ou num `lui-button`, e também quando o clique vem de algo dentro do elemento marcado.
+Mark the button that only closes the drawer, such as a "Cancel", with `data-drawer-close`. It works in the `actions` slot and in the content, on a native element or on a `lui-button`, and also when the click comes from something inside the marked element.
 
-- Fecha o `lui-drawer` mais próximo acima dele: dentro de um `lui-drawer` aninhado, fecha só esse.
-- No slot `trigger`, o atributo é ignorado.
-- Não fecha quando o clique passa por um controle com `aria-disabled="true"` (um `lui-button` em `loading`) ou quando um handler chama `event.preventDefault()`.
-- Ações que fazem algo antes de fechar, como "Confirmar", chamam `closeDrawer()` no próprio handler.
+- It closes the nearest `lui-drawer` above it: inside a nested `lui-drawer`, it closes only that one.
+- In the `trigger` slot, the attribute is ignored.
+- It does not close when the click goes through a control with `aria-disabled="true"` (a `lui-button` in `loading`) or when a handler calls `event.preventDefault()`.
+- Actions that do something before closing, such as "Confirm", call `closeDrawer()` in their own handler.
 
-O foco volta a quem abriu o drawer, como em qualquer outro jeito de fechar.
+Focus returns to the element that opened the drawer, as with any other way of closing.
 
-### Textos acessíveis
+### Accessible texts
 
-O botão de fechar usa `close-label` como `aria-label` (padrão: `"Close drawer"`). Troque-o para o idioma do projeto.
+The close button uses `close-label` as its `aria-label` (default: `"Close drawer"`). Change it to the project's language. For example, in Portuguese:
 
 ```html
 <lui-drawer title="Título" close-label="Fechar drawer"></lui-drawer>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="drawer-backdrop is-open"></div>
 <div class="drawer drawer--md is-open" role="dialog" aria-modal="true">
   <div class="drawer__header">
-    <span class="drawer__title">Título</span>
-    <button class="drawer__close" aria-label="Fechar">×</button>
+    <span class="drawer__title">Title</span>
+    <button class="drawer__close" aria-label="Close">×</button>
   </div>
-  <div class="drawer__body">Conteúdo do drawer</div>
+  <div class="drawer__body">Drawer content</div>
   <div class="drawer__footer">
-    <button class="btn btn--secondary btn--lg">Cancelar</button>
-    <button class="btn btn--primary btn--lg">Confirmar</button>
+    <button class="btn btn--secondary btn--lg">Cancel</button>
+    <button class="btn btn--primary btn--lg">Confirm</button>
   </div>
 </div>
 ```

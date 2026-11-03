@@ -3,31 +3,31 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Move o foco para o botão. |
-| `Enter` ou `Espaço` | Ativa a ação. |
+| `Tab` | Moves focus to the button. |
+| `Enter` or `Space` | Activates the action. |
 
-## Leitor de tela
+## Screen reader
 
-- O `aria-label` é **obrigatório**: sem texto visível, ele é o único nome do botão. Um `aria-label` ausente ou vazio é uma falha.
-- O ícone SVG é decorativo e fica fora da árvore de acessibilidade, para não ser lido duas vezes.
-- Um botão desabilitado é anunciado como indisponível e sai da ordem de tabulação.
-- Num botão alternável, `aria-pressed` anuncia "pressionado" ou "não pressionado". Mantenha o mesmo `aria-label` nos dois estados: um nome que muda com o estado confunde.
-- Quando o botão abre algo, `aria-expanded` e `aria-haspopup` informam o estado. Como gatilho de Modal, Drawer ou Dropdown Menu, o botão recebe esse estado do próprio componente.
-- `aria-label`, `aria-expanded`, `aria-haspopup` e `aria-pressed` vão para o `<button>` interno e saem do `<lui-icon-button>`, para não criar um nó extra na árvore de acessibilidade.
+- `aria-label` is **required**: with no visible text, it is the button's only name. A missing or empty `aria-label` is a failure.
+- The SVG icon is decorative and stays out of the accessibility tree, so it is not read twice.
+- A disabled button is announced as unavailable and leaves the tab order.
+- On a toggle button, `aria-pressed` announces "pressed" or "not pressed". Keep the same `aria-label` in both states: a name that changes with the state is confusing.
+- When the button opens something, `aria-expanded` and `aria-haspopup` convey the state. As the trigger of a Modal, Drawer or Dropdown Menu, the button gets this state from the component itself.
+- `aria-label`, `aria-expanded`, `aria-haspopup` and `aria-pressed` move to the inner `<button>` and leave `<lui-icon-button>`, so no extra node is created in the accessibility tree.
 
 ## Visual
 
-- Ícone e fundo precisam de contraste de pelo menos 3:1 (WCAG 2.2 AA para componentes de interface).
-- O anel de foco aparece ao navegar por teclado.
-- A área de toque de 32px (`md`) e 40px (`lg`) é maior que o mínimo de 24px do WCAG 2.2.
-- Em modo de alto contraste (`forced-colors`), o botão pressionado usa as cores de destaque do sistema e ganha um anel interno, e o desabilitado usa `GrayText`.
+- Icon and background need a contrast of at least 3:1 (WCAG 2.2 AA for interface components).
+- The focus ring appears when navigating by keyboard.
+- The 32px (`md`) and 40px (`lg`) touch targets are larger than the 24px minimum of WCAG 2.2.
+- In high contrast mode (`forced-colors`), the pressed button uses the system highlight colors and gets an inner ring, and the disabled one uses `GrayText`.
 
-## Para designers
+## For designers
 
-- Nunca entregue um Icon Button sem definir o texto do `aria-label`. Faça isso parte da especificação do componente.
-- Não confie só no ícone: um tooltip ajuda quem tem dificuldade de reconhecer símbolos.
-- Num botão alternável, mostre o estado também na forma, não só na cor de fundo, quando o estado for importante para a tarefa.
+- Never hand off an Icon Button without defining the `aria-label` text. Make it part of the component specification.
+- Do not rely on the icon alone: a tooltip helps people who have trouble recognizing symbols.
+- On a toggle button, show the state through shape too, not just the background color, when the state matters to the task.

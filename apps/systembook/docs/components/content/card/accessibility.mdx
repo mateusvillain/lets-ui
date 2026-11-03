@@ -3,18 +3,18 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-O Card em si não recebe foco. O foco vai para os **elementos interativos dentro dele**, como links e botões, na ordem do conteúdo.
+The Card itself does not receive focus. Focus goes to the **interactive elements inside it**, such as links and buttons, in content order.
 
-## Leitor de tela
+## Screen reader
 
-- O Card tem um nome acessível (`aria-label`, padrão "Card"). Troque por um nome que descreva o conteúdo ("Resumo da conta") quando ele representar uma região importante.
-- Os botões do slot `actions` ficam em um grupo (`role="group"`) com nome próprio, definido por `actions-label` (padrão "Card actions"). Traduza o nome para o idioma da página ("Ações do card").
-- A estrutura interna depende do conteúdo que você coloca. Use títulos reais (`h2`, `h3`) para o título do Card, respeitando a hierarquia da página.
+- The Card has an accessible name (`aria-label`, default "Card"). Replace it with a name that describes the content ("Account summary") when it represents an important region.
+- The buttons in the `actions` slot sit in a group (`role="group"`) with its own name, set by `actions-label` (default "Card actions"). Translate it into the page's language: on a Portuguese page, "Ações do card".
+- The internal structure depends on the content you put in. Use real headings (`h2`, `h3`) for the Card title, respecting the page hierarchy.
 
-## Para designers
+## For designers
 
-- Garanta que o texto dentro do Card tenha contraste de 4,5:1 com a superfície.
-- Se o Card inteiro é clicável, o alvo precisa ter um link com texto descritivo, e não apenas "Saiba mais".
-- Não dependa só de cor ou sombra para separar Cards: o espaçamento e a borda ajudam.
+- Make sure the text inside the Card has a 4.5:1 contrast against the surface.
+- If the whole Card is clickable, the target needs a link with descriptive text, not just "Learn more".
+- Do not rely on color or shadow alone to separate Cards: spacing and the border help.

@@ -3,43 +3,43 @@ title: "Usage"
 order: 2
 ---
 
-## Rótulo
+## Label
 
-O rótulo diz **qual tarefa** está andando: "Enviando arquivos", "Importando contatos", "Armazenamento". Escreva no idioma da página e mantenha o mesmo texto do começo ao fim.
+The label says **which task** is running: "Uploading files", "Importing contacts", "Storage". Write it in the page's language and keep the same text from start to finish.
 
-## Valor em outras unidades
+## Value in other units
 
-`value` e `max` podem estar em qualquer unidade. Sem `value-text`, o valor aparece em percentual. Com `value-text`, aparece exatamente o texto que você escrever, como "3,2 GB de 10 GB". Atualize `value-text` junto com `value`.
+`value` and `max` can be in any unit. Without `value-text`, the value appears as a percentage. With `value-text`, exactly the text you write appears, such as "3.2 GB of 10 GB". Update `value-text` together with `value`.
 
 <ComponentEmbed component="ProgressBar" variant="custom-unit" />
 
-## Legenda
+## Caption
 
-A legenda é por onde a pessoa fica sabendo do avanço e do resultado: ela é lida em voz alta quando muda.
+The caption is how the person learns about the progress and the result: it is read aloud when it changes.
 
-<DosDonts variant="do" title="Marcos e resultado">
-  "Metade dos arquivos enviados", depois "Envio concluído". A pessoa ouve o que importa, sem interrupções.
+<DosDonts variant="do" title="Milestones and result">
+  "Half of the files uploaded", then "Upload complete". The person hears what matters, without interruptions.
 </DosDonts>
 
-<DosDonts variant="dont" title="Contagem a cada passo">
-  "1 de 200", "2 de 200", "3 de 200". Cada mudança é anunciada, e a pessoa é interrompida o tempo todo.
+<DosDonts variant="dont" title="Count at every step">
+  "1 of 200", "2 of 200", "3 of 200". Every change is announced, and the person is interrupted all the time.
 </DosDonts>
 
-- Em `success`, `caution` e `danger`, a legenda diz o desfecho: "Falha no envio: conexão perdida".
-- No modo indeterminado, use a legenda para dizer em que etapa a tarefa está.
+- In `success`, `caution` and `danger`, the caption states the outcome: "Upload failed: connection lost".
+- In indeterminate mode, use the caption to say which stage the task is in.
 
-## Só a barra
+## Bar only
 
-Com `hide-label` e `hide-value`, sobra apenas a trilha. Use essa combinação só quando o valor ou o estado estiverem em texto ao lado, como "Seu perfil está 60% completo" logo acima. O `label` continua sendo o nome acessível, então informe-o mesmo assim.
+With `hide-label` and `hide-value`, only the track remains. Use this combination only when the value or the state is in text nearby, such as "Your profile is 60% complete" right above. `label` is still the accessible name, so provide it anyway.
 
-## Durante a tarefa
+## During the task
 
-- Desabilite os controles que dependem dela, como o botão de enviar.
-- Mantenha a barra na tela até o resultado ser anunciado. Removida junto com a mudança da legenda, o texto não chega a ser lido.
-- Se a tarefa puder ser interrompida, ofereça "Cancelar" perto da barra.
+- Disable the controls that depend on it, such as the submit button.
+- Keep the bar on screen until the result is announced. If it is removed along with the caption change, the text never gets read.
+- If the task can be interrupted, offer "Cancel" near the bar.
 
-## Boas práticas
+## Best practices
 
-- Não mostre uma barra que volta para trás. Se a estimativa mudar, prefira o modo indeterminado até ter uma medida confiável.
-- Não use a cor como única pista do resultado: escreva-o na legenda.
-- Evite várias barras ao mesmo tempo. Se houver muitas tarefas, mostre o progresso total.
+- Do not show a bar that goes backward. If the estimate changes, prefer indeterminate mode until you have a reliable measurement.
+- Do not use color as the only cue for the result: write it in the caption.
+- Avoid several bars at the same time. If there are many tasks, show the overall progress.

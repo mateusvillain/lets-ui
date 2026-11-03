@@ -3,25 +3,25 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Percorre os botões da paginação. |
-| `Enter` ou `Espaço` | Vai para a página escolhida. |
+| `Tab` | Moves through the pagination buttons. |
+| `Enter` or `Space` | Goes to the chosen page. |
 
-Depois de navegar, o foco permanece no controle usado. Se ele ficar desabilitado ou sumir (como "Próxima" na última página), o foco vai para a página atual.
+After navigating, focus stays on the control that was used. If it becomes disabled or disappears (like "Next" on the last page), focus moves to the current page.
 
-## Leitor de tela
+## Screen reader
 
-- A paginação é um landmark de navegação com um nome, definido por `label`.
-- A página atual é anunciada como atual (`aria-current="page"`).
-- Cada página tem um nome como "Página 3", e os botões de anterior e próxima têm nomes próprios.
-- Depois de cada troca, uma região invisível anuncia "Página 3 de 20".
-- As reticências são decorativas e ficam fora da árvore de acessibilidade.
+- The pagination is a navigation landmark with a name, set by `label`.
+- The current page is announced as current (`aria-current="page"`).
+- Each page has a name like "Page 3", and the previous and next buttons have their own names.
+- After each change, an invisible region announces "Page 3 of 20".
+- The ellipses are decorative and stay out of the accessibility tree.
 
-## Para designers
+## For designers
 
-- Traduza os textos acessíveis (`previous-label`, `next-label`, `page-label` e `status-label`) para o idioma do produto.
-- Garanta que a página atual se destaque por mais do que a cor.
-- Mantenha área de toque confortável: os botões são pequenos e ficam próximos.
+- Translate the accessible texts (`previous-label`, `next-label`, `page-label` and `status-label`) into the product's language.
+- Make sure the current page stands out through more than color.
+- Keep a comfortable touch target: the buttons are small and close together.

@@ -1,63 +1,63 @@
 ---
 title: "Radio Group"
-subtitle: "Reúne os Radios de uma escolha exclusiva, com título, dica e mensagem de erro."
+subtitle: "Brings together the Radios of an exclusive choice, with a title, hint and error message."
 order: 5
 ---
 
 <ComponentEmbed component="RadioGroup" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Uma única opção entre duas a sete">
-  Método de pagamento, tamanho, frequência ou plano.
+<DosDonts variant="do" title="A single option out of two to seven">
+  Payment method, size, frequency or plan.
 </DosDonts>
 
-<DosDonts variant="do" title="Comparar as opções lado a lado">
-  Quando ver todas ao mesmo tempo ajuda a decidir.
+<DosDonts variant="do" title="Comparing the options side by side">
+  When seeing them all at once helps people decide.
 </DosDonts>
 
-<DosDonts variant="dont" title="Escolher várias opções">
-  Use o [Checkbox](../checkbox/index.mdx).
+<DosDonts variant="dont" title="Choosing several options">
+  Use the [Checkbox](../checkbox/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Mais de sete opções">
-  Use o [Select](../select/index.mdx).
+<DosDonts variant="dont" title="More than seven options">
+  Use the [Select](../select/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Ligar ou desligar">
-  Use o [Switch](../switch/index.mdx).
+<DosDonts variant="dont" title="Turning on or off">
+  Use the [Switch](../switch/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Efeito imediato com só duas opções">
-  Para algo como "Ativar notificações", considere um Switch.
+<DosDonts variant="dont" title="Immediate effect with only two options">
+  For something like "Turn on notifications", consider a Switch.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Radio Group: título, hint, opções e mensagem de erro](./anatomy.png)
+![Radio Group anatomy: title, hint, options and error message](./anatomy.png)
 
-1. **Título do grupo**: a pergunta que as opções respondem.
-2. **Hint** (opcional): texto de apoio, entre o título e as opções.
-3. **Opções** (Radios): as escolhas possíveis.
-4. **Mensagem de erro**: aparece abaixo das opções quando falta uma escolha obrigatória.
+1. **Group title**: the question the options answer.
+2. **Hint** (optional): helper text, between the title and the options.
+3. **Options** (Radios): the possible choices.
+4. **Error message**: appears below the options when a required choice is missing.
 
-## Variações
+## Variations
 
-| Variação | Quando usar |
+| Variation | When to use |
 | --- | --- |
-| **Padrão** | Escolha simples com título. |
-| **Com hint** | A pessoa precisa de uma orientação adicional. |
-| **Obrigatório** | A escolha precisa ser feita para continuar. |
-| **Desabilitado** | A escolha não está disponível agora. |
+| **Default** | Simple choice with a title. |
+| **With hint** | The person needs additional guidance. |
+| **Required** | The choice must be made to continue. |
+| **Disabled** | The choice is not available right now. |
 
-Os tamanhos `lg` (padrão) e `md` seguem o [Input](../input/index.mdx).
+The `lg` (default) and `md` sizes follow the [Input](../input/index.mdx).
 
 <ComponentEmbed component="RadioGroup" variant="hint" />
 
 <ComponentEmbed component="RadioGroup" variant="error" />
 
-## Relacionados
+## Related
 
-- [Radio](../radio/index.mdx): cada opção.
-- [Checkbox](../checkbox/index.mdx): várias escolhas.
-- [Select](../select/index.mdx): lista longa de opções.
+- [Radio](../radio/index.mdx): each option.
+- [Checkbox](../checkbox/index.mdx): multiple choices.
+- [Select](../select/index.mdx): a long list of options.

@@ -7,9 +7,9 @@ order: 4
 
 <ComponentEmbed component="Sidebar" variant="end" />
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `side` | `string` | `start` |
 | `side-width` | `string` | `240px` |
@@ -17,22 +17,22 @@ order: 4
 | `gap` | `string` | `24` |
 | `align` | `string` | `stretch` |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
 <lui-sidebar side="start" side-width="240px" content-min-width="50%" gap="lg" align="stretch">
-  <div slot="sidebar">Navegação ou metadados</div>
-  <div slot="content">Conteúdo principal</div>
+  <div slot="sidebar">Navigation or metadata</div>
+  <div slot="content">Main content</div>
 </lui-sidebar>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="sidebar sidebar--gap-md">
   <div class="sidebar__side">Sidebar (240px)</div>
-  <div class="sidebar__content">Conteúdo principal</div>
+  <div class="sidebar__content">Main content</div>
 </div>
 ```

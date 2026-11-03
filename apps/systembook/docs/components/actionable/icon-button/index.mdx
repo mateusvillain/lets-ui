@@ -1,59 +1,59 @@
 ---
 title: "Icon Button"
-subtitle: "Botão compacto que mostra só um ícone. Economiza espaço quando a ação é reconhecível sem texto."
+subtitle: "A compact button that shows only an icon. It saves space when the action is recognizable without text."
 order: 2
 ---
 
 <ComponentEmbed component="IconButton" variant="md" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Ações universalmente reconhecíveis">
-  Fechar, editar, excluir, copiar, mais opções, buscar, voltar.
+<DosDonts variant="do" title="Universally recognizable actions">
+  Close, edit, delete, copy, more options, search, back.
 </DosDonts>
 
-<DosDonts variant="do" title="Pouco espaço">
-  Barras de ferramentas, linhas de tabela, cabeçalhos de cards e controles de mídia.
+<DosDonts variant="do" title="Little space">
+  Toolbars, table rows, card headers and media controls.
 </DosDonts>
 
-<DosDonts variant="dont" title="Ações que o ícone não explica sozinho">
-  Se a pessoa precisa adivinhar o que o ícone faz, use um [Button](../button/index.mdx) com texto.
+<DosDonts variant="dont" title="Actions the icon cannot explain on its own">
+  If the person has to guess what the icon does, use a [Button](../button/index.mdx) with text.
 </DosDonts>
 
-<DosDonts variant="dont" title="A ação principal da tela">
-  Ações importantes merecem rótulo visível.
+<DosDonts variant="dont" title="The main action of the screen">
+  Important actions deserve a visible label.
 </DosDonts>
 
-<DosDonts variant="dont" title="Fechar um modal, drawer ou alert">
-  O [Close Button](../close-button/index.mdx) já traz o ícone e o nome acessível prontos.
+<DosDonts variant="dont" title="Closing a modal, drawer or alert">
+  The [Close Button](../close-button/index.mdx) already comes with the icon and the accessible name.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Icon Button: container e ícone](./anatomy.png)
+![Icon Button anatomy: container and icon](./anatomy.png)
 
-1. **Container**: define a área de toque e o estado visual. Fica transparente em repouso e ganha cor nos estados de interação.
-2. **Ícone**: SVG de 24px, que herda a cor do texto.
+1. **Container**: sets the touch target and the visual state. It is transparent at rest and gains color in interaction states.
+2. **Icon**: a 24px SVG that inherits the text color.
 
-## Tamanhos
+## Sizes
 
-| Tamanho | Medida | Uso |
+| Size | Measure | Usage |
 | --- | --- | --- |
-| `lg` | 40px | Áreas com espaço, cabeçalhos, controles principais. |
-| `md` (padrão) | 32px | Toolbars, tabelas e layouts compactos. |
+| `lg` | 40px | Roomy areas, headers, main controls. |
+| `md` (default) | 32px | Toolbars, tables and compact layouts. |
 
-## Estados
+## States
 
-Padrão, hover, foco, pressed e disabled, com o mesmo comportamento do [Button](../button/index.mdx). O estado desabilitado indica que a ação não está disponível agora.
+Default, hover, focus, pressed and disabled, with the same behavior as the [Button](../button/index.mdx). The disabled state indicates the action is not available right now.
 
-### Alternável
+### Toggle
 
-Um Icon Button pode ligar e desligar uma opção, como um filtro ou uma formatação. **Ligado**, ele ganha o fundo de contêiner neutro. Hover, foco e desabilitado continuam funcionando por cima desse estado.
+An Icon Button can turn an option on and off, like a filter or a formatting option. When **on**, it gets the neutral container background. Hover, focus and disabled keep working on top of that state.
 
 <ComponentEmbed component="IconButton" variant="pressed" />
 
-## Relacionados
+## Related
 
-- [Button](../button/index.mdx): ação com rótulo.
-- [Close Button](../close-button/index.mdx): fechar e dispensar.
-- [Tooltip](../../content/tooltip/index.mdx): explica o ícone ao passar o mouse ou focar.
+- [Button](../button/index.mdx): action with a label.
+- [Close Button](../close-button/index.mdx): close and dismiss.
+- [Tooltip](../../content/tooltip/index.mdx): explains the icon on hover or focus.

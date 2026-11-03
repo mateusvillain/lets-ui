@@ -3,34 +3,34 @@ title: "Usage"
 order: 2
 ---
 
-## Tamanho e altura
+## Size and height
 
-- Defina a altura inicial pelo tamanho esperado: **2 a 3 linhas** para um comentário curto, **5 ou mais** para um texto longo.
-- Mantenha `resize` vertical (padrão), para que a pessoa possa ampliar sem quebrar a largura do layout.
-- Use `resize="none"` apenas quando o contêiner exigir tamanho fixo.
+- Set the initial height by the expected length: **2 to 3 lines** for a short comment, **5 or more** for a long text.
+- Keep `resize` vertical (default), so the person can enlarge it without breaking the layout width.
+- Use `resize="none"` only when the container requires a fixed size.
 
-## Contador de caracteres
+## Character counter
 
-Ative `maxlength` apenas quando houver um **limite real** de armazenamento ou de exibição. O contador mostra quanto resta e evita surpresas.
+Turn on `maxlength` only when there is a **real** storage or display **limit**. The counter shows how much is left and avoids surprises.
 
-<DosDonts variant="do" title="Limite claro e visível">
-  O contador "42/160" aparece enquanto a pessoa digita. Ela sabe quanto ainda pode escrever.
+<DosDonts variant="do" title="Clear, visible limit">
+  The "42/160" counter appears while the person types. They know how much more they can write.
 </DosDonts>
 
-<DosDonts variant="dont" title="Cortar o texto em silêncio">
-  Impedir a digitação sem avisar, ou truncar o texto depois do envio, faz a pessoa perder o que escreveu.
+<DosDonts variant="dont" title="Silently cutting the text">
+  Blocking typing without warning, or truncating the text after submission, makes the person lose what they wrote.
 </DosDonts>
 
-## Label, hint e erros
+## Label, hint and errors
 
-As regras são as do [Input](../input/index.mdx): label sempre visível, hint para formato e limites, e mensagem de erro específica que diz como corrigir.
+The rules are the same as the [Input](../input/index.mdx): label always visible, hint for format and limits, and a specific error message that says how to fix it.
 
-- Em campos longos, use o hint para sugerir **o que escrever**: "Descreva o problema e o que você esperava que acontecesse."
-- Evite placeholders longos. Eles somem quando a pessoa começa a digitar.
+- In long fields, use the hint to suggest **what to write**: "Describe the problem and what you expected to happen."
+- Avoid long placeholders. They disappear when the person starts typing.
 
-## Boas práticas
+## Best practices
 
-- Não limite o tamanho sem necessidade. Limites curtos frustram.
-- Preserve o que a pessoa digitou se houver erro no envio.
-- Não valide a cada tecla. Valide ao sair do campo ou ao enviar.
-- Para texto muito longo, considere salvar rascunhos automaticamente.
+- Do not limit the length without need. Short limits frustrate.
+- Keep what the person typed if submission fails.
+- Do not validate on every keystroke. Validate on leaving the field or on submit.
+- For very long text, consider saving drafts automatically.

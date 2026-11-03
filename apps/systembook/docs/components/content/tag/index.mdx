@@ -1,71 +1,71 @@
 ---
 title: "Tag"
-subtitle: "Rótulo curto que classifica ou dá status a um item, como \"Ativo\", \"Beta\" ou \"Falhou\"."
+subtitle: "A short label that classifies an item or gives it a status, such as \"Active\", \"Beta\" or \"Failed\"."
 order: 11
 ---
 
 <ComponentEmbed component="Tag" variant="surface" />
 
-## Boas práticas
+## Best practices
 
 <DosDonts variant="do" title="Status">
-  A situação de um pedido ou o estágio de um recurso.
+  The state of an order or the stage of a feature.
 </DosDonts>
 
-<DosDonts variant="do" title="Categoria">
-  O tipo de um conteúdo ou a etiqueta de um item.
+<DosDonts variant="do" title="Category">
+  The type of a piece of content or the label of an item.
 </DosDonts>
 
-<DosDonts variant="dont" title="Ações clicáveis">
-  A Tag não é um botão. Use [Button](../../actionable/button/index.mdx).
+<DosDonts variant="dont" title="Clickable actions">
+  Tag is not a button. Use [Button](../../actionable/button/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Mensagens longas">
-  Use um [Alert](../alert/index.mdx).
+<DosDonts variant="dont" title="Long messages">
+  Use an [Alert](../alert/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Contadores e notificações">
-  Use um indicador numérico próprio.
+<DosDonts variant="dont" title="Counters and notifications">
+  Use a dedicated numeric indicator.
 </DosDonts>
 
-<DosDonts variant="dont" title="Frases">
-  A Tag é para uma ou duas palavras.
+<DosDonts variant="dont" title="Sentences">
+  Tag is for one or two words.
 </DosDonts>
 
-## Anatomia
+## Anatomy
 
-![Anatomia do Tag: container e rótulo](./anatomy.png)
+![Tag anatomy: container and label](./anatomy.png)
 
-1. **Container**: define a cor, o raio e o espaçamento.
-2. **Rótulo**: o texto curto.
+1. **Container**: defines the color, the radius and the spacing.
+2. **Label**: the short text.
 
-## Estilos
+## Styles
 
-| Estilo | Descrição | Quando usar |
+| Style | Description | When to use |
 | --- | --- | --- |
-| **Surface** (padrão) | Fundo suave. | A maioria dos casos, incluindo tabelas e listas. |
-| **Container** | Fundo de destaque. | Quando a tag precisa de mais ênfase. |
+| **Surface** (default) | Soft background. | Most cases, including tables and lists. |
+| **Container** | Emphasis background. | When the tag needs more emphasis. |
 
 <ComponentEmbed component="Tag" variant="container" />
 
-## Variantes
+## Variants
 
-A cor segue o significado:
+The color follows the meaning:
 
-| Variante | Significado | Exemplo |
+| Variant | Meaning | Example |
 | --- | --- | --- |
-| **Primary** | Destaque da marca ou categoria principal. | "Novo" |
-| **Success** | Algo positivo ou concluído. | "Ativo", "Pago" |
-| **Caution** | Atenção ou algo pendente. | "Pendente", "Expira em breve" |
-| **Danger** | Problema ou algo negativo. | "Falhou", "Recusado" |
-| **Neutral** | Informação sem carga de significado. | "Rascunho", "Arquivado" |
+| **Primary** | Brand emphasis or main category. | "New" |
+| **Success** | Something positive or completed. | "Active", "Paid" |
+| **Caution** | Attention or something pending. | "Pending", "Expires soon" |
+| **Danger** | A problem or something negative. | "Failed", "Declined" |
+| **Neutral** | Information with no loaded meaning. | "Draft", "Archived" |
 
-## Tamanhos e formato
+## Sizes and shape
 
-`sm`, `md` (padrão), `lg` e `xl`. Com `circle`, a Tag fica totalmente arredondada, como uma pílula.
+`sm`, `md` (default), `lg` and `xl`. With `circle`, the Tag becomes fully rounded, like a pill.
 
-## Relacionados
+## Related
 
-- [Table](../table/index.mdx): onde Tags indicam status.
-- [Avatar](../avatar/index.mdx): status de presença.
-- [Alert](../alert/index.mdx): mensagens com mais contexto.
+- [Table](../table/index.mdx): where Tags indicate status.
+- [Avatar](../avatar/index.mdx): presence status.
+- [Alert](../alert/index.mdx): messages with more context.

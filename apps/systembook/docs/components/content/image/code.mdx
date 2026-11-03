@@ -23,9 +23,9 @@ Provide an alternative image to display when the primary `src` fails to load.
 
 Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<source>` elements).
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão |
+| Attribute | Type | Default |
 | --- | --- | --- |
 | `as` | `string` | `image` |
 | `src` | `string` | `''` |
@@ -42,14 +42,14 @@ Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<sou
 | `fallback-src` | `string` | `''` |
 | `caption` | `string` | `''` |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
 <lui-image
   src="..."
-  alt="Descrição"
+  alt="Description"
   width="400px"
   aspect-ratio="16 / 9"
   radius="md"
@@ -57,10 +57,10 @@ Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<sou
 ></lui-image>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="img" style="width: 400px; aspect-ratio: 16 / 9; border-radius: 8px;">
-  <img class="img__element" src="..." alt="Descrição">
+  <img class="img__element" src="..." alt="Description">
 </div>
 ```

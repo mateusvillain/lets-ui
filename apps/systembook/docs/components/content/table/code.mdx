@@ -3,73 +3,73 @@ title: "Code"
 order: 4
 ---
 
-## Com borda
+## Bordered
 
-`bordered` desenha a borda externa com cantos arredondados.
+`bordered` draws the outer border with rounded corners.
 
 <ComponentEmbed component="Table" variant="bordered" />
 
-## Exemplos
+## Examples
 
-### Avatar, link e tag nas células
+### Avatar, link and tag in cells
 
-As células aceitam outros componentes. Cada um continua com o próprio nome acessível, e o texto do link já diz para onde ele leva.
+Cells accept other components. Each one keeps its own accessible name, and the link text already says where it leads.
 
-### Seleção
+### Selection
 
-Um `lui-checkbox` por linha, com `aria-label` que cita a linha ("Selecionar Base de clientes.csv"). A coluna da caixa precisa de um `<th scope="col">` com texto, nem que seja só para leitores de tela.
+One `lui-checkbox` per row, with an `aria-label` that mentions the row ("Select Customer base.csv"). The checkbox column needs a `<th scope="col">` with text, even if only for screen readers.
 
-### Valores e situação
+### Values and status
 
-A situação vem em texto dentro da tag, não só em cor.
+The status comes as text inside the tag, not only as color.
 
-### Só texto, sem borda
+### Text only, no border
 
-Sem `bordered`, a tabela fica sem moldura e usa só os divisores de linha.
+Without `bordered`, the table has no frame and uses only the row dividers.
 
-## Alinhamento à direita
+## Right alignment
 
-Colunas de ações ou de valores podem ficar alinhadas ao fim. Coloque `.table__cell--end` no cabeçalho e em cada célula da coluna, para o título acompanhar o conteúdo. Ela serve para ações e valores numéricos. Texto corrido fica à esquerda.
+Action or value columns can be aligned to the end. Put `.table__cell--end` on the header and on every cell of the column, so the title follows the content. It is meant for actions and numeric values. Running text stays on the left.
 
 ```html
-<th scope="col" class="table__cell--end">Ações</th>
+<th scope="col" class="table__cell--end">Actions</th>
 …
 <td class="table__cell--end">
-  <lui-icon-button aria-label="Ações de Ana Souza">…</lui-icon-button>
+  <lui-icon-button aria-label="Actions for Ana Souza">…</lui-icon-button>
 </td>
 ```
 
-A classe usa `text-align: end`, então segue a direção de escrita. Em idiomas escritos da direita para a esquerda, o fim é o lado esquerdo.
+The class uses `text-align: end`, so it follows the writing direction. In right-to-left languages, the end is the left side.
 
-## Coluna só do tamanho do conteúdo
+## Content-sized column
 
-Por padrão as colunas dividem a largura da tabela. Uma coluna que não precisa de espaço, como ações, ids, tags de status ou caixa de seleção, pode usar `.table__cell--fit`. Ela fica com a largura do conteúdo mais largo, e as outras colunas dividem o resto. Como a medida vem do conteúdo, não há valor para atualizar quando o texto muda.
+By default, columns share the table width. A column that does not need space, such as actions, ids, status tags or a checkbox, can use `.table__cell--fit`. It takes the width of its widest content, and the other columns share the rest. Since the measurement comes from the content, there is no value to update when the text changes.
 
-Coloque a classe no cabeçalho e em cada célula da coluna. Ela também impede a quebra de linha, então o conteúdo precisa ser curto. Pode ser usada junto com `.table__cell--end`.
+Put the class on the header and on every cell of the column. It also prevents line wrapping, so the content must be short. It can be combined with `.table__cell--end`.
 
 ```html
-<th scope="col" class="table__cell--fit table__cell--end">Ações</th>
+<th scope="col" class="table__cell--fit table__cell--end">Actions</th>
 …
 <td class="table__cell--fit table__cell--end">
-  <lui-icon-button aria-label="Ações de Ana Souza">…</lui-icon-button>
+  <lui-icon-button aria-label="Actions for Ana Souza">…</lui-icon-button>
 </td>
 ```
 
-Não use a classe em colunas de texto corrido, que precisam quebrar linha.
+Do not use the class on running-text columns, which need to wrap.
 
-## Colunas ordenáveis
+## Sortable columns
 
-Para uma coluna ser ordenável, ponha um `<button class="table__sort">` dentro do `<th>`. O botão dá acesso por teclado e o nome da coluna. O `lui-table` cuida do resto: troca o `aria-sort` do `<th>`, mostra a seta e emite `lui-sort`.
+To make a column sortable, put a `<button class="table__sort">` inside the `<th>`. The button provides keyboard access and the column name. `lui-table` takes care of the rest: it switches the `aria-sort` of the `<th>`, shows the arrow and emits `lui-sort`.
 
 ```html
 <lui-table>
-  <table aria-label="Equipe">
+  <table aria-label="Team">
     <thead>
       <tr>
         <th scope="col" data-column="name">
-          <button type="button" class="table__sort">Nome</button>
+          <button type="button" class="table__sort">Name</button>
         </th>
-        <th scope="col">Função</th>
+        <th scope="col">Role</th>
       </tr>
     </thead>
     …
@@ -79,21 +79,21 @@ Para uma coluna ser ordenável, ponha um `<button class="table__sort">` dentro d
 
 ```js
 table.addEventListener('lui-sort', ({ detail }) => {
-  // detail.column: o data-column do <th>, ou o texto do botão
-  // detail.direction: 'ascending', 'descending' ou 'none'
+  // detail.column: the data-column of the <th>, or the button text
+  // detail.direction: 'ascending', 'descending' or 'none'
 });
 ```
 
-- Cada clique avança a coluna: crescente, decrescente e sem ordem. Com `none`, o autor pode voltar à ordem original.
-- Só uma coluna fica ordenada por vez. Ao ordenar uma, as outras voltam para `none`.
-- O componente **não reordena as linhas**. Quem usa decide como: no navegador, como na story, ou pedindo os dados ao servidor.
-- O `aria-sort` é colocado como `none` em todo `<th>` que tem o botão, se o autor não tiver definido um valor. Um `aria-sort` já escrito é mantido, então dá para abrir a tabela já ordenada.
-- A seta vem do `aria-sort`: as duas setas esmaecidas sem ordem, e uma seta na cor do título quando a coluna está ordenada.
-- Em CSS puro, `.table__sort` já tem o visual, mas o `aria-sort` e o evento ficam por sua conta.
+- Each click advances the column: ascending, descending and unsorted. With `none`, the author can go back to the original order.
+- Only one column is sorted at a time. When you sort one, the others go back to `none`.
+- The component **does not reorder the rows**. You decide how: in the browser, as in the story, or by requesting the data from the server.
+- `aria-sort` is set to `none` on every `<th>` that has the button, if the author has not set a value. An `aria-sort` already written is kept, so you can open the table already sorted.
+- The arrow comes from `aria-sort`: both arrows dimmed when unsorted, and one arrow in the title color when the column is sorted.
+- In pure CSS, `.table__sort` already has the look, but `aria-sort` and the event are up to you.
 
-## Header fixo
+## Sticky header
 
-`sticky-header` mantém o cabeçalho visível enquanto as linhas rolam. Ele só funciona com `max-height`, que limita a altura da área. Sem altura limitada a tabela não rola na vertical. Um número vale como pixels (`280`), e qualquer medida CSS também serve (`20rem`).
+`sticky-header` keeps the header visible while the rows scroll. It only works with `max-height`, which limits the height of the area. Without a limited height, the table does not scroll vertically. A number counts as pixels (`280`), and any CSS length also works (`20rem`).
 
 ```html
 <lui-table sticky-header max-height="280">
@@ -103,35 +103,35 @@ table.addEventListener('lui-sort', ({ detail }) => {
 </lui-table>
 ```
 
-- A área vira uma região com `role="region"`, `tabindex="0"` e nome, para o teclado conseguir rolar na vertical.
-- Ao navegar por teclado, a linha com foco não fica atrás do cabeçalho. O componente define `scroll-padding-top` com a altura dele.
-- O cabeçalho usa o fundo `surface` neutro e opaco, para as linhas não aparecerem por trás. Em uma página com outra cor de fundo, o cabeçalho vai destoar.
-- O `<caption>` rola junto com as linhas; só o cabeçalho fica.
-- Em CSS puro, use `.table--sticky-header` na tabela e defina o `max-height` no `.table-wrapper`.
+- The area becomes a region with `role="region"`, `tabindex="0"` and a name, so the keyboard can scroll vertically.
+- When navigating by keyboard, the focused row does not end up behind the header. The component sets `scroll-padding-top` to the header's height.
+- The header uses the neutral, opaque `surface` background, so the rows do not show through. On a page with another background color, the header will stand out.
+- The `<caption>` scrolls with the rows; only the header stays.
+- In pure CSS, use `.table--sticky-header` on the table and set `max-height` on `.table-wrapper`.
 
-## Estrutura
+## Structure
 
-Você escreve o `<table>` dentro de `<lui-table>`. O Web Component não cria linhas nem células. Ele só coloca a classe `.table` na tabela e cuida da borda e da rolagem.
+You write the `<table>` inside `<lui-table>`. The Web Component does not create rows or cells. It only adds the `.table` class to the table and handles the border and scrolling.
 
-- A tabela precisa de um nome acessível. Veja [Nome da tabela](#nome-da-tabela).
-- `<th scope="col">` no cabeçalho de cada coluna.
-- `<th scope="row">` na primeira célula de cada linha, quando ela identifica a linha. Dados comuns ficam em `<td>`.
-- Ações dentro das células precisam de nome próprio que diga a qual linha pertencem ("Ações de Ana Souza").
+- The table needs an accessible name. See [Table name](#table-name).
+- `<th scope="col">` on the header of each column.
+- `<th scope="row">` on the first cell of each row, when it identifies the row. Regular data goes in `<td>`.
+- Actions inside cells need their own name that says which row they belong to ("Actions for Ana Souza").
 
-## Nome da tabela
+## Table name
 
-Toda tabela de dados precisa de um nome, para o leitor de tela anunciar "tabela, Pedidos" e não só "tabela". O `<caption>` é opcional. Quando usado, ele aparece como no design: título à esquerda, dentro da borda, acima do cabeçalho. Como nomear:
+Every data table needs a name, so the screen reader announces "table, Orders" and not just "table". The `<caption>` is optional. When used, it appears as in the design: title on the left, inside the border, above the header. How to name it:
 
-- Com título visível, como no design: use `<caption>`. Ele é o título e também o nome.
-- Sem título visível: use `aria-label` no `<table>`.
-- Com um título em outro lugar da página, como um heading: use `aria-labelledby` no `<table>`, apontando para ele.
-- Não use `aria-label` e `<caption>` juntos. O `aria-label` vale e o caption fica repetido.
+- With a visible title, as in the design: use `<caption>`. It is the title and also the name.
+- Without a visible title: use `aria-label` on the `<table>`.
+- With a title elsewhere on the page, such as a heading: use `aria-labelledby` on the `<table>`, pointing to it.
+- Do not use `aria-label` and `<caption>` together. The `aria-label` wins and the caption is repeated.
 
-## Rolagem horizontal
+## Horizontal scrolling
 
-Quando a tabela é mais larga que o espaço disponível, a área ganha `role="region"`, `tabindex="0"` e um nome, para o teclado conseguir rolar. O nome vem de `label` ou, sem ele, do nome da própria tabela, na ordem `aria-labelledby`, `aria-label` e `<caption>`. Um `aria-label` vazio é ignorado. Se esses atributos ou o texto do caption mudarem, o nome acompanha.
+When the table is wider than the available space, the area gets `role="region"`, `tabindex="0"` and a name, so the keyboard can scroll. The name comes from `label` or, without it, from the table's own name, in the order `aria-labelledby`, `aria-label` and `<caption>`. An empty `aria-label` is ignored. If these attributes or the caption text change, the name follows.
 
-## Uso
+## Usage
 
 ### Web Component
 
@@ -139,50 +139,50 @@ Quando a tabela é mais larga que o espaço disponível, a área ganha `role="re
 <lui-table bordered>
   <table>
     <caption>
-      Pedidos
+      Orders
     </caption>
     <thead>
       <tr>
-        <th scope="col">Nome</th>
+        <th scope="col">Name</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <th scope="row">Ana Souza</th>
-        <td>Concluído</td>
+        <td>Completed</td>
       </tr>
     </tbody>
   </table>
 </lui-table>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="table-wrapper table-wrapper--bordered">
   <table class="table">
     <caption>
-      Pedidos
+      Orders
     </caption>
     …
   </table>
 </div>
 ```
 
-Sem o Web Component, a região rolável fica por sua conta: se a tabela puder transbordar, adicione `role="region"`, `tabindex="0"` e `aria-label` ao `.table-wrapper`.
+Without the Web Component, the scrollable region is up to you: if the table can overflow, add `role="region"`, `tabindex="0"` and `aria-label` to `.table-wrapper`.
 
-## Propriedades
+## Properties
 
-| Propriedade    | Atributo        | Tipo      | Padrão  | Descrição                                                  |
-| -------------- | --------------- | --------- | ------- | ---------------------------------------------------------- |
-| `bordered`     | `bordered`      | `boolean` | `false` | Borda externa com cantos arredondados.                     |
-| `label`        | `label`         | `string`  | `''`    | Nome da região rolável. Sem ele, usa o nome da tabela.     |
-| `stickyHeader` | `sticky-header` | `boolean` | `false` | Mantém o cabeçalho visível na rolagem. Exige `max-height`. |
-| `maxHeight`    | `max-height`    | `string`  | `''`    | Altura máxima da área; acima dela, rola na vertical.       |
+| Property       | Attribute       | Type      | Default | Description                                                        |
+| -------------- | --------------- | --------- | ------- | ------------------------------------------------------------------ |
+| `bordered`     | `bordered`      | `boolean` | `false` | Outer border with rounded corners.                                 |
+| `label`        | `label`         | `string`  | `''`    | Name of the scrollable region. Without it, uses the table's name.  |
+| `stickyHeader` | `sticky-header` | `boolean` | `false` | Keeps the header visible while scrolling. Requires `max-height`.   |
+| `maxHeight`    | `max-height`    | `string`  | `''`    | Maximum height of the area; beyond it, it scrolls vertically.      |
 
-## Eventos
+## Events
 
-| Evento     | `detail`                                                               | Quando                              |
-| ---------- | ---------------------------------------------------------------------- | ----------------------------------- |
-| `lui-sort` | `{ column: string, direction: 'ascending' \| 'descending' \| 'none' }` | Um botão `.table__sort` é acionado. |
+| Event      | `detail`                                                               | When                                 |
+| ---------- | ---------------------------------------------------------------------- | ------------------------------------ |
+| `lui-sort` | `{ column: string, direction: 'ascending' \| 'descending' \| 'none' }` | A `.table__sort` button is activated. |

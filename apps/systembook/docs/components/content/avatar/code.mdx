@@ -3,75 +3,75 @@ title: "Code"
 order: 4
 ---
 
-## Foto
+## Photo
 
-Com `src`, o avatar mostra a imagem, recortada para cobrir o formato. A foto é decorativa para o leitor de tela, porque o nome já está no avatar.
+With `src`, the avatar shows the image, cropped to cover the shape. The photo is decorative for the screen reader, because the name is already on the avatar.
 
-Se a imagem falhar ao carregar, o avatar volta para as iniciais. Trocar o `src` tenta de novo.
+If the image fails to load, the avatar falls back to the initials. Changing `src` tries again.
 
-## Sem foto e sem iniciais
+## No photo and no initials
 
-Sem `src`, `initials` e `name`, o avatar mostra o ícone de uma pessoa. Ele usa a cor das iniciais da `variant`, e fica fora da árvore de acessibilidade.
+Without `src`, `initials` and `name`, the avatar shows a person icon. It uses the initials color of the `variant`, and stays out of the accessibility tree.
 
 <ComponentEmbed component="Avatar" variant="placeholder" />
 
 ## Status
 
-`status` desenha um indicador no canto inferior direito: `online`, `away`, `busy` ou `offline`.
+`status` draws an indicator in the bottom-right corner: `online`, `away`, `busy` or `offline`.
 
 <ComponentEmbed component="Avatar" variant="status" />
 
-Os pontos medem 10, 12 e 16px em `sm`, `md` e `lg`.
+The dots measure 10, 12 and 16px at `sm`, `md` and `lg`.
 
-### Forma do status
+### Status shape
 
-Cada status tem uma forma própria dentro do ponto, além da cor, para que quem não distingue as cores ainda distinga os estados: `online` fica cheio, `away` mostra ponteiros de relógio, `busy` uma barra e `offline` um centro vazio. As formas são medidas sobre a área dentro do anel do ponto e acompanham o tamanho. Em `sm` o ponto tem 10px e as formas ficam muito pequenas, então prefira `md` ou `lg` quando a diferença de status importar.
+Each status has its own shape inside the dot, in addition to color, so that people who cannot tell the colors apart can still tell the states apart: `online` is filled, `away` shows clock hands, `busy` a bar and `offline` an empty center. The shapes are measured on the area inside the dot's ring and scale with the size. At `sm` the dot is 10px and the shapes get very small, so prefer `md` or `lg` when the status difference matters.
 
-### Texto do status
+### Status text
 
-Nos dois modos o status entra no nome acessível como texto: "Mateus Villain, Online". Os textos padrão estão em inglês. Troque-os com `status-label`.
+In both modes the status goes into the accessible name as text: "Mateus Villain, Online". The default texts are in English. Change them with `status-label`.
 
-## Decorativo
+## Decorative
 
-Um avatar sem `name` e sem `status` não tem nome acessível, então fica escondido da tecnologia assistiva.
+An avatar without `name` and without `status` has no accessible name, so it stays hidden from assistive technology.
 
-## Grupo
+## Group
 
-`lui-avatar-group` empilha os avatares com uma sobreposição de 30% do tamanho e um anel na cor da superfície, que mantém a borda de cada um legível. O `size` do grupo vale para todos os avatares, e um avatar pode ter o seu.
+`lui-avatar-group` stacks the avatars with an overlap of 30% of the size and a ring in the surface color, which keeps each one's edge legible. The group's `size` applies to all avatars, and an avatar can have its own.
 
-Dentro de um grupo, o ponto de status vai para o canto inferior esquerdo, o canto que o avatar seguinte deixa livre. A sobreposição acompanha o tamanho de cada avatar, e não o do grupo.
+Inside a group, the status dot moves to the bottom-left corner, the corner the next avatar leaves free. The overlap follows each avatar's size, not the group's.
 
-## Classe CSS (sem Web Component)
+## CSS class (without Web Component)
 
-Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `role="img"` e `aria-label`, e o que está dentro dele leva `aria-hidden="true"` (iniciais e ponto de status) ou `alt=""` (foto). O fallback da foto que falha não existe nesta versão.
+Without the Web Component, the markup is up to you. The wrapper takes `role="img"` and `aria-label`, and what is inside it takes `aria-hidden="true"` (initials and status dot) or `alt=""` (photo). The fallback for a photo that fails does not exist in this version.
 
-## Propriedades
+## Properties
 
 ### `lui-avatar`
 
-| Atributo       | Tipo     | Padrão   | Descrição                                                                                 |
-| -------------- | -------- | -------- | ----------------------------------------------------------------------------------------- |
-| `name`         | `string` | `''`     | Nome da pessoa. Vira o nome acessível e a fonte das iniciais.                             |
-| `src`          | `string` | `''`     | URL da foto. Se falhar, mostra as iniciais ou o ícone.                                    |
-| `initials`     | `string` | `''`     | Iniciais a mostrar. Se omitido, vêm do `name`.                                            |
-| `variant`      | `string` | `gray`   | `gray`, `blue`, `green`, `orange`, `red` ou `violet`.                                     |
-| `size`         | `string` | `''`     | `sm`, `md` ou `lg`. Vazio vale `lg`, ou o tamanho do grupo.                               |
-| `radius`       | `string` | `circle` | `circle`, `rounded` ou `square`.                                                          |
-| `status`       | `string` | `''`     | `online`, `away`, `busy` ou `offline`. Vazio não desenha o indicador.                     |
-| `status-label` | `string` | `''`     | Texto do status para o leitor de tela. Se omitido: "Online", "Away", "Busy" ou "Offline". |
+| Attribute      | Type     | Default  | Description                                                                                  |
+| -------------- | -------- | -------- | -------------------------------------------------------------------------------------------- |
+| `name`         | `string` | `''`     | The person's name. Becomes the accessible name and the source of the initials.               |
+| `src`          | `string` | `''`     | Photo URL. If it fails, shows the initials or the icon.                                      |
+| `initials`     | `string` | `''`     | Initials to show. If omitted, they come from `name`.                                         |
+| `variant`      | `string` | `gray`   | `gray`, `blue`, `green`, `orange`, `red` or `violet`.                                        |
+| `size`         | `string` | `''`     | `sm`, `md` or `lg`. Empty means `lg`, or the group's size.                                   |
+| `radius`       | `string` | `circle` | `circle`, `rounded` or `square`.                                                             |
+| `status`       | `string` | `''`     | `online`, `away`, `busy` or `offline`. Empty draws no indicator.                             |
+| `status-label` | `string` | `''`     | Status text for the screen reader. If omitted: "Online", "Away", "Busy" or "Offline".        |
 
 ### `lui-avatar-group`
 
-| Atributo | Tipo     | Padrão | Descrição                                                        |
-| -------- | -------- | ------ | ---------------------------------------------------------------- |
-| `label`  | `string` | `''`   | Nome acessível do grupo, como "Membros do projeto".              |
-| `size`   | `string` | `''`   | `sm`, `md` ou `lg`. Vale para os avatares que não definem o seu. |
+| Attribute | Type     | Default | Description                                                        |
+| --------- | -------- | ------- | ------------------------------------------------------------------ |
+| `label`   | `string` | `''`    | Accessible name of the group, such as "Project members".           |
+| `size`    | `string` | `''`    | `sm`, `md` or `lg`. Applies to avatars that do not set their own.  |
 
-| Slot     | Descrição                 |
-| -------- | ------------------------- |
-| (padrão) | Os `lui-avatar` do grupo. |
+| Slot      | Description                 |
+| --------- | --------------------------- |
+| (default) | The group's `lui-avatar` elements. |
 
-## Uso
+## Usage
 
 ### Web Component
 
@@ -81,14 +81,14 @@ Sem o Web Component, a marcação fica a cargo de quem usa. O invólucro leva `r
 <lui-avatar name="Ana Lima" src="/fotos/ana.jpg" size="md" radius="rounded">
 </lui-avatar>
 
-<lui-avatar-group label="Membros do projeto" size="md">
+<lui-avatar-group label="Project members" size="md">
   <lui-avatar name="Ana Lima" variant="blue"></lui-avatar>
   <lui-avatar name="Bia Souza" variant="green"></lui-avatar>
   <lui-avatar name="Caio Reis" variant="orange"></lui-avatar>
 </lui-avatar-group>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <span

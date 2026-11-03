@@ -3,74 +3,74 @@ title: "Code"
 order: 4
 ---
 
-Use quando: o usuário acessa uma funcionalidade pela primeira vez, uma busca ou filtro não retornou resultados, o conteúdo foi excluído/arquivado, uma tarefa foi concluída (fila zerada), ou os dados não podem ser exibidos por permissão, configuração pendente ou falha externa.
+Use when: the user accesses a feature for the first time, a search or filter returned no results, the content was deleted/archived, a task was completed (empty queue), or the data cannot be shown because of permissions, pending configuration or an external failure.
 
-Não use para estado de carregamento (isso é _skeleton_) nem para páginas de erro de servidor (404/500).
+Do not use it for a loading state (that is a _skeleton_) or for server error pages (404/500).
 
-**Regra de integração:** o Empty State deve substituir **integralmente** o componente vazio. Nada de cabeçalho de tabela, rodapé ou contador de paginação "fantasma" ao lado dele. Isso confunde visualmente e força o leitor de tela a atravessar colunas vazias antes de chegar à mensagem.
+**Integration rule:** the Empty State must **fully** replace the empty component. No "ghost" table header, footer or pagination counter next to it. That is visually confusing and forces the screen reader to go through empty columns before reaching the message.
 
-## Tom é conteúdo, não variante
+## Tone is content, not a variant
 
-Não existe prop `variant` de "tipo visual" (`error`, `success`, `no-data`). O tipo de Empty State é decisão de **conteúdo** (o que você escreve em `title`/`description`) e de **composição** (qual capa e quais ações você passa). Isso mantém a evolução da UX writing fora do código.
+There is no "visual type" `variant` prop (`error`, `success`, `no-data`). The type of Empty State is a decision of **content** (what you write in `title`/`description`) and of **composition** (which cover and which actions you pass). This keeps the evolution of UX writing out of the code.
 
-| Situação              | Tom              | Estrutura recomendada                                      |
-| --------------------- | ---------------- | ---------------------------------------------------------- |
-| Primeiro uso          | Neutro/positivo  | Capa + título + descrição + ação de criação                |
-| Sem resultados        | Neutro           | Título + descrição com sugestão de ajuste, sem capa pesada |
-| Confirmação/sucesso   | Celebratório     | Título; ação opcional                                      |
-| Erro de permissão     | Neutro/sério     | Título + descrição + "solicitar acesso"                    |
-| Erro de sistema       | Sério, sem humor | Título + descrição + "tentar de novo"                      |
-| Configuração pendente | Instrutivo       | Título + descrição + ação de configuração                  |
+| Situation             | Tone              | Recommended structure                                          |
+| --------------------- | ----------------- | -------------------------------------------------------------- |
+| First use             | Neutral/positive  | Cover + title + description + create action                    |
+| No results            | Neutral           | Title + description with an adjustment hint, no heavy cover    |
+| Confirmation/success  | Celebratory       | Title; optional action                                         |
+| Permission error      | Neutral/serious   | Title + description + "request access"                         |
+| System error          | Serious, no humor | Title + description + "try again"                              |
+| Pending configuration | Instructive       | Title + description + configuration action                     |
 
-## Alinhamento
+## Alignment
 
-O bloco todo alinha ao centro (padrão) ou à esquerda. Centro funciona bem em páginas inteiras e painéis grandes; esquerda acompanha melhor conteúdo de leitura já alinhado à esquerda, como o corpo de uma tabela.
+The whole block aligns to the center (default) or to the left. Center works well on full pages and large panels; left goes better with reading content already aligned to the left, such as the body of a table.
 
 ### Left
 
 <ComponentEmbed component="EmptyState" variant="left" />
 
-## Capa opcional
+## Optional cover
 
-A capa (`slot="cover"`) aceita imagem, ilustração ou ícone, e é sempre **decorativa**, considerando que o componente aplica `aria-hidden="true"`. Nada que ela comunique pode ser exclusivo dela; título e descrição carregam todo o significado, e o layout absorve a ausência da capa sem quebrar.
+The cover (`slot="cover"`) accepts an image, illustration or icon, and is always **decorative**, since the component applies `aria-hidden="true"`. Nothing it communicates can be exclusive to it; the title and description carry all the meaning, and the layout absorbs the absence of the cover without breaking.
 
-Omita a capa em espaços pequenos ou quando vários Empty States aparecem na mesma tela (vários widgets falhando ao mesmo tempo). Repetir a mesma ilustração reduz o impacto de todas.
+Omit the cover in small spaces or when several Empty States appear on the same screen (several widgets failing at the same time). Repeating the same illustration reduces the impact of all of them.
 
-## Ações opcionais
+## Optional actions
 
-Ações entram por `slot="actions"` como `<button class="btn">` ou `<lui-button>`, e não por props de configuração, assim você usa toda a API de Button sem que o Empty State precise reimplementá-la.
+Actions come in through `slot="actions"` as `<button class="btn">` or `<lui-button>`, not through configuration props, so you use the whole Button API without the Empty State having to reimplement it.
 
-Uma única ação primária. Se não há nada que o usuário possa fazer (ex.: aguardando um processo externo), não invente um botão.
+A single primary action. If there is nothing the user can do (e.g. waiting for an external process), do not invent a button.
 
-### Caso mínimo
+### Minimal case
 
-Só o título já é um Empty State válido.
+The title alone is already a valid Empty State.
 
-## Anunciar mudanças dinâmicas (`announce`)
+## Announcing dynamic changes (`announce`)
 
-Este é o ponto de acessibilidade menos intuitivo do padrão. Quando o Empty State aparece **como resultado de uma ação do usuário na mesma navegação** (busca, filtro, exclusão do último item), o leitor de tela precisa ser avisado, senão o usuário não descobre que o resultado mudou sem navegar manualmente até a área.
+This is the least intuitive accessibility point of the pattern. When the Empty State appears **as the result of a user action in the same navigation** (search, filter, deleting the last item), the screen reader needs to be notified, otherwise the user does not find out that the result changed without manually navigating to the area.
 
-| `announce`     | Renderiza       | Quando usar                                                                                  |
-| -------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `off` (padrão) | sem role        | O Empty State já está presente no carregamento inicial da página, anunciar seria redundante. |
-| `polite`       | `role="status"` | Busca sem resultado, filtro aplicado, último item excluído.                                  |
-| `assertive`    | `role="alert"`  | Só para erro que exige atenção imediata, interrompendo a leitura em curso.                   |
+| `announce`      | Renders         | When to use                                                                                     |
+| --------------- | --------------- | ----------------------------------------------------------------------------------------------- |
+| `off` (default) | no role         | The Empty State is already present on the initial page load; announcing it would be redundant. |
+| `polite`        | `role="status"` | Search with no results, filter applied, last item deleted.                                      |
+| `assertive`     | `role="alert"`  | Only for an error that requires immediate attention, interrupting the ongoing reading.          |
 
-**Gerenciamento de foco:** quando o Empty State substitui algo que estava com o foco (o item que o usuário acabou de excluir), mova o foco de forma previsível, para o campo de busca ou para o próximo elemento lógico. Nunca deixe o foco "perdido" no `<body>`. O container do Empty State não é focável: ele não é um widget, e o `Tab` vai direto para os botões.
+**Focus management:** when the Empty State replaces something that had focus (the item the user just deleted), move focus predictably, to the search field or to the next logical element. Never leave focus "lost" on `<body>`. The Empty State container is not focusable: it is not a widget, and `Tab` goes straight to the buttons.
 
-**Debounce:** não troque para o Empty State a cada tecla digitada em um campo de busca. Espere a query "assentar", senão o bloco pisca a cada caractere.
+**Debounce:** do not switch to the Empty State on every keystroke in a search field. Wait for the query to "settle", otherwise the block flickers with each character.
 
-## Hierarquia do título
+## Title hierarchy
 
-O título é um heading nativo real. Como o componente não sabe onde foi inserido, o nível é configurável por `title-level` (1–6, padrão `2`). Ajuste conforme a hierarquia do documento ao redor.
+The title is a real native heading. Since the component does not know where it was inserted, the level is configurable through `title-level` (1–6, default `2`). Adjust it to the hierarchy of the surrounding document.
 
-## Responsividade
+## Responsiveness
 
-Layout mobile-first. Até `md` (1024px) as ações empilham em largura total; a partir daí voltam a ser uma linha. O bloco tem `max-width: 560px` e o título nunca trunca. Textos longos (e traduções mais extensas) simplesmente ocupam mais altura.
+Mobile-first layout. Up to `md` (1024px) the actions stack at full width; from there on they go back to a single row. The block has `max-width: 560px` and the title never truncates. Long texts (and longer translations) simply take up more height.
 
-Com `<lui-button>`, adicione o atributo `block` para que o botão preencha a largura no empilhamento mobile. Botões nativos com a classe `.btn` já esticam sozinhos.
+With `<lui-button>`, add the `block` attribute so the button fills the width in the mobile stack. Native buttons with the `.btn` class already stretch on their own.
 
-## Uso
+## Usage
 
 ### Web Component
 
@@ -89,21 +89,21 @@ Com `<lui-button>`, adicione o atributo `block` para que o botão preencha a lar
 </lui-empty-state>
 ```
 
-### Sem resultados, anunciado
+### No results, announced
 
 ```html
 <lui-empty-state
-  title="Nenhum resultado para “relatório financeiro”"
-  description="Tente termos mais genéricos ou remova os filtros ativos."
+  title="No results for “financial report”"
+  description="Try more general terms or remove the active filters."
   announce="polite"
 >
   <button slot="actions" class="btn btn--secondary btn--lg">
-    Limpar filtros
+    Clear filters
   </button>
 </lui-empty-state>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <div class="empty-state empty-state--align-center">
@@ -129,17 +129,17 @@ Com `<lui-button>`, adicione o atributo `block` para que o botão preencha a lar
 
 ## API
 
-| Atributo        | Valores                      | Padrão                | Descrição                                                 |
-| --------------- | ---------------------------- | --------------------- | --------------------------------------------------------- |
-| `align`         | `center`, `left`             | `center`              | Alinhamento do bloco inteiro.                             |
-| `title`         | texto                        | `''`                  | Título. Único conteúdo obrigatório.                       |
-| `title-level`   | `1`–`6`                      | `2`                   | Nível do heading HTML renderizado.                        |
-| `description`   | texto                        | `''`                  | Texto de apoio. Omitido quando vazio.                     |
-| `announce`      | `off`, `polite`, `assertive` | `off`                 | Anuncia a região quando ela aparece após ação do usuário. |
-| `actions-label` | texto                        | `Empty state actions` | Rótulo acessível do grupo de ações.                       |
+| Attribute       | Values                       | Default               | Description                                                   |
+| --------------- | ---------------------------- | --------------------- | ------------------------------------------------------------- |
+| `align`         | `center`, `left`             | `center`              | Alignment of the whole block.                                 |
+| `title`         | text                         | `''`                  | Title. The only required content.                             |
+| `title-level`   | `1`–`6`                      | `2`                   | Level of the rendered HTML heading.                           |
+| `description`   | text                         | `''`                  | Supporting text. Omitted when empty.                          |
+| `announce`      | `off`, `polite`, `assertive` | `off`                 | Announces the region when it appears after a user action.     |
+| `actions-label` | text                         | `Empty state actions` | Accessible label of the actions group.                        |
 
-| Slot      | Descrição                                                       |
-| --------- | --------------------------------------------------------------- |
-| `cover`   | Imagem, ilustração ou ícone. Sempre decorativo (`aria-hidden`). |
-| (padrão)  | Conteúdo extra abaixo da descrição. Ex.: lista de sugestões.    |
-| `actions` | Botões ou links de ação.                                        |
+| Slot      | Description                                                       |
+| --------- | ----------------------------------------------------------------- |
+| `cover`   | Image, illustration or icon. Always decorative (`aria-hidden`).   |
+| (default) | Extra content below the description. E.g. a list of suggestions.  |
+| `actions` | Action buttons or links.                                          |

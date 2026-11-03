@@ -1,23 +1,23 @@
 ---
 title: "Mixins"
-subtitle: "Mixins SCSS definidos em `packages/styles/src/utilities/_mixins.scss`. Encapsulam padrões recorrentes de CSS para reduzir repetição e garantir consistência entre componentes."
+subtitle: "SCSS mixins defined in `packages/styles/src/utilities/_mixins.scss`. They wrap recurring CSS patterns to reduce repetition and keep components consistent."
 order: 2
 ---
 
 ## flex
 
-Shorthand para configurar um container flexbox em uma única linha.
+Shorthand to set up a flexbox container in a single line.
 
 ```scss
 @include flex($direction, $align, $justify, $gap, $wrap)
 ```
 
-| Parâmetro | Padrão | Valores |
+| Parameter | Default | Values |
 | --- | --- | --- |
 | `$direction` | `row` | row \| row-reverse \| column \| column-reverse |
 | `$align` | `center` | flex-start \| center \| flex-end \| stretch \| baseline |
 | `$justify` | `flex-start` | flex-start \| center \| flex-end \| space-between \| space-around |
-| `$gap` | `0` | qualquer valor de espaçamento |
+| `$gap` | `0` | any spacing value |
 | `$wrap` | `nowrap` | nowrap \| wrap \| wrap-reverse |
 
 ```scss
@@ -26,30 +26,30 @@ Shorthand para configurar um container flexbox em uma única linha.
 
 ## center
 
-Centraliza o conteúdo via flexbox no eixo indicado.
+Centers the content with flexbox on the given axis.
 
 ```scss
 @include center($axis)
 ```
 
-| Parâmetro | Padrão | Valores |
+| Parameter | Default | Values |
 | --- | --- | --- |
 | `$axis` | `both` | both \| x \| y |
 
 ```scss
-// Centralizar em ambos os eixos
+// Center on both axes
 @include center;
 
-// Apenas horizontalmente
+// Horizontally only
 @include center(x);
 
-// Apenas verticalmente
+// Vertically only
 @include center(y);
 ```
 
 ## center-absolute
 
-Centraliza absolutamente um elemento em relação ao seu pai com position: absolute.
+Absolutely centers an element relative to its parent with position: absolute.
 
 ```scss
 @include center-absolute
@@ -57,7 +57,7 @@ Centraliza absolutamente um elemento em relação ao seu pai com position: absol
 
 ```scss
 .overlay__spinner {
-  position: relative; // no pai
+  position: relative; // on the parent
 
   .spinner {
     @include center-absolute;
@@ -67,13 +67,13 @@ Centraliza absolutamente um elemento em relação ao seu pai com position: absol
 
 ## media-up
 
-Aplica estilos a partir de um breakpoint mínimo (mobile-first).
+Applies styles from a minimum breakpoint up (mobile-first).
 
 ```scss
 @include media-up($breakpoint)
 ```
 
-| Parâmetro | Padrão | Valores |
+| Parameter | Default | Values |
 | --- | --- | --- |
 | `$breakpoint` | `—` | sm \| md \| lg \| 1xl |
 
@@ -89,13 +89,13 @@ Aplica estilos a partir de um breakpoint mínimo (mobile-first).
 
 ## media-down
 
-Aplica estilos abaixo de um breakpoint máximo.
+Applies styles below a maximum breakpoint.
 
 ```scss
 @include media-down($breakpoint)
 ```
 
-| Parâmetro | Padrão | Valores |
+| Parameter | Default | Values |
 | --- | --- | --- |
 | `$breakpoint` | `—` | 1xs \| sm \| md \| lg \| 1xl |
 
@@ -109,45 +109,45 @@ Aplica estilos abaixo de um breakpoint máximo.
 
 ## states
 
-Aplica estados interativos completos: disabled, hover, active e focus-visible. Ideal para botões e controles interativos.
+Applies the full set of interactive states: disabled, hover, active and focus-visible. Ideal for buttons and interactive controls.
 
-Num componente **preenchido** (fundo sólido com rótulo por cima), passe em `$tint` a cor oposta à do rótulo: o hover e o pressed misturam essa cor, o fundo se afasta do texto e o contraste aumenta nos estados. Sem `$tint`, os estados misturam a cor do próprio conteúdo, como num componente de superfície. O mesmo `$tint` existe em `state-layer()` e `state-base()`.
+In a **filled** component (solid background with a label on top), pass in `$tint` the color opposite to the label: hover and pressed mix that color, the background moves away from the text and contrast goes up in those states. Without `$tint`, the states mix the color of the content itself, as in a surface component. The same `$tint` exists in `state-layer()` and `state-base()`.
 
 ```scss
 @include states($focus-visible, $focus?, $bg?, $tint?)
 ```
 
-| Parâmetro | Padrão | Valores |
+| Parameter | Default | Values |
 | --- | --- | --- |
 | `$focus-visible` | `—` | primary \| secondary \| danger \| success \| neutral |
 | `$focus` | `null` | primary \| secondary \| danger \| success \| neutral |
-| `$bg` | `transparent` | Cor de fundo em repouso, ex.: `bg(container, primary)` |
-| `$tint` | `null` | `tint(foreground)` para rótulo claro · `tint(background)` para rótulo escuro |
+| `$bg` | `transparent` | Resting background color, e.g. `bg(container, primary)` |
+| `$tint` | `null` | `tint(foreground)` for a light label · `tint(background)` for a dark label |
 
 ```scss
 .menu-item {
-  // Superfície: os estados misturam a cor do próprio conteúdo.
+  // Surface: the states mix the color of the content itself.
   @include states(primary);
 }
 
 .btn--primary {
   color: text(inverse);
 
-  // Preenchido, rótulo claro: tinta oposta ao rótulo.
+  // Filled, light label: tint opposite to the label.
   @include states(primary, primary, $bg: bg(container, primary), $tint: tint(foreground));
 }
 
 .btn--neutral {
   color: text(body);
 
-  // Preenchido, rótulo escuro.
+  // Filled, dark label.
   @include states(neutral, neutral, $bg: bg(container, neutral), $tint: tint(background));
 }
 ```
 
 ## disabled
 
-Aplica apenas os estilos de estado desabilitado (cursor, opacidade, text-decoration). Use quando não precisar dos outros estados do mixin states().
+Applies only the disabled state styles (cursor, opacity, text-decoration). Use it when you do not need the other states of the states() mixin.
 
 ```scss
 @include disabled
@@ -161,13 +161,13 @@ Aplica apenas os estilos de estado desabilitado (cursor, opacidade, text-decorat
 
 ## focus-ring
 
-Aplica o box-shadow de foco visível ao :focus-visible do elemento.
+Applies the visible focus box-shadow to the element's :focus-visible.
 
 ```scss
 @include focus-ring($variant)
 ```
 
-| Parâmetro | Padrão | Valores |
+| Parameter | Default | Values |
 | --- | --- | --- |
 | `$variant` | `—` | primary \| secondary \| danger \| success \| neutral |
 
@@ -179,7 +179,7 @@ Aplica o box-shadow de foco visível ao :focus-visible do elemento.
 
 ## sr-only
 
-Esconde visualmente o elemento mas mantém acessível para leitores de tela. Equivalente ao utilitário sr-only do Tailwind.
+Hides the element visually but keeps it available to screen readers. Equivalent to Tailwind's sr-only utility.
 
 ```scss
 @include sr-only
@@ -193,7 +193,7 @@ Esconde visualmente o elemento mas mantém acessível para leitores de tela. Equ
 
 ## no-select
 
-Desabilita a seleção de texto com user-select: none.
+Disables text selection with user-select: none.
 
 ```scss
 @include no-select
@@ -207,13 +207,13 @@ Desabilita a seleção de texto com user-select: none.
 
 ## font-scale
 
-Aplica uma escala tipográfica completa (font, size, weight, line-height, case) em uma única chamada.
+Applies a full type scale (font, size, weight, line-height, case) in a single call.
 
 ```scss
 @include font-scale($scale-name)
 ```
 
-| Parâmetro | Padrão | Valores |
+| Parameter | Default | Values |
 | --- | --- | --- |
 | `$scale-name` | `—` | display \| title \| headline \| subtitle \| block-title \| subheadline \| overtitle \| body--lg \| body--md \| body--sm |
 

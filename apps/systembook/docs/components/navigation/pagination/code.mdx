@@ -3,39 +3,39 @@ title: "Code"
 order: 4
 ---
 
-## Poucas páginas
+## Few pages
 
-Quando o total cabe no intervalo visível, todas as páginas aparecem sem truncamento.
+When the total fits within the visible range, every page appears with no truncation.
 
 <ComponentEmbed component="Pagination" variant="few-pages" />
 
-## Truncamento com reticências
+## Truncation with ellipses
 
-A primeira e a última página ficam sempre visíveis; a página atual mantém `sibling-count` vizinhas de cada lado, e cada lacuna vira uma reticência. Depois de truncada, a lista tem sempre o mesmo número de itens, então a largura não muda durante a navegação.
+The first and last pages are always visible; the current page keeps `sibling-count` neighbors on each side, and each gap becomes an ellipsis. Once truncated, the list always has the same number of items, so its width does not change during navigation.
 
-## Evento `lui-page-change`
+## `lui-page-change` event
 
-Ao navegar, o componente atualiza `current-page` e emite `lui-page-change` com a nova página em `event.detail.page`. O evento borbulha e atravessa o shadow DOM.
+On navigation, the component updates `current-page` and emits `lui-page-change` with the new page in `event.detail.page`. The event bubbles and crosses the shadow DOM.
 
-## Classe CSS (sem Web Component)
+## CSS class (without Web Component)
 
-Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com links para uma paginação do lado do servidor.
+Without the Web Component, the markup is up to you — for example, with links for server-side pagination.
 
-## Propriedades
+## Properties
 
-| Atributo                | Tipo     | Padrão                      | Descrição                                                                                                         |
+| Attribute               | Type     | Default                     | Description                                                                                                       |
 | ----------------------- | -------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `current-page`          | `number` | `1`                         | Página atual. Refletido no atributo ao navegar.                                                                   |
-| `total-pages`           | `number` | `1`                         | Total de páginas.                                                                                                 |
-| `sibling-count`         | `number` | `1`                         | Páginas vizinhas exibidas de cada lado da atual.                                                                  |
-| `compact-sibling-count` | `number` | `0`                         | Vizinhas de cada lado abaixo de 768px (limitado a `sibling-count`). Primeira, última e atual permanecem visíveis. |
-| `label`                 | `string` | `Pagination`                | Nome acessível do landmark `<nav>`.                                                                               |
-| `previous-label`        | `string` | `Previous page`             | Nome acessível do botão de página anterior.                                                                       |
-| `next-label`            | `string` | `Next page`                 | Nome acessível do botão de próxima página.                                                                        |
-| `page-label`            | `string` | `Page`                      | Prefixo do nome acessível de cada página ("Page 3").                                                              |
-| `status-label`          | `string` | `Page {current} of {total}` | Texto anunciado por leitores de tela após a troca de página.                                                      |
+| `current-page`          | `number` | `1`                         | Current page. Reflected to the attribute on navigation.                                                           |
+| `total-pages`           | `number` | `1`                         | Total number of pages.                                                                                            |
+| `sibling-count`         | `number` | `1`                         | Neighbor pages shown on each side of the current one.                                                             |
+| `compact-sibling-count` | `number` | `0`                         | Neighbors on each side below 768px (capped at `sibling-count`). First, last and current stay visible.             |
+| `label`                 | `string` | `Pagination`                | Accessible name of the `<nav>` landmark.                                                                          |
+| `previous-label`        | `string` | `Previous page`             | Accessible name of the previous page button.                                                                      |
+| `next-label`            | `string` | `Next page`                 | Accessible name of the next page button.                                                                          |
+| `page-label`            | `string` | `Page`                      | Prefix of each page's accessible name ("Page 3").                                                                 |
+| `status-label`          | `string` | `Page {current} of {total}` | Text announced by screen readers after the page changes.                                                          |
 
-## Uso
+## Usage
 
 ### Web Component
 
@@ -51,7 +51,7 @@ Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com 
 </script>
 ```
 
-### Classe CSS
+### CSS class
 
 ```html
 <nav class="pagination" aria-label="Pagination">
@@ -62,7 +62,7 @@ Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com 
         href="?page=1"
         aria-label="Previous page"
       >
-        <!-- ícone -->
+        <!-- icon -->
       </a>
     </li>
     <li><a class="pagination__item" href="?page=1">1</a></li>
@@ -76,7 +76,7 @@ Sem o Web Component, a marcação fica a cargo de quem usa — por exemplo, com 
         href="?page=3"
         aria-label="Next page"
       >
-        <!-- ícone -->
+        <!-- icon -->
       </a>
     </li>
   </ul>

@@ -1,0 +1,65 @@
+---
+title: "Link"
+subtitle: "Leva a outra página, seção ou recurso. É o elemento de navegação em texto."
+---
+
+<ComponentEmbed component="Link" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Navegar">
+  Para outra página ou para uma âncora na mesma página.
+</DosDonts>
+
+<DosDonts variant="do" title="Recursos externos e downloads">
+  Para abrir um site externo ou baixar um arquivo.
+</DosDonts>
+
+<DosDonts variant="do" title="Texto clicável">
+  Dentro de um parágrafo ou como chamada textual isolada.
+</DosDonts>
+
+<DosDonts variant="dont" title="Executar uma ação">
+  Para salvar, enviar ou excluir, use um [Button](../../actionable/button/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Escolher entre opções">
+  Use controles de formulário.
+</DosDonts>
+
+<DosDonts variant="dont" title="Navegação com muitos itens e estado ativo">
+  Use [Tabs](../tabs/index.mdx) ou um menu.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Link: texto e sublinhado ao passar o mouse, e ícone de link externo](./anatomy.png)
+
+1. **Texto**: descreve o destino.
+2. **Sublinhado**: aparece ao passar o mouse. No foco por teclado, o link ganha o anel de foco.
+3. **Ícone de link externo** (opcional): indica que o destino sai do produto.
+
+## Tipos
+
+| Tipo | Quando usar |
+| --- | --- |
+| **Padrão** | Navegação interna, na mesma aba. |
+| **Externo** (`external`) | Destino fora do produto. Abre em nova aba e mostra um ícone. |
+| **Download** (`download`) | O clique baixa um arquivo em vez de navegar. |
+| **Desabilitado** (`disabled`) | O destino existe, mas não está disponível agora. |
+
+## Tamanhos
+
+`lg`, `md` e `sm` seguem a escala do [Body](../../typography/body/index.mdx). Sem `size`, o link herda o tamanho do texto ao redor, que é o comportamento certo dentro de um parágrafo.
+
+## Estados
+
+Padrão, hover (sublinhado), foco (anel visível), visitado e desabilitado. O estilo de **visitado** vem desligado por padrão e pode ser ativado com o atributo `visited`, útil em listas de artigos e resultados de busca.
+
+<ComponentEmbed component="Link" variant="disabled" />
+
+## Relacionados
+
+- [Button](../../actionable/button/index.mdx): executar ações.
+- [Breadcrumb](../breadcrumb/index.mdx): links de hierarquia.
+- [Body](../../typography/body/index.mdx): o texto onde o link vive.

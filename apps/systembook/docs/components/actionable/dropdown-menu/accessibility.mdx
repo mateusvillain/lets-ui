@@ -3,30 +3,30 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Enter` ou `Espaço` | Abre o menu no gatilho e ativa o item em foco. |
-| `Seta para baixo` | Vai para o próximo item (volta ao primeiro no fim). |
-| `Seta para cima` | Vai para o item anterior (vai ao último no começo). |
-| `Seta para direita` | Abre o submenu e foca o primeiro item dele. |
-| `Seta para esquerda` | Fecha o submenu e devolve o foco ao item pai. |
-| `Esc` | Fecha o menu e devolve o foco ao gatilho. |
-| `Tab` | Fecha o menu e leva o foco para depois do gatilho. |
-| `Shift` + `Tab` | Fecha o menu e leva o foco para antes do gatilho. |
+| `Enter` or `Space` | Opens the menu from the trigger and activates the focused item. |
+| `Down Arrow` | Moves to the next item (wraps to the first one at the end). |
+| `Up Arrow` | Moves to the previous item (wraps to the last one at the start). |
+| `Right Arrow` | Opens the submenu and focuses its first item. |
+| `Left Arrow` | Closes the submenu and returns focus to the parent item. |
+| `Esc` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus to after the trigger. |
+| `Shift` + `Tab` | Closes the menu and moves focus to before the trigger. |
 
-Ao abrir, o foco vai para o primeiro item disponível. Os itens ficam **fora da ordem do `Tab`** e são alcançados só pelas setas, então o menu inteiro é uma única parada de `Tab`, como no padrão Menu Button do ARIA Authoring Practices. Itens desabilitados são pulados na navegação.
+When it opens, focus goes to the first available item. Items stay **out of the `Tab` order** and are reached only with the arrows, so the whole menu is a single `Tab` stop, as in the Menu Button pattern of the ARIA Authoring Practices. Disabled items are skipped during navigation.
 
-## Leitor de tela
+## Screen reader
 
-- O gatilho informa que abre um menu (`aria-haspopup`) e se está aberto (`aria-expanded`).
-- O painel é anunciado como `menu`, e cada ação como `menuitem`.
-- Itens com submenu informam que abrem outro menu e seu estado.
-- Divisores são anunciados como separadores.
+- The trigger tells that it opens a menu (`aria-haspopup`) and whether it is open (`aria-expanded`).
+- The panel is announced as `menu`, and each action as `menuitem`.
+- Items with a submenu tell that they open another menu and their state.
+- Dividers are announced as separators.
 
-## Para designers
+## For designers
 
-- Dê um nome claro ao gatilho. Se for só um ícone, ele precisa de um nome acessível ("Mais opções").
-- Não dependa só de hover para abrir submenus: o teclado e o toque também precisam abrir.
-- Itens perigosos devem ser claros pelo **texto**, não só pela cor vermelha.
+- Give the trigger a clear name. If it is only an icon, it needs an accessible name ("More options").
+- Do not rely on hover alone to open submenus: keyboard and touch must open them too.
+- Dangerous items must be clear through their **text**, not just the red color.

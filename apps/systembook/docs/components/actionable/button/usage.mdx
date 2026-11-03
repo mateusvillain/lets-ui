@@ -3,69 +3,69 @@ title: "Usage"
 order: 2
 ---
 
-## Hierarquia das ações
+## Action hierarchy
 
-A tela deve deixar claro, em um relance, qual é o próximo passo. Isso é a hierarquia: **uma ação primária**, quantas secundárias forem necessárias e, no máximo, uma ação destrutiva por vez.
+The screen should make the next step clear at a glance. That is the hierarchy: **one primary action**, as many secondary ones as needed and, at most, one destructive action at a time.
 
-<DosDonts variant="do" title="Uma ação primária por contexto">
-  Combine um botão Primary com um Secondary. A pessoa vê de imediato qual é o caminho recomendado e qual é a saída.
+<DosDonts variant="do" title="One primary action per context">
+  Pair a Primary button with a Secondary one. The person immediately sees which path is recommended and which is the way out.
 </DosDonts>
 
-<DosDonts variant="dont" title="Várias ações primárias lado a lado">
-  Dois botões com o mesmo peso competem pela atenção, e ninguém sabe qual é o principal. Rebaixe uma delas para Secondary ou Neutral.
+<DosDonts variant="dont" title="Several primary actions side by side">
+  Two buttons with the same weight compete for attention, and no one knows which is the main one. Demote one of them to Secondary or Neutral.
 </DosDonts>
 
-## Posição e ordem
+## Position and order
 
-- Em formulários e diálogos, alinhe os botões ao **fim** do conteúdo (à direita em idiomas da esquerda para a direita).
-- Coloque a ação primária **por último** na ordem de leitura, depois da secundária: "Cancelar" e então "Salvar".
-- Em telas pequenas, empilhe os botões com `block` e deixe a ação primária no topo.
-- Mantenha 8px ou 16px de espaço entre botões do mesmo grupo, nunca botões colados.
+- In forms and dialogs, align the buttons to the **end** of the content (to the right in left-to-right languages).
+- Place the primary action **last** in reading order, after the secondary one: "Cancel" and then "Save".
+- On small screens, stack the buttons with `block` and keep the primary action at the top.
+- Keep 8px or 16px of space between buttons in the same group, never buttons stuck together.
 
-## Escrevendo o rótulo
+## Writing the label
 
-O rótulo é um **verbo no infinitivo** que diz o que vai acontecer.
+The label is a **verb in the imperative** that says what will happen.
 
-<DosDonts variant="do" title="Verbo + objeto">
-  "Salvar alterações", "Excluir projeto", "Enviar convite". A pessoa sabe o resultado antes de clicar.
+<DosDonts variant="do" title="Verb + object">
+  "Save changes", "Delete project", "Send invite". The person knows the result before clicking.
 </DosDonts>
 
-<DosDonts variant="dont" title="Rótulos genéricos">
-  "OK", "Sim", "Enviar" sem contexto, ou "Clique aqui". Forçam a pessoa a reler a pergunta para entender o efeito.
+<DosDonts variant="dont" title="Generic labels">
+  "OK", "Yes", "Send" with no context, or "Click here". They force the person to reread the question to understand the effect.
 </DosDonts>
 
-Mais orientações:
+More guidance:
 
-- Use até **três palavras** e capitalização de frase ("Criar conta", não "Criar Conta").
-- Não use pontuação final.
-- Em ações destrutivas, nomeie o que será perdido: "Excluir 3 arquivos" é melhor que "Excluir".
-- Use o mesmo verbo para a mesma ação em todo o produto.
+- Use up to **three words** and sentence case ("Create account", not "Create Account").
+- Do not use final punctuation.
+- In destructive actions, name what will be lost: "Delete 3 files" is better than "Delete".
+- Use the same verb for the same action across the whole product.
 
-## Ações destrutivas
+## Destructive actions
 
-Use `danger` apenas quando a ação **não pode ser desfeita** ou causa perda de dados. Para ações reversíveis, prefira oferecer "Desfazer" depois, em vez de pedir confirmação antes.
+Use `danger` only when the action **cannot be undone** or causes data loss. For reversible actions, prefer offering "Undo" afterwards instead of asking for confirmation first.
 
 <Callout variant="warning">
-  Quando a ação for irreversível, confirme em um [Modal](../../content/modal/index.mdx), nomeando o que será excluído. O botão de confirmação repete o verbo: "Excluir projeto".
+  When the action is irreversible, confirm it in a [Modal](../../content/modal/index.mdx), naming what will be deleted. The confirmation button repeats the verb: "Delete project".
 </Callout>
 
-## Carregamento
+## Loading
 
-Ao iniciar uma operação que leva mais de um instante, ative `loading`. O botão mantém o tamanho, mostra o progresso e bloqueia cliques repetidos, evitando envios duplicados.
+When starting an operation that takes more than a moment, turn on `loading`. The button keeps its size, shows progress and blocks repeated clicks, avoiding duplicate submissions.
 
-- Troque o rótulo com `loading-text` quando ajudar: "Salvando…".
-- Não desabilite o botão para indicar carregamento. Desabilitado significa "indisponível", não "em andamento".
+- Change the label with `loading-text` when it helps: "Saving…".
+- Do not disable the button to indicate loading. Disabled means "unavailable", not "in progress".
 
-## Botão desabilitado
+## Disabled button
 
-Use `disabled` com moderação. Um botão desabilitado não explica por que está indisponível.
+Use `disabled` sparingly. A disabled button does not explain why it is unavailable.
 
-- Prefira manter o botão ativo e mostrar o erro de validação quando a pessoa tentar avançar.
-- Se desabilitar for necessário, explique o motivo no texto próximo ou em um [Tooltip](../../content/tooltip/index.mdx).
+- Prefer keeping the button active and showing the validation error when the person tries to move forward.
+- If disabling is necessary, explain the reason in nearby text or in a [Tooltip](../../content/tooltip/index.mdx).
 
-## Boas práticas
+## Best practices
 
-- Um botão **faz algo**; se leva a outro lugar, use um link.
-- Dê ao botão área de toque de pelo menos 40px em telas sensíveis ao toque, que é o `lg`.
-- Não use dois estilos diferentes para a mesma ação em telas diferentes.
-- Não coloque ícones só para decorar. Se o ícone não adiciona significado, deixe o texto sozinho.
+- A button **does something**; if it takes you somewhere else, use a link.
+- Give the button a touch target of at least 40px on touch screens, which is `lg`.
+- Do not use two different styles for the same action on different screens.
+- Do not add icons just for decoration. If the icon adds no meaning, leave the text alone.

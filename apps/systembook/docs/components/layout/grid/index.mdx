@@ -1,63 +1,63 @@
 ---
 title: "Grid"
-subtitle: "Grade de colunas responsiva, que estrutura a página inteira."
+subtitle: "Responsive column grid that structures the whole page."
 order: 4
 ---
 
 <ComponentEmbed component="Grid" variant="default" />
 
-## Boas práticas
+## Best practices
 
-<DosDonts variant="do" title="Estrutura da página">
-  Layouts de conteúdo e painéis organizados em colunas.
+<DosDonts variant="do" title="Page structure">
+  Content layouts and dashboards organized in columns.
 </DosDonts>
 
-<DosDonts variant="do" title="Galerias e listagens de cards">
-  Itens distribuídos pelas colunas da grade.
+<DosDonts variant="do" title="Galleries and card listings">
+  Items distributed across the grid columns.
 </DosDonts>
 
-<DosDonts variant="do" title="Colunas que se adaptam à tela">
-  O número de colunas, o espaço entre elas e a margem lateral mudam sozinhos conforme o tamanho da tela.
+<DosDonts variant="do" title="Columns that adapt to the screen">
+  The number of columns, the space between them and the side margin change on their own with the screen size.
 </DosDonts>
 
-<DosDonts variant="dont" title="Alinhar poucos elementos em uma linha">
-  Use [Flex](../flex/index.mdx) ou [Inline](../inline/index.mdx).
+<DosDonts variant="dont" title="Aligning a few elements in a row">
+  Use [Flex](../flex/index.mdx) or [Inline](../inline/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Uma coluna simples">
+<DosDonts variant="dont" title="A simple column">
   Use [Stack](../stack/index.mdx).
 </DosDonts>
 
-<DosDonts variant="dont" title="Duas áreas, uma fixa e outra flexível">
+<DosDonts variant="dont" title="Two areas, one fixed and one flexible">
   Use [Sidebar](../sidebar/index.mdx).
 </DosDonts>
 
-## A grade
+## The grid
 
-A grade é **mobile-first**. A quantidade de colunas e o espaço entre elas variam por breakpoint:
+The grid is **mobile-first**. The number of columns and the space between them vary by breakpoint:
 
-| Breakpoint | Tela | Colunas | Gap | Margem lateral |
+| Breakpoint | Screen | Columns | Gap | Side margin |
 | --- | --- | --- | --- | --- |
-| base | até 767px | 4 | 16px | 16px |
-| `sm` | a partir de 768px | 8 | 16px | 32px |
-| `md` | a partir de 1024px | 8 | 16px | 40px |
-| `lg` | a partir de 1280px | 12 | 24px | 40px |
-| `1xl` | a partir de 1440px | 12 | 24px | Contêiner de 1360px, centralizado |
+| base | up to 767px | 4 | 16px | 16px |
+| `sm` | from 768px | 8 | 16px | 32px |
+| `md` | from 1024px | 8 | 16px | 40px |
+| `lg` | from 1280px | 12 | 24px | 40px |
+| `1xl` | from 1440px | 12 | 24px | 1360px container, centered |
 
-Esses valores vêm dos tokens da marca, então uma marca pode redefinir a grade inteira.
+These values come from the brand tokens, so a brand can redefine the whole grid.
 
-## Itens
+## Items
 
-Cada `lui-grid-item` escolhe **quantas colunas ocupa** em cada breakpoint (`col`, `col-sm`, `col-md`, `col-lg` e `col-1xl`). Um valor declarado vale dali para cima, até outro substituí-lo.
+Each `lui-grid-item` chooses **how many columns it spans** at each breakpoint (`col`, `col-sm`, `col-md`, `col-lg` and `col-1xl`). A declared value applies from there upward, until another one overrides it.
 
-## Grid aninhado
+## Nested grid
 
-Um Grid dentro de um item recebe `flush` automaticamente, para não repetir a margem lateral.
+A Grid inside an item gets `flush` automatically, so the side margin is not repeated.
 
 <ComponentEmbed component="Grid" variant="flush" />
 
-## Relacionados
+## Related
 
-- [Container](../container/index.mdx): largura máxima do conteúdo.
-- [Stack](../stack/index.mdx), [Flex](../flex/index.mdx): layouts dentro de cada coluna.
+- [Container](../container/index.mdx): maximum content width.
+- [Stack](../stack/index.mdx), [Flex](../flex/index.mdx): layouts inside each column.
 - [Spacing](../../../foundations/properties/spacing.mdx).

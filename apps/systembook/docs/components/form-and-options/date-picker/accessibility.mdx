@@ -3,66 +3,66 @@ title: "Accessibility"
 order: 3
 ---
 
-O calendário segue o padrão [Date Picker Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/) do WAI-ARIA APG: um diálogo **não modal** com os dias numa grade.
+The calendar follows the WAI-ARIA APG [Date Picker Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/) pattern: a **non-modal** dialog with the days in a grid.
 
-## Teclado no campo
+## Keyboard in the field
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Enter` ou `Espaço` | Abre ou fecha o calendário. |
-| `Seta para baixo` ou `para cima` | Abre o calendário no dia escolhido ou em hoje. |
-| `Alt` + `Seta para baixo` | Com `editable`, abre o calendário a partir da caixa de texto. |
-| `0` a `9` | Com `editable`, digita a data. A máscara põe os separadores. |
-| `Esc` | Com o calendário aberto, fecha sem alterar. |
+| `Enter` or `Space` | Opens or closes the calendar. |
+| `Down Arrow` or `Up Arrow` | Opens the calendar on the chosen day or on today. |
+| `Alt` + `Down Arrow` | With `editable`, opens the calendar from the text box. |
+| `0` to `9` | With `editable`, types the date. The mask adds the separators. |
+| `Esc` | With the calendar open, closes it without changes. |
 
-## Teclado no calendário
+## Keyboard in the calendar
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Setas` | Dia anterior ou seguinte; mesma coluna na semana anterior ou seguinte. |
-| `Home` / `End` | Início ou fim da semana. |
-| `Page Up` / `Page Down` | Mês anterior ou seguinte. |
-| `Shift` + `Page Up` / `Page Down` | Ano anterior ou seguinte. |
-| `Enter` ou `Espaço` | Escolhe o dia e fecha. Com `range`, o primeiro marca uma ponta e o segundo, a outra. |
-| `Tab` | Passa pelos botões do cabeçalho e pela grade. Ao sair, fecha. |
-| `Esc` | Fecha sem alterar. Com `range`, descarta a seleção incompleta. |
+| `Arrows` | Previous or next day; same column in the previous or next week. |
+| `Home` / `End` | Start or end of the week. |
+| `Page Up` / `Page Down` | Previous or next month. |
+| `Shift` + `Page Up` / `Page Down` | Previous or next year. |
+| `Enter` or `Space` | Chooses the day and closes. With `range`, the first marks one end and the second, the other. |
+| `Tab` | Moves through the header buttons and the grid. Leaving closes it. |
+| `Esc` | Closes without changes. With `range`, discards the incomplete selection. |
 
-Nas grades de mês e de ano, as setas, `Home`, `End` e `Page Up` / `Page Down` funcionam do mesmo jeito. `Enter` escolhe e volta aos dias, e `Esc` volta aos dias sem alterar.
+In the month and year grids, the arrows, `Home`, `End` and `Page Up` / `Page Down` work the same way. `Enter` chooses and returns to the days, and `Esc` returns to the days without changes.
 
-## Foco
+## Focus
 
-- Ao abrir, o foco vai para o dia escolhido ou, sem valor, para hoje.
-- A grade tem um único ponto de tabulação, mesmo com dois meses lado a lado.
-- Ao escolher ou fechar com `Esc`, o foco volta a quem abriu o calendário.
-- O calendário não prende o foco: fecha com `Tab` para fora ou com um clique fora.
-- Dentro de um [Modal](../../content/modal/index.mdx), `Esc` fecha só o calendário.
+- On opening, focus goes to the chosen day or, with no value, to today.
+- The grid has a single tab stop, even with two months side by side.
+- On choosing or closing with `Esc`, focus returns to whatever opened the calendar.
+- The calendar does not trap focus: it closes with `Tab` out or with a click outside.
+- Inside a [Modal](../../content/modal/index.mdx), `Esc` closes only the calendar.
 
-## Leitor de tela
+## Screen reader
 
-- O campo é nomeado pela label e pela data exibida, e anuncia se o calendário está aberto. Com `editable`, a caixa de texto é descrita pelo formato, pelo hint ou pelo erro. O botão do calendário diz a data escolhida: "Escolher data, 16 de jan. de 2026".
-- Cada dia é lido por extenso: "sexta-feira, 16 de janeiro de 2026". Hoje é marcado como data atual.
-- O estado do dia entra no nome: "selecionado", "início do período", "no período", "fim do período" ou "indisponível". Assim ele é anunciado até no VoiceOver, que não lê a seleção numa célula de grade.
-- A troca de mês é anunciada. Com `range`, depois da primeira escolha, um aviso pede a data final.
-- Os dias da semana têm o nome completo, mesmo quando a tela mostra só a inicial.
-- Em erro, o campo é anunciado como inválido, com a mensagem do caso.
+- The field is named by the label and the displayed date, and announces whether the calendar is open. With `editable`, the text box is described by the format, the hint or the error. The calendar button states the chosen date: "Choose date, Jan 16, 2026".
+- Each day is read in full: "Friday, January 16, 2026". Today is marked as the current date.
+- The day's state is part of its name: "selected", "start of period", "in period", "end of period" or "unavailable". That way it is announced even in VoiceOver, which does not read the selection in a grid cell.
+- Changing the month is announced. With `range`, after the first choice, a notice asks for the end date.
+- The weekdays have their full name, even when the screen shows only the initial.
+- On error, the field is announced as invalid, with the message for the case.
 
 ## Visual
 
-- Hoje tem negrito, a seleção tem preenchimento e o dia indisponível tem um traço: nenhum desses estados depende só da cor.
-- Os dias têm 32px, e os botões do cabeçalho e as células de mês e ano, 40px, acima do mínimo de 24px do WCAG 2.2.
-- Com `range`, os dois meses ficam um embaixo do outro em telas estreitas.
+- Today is bold, the selection is filled and an unavailable day has a strikethrough: none of these states depends on color alone.
+- Days are 32px, and the header buttons and the month and year cells are 40px, above the WCAG 2.2 minimum of 24px.
+- With `range`, the two months stack one below the other on narrow screens.
 
-## Para designers
+## For designers
 
-- Defina a label de todo Date Picker. Sem label visível, especifique o `aria-label`.
-- Traduza todos os textos do componente para o idioma do produto: o padrão é inglês.
-- Especifique uma mensagem para cada erro.
-- Não confie só no calendário para datas distantes: ofereça a digitação.
+- Define the label of every Date Picker. With no visible label, specify the `aria-label`.
+- Translate all of the component's texts into the product's language: the default is English.
+- Specify a message for each error.
+- Do not rely on the calendar alone for distant dates: offer typing.
 
-## Testes
+## Tests
 
-| Área | Status |
+| Area | Status |
 | --- | --- |
-| Teclado, foco e atributos ARIA | Testes automatizados, no Chromium. |
-| VoiceOver, no Safari | Testado manualmente. |
-| NVDA | Ainda não testado manualmente. |
+| Keyboard, focus and ARIA attributes | Automated tests, in Chromium. |
+| VoiceOver, in Safari | Tested manually. |
+| NVDA | Not yet tested manually. |

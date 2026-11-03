@@ -3,29 +3,29 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` | Move o foco para o botão de fechar ou para a ação. |
-| `Enter` ou `Espaço` | Ativa o botão em foco. |
+| `Tab` | Moves focus to the close button or to the action. |
+| `Enter` or `Space` | Activates the focused button. |
 
-Mover o foco para dentro do Toast **pausa a contagem** do tempo, que retoma quando o foco sai.
+Moving focus into the Toast **pauses the countdown**, which resumes when focus leaves.
 
-## Leitor de tela
+## Screen reader
 
-- O Toast é anunciado quando aparece, sem tirar o foco da pessoa.
-- Toasts informativos e de sucesso são anunciados de forma educada (`status`). O Toast de erro (`danger`) é anunciado de forma assertiva (`alert`).
-- O ícone é decorativo.
-- O botão de fechar tem nome acessível (`close-label`). Traduza para o idioma do produto.
+- The Toast is announced when it appears, without taking focus away from the person.
+- Informative and success Toasts are announced politely (`status`). The error Toast (`danger`) is announced assertively (`alert`).
+- The icon is decorative.
+- The close button has an accessible name (`close-label`). Translate it into the product's language.
 
-## Tempo
+## Timing
 
-- Passar o mouse ou focar pausa a contagem.
-- O Toast `danger` **nunca some sozinho**: quem lê devagar ou usa tecnologia assistiva precisa de tempo para entender o erro.
+- Hovering or focusing pauses the countdown.
+- The `danger` Toast **never disappears on its own**: people who read slowly or use assistive technology need time to understand the error.
 
-## Para designers
+## For designers
 
-- Nunca use um Toast como único canal de informação essencial.
-- Dê tempo suficiente para ler: cerca de uma palavra a cada 200 ms mais um tempo extra.
-- Evite posicioná-lo sobre elementos importantes da tela.
+- Never use a Toast as the only channel for essential information.
+- Give enough time to read: about one word every 200 ms plus some extra time.
+- Avoid placing it over important elements on the screen.

@@ -3,9 +3,9 @@ title: "Code"
 order: 4
 ---
 
-## Atualizando o valor
+## Updating the value
 
-O componente atualiza a barra quando as propriedades mudam, mas não gera o `value-text`: o texto depende da unidade e do idioma. Atualize `value` e `valueText` juntos.
+The component updates the bar when the properties change, but it does not generate the `value-text`: the text depends on the unit and the language. Update `value` and `valueText` together.
 
 ```js
 const bar = document.querySelector('lui-progress-bar');
@@ -13,65 +13,65 @@ const bar = document.querySelector('lui-progress-bar');
 function updateStorage(usedGB, totalGB) {
   bar.value = usedGB;
   bar.max = totalGB;
-  bar.valueText = `${usedGB} GB de ${totalGB} GB`;
+  bar.valueText = `${usedGB} GB of ${totalGB} GB`;
 }
 
 updateStorage(3.2, 10);
 ```
 
-## Por que não `<progress>`
+## Why not `<progress>`
 
-O `<progress>` nativo não segue os temas e as marcas do Let's UI: a aparência muda de navegador para navegador e mal aceita estilo. Ele também não oferece os tamanhos, as variantes nem o modo indeterminado com movimento reduzido. Por isso o Progress Bar usa uma `div` com `role="progressbar"` e os atributos `aria-value*`, que os leitores de tela anunciam da mesma forma. Em HTML próprio, sem os estilos do Let's UI, o `<progress>` continua sendo a primeira opção.
+The native `<progress>` does not follow Let's UI themes and brands: its appearance changes from browser to browser and it barely accepts styling. It also does not offer the sizes, the variants or the indeterminate mode with reduced motion. That is why Progress Bar uses a `div` with `role="progressbar"` and the `aria-value*` attributes, which screen readers announce the same way. In your own HTML, without Let's UI styles, `<progress>` is still the first choice.
 
-## Propriedades
+## Properties
 
-| Atributo | Tipo | Padrão | Descrição |
+| Attribute | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `number` | — | Avanço atual, limitado entre `0` e `max`. Sem ele, a barra fica indeterminada. |
-| `max` | `number` | `100` | Valor que completa a barra. Zero, negativo ou inválido vira `100`. |
-| `variant` | `string` | `primary` | `primary`, `success`, `caution` ou `danger`. |
-| `size` | `string` | `md` | `sm` (4px), `md` (8px) ou `lg` (12px). |
-| `label-placement` | `string` | `top` | `top` ou `inline`. |
-| `label` | `string` | `Progress bar` | Rótulo visível e nome acessível. O padrão só é usado como `aria-label` e não aparece na tela. |
-| `value-text` | `string` | `''` | Texto no lugar do percentual, usado também como `aria-valuetext`. Ignorado no modo indeterminado. |
-| `caption` | `string` | `''` | Legenda abaixo da trilha, anunciada quando muda. |
-| `hide-label` | `boolean` | `false` | Esconde o rótulo visível; `label` continua nomeando a barra. |
-| `hide-value` | `boolean` | `false` | Esconde o valor ao lado do rótulo. |
+| `value` | `number` | — | Current progress, clamped between `0` and `max`. Without it, the bar is indeterminate. |
+| `max` | `number` | `100` | Value that completes the bar. Zero, negative or invalid becomes `100`. |
+| `variant` | `string` | `primary` | `primary`, `success`, `caution` or `danger`. |
+| `size` | `string` | `md` | `sm` (4px), `md` (8px) or `lg` (12px). |
+| `label-placement` | `string` | `top` | `top` or `inline`. |
+| `label` | `string` | `Progress bar` | Visible label and accessible name. The default is only used as `aria-label` and does not appear on screen. |
+| `value-text` | `string` | `''` | Text in place of the percentage, also used as `aria-valuetext`. Ignored in indeterminate mode. |
+| `caption` | `string` | `''` | Caption below the track, announced when it changes. |
+| `hide-label` | `boolean` | `false` | Hides the visible label; `label` still names the bar. |
+| `hide-value` | `boolean` | `false` | Hides the value next to the label. |
 
-## Uso
+## Usage
 
 ### Web Component
 
 ```html
 <lui-progress-bar
   value="40"
-  label="Enviando arquivos"
-  caption="8 de 20 arquivos"
+  label="Uploading files"
+  caption="8 of 20 files"
 ></lui-progress-bar>
 
 <lui-progress-bar
   value="3.2"
   max="10"
-  value-text="3,2 GB de 10 GB"
-  label="Armazenamento"
+  value-text="3.2 GB of 10 GB"
+  label="Storage"
 ></lui-progress-bar>
 
-<!-- Indeterminado -->
-<lui-progress-bar label="Carregando"></lui-progress-bar>
+<!-- Indeterminate -->
+<lui-progress-bar label="Loading"></lui-progress-bar>
 ```
 
-### Classe CSS
+### CSS class
 
-Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value`, sempre em percentual da trilha, e os atributos ARIA ficam por sua conta:
+Without the Web Component, the fill width comes from `--lui-progress-bar-value`, always as a percentage of the track, and the ARIA attributes are up to you:
 
-- `role="progressbar"` na trilha (`.progress-bar__track`), com `aria-valuemin`, `aria-valuemax` e `aria-valuenow`. No indeterminado, omita `aria-valuenow`.
-- Um nome: `aria-labelledby` apontando para o rótulo, ou `aria-label` quando não há rótulo.
-- Para outras unidades, calcule `value / max` para a variável e use `aria-valuetext` com o texto exibido.
-- A legenda com `aria-live="polite"` no HTML desde o início, mesmo vazia, ligada à trilha por `aria-describedby` quando tiver texto. Vazia, escreva-a sem espaço entre as tags (`<span …></span>`), para não ocupar espaço abaixo da trilha.
+- `role="progressbar"` on the track (`.progress-bar__track`), with `aria-valuemin`, `aria-valuemax` and `aria-valuenow`. In indeterminate mode, omit `aria-valuenow`.
+- A name: `aria-labelledby` pointing to the label, or `aria-label` when there is no label.
+- For other units, compute `value / max` for the variable and use `aria-valuetext` with the displayed text.
+- The caption with `aria-live="polite"` in the HTML from the start, even when empty, linked to the track through `aria-describedby` when it has text. When empty, write it with no space between the tags (`<span …></span>`), so it takes no space below the track.
 
 ```html
 <div class="progress-bar progress-bar--md progress-bar--primary">
-  <span class="progress-bar__label" id="upload-label">Enviando arquivos</span>
+  <span class="progress-bar__label" id="upload-label">Uploading files</span>
   <span class="progress-bar__value" aria-hidden="true">40%</span>
   <div
     class="progress-bar__track"
@@ -84,8 +84,8 @@ Sem o Web Component, a largura do preenchimento vem de `--lui-progress-bar-value
   >
     <span class="progress-bar__indicator" style="--lui-progress-bar-value: 40%"></span>
   </div>
-  <span class="progress-bar__caption" id="upload-caption" aria-live="polite">8 de 20 arquivos</span>
+  <span class="progress-bar__caption" id="upload-caption" aria-live="polite">8 of 20 files</span>
 </div>
 ```
 
-Modificadores: `progress-bar--{primary|success|caution|danger}`, `progress-bar--{sm|md|lg}`, `progress-bar--inline` e `progress-bar--indeterminate`.
+Modifiers: `progress-bar--{primary|success|caution|danger}`, `progress-bar--{sm|md|lg}`, `progress-bar--inline` and `progress-bar--indeterminate`.

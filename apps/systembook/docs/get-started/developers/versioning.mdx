@@ -1,12 +1,12 @@
 ---
 title: "Versioning"
-subtitle: "Como as versões do Let's UI são numeradas, publicadas e registradas."
+subtitle: "How Let's UI versions are numbered, published and recorded."
 order: 3
 ---
 
-## Uma versão para os três pacotes
+## One version for the three packages
 
-`@lets-ui/tokens`, `@lets-ui/styles` e `@lets-ui/components` são publicados **sempre juntos e com o mesmo número**. Quando um muda, os três sobem de versão. Assim, a combinação certa é sempre a de números iguais: `@lets-ui/styles@1.13.1` com `@lets-ui/components@1.13.1`.
+`@lets-ui/tokens`, `@lets-ui/styles` and `@lets-ui/components` are published **always together and with the same number**. When one changes, all three get a new version. So the right combination is always the one with matching numbers: `@lets-ui/styles@1.13.1` with `@lets-ui/components@1.13.1`.
 
 ```json
 {
@@ -17,22 +17,22 @@ order: 3
 }
 ```
 
-## Versionamento semântico
+## Semantic versioning
 
-O número segue o [Semantic Versioning](https://semver.org/lang/pt-BR/): `maior.menor.correção`.
+The number follows [Semantic Versioning](https://semver.org/): `major.minor.patch`.
 
-| Versão | Quando sobe | Exemplos |
+| Version | When it goes up | Examples |
 | --- | --- | --- |
-| **Correção** (`1.13.0` → `1.13.1`) | Correções que não mudam a API. | Um bug de foco, um ajuste de contraste, um texto acessível corrigido. |
-| **Menor** (`1.12` → `1.13`) | Novidades compatíveis com o que já existe. | Um componente novo, um atributo novo, uma variante nova. |
-| **Maior** (`1.x` → `2.0`) | Mudanças que podem quebrar o seu código. | Remover ou renomear um atributo, um evento, uma classe CSS ou uma custom property documentada. |
+| **Patch** (`1.13.0` → `1.13.1`) | Fixes that do not change the API. | A focus bug, a contrast adjustment, a corrected accessible text. |
+| **Minor** (`1.12` → `1.13`) | New features compatible with what already exists. | A new component, a new attribute, a new variant. |
+| **Major** (`1.x` → `2.0`) | Changes that can break your code. | Removing or renaming a documented attribute, event, CSS class or custom property. |
 
-Com o `^` no `package.json`, você recebe correções e novidades automaticamente, e uma versão maior só entra quando você atualiza de propósito. Pela CDN, o `@1` na URL tem o mesmo efeito. Veja a [Installation](./installation.mdx).
+With `^` in `package.json`, you get fixes and new features automatically, and a major version only comes in when you upgrade on purpose. Through the CDN, the `@1` in the URL has the same effect. See [Installation](./installation.mdx).
 
-## Onde ver o que mudou
+## Where to see what changed
 
-- O [CHANGELOG](https://github.com/mateusvillain/lets-ui/blob/main/CHANGELOG.md) lista cada versão, dividida em **Added**, **Changed**, **Fixed** e **Removed**.
-- As [releases no GitHub](https://github.com/mateusvillain/lets-ui/releases) trazem as mesmas notas, com a tag de cada versão.
-- Nesta documentação, um componente que mudou de comportamento tem a página atualizada na mesma versão.
+- The [CHANGELOG](https://github.com/mateusvillain/lets-ui/blob/main/CHANGELOG.md) lists every version, split into **Added**, **Changed**, **Fixed** and **Removed**.
+- The [releases on GitHub](https://github.com/mateusvillain/lets-ui/releases) carry the same notes, with the tag of each version.
+- In this documentation, a component whose behavior changed has its page updated in the same version.
 
-Antes de atualizar para uma versão maior, leia as seções **Changed** e **Removed** dela: é onde ficam as mudanças que pedem ajuste no seu código.
+Before upgrading to a major version, read its **Changed** and **Removed** sections: that is where the changes that need adjustments in your code are.

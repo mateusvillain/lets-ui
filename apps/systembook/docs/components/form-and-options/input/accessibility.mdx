@@ -3,30 +3,30 @@ title: "Accessibility"
 order: 3
 ---
 
-## Teclado
+## Keyboard
 
-| Tecla | Ação |
+| Key | Action |
 | --- | --- |
-| `Tab` / `Shift+Tab` | Entra e sai do campo. |
-| `Seta para cima/baixo` | Em campos numéricos, aumenta e diminui o valor. |
-| `Enter` | Envia o formulário, quando há um. |
+| `Tab` / `Shift+Tab` | Enters and leaves the field. |
+| `Up/Down Arrow` | In number fields, increases and decreases the value. |
+| `Enter` | Submits the form, when there is one. |
 
-## Leitor de tela
+## Screen reader
 
-- A label é associada ao campo, e o leitor anuncia o nome ao entrar nele.
-- O hint e a mensagem de erro são lidos junto do campo (`aria-describedby`).
-- Em erro, o campo é anunciado como inválido (`aria-invalid`). Campos obrigatórios são anunciados como obrigatórios.
-- Os botões de mostrar senha e de aumentar e diminuir têm nomes próprios. Troque os textos padrão (em inglês) para o idioma do produto.
+- The label is associated with the field, and the reader announces the name on entering it.
+- The hint and the error message are read along with the field (`aria-describedby`).
+- On error, the field is announced as invalid (`aria-invalid`). Required fields are announced as required.
+- The show password and increase and decrease buttons have their own names. Change the default texts (in English) to the product's language.
 
 ## Visual
 
-- O texto digitado e a label têm contraste mínimo de 4,5:1, e a borda do campo, de 3:1.
-- O estado de erro usa texto e ícone além da cor.
-- O foco é visível com um anel ao redor do campo.
+- The typed text and the label have a minimum contrast of 4.5:1, and the field border, 3:1.
+- The error state uses text and an icon in addition to color.
+- Focus is visible with a ring around the field.
 
-## Para designers
+## For designers
 
-- Nunca use só o placeholder como label.
-- Escreva mensagens de erro que expliquem como corrigir.
-- Use os atributos `type` e `inputmode` certos: eles melhoram a experiência de quem usa teclado virtual ou tecnologia assistiva.
-- Permita que gerenciadores de senha e preenchimento automático funcionem.
+- Never use the placeholder alone as the label.
+- Write error messages that explain how to fix the problem.
+- Use the right `type` and `inputmode` attributes: they improve the experience for people using a virtual keyboard or assistive technology.
+- Let password managers and autofill work.
