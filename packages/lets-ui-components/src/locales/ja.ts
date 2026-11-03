@@ -13,6 +13,7 @@ import type { Translation } from '../utils/i18n.js';
 export const ja: Translation = {
   $code: 'ja',
   $name: '日本語',
+  $dir: 'ltr',
 
   // Full-width parentheses, as Japanese text writes them.
   'form.optionalText': '（任意）',

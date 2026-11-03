@@ -123,7 +123,7 @@ $gap: fixed(8); // between trigger and content
   }
 
   &--left &__content {
-    text-align: left;
+    text-align: start;
     right: calc(100% + $gap);
     top: 50%;
     transform: translate(fixed(8), -50%);
@@ -138,7 +138,7 @@ $gap: fixed(8); // between trigger and content
   }
 
   &--right &__content {
-    text-align: left;
+    text-align: start;
     left: calc(100% + $gap);
     top: 50%;
     transform: translate(calc(fixed(8) * -1), -50%);

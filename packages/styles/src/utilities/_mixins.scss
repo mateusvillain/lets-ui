@@ -330,3 +330,14 @@
     text-decoration: none;
   }
 }
+
+// Mirror in right-to-left
+//  @include mirror-in-rtl;
+// For an icon that points along the reading direction — a chevron to the next
+// page, a submenu arrow. Icons that depict an object (a clock, a checkmark,
+// the external-link box) keep their drawing.
+@mixin mirror-in-rtl {
+  &:dir(rtl) {
+    transform: scaleX(-1);
+  }
+}

@@ -2,6 +2,7 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { property, state } from 'lit/decorators.js';
 import styles from './tabs.scss?inline';
+import { ltrKey } from '../../utils/direction.js';
 
 interface TabData {
   label: string;
@@ -96,7 +97,8 @@ export class LuiTabs extends LitElement {
       !el.hasAttribute('disabled') &&
       el.getAttribute('aria-disabled') !== 'true';
 
-    switch (e.key) {
+    // Right to left, the next tab sits to the left.
+    switch (ltrKey(e.key, this)) {
       case 'ArrowLeft':
         e.preventDefault();
         for (let i = currentIndex - 1; i >= 0; i--) {

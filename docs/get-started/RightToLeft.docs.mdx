@@ -1,0 +1,106 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
+
+<Meta title="Get started/RTL" />
+
+<Lang lang="pt-BR">
+# RTL
+
+Árabe, hebraico, persa e urdu são escritos da direita para a esquerda (RTL, _right to left_). Numa página nesses idiomas, a interface inteira se espelha: o texto começa à direita, o botão de voltar aponta para a direita, a próxima aba fica à esquerda.
+
+Os componentes seguem o atributo `dir` do ancestral mais próximo, o `<html>` incluído. Não há nada para registrar:
+
+```html
+<html lang="ar" dir="rtl">
+  <lui-tabs>…</lui-tabs>
+</html>
+```
+
+Trocar o `dir` com a página aberta atualiza os componentes na hora. O `dir` vale também para um trecho: `<div dir="rtl">` espelha só o que está dentro dele.
+
+O `dir` não depende do `lang`. Declare os dois: o `lang` escolhe a tradução (veja Localização) e o `dir` escolhe o lado. Todo dicionário traz o `$dir` do idioma, para o seletor de idioma da aplicação ajustar os dois juntos — mas os componentes leem só o atributo `dir`, que é o que move o layout.
+
+## O que muda
+
+| Componente          | Da direita para a esquerda                                                              |
+| ------------------- | --------------------------------------------------------------------------------------- |
+| Layout em geral     | Margens, recuos, bordas e alinhamento do texto trocam de lado                           |
+| `lui-tabs`          | `←` vai para a próxima aba e `→` para a anterior                                        |
+| `lui-radio-group`   | `←` vai para o próximo item; `↑` e `↓` não mudam                                        |
+| `lui-dropdown-menu` | O submenu abre à esquerda, e `←` entra nele                                             |
+| `lui-date-picker`   | O calendário começa à direita; `←` vai para o dia seguinte; as setas de mês se espelham |
+| `lui-otp-input`     | A primeira caixa fica à direita                                                         |
+| `lui-pagination`    | As setas de anterior e próxima se espelham                                              |
+| `lui-switch`        | Ligado, o indicador vai para a esquerda                                                 |
+| `lui-drawer`        | Entra pela esquerda                                                                     |
+| `lui-progress-bar`  | Enche da direita para a esquerda                                                        |
+| `lui-float`         | `start` e `end` trocam de lado                                                          |
+| `lui-tooltip`       | `position="start"` e `"end"` trocam de lado; `left` e `right` continuam onde estão      |
+| `lui-scroll-area`   | A rolagem horizontal começa pela direita, e as sombras de borda acompanham              |
+| `lui-link`          | O ícone de link externo se espelha                                                      |
+| `.toast-region`     | `--top-start`, `--bottom-end` e afins trocam de lado; `--top-right` e afins continuam   |
+
+## O que não muda
+
+- **Código.** O `lui-code-block` continua da esquerda para a direita, com os números de linha à esquerda: código se lê assim em qualquer idioma.
+- **Ícones que representam um objeto**, como o de verificado, o relógio ou o calendário. Só se espelham os que apontam na direção da leitura.
+- **`left` e `right` escritos por você.** `position="left"` no tooltip e `--top-right` na região de toast são lados da tela. Para seguir a direção, use `start` e `end`.
+- **Utilitários de espaçamento `l` e `r`.** `.m-l-fixed-8` é sempre margem à esquerda. Para o início e o fim da linha, use `s` e `e`: `.m-s-fixed-8`, `.p-e-fluid-16`.
+
+## Observações
+
+- **Datas digitadas.** No `lui-date-picker` com `editable`, a ordem dos campos vem do `locale` e o navegador posiciona os números pelo algoritmo bidirecional do Unicode. Valide com quem lê o idioma antes de publicar.
+- **Shadow DOM.** O `dir` é lido através de shadow roots, mas uma troca de `dir` _dentro_ de um shadow root não é observada; declare a direção no documento.
+
+</Lang>
+
+<Lang lang="en-US">
+# RTL
+
+Arabic, Hebrew, Persian and Urdu are written right to left (RTL). On a page in those languages the whole interface mirrors: text starts on the right, the back button points right, the next tab sits to the left.
+
+Components follow the `dir` attribute of their closest ancestor, `<html>` included. There is nothing to register:
+
+```html
+<html lang="ar" dir="rtl">
+  <lui-tabs>…</lui-tabs>
+</html>
+```
+
+Changing `dir` while the page is open updates the components at once. `dir` also works on a section: `<div dir="rtl">` mirrors only what is inside it.
+
+`dir` does not depend on `lang`. Declare both: `lang` picks the translation (see Localization) and `dir` picks the side. Every dictionary carries the language's `$dir`, so the application's language switcher can set both together — but components only read the `dir` attribute, which is what moves the layout.
+
+## What changes
+
+| Component           | Right to left                                                                          |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| Layout in general   | Margins, padding, borders and text alignment swap sides                                |
+| `lui-tabs`          | `←` goes to the next tab and `→` to the previous one                                   |
+| `lui-radio-group`   | `←` goes to the next item; `↑` and `↓` don't change                                    |
+| `lui-dropdown-menu` | The submenu opens to the left, and `←` enters it                                       |
+| `lui-date-picker`   | The calendar starts on the right; `←` goes to the next day; the month arrows mirror    |
+| `lui-otp-input`     | The first box sits on the right                                                        |
+| `lui-pagination`    | The previous and next arrows mirror                                                    |
+| `lui-switch`        | When on, the thumb moves to the left                                                   |
+| `lui-drawer`        | Comes in from the left                                                                 |
+| `lui-progress-bar`  | Fills from right to left                                                               |
+| `lui-float`         | `start` and `end` swap sides                                                           |
+| `lui-tooltip`       | `position="start"` and `"end"` swap sides; `left` and `right` stay where they are      |
+| `lui-scroll-area`   | Horizontal scrolling starts from the right, and the edge shadows follow                |
+| `lui-link`          | The external-link icon mirrors                                                         |
+| `.toast-region`     | `--top-start`, `--bottom-end` and the like swap sides; `--top-right` and the like stay |
+
+## What doesn't change
+
+- **Code.** `lui-code-block` stays left to right, with line numbers on the left: code reads that way in any language.
+- **Icons that depict an object**, such as the checkmark, the clock or the calendar. Only the ones that point along the reading direction mirror.
+- **`left` and `right` you write.** `position="left"` on the tooltip and `--top-right` on the toast region are sides of the screen. To follow the direction, use `start` and `end`.
+- **The `l` and `r` spacing utilities.** `.m-l-fixed-8` is always a left margin. For the start and end of the line, use `s` and `e`: `.m-s-fixed-8`, `.p-e-fluid-16`.
+
+## Notes
+
+- **Typed dates.** In `lui-date-picker` with `editable`, the order of the fields comes from the `locale`, and the browser places the numbers through the Unicode bidirectional algorithm. Check with readers of the language before shipping.
+- **Shadow DOM.** `dir` is read across shadow roots, but a `dir` change _inside_ a shadow root is not observed; declare the direction in the document.
+
+</Lang>

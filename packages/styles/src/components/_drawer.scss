@@ -27,21 +27,28 @@ $size: (
 
 .drawer {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+
+  // The drawer comes in from the end of the line: the right on a
+  // left-to-right page, the left on a right-to-left one.
+  inset-block: 0;
+  inset-inline-end: 0;
   z-index: 1050;
   display: flex;
   flex-direction: column;
   width: 100%;
   background-color: bg(surface, neutral);
-  border-radius: radius(xl) radius(none) radius(none) radius(xl);
+  border-start-start-radius: radius(xl);
+  border-end-start-radius: radius(xl);
   box-shadow: none;
   outline: 0;
   transform: translateX(100%);
   transition:
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.3s ease;
+
+  &:dir(rtl) {
+    transform: translateX(-100%);
+  }
 
   &.is-open {
     box-shadow: elevation(overlay);

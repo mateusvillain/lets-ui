@@ -55,8 +55,11 @@ $copy-room: fixed(40);
     color: text(body);
   }
 
+  // Code reads left to right in any language, line numbers first, so the body
+  // keeps that direction on a right-to-left page — the copy button with it.
   &__body {
     position: relative;
+    direction: ltr;
     display: flex;
     align-items: flex-start;
     gap: fluid(16);
@@ -105,21 +108,19 @@ $copy-room: fixed(40);
   & &__copy {
     position: absolute;
     top: fixed(8);
-    right: fixed(8);
+    inset-inline-end: fixed(8);
   }
 
   // The button sits at the right edge, so a tooltip centred under it would
   // spill past the block — off-screen on a phone. It hangs from the button's
   // right edge instead, with the arrow kept under the icon.
   & &__copy .tooltip__content {
-    left: auto;
-    right: fixed(0);
+    inset-inline: auto fixed(0);
     transform: translateY(calc(fixed(8) * -1));
   }
 
   & &__copy .tooltip__content::after {
-    left: auto;
-    right: calc(fixed(40) / 2);
+    inset-inline: auto calc(fixed(40) / 2);
     transform: translateX(50%);
   }
 

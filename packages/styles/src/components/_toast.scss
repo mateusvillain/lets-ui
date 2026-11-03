@@ -120,8 +120,11 @@
   // Default: bottom-center, with breathing room off the viewport edge
   // (mobile/Android convention — see .study/toast.md §10). Other positions
   // are opt-in via the modifiers below.
+  // Physical `left`: translateX is physical too, so the pair centres the
+  // region in either direction.
   inset-block: auto fluid(24);
-  inset-inline: 50% auto;
+  left: 50%;
+  right: auto;
   transform: translateX(-50%);
 
   // Collapsed card-stack: every toast shares the same grid cell. The most
@@ -170,40 +173,43 @@
     }
   }
 
-  &--top-right {
-    inset-block: fluid(24) auto;
-    inset-inline: auto fluid(24);
-    transform: none;
-  }
+  // `left` and `right` are the sides of the screen in any direction; `start`
+  // and `end` follow the writing direction, so `bottom-end` is the right-hand
+  // corner on a left-to-right page and the left-hand one on a right-to-left
+  // page. Centring is the same in both.
+  @each $block, $block-inset in (top: fluid(24) auto, bottom: auto fluid(24)) {
+    &--#{$block}-right {
+      inset-block: $block-inset;
+      left: auto;
+      right: fluid(24);
+      transform: none;
+    }
 
-  &--top-left {
-    inset-block: fluid(24) auto;
-    inset-inline: fluid(24) auto;
-    transform: none;
-  }
+    &--#{$block}-left {
+      inset-block: $block-inset;
+      left: fluid(24);
+      right: auto;
+      transform: none;
+    }
 
-  &--top-center {
-    inset-block: fluid(24) auto;
-    inset-inline: 50% auto;
-    transform: translateX(-50%);
-  }
+    &--#{$block}-start {
+      inset-block: $block-inset;
+      inset-inline: fluid(24) auto;
+      transform: none;
+    }
 
-  &--bottom-right {
-    inset-block: auto fluid(24);
-    inset-inline: auto fluid(24);
-    transform: none;
-  }
+    &--#{$block}-end {
+      inset-block: $block-inset;
+      inset-inline: auto fluid(24);
+      transform: none;
+    }
 
-  &--bottom-left {
-    inset-block: auto fluid(24);
-    inset-inline: fluid(24) auto;
-    transform: none;
-  }
-
-  &--bottom-center {
-    inset-block: auto fluid(24);
-    inset-inline: 50% auto;
-    transform: translateX(-50%);
+    &--#{$block}-center {
+      inset-block: $block-inset;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+    }
   }
 
   @include media-down('1xs') {

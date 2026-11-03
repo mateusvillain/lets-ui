@@ -5,8 +5,6 @@
   box-sizing: border-box;
   width: 100%;
   max-width: var(--lui-container-max-width, #{fn.breakpoint(lg)});
-  padding-left: var(--lui-container-padding, #{fn.fluid(32)});
-  padding-right: var(--lui-container-padding, #{fn.fluid(32)});
-  margin-left: var(--lui-container-margin-auto, auto);
-  margin-right: var(--lui-container-margin-auto, auto);
+  padding-inline: var(--lui-container-padding, #{fn.fluid(32)});
+  margin-inline: var(--lui-container-margin-auto, auto);
 }

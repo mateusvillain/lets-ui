@@ -32,7 +32,10 @@ a.link {
     @include font-scale(body--sm);
   }
 
+  // The arrow leaves the box towards the end of the line.
   .link__external-icon {
+    @include mirror-in-rtl;
+
     display: inline-block;
     height: 1em;
     width: auto;

@@ -35,6 +35,7 @@ import {
   readMask,
 } from './mask.js';
 import { localized, resolveLang, translate } from '../../utils/i18n.js';
+import { ltrKey } from '../../utils/direction.js';
 
 const ICON_CALENDAR = html`
   <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -883,7 +884,9 @@ export class LuiDatePicker extends LitElement {
       PageUp: () => addMonths(current, e.shiftKey ? -12 : -1),
       PageDown: () => addMonths(current, e.shiftKey ? 12 : 1),
     };
-    const move = moves[e.key];
+    // The calendar is a table, which lays its columns out right to left on a
+    // right-to-left page: the next day is to the left.
+    const move = moves[ltrKey(e.key, this)];
     if (!move) return;
     e.preventDefault();
     this._activeDate = clampDate(move(), this._minDate, this._maxDate);
@@ -1561,7 +1564,7 @@ export class LuiDatePicker extends LitElement {
       PageUp: -page,
       PageDown: page,
     };
-    return moves[e.key];
+    return moves[ltrKey(e.key, this)];
   }
 
   private _handleYearGridKeydown(e: KeyboardEvent) {

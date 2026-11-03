@@ -13,7 +13,7 @@ lui-menu-divider {
   &__panel {
     position: absolute;
     top: calc(100% + fluid(4));
-    left: 0;
+    inset-inline-start: 0;
     z-index: 100;
     min-width: 200px;
     max-width: max-content;
@@ -55,7 +55,7 @@ lui-menu-divider {
   border: 0;
   color: text(body);
   cursor: pointer;
-  text-align: left;
+  text-align: start;
 
   @include font-scale(body--lg);
   @include states(primary);
@@ -90,6 +90,8 @@ lui-menu-divider {
   }
 
   &__chevron {
+    @include mirror-in-rtl;
+
     display: inline-flex;
     align-items: center;
     color: icon(neutral);
@@ -102,8 +104,13 @@ lui-menu-divider {
 
   > .dropdown-menu__panel {
     top: 0;
-    left: calc(100% + fluid(2));
+    inset-inline-start: calc(100% + fluid(2));
     transform: translateX(calc(fluid(4) * -1));
+
+    // The submenu slides in from the side it opens on.
+    &:dir(rtl) {
+      transform: translateX(fluid(4));
+    }
   }
 
   &:hover > .dropdown-menu__panel,

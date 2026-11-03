@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import styles from './dropdown-menu.scss?inline';
+import { ltrKey } from '../../utils/direction.js';
 
 const CHEVRON_RIGHT = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" focusable="false" aria-hidden="true"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
@@ -267,7 +268,8 @@ export class LuiDropdownMenu extends LitElement {
     ) as HTMLElement | null;
     const currentIndex = focused ? items.indexOf(focused) : -1;
 
-    switch (e.key) {
+    // Right to left, a submenu opens to the left, so ArrowLeft enters it.
+    switch (ltrKey(e.key, this)) {
       case 'ArrowDown':
         e.preventDefault();
         items[(currentIndex + 1) % items.length]?.focus();

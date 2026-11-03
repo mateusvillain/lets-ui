@@ -16,7 +16,7 @@
   height: 100vh;
   line-height: 1.5rem;
   overflow-y: auto;
-  border-right: 1px solid stroke(neutral);
+  border-inline-end: 1px solid stroke(neutral);
   grid-area: sidebar;
 
   img {

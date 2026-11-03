@@ -304,6 +304,13 @@ describe('dictionaries', () => {
 
   const shipped = { ptBR, ptPT, es, fr, de, ja, it: italian, zhCN, zhTW };
 
+  it.each(Object.entries({ en, ...shipped }))(
+    'declares the writing direction of %s',
+    (_, dictionary) => {
+      expect(['ltr', 'rtl']).toContain(dictionary.$dir);
+    }
+  );
+
   it.each(Object.entries(shipped))(
     'ships %s with exactly the English terms',
     (_, dictionary) => {

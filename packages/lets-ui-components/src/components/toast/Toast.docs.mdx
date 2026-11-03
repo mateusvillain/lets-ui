@@ -192,7 +192,7 @@ Por padrão, `.toast-region` fica fixo na parte inferior central da tela, com ~2
 </div>
 ```
 
-Modificadores disponíveis: `--top-left`, `--top-center`, `--top-right`, `--bottom-left`, `--bottom-center` (equivalente ao padrão), `--bottom-right`. Em telas `< 768px` a região sempre ocupa a largura toda (menos 16px de margem em cada lado) e fica ancorada embaixo, respeitando `env(safe-area-inset-bottom)`, independentemente do modificador escolhido.
+Modificadores disponíveis: `--top-left`, `--top-center`, `--top-right`, `--bottom-left`, `--bottom-center` (equivalente ao padrão), `--bottom-right`. `left` e `right` são lados da tela; para seguir a direção do texto, use `--top-start`, `--top-end`, `--bottom-start` e `--bottom-end`, que trocam de lado numa página `dir="rtl"`. Em telas `< 768px` a região sempre ocupa a largura toda (menos 16px de margem em cada lado) e fica ancorada embaixo, respeitando `env(safe-area-inset-bottom)`, independentemente do modificador escolhido.
 
 </Lang>
 
@@ -211,7 +211,7 @@ By default, `.toast-region` is fixed at the bottom center of the screen, with ~2
 </div>
 ```
 
-Available modifiers: `--top-left`, `--top-center`, `--top-right`, `--bottom-left`, `--bottom-center` (equivalent to the default), `--bottom-right`. On screens `< 768px` the region always takes the full width (minus 16px of margin on each side) and is anchored at the bottom, respecting `env(safe-area-inset-bottom)`, regardless of the chosen modifier.
+Available modifiers: `--top-left`, `--top-center`, `--top-right`, `--bottom-left`, `--bottom-center` (equivalent to the default), `--bottom-right`. `left` and `right` are sides of the screen; to follow the text direction, use `--top-start`, `--top-end`, `--bottom-start` and `--bottom-end`, which swap sides on a `dir="rtl"` page. On screens `< 768px` the region always takes the full width (minus 16px of margin on each side) and is anchored at the bottom, respecting `env(safe-area-inset-bottom)`, regardless of the chosen modifier.
 
 </Lang>
 

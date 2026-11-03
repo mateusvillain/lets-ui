@@ -8,7 +8,7 @@ export default {
     text: { control: 'text' },
     position: {
       control: { type: 'select' },
-      options: ['top', 'bottom', 'left', 'right'],
+      options: ['top', 'bottom', 'left', 'right', 'start', 'end'],
     },
     label: { control: 'text' },
   },

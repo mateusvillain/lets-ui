@@ -41,6 +41,11 @@
 
 .pagination__item--direction {
   color: icon(neutral);
+
+  // Previous points back along the line of reading: right, right to left.
+  svg {
+    @include mirror-in-rtl;
+  }
 }
 
 // Specificity 0,2,0 — above the 0,1,0 resting colour `states()` sets, below its

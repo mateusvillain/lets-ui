@@ -15,7 +15,7 @@ import { en } from '../locales/en.js';
  * 3. the built-in English text.
  */
 
-export type TermKey = Exclude<keyof typeof en, '$code' | '$name'>;
+export type TermKey = Exclude<keyof typeof en, '$code' | '$name' | '$dir'>;
 
 /** A complete dictionary: every term, in one language. */
 export type Translation = {
@@ -23,6 +23,12 @@ export type Translation = {
   $code: string;
   /** The language's name, in that language. */
   $name: string;
+  /**
+   * The language's writing direction. Information for the application — a
+   * language switcher sets `<html dir>` from it — not something components
+   * read: they follow the `dir` attribute, which is what lays the page out.
+   */
+  $dir?: 'ltr' | 'rtl';
 } & Record<TermKey, string>;
 
 /**
@@ -30,9 +36,11 @@ export type Translation = {
  * missing term falls through to English, so a partial dictionary overrides
  * only the text it names.
  */
-export type PartialTranslation = { $code: string; $name?: string } & Partial<
-  Record<TermKey, string>
->;
+export type PartialTranslation = {
+  $code: string;
+  $name?: string;
+  $dir?: 'ltr' | 'rtl';
+} & Partial<Record<TermKey, string>>;
 
 // Keyed by the lowercased code: `lang` is case-insensitive.
 const translations = new Map<string, PartialTranslation>([['en', en]]);

@@ -15,6 +15,7 @@ import type { Translation } from '../utils/i18n.js';
 export const zhTW: Translation = {
   $code: 'zh-TW',
   $name: '繁體中文（台灣）',
+  $dir: 'ltr',
 
   // Full-width parentheses, as Chinese text writes them.
   'form.optionalText': '（選填）',

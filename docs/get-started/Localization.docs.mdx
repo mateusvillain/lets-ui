@@ -84,7 +84,7 @@ Para um texto em um único elemento, use o atributo — a camada 1.
 
 ## Adicionando um idioma
 
-Para um idioma que não vem incluído, uma tradução é um objeto com o código BCP 47, o nome do idioma nele mesmo e todos os termos. Em TypeScript, o tipo `Translation` acusa qualquer termo faltando:
+Para um idioma que não vem incluído, uma tradução é um objeto com o código BCP 47, o nome do idioma nele mesmo, a direção da escrita e todos os termos. Em TypeScript, o tipo `Translation` acusa qualquer termo faltando:
 
 ```ts
 import { registerTranslation, type Translation } from '@lets-ui/components';
@@ -92,6 +92,7 @@ import { registerTranslation, type Translation } from '@lets-ui/components';
 const ko: Translation = {
   $code: 'ko',
   $name: '한국어',
+  $dir: 'ltr',
   'form.optionalText': '(선택 사항)',
   'form.errorText': '필수 입력 항목입니다.',
   // …
@@ -101,6 +102,16 @@ registerTranslation(ko);
 ```
 
 A lista completa de termos, com o texto em inglês de cada um, está em `@lets-ui/components/locales/en`. Marcadores como `{index}` são preenchidos pelo componente e precisam aparecer na tradução.
+
+`$dir` é opcional e informa a direção da escrita do idioma, `ltr` ou `rtl`. Os componentes não o leem: a direção vem do atributo `dir` (veja RTL). Ele serve ao seletor de idioma da aplicação, que ajusta `lang` e `dir` juntos:
+
+```js
+function setLanguage(translation) {
+  registerTranslation(translation);
+  document.documentElement.lang = translation.$code;
+  document.documentElement.dir = translation.$dir ?? 'ltr';
+}
+```
 
 ## Componentes cobertos
 
@@ -207,7 +218,7 @@ For a text on a single element, use the attribute — layer 1.
 
 ## Adding a language
 
-For a language that is not included, a translation is an object with the BCP 47 code, the language's name in that language, and every term. In TypeScript, the `Translation` type flags any missing term:
+For a language that is not included, a translation is an object with the BCP 47 code, the language's name in that language, its writing direction, and every term. In TypeScript, the `Translation` type flags any missing term:
 
 ```ts
 import { registerTranslation, type Translation } from '@lets-ui/components';
@@ -215,6 +226,7 @@ import { registerTranslation, type Translation } from '@lets-ui/components';
 const ko: Translation = {
   $code: 'ko',
   $name: '한국어',
+  $dir: 'ltr',
   'form.optionalText': '(선택 사항)',
   'form.errorText': '필수 입력 항목입니다.',
   // …
@@ -224,6 +236,16 @@ registerTranslation(ko);
 ```
 
 The full list of terms, with the English text of each, is in `@lets-ui/components/locales/en`. Placeholders such as `{index}` are filled in by the component and must appear in the translation.
+
+`$dir` is optional and states the language's writing direction, `ltr` or `rtl`. Components don't read it: the direction comes from the `dir` attribute (see RTL). It is there for the application's language switcher, which sets `lang` and `dir` together:
+
+```js
+function setLanguage(translation) {
+  registerTranslation(translation);
+  document.documentElement.lang = translation.$code;
+  document.documentElement.dir = translation.$dir ?? 'ltr';
+}
+```
 
 ## Covered components
 

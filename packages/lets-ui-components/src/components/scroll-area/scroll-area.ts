@@ -1,6 +1,7 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import styles from './scroll-area.scss?inline';
+import { DirectionController, isRtl } from '../../utils/direction.js';
 
 type Orientation = 'vertical' | 'horizontal' | 'both';
 type ScrollbarVisibility = 'auto' | 'always' | 'hover' | 'hidden';
@@ -15,8 +16,37 @@ function resolveSize(value: string): string {
   return /^\d+(\.\d+)?$/.test(value.trim()) ? `${value}px` : value;
 }
 
+const THRESHOLD = 1;
+
+// Which edges the viewport rests against. Right to left, `scrollLeft` starts at
+// 0 on the right edge and grows negative towards the left, so the two
+// horizontal checks trade places.
+function edges(vp: HTMLElement) {
+  const {
+    scrollTop,
+    scrollLeft,
+    scrollHeight,
+    scrollWidth,
+    clientHeight,
+    clientWidth,
+  } = vp;
+  const atStart = Math.abs(scrollLeft) <= THRESHOLD;
+  const atEnd = Math.abs(scrollLeft) + clientWidth >= scrollWidth - THRESHOLD;
+  const rtl = isRtl(vp);
+  return {
+    atTop: scrollTop <= THRESHOLD,
+    atBottom: scrollTop + clientHeight >= scrollHeight - THRESHOLD,
+    atLeft: rtl ? atEnd : atStart,
+    atRight: rtl ? atStart : atEnd,
+  };
+}
+
 export class LuiScrollArea extends LitElement {
   static styles = unsafeCSS(styles);
+
+  // A `dir` change moves the edges the fades read, so it re-renders, and
+  // `updated()` repaints them.
+  private _direction = new DirectionController(this);
 
   @property() orientation: Orientation = 'vertical';
   @property({ attribute: 'scrollbar-visibility' })
@@ -136,20 +166,7 @@ export class LuiScrollArea extends LitElement {
     const vp = this._viewport;
     if (!sr || !vp) return;
 
-    const {
-      scrollTop,
-      scrollLeft,
-      scrollHeight,
-      scrollWidth,
-      clientHeight,
-      clientWidth,
-    } = vp;
-    const threshold = 1;
-
-    const atTop = scrollTop <= threshold;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - threshold;
-    const atLeft = scrollLeft <= threshold;
-    const atRight = scrollLeft + clientWidth >= scrollWidth - threshold;
+    const { atTop, atBottom, atLeft, atRight } = edges(vp);
 
     const fadeSides = this._parsedFadeSides;
     const useFade = fadeSides.size > 0;
@@ -196,12 +213,7 @@ export class LuiScrollArea extends LitElement {
       clientHeight,
       clientWidth,
     } = vp;
-    const threshold = 1;
-
-    const atTop = scrollTop <= threshold;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - threshold;
-    const atLeft = scrollLeft <= threshold;
-    const atRight = scrollLeft + clientWidth >= scrollWidth - threshold;
+    const { atTop, atBottom, atLeft, atRight } = edges(vp);
 
     this._updateIndicators();
 

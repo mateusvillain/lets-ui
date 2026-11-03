@@ -13,6 +13,7 @@
 export const en = {
   $code: 'en',
   $name: 'English',
+  $dir: 'ltr' as const,
 
   'form.optionalText': '(optional)',
   'form.errorText': 'This field is required.',

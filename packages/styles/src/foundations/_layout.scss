@@ -51,7 +51,7 @@
 @include mx.media-down(lg) {
   .main-content {
     padding: fn.fixed(16);
-    margin-left: 0;
+    margin-inline-start: 0;
     max-width: none;
   }
 
@@ -72,7 +72,7 @@
   .main-content {
     grid-area: content;
     padding: fn.fluid(40);
-    margin-left: 280px;
+    margin-inline-start: 280px;
   }
 
   .layout {

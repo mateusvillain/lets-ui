@@ -5,6 +5,7 @@ import styles from './radio-group.scss?inline';
 import { nameProperty } from '../../utils/form.js';
 import { LuiRadio } from '../radio/radio.js';
 import { localized } from '../../utils/i18n.js';
+import { ltrKey } from '../../utils/direction.js';
 
 export class LuiRadioGroup extends LitElement {
   static styles = unsafeCSS(styles);
@@ -157,7 +158,9 @@ export class LuiRadioGroup extends LitElement {
     if (enabled.length === 0) return;
 
     const currentIndex = enabled.indexOf(target);
-    const isForward = e.key === 'ArrowDown' || e.key === 'ArrowRight';
+    // Right to left, the next radio of a row sits to the left.
+    const key = ltrKey(e.key, this);
+    const isForward = key === 'ArrowDown' || key === 'ArrowRight';
     const direction = isForward ? 1 : -1;
     const nextIndex =
       (currentIndex + direction + enabled.length) % enabled.length;

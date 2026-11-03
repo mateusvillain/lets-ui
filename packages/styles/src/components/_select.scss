@@ -73,7 +73,7 @@
     @include field.size-body('native-select', $props);
 
     .native-select__arrow {
-      right: map.get($props, padding);
+      inset-inline-end: map.get($props, padding);
     }
 
     .native-select__input {
@@ -96,7 +96,7 @@
       padding: calc(#{map.get($props, padding)} - 1px);
 
       .native-select__arrow {
-        right: calc(#{map.get($props, padding)} - 1px);
+        inset-inline-end: calc(#{map.get($props, padding)} - 1px);
       }
 
       .native-select__input {

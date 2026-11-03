@@ -5,6 +5,7 @@ import { live } from 'lit/directives/live.js';
 import styles from './otp-input.scss?inline';
 import { nameProperty } from '../../utils/form.js';
 import { localized } from '../../utils/i18n.js';
+import { ltrKey } from '../../utils/direction.js';
 
 const DIGIT = /^\d$/;
 const VISIBLE = /^\S$/;
@@ -224,8 +225,7 @@ export class LuiOtpInput extends LitElement {
       case 'ArrowRight': {
         e.preventDefault();
         // In a right-to-left layout the first box sits on the right.
-        const rtl = getComputedStyle(this).direction === 'rtl';
-        const forward = (e.key === 'ArrowRight') !== rtl;
+        const forward = ltrKey(e.key, this) === 'ArrowRight';
         this._focusField(index + (forward ? 1 : -1));
         return;
       }

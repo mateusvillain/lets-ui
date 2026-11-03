@@ -10,10 +10,8 @@ $-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
   box-sizing: border-box;
   width: 100%;
   max-width: fn.breakpoint(lg);
-  padding-left: fn.fluid(32);
-  padding-right: fn.fluid(32);
-  margin-left: auto;
-  margin-right: auto;
+  padding-inline: fn.fluid(32);
+  margin-inline: auto;
 
   &--xs {
     max-width: 480px;
@@ -40,19 +38,16 @@ $-fluid-tokens: 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80;
   }
 
   &--no-center {
-    margin-left: 0;
-    margin-right: 0;
+    margin-inline: 0;
   }
 
   &--padding-0 {
-    padding-left: 0;
-    padding-right: 0;
+    padding-inline: 0;
   }
 
   @each $n in $-fluid-tokens {
     &--padding-#{$n} {
-      padding-left: fn.fluid($n);
-      padding-right: fn.fluid($n);
+      padding-inline: fn.fluid($n);
     }
   }
 }

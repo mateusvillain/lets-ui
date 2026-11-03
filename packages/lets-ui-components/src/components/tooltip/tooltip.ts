@@ -4,8 +4,17 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './tooltip.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
 import { TooltipDismissController } from '../../utils/tooltip-dismiss.js';
+import { DirectionController, physicalSide } from '../../utils/direction.js';
 
-const VALID_POSITIONS = new Set(['top', 'bottom', 'left', 'right']);
+// `start` and `end` follow the writing direction; `left` and `right` stay put.
+const VALID_POSITIONS = new Set([
+  'top',
+  'bottom',
+  'left',
+  'right',
+  'start',
+  'end',
+]);
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), lui-button, lui-close-button, lui-icon-button, lui-link';
 
@@ -85,6 +94,9 @@ export class LuiTooltip extends HostAriaMixin(LitElement) {
 
   private _baseId: string;
 
+  // `start` and `end` resolve to a side at render time.
+  private _direction = new DirectionController(this);
+
   private _dismiss = new TooltipDismissController(this, () =>
     this.shadowRoot?.querySelector('.tooltip')
   );
@@ -95,9 +107,11 @@ export class LuiTooltip extends HostAriaMixin(LitElement) {
   }
 
   get _position(): 'top' | 'bottom' | 'left' | 'right' {
-    return VALID_POSITIONS.has(this.position)
-      ? (this.position as 'top' | 'bottom' | 'left' | 'right')
-      : 'top';
+    const position = VALID_POSITIONS.has(this.position) ? this.position : 'top';
+    if (position === 'start' || position === 'end') {
+      return physicalSide(this, position);
+    }
+    return position as 'top' | 'bottom' | 'left' | 'right';
   }
 
   // A slotted trigger with nothing focusable in it, such as plain text or a

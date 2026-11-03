@@ -13,6 +13,7 @@ import type { Translation } from '../utils/i18n.js';
 export const it: Translation = {
   $code: 'it',
   $name: 'Italiano',
+  $dir: 'ltr',
 
   'form.optionalText': '(facoltativo)',
   'form.errorText': 'Questo campo è obbligatorio.',

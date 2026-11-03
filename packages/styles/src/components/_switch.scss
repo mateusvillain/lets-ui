@@ -75,11 +75,16 @@ $sizes: (
         width: map.get($values, thumb);
         height: map.get($values, thumb);
         top: map.get($values, offset);
-        left: map.get($values, offset);
+        inset-inline-start: map.get($values, offset);
       }
 
       &:checked::after {
         transform: translateX(map.get($values, translate));
+      }
+
+      // translateX is physical: right-to-left slides the thumb the other way.
+      &:checked:dir(rtl)::after {
+        transform: translateX(calc(#{map.get($values, translate)} * -1));
       }
     }
   }

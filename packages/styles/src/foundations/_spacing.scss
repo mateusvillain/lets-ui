@@ -10,6 +10,9 @@ $directions: (
   'b': bottom,
   'l': left,
   'r': right,
+  // Logical: the start and end of the line, which swap sides right to left.
+  's': inline-start,
+  'e': inline-end,
   'x': (
     left,
     right,
