@@ -3,6 +3,8 @@ import type { Translation } from '../utils/i18n.js';
 /**
  * Spanish. Registered as `es`, so it serves every regional variant — `es-ES`,
  * `es-MX`, `es-AR` — unless one of them registers a dictionary of its own.
+ * Worded to read naturally on both sides of the Atlantic: "Escribe" rather
+ * than Spain's "Introduce" or Latin America's "Ingresa".
  * Opt-in: nothing registers it until the app does.
  *
  * ```js
@@ -34,9 +36,9 @@ export const es: Translation = {
   'link.externalLabel': '(se abre en una pestaña nueva)',
 
   'datePicker.requiredText': 'Obligatorio',
-  'datePicker.badInputText': 'Introduce una fecha válida.',
+  'datePicker.badInputText': 'Escribe una fecha válida.',
   'datePicker.rangeErrorText':
-    'Introduce una fecha dentro del período permitido.',
+    'Escribe una fecha dentro del período permitido.',
   'datePicker.unavailableDateText': 'Esta fecha no está disponible.',
   'datePicker.rangeOrderText':
     'La fecha final no puede ser anterior a la fecha inicial.',
