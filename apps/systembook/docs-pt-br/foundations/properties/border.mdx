@@ -66,18 +66,18 @@ Quando uma superfície arredondada fica dentro de outra, o raio de dentro deve s
 
 ## Cor de borda
 
-As cores vêm da camada semântica, pela função `stroke($família, $categoria)`. Veja [Color](color.mdx).
+As cores vêm da camada semântica, pela função `stroke($família, $categoria)`. `$categoria` é `default` quando omitida; `subtle` só existe para `neutral`. Veja [Color](color.mdx).
 
 | Token | Função | Uso |
 | --- | --- | --- |
 | `neutral.border.subtle` | `stroke(neutral, subtle)` | Borda em repouso de cards, campos, tabelas, toasts e divisores. |
-| `neutral.border.default` | `stroke(neutral)` | Hover de campos; borda de Checkbox, Radio e Switch desmarcados. |
-| `neutral.border.pressed` | `stroke(neutral, pressed)` | Borda neutra pressionada. |
+| `neutral.border.default` | `stroke(neutral)` | Linha neutra mais forte: o divisor da Navbar e o separador do OTP Input. |
 | `primary.border.default` | `stroke(primary)` | Campo com foco, aba selecionada. |
 | `danger.border.default` | `stroke(danger)` | Campo com erro. |
-| `danger.border.hover` / `pressed` | `stroke(danger, hover)` | Interação em controles de erro. |
 | `{success, caution, info}.border.default` | `stroke(success)` | Borda de Alert e de mensagens de status. |
 | `lui.divider.color.border.default` | `var(--lui-divider-color-border-default)` | Token de componente do [Divider](../../components/layout/divider/index.mdx), também usado nas linhas de Table e Accordion. |
+
+Bordas de hover e pressed não têm token próprio. `state-border(hover)` e `state-border(pressed)` misturam a cor do conteúdo na borda de repouso (40% e 56%), então a linha ganha contraste contra a superfície nos dois temas, sem um token por estado para escolher. Os campos de formulário e o Checkbox e o Radio desmarcados usam essas funções.
 
 ## Estados
 
@@ -86,7 +86,7 @@ As bordas de estado mudam a **cor**, e o elemento não pode se mover nem mudar d
 | Estado | Borda | Anel de foco | Outros sinais |
 | --- | --- | --- | --- |
 | **Default** | `neutral.border.subtle` | — | Label visível. |
-| **Hover** | `neutral.border.default` | — | Cursor de texto. |
+| **Hover** | `state-border(hover)` sobre `neutral.border.subtle` | — | Cursor de texto. |
 | **Focus** | `primary.border.default` | `focus-ring(primary)` | Cursor no campo. |
 | **Erro** | `danger.border.default` | `focus-ring(danger)` ao focar | Mensagem de erro em texto e `aria-invalid`. |
 | **Selected** | `primary.border.default` (linha de 2px da aba) | — | `aria-selected`, texto em cor primária. |

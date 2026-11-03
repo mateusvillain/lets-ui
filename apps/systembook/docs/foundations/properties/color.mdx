@@ -31,7 +31,7 @@ Color goes through **four layers**. Each one only points to the layer below, and
 
 | Layer | Tokens | Changes with | Used by |
 | --- | --- | --- | --- |
-| **Primitives** | `lui.color.{blue, gray, green, orange, red, violet}.1–8` and `lui.color.black.alpha.1–8` | Theme (`data-theme`) | Other tokens only. |
+| **Primitives** | `lui.color.{blue, gray, green, orange, red, violet}.1–8` | Theme (`data-theme`) | Other tokens only. |
 | **Brand** | `lui.brand.color.{primary, secondary}.1–8` | Brand (`data-brand`) and theme | Other tokens only. |
 | **Semantic** | `lui.color.{family}.{property}.{variant}` | Nothing: they are aliases | Components and screens. |
 | **Component** | `lui.link.color.*`, `lui.divider.color.*` | Nothing: they are aliases | A single component. |
@@ -49,7 +49,7 @@ A semantic token **has no value of its own**: it points to a primitive or to a b
 | **Brand** | `primary`, `secondary` | Identity and main action. The values come from each brand. |
 | **Neutral** | `neutral` (on top of `gray`) | Structure: text, backgrounds, borders and dividers. Most of the screen. |
 | **Semantic** | `success`, `caution`, `danger`, `info` | State and feedback. Each one has a fixed meaning. |
-| **Support** | `violet` and `black.alpha` | No semantic role. `violet` serves categorical data and illustrations; `black.alpha` serves translucent overlays. |
+| **Support** | `violet` | No semantic role. It serves categorical data and illustrations. |
 
 ### What each family means
 
@@ -84,8 +84,8 @@ The `blue` and `green` ramps and the `lets-ui` brand's `primary` are defined in 
 | `2` | Subtle borders and dividers. | `neutral.border.subtle` |
 | `3` | Neutral container fills. | `neutral.background.container` |
 | `4` | The family's "full" color. | `background.container`, `border.default`, `icon.default` |
-| `5` | Border hover and focus ring. | `focus-ring`, `danger.border.hover`, `neutral.border.pressed` |
-| `6` | Border pressed and visited link. | `danger.border.pressed`, `link.visited` |
+| `5` | Focus ring. | `focus-ring` |
+| `6` | Visited link. | `link.visited` |
 | `7` | Body text. | `neutral.text.body` |
 | `8` | Headings, icons and the strongest surface. | `neutral.text.heading`, `neutral.icon.default`, `neutral.background.overlay` |
 
@@ -117,12 +117,6 @@ Use the SCSS function `color($family, $step)` only when there is no semantic rol
 
 <TokenTable group="lui.color.violet" />
 
-### Black Alpha
-
-Translucent overlays, from 2% to 28% opacity. They are black in the light theme and white in the dark theme, so they darken or lighten the surface in the right direction.
-
-<TokenTable group="lui.color.black.alpha" />
-
 ## Brand colors
 
 `primary` and `secondary` are defined per brand, in one file per theme. In the default brand (`lets-ui`), the primary is blue and the secondary is gray.
@@ -142,12 +136,12 @@ A semantic token's name says **what** it is for: `lui.color.{family}.{property}.
 | Property | Variants | SCSS function | CSS example |
 | --- | --- | --- | --- |
 | `background` | `surface` (soft tint), `container` (full color), `overlay` (`neutral` only) | `bg($category, $family)` | `var(--lui-color-danger-background-surface)` |
-| `border` | `default`, `subtle`, `hover`, `pressed` | `stroke($family, $category)` | `var(--lui-color-neutral-border-subtle)` |
+| `border` | `default`, `subtle` (`neutral` only) | `stroke($family, $category)` | `var(--lui-color-neutral-border-subtle)` |
 | `text` | `heading`, `body`, `caption`, `inverse`, `error` | `text($variant)` | `var(--lui-color-neutral-text-body)` |
 | `icon` | `default`, `inverse` | `icon($family)` | `var(--lui-color-success-icon-default)` |
 | `focus-ring` | one color per family | `focus-ring($family)` | `var(--lui-focus-ring-primary)` |
 
-Not every family has every property: the system only creates a token that some component uses. `danger` and `neutral` have `border.hover` and `border.pressed` because form fields react to interaction through the border; `caution` and `info` have no `focus-ring` because no interactive component uses those families.
+Not every family has every property: the system only creates a token that some component uses. no family has a hover or pressed border, because `state-border()` derives them from the resting border (see [Border](border.mdx)); `caution` and `info` have no `focus-ring` because no interactive component uses those families.
 
 ### Surface or container?
 

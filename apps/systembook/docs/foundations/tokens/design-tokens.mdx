@@ -104,7 +104,7 @@ lui .           color    . danger  . border   . hover
 | Variant | The intent or the state. | `surface`, `container`, `subtle`, `hover`, `heading` |
 
 - **Semantic, not visual.** `text.caption`, not `text.light-gray`. The name survives a change in value.
-- **Predictable.** Anyone who knows `danger.border.hover` can guess `neutral.border.hover`.
+- **Predictable.** Anyone who knows `danger.border.default` can guess `neutral.border.default`.
 - **Scales with numbers or sizes.** Numbers when the scale is open and ordered (`blue.1`–`8`, `spacing.fixed.16`); sizes when it is short (`xs`–`xl`). In the size scale, `1xs` and `1xl` are the steps just beyond `sm` and `lg`.
 - **The platform derives from the name.** In CSS, the dots become hyphens with `--` in front: `lui.color.neutral.text.body` → `--lui-color-neutral-text-body`.
 

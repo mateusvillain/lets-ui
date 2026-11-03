@@ -30,7 +30,7 @@ A cor passa por **quatro camadas**. Cada uma só aponta para a camada de baixo, 
 
 | Camada | Tokens | Muda com | Quem usa |
 | --- | --- | --- | --- |
-| **Primitivas** | `lui.color.{blue, gray, green, orange, red, violet}.1–8` e `lui.color.black.alpha.1–8` | Tema (`data-theme`) | Só outros tokens. |
+| **Primitivas** | `lui.color.{blue, gray, green, orange, red, violet}.1–8` | Tema (`data-theme`) | Só outros tokens. |
 | **Marca** | `lui.brand.color.{primary, secondary}.1–8` | Marca (`data-brand`) e tema | Só outros tokens. |
 | **Semânticas** | `lui.color.{família}.{propriedade}.{variante}` | Nada: são apelidos | Componentes e telas. |
 | **Componente** | `lui.link.color.*`, `lui.divider.color.*` | Nada: são apelidos | Um único componente. |
@@ -48,7 +48,7 @@ O token semântico **não tem valor próprio**: ele aponta para uma primitiva ou
 | **Marca** | `primary`, `secondary` | Identidade e ação principal. Os valores vêm de cada marca. |
 | **Neutra** | `neutral` (sobre `gray`) | Estrutura: texto, fundos, bordas e divisores. A maior parte da tela. |
 | **Semântica** | `success`, `caution`, `danger`, `info` | Estado e feedback. Cada uma tem um significado fixo. |
-| **Suporte** | `violet` e `black.alpha` | Sem papel semântico. `violet` serve a dados categóricos e ilustrações; `black.alpha` a sobreposições translúcidas. |
+| **Suporte** | `violet` | Sem papel semântico. Serve a dados categóricos e ilustrações. |
 
 ### O significado de cada família
 
@@ -83,8 +83,8 @@ As rampas `blue`, `green` e a `primary` da marca `lets-ui` são definidas em **O
 | `2` | Bordas sutis e divisores. | `neutral.border.subtle` |
 | `3` | Preenchimentos neutros de contêiner. | `neutral.background.container` |
 | `4` | A cor "cheia" da família. | `background.container`, `border.default`, `icon.default` |
-| `5` | Hover de borda e anel de foco. | `focus-ring`, `danger.border.hover`, `neutral.border.pressed` |
-| `6` | Pressed de borda e link visitado. | `danger.border.pressed`, `link.visited` |
+| `5` | Anel de foco. | `focus-ring` |
+| `6` | Link visitado. | `link.visited` |
 | `7` | Texto de corpo. | `neutral.text.body` |
 | `8` | Títulos, ícones e a superfície mais forte. | `neutral.text.heading`, `neutral.icon.default`, `neutral.background.overlay` |
 
@@ -116,12 +116,6 @@ Use a função SCSS `color($família, $degrau)` só quando não houver papel sem
 
 <TokenTable group="lui.color.violet" />
 
-### Black Alpha
-
-Sobreposições translúcidas, de 2% a 28% de opacidade. São pretas no tema claro e brancas no tema escuro, então escurecem ou clareiam a superfície na direção certa.
-
-<TokenTable group="lui.color.black.alpha" />
-
 ## Cores da marca
 
 `primary` e `secondary` são definidas por marca, em um arquivo por tema. Na marca padrão (`lets-ui`), a primária é azul e a secundária é cinza.
@@ -141,12 +135,12 @@ O nome de um token semântico diz **para que** ele serve: `lui.color.{família}.
 | Propriedade | Variantes | Função SCSS | Exemplo de CSS |
 | --- | --- | --- | --- |
 | `background` | `surface` (tinta suave), `container` (cor cheia), `overlay` (só `neutral`) | `bg($categoria, $família)` | `var(--lui-color-danger-background-surface)` |
-| `border` | `default`, `subtle`, `hover`, `pressed` | `stroke($família, $categoria)` | `var(--lui-color-neutral-border-subtle)` |
+| `border` | `default`, `subtle` (só `neutral`) | `stroke($família, $categoria)` | `var(--lui-color-neutral-border-subtle)` |
 | `text` | `heading`, `body`, `caption`, `inverse`, `error` | `text($variante)` | `var(--lui-color-neutral-text-body)` |
 | `icon` | `default`, `inverse` | `icon($família)` | `var(--lui-color-success-icon-default)` |
 | `focus-ring` | uma cor por família | `focus-ring($família)` | `var(--lui-focus-ring-primary)` |
 
-Nem toda família tem todas as propriedades: o sistema só cria o token que algum componente usa. `danger` e `neutral` têm `border.hover` e `border.pressed` porque os campos de formulário reagem à interação pela borda; `caution` e `info` não têm `focus-ring` porque nenhum componente interativo usa essas famílias.
+Nem toda família tem todas as propriedades: o sistema só cria o token que algum componente usa. nenhuma família tem borda de hover ou pressed, porque `state-border()` as deriva da borda de repouso (veja [Border](border.mdx)); `caution` e `info` não têm `focus-ring` porque nenhum componente interativo usa essas famílias.
 
 ### Surface ou container?
 

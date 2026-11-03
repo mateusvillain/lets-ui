@@ -140,8 +140,8 @@ A component uses `bg(container, primary)`, never "Let's UI's blue". No component
 ## Recommended architecture
 
 ```text
-Primitives  →  Semantic  →  Component  →  Theme / brand
-blue.4         primary.background.container   link.color.text   data-theme, data-brand
+Primitives / brand  →  Semantic                       →  Component        →  Theme / brand
+brand.color.primary.4  primary.background.container      link.color.text     data-theme, data-brand
 ```
 
 - **Primitives** hold the raw values and are the only ones the **theme** swaps.

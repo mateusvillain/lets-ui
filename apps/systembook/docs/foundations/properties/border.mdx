@@ -67,18 +67,18 @@ When a rounded surface sits inside another, the inner radius should be **smaller
 
 ## Border color
 
-Colors come from the semantic layer, through the `stroke($family, $category)` function. See [Color](color.mdx).
+Colors come from the semantic layer, through the `stroke($family, $category)` function. `$category` is `default` when omitted; `subtle` exists only for `neutral`. See [Color](color.mdx).
 
 | Token | Function | Usage |
 | --- | --- | --- |
 | `neutral.border.subtle` | `stroke(neutral, subtle)` | Resting border of cards, fields, tables, toasts and dividers. |
-| `neutral.border.default` | `stroke(neutral)` | Field hover; border of unchecked Checkbox, Radio and Switch. |
-| `neutral.border.pressed` | `stroke(neutral, pressed)` | Pressed neutral border. |
+| `neutral.border.default` | `stroke(neutral)` | A stronger neutral line: the Navbar divider and the OTP Input separator. |
 | `primary.border.default` | `stroke(primary)` | Focused field, selected tab. |
 | `danger.border.default` | `stroke(danger)` | Field with an error. |
-| `danger.border.hover` / `pressed` | `stroke(danger, hover)` | Interaction on error controls. |
 | `{success, caution, info}.border.default` | `stroke(success)` | Border of Alert and status messages. |
 | `lui.divider.color.border.default` | `var(--lui-divider-color-border-default)` | Component token of the [Divider](../../components/layout/divider/index.mdx), also used for Table and Accordion lines. |
+
+Hover and pressed borders have no token of their own. `state-border(hover)` and `state-border(pressed)` mix the content color into the resting border (40% and 56%), so the line gains contrast against the surface in both themes, with no per-state token to choose. Form fields and the unchecked Checkbox and Radio use them.
 
 ## States
 
@@ -87,7 +87,7 @@ State borders change **color**, and the element must not move or change size whe
 | State | Border | Focus ring | Other signals |
 | --- | --- | --- | --- |
 | **Default** | `neutral.border.subtle` | — | Visible label. |
-| **Hover** | `neutral.border.default` | — | Text cursor. |
+| **Hover** | `state-border(hover)` over `neutral.border.subtle` | — | Text cursor. |
 | **Focus** | `primary.border.default` | `focus-ring(primary)` | Cursor in the field. |
 | **Error** | `danger.border.default` | `focus-ring(danger)` on focus | Text error message and `aria-invalid`. |
 | **Selected** | `primary.border.default` (the tab's 2px line) | — | `aria-selected`, text in the primary color. |
