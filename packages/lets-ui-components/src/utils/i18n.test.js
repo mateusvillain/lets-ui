@@ -8,9 +8,13 @@ import { en } from '../locales/en.ts';
 import { de } from '../locales/de.ts';
 import { es } from '../locales/es.ts';
 import { fr } from '../locales/fr.ts';
+// Renamed: `it` is Vitest's.
+import { it as italian } from '../locales/it.ts';
 import { ja } from '../locales/ja.ts';
 import { ptBR } from '../locales/pt-BR.ts';
 import { ptPT } from '../locales/pt-PT.ts';
+import { zhCN } from '../locales/zh-CN.ts';
+import { zhTW } from '../locales/zh-TW.ts';
 import { registerTranslation, resolveLang } from './i18n.ts';
 
 // Only the elements under test: the full index would pull in every component
@@ -274,7 +278,7 @@ describe('dictionaries', () => {
       .filter((key) => !key.startsWith('$'))
       .sort();
 
-  const shipped = { ptBR, ptPT, es, fr, de, ja };
+  const shipped = { ptBR, ptPT, es, fr, de, ja, it: italian, zhCN, zhTW };
 
   it.each(Object.entries(shipped))(
     'ships %s with exactly the English terms',

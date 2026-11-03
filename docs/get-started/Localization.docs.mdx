@@ -45,15 +45,18 @@ O idioma é casado sem diferenciar maiúsculas: `pt-BR` primeiro, depois `pt`, d
 
 ## Idiomas incluídos
 
-| Idioma               | Export | Caminho                             | Atende                                           |
-| -------------------- | ------ | ----------------------------------- | ------------------------------------------------ |
-| Inglês (embutido)    | `en`   | `@lets-ui/components/locales/en`    | qualquer idioma sem tradução                     |
-| Português (Brasil)   | `ptBR` | `@lets-ui/components/locales/pt-BR` | `pt-BR`, `pt` e variantes sem dicionário próprio |
-| Espanhol             | `es`   | `@lets-ui/components/locales/es`    | `es`, `es-ES`, `es-MX`…                          |
-| Francês              | `fr`   | `@lets-ui/components/locales/fr`    | `fr`, `fr-FR`, `fr-CA`…                          |
-| Português (Portugal) | `ptPT` | `@lets-ui/components/locales/pt-PT` | `pt-PT`                                          |
-| Alemão               | `de`   | `@lets-ui/components/locales/de`    | `de`, `de-DE`, `de-AT`, `de-CH`…                 |
-| Japonês              | `ja`   | `@lets-ui/components/locales/ja`    | `ja`, `ja-JP`                                    |
+| Idioma                      | Export | Caminho                             | Atende                                           |
+| --------------------------- | ------ | ----------------------------------- | ------------------------------------------------ |
+| Inglês (embutido)           | `en`   | `@lets-ui/components/locales/en`    | qualquer idioma sem tradução                     |
+| Português (Brasil)          | `ptBR` | `@lets-ui/components/locales/pt-BR` | `pt-BR`, `pt` e variantes sem dicionário próprio |
+| Espanhol                    | `es`   | `@lets-ui/components/locales/es`    | `es`, `es-ES`, `es-MX`…                          |
+| Francês                     | `fr`   | `@lets-ui/components/locales/fr`    | `fr`, `fr-FR`, `fr-CA`…                          |
+| Português (Portugal)        | `ptPT` | `@lets-ui/components/locales/pt-PT` | `pt-PT`                                          |
+| Alemão                      | `de`   | `@lets-ui/components/locales/de`    | `de`, `de-DE`, `de-AT`, `de-CH`…                 |
+| Japonês                     | `ja`   | `@lets-ui/components/locales/ja`    | `ja`, `ja-JP`                                    |
+| Italiano                    | `it`   | `@lets-ui/components/locales/it`    | `it`, `it-IT`, `it-CH`                           |
+| Chinês simplificado         | `zhCN` | `@lets-ui/components/locales/zh-CN` | `zh-CN`                                          |
+| Chinês tradicional (Taiwan) | `zhTW` | `@lets-ui/components/locales/zh-TW` | `zh-TW`                                          |
 
 Nenhum é registrado sozinho; registre só os que a aplicação usa:
 
@@ -84,15 +87,15 @@ Para um idioma que não vem incluído, uma tradução é um objeto com o código
 ```ts
 import { registerTranslation, type Translation } from '@lets-ui/components';
 
-const it: Translation = {
-  $code: 'it',
-  $name: 'Italiano',
-  'form.optionalText': '(facoltativo)',
-  'form.errorText': 'Questo campo è obbligatorio.',
+const ko: Translation = {
+  $code: 'ko',
+  $name: '한국어',
+  'form.optionalText': '(선택 사항)',
+  'form.errorText': '필수 입력 항목입니다.',
   // …
 };
 
-registerTranslation(it);
+registerTranslation(ko);
 ```
 
 A lista completa de termos, com o texto em inglês de cada um, está em `@lets-ui/components/locales/en`. Marcadores como `{index}` são preenchidos pelo componente e precisam aparecer na tradução.
@@ -163,15 +166,18 @@ The language is matched case-insensitively: `pt-BR` first, then `pt`, then any r
 
 ## Included languages
 
-| Language              | Export | Path                                | Serves                                                       |
-| --------------------- | ------ | ----------------------------------- | ------------------------------------------------------------ |
-| English (built in)    | `en`   | `@lets-ui/components/locales/en`    | any language without a translation                           |
-| Portuguese (Brazil)   | `ptBR` | `@lets-ui/components/locales/pt-BR` | `pt-BR`, `pt` and variants without a dictionary of their own |
-| Spanish               | `es`   | `@lets-ui/components/locales/es`    | `es`, `es-ES`, `es-MX`…                                      |
-| French                | `fr`   | `@lets-ui/components/locales/fr`    | `fr`, `fr-FR`, `fr-CA`…                                      |
-| Portuguese (Portugal) | `ptPT` | `@lets-ui/components/locales/pt-PT` | `pt-PT`                                                      |
-| German                | `de`   | `@lets-ui/components/locales/de`    | `de`, `de-DE`, `de-AT`, `de-CH`…                             |
-| Japanese              | `ja`   | `@lets-ui/components/locales/ja`    | `ja`, `ja-JP`                                                |
+| Language                     | Export | Path                                | Serves                                                       |
+| ---------------------------- | ------ | ----------------------------------- | ------------------------------------------------------------ |
+| English (built in)           | `en`   | `@lets-ui/components/locales/en`    | any language without a translation                           |
+| Portuguese (Brazil)          | `ptBR` | `@lets-ui/components/locales/pt-BR` | `pt-BR`, `pt` and variants without a dictionary of their own |
+| Spanish                      | `es`   | `@lets-ui/components/locales/es`    | `es`, `es-ES`, `es-MX`…                                      |
+| French                       | `fr`   | `@lets-ui/components/locales/fr`    | `fr`, `fr-FR`, `fr-CA`…                                      |
+| Portuguese (Portugal)        | `ptPT` | `@lets-ui/components/locales/pt-PT` | `pt-PT`                                                      |
+| German                       | `de`   | `@lets-ui/components/locales/de`    | `de`, `de-DE`, `de-AT`, `de-CH`…                             |
+| Japanese                     | `ja`   | `@lets-ui/components/locales/ja`    | `ja`, `ja-JP`                                                |
+| Italian                      | `it`   | `@lets-ui/components/locales/it`    | `it`, `it-IT`, `it-CH`                                       |
+| Simplified Chinese           | `zhCN` | `@lets-ui/components/locales/zh-CN` | `zh-CN`                                                      |
+| Traditional Chinese (Taiwan) | `zhTW` | `@lets-ui/components/locales/zh-TW` | `zh-TW`                                                      |
 
 None registers itself; register only the ones the application uses:
 
@@ -202,15 +208,15 @@ For a language that is not included, a translation is an object with the BCP 47 
 ```ts
 import { registerTranslation, type Translation } from '@lets-ui/components';
 
-const it: Translation = {
-  $code: 'it',
-  $name: 'Italiano',
-  'form.optionalText': '(facoltativo)',
-  'form.errorText': 'Questo campo è obbligatorio.',
+const ko: Translation = {
+  $code: 'ko',
+  $name: '한국어',
+  'form.optionalText': '(선택 사항)',
+  'form.errorText': '필수 입력 항목입니다.',
   // …
 };
 
-registerTranslation(it);
+registerTranslation(ko);
 ```
 
 The full list of terms, with the English text of each, is in `@lets-ui/components/locales/en`. Placeholders such as `{index}` are filled in by the component and must appear in the translation.

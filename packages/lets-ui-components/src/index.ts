@@ -66,6 +66,9 @@ export { es } from './locales/es.js';
 export { fr } from './locales/fr.js';
 export { de } from './locales/de.js';
 export { ja } from './locales/ja.js';
+export { it } from './locales/it.js';
+export { zhCN } from './locales/zh-CN.js';
+export { zhTW } from './locales/zh-TW.js';
 
 function define(name: string, elementClass: CustomElementConstructor) {
   if (!customElements.get(name)) {
