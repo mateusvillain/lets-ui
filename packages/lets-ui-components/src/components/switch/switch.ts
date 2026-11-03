@@ -4,6 +4,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './switch.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
+import { localized } from '../../utils/i18n.js';
 
 export class LuiSwitch extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
@@ -20,7 +21,8 @@ export class LuiSwitch extends HostAriaMixin(LitElement) {
   @property() size = 'lg';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
+  @localized('form.errorText', { attribute: 'error-text' })
+  errorText!: string;
 
   private _baseId: string;
 

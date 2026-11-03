@@ -1,0 +1,240 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
+
+<Meta title="Get started/Localization" />
+
+<Lang lang="pt-BR">
+# Localização
+
+Os componentes escrevem alguns textos por conta própria: mensagens de validação, o "(opcional)" ao lado do rótulo, nomes acessíveis de botões que só têm ícone, o aviso de que um link abre em nova aba. Esses textos vêm em inglês e podem seguir o idioma da página.
+
+Isso cobre só o texto que o **componente** escreve. O conteúdo da sua aplicação — rótulos, títulos, descrições — continua com a ferramenta de i18n que você já usa (i18next, FormatJS, a do seu framework).
+
+## Como um texto é resolvido
+
+Cada texto passa por três camadas, e a primeira que tiver valor vence:
+
+1. **O atributo no elemento.** `error-text="Informe o CPF"` sempre vence, em qualquer idioma.
+2. **A tradução registrada para o idioma do elemento.** O idioma é o `lang` do ancestral mais próximo que tiver um — o `<html>` incluído.
+3. **O texto em inglês embutido.** Vale quando não há atributo nem tradução para aquele idioma.
+
+Nenhum atributo existente mudou: quem já passa os textos um a um continua funcionando igual.
+
+## Ativando um idioma
+
+Registre a tradução uma vez, na inicialização da aplicação, e declare o idioma da página:
+
+```js
+import { registerTranslation, ptBR } from '@lets-ui/components';
+
+registerTranslation(ptBR);
+```
+
+```html
+<html lang="pt-BR">
+  <lui-input label="Nome" optional></lui-input>
+  <!-- "(opcional)" -->
+  <lui-date-picker label="Data de entrega"></lui-date-picker>
+  <!-- "Escolher data", "Mês anterior"… -->
+</html>
+```
+
+Os componentes que já estão na página atualizam na hora — tanto ao registrar uma tradução quanto ao trocar o `lang` de qualquer ancestral. O seletor de idioma deste Storybook usa exatamente esse mecanismo.
+
+O idioma é casado sem diferenciar maiúsculas: `pt-BR` primeiro, depois `pt`, depois qualquer variante regional de `pt` registrada. Um idioma sem tradução registrada cai no inglês.
+
+## Idiomas incluídos
+
+| Idioma               | Export | Caminho                             | Atende                                           |
+| -------------------- | ------ | ----------------------------------- | ------------------------------------------------ |
+| Inglês (embutido)    | `en`   | `@lets-ui/components/locales/en`    | qualquer idioma sem tradução                     |
+| Português (Brasil)   | `ptBR` | `@lets-ui/components/locales/pt-BR` | `pt-BR`, `pt` e variantes sem dicionário próprio |
+| Espanhol             | `es`   | `@lets-ui/components/locales/es`    | `es`, `es-ES`, `es-MX`…                          |
+| Francês              | `fr`   | `@lets-ui/components/locales/fr`    | `fr`, `fr-FR`, `fr-CA`…                          |
+| Português (Portugal) | `ptPT` | `@lets-ui/components/locales/pt-PT` | `pt-PT`                                          |
+| Alemão               | `de`   | `@lets-ui/components/locales/de`    | `de`, `de-DE`, `de-AT`, `de-CH`…                 |
+| Japonês              | `ja`   | `@lets-ui/components/locales/ja`    | `ja`, `ja-JP`                                    |
+
+Nenhum é registrado sozinho; registre só os que a aplicação usa:
+
+```js
+import { registerTranslation, ptBR, es, fr } from '@lets-ui/components';
+
+registerTranslation(ptBR, es, fr);
+```
+
+## Trocando só alguns textos
+
+Uma tradução parcial sobrescreve apenas os termos que nomeia; o resto segue o dicionário já registrado para aquele código, e depois o inglês:
+
+```js
+registerTranslation(ptBR);
+registerTranslation({
+  $code: 'pt-BR',
+  'form.optionalText': '(não obrigatório)',
+});
+```
+
+Para um texto em um único elemento, use o atributo — a camada 1.
+
+## Adicionando um idioma
+
+Para um idioma que não vem incluído, uma tradução é um objeto com o código BCP 47, o nome do idioma nele mesmo e todos os termos. Em TypeScript, o tipo `Translation` acusa qualquer termo faltando:
+
+```ts
+import { registerTranslation, type Translation } from '@lets-ui/components';
+
+const it: Translation = {
+  $code: 'it',
+  $name: 'Italiano',
+  'form.optionalText': '(facoltativo)',
+  'form.errorText': 'Questo campo è obbligatorio.',
+  // …
+};
+
+registerTranslation(it);
+```
+
+A lista completa de termos, com o texto em inglês de cada um, está em `@lets-ui/components/locales/en`. Marcadores como `{index}` são preenchidos pelo componente e precisam aparecer na tradução.
+
+## Componentes cobertos
+
+| Componente        | Termos                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| `lui-input`       | `form.optionalText`, `form.errorText`, `input.*` (mostrar/ocultar senha, aumentar/diminuir) |
+| `lui-textarea`    | `form.optionalText`, `form.errorText`                                                       |
+| `lui-select`      | `form.optionalText`, `form.errorText`, `select.placeholder`                                 |
+| `lui-checkbox`    | `form.errorText`                                                                            |
+| `lui-switch`      | `form.errorText`                                                                            |
+| `lui-radio-group` | `radioGroup.errorText`                                                                      |
+| `lui-otp-input`   | `form.errorText`, `otpInput.*`                                                              |
+| `lui-date-picker` | `form.optionalText`, `form.errorText`, `datePicker.*` (25 termos)                           |
+| `lui-link`        | `link.externalLabel`                                                                        |
+
+Os demais componentes ainda recebem seus textos só por atributo.
+
+## Observações
+
+- **Datas e números** não passam pelo dicionário. O `lui-date-picker` formata meses e dias com `Intl`, pelo atributo `locale`. Sem ele, usa o mesmo `lang` que escolhe a tradução, então `<html lang="pt-BR">` basta para textos, meses e dias em português.
+- **String vazia.** Onde `error-text=""` já significava "sem mensagem", continua significando. Onde um texto vazio já caía no padrão (`start-label`, `end-label` e `required-text` do date picker; `label`, `field-label` e `error-text` do OTP input), agora cai na tradução.
+- **Shadow DOM.** O `lang` é lido através de shadow roots, mas uma troca de `lang` _dentro_ de um shadow root não é observada; declare o idioma no documento.
+
+</Lang>
+
+<Lang lang="en-US">
+# Localization
+
+Components write some text on their own: validation messages, the "(optional)" next to a label, accessible names of icon-only buttons, the notice that a link opens in a new tab. That text ships in English and can follow the page's language.
+
+This covers only the text the **component** writes. Your application's content — labels, headings, descriptions — stays with the i18n tool you already use (i18next, FormatJS, your framework's own).
+
+## How a text is resolved
+
+Each text goes through three layers, and the first one that has a value wins:
+
+1. **The attribute on the element.** `error-text="Enter your tax ID"` always wins, in any language.
+2. **The translation registered for the element's language.** The language is the `lang` of the closest ancestor that has one — `<html>` included.
+3. **The built-in English text.** Used when there is neither an attribute nor a translation for that language.
+
+No existing attribute changed: code that already passes the texts one by one keeps working as it did.
+
+## Turning a language on
+
+Register the translation once, when the application starts, and declare the page's language:
+
+```js
+import { registerTranslation, ptBR } from '@lets-ui/components';
+
+registerTranslation(ptBR);
+```
+
+```html
+<html lang="pt-BR">
+  <lui-input label="Nome" optional></lui-input>
+  <!-- "(opcional)" -->
+  <lui-date-picker label="Data de entrega"></lui-date-picker>
+  <!-- "Escolher data", "Mês anterior"… -->
+</html>
+```
+
+Components already on the page update at once — both when a translation is registered and when the `lang` of any ancestor changes. This Storybook's language switcher uses exactly that mechanism.
+
+The language is matched case-insensitively: `pt-BR` first, then `pt`, then any registered regional variant of `pt`. A language with no registered translation falls back to English.
+
+## Included languages
+
+| Language              | Export | Path                                | Serves                                                       |
+| --------------------- | ------ | ----------------------------------- | ------------------------------------------------------------ |
+| English (built in)    | `en`   | `@lets-ui/components/locales/en`    | any language without a translation                           |
+| Portuguese (Brazil)   | `ptBR` | `@lets-ui/components/locales/pt-BR` | `pt-BR`, `pt` and variants without a dictionary of their own |
+| Spanish               | `es`   | `@lets-ui/components/locales/es`    | `es`, `es-ES`, `es-MX`…                                      |
+| French                | `fr`   | `@lets-ui/components/locales/fr`    | `fr`, `fr-FR`, `fr-CA`…                                      |
+| Portuguese (Portugal) | `ptPT` | `@lets-ui/components/locales/pt-PT` | `pt-PT`                                                      |
+| German                | `de`   | `@lets-ui/components/locales/de`    | `de`, `de-DE`, `de-AT`, `de-CH`…                             |
+| Japanese              | `ja`   | `@lets-ui/components/locales/ja`    | `ja`, `ja-JP`                                                |
+
+None registers itself; register only the ones the application uses:
+
+```js
+import { registerTranslation, ptBR, es, fr } from '@lets-ui/components';
+
+registerTranslation(ptBR, es, fr);
+```
+
+## Changing only some texts
+
+A partial translation overrides only the terms it names; the rest follow the dictionary already registered for that code, and then English:
+
+```js
+registerTranslation(ptBR);
+registerTranslation({
+  $code: 'pt-BR',
+  'form.optionalText': '(não obrigatório)',
+});
+```
+
+For a text on a single element, use the attribute — layer 1.
+
+## Adding a language
+
+For a language that is not included, a translation is an object with the BCP 47 code, the language's name in that language, and every term. In TypeScript, the `Translation` type flags any missing term:
+
+```ts
+import { registerTranslation, type Translation } from '@lets-ui/components';
+
+const it: Translation = {
+  $code: 'it',
+  $name: 'Italiano',
+  'form.optionalText': '(facoltativo)',
+  'form.errorText': 'Questo campo è obbligatorio.',
+  // …
+};
+
+registerTranslation(it);
+```
+
+The full list of terms, with the English text of each, is in `@lets-ui/components/locales/en`. Placeholders such as `{index}` are filled in by the component and must appear in the translation.
+
+## Covered components
+
+| Component         | Terms                                                                                    |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `lui-input`       | `form.optionalText`, `form.errorText`, `input.*` (show/hide password, increase/decrease) |
+| `lui-textarea`    | `form.optionalText`, `form.errorText`                                                    |
+| `lui-select`      | `form.optionalText`, `form.errorText`, `select.placeholder`                              |
+| `lui-checkbox`    | `form.errorText`                                                                         |
+| `lui-switch`      | `form.errorText`                                                                         |
+| `lui-radio-group` | `radioGroup.errorText`                                                                   |
+| `lui-otp-input`   | `form.errorText`, `otpInput.*`                                                           |
+| `lui-date-picker` | `form.optionalText`, `form.errorText`, `datePicker.*` (25 terms)                         |
+| `lui-link`        | `link.externalLabel`                                                                     |
+
+The other components still take their text through attributes only.
+
+## Notes
+
+- **Dates and numbers** don't go through the dictionary. `lui-date-picker` formats months and days with `Intl`, through the `locale` attribute. Without it, it uses the same `lang` that picks the translation, so `<html lang="pt-BR">` is enough for texts, months and days in Portuguese.
+- **Empty strings.** Where `error-text=""` already meant "no message", it still does. Where an empty text already fell back to the default (`start-label`, `end-label` and `required-text` on the date picker; `label`, `field-label` and `error-text` on the OTP input), it now falls back to the translation.
+- **Shadow DOM.** `lang` is read across shadow roots, but a `lang` change _inside_ a shadow root is not observed; declare the language on the document.
+
+</Lang>

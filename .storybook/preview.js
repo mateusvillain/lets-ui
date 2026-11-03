@@ -8,6 +8,13 @@ import {
   LANGUAGE_GLOBAL,
   activeLanguage,
 } from './language/language.js';
+import { registerTranslation } from '../packages/lets-ui-components/src/utils/i18n.js';
+import { ptBR } from '../packages/lets-ui-components/src/locales/pt-BR.js';
+
+// The language switcher sets `<html lang>`, so with Portuguese registered the
+// components' own text — validation messages, accessible names, "(optional)"
+// — follows it too. English needs no registration: it is built in.
+registerTranslation(ptBR);
 
 /**
  * Docs (`.mdx`) pages are not wrapped by the preview decorators, so the language

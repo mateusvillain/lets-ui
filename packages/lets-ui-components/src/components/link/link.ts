@@ -3,6 +3,7 @@ import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './link.scss?inline';
 import { TriggerAriaMixin, stateAria } from '../../utils/aria.js';
+import { localized } from '../../utils/i18n.js';
 
 const externalIcon = svg`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="3 3 18 18" aria-hidden="true" class="link__external-icon">
   <path fill="currentColor" d="M11.25 4.5a.75.75 0 0 1 0 1.5H6v12h12v-5.25a.75.75 0 0 1 1.5 0V18a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 18V6A1.5 1.5 0 0 1 6 4.5h5.25Zm9-1.5a.75.75 0 0 1 .75.75v6a.75.75 0 0 1-1.5 0V5.56l-6.22 6.22a.75.75 0 1 1-1.06-1.06l6.22-6.22h-4.19a.75.75 0 0 1 0-1.5h6Z"/>
@@ -20,8 +21,8 @@ export class LuiLink extends TriggerAriaMixin(LitElement) {
   @property() hreflang = '';
   @property() referrerpolicy = '';
   @property({ type: Boolean }) external = false;
-  @property({ attribute: 'external-label' }) externalLabel =
-    '(abre em nova aba)';
+  @localized('link.externalLabel', { attribute: 'external-label' })
+  externalLabel!: string;
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) visited = false;
   @property({ attribute: 'aria-label' }) ariaLabel = '';

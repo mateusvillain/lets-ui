@@ -4,17 +4,10 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
 import styles from './otp-input.scss?inline';
 import { nameProperty } from '../../utils/form.js';
+import { localized } from '../../utils/i18n.js';
 
 const DIGIT = /^\d$/;
 const VISIBLE = /^\S$/;
-
-// The English defaults of the text props. A removed attribute sets its property
-// to null, so the field reads each one through `||` against these.
-const DEFAULTS = {
-  errorText: 'This field is required.',
-  label: 'Verification code',
-  fieldLabel: 'Character {index} of {length}',
-};
 
 export class LuiOtpInput extends LitElement {
   static styles = unsafeCSS(styles);
@@ -30,13 +23,19 @@ export class LuiOtpInput extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = DEFAULTS.errorText;
+  @localized('form.errorText', { attribute: 'error-text', emptyIsUnset: true })
+  errorText!: string;
   @property() hint = '';
-  @property() label = DEFAULTS.label;
+  @localized('otpInput.label', { emptyIsUnset: true })
+  label!: string;
   // Many OTP screens explain the code in their own heading, so the label only
   // names the group for assistive technology unless this asks to show it.
   @property({ type: Boolean, attribute: 'show-label' }) showLabel = false;
-  @property({ attribute: 'field-label' }) fieldLabel = DEFAULTS.fieldLabel;
+  @localized('otpInput.fieldLabel', {
+    attribute: 'field-label',
+    emptyIsUnset: true,
+  })
+  fieldLabel!: string;
   // Box positions a separator follows, comma-separated: `separator="3"` draws
   // one after the third box. Unset, the boxes form a single row.
   @property() separator = '';
@@ -70,7 +69,7 @@ export class LuiOtpInput extends LitElement {
   }
 
   get _errorText(): string {
-    return this.errorText || DEFAULTS.errorText;
+    return this.errorText;
   }
 
   get _numeric(): boolean {
@@ -289,7 +288,7 @@ export class LuiOtpInput extends LitElement {
         autocapitalize="off"
         spellcheck="false"
         placeholder="${this.placeholder}"
-        aria-label="${(this.fieldLabel || DEFAULTS.fieldLabel)
+        aria-label="${this.fieldLabel
           .replace('{index}', String(index + 1))
           .replace('{length}', String(length))}"
         aria-describedby="${ifDefined(describedBy)}"
@@ -333,9 +332,7 @@ export class LuiOtpInput extends LitElement {
         <div
           class="otp-input__group"
           role="group"
-          aria-label="${ifDefined(
-            this.showLabel ? undefined : this.label || DEFAULTS.label
-          )}"
+          aria-label="${ifDefined(this.showLabel ? undefined : this.label)}"
           aria-labelledby="${ifDefined(
             this.showLabel ? `${this._baseId}-label` : undefined
           )}"

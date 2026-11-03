@@ -16,6 +16,7 @@ import {
   dateMask,
   maskPattern,
   rangeMask,
+  rangeSeparator,
   readMask,
 } from './mask.ts';
 
@@ -1209,15 +1210,14 @@ describe('range', () => {
 });
 
 describe('mask helpers', () => {
-  const maskFor = (locale) =>
-    dateMask(
-      new Intl.DateTimeFormat(locale, {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        numberingSystem: 'latn',
-      })
-    );
+  const formatterFor = (locale) =>
+    new Intl.DateTimeFormat(locale, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      numberingSystem: 'latn',
+    });
+  const maskFor = (locale) => dateMask(formatterFor(locale));
 
   it('follows the order and marks of the locale', () => {
     expect(maskPattern(maskFor('pt-BR'))).toBe('dd / mm / yyyy');
@@ -1244,6 +1244,15 @@ describe('mask helpers', () => {
     expect(
       readMask('1601202621012026', rangeMask(mask)).map(toISODate)
     ).toEqual(['2026-01-16', '2026-01-21']);
+  });
+
+  it('separates the two dates of a range as the locale does', () => {
+    const separator = (locale) => rangeSeparator(formatterFor(locale));
+    expect(separator('en-US')).toBe(' – ');
+    expect(separator('pt-BR')).toBe(' – ');
+    expect(separator('ja-JP')).toBe('～');
+    // The Korean date's closing period stays with the date, out of the mark.
+    expect(separator('ko-KR')).toBe(' ~ ');
   });
 
   it('places the caret after a count of digits', () => {
@@ -1341,6 +1350,25 @@ describe('editable', () => {
     expect($(el, '.date-picker__message').textContent.trim()).toBe(
       'Enter a valid date.'
     );
+  });
+
+  it('separates the typed range with the locale’s mark', async () => {
+    const el = await mount('editable range locale="ja-JP"');
+    expect(input(el).placeholder).toBe('yyyy / mm / dd～yyyy / mm / dd');
+    await type(el, '2026011620260121');
+    expect(input(el).value).toBe('2026 / 01 / 16～2026 / 01 / 21');
+    expect(el.value).toBe('2026-01-16/2026-01-21');
+  });
+
+  it('marks the gap between two range fields as the locale does', async () => {
+    const separator = async (locale) => {
+      const el = await mount(
+        `editable range range-fields="two" locale="${locale}"`
+      );
+      return $(el, '.date-picker__separator').textContent.trim();
+    };
+    expect(await separator('pt-BR')).toBe('–');
+    expect(await separator('ja-JP')).toBe('～');
   });
 
   it('types both ends of a range', async () => {

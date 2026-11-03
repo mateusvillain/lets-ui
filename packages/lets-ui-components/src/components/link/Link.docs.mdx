@@ -327,22 +327,23 @@ Link styling is available directly via the `.link` CSS class on any `<a>` tag, w
 
 ## Atributos
 
-| Atributo         | Tipo      | Default | Descrição                                                                                                             |
-| ---------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------- |
-| `href`           | `string`  | `#`     | URL de destino                                                                                                        |
-| `label`          | `string`  | —       | Texto do link (alternativa ao slot)                                                                                   |
-| `size`           | `string`  | —       | Tamanho do texto: `lg`, `md`, `sm`. Herda o `font-size` do contexto quando omitido                                    |
-| `target`         | `string`  | `_self` | Contexto de abertura (`_self`, `_blank`, `_parent`, `_top`)                                                           |
-| `rel`            | `string`  | —       | Relação do link. Quando `target="_blank"`, assume `noopener noreferrer` automaticamente                               |
-| `download`       | `string`  | —       | Nome sugerido do arquivo ao baixar                                                                                    |
-| `hreflang`       | `string`  | —       | Idioma do documento de destino                                                                                        |
-| `referrerpolicy` | `string`  | —       | Política de referrer enviada na requisição                                                                            |
-| `external`       | `boolean` | `false` | Exibe ícone de link externo ao lado do texto. Implica `target="_blank"` e `rel="noopener noreferrer"` automaticamente |
-| `visited`        | `boolean` | `false` | Habilita o estilo `:visited` após o link ser clicado                                                                  |
-| `disabled`       | `boolean` | `false` | Desabilita a navegação: remove `href`, adiciona `aria-disabled="true"` e mantém o elemento focável                    |
-| `aria-label`     | `string`  | —       | Label acessível para leitores de tela                                                                                 |
-| `aria-expanded`  | `string`  | —       | Estado aberto/fechado do que o link controla; levado ao `<a>` interno                                                 |
-| `aria-haspopup`  | `string`  | —       | Tipo de popup que o link abre; levado ao `<a>` interno                                                                |
+| Atributo         | Tipo      | Default                | Descrição                                                                                                                                                                |
+| ---------------- | --------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `href`           | `string`  | `#`                    | URL de destino                                                                                                                                                           |
+| `label`          | `string`  | —                      | Texto do link (alternativa ao slot)                                                                                                                                      |
+| `size`           | `string`  | —                      | Tamanho do texto: `lg`, `md`, `sm`. Herda o `font-size` do contexto quando omitido                                                                                       |
+| `target`         | `string`  | `_self`                | Contexto de abertura (`_self`, `_blank`, `_parent`, `_top`)                                                                                                              |
+| `rel`            | `string`  | —                      | Relação do link. Quando `target="_blank"`, assume `noopener noreferrer` automaticamente                                                                                  |
+| `download`       | `string`  | —                      | Nome sugerido do arquivo ao baixar                                                                                                                                       |
+| `hreflang`       | `string`  | —                      | Idioma do documento de destino                                                                                                                                           |
+| `referrerpolicy` | `string`  | —                      | Política de referrer enviada na requisição                                                                                                                               |
+| `external`       | `boolean` | `false`                | Exibe ícone de link externo ao lado do texto. Implica `target="_blank"` e `rel="noopener noreferrer"` automaticamente                                                    |
+| `external-label` | `string`  | `(opens in a new tab)` | Texto lido por leitores de tela junto ao ícone de link externo. Sem o atributo, segue o idioma da página — ver [Localização](?path=/docs/get-started-localization--docs) |
+| `visited`        | `boolean` | `false`                | Habilita o estilo `:visited` após o link ser clicado                                                                                                                     |
+| `disabled`       | `boolean` | `false`                | Desabilita a navegação: remove `href`, adiciona `aria-disabled="true"` e mantém o elemento focável                                                                       |
+| `aria-label`     | `string`  | —                      | Label acessível para leitores de tela                                                                                                                                    |
+| `aria-expanded`  | `string`  | —                      | Estado aberto/fechado do que o link controla; levado ao `<a>` interno                                                                                                    |
+| `aria-haspopup`  | `string`  | —                      | Tipo de popup que o link abre; levado ao `<a>` interno                                                                                                                   |
 
 </Lang>
 
@@ -350,21 +351,22 @@ Link styling is available directly via the `.link` CSS class on any `<a>` tag, w
 
 ## Attributes
 
-| Attribute        | Type      | Default | Description                                                                                                           |
-| ---------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------- |
-| `href`           | `string`  | `#`     | Destination URL                                                                                                       |
-| `label`          | `string`  | —       | Link text (alternative to the slot)                                                                                   |
-| `size`           | `string`  | —       | Text size: `lg`, `md`, `sm`. Inherits the `font-size` of the context when omitted                                     |
-| `target`         | `string`  | `_self` | Opening context (`_self`, `_blank`, `_parent`, `_top`)                                                                |
-| `rel`            | `string`  | —       | Link relation. When `target="_blank"`, assumes `noopener noreferrer` automatically                                    |
-| `download`       | `string`  | —       | Suggested file name when downloading                                                                                  |
-| `hreflang`       | `string`  | —       | Language of the destination document                                                                                  |
-| `referrerpolicy` | `string`  | —       | Referrer policy sent in the request                                                                                   |
-| `external`       | `boolean` | `false` | Shows an external link icon next to the text. Implies `target="_blank"` and `rel="noopener noreferrer"` automatically |
-| `visited`        | `boolean` | `false` | Enables the `:visited` style after the link is clicked                                                                |
-| `disabled`       | `boolean` | `false` | Disables navigation: removes `href`, adds `aria-disabled="true"` and keeps the element focusable                      |
-| `aria-label`     | `string`  | —       | Accessible label for screen readers                                                                                   |
-| `aria-expanded`  | `string`  | —       | Open/closed state of what the link controls; taken to the inner `<a>`                                                 |
-| `aria-haspopup`  | `string`  | —       | Type of popup the link opens; taken to the inner `<a>`                                                                |
+| Attribute        | Type      | Default                | Description                                                                                                                                                                        |
+| ---------------- | --------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `href`           | `string`  | `#`                    | Destination URL                                                                                                                                                                    |
+| `label`          | `string`  | —                      | Link text (alternative to the slot)                                                                                                                                                |
+| `size`           | `string`  | —                      | Text size: `lg`, `md`, `sm`. Inherits the `font-size` of the context when omitted                                                                                                  |
+| `target`         | `string`  | `_self`                | Opening context (`_self`, `_blank`, `_parent`, `_top`)                                                                                                                             |
+| `rel`            | `string`  | —                      | Link relation. When `target="_blank"`, assumes `noopener noreferrer` automatically                                                                                                 |
+| `download`       | `string`  | —                      | Suggested file name when downloading                                                                                                                                               |
+| `hreflang`       | `string`  | —                      | Language of the destination document                                                                                                                                               |
+| `referrerpolicy` | `string`  | —                      | Referrer policy sent in the request                                                                                                                                                |
+| `external`       | `boolean` | `false`                | Shows an external link icon next to the text. Implies `target="_blank"` and `rel="noopener noreferrer"` automatically                                                              |
+| `external-label` | `string`  | `(opens in a new tab)` | Text read by screen readers next to the external link icon. Without the attribute, it follows the page's language — see [Localization](?path=/docs/get-started-localization--docs) |
+| `visited`        | `boolean` | `false`                | Enables the `:visited` style after the link is clicked                                                                                                                             |
+| `disabled`       | `boolean` | `false`                | Disables navigation: removes `href`, adds `aria-disabled="true"` and keeps the element focusable                                                                                   |
+| `aria-label`     | `string`  | —                      | Accessible label for screen readers                                                                                                                                                |
+| `aria-expanded`  | `string`  | —                      | Open/closed state of what the link controls; taken to the inner `<a>`                                                                                                              |
+| `aria-haspopup`  | `string`  | —                      | Type of popup the link opens; taken to the inner `<a>`                                                                                                                             |
 
 </Lang>

@@ -51,7 +51,8 @@ export default {
     },
     locale: {
       control: 'text',
-      table: { defaultValue: { summary: 'en-US' } },
+      description: 'Vazio segue o `lang` do elemento; sem `lang`, `en-US`',
+      table: { defaultValue: { summary: "''" } },
     },
     firstDayOfWeek: {
       control: { type: 'select' },
@@ -362,7 +363,7 @@ DatePicker.args = {
   min: '',
   max: '',
   size: 'lg',
-  locale: 'en-US',
+  locale: '',
   firstDayOfWeek: 0,
   name: '',
   required: false,

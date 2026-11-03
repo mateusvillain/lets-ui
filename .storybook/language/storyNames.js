@@ -344,6 +344,7 @@ export const untranslatedStoryNames = new Set([
 export const titleSegmentsPt = {
   'Get started': 'Primeiros passos',
   Introduction: 'Introdução',
+  Localization: 'Localização',
   Foundations: 'Fundamentos',
   Border: 'Bordas',
   Color: 'Cores',

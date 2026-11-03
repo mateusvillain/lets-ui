@@ -31,8 +31,10 @@ import {
   maskDigits,
   maskPattern,
   rangeMask,
+  rangeSeparator,
   readMask,
 } from './mask.js';
+import { localized, resolveLang, translate } from '../../utils/i18n.js';
 
 const ICON_CALENDAR = html`
   <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -76,14 +78,6 @@ const GRID_COLUMNS = 3;
 
 const monthIndex = (date: Date) => date.getFullYear() * 12 + date.getMonth();
 
-// Read with `||`: removing the attribute leaves the property null, and the
-// text still needs a value.
-const DEFAULTS = {
-  requiredText: 'Required',
-  startLabel: 'Start date',
-  endLabel: 'End date',
-};
-
 // January 4, 2026 is a Sunday: adding 0–6 days walks a whole week from it.
 const REFERENCE_SUNDAY = new Date(2026, 0, 4);
 
@@ -107,7 +101,10 @@ export class LuiDatePicker extends LitElement {
   @property({ type: Boolean, reflect: true }) editable = false;
   @property() placeholder = '';
   @property() size = 'lg';
-  @property() locale = 'en-US';
+  // Empty follows the element's language — the `lang` of its closest
+  // ancestor — so a page in Portuguese gets Portuguese months without saying
+  // so twice. Without a `lang` anywhere, `en-US`.
+  @property() locale = '';
   @property({ type: Number, attribute: 'first-day-of-week' })
   firstDayOfWeek = 0;
   @property({ type: Boolean, reflect: true }) open = false;
@@ -115,59 +112,92 @@ export class LuiDatePicker extends LitElement {
   @property({ type: Boolean }) required = false;
   // Read only without `editable`: a button takes no aria-required, so the
   // field is described as required instead.
-  @property({ attribute: 'required-text' }) requiredText =
-    DEFAULTS.requiredText;
+  @localized('datePicker.requiredText', {
+    attribute: 'required-text',
+    emptyIsUnset: true,
+  })
+  requiredText!: string;
   @property({ type: Boolean }) optional = false;
-  @property({ attribute: 'optional-text' }) optionalText = '(optional)';
+  @localized('form.optionalText', { attribute: 'optional-text' })
+  optionalText!: string;
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
-  @property({ attribute: 'bad-input-text' }) badInputText =
-    'Enter a valid date.';
+  @localized('form.errorText', { attribute: 'error-text' })
+  errorText!: string;
+  @localized('datePicker.badInputText', { attribute: 'bad-input-text' })
+  badInputText!: string;
   // The typed format, as the reader should see it. Empty means the locale's
-  // pattern with English letters, like `dd / mm / yyyy`.
+  // pattern with the letters of the element's language, like `dd / mm / yyyy`
+  // in English and `dd / mm / aaaa` in Portuguese.
   @property({ attribute: 'format-text' }) formatText = '';
-  @property({ attribute: 'range-error-text' }) rangeErrorText =
-    'Enter a date within the allowed period.';
+  @localized('datePicker.rangeErrorText', { attribute: 'range-error-text' })
+  rangeErrorText!: string;
   // A date `isDateDisabled` names: inside `min`/`max`, but still blocked, so
   // it earns a message of its own rather than reusing `range-error-text`.
-  @property({ attribute: 'unavailable-date-text' }) unavailableDateText =
-    'This date is unavailable.';
-  @property({ attribute: 'range-order-text' }) rangeOrderText =
-    "The end date can't be before the start date.";
-  @property({ attribute: 'range-start-text' }) rangeStartText =
-    'Start date selected. Choose the end date.';
+  @localized('datePicker.unavailableDateText', {
+    attribute: 'unavailable-date-text',
+  })
+  unavailableDateText!: string;
+  @localized('datePicker.rangeOrderText', { attribute: 'range-order-text' })
+  rangeOrderText!: string;
+  @localized('datePicker.rangeStartText', { attribute: 'range-start-text' })
+  rangeStartText!: string;
   // Appended to a day's name. VoiceOver does not announce `aria-selected` on
   // a gridcell, so the state is spoken as part of the name too.
-  @property({ attribute: 'selected-day-text' }) selectedDayText = 'selected';
-  @property({ attribute: 'range-start-day-text' }) rangeStartDayText =
-    'start of period';
-  @property({ attribute: 'in-range-day-text' }) inRangeDayText = 'in period';
-  @property({ attribute: 'range-end-day-text' }) rangeEndDayText =
-    'end of period';
-  @property({ attribute: 'unavailable-day-text' }) unavailableDayText =
-    'unavailable';
-  @property({ attribute: 'dialog-label' }) dialogLabel = 'Choose date';
-  @property({ attribute: 'previous-month-label' }) previousMonthLabel =
-    'Previous month';
-  @property({ attribute: 'next-month-label' }) nextMonthLabel = 'Next month';
+  @localized('datePicker.selectedDayText', { attribute: 'selected-day-text' })
+  selectedDayText!: string;
+  @localized('datePicker.rangeStartDayText', {
+    attribute: 'range-start-day-text',
+  })
+  rangeStartDayText!: string;
+  @localized('datePicker.inRangeDayText', { attribute: 'in-range-day-text' })
+  inRangeDayText!: string;
+  @localized('datePicker.rangeEndDayText', { attribute: 'range-end-day-text' })
+  rangeEndDayText!: string;
+  @localized('datePicker.unavailableDayText', {
+    attribute: 'unavailable-day-text',
+  })
+  unavailableDayText!: string;
+  @localized('datePicker.dialogLabel', { attribute: 'dialog-label' })
+  dialogLabel!: string;
+  @localized('datePicker.previousMonthLabel', {
+    attribute: 'previous-month-label',
+  })
+  previousMonthLabel!: string;
+  @localized('datePicker.nextMonthLabel', { attribute: 'next-month-label' })
+  nextMonthLabel!: string;
   // Appended to the month and the year in the title, each a button: a click
   // swaps the days for a grid of months or years, the pointer's way to a
   // distant date.
-  @property({ attribute: 'choose-month-label' }) chooseMonthLabel =
-    'choose month';
-  @property({ attribute: 'choose-year-label' }) chooseYearLabel = 'choose year';
-  @property({ attribute: 'previous-year-label' }) previousYearLabel =
-    'Previous year';
-  @property({ attribute: 'next-year-label' }) nextYearLabel = 'Next year';
-  @property({ attribute: 'previous-years-label' }) previousYearsLabel =
-    'Previous years';
-  @property({ attribute: 'next-years-label' }) nextYearsLabel = 'Next years';
+  @localized('datePicker.chooseMonthLabel', { attribute: 'choose-month-label' })
+  chooseMonthLabel!: string;
+  @localized('datePicker.chooseYearLabel', { attribute: 'choose-year-label' })
+  chooseYearLabel!: string;
+  @localized('datePicker.previousYearLabel', {
+    attribute: 'previous-year-label',
+  })
+  previousYearLabel!: string;
+  @localized('datePicker.nextYearLabel', { attribute: 'next-year-label' })
+  nextYearLabel!: string;
+  @localized('datePicker.previousYearsLabel', {
+    attribute: 'previous-years-label',
+  })
+  previousYearsLabel!: string;
+  @localized('datePicker.nextYearsLabel', { attribute: 'next-years-label' })
+  nextYearsLabel!: string;
   // With `editable range`, `two` types each end in a text box of its own,
   // inside one control that still looks like a single field.
   @property({ attribute: 'range-fields' }) rangeFields = 'one';
-  @property({ attribute: 'start-label' }) startLabel = DEFAULTS.startLabel;
-  @property({ attribute: 'end-label' }) endLabel = DEFAULTS.endLabel;
+  @localized('datePicker.startLabel', {
+    attribute: 'start-label',
+    emptyIsUnset: true,
+  })
+  startLabel!: string;
+  @localized('datePicker.endLabel', {
+    attribute: 'end-label',
+    emptyIsUnset: true,
+  })
+  endLabel!: string;
   @property({ attribute: 'force-state' }) forceState = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 
@@ -223,10 +253,22 @@ export class LuiDatePicker extends LitElement {
     document.removeEventListener('click', this._handleDocumentClick);
   }
 
+  // The locale in effect: the attribute, else the element's language.
+  get _locale() {
+    return this.locale || resolveLang(this) || 'en-US';
+  }
+
+  // The locale the field text was last written in. A `lang` change re-renders
+  // without touching `locale`, so the text compares against this instead.
+  private _textLocale = '';
+
   protected willUpdate(changed: PropertyValues) {
+    const locale = this._locale;
+    const localeChanged = locale !== this._textLocale;
+    this._textLocale = locale;
     if (
       (changed.has('value') ||
-        changed.has('locale') ||
+        localeChanged ||
         changed.has('range') ||
         changed.has('editable') ||
         changed.has('rangeFields')) &&
@@ -507,11 +549,12 @@ export class LuiDatePicker extends LitElement {
   private _formatters = new Map<string, Intl.DateTimeFormat>();
 
   private _formatter(options: Intl.DateTimeFormatOptions) {
-    const key = `${this.locale}|${JSON.stringify(options)}`;
+    const locale = this._locale;
+    const key = `${locale}|${JSON.stringify(options)}`;
     let formatter = this._formatters.get(key);
     if (!formatter) {
       try {
-        formatter = new Intl.DateTimeFormat(this.locale || undefined, options);
+        formatter = new Intl.DateTimeFormat(locale, options);
       } catch {
         // An unknown locale tag throws; fall back to the user agent's.
         formatter = new Intl.DateTimeFormat(undefined, options);
@@ -525,20 +568,38 @@ export class LuiDatePicker extends LitElement {
     return this._formatter(options).format(date);
   }
 
+  // Fixed-width digits, the form a typed date takes.
+  get _numericFormatter() {
+    return this._formatter({
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      numberingSystem: 'latn',
+    });
+  }
+
+  // The mark between the two dates of a typed range, in one text box or
+  // between two.
+  get _rangeSeparator() {
+    return rangeSeparator(this._numericFormatter);
+  }
+
   get _mask(): MaskSegment[] {
-    const mask = dateMask(
-      this._formatter({
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        numberingSystem: 'latn',
-      })
-    );
-    return this.range && !this._split ? rangeMask(mask) : mask;
+    const mask = dateMask(this._numericFormatter);
+    return this.range && !this._split
+      ? rangeMask(mask, this._rangeSeparator)
+      : mask;
   }
 
   get _formatText() {
-    return this.formatText || maskPattern(this._mask);
+    return (
+      this.formatText ||
+      maskPattern(this._mask, {
+        day: translate(this, 'datePicker.dayLetter'),
+        month: translate(this, 'datePicker.monthLetter'),
+        year: translate(this, 'datePicker.yearLetter'),
+      })
+    );
   }
 
   private _maskText({ start, end }: DateRange) {
@@ -1659,7 +1720,7 @@ export class LuiDatePicker extends LitElement {
       </button>
       ${this.required
         ? html`<span id="${requiredId}" class="date-picker__sr-only"
-            >${this.requiredText || DEFAULTS.requiredText}</span
+            >${this.requiredText}</span
           >`
         : nothing}
     `;
@@ -1759,9 +1820,7 @@ export class LuiDatePicker extends LitElement {
         autocomplete="off"
         .value="${live(end ? this._endText : this._startText)}"
         placeholder="${this.placeholder || this._formatText}"
-        aria-label="${end
-          ? this.endLabel || DEFAULTS.endLabel
-          : this.startLabel || DEFAULTS.startLabel}"
+        aria-label="${end ? this.endLabel : this.startLabel}"
         aria-describedby="${describedBy(end)}"
         aria-invalid="${(end ? invalid.end : invalid.start) ? 'true' : 'false'}"
         aria-required="${this.required ? 'true' : 'false'}"
@@ -1784,7 +1843,9 @@ export class LuiDatePicker extends LitElement {
         )}"
       >
         ${field(false)}
-        <span class="date-picker__separator" aria-hidden="true">–</span>
+        <span class="date-picker__separator" aria-hidden="true"
+          >${this._rangeSeparator.trim()}</span
+        >
         ${field(true)} ${this._renderToggle()}
       </div>
     `;

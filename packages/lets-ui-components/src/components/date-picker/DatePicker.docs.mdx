@@ -15,6 +15,7 @@ como a data de nascimento, ative `editable` para que a data possa ser digitada.
 O campo tem a mesma anatomia, os mesmos estados e os mesmos tamanhos do Input.
 O valor é uma string ISO 8601 em qualquer idioma: `YYYY-MM-DD` para uma data e
 `YYYY-MM-DD/YYYY-MM-DD` para um intervalo.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -28,18 +29,15 @@ such as the birth date, turn on `editable` so the date can be typed.
 The field has the same anatomy, the same states and the same sizes as Input.
 The value is an ISO 8601 string in any language: `YYYY-MM-DD` for a date and
 `YYYY-MM-DD/YYYY-MM-DD` for a range.
+
 </Lang>
 
 <Canvas of={DatePickerStories.DatePicker} />
 <Controls of={DatePickerStories.DatePicker} />
 
-<Lang lang="pt-BR">
-## Calendário aberto
-</Lang>
+<Lang lang="pt-BR">## Calendário aberto</Lang>
 
-<Lang lang="en-US">
-## Open calendar
-</Lang>
+<Lang lang="en-US">## Open calendar</Lang>
 
 <Canvas of={DatePickerStories.Open} />
 
@@ -63,6 +61,7 @@ outro.
 
 O campo mostra as duas pontas com `Intl.DateTimeFormat.formatRange`, que não
 repete o que elas têm em comum: `Jan 16 – 21, 2026`.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -85,6 +84,7 @@ other.
 
 The field shows both ends with `Intl.DateTimeFormat.formatRange`, which does
 not repeat what they have in common: `Jan 16 – 21, 2026`.
+
 </Lang>
 
 <Canvas of={DatePickerStories.Range} />
@@ -107,6 +107,8 @@ campos:
 | `ja-JP`  | `yyyy / mm / dd` |
 
 Com `range`, o campo recebe as duas datas: `dd / mm / yyyy – dd / mm / yyyy`.
+O sinal entre elas também vem do `locale`, o mesmo que o texto do campo usa:
+`–` na maioria dos idiomas, `～` em `ja-JP`.
 
 O `value` só muda quando o texto forma uma data completa e válida, e cada
 mudança emite `change`. Enquanto o texto está incompleto ou forma uma data que
@@ -116,10 +118,12 @@ vem antes da inicial também reportam `badInput`, mas com a mensagem de
 `range-order-text`. Em todos os casos, o texto digitado fica no campo para ser
 corrigido. Colar uma data em ISO 8601, como `2026-01-16`, também funciona.
 
-Para traduzir as letras do formato, use `format-text`, como em
-`format-text="dd / mm / aaaa"`. Ele vale para o placeholder, para o texto
-abaixo do campo e para a descrição acessível. Com `hint`, inclua o formato no
-texto do hint, já que ele toma o lugar do formato abaixo do campo.
+As letras do formato seguem o idioma do elemento: com a tradução `ptBR`
+registrada, uma página em português mostra `dd / mm / aaaa`. Para outro texto,
+use `format-text`, que vale para o placeholder, para o texto abaixo do campo e
+para a descrição acessível. Com `hint`, inclua o formato no texto do hint, já
+que ele toma o lugar do formato abaixo do campo.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -140,6 +144,8 @@ the fields:
 | `ja-JP`  | `yyyy / mm / dd` |
 
 With `range`, the field receives both dates: `dd / mm / yyyy – dd / mm / yyyy`.
+The mark between them also comes from the `locale`, the same one the field
+text uses: `–` in most languages, `～` in `ja-JP`.
 
 `value` only changes when the text forms a complete and valid date, and each
 change emits `change`. While the text is incomplete or forms a date that does
@@ -149,10 +155,12 @@ end comes before the start also report `badInput`, but with the message from
 `range-order-text`. In every case, the typed text stays in the field to be
 corrected. Pasting a date in ISO 8601, such as `2026-01-16`, also works.
 
-To translate the letters of the format, use `format-text`, as in
-`format-text="dd / mm / aaaa"`. It applies to the placeholder, to the text
+The letters of the format follow the element's language: with the `ptBR`
+translation registered, a page in Portuguese shows `dd / mm / aaaa`. For any
+other text, use `format-text`, which applies to the placeholder, to the text
 below the field and to the accessible description. With `hint`, include the
 format in the hint text, since it takes the place of the format below the field.
+
 </Lang>
 
 <Canvas of={DatePickerStories.Editable} />
@@ -183,6 +191,7 @@ Colar um intervalo em ISO 8601 em qualquer uma das caixas preenche as duas.
 Sem `editable`, o range continua um botão só, e `range-fields` não tem efeito.
 Cada caixa tem a largura da data, então as duas ficam tão próximas quanto no
 range em um campo.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -213,6 +222,7 @@ ISO 8601 in any of the boxes fills both.
 Without `editable`, range remains a single button, and `range-fields` has no
 effect. Each box is the width of the date, so the two sit as close as in the
 range in one field.
+
 </Lang>
 
 <Canvas of={DatePickerStories.RangeTwoFields} />
@@ -223,6 +233,7 @@ range in one field.
 Use `min` e `max` para limitar as datas que podem ser escolhidas. Por exemplo,
 uma reserva que não pode ser no passado ou um prazo que não pode passar do fim
 do trimestre.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -231,6 +242,7 @@ do trimestre.
 Use `min` and `max` to limit the dates that can be chosen. For example, a
 booking that cannot be in the past or a deadline that cannot go past the end of
 the quarter.
+
 </Lang>
 
 <Canvas of={DatePickerStories.MinMax} />
@@ -248,6 +260,7 @@ distante, sem clicar mês a mês.
 Meses e anos sem nenhum dia dentro de `min` e `max` ficam desabilitados. `Esc`
 ou um novo clique no botão aberto volta aos dias sem mudar nada. Com `range`, a
 primeira ponta já escolhida continua marcada depois da troca de mês ou ano.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -265,6 +278,7 @@ Months and years with no day within `min` and `max` are disabled. `Esc` or a
 new click on the open button returns to the days without changing anything.
 With `range`, the first end already chosen stays marked after changing the
 month or year.
+
 </Lang>
 
 <Lang lang="pt-BR">
@@ -312,6 +326,7 @@ leste de Greenwich, cai no dia anterior.
 
 A função roda a cada renderização, uma vez por dia do mês na tela. Mantenha-a
 rápida: uma consulta a um `Set`, não uma requisição.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -359,37 +374,26 @@ and, east of Greenwich, falls on the previous day.
 
 The function runs on every render, once per day of the month on screen. Keep it
 fast: a query to a `Set`, not a request.
+
 </Lang>
 
 <Canvas of={DatePickerStories.UnavailableDates} />
 
-<Lang lang="pt-BR">
-## Error
-</Lang>
+<Lang lang="pt-BR">## Error</Lang>
 
-<Lang lang="en-US">
-## Error
-</Lang>
+<Lang lang="en-US">## Error</Lang>
 
 <Canvas of={DatePickerStories.Error} />
 
-<Lang lang="pt-BR">
-## Disabled
-</Lang>
+<Lang lang="pt-BR">## Disabled</Lang>
 
-<Lang lang="en-US">
-## Disabled
-</Lang>
+<Lang lang="en-US">## Disabled</Lang>
 
 <Canvas of={DatePickerStories.Disabled} />
 
-<Lang lang="pt-BR">
-## Sizes
-</Lang>
+<Lang lang="pt-BR">## Sizes</Lang>
 
-<Lang lang="en-US">
-## Sizes
-</Lang>
+<Lang lang="en-US">## Sizes</Lang>
 
 <Canvas of={DatePickerStories.Sizes} />
 
@@ -407,17 +411,25 @@ e a pontuação mudam conforme a `locale`:
 | `en-GB`  | 16 Oct 2026        | 16 – 21 Oct 2026        |
 | `pt-BR`  | 16 de out. de 2026 | 16 – 21 de out. de 2026 |
 | `de-DE`  | 16. Okt. 2026      | 16.–21. Okt. 2026       |
+| `pt-PT`  | 16/10/2026         | 16/10/2026 – 21/10/2026 |
+| `ja-JP`  | 2026年10月16日     | 2026/10/16～2026/10/21  |
 
-Em todos os idiomas, o dia e o ano aparecem em números e o mês aparece
-abreviado. O mês escrito evita confusão: `10/11/2026` é outubro nos Estados
-Unidos e novembro no Brasil. A `locale` não altera o `value`, que fica em
+O campo pede ao navegador o mês abreviado, porque o mês escrito evita confusão:
+`10/11/2026` é outubro nos Estados Unidos e novembro no Brasil. A maioria dos
+idiomas escreve o mês, mas alguns, como `pt-PT` e `ja-JP`, usam números
+mesmo assim. É a convenção desses idiomas, e lá a ordem dos campos não é
+ambígua. A `locale` não altera o `value`, que fica em
 ISO 8601.
 
-Se o navegador não reconhecer a tag, o campo usa o idioma do navegador.
+Sem `locale`, o campo segue o `lang` do ancestral mais próximo, `<html>`
+incluído, e sem nenhum `lang` usa `en-US`. Assim uma página com
+`<html lang="pt-BR">` já mostra meses e dias em português. Se o navegador não
+reconhecer a tag, o campo usa o idioma do navegador.
 
 `first-day-of-week` define a primeira coluna do calendário. Nos Estados Unidos
 e no Brasil a semana começa no domingo, e na maior parte da Europa começa na
 segunda.
+
 </Lang>
 
 <Lang lang="en-US">
@@ -435,17 +447,25 @@ according to the `locale`:
 | `en-GB`  | 16 Oct 2026        | 16 – 21 Oct 2026        |
 | `pt-BR`  | 16 de out. de 2026 | 16 – 21 de out. de 2026 |
 | `de-DE`  | 16. Okt. 2026      | 16.–21. Okt. 2026       |
+| `pt-PT`  | 16/10/2026         | 16/10/2026 – 21/10/2026 |
+| `ja-JP`  | 2026年10月16日     | 2026/10/16～2026/10/21  |
 
-In every language, the day and the year appear as numbers and the month appears
-abbreviated. The written month avoids confusion: `10/11/2026` is October in the
-United States and November in Brazil. The `locale` does not change `value`,
+The field asks the browser for the abbreviated month, because a written month
+avoids confusion: `10/11/2026` is October in the United States and November in
+Brazil. Most languages write the month, but some, such as `pt-PT` and `ja-JP`,
+use numbers anyway. That is the convention of those languages, and there the
+order of the fields is not ambiguous. The `locale` does not change `value`,
 which stays in ISO 8601.
 
-If the browser does not recognize the tag, the field uses the browser language.
+Without `locale`, the field follows the `lang` of its closest ancestor,
+`<html>` included, and with no `lang` at all it uses `en-US`. So a page with
+`<html lang="pt-BR">` already shows months and days in Portuguese. If the
+browser does not recognize the tag, the field uses the browser language.
 
 `first-day-of-week` defines the first column of the calendar. In the United
 States and Brazil the week starts on Sunday, and in most of Europe it starts on
 Monday.
+
 </Lang>
 
 <Canvas of={DatePickerStories.Localized} />
@@ -468,6 +488,7 @@ reporta `rangeOverflow`. Cada caso tem a sua mensagem:
 | `badInput`                         | Com `editable`, o texto está incompleto ou a data não existe | `bad-input-text`        |
 | `badInput`                         | Com `editable range`, a data final vem antes da inicial      | `range-order-text`      |
 | `customError`                      | Uma ponta cai num dia de `isDateDisabled`                    | `unavailable-date-text` |
+
 </Lang>
 
 <Lang lang="en-US">
@@ -488,6 +509,7 @@ before `min` reports `rangeUnderflow`, and one that ends after `max` reports
 | `badInput`                         | With `editable`, the text is incomplete or the date does not exist | `bad-input-text`        |
 | `badInput`                         | With `editable range`, the end date comes before the start         | `range-order-text`      |
 | `customError`                      | An end falls on a day of `isDateDisabled`                          | `unavailable-date-text` |
+
 </Lang>
 
 <Canvas of={DatePickerStories.FormIntegration} />
@@ -499,6 +521,7 @@ before `min` reports `rangeUnderflow`, and one that ends after `max` reports
 | -------- | ----------------------------------------------- | ----------------------------------------- |
 | `change` | `{ value: string }`                             | O usuário escolhe ou digita uma data      |
 | `change` | `{ value: string, start: string, end: string }` | Com `range`, o usuário fecha um intervalo |
+
 </Lang>
 
 <Lang lang="en-US">
@@ -508,56 +531,59 @@ before `min` reports `rangeUnderflow`, and one that ends after `max` reports
 | -------- | ----------------------------------------------- | ------------------------------------- |
 | `change` | `{ value: string }`                             | The user chooses or types a date      |
 | `change` | `{ value: string, start: string, end: string }` | With `range`, the user closes a range |
+
 </Lang>
 
 <Lang lang="pt-BR">
 ## Atributos
 
-| Atributo            | Tipo                      | Padrão    | Descrição                                                                          |
-| ------------------- | ------------------------- | --------- | ---------------------------------------------------------------------------------- |
-| `value`             | `string`                  | `''`      | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`           |
-| `range`             | `boolean`                 | `false`   | Seleciona um intervalo, com dois meses lado a lado                                 |
-| `editable`          | `boolean`                 | `false`   | Permite digitar a data, com máscara no formato do `locale`                         |
-| `range-fields`      | `string`                  | `'one'`   | Com `editable range`, `two` usa uma caixa de texto para cada ponta, no mesmo campo |
-| `min`               | `string`                  | `''`      | Primeira data selecionável, `YYYY-MM-DD`                                           |
-| `max`               | `string`                  | `''`      | Última data selecionável, `YYYY-MM-DD`                                             |
-| `isDateDisabled`    | `(date: Date) => boolean` | `null`    | Só em JS, sem atributo. Marca dias indisponíveis fora do padrão de `min`/`max`     |
-| `open`              | `boolean`                 | `false`   | Calendário aberto, refletido como atributo                                         |
-| `locale`            | `string`                  | `'en-US'` | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`                         |
-| `first-day-of-week` | `number`                  | `0`       | Primeira coluna do calendário: `0` domingo … `6` sábado                            |
-| `size`              | `string`                  | `'lg'`    | `lg` ou `md`                                                                       |
-| `label`             | `string`                  | `''`      | Rótulo do campo. Obrigatório, ou `aria-label` quando não houver rótulo visível     |
-| `hint`              | `string`                  | `''`      | Texto de apoio abaixo do campo. Com `editable`, substitui o formato                |
-| `error`             | `boolean`                 | `false`   | Exibe o estado de erro e a mensagem de `error-text`                                |
-| `disabled`          | `boolean`                 | `false`   | Desabilita o campo                                                                 |
-| `optional`          | `boolean`                 | `false`   | Exibe o marcador de `optional-text` ao lado do rótulo                              |
-| `name`              | `string`                  | `''`      | Nome do campo no `FormData`                                                        |
-| `required`          | `boolean`                 | `false`   | Bloqueia a submissão sem data                                                      |
+| Atributo            | Tipo                      | Padrão  | Descrição                                                                          |
+| ------------------- | ------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| `value`             | `string`                  | `''`    | Data selecionada em `YYYY-MM-DD`, ou `YYYY-MM-DD/YYYY-MM-DD` com `range`           |
+| `range`             | `boolean`                 | `false` | Seleciona um intervalo, com dois meses lado a lado                                 |
+| `editable`          | `boolean`                 | `false` | Permite digitar a data, com máscara no formato do `locale`                         |
+| `range-fields`      | `string`                  | `'one'` | Com `editable range`, `two` usa uma caixa de texto para cada ponta, no mesmo campo |
+| `min`               | `string`                  | `''`    | Primeira data selecionável, `YYYY-MM-DD`                                           |
+| `max`               | `string`                  | `''`    | Última data selecionável, `YYYY-MM-DD`                                             |
+| `isDateDisabled`    | `(date: Date) => boolean` | `null`  | Só em JS, sem atributo. Marca dias indisponíveis fora do padrão de `min`/`max`     |
+| `open`              | `boolean`                 | `false` | Calendário aberto, refletido como atributo                                         |
+| `locale`            | `string`                  | `''`    | Idioma de exibição (tag BCP 47), via `Intl.DateTimeFormat`. Vazio segue o `lang`   |
+| `first-day-of-week` | `number`                  | `0`     | Primeira coluna do calendário: `0` domingo … `6` sábado                            |
+| `size`              | `string`                  | `'lg'`  | `lg` ou `md`                                                                       |
+| `label`             | `string`                  | `''`    | Rótulo do campo. Obrigatório, ou `aria-label` quando não houver rótulo visível     |
+| `hint`              | `string`                  | `''`    | Texto de apoio abaixo do campo. Com `editable`, substitui o formato                |
+| `error`             | `boolean`                 | `false` | Exibe o estado de erro e a mensagem de `error-text`                                |
+| `disabled`          | `boolean`                 | `false` | Desabilita o campo                                                                 |
+| `optional`          | `boolean`                 | `false` | Exibe o marcador de `optional-text` ao lado do rótulo                              |
+| `name`              | `string`                  | `''`    | Nome do campo no `FormData`                                                        |
+| `required`          | `boolean`                 | `false` | Bloqueia a submissão sem data                                                      |
+
 </Lang>
 
 <Lang lang="en-US">
 ## Attributes
 
-| Attribute           | Type                      | Default   | Description                                                                      |
-| ------------------- | ------------------------- | --------- | -------------------------------------------------------------------------------- |
-| `value`             | `string`                  | `''`      | Selected date in `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` with `range`           |
-| `range`             | `boolean`                 | `false`   | Selects a range, with two months side by side                                    |
-| `editable`          | `boolean`                 | `false`   | Allows typing the date, with a mask in the `locale` format                       |
-| `range-fields`      | `string`                  | `'one'`   | With `editable range`, `two` uses a text box for each end, in the same field     |
-| `min`               | `string`                  | `''`      | First selectable date, `YYYY-MM-DD`                                              |
-| `max`               | `string`                  | `''`      | Last selectable date, `YYYY-MM-DD`                                               |
-| `isDateDisabled`    | `(date: Date) => boolean` | `null`    | Only in JS, no attribute. Marks unavailable days outside the `min`/`max` pattern |
-| `open`              | `boolean`                 | `false`   | Calendar open, reflected as an attribute                                         |
-| `locale`            | `string`                  | `'en-US'` | Display language (BCP 47 tag), through `Intl.DateTimeFormat`                     |
-| `first-day-of-week` | `number`                  | `0`       | First column of the calendar: `0` Sunday … `6` Saturday                          |
-| `size`              | `string`                  | `'lg'`    | `lg` or `md`                                                                     |
-| `label`             | `string`                  | `''`      | Field label. Required, or `aria-label` when there is no visible label            |
-| `hint`              | `string`                  | `''`      | Support text below the field. With `editable`, replaces the format               |
-| `error`             | `boolean`                 | `false`   | Shows the error state and the message from `error-text`                          |
-| `disabled`          | `boolean`                 | `false`   | Disables the field                                                               |
-| `optional`          | `boolean`                 | `false`   | Shows the `optional-text` marker next to the label                               |
-| `name`              | `string`                  | `''`      | Field name in `FormData`                                                         |
-| `required`          | `boolean`                 | `false`   | Blocks submission without a date                                                 |
+| Attribute           | Type                      | Default | Description                                                                        |
+| ------------------- | ------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| `value`             | `string`                  | `''`    | Selected date in `YYYY-MM-DD`, or `YYYY-MM-DD/YYYY-MM-DD` with `range`             |
+| `range`             | `boolean`                 | `false` | Selects a range, with two months side by side                                      |
+| `editable`          | `boolean`                 | `false` | Allows typing the date, with a mask in the `locale` format                         |
+| `range-fields`      | `string`                  | `'one'` | With `editable range`, `two` uses a text box for each end, in the same field       |
+| `min`               | `string`                  | `''`    | First selectable date, `YYYY-MM-DD`                                                |
+| `max`               | `string`                  | `''`    | Last selectable date, `YYYY-MM-DD`                                                 |
+| `isDateDisabled`    | `(date: Date) => boolean` | `null`  | Only in JS, no attribute. Marks unavailable days outside the `min`/`max` pattern   |
+| `open`              | `boolean`                 | `false` | Calendar open, reflected as an attribute                                           |
+| `locale`            | `string`                  | `''`    | Display language (BCP 47 tag), through `Intl.DateTimeFormat`. Empty follows `lang` |
+| `first-day-of-week` | `number`                  | `0`     | First column of the calendar: `0` Sunday … `6` Saturday                            |
+| `size`              | `string`                  | `'lg'`  | `lg` or `md`                                                                       |
+| `label`             | `string`                  | `''`    | Field label. Required, or `aria-label` when there is no visible label              |
+| `hint`              | `string`                  | `''`    | Support text below the field. With `editable`, replaces the format                 |
+| `error`             | `boolean`                 | `false` | Shows the error state and the message from `error-text`                            |
+| `disabled`          | `boolean`                 | `false` | Disables the field                                                                 |
+| `optional`          | `boolean`                 | `false` | Shows the `optional-text` marker next to the label                                 |
+| `name`              | `string`                  | `''`    | Field name in `FormData`                                                           |
+| `required`          | `boolean`                 | `false` | Blocks submission without a date                                                   |
+
 </Lang>
 
 <Lang lang="pt-BR">
@@ -584,7 +610,7 @@ abaixo para usar o idioma do projeto.
 | `in-range-day-text`     | `'in period'`                                    | Com `range`, junto ao nome dos dias entre as pontas                                             |
 | `range-end-day-text`    | `'end of period'`                                | Com `range`, junto ao nome do último dia do período                                             |
 | `unavailable-day-text`  | `'unavailable'`                                  | Junto ao nome de um dia marcado por `isDateDisabled`                                            |
-| `format-text`           | Formato do `locale`, como `dd / mm / yyyy`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível             |
+| `format-text`           | Formato do `locale`, como `dd / mm / aaaa`       | Com `editable`: placeholder, texto abaixo do campo sem `hint` e descrição acessível             |
 | `dialog-label`          | `'Choose date'`                                  | Nome acessível do calendário e, com `editable`, do botão que o abre, seguido da data escolhida  |
 | `previous-month-label`  | `'Previous month'`                               | `aria-label` do botão de mês anterior                                                           |
 | `next-month-label`      | `'Next month'`                                   | `aria-label` do botão de próximo mês                                                            |
@@ -594,6 +620,7 @@ abaixo para usar o idioma do projeto.
 | `next-year-label`       | `'Next year'`                                    | Na grade de meses, `aria-label` do botão de próximo ano                                         |
 | `previous-years-label`  | `'Previous years'`                               | Na grade de anos, `aria-label` do botão dos doze anos anteriores                                |
 | `next-years-label`      | `'Next years'`                                   | Na grade de anos, `aria-label` do botão dos doze anos seguintes                                 |
+
 </Lang>
 
 <Lang lang="en-US">
@@ -630,6 +657,7 @@ attributes below to use the project language.
 | `next-year-label`       | `'Next year'`                                    | In the months grid, `aria-label` of the next year button                                                       |
 | `previous-years-label`  | `'Previous years'`                               | In the years grid, `aria-label` of the button for the previous twelve years                                    |
 | `next-years-label`      | `'Next years'`                                   | In the years grid, `aria-label` of the button for the next twelve years                                        |
+
 </Lang>
 
 <Lang lang="pt-BR">
@@ -771,6 +799,7 @@ obrigatório desde o início. Ao enviar o form vazio, vale o `valueMissing`, com
 | Regras do axe                  | Painel Accessibility do Storybook, sem bloquear o build |
 | VoiceOver, no Safari           | Testado manualmente                                     |
 | NVDA                           | Ainda não testado manualmente                           |
+
 </Lang>
 
 <Lang lang="en-US">
@@ -912,15 +941,12 @@ is announced as required from the start. On submitting the empty form,
 | axe rules                           | Storybook Accessibility panel, without blocking the build |
 | VoiceOver, in Safari                | Manually tested                                           |
 | NVDA                                | Not manually tested yet                                   |
+
 </Lang>
 
-<Lang lang="pt-BR">
-## Classe CSS (sem Web Component)
-</Lang>
+<Lang lang="pt-BR">## Classe CSS (sem Web Component)</Lang>
 
-<Lang lang="en-US">
-## CSS class (without Web Component)
-</Lang>
+<Lang lang="en-US">## CSS class (without Web Component)</Lang>
 
 <Canvas of={DatePickerStories.CSSClass} />
 
@@ -941,6 +967,7 @@ is announced as required from the start. On submitting the empty form,
     .addEventListener('change', (e) => console.log(e.detail.value));
 </script>
 ```
+
 </Lang>
 
 <Lang lang="en-US">
@@ -960,4 +987,5 @@ is announced as required from the start. On submitting the empty form,
     .addEventListener('change', (e) => console.log(e.detail.value));
 </script>
 ```
+
 </Lang>

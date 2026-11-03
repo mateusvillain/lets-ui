@@ -4,6 +4,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './radio-group.scss?inline';
 import { nameProperty } from '../../utils/form.js';
 import { LuiRadio } from '../radio/radio.js';
+import { localized } from '../../utils/i18n.js';
 
 export class LuiRadioGroup extends LitElement {
   static styles = unsafeCSS(styles);
@@ -20,7 +21,8 @@ export class LuiRadioGroup extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'Select an option.';
+  @localized('radioGroup.errorText', { attribute: 'error-text' })
+  errorText!: string;
 
   constructor() {
     super();

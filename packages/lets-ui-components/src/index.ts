@@ -57,6 +57,16 @@ import { LuiToast } from './components/toast/toast.js';
 import { LuiTooltip } from './components/tooltip/tooltip.js';
 import { LuiScrollArea } from './components/scroll-area/scroll-area.js';
 
+export { registerTranslation } from './utils/i18n.js';
+export type { PartialTranslation, TermKey, Translation } from './utils/i18n.js';
+export { en } from './locales/en.js';
+export { ptBR } from './locales/pt-BR.js';
+export { ptPT } from './locales/pt-PT.js';
+export { es } from './locales/es.js';
+export { fr } from './locales/fr.js';
+export { de } from './locales/de.js';
+export { ja } from './locales/ja.js';
+
 function define(name: string, elementClass: CustomElementConstructor) {
   if (!customElements.get(name)) {
     customElements.define(name, elementClass);

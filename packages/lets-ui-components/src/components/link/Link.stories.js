@@ -55,7 +55,7 @@ export default {
     },
     externalLabel: {
       control: 'text',
-      table: { defaultValue: { summary: '(abre em nova aba)' } },
+      table: { defaultValue: { summary: '(opens in a new tab)' } },
     },
     disabled: {
       control: 'boolean',
@@ -95,10 +95,7 @@ const Template = ({
     hreflang && `hreflang="${hreflang}"`,
     referrerpolicy && `referrerpolicy="${referrerpolicy}"`,
     external && 'external',
-    external &&
-      externalLabel &&
-      externalLabel !== '(abre em nova aba)' &&
-      `external-label="${externalLabel}"`,
+    external && externalLabel && `external-label="${externalLabel}"`,
     disabled && 'disabled',
     visited && 'visited',
     ariaLabel && `aria-label="${ariaLabel}"`,
@@ -117,7 +114,7 @@ Default.args = {
   target: '',
   size: '',
   external: false,
-  externalLabel: '(abre em nova aba)',
+  externalLabel: '',
   visited: false,
   rel: '',
   download: '',
@@ -153,7 +150,7 @@ ExternalLink.storyName = 'Link externo';
 export const ExternalLabelI18n = () => `
   <div style="display: flex; flex-direction: column; gap: 12px;">
     <lui-link href="https://example.com" external>
-      pt-BR (padrão)
+      Idioma da página (padrão)
     </lui-link>
     <lui-link href="https://example.com" external external-label="(opens in a new tab)">
       English

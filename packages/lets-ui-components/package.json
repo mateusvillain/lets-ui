@@ -23,6 +23,13 @@
   ],
   "exports": {
     ".": "./dist/index.js",
+    "./locales/en": "./dist/locales/en.js",
+    "./locales/pt-BR": "./dist/locales/pt-BR.js",
+    "./locales/pt-PT": "./dist/locales/pt-PT.js",
+    "./locales/es": "./dist/locales/es.js",
+    "./locales/fr": "./dist/locales/fr.js",
+    "./locales/de": "./dist/locales/de.js",
+    "./locales/ja": "./dist/locales/ja.js",
     "./alert": "./dist/components/alert/alert.js",
     "./breadcrumb": "./dist/components/breadcrumb/breadcrumb.js",
     "./breadcrumb-item": "./dist/components/breadcrumb/breadcrumb-item.js",

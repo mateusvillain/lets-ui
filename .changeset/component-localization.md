@@ -1,0 +1,9 @@
+---
+'@lets-ui/components': minor
+---
+
+Localize the text components write themselves. `registerTranslation()` registers a dictionary once, and every component that reads a localized term follows the `lang` of its closest ancestor, updating in place when a translation is registered or a `lang` changes. An attribute on the element still wins; without one the registered translation applies, then the built-in English. Ships complete Brazilian Portuguese, European Portuguese, Spanish, French, German and Japanese dictionaries (`ptBR`, `ptPT`, `es`, `fr`, `de`, `ja`, each also at `@lets-ui/components/locales/<code>`, such as `/pt-BR`) and the English source of the term keys (`en`). Covers `lui-input`, `lui-textarea`, `lui-select`, `lui-checkbox`, `lui-switch`, `lui-radio-group`, `lui-otp-input`, `lui-date-picker` (all 24 texts, plus the letters of its typed format: `dd / mm / aaaa` in Portuguese) and `lui-link`; the `(optional)` and `This field is required.` texts the form components each repeated now come from one shared term.
+
+`lui-link`'s `external-label` now defaults to English, `(opens in a new tab)`, like every other component's built-in text, instead of Portuguese. Register `ptBR` to keep `(abre em nova aba)` on Portuguese pages.
+
+`lui-date-picker`'s `locale` now defaults to empty, which follows the same `lang` that picks the translation, so `<html lang="pt-BR">` alone gives Portuguese texts, months and days. Without a `lang` anywhere it is still `en-US`, and an explicit `locale` still wins. A page that declares a `lang` but no `locale` now formats dates, and orders the typed mask, in that language instead of `en-US`; set `locale="en-US"` to keep the previous output. `value` stays ISO 8601 either way. The mark between the two dates of a typed range now comes from the locale too, like the field text's: `～` in Japanese rather than `–`.

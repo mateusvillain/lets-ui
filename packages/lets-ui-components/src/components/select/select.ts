@@ -4,6 +4,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './select.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
+import { localized } from '../../utils/i18n.js';
 
 export class LuiSelect extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
@@ -19,11 +20,14 @@ export class LuiSelect extends HostAriaMixin(LitElement) {
   @property({ type: Boolean }) required = false;
   @property() size = 'lg';
   @property({ type: Boolean }) optional = false;
-  @property({ attribute: 'optional-text' }) optionalText = '(optional)';
+  @localized('form.optionalText', { attribute: 'optional-text' })
+  optionalText!: string;
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
-  @property() placeholder = 'Select an option';
+  @localized('form.errorText', { attribute: 'error-text' })
+  errorText!: string;
+  @localized('select.placeholder')
+  placeholder!: string;
   @property({ attribute: 'force-state' }) forceState = '';
   @property({ attribute: 'aria-label' }) ariaLabel = '';
 

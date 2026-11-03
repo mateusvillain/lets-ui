@@ -5,6 +5,7 @@ import { live } from 'lit/directives/live.js';
 import styles from './textarea.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
+import { localized } from '../../utils/i18n.js';
 
 export class LuiTextarea extends HostAriaMixin(LitElement) {
   static styles = unsafeCSS(styles);
@@ -20,10 +21,12 @@ export class LuiTextarea extends HostAriaMixin(LitElement) {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;
-  @property({ attribute: 'optional-text' }) optionalText = '(optional)';
+  @localized('form.optionalText', { attribute: 'optional-text' })
+  optionalText!: string;
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
+  @localized('form.errorText', { attribute: 'error-text' })
+  errorText!: string;
   @property() maxlength = '';
   @property() rows = '4';
   @property() resize = 'vertical';

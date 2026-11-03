@@ -5,6 +5,7 @@ import { live } from 'lit/directives/live.js';
 import styles from './input.scss?inline';
 import { HostAriaMixin } from '../../utils/aria.js';
 import { nameProperty } from '../../utils/form.js';
+import { localized } from '../../utils/i18n.js';
 
 const EYE_CLOSED = html`
   <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -58,16 +59,20 @@ export class LuiInput extends HostAriaMixin(LitElement) {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;
-  @property({ attribute: 'optional-text' }) optionalText = '(optional)';
+  @localized('form.optionalText', { attribute: 'optional-text' })
+  optionalText!: string;
   @property() hint = '';
   @property({ type: Boolean }) error = false;
-  @property({ attribute: 'error-text' }) errorText = 'This field is required.';
-  @property({ attribute: 'show-password-label' }) showPasswordLabel =
-    'Show password';
-  @property({ attribute: 'hide-password-label' }) hidePasswordLabel =
-    'Hide password';
-  @property({ attribute: 'increment-label' }) incrementLabel = 'Increase value';
-  @property({ attribute: 'decrement-label' }) decrementLabel = 'Decrease value';
+  @localized('form.errorText', { attribute: 'error-text' })
+  errorText!: string;
+  @localized('input.showPasswordLabel', { attribute: 'show-password-label' })
+  showPasswordLabel!: string;
+  @localized('input.hidePasswordLabel', { attribute: 'hide-password-label' })
+  hidePasswordLabel!: string;
+  @localized('input.incrementLabel', { attribute: 'increment-label' })
+  incrementLabel!: string;
+  @localized('input.decrementLabel', { attribute: 'decrement-label' })
+  decrementLabel!: string;
   @property() maxlength = '';
   @property() prefix = '';
   @property() suffix = '';

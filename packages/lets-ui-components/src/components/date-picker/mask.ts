@@ -11,11 +11,6 @@ export type MaskSegment =
   | { literal: string };
 
 const FIELD_LENGTH: Record<MaskField, number> = { day: 2, month: 2, year: 4 };
-const FIELD_LETTER: Record<MaskField, string> = {
-  day: 'd',
-  month: 'm',
-  year: 'y',
-};
 // Right-to-left locales wrap their marks in direction marks, which would
 // otherwise be typed over as if they were characters.
 const BIDI_MARKS = /[\u200e\u200f\u061c]/g;
@@ -56,21 +51,61 @@ export function dateMask(formatter: Intl.DateTimeFormat): MaskSegment[] {
   return fields === 3 ? segments : ISO_MASK;
 }
 
+const RANGE_SEPARATOR = ' – ';
+
+// The mark the locale writes between two dates: ` – ` in most of them, `～` in
+// Japanese. Read from `formatter` — the same one `dateMask` takes — over two
+// dates that share no field, so the mark is all that stands between them.
+export function rangeSeparator(formatter: Intl.DateTimeFormat): string {
+  if (typeof formatter.formatRangeToParts !== 'function') {
+    return RANGE_SEPARATOR;
+  }
+  const start = new Date(2025, 11, 31);
+  const end = new Date(2026, 11, 31);
+  const parts = formatter.formatRangeToParts(start, end);
+  const lastStart = parts.map((p) => p.source).lastIndexOf('startRange');
+  const firstEnd = parts.findIndex((p) => p.source === 'endRange');
+  let separator = parts
+    .slice(lastStart + 1, firstEnd)
+    .map((p) => p.value)
+    .join('')
+    .replace(BIDI_MARKS, '')
+    // Thin and no-break spaces, which `Intl` sets around the dash, become
+    // plain ones: a typed field has no use for them.
+    .replace(/\s+/g, ' ');
+  // A mark that ends a date, like the period of a Korean one, belongs to the
+  // date before it — and `dateMask` already leaves it out.
+  const single = formatter.formatToParts(start);
+  const trailing = single[single.length - 1];
+  if (trailing?.type === 'literal') {
+    const mark = trailing.value.replace(BIDI_MARKS, '');
+    if (mark && separator.startsWith(mark)) {
+      separator = separator.slice(mark.length);
+    }
+  }
+  return separator.trim() ? separator : RANGE_SEPARATOR;
+}
+
 // Two dates, one after the other, for a range.
-export function rangeMask(mask: MaskSegment[]): MaskSegment[] {
-  return [...mask, { literal: ' – ' }, ...mask];
+export function rangeMask(
+  mask: MaskSegment[],
+  separator = RANGE_SEPARATOR
+): MaskSegment[] {
+  return [...mask, { literal: separator }, ...mask];
 }
 
 export function maskCapacity(mask: MaskSegment[]): number {
   return mask.reduce((sum, s) => sum + ('field' in s ? s.length : 0), 0);
 }
 
-// `DD/MM/YYYY`, for the placeholder.
-export function maskPattern(mask: MaskSegment[]): string {
+// `dd / mm / yyyy`, for the placeholder. Each field repeats its letter, which
+// comes from the reader's language: `aaaa` is the year in Portuguese.
+export function maskPattern(
+  mask: MaskSegment[],
+  letters: Record<MaskField, string> = { day: 'd', month: 'm', year: 'y' }
+): string {
   return mask
-    .map((s) =>
-      'field' in s ? FIELD_LETTER[s.field].repeat(s.length) : s.literal
-    )
+    .map((s) => ('field' in s ? letters[s.field].repeat(s.length) : s.literal))
     .join('');
 }
 
