@@ -54,6 +54,29 @@ function persistedLanguage() {
 applyLanguageGlobals(persistedLanguage());
 addons.getChannel().on('globalsUpdated', applyLanguageGlobals);
 
+/**
+ * Wraps the story in an element carrying `dir`, rather than setting it on
+ * `<html>`: on a docs page that would mirror the documentation's own text too.
+ * `display: contents` keeps the wrapper out of the layout, and anything the
+ * story renders — a drawer, a toast region — is still inside it, so it
+ * inherits the direction.
+ *
+ * @param {string | Node} story What the story returned.
+ * @param {unknown} direction The `direction` global.
+ * @returns {string | Node}
+ */
+function withDirection(story, direction) {
+  if (direction !== 'rtl') return story;
+  if (typeof story === 'string') {
+    return `<div dir="rtl" style="display: contents">${story}</div>`;
+  }
+  const wrapper = document.createElement('div');
+  wrapper.dir = 'rtl';
+  wrapper.style.display = 'contents';
+  wrapper.append(story);
+  return wrapper;
+}
+
 /** @type { import('@storybook/html-vite').Preview } */
 const preview = {
   parameters: {
@@ -120,6 +143,19 @@ const preview = {
         items: LANGUAGES,
       },
     },
+    direction: {
+      name: 'Direction',
+      description:
+        'Direção de escrita das stories. Só os exemplos se espelham; o texto da documentação continua da esquerda para a direita.',
+      toolbar: {
+        icon: 'transfer',
+        items: [
+          { value: 'ltr', title: 'LTR — esquerda para a direita' },
+          { value: 'rtl', title: 'RTL — direita para a esquerda' },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
 
   // Modern replacements for the `defaultValue` fields above, which Storybook
@@ -127,6 +163,7 @@ const preview = {
   // legacy fields until this config is migrated.
   initialGlobals: {
     language: DEFAULT_LANGUAGE,
+    direction: 'ltr',
   },
 
   decorators: [
@@ -140,7 +177,7 @@ const preview = {
       document.documentElement.setAttribute(LANGUAGE_ATTRIBUTE, language);
       document.documentElement.lang = language;
 
-      return Story();
+      return withDirection(Story(), context.globals.direction);
     },
   ],
 };
