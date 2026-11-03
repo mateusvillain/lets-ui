@@ -1,0 +1,49 @@
+---
+title: "Contributing"
+subtitle: "Como relatar um problema, propor uma mudança e enviar código para o Let's UI."
+order: 4
+---
+
+O Let's UI é aberto a contribuições: correções, componentes, tokens, documentação e melhorias de acessibilidade. Tudo acontece no [repositório no GitHub](https://github.com/mateusvillain/lets-ui), seguindo o [código de conduta](https://github.com/mateusvillain/lets-ui/blob/main/CODE_OF_CONDUCT.md).
+
+## Abrir uma issue
+
+Antes de uma mudança grande, abra uma issue para discutir a proposta. O repositório tem um modelo para cada caso:
+
+| Modelo | Use para |
+| --- | --- |
+| **Bug report** | Algo que não funciona como a documentação descreve. |
+| **Component request** | Um componente novo, ou uma mudança em um existente. |
+| **Design token request** | Criar ou alterar um token. |
+| **Accessibility issue** | Uma barreira de acessibilidade em um componente ou foundation. |
+| **Question** | Uma dúvida de uso. |
+
+Em um bug, inclua a versão do pacote, o navegador e o menor HTML que reproduz o problema.
+
+## Preparar o ambiente
+
+O repositório é um monorepo com [pnpm](https://pnpm.io/):
+
+```bash
+pnpm install
+pnpm build        # tokens, estilos e componentes
+pnpm test         # testes unitários (os componentes rodam no Chromium, via Playwright)
+pnpm lint         # Stylelint e Markdownlint
+pnpm storybook    # ambiente de desenvolvimento dos componentes, na porta 6006
+```
+
+Esta documentação fica em `apps/systembook`, fora do workspace. Veja o `README.md` dela para rodar o site localmente.
+
+## Enviar uma mudança
+
+1. Crie uma branch a partir da `main`.
+2. Faça a mudança seguindo as regras do sistema: nada de valores soltos onde existe um token, e acessibilidade como parte da definição de pronto. Veja os [Princípios](../overview/principles.mdx).
+3. Escreva as mensagens de commit no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/), como `fix(tooltip): close on Escape`. O padrão é verificado a cada commit.
+4. Se a mudança afeta um pacote publicado, crie um changeset com `pnpm changeset`, escolhendo o tipo de versão conforme o [Versioning](./versioning.mdx).
+5. Abra o pull request descrevendo o que mudou e por quê, com a issue relacionada e capturas de tela quando houver mudança visual.
+
+O CI roda o lint, o build e os testes em cada pull request. Depois do merge, um pull request automático junta os changesets, atualiza as versões e, ao ser aprovado, publica os pacotes no npm.
+
+## Licença
+
+Ao contribuir, você concorda que a sua contribuição seja distribuída sob a licença **MIT**, a mesma do projeto.
