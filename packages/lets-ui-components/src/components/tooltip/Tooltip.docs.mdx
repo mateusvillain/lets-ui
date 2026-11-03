@@ -1,27 +1,59 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as TooltipStories from './Tooltip.stories';
 
 <Meta of={TooltipStories} />
 
+<Lang lang="pt-BR">
+# Tooltip
+
+`<lui-tooltip>` envolve qualquer elemento de gatilho e associa a ele um tooltip acessível. Quando nenhum gatilho é projetado no slot, um botão padrão é renderizado usando o atributo `label`.
+
+</Lang>
+
+<Lang lang="en-US">
 # Tooltip
 
 `<lui-tooltip>` wraps any trigger element and attaches an accessible tooltip to it. When no trigger is slotted in, a default button is rendered using the `label` attribute.
 
+</Lang>
+
 <Canvas of={TooltipStories.Tooltip} />
 <Controls of={TooltipStories.Tooltip} />
 
+<Lang lang="pt-BR">
+## Posições
+
+Use o atributo `position` para controlar onde o tooltip aparece em relação ao gatilho.
+
+</Lang>
+
+<Lang lang="en-US">
 ## Positions
 
 Use the `position` attribute to control where the tooltip appears relative to its trigger.
 
+</Lang>
+
 <Canvas of={TooltipStories.Positions} />
 
+<Lang lang="pt-BR">
+## Gatilho customizado
+
+Projete qualquer elemento focável dentro de `<lui-tooltip>` para usá-lo como gatilho.
+
+</Lang>
+
+<Lang lang="en-US">
 ## Custom Trigger
 
 Slot any focusable element inside `<lui-tooltip>` to use it as the trigger.
 
+</Lang>
+
 <Canvas of={TooltipStories.WithCustomTrigger} />
 
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 ### Trigger customizado
@@ -78,10 +110,110 @@ Prefira um controle real sempre que o tooltip explicar uma ação.
 Sem conteúdo, o Tooltip renderiza um `<button>` próprio com o texto de `label`, descrito pelo
 conteúdo do tooltip via `aria-describedby`.
 
+### Fechar, passar o ponteiro e movimento
+
+- **`Esc` fecha o tooltip** que estiver aberto, sem mover o ponteiro nem o foco (WCAG 1.4.13). Ele
+  volta a abrir na próxima vez que o ponteiro entrar no trigger ou que o trigger receber foco. Um
+  `Esc` que fecha um tooltip é consumido: um diálogo que contenha o tooltip só fecha no `Esc`
+  seguinte.
+- **O ponteiro pode passar do trigger para o tooltip** sem que ele suma (WCAG 1.4.13), inclusive
+  pelo espaço entre os dois.
+- **Com `prefers-reduced-motion: reduce`**, o tooltip aparece e some sem transição (WCAG 2.3.3).
+
+</Lang>
+
+<Lang lang="en-US">
+## Accessibility
+
+### Custom trigger
+
+The trigger must be **one** focusable control: a `<button>`, `<a href>`, native form field,
+`lui-button`, `lui-close-button`, `lui-icon-button` or `lui-link`. It may be inside another
+element, such as a `<span>`; the Tooltip uses the first focusable control it finds in the content, and
+follows the content when it changes later. Other Let's UI components, such as `lui-input` or
+`lui-select`, are not yet supported as a trigger.
+
+- **A single `Tab` stop**, on the control itself. The Tooltip does not add any focusable element
+  around it.
+- **The tooltip text becomes the control description.** The Tooltip sets `aria-description` with the
+  value of `text` on the trigger. With `lui-button`, `lui-close-button`, `lui-icon-button` and `lui-link`, the description is
+  forwarded to the internal `<button>` or `<a>`, which is what the screen reader announces. The host does not receive the
+  attribute, so it does not appear as a second node in the accessibility tree.
+- **A text equal to the trigger name does not become a description.** When `text` repeats the control name
+  (`aria-labelledby`, `aria-label` or, without them, the text it renders, ignoring case and
+  spacing differences), the
+  Tooltip does not set `aria-description`, and the screen reader announces the name only once. If `text`
+  or the name changes later, the description follows.
+- The tooltip opens with the pointer over the trigger and with keyboard focus on it.
+- **The trigger's own description** in `aria-description` is replaced by the tooltip text
+  while it is inside the Tooltip, and restored when it leaves. If the text repeats the name, the
+  author description is kept. `aria-describedby` takes
+  precedence over `aria-description`: a trigger that uses both announces only what
+  `aria-describedby` references. In that case, include the tooltip text in the referenced element.
+
+The Tooltip does not use `aria-describedby` on the custom trigger: the content stays in the component
+shadow root, and an ID cannot be referenced from outside it. `aria-description` is an ARIA 1.3
+attribute and carries the text itself, without a reference.
+
+A `lui-icon-button` without visible text still needs an `aria-label`: the tooltip describes the
+button, but does not give it a name.
+
+```html
+<lui-tooltip text="Delete item">
+  <lui-icon-button aria-label="Delete">
+    <svg aria-hidden="true">…</svg>
+  </lui-icon-button>
+</lui-tooltip>
+```
+
+### Trigger without a focusable control
+
+If the content has nothing focusable, such as a text, or if the control is disabled, the
+Tooltip makes the trigger container itself focusable and describes it with the tooltip content, so
+the text stays accessible by keyboard. This is the case of a tooltip that explains why a button is
+disabled.
+Prefer a real control whenever the tooltip explains an action.
+
+### Without a trigger
+
+Without content, the Tooltip renders its own `<button>` with the `label` text, described by the
+tooltip content through `aria-describedby`.
+
+### Dismissing, hovering and motion
+
+- **`Esc` closes the open tooltip** without moving the pointer or the focus (WCAG 1.4.13). It opens
+  again the next time the pointer enters the trigger or the trigger receives focus. An `Esc` that
+  closes a tooltip is consumed: a dialog holding the tooltip only closes on the following `Esc`.
+- **The pointer can move from the trigger onto the tooltip** without it disappearing (WCAG 1.4.13),
+  including across the space between them.
+- **With `prefers-reduced-motion: reduce`**, the tooltip appears and disappears without a transition
+  (WCAG 2.3.3).
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+Só com a classe, o tooltip já pode receber o ponteiro e respeita `prefers-reduced-motion`. Fechar
+com `Esc` depende de script: adicione `tooltip--dismissed` ao elemento `.tooltip` quando `Esc` for
+pressionado com ele aberto, e remova a classe no próximo `pointerenter` ou `focusin`.
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+With the class alone, the tooltip already takes the pointer and respects `prefers-reduced-motion`.
+Closing on `Esc` needs script: add `tooltip--dismissed` to the `.tooltip` element when `Esc` is
+pressed while it is open, and remove the class on the next `pointerenter` or `focusin`.
+
+</Lang>
 
 <Canvas of={TooltipStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -102,3 +234,29 @@ conteúdo do tooltip via `aria-describedby`.
   <div role="tooltip" class="tooltip__content">Texto do tooltip</div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-tooltip
+  text="Tooltip text"
+  position="top"
+  label="Hover here"
+></lui-tooltip>
+```
+
+### CSS class
+
+```html
+<div class="tooltip tooltip--top">
+  <button class="tooltip__trigger">Hover here</button>
+  <div role="tooltip" class="tooltip__content">Tooltip text</div>
+</div>
+```
+
+</Lang>

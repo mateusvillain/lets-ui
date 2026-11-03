@@ -1,13 +1,72 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Foundations/Elevation" />
 
 export const focusRings = [
-  { variant: 'primary',   token: '--lui-focus-ring-primary',   colorToken: '--lui-color-primary-focus-ring',   desc: 'Foco primário — ações e controles padrão'     },
-  { variant: 'secondary', token: '--lui-focus-ring-secondary', colorToken: '--lui-color-secondary-focus-ring', desc: 'Foco secundário — controles neutros'           },
-  { variant: 'danger',    token: '--lui-focus-ring-danger',    colorToken: '--lui-color-danger-focus-ring',    desc: 'Foco de perigo — campos com erro'              },
-  { variant: 'success',   token: '--lui-focus-ring-success',   colorToken: '--lui-color-success-focus-ring',   desc: 'Foco de sucesso — campos validados'            },
-  { variant: 'neutral',   token: '--lui-focus-ring-neutral',   colorToken: '--lui-color-neutral-focus-ring',   desc: 'Foco neutro — elementos sem contexto semântico' },
+  {
+    variant: 'primary',
+    token: '--lui-focus-ring-primary',
+    colorToken: '--lui-color-primary-focus-ring',
+    desc: 'Foco primário — ações e controles padrão',
+  },
+  {
+    variant: 'secondary',
+    token: '--lui-focus-ring-secondary',
+    colorToken: '--lui-color-secondary-focus-ring',
+    desc: 'Foco secundário — controles neutros',
+  },
+  {
+    variant: 'danger',
+    token: '--lui-focus-ring-danger',
+    colorToken: '--lui-color-danger-focus-ring',
+    desc: 'Foco de perigo — campos com erro',
+  },
+  {
+    variant: 'success',
+    token: '--lui-focus-ring-success',
+    colorToken: '--lui-color-success-focus-ring',
+    desc: 'Foco de sucesso — campos validados',
+  },
+  {
+    variant: 'neutral',
+    token: '--lui-focus-ring-neutral',
+    colorToken: '--lui-color-neutral-focus-ring',
+    desc: 'Foco neutro — elementos sem contexto semântico',
+  },
+];
+
+export const focusRingsEn = [
+  {
+    variant: 'primary',
+    token: '--lui-focus-ring-primary',
+    colorToken: '--lui-color-primary-focus-ring',
+    desc: 'Primary focus — actions and default controls',
+  },
+  {
+    variant: 'secondary',
+    token: '--lui-focus-ring-secondary',
+    colorToken: '--lui-color-secondary-focus-ring',
+    desc: 'Secondary focus — neutral controls',
+  },
+  {
+    variant: 'danger',
+    token: '--lui-focus-ring-danger',
+    colorToken: '--lui-color-danger-focus-ring',
+    desc: 'Danger focus — fields with errors',
+  },
+  {
+    variant: 'success',
+    token: '--lui-focus-ring-success',
+    colorToken: '--lui-color-success-focus-ring',
+    desc: 'Success focus — validated fields',
+  },
+  {
+    variant: 'neutral',
+    token: '--lui-focus-ring-neutral',
+    colorToken: '--lui-color-neutral-focus-ring',
+    desc: 'Neutral focus — elements without semantic context',
+  },
 ];
 
 export const levels = [
@@ -37,6 +96,34 @@ export const levels = [
   },
 ];
 
+export const levelsEn = [
+  {
+    name: 'base',
+    token: '--lui-elevation-base',
+    value: '0 0 8px 0 rgb(0% 0% 0% / 2%), 0 4px 12px 0 rgb(0% 0% 0% / 4%)',
+    use: 'Surfaces at rest: cards, panels, closed dropdowns.',
+  },
+  {
+    name: 'hovered',
+    token: '--lui-elevation-hovered',
+    value: '0 0 8px 0 rgb(0% 0% 0% / 4%), 0 8px 16px 0 rgb(0% 0% 0% / 8%)',
+    use: 'Hover state of interactive cards and elevated surfaces.',
+  },
+  {
+    name: 'floating',
+    token: '--lui-elevation-floating',
+    value: '0 0 8px 0 rgb(0% 0% 0% / 8%), 0 12px 20px 0 rgb(0% 0% 0% / 12%)',
+    use: 'Floating elements: dropdowns, popovers, tooltips.',
+  },
+  {
+    name: 'overlay',
+    token: '--lui-elevation-overlay',
+    value: '0 1px 8px 0 rgb(0% 0% 0% / 4%), 0 16px 24px 0 rgb(0% 0% 0% / 16%)',
+    use: 'Highest layer: modals, drawers, side panels.',
+  },
+];
+
+<Lang lang="pt-BR">
 # Elevation
 
 Tokens de sombra que comunicam a altura de cada superfície na hierarquia visual. Use a função SCSS `elevation($layer)` para aplicar nos componentes.
@@ -45,38 +132,64 @@ Tokens de sombra que comunicam a altura de cada superfície na hierarquia visual
 
 ## Níveis de Elevação
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '16px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    marginBottom: '16px',
+  }}
+>
   {levels.map(({ name, token, value, use }) => (
-    <div key={name} style={{
-      display: 'grid',
-      gridTemplateColumns: '120px 1fr',
-      gap: '24px',
-      alignItems: 'center',
-      padding: '24px',
-      borderRadius: '12px',
-      border: '1px solid var(--lui-color-neutral-border-subtle)',
-    }}>
-      <div style={{
-        width: '100%',
-        aspectRatio: '1',
-        borderRadius: '10px',
-        background: 'var(--lui-color-neutral-background-surface)',
-        boxShadow: `var(${token})`,
-      }} />
-      <div>
-        <code style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>{token}</code>
-        <p style={{ margin: '0 0 8px', fontSize: '13px', color: 'var(--lui-color-neutral-text-body)' }}>{use}</p>
-        <code style={{
-          display: 'block',
-          fontSize: '11px',
-          color: 'var(--lui-color-neutral-text-caption)',
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '120px 1fr',
+        gap: '24px',
+        alignItems: 'center',
+        padding: '24px',
+        borderRadius: '12px',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          aspectRatio: '1',
+          borderRadius: '10px',
           background: 'var(--lui-color-neutral-background-surface)',
-          border: '1px solid var(--lui-color-neutral-border-subtle)',
-          borderRadius: '4px',
-          padding: '6px 8px',
-          wordBreak: 'break-all',
-          lineHeight: 1.5,
-        }}>
+          boxShadow: `var(${token})`,
+        }}
+      />
+      <div>
+        <code
+          style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}
+        >
+          {token}
+        </code>
+        <p
+          style={{
+            margin: '0 0 8px',
+            fontSize: '13px',
+            color: 'var(--lui-color-neutral-text-body)',
+          }}
+        >
+          {use}
+        </p>
+        <code
+          style={{
+            display: 'block',
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+            background: 'var(--lui-color-neutral-background-surface)',
+            border: '1px solid var(--lui-color-neutral-border-subtle)',
+            borderRadius: '4px',
+            padding: '6px 8px',
+            wordBreak: 'break-all',
+            lineHeight: 1.5,
+          }}
+        >
           {value}
         </code>
       </div>
@@ -90,25 +203,37 @@ Tokens de sombra que comunicam a altura de cada superfície na hierarquia visual
 
 Todos os níveis lado a lado sobre o mesmo fundo para comparar a profundidade.
 
-<div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
-  gap: '32px',
-  padding: '40px 24px',
-  background: 'var(--lui-color-neutral-background-surface)',
-  borderRadius: '12px',
-  border: '1px solid var(--lui-color-neutral-border-subtle)',
-  marginBottom: '16px',
-}}>
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '32px',
+    padding: '40px 24px',
+    background: 'var(--lui-color-neutral-background-surface)',
+    borderRadius: '12px',
+    border: '1px solid var(--lui-color-neutral-border-subtle)',
+    marginBottom: '16px',
+  }}
+>
   {levels.map(({ name, token }) => (
-    <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-      <div style={{
-        width: '100%',
-        height: '80px',
-        borderRadius: '8px',
-        background: '#fff',
-        boxShadow: `var(${token})`,
-      }} />
+    <div
+      key={name}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '12px',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          height: '80px',
+          borderRadius: '8px',
+          background: '#fff',
+          boxShadow: `var(${token})`,
+        }}
+      />
       <code style={{ fontSize: '11px' }}>{name}</code>
     </div>
   ))}
@@ -160,3 +285,168 @@ Sombras de contorno aplicadas em estados de foco de acessibilidade. Use a funç�
     </div>
   ))}
 </div>
+</Lang>
+
+<Lang lang="en-US">
+# Elevation
+
+Shadow tokens that communicate the height of each surface in the visual hierarchy. Use the SCSS `elevation($layer)` function to apply them in components.
+
+---
+
+## Elevation Levels
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    marginBottom: '16px',
+  }}
+>
+  {levelsEn.map(({ name, token, value, use }) => (
+    <div
+      key={name}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '120px 1fr',
+        gap: '24px',
+        alignItems: 'center',
+        padding: '24px',
+        borderRadius: '12px',
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          aspectRatio: '1',
+          borderRadius: '10px',
+          background: 'var(--lui-color-neutral-background-surface)',
+          boxShadow: `var(${token})`,
+        }}
+      />
+      <div>
+        <code
+          style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}
+        >
+          {token}
+        </code>
+        <p
+          style={{
+            margin: '0 0 8px',
+            fontSize: '13px',
+            color: 'var(--lui-color-neutral-text-body)',
+          }}
+        >
+          {use}
+        </p>
+        <code
+          style={{
+            display: 'block',
+            fontSize: '11px',
+            color: 'var(--lui-color-neutral-text-caption)',
+            background: 'var(--lui-color-neutral-background-surface)',
+            border: '1px solid var(--lui-color-neutral-border-subtle)',
+            borderRadius: '4px',
+            padding: '6px 8px',
+            wordBreak: 'break-all',
+            lineHeight: 1.5,
+          }}
+        >
+          {value}
+        </code>
+      </div>
+    </div>
+  ))}
+</div>
+
+---
+
+## Visual Scale
+
+All levels side by side on the same background to compare depth.
+
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '32px',
+    padding: '40px 24px',
+    background: 'var(--lui-color-neutral-background-surface)',
+    borderRadius: '12px',
+    border: '1px solid var(--lui-color-neutral-border-subtle)',
+    marginBottom: '16px',
+  }}
+>
+  {levelsEn.map(({ name, token }) => (
+    <div
+      key={name}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '12px',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          height: '80px',
+          borderRadius: '8px',
+          background: '#fff',
+          boxShadow: `var(${token})`,
+        }}
+      />
+      <code style={{ fontSize: '11px' }}>{name}</code>
+    </div>
+  ))}
+</div>
+
+---
+
+## Focus Ring
+
+Outline shadows applied in accessibility focus states. Use the SCSS `focus-ring($variant)` function to apply them in components.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
+  {focusRingsEn.map(({ variant, token, colorToken, desc }) => (
+    <div key={variant} style={{
+      display: 'grid',
+      gridTemplateColumns: '80px 1fr',
+      gap: '24px',
+      alignItems: 'center',
+      padding: '20px',
+      borderRadius: '10px',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+    }}>
+      <div style={{
+        width: '64px',
+        height: '64px',
+        borderRadius: '8px',
+        background: 'var(--lui-color-neutral-background-surface)',
+        border: '2px solid var(--lui-color-neutral-border-default)',
+        boxShadow: `var(${token})`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      }}>
+        <div style={{
+          width: '12px',
+          height: '12px',
+          borderRadius: '50%',
+          background: `var(${colorToken})`,
+        }} />
+      </div>
+      <div>
+        <code style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>{token}</code>
+        <p style={{ margin: '0 0 6px', fontSize: '12px', color: 'var(--lui-color-neutral-text-body)' }}>{desc}</p>
+        <code style={{ fontSize: '11px', color: 'var(--lui-color-neutral-text-caption)' }}>
+          {`0 0 0 3px var(${colorToken})`}
+        </code>
+      </div>
+    </div>
+  ))}
+</div>
+</Lang>

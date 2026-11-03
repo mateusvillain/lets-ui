@@ -1,37 +1,89 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as ShortcutStories from './Shortcut.stories';
 
 <Meta of={ShortcutStories} />
 
+<Lang lang="pt-BR">
 # Shortcut
 
 Exibe combinações de teclas de teclado de forma semântica e acessível. Use para comunicar atalhos disponíveis em tooltips, menus de contexto, listas de comandos e interfaces de ajuda. Cada tecla é renderizada com `<kbd>` e separada visualmente por `+`.
 
+</Lang>
+
+<Lang lang="en-US">
+# Shortcut
+
+Displays keyboard key combinations semantically and accessibly. Use it to communicate available shortcuts in tooltips, context menus, command lists and help interfaces. Each key is rendered with `<kbd>` and visually separated by `+`.
+
+</Lang>
+
 <Canvas of={ShortcutStories.Shortcut} />
 <Controls of={ShortcutStories.Shortcut} />
 
+<Lang lang="pt-BR">
 ## Tecla única
 
 Use quando o atalho corresponde a uma única tecla — como teclas de ação (`Enter`, `Esc`, `Tab`). Ideal para indicar confirmação ou cancelamento em formulários e modais.
 
+</Lang>
+
+<Lang lang="en-US">
+## Single key
+
+Use it when the shortcut corresponds to a single key — such as action keys (`Enter`, `Esc`, `Tab`). Ideal for indicating confirmation or cancellation in forms and modals.
+
+</Lang>
+
 <Canvas of={ShortcutStories.SingleKey} />
 
+<Lang lang="pt-BR">
 ## Múltiplas teclas
 
 Use quando o atalho exige uma combinação de teclas simultâneas. Passe as teclas separadas por vírgula no atributo `keys` (ex.: `keys="Ctrl,K"`). A ordem deve seguir a convenção da plataforma: modificadores primeiro (`Ctrl`, `Shift`, `Cmd`, `Alt`), depois a tecla principal.
 
+</Lang>
+
+<Lang lang="en-US">
+## Multiple keys
+
+Use it when the shortcut requires a combination of simultaneous keys. Pass the keys separated by commas in the `keys` attribute (e.g.: `keys="Ctrl,K"`). The order must follow the platform convention: modifiers first (`Ctrl`, `Shift`, `Cmd`, `Alt`), then the main key.
+
+</Lang>
+
 <Canvas of={ShortcutStories.MultipleKeys} />
 
+<Lang lang="pt-BR">
 ## Em contexto
 
 Combine com listas de ações ou menus para documentar atalhos disponíveis na interface. O componente se alinha naturalmente em layouts `flex` com `justify-content: space-between`.
 
+</Lang>
+
+<Lang lang="en-US">
+## In context
+
+Combine it with action lists or menus to document the shortcuts available in the interface. The component aligns naturally in `flex` layouts with `justify-content: space-between`.
+
+</Lang>
+
 <Canvas of={ShortcutStories.InContext} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={ShortcutStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -49,3 +101,26 @@ Combine com listas de ações ou menus para documentar atalhos disponíveis na i
   <kbd class="shortcut__key">K</kbd>
 </span>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-shortcut keys="⌘,K"></lui-shortcut>
+```
+
+### CSS class
+
+```html
+<span class="shortcut">
+  <kbd class="shortcut__key">⌘</kbd>
+  <span class="shortcut__sep">+</span>
+  <kbd class="shortcut__key">K</kbd>
+</span>
+```
+
+</Lang>

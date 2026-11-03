@@ -1,23 +1,55 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as SelectStories from './Select.stories';
 
 <Meta of={SelectStories} />
 
+<Lang lang="pt-BR">
 # Native Select
 
 Select nativo com estilização customizada. O valor da opção selecionada é submetido no `FormData` com a chave `name`.
 
+</Lang>
+
+<Lang lang="en-US">
+# Native Select
+
+Native select with custom styling. The selected option value is submitted in `FormData` under the `name` key.
+
+</Lang>
+
 <Canvas of={SelectStories.NativeSelect} />
 <Controls of={SelectStories.NativeSelect} />
 
+<Lang lang="pt-BR">
+
 ## Error
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Error
+
+</Lang>
 
 <Canvas of={SelectStories.Error} />
 
+<Lang lang="pt-BR">
+
 ## Disabled
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Disabled
+
+</Lang>
 
 <Canvas of={SelectStories.Disabled} />
 
+<Lang lang="pt-BR">
 ## Integração com formulários
 
 O `lui-native-select` é form-associated. O valor da opção selecionada é submetido via `FormData` com a chave `name`. Use `form` para associá-lo a um form por ID mesmo estando fora do `<form>`.
@@ -26,24 +58,72 @@ O `lui-native-select` é form-associated. O valor da opção selecionada é subm
 
 Com `required`, o form não submete enquanto o placeholder estiver ativo (nenhuma opção real selecionada).
 
+</Lang>
+
+<Lang lang="en-US">
+## Form integration
+
+`lui-native-select` is form-associated. The selected option value is submitted through `FormData` under the `name` key. Use `form` to associate it with a form by ID even when it is outside the `<form>`.
+
+### Required
+
+With `required`, the form does not submit while the placeholder is active (no real option selected).
+
+</Lang>
+
 <Canvas of={SelectStories.Required} />
+
+<Lang lang="pt-BR">
 
 ### Form Integration
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Form Integration
+
+</Lang>
+
 <Canvas of={SelectStories.FormIntegration} />
 
+<Lang lang="pt-BR">
 ## Atributos de formulário
 
-| Atributo   | Tipo      | Padrão | Descrição                                                                        |
-| ---------- | --------- | ------ | -------------------------------------------------------------------------------- |
-| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`       |
-| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o select fora do elemento form            |
-| `required` | `boolean` | `false`| Bloqueia a submissão enquanto o placeholder estiver selecionado                  |
+| Atributo   | Tipo      | Padrão  | Descrição                                                                  |
+| ---------- | --------- | ------- | -------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`    | Nome do campo nos dados submetidos; necessário para aparecer no `FormData` |
+| `form`     | `string`  | `''`    | ID do `<form>` associado; permite usar o select fora do elemento form      |
+| `required` | `boolean` | `false` | Bloqueia a submissão enquanto o placeholder estiver selecionado            |
+
+</Lang>
+
+<Lang lang="en-US">
+## Form attributes
+
+| Attribute  | Type      | Default | Description                                                                     |
+| ---------- | --------- | ------- | ------------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`    | Field name in the submitted data; required to appear in `FormData`              |
+| `form`     | `string`  | `''`    | ID of the associated `<form>`; lets you use the select outside the form element |
+| `required` | `boolean` | `false` | Blocks submission while the placeholder is selected                             |
+
+</Lang>
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={SelectStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -75,3 +155,40 @@ Com `required`, o form não submete enquanto o placeholder estiver ativo (nenhum
   </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-native-select
+  label="Country"
+  placeholder="Select..."
+  options="Brazil,Portugal"
+  size="lg"
+></lui-native-select>
+```
+
+### CSS class
+
+```html
+<div class="native-select native-select--lg">
+  <div class="native-select__head">
+    <label class="native-select__label">Country</label>
+  </div>
+  <div class="native-select__control">
+    <select class="native-select__input">
+      <option value="">Select...</option>
+      <option value="br">Brazil</option>
+    </select>
+    <span class="native-select__arrow">
+      <svg ...>...</svg>
+    </span>
+  </div>
+</div>
+```
+
+</Lang>

@@ -1,113 +1,241 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as BoxStories from './Box.stories';
 
 <Meta of={BoxStories} />
+
+<Lang lang="pt-BR">
+
+# Box
+
+Container genérico com padding, background, borda e controle de overflow. Props que aceitam design tokens resolvem para custom properties CSS automaticamente — incluindo a troca de tema (`data-theme`) e marca (`data-brand`).
+
+</Lang>
+
+<Lang lang="en-US">
 
 # Box
 
 Generic container with padding, background, border, and overflow control. Props that accept design tokens resolve to CSS custom properties automatically — including theme (`data-theme`) and brand (`data-brand`) switching.
 
+</Lang>
+
 <Canvas of={BoxStories.Default} />
 <Controls of={BoxStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## background
 
-Accepts a semantic alias in the form `{category}/{variant}` or any raw CSS value.
+Aceita um alias semântico no formato `{category}/{variant}` ou qualquer valor CSS bruto.
 
-| Alias | Token |
-|---|---|
-| `neutral/surface` | `--lui-color-neutral-background-surface` |
-| `neutral/container` | `--lui-color-neutral-background-container` |
-| `neutral/overlay` | `--lui-color-neutral-background-overlay` |
-| `primary/surface` | `--lui-color-primary-background-surface` |
-| `primary/container` | `--lui-color-primary-background-container` |
-| `secondary/surface` | `--lui-color-secondary-background-surface` |
+| Alias                 | Token                                        |
+| --------------------- | -------------------------------------------- |
+| `neutral/surface`     | `--lui-color-neutral-background-surface`     |
+| `neutral/container`   | `--lui-color-neutral-background-container`   |
+| `neutral/overlay`     | `--lui-color-neutral-background-overlay`     |
+| `primary/surface`     | `--lui-color-primary-background-surface`     |
+| `primary/container`   | `--lui-color-primary-background-container`   |
+| `secondary/surface`   | `--lui-color-secondary-background-surface`   |
 | `secondary/container` | `--lui-color-secondary-background-container` |
-| `caution/surface` | `--lui-color-caution-background-surface` |
-| `caution/container` | `--lui-color-caution-background-container` |
-| `info/surface` | `--lui-color-info-background-surface` |
-| `info/container` | `--lui-color-info-background-container` |
-| `danger/surface` | `--lui-color-danger-background-surface` |
-| `danger/container` | `--lui-color-danger-background-container` |
-| `success/surface` | `--lui-color-success-background-surface` |
-| `success/container` | `--lui-color-success-background-container` |
+| `caution/surface`     | `--lui-color-caution-background-surface`     |
+| `caution/container`   | `--lui-color-caution-background-container`   |
+| `info/surface`        | `--lui-color-info-background-surface`        |
+| `info/container`      | `--lui-color-info-background-container`      |
+| `danger/surface`      | `--lui-color-danger-background-surface`      |
+| `danger/container`    | `--lui-color-danger-background-container`    |
+| `success/surface`     | `--lui-color-success-background-surface`     |
+| `success/container`   | `--lui-color-success-background-container`   |
 
 ```html
 <lui-box background="neutral/surface">…</lui-box>
 <lui-box background="danger/surface">…</lui-box>
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+
+## background
+
+Accepts a semantic alias in the form `{category}/{variant}` or any raw CSS value.
+
+| Alias                 | Token                                        |
+| --------------------- | -------------------------------------------- |
+| `neutral/surface`     | `--lui-color-neutral-background-surface`     |
+| `neutral/container`   | `--lui-color-neutral-background-container`   |
+| `neutral/overlay`     | `--lui-color-neutral-background-overlay`     |
+| `primary/surface`     | `--lui-color-primary-background-surface`     |
+| `primary/container`   | `--lui-color-primary-background-container`   |
+| `secondary/surface`   | `--lui-color-secondary-background-surface`   |
+| `secondary/container` | `--lui-color-secondary-background-container` |
+| `caution/surface`     | `--lui-color-caution-background-surface`     |
+| `caution/container`   | `--lui-color-caution-background-container`   |
+| `info/surface`        | `--lui-color-info-background-surface`        |
+| `info/container`      | `--lui-color-info-background-container`      |
+| `danger/surface`      | `--lui-color-danger-background-surface`      |
+| `danger/container`    | `--lui-color-danger-background-container`    |
+| `success/surface`     | `--lui-color-success-background-surface`     |
+| `success/container`   | `--lui-color-success-background-container`   |
+
+```html
+<lui-box background="neutral/surface">…</lui-box>
+<lui-box background="danger/surface">…</lui-box>
+```
+
+</Lang>
+
 <Canvas of={BoxStories.BackgroundVariants} />
+
+<Lang lang="pt-BR">
 
 ## border-radius
 
-Accepts a token scale name or any raw CSS value.
+Aceita o nome de uma escala de token ou qualquer valor CSS bruto.
 
-| Value | Token | Resolved |
-|---|---|---|
-| `none` | `--lui-border-radius-none` | `0` |
-| `xs` | `--lui-border-radius-xs` | brand-defined |
-| `sm` | `--lui-border-radius-sm` | brand-defined |
-| `md` | `--lui-border-radius-md` | brand-defined |
-| `lg` | `--lui-border-radius-lg` | brand-defined |
-| `xl` | `--lui-border-radius-xl` | brand-defined |
-| `circle` | `--lui-border-radius-circle` | `1000000px` |
+| Valor    | Token                        | Resolvido           |
+| -------- | ---------------------------- | ------------------- |
+| `none`   | `--lui-border-radius-none`   | `0`                 |
+| `xs`     | `--lui-border-radius-xs`     | definido pela marca |
+| `sm`     | `--lui-border-radius-sm`     | definido pela marca |
+| `md`     | `--lui-border-radius-md`     | definido pela marca |
+| `lg`     | `--lui-border-radius-lg`     | definido pela marca |
+| `xl`     | `--lui-border-radius-xl`     | definido pela marca |
+| `circle` | `--lui-border-radius-circle` | `1000000px`         |
 
 ```html
 <lui-box border-radius="md">…</lui-box>
 <lui-box border-radius="circle">…</lui-box>
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+
+## border-radius
+
+Accepts a token scale name or any raw CSS value.
+
+| Value    | Token                        | Resolved      |
+| -------- | ---------------------------- | ------------- |
+| `none`   | `--lui-border-radius-none`   | `0`           |
+| `xs`     | `--lui-border-radius-xs`     | brand-defined |
+| `sm`     | `--lui-border-radius-sm`     | brand-defined |
+| `md`     | `--lui-border-radius-md`     | brand-defined |
+| `lg`     | `--lui-border-radius-lg`     | brand-defined |
+| `xl`     | `--lui-border-radius-xl`     | brand-defined |
+| `circle` | `--lui-border-radius-circle` | `1000000px`   |
+
+```html
+<lui-box border-radius="md">…</lui-box>
+<lui-box border-radius="circle">…</lui-box>
+```
+
+</Lang>
+
 <Canvas of={BoxStories.BorderRadiusVariants} />
+
+<Lang lang="pt-BR">
 
 ## border-width
 
-Accepts a token scale (`0`, `1`, `2`, `4`) or any raw CSS value.
+Aceita uma escala de token (`0`, `1`, `2`, `4`) ou qualquer valor CSS bruto.
 
-| Value | Token | Resolved |
-|---|---|---|
-| `0` | `--lui-border-width-0` | `0` |
-| `1` | `--lui-border-width-1` | `1px` |
-| `2` | `--lui-border-width-2` | `2px` |
-| `4` | `--lui-border-width-4` | `4px` |
+| Valor | Token                  | Resolvido |
+| ----- | ---------------------- | --------- |
+| `0`   | `--lui-border-width-0` | `0`       |
+| `1`   | `--lui-border-width-1` | `1px`     |
+| `2`   | `--lui-border-width-2` | `2px`     |
+| `4`   | `--lui-border-width-4` | `4px`     |
 
 ```html
 <lui-box border-width="1" border-color="neutral/default">…</lui-box>
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+
+## border-width
+
+Accepts a token scale (`0`, `1`, `2`, `4`) or any raw CSS value.
+
+| Value | Token                  | Resolved |
+| ----- | ---------------------- | -------- |
+| `0`   | `--lui-border-width-0` | `0`      |
+| `1`   | `--lui-border-width-1` | `1px`    |
+| `2`   | `--lui-border-width-2` | `2px`    |
+| `4`   | `--lui-border-width-4` | `4px`    |
+
+```html
+<lui-box border-width="1" border-color="neutral/default">…</lui-box>
+```
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## border-color
 
-Accepts a semantic alias in the form `{category}/{variant}` or any raw CSS value.
+Aceita um alias semântico no formato `{category}/{variant}` ou qualquer valor CSS bruto.
 
-| Alias | Token |
-|---|---|
-| `neutral/subtle` | `--lui-color-neutral-border-subtle` |
-| `neutral/default` | `--lui-color-neutral-border-default` |
-| `primary/default` | `--lui-color-primary-border-default` |
+| Alias               | Token                                  |
+| ------------------- | -------------------------------------- |
+| `neutral/subtle`    | `--lui-color-neutral-border-subtle`    |
+| `neutral/default`   | `--lui-color-neutral-border-default`   |
+| `primary/default`   | `--lui-color-primary-border-default`   |
 | `secondary/default` | `--lui-color-secondary-border-default` |
-| `caution/default` | `--lui-color-caution-border-default` |
-| `info/default` | `--lui-color-info-border-default` |
-| `danger/default` | `--lui-color-danger-border-default` |
-| `success/default` | `--lui-color-success-border-default` |
+| `caution/default`   | `--lui-color-caution-border-default`   |
+| `info/default`      | `--lui-color-info-border-default`      |
+| `danger/default`    | `--lui-color-danger-border-default`    |
+| `success/default`   | `--lui-color-success-border-default`   |
 
 ```html
 <lui-box border-width="1" border-color="neutral/subtle">…</lui-box>
 <lui-box border-width="2" border-color="danger/default">…</lui-box>
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+
+## border-color
+
+Accepts a semantic alias in the form `{category}/{variant}` or any raw CSS value.
+
+| Alias               | Token                                  |
+| ------------------- | -------------------------------------- |
+| `neutral/subtle`    | `--lui-color-neutral-border-subtle`    |
+| `neutral/default`   | `--lui-color-neutral-border-default`   |
+| `primary/default`   | `--lui-color-primary-border-default`   |
+| `secondary/default` | `--lui-color-secondary-border-default` |
+| `caution/default`   | `--lui-color-caution-border-default`   |
+| `info/default`      | `--lui-color-info-border-default`      |
+| `danger/default`    | `--lui-color-danger-border-default`    |
+| `success/default`   | `--lui-color-success-border-default`   |
+
+```html
+<lui-box border-width="1" border-color="neutral/subtle">…</lui-box>
+<lui-box border-width="2" border-color="danger/default">…</lui-box>
+```
+
+</Lang>
+
 <Canvas of={BoxStories.BorderColorVariants} />
+
+<Lang lang="pt-BR">
 
 ## padding
 
-Accepts a token scale name. `padding-x` and `padding-y` override horizontal and vertical independently.
+Aceita o nome de uma escala de token. `padding-x` e `padding-y` sobrescrevem horizontal e vertical independentemente.
 
-| Value | Token |
-|---|---|
-| `xs` | `--lui-spacing-fluid-4` |
-| `sm` | `--lui-spacing-fluid-8` |
-| `md` | `--lui-spacing-fluid-16` |
-| `lg` | `--lui-spacing-fluid-24` |
-| `xl` | `--lui-spacing-fluid-32` |
+| Valor | Token                    |
+| ----- | ------------------------ |
+| `xs`  | `--lui-spacing-fluid-4`  |
+| `sm`  | `--lui-spacing-fluid-8`  |
+| `md`  | `--lui-spacing-fluid-16` |
+| `lg`  | `--lui-spacing-fluid-24` |
+| `xl`  | `--lui-spacing-fluid-32` |
 | `2xl` | `--lui-spacing-fluid-48` |
 
 ```html
@@ -115,31 +243,104 @@ Accepts a token scale name. `padding-x` and `padding-y` override horizontal and 
 <lui-box padding-x="xl" padding-y="sm">…</lui-box>
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+
+## padding
+
+Accepts a token scale name. `padding-x` and `padding-y` override horizontal and vertical independently.
+
+| Value | Token                    |
+| ----- | ------------------------ |
+| `xs`  | `--lui-spacing-fluid-4`  |
+| `sm`  | `--lui-spacing-fluid-8`  |
+| `md`  | `--lui-spacing-fluid-16` |
+| `lg`  | `--lui-spacing-fluid-24` |
+| `xl`  | `--lui-spacing-fluid-32` |
+| `2xl` | `--lui-spacing-fluid-48` |
+
+```html
+<lui-box padding="md">…</lui-box>
+<lui-box padding-x="xl" padding-y="sm">…</lui-box>
+```
+
+</Lang>
+
+<Lang lang="pt-BR">
+
+## Raw CSS fallback
+
+Valores desconhecidos passam como estão, então valores CSS brutos e referências `var()` continuam funcionando.
+
+```html
+<lui-box background="#fef9c3" border-radius="12px" border-width="2px"
+  >…</lui-box
+>
+<lui-box background="var(--lui-color-neutral-background-surface)">…</lui-box>
+```
+
+</Lang>
+
+<Lang lang="en-US">
+
 ## Raw CSS fallback
 
 Unknown values are passed through as-is, so raw CSS values and `var()` references continue to work.
 
 ```html
-<lui-box background="#fef9c3" border-radius="12px" border-width="2px">…</lui-box>
+<lui-box background="#fef9c3" border-radius="12px" border-width="2px"
+  >…</lui-box
+>
 <lui-box background="var(--lui-color-neutral-background-surface)">…</lui-box>
 ```
 
+</Lang>
+
 <Canvas of={BoxStories.RawCSSFallback} />
+
+<Lang lang="pt-BR">
 
 ## Card
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Card
+
+</Lang>
+
 <Canvas of={BoxStories.Card} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={BoxStories.CSSClass} />
+
+<Lang lang="pt-BR">
 
 ## Uso
 
 ### Web Component
 
 ```html
-<lui-box padding="md" background="neutral/surface" border-radius="md" border-width="1" border-color="neutral/subtle">
+<lui-box
+  padding="md"
+  background="neutral/surface"
+  border-radius="md"
+  border-width="1"
+  border-color="neutral/subtle"
+>
   Conteúdo com padding interno
 </lui-box>
 ```
@@ -147,7 +348,33 @@ Unknown values are passed through as-is, so raw CSS values and `var()` reference
 ### Classe CSS
 
 ```html
-<div class="box box--padding-md">
-  Conteúdo com padding interno
-</div>
+<div class="box box--padding-md">Conteúdo com padding interno</div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Usage
+
+### Web Component
+
+```html
+<lui-box
+  padding="md"
+  background="neutral/surface"
+  border-radius="md"
+  border-width="1"
+  border-color="neutral/subtle"
+>
+  Content with inner padding
+</lui-box>
+```
+
+### CSS class
+
+```html
+<div class="box box--padding-md">Content with inner padding</div>
+```
+
+</Lang>

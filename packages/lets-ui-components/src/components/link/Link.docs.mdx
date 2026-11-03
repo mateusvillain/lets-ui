@@ -1,7 +1,10 @@
 import { Meta, Canvas, Controls, ArgTypes } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as LinkStories from './Link.stories';
 
 <Meta of={LinkStories} />
+
+<Lang lang="pt-BR">
 
 # Link
 
@@ -9,40 +12,114 @@ Use `lui-link` para navegação entre páginas, seções ou recursos externos. �
 
 Aplica a cor semântica `text(link)`, remove o sublinhado padrão e o restaura no hover. No estado `:visited` usa `text(link-visited)`. O foco é gerenciado via `@include focus-ring(primary)`, com o anel de foco exigido pelo WCAG 2.2 AA.
 
+</Lang>
+
+<Lang lang="en-US">
+
+# Link
+
+Use `lui-link` for navigation between pages, sections or external resources. It is suitable for inline links in running text, textual CTAs and any situation where the main action is to navigate — unlike `lui-button`, which represents actions that change state or trigger operations.
+
+Applies the semantic color `text(link)`, removes the default underline and restores it on hover. In the `:visited` state it uses `text(link-visited)`. Focus is managed via `@include focus-ring(primary)`, ensuring WCAG 2.1 AA compliance.
+
+</Lang>
+
 <Canvas of={LinkStories.Default} />
 <Controls of={LinkStories.Default} />
+
+<Lang lang="pt-BR">
 
 ## Tamanhos
 
 Use `size` para controlar o tamanho do link. Os valores seguem a mesma escala do `lui-body`: `lg`, `md` e `sm`. Sem `size`, o link herda o `font-size` do contexto.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Sizes
+
+Use `size` to control the link size. The values follow the same scale as `lui-body`: `lg`, `md` and `sm`. Without `size`, the link inherits the `font-size` of the context.
+
+</Lang>
+
 <Canvas of={LinkStories.Sizes} />
+
+<Lang lang="pt-BR">
 
 ## Nova aba
 
 Use `target="_blank"` para abrir o link em uma nova aba. O atributo `rel` é automaticamente definido como `noopener noreferrer` neste caso, por segurança.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## New tab
+
+Use `target="_blank"` to open the link in a new tab. The `rel` attribute is automatically set to `noopener noreferrer` in this case, for security.
+
+</Lang>
+
 <Canvas of={LinkStories.OpenInNewTab} />
+
+<Lang lang="pt-BR">
 
 ## Link externo
 
 Use o atributo booleano `external` para exibir um ícone indicativo de link externo ao lado do texto. Ao aplicá-lo, `target="_blank"` e `rel="noopener noreferrer"` são definidos automaticamente — não é necessário declará-los.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## External link
+
+Use the boolean `external` attribute to show an icon indicating an external link next to the text. When applied, `target="_blank"` and `rel="noopener noreferrer"` are set automatically — there is no need to declare them.
+
+</Lang>
+
 <Canvas of={LinkStories.ExternalLink} />
 
 <Canvas of={LinkStories.ExternalInParagraph} />
+
+<Lang lang="pt-BR">
 
 ## Download
 
 Use `download` para que o navegador baixe o arquivo ao invés de navegar para ele. O valor do atributo define o nome sugerido para o arquivo baixado.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Download
+
+Use `download` so the browser downloads the file instead of navigating to it. The attribute value defines the suggested name for the downloaded file.
+
+</Lang>
+
 <Canvas of={LinkStories.Download} />
+
+<Lang lang="pt-BR">
 
 ## Desabilitado
 
 Use `disabled` para impedir a navegação. O `href` é removido, `aria-disabled="true"` é adicionado e o elemento permanece focável via teclado (`tabindex="0"`).
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Disabled
+
+Use `disabled` to prevent navigation. The `href` is removed, `aria-disabled="true"` is added and the element remains focusable via keyboard (`tabindex="0"`).
+
+</Lang>
+
 <Canvas of={LinkStories.Disabled} />
+
+<Lang lang="pt-BR">
 
 ## Rastreamento de visita
 
@@ -50,19 +127,63 @@ Por padrão, o estilo `:visited` não é aplicado — evitando que o histórico 
 
 Isso é útil em contextos como listas de artigos, resultados de busca ou menus de navegação, onde sinalizar visualmente o que já foi acessado melhora a orientação do usuário.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Visit tracking
+
+By default, the `:visited` style is not applied — preventing the user's browsing history from changing the link appearance without explicit intent. Use `track-visited` to enable the color change after the link has been visited.
+
+This is useful in contexts such as article lists, search results or navigation menus, where visually signaling what has already been accessed improves user orientation.
+
+</Lang>
+
 <Canvas of={LinkStories.TrackVisited} />
+
+<Lang lang="pt-BR">
 
 ## Em parágrafo
 
+</Lang>
+
+<Lang lang="en-US">
+
+## In a paragraph
+
+</Lang>
+
 <Canvas of={LinkStories.InParagraph} />
+
+<Lang lang="pt-BR">
 
 ## Via slot
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Via slot
+
+</Lang>
+
 <Canvas of={LinkStories.WithSlot} />
+
+<Lang lang="pt-BR">
 
 ## Via label
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Via label
+
+</Lang>
+
 <Canvas of={LinkStories.WithLabel} />
+
+<Lang lang="pt-BR">
 
 ## Com aria-label
 
@@ -74,13 +195,43 @@ Use `aria-label` quando o texto visível do link não descreve o destino com cla
 
 O valor deve descrever o destino ou a ação, não repetir o texto visível. Prefira "Leia mais sobre acessibilidade" a "Leia mais".
 
+</Lang>
+
+<Lang lang="en-US">
+
+## With aria-label
+
+Use `aria-label` when the link's visible text does not describe the destination clearly for assistive technologies. Common cases:
+
+- Generic texts such as "learn more", "click here" or "read more" that only make sense with the visual context around them
+- Links with only an icon or image as content, without readable text
+- Multiple links with the same text on the same page, but with different destinations
+
+The value must describe the destination or the action, not repeat the visible text. Prefer "Read more about accessibility" over "Read more".
+
+</Lang>
+
 <Canvas of={LinkStories.WithAriaLabel} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
 A estilização de link está disponível diretamente via classe CSS `.link` em qualquer tag `<a>`, sem necessidade de usar o web component `<lui-link>`.
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+Link styling is available directly via the `.link` CSS class on any `<a>` tag, without the need to use the `<lui-link>` web component.
+
+</Lang>
+
 <Canvas of={LinkStories.CSSClass} />
+
+<Lang lang="pt-BR">
 
 ## Uso
 
@@ -124,6 +275,56 @@ A estilização de link está disponível diretamente via classe CSS `.link` em 
 </p>
 ```
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Usage
+
+### Web Component
+
+```html
+<!-- Default link -->
+<lui-link label="Learn more" href="/sobre"></lui-link>
+
+<!-- Open in a new tab (rel added automatically) -->
+<lui-link href="https://example.com" target="_blank"> Documentation </lui-link>
+
+<!-- External link with icon -->
+<lui-link href="https://example.com" target="_blank" external>
+  External documentation
+</lui-link>
+
+<!-- Download -->
+<lui-link href="/assets/guia.pdf" download="guia-design-system.pdf">
+  Download guide
+</lui-link>
+
+<!-- With custom aria-label -->
+<lui-link
+  label="Read more"
+  href="/acessibilidade"
+  aria-label="Read more about accessibility"
+></lui-link>
+
+<!-- Disabled -->
+<lui-link href="/sobre" disabled>Disabled link</lui-link>
+```
+
+### CSS class
+
+```html
+<!-- Inline link in text -->
+<p>
+  See the
+  <a class="link" href="/termos">privacy policy</a>.
+</p>
+```
+
+</Lang>
+
+<Lang lang="pt-BR">
+
 ## Atributos
 
 | Atributo         | Tipo      | Default | Descrição                                                                                                             |
@@ -142,3 +343,28 @@ A estilização de link está disponível diretamente via classe CSS `.link` em 
 | `aria-label`     | `string`  | —       | Label acessível para leitores de tela                                                                                 |
 | `aria-expanded`  | `string`  | —       | Estado aberto/fechado do que o link controla; levado ao `<a>` interno                                                 |
 | `aria-haspopup`  | `string`  | —       | Tipo de popup que o link abre; levado ao `<a>` interno                                                                |
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Attributes
+
+| Attribute        | Type      | Default | Description                                                                                                           |
+| ---------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------- |
+| `href`           | `string`  | `#`     | Destination URL                                                                                                       |
+| `label`          | `string`  | —       | Link text (alternative to the slot)                                                                                   |
+| `size`           | `string`  | —       | Text size: `lg`, `md`, `sm`. Inherits the `font-size` of the context when omitted                                     |
+| `target`         | `string`  | `_self` | Opening context (`_self`, `_blank`, `_parent`, `_top`)                                                                |
+| `rel`            | `string`  | —       | Link relation. When `target="_blank"`, assumes `noopener noreferrer` automatically                                    |
+| `download`       | `string`  | —       | Suggested file name when downloading                                                                                  |
+| `hreflang`       | `string`  | —       | Language of the destination document                                                                                  |
+| `referrerpolicy` | `string`  | —       | Referrer policy sent in the request                                                                                   |
+| `external`       | `boolean` | `false` | Shows an external link icon next to the text. Implies `target="_blank"` and `rel="noopener noreferrer"` automatically |
+| `visited`        | `boolean` | `false` | Enables the `:visited` style after the link is clicked                                                                |
+| `disabled`       | `boolean` | `false` | Disables navigation: removes `href`, adds `aria-disabled="true"` and keeps the element focusable                      |
+| `aria-label`     | `string`  | —       | Accessible label for screen readers                                                                                   |
+| `aria-expanded`  | `string`  | —       | Open/closed state of what the link controls; taken to the inner `<a>`                                                 |
+| `aria-haspopup`  | `string`  | —       | Type of popup the link opens; taken to the inner `<a>`                                                                |
+
+</Lang>

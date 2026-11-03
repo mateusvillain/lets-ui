@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Get started/Introduction" />
 
@@ -20,6 +21,25 @@ export const packages = [
   },
 ];
 
+export const packagesEn = [
+  {
+    name: '@lets-ui/tokens',
+    desc: 'Design tokens in JSON compiled to CSS custom properties and SCSS. The foundation of all styling in the system.',
+    use: 'Tokens, themes, brands',
+  },
+  {
+    name: '@lets-ui/styles',
+    desc: 'Compiled CSS with every component style, foundations and reset. Use it when you do not need JavaScript.',
+    use: 'CSS only',
+  },
+  {
+    name: '@lets-ui/components',
+    desc: 'Web Components in Vanilla JS (custom elements). Includes the compiled CSS automatically and has no framework dependency.',
+    use: 'Interactive components',
+  },
+];
+
+<Lang lang="pt-BR">
 # Introduction
 
 **Let's UI** é um design system open-source, framework-agnostic, construído sobre CSS custom properties e Web Components nativos. Funciona em qualquer projeto — React, Vue, Angular, Svelte ou HTML puro — sem impor dependências de runtime.
@@ -185,3 +205,172 @@ Tokens de marca como `--lui-brand-color-primary-*` e `--lui-brand-border-radius-
 ## Licença
 
 Let's UI é distribuído sob a licença **MIT**. Veja o arquivo `LICENSE` no repositório para mais detalhes.
+</Lang>
+
+<Lang lang="en-US">
+# Introduction
+
+**Let's UI** is an open-source, framework-agnostic design system built on CSS custom properties and native Web Components. It works in any project — React, Vue, Angular, Svelte or plain HTML — without imposing runtime dependencies.
+
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, 1fr)',
+  gap: '12px',
+  margin: '24px 0 32px',
+}}>
+  {[
+    { icon: '🎨', title: 'Token-driven',   desc: 'Every visual decision comes from tokens, not hardcoded values.'           },
+    { icon: '🧩', title: 'Agnostic',       desc: 'Native Web Components. Works in any framework or in none.'                 },
+    { icon: '🌗', title: 'Multi-theme',    desc: 'Native support for light/dark mode and multiple brands via HTML attributes.' },
+  ].map(({ icon, title, desc }) => (
+    <div key={title} style={{
+      padding: '20px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '8px',
+    }}>
+      <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>{icon}</span>
+      <strong style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>{title}</strong>
+      <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-caption)', lineHeight: 1.5 }}>{desc}</span>
+    </div>
+  ))}
+</div>
+
+---
+
+## Packages
+
+The monorepo publishes three independent packages on npm. Use only what you need.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px' }}>
+  {packagesEn.map(({ name, desc, use }) => (
+    <div key={name} style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
+      alignItems: 'start',
+      gap: '16px',
+      padding: '16px 20px',
+      background: 'var(--lui-color-neutral-background-surface)',
+      border: '1px solid var(--lui-color-neutral-border-subtle)',
+      borderRadius: '8px',
+    }}>
+      <div>
+        <code style={{ display: 'block', fontSize: '13px', marginBottom: '6px' }}>{name}</code>
+        <span style={{ fontSize: '12px', color: 'var(--lui-color-neutral-text-body)', lineHeight: 1.5 }}>{desc}</span>
+      </div>
+      <span style={{
+        fontSize: '11px',
+        color: 'var(--lui-color-primary-text-body)',
+        background: 'var(--lui-color-primary-background-surface)',
+        border: '1px solid var(--lui-color-primary-border-default)',
+        borderRadius: '4px',
+        padding: '2px 8px',
+        whiteSpace: 'nowrap',
+        alignSelf: 'start',
+      }}>{use}</span>
+    </div>
+  ))}
+</div>
+
+---
+
+## Installation
+
+Choose the installation method that fits what your project needs.
+
+### CSS only
+
+The simplest way to use Let's UI. Install the styles package — it includes the compiled CSS with every component, foundations and reset.
+
+```bash
+npm install @lets-ui/styles
+```
+
+Import the CSS at your application's entry point:
+
+```js
+import '@lets-ui/styles';
+```
+
+Or through a `<link>` in the HTML:
+
+```html
+<link rel="stylesheet" href="node_modules/@lets-ui/styles/dist/letsui.min.css" />
+```
+
+---
+
+### With Web Components
+
+To use the interactive components (buttons, inputs, modals, etc.), import the whole components package or individual components. Styles are injected automatically — no additional CSS import is needed.
+
+```bash
+npm install @lets-ui/components
+```
+
+```js
+// Registers every component
+import '@lets-ui/components';
+
+// Or import components individually
+import '@lets-ui/components/button';
+import '@lets-ui/components/modal';
+```
+
+Components register themselves automatically as custom elements and become available in the HTML:
+
+```html
+<lui-button variant="primary">Confirm</lui-button>
+<lui-button variant="secondary">Cancel</lui-button>
+```
+
+---
+
+## Themes and brands
+
+Let's UI supports light/dark mode and multiple brands through HTML attributes, without extra JavaScript.
+
+### Light / dark mode
+
+Apply `data-theme` to the root element. The default value is `light`.
+
+```html
+<!-- Light mode (default) -->
+<html data-theme="light">
+
+<!-- Dark mode -->
+<html data-theme="dark">
+```
+
+To switch the theme through JavaScript:
+
+```js
+document.documentElement.setAttribute('data-theme', 'dark');
+```
+
+### Multi-brand
+
+The `data-brand` attribute defines which brand palette is used. The default theme is `lets-ui`.
+
+```html
+<html data-theme="light" data-brand="lets-ui">
+```
+
+Brand tokens such as `--lui-brand-color-primary-*` and `--lui-brand-border-radius-*` are overwritten automatically when `data-brand` changes.
+
+---
+
+## Requirements
+
+| Requirement   | Minimum version      |
+| ------------- | -------------------- |
+| Node.js       | 18+                  |
+| Browsers      | Evergreen (CSS custom properties and Custom Elements v1 support) |
+| Package manager | npm, pnpm or yarn  |
+
+---
+
+## License
+
+Let's UI is distributed under the **MIT** license. See the `LICENSE` file in the repository for details.
+</Lang>

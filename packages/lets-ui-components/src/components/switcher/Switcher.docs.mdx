@@ -1,23 +1,55 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as SwitcherStories from './Switcher.stories';
 
 <Meta of={SwitcherStories} />
 
+<Lang lang="pt-BR">
 # Switcher
 
 Intrinsic responsive layout using the Every Layout switcher pattern. Children switch from horizontal to vertical layout when the container drops below the `threshold` width.
 
+</Lang>
+
+<Lang lang="en-US">
+# Switcher
+
+Intrinsic responsive layout using the Every Layout switcher pattern. Children switch from horizontal to vertical layout when the container drops below the `threshold` width.
+
+</Lang>
+
 <Canvas of={SwitcherStories.Default} />
 <Controls of={SwitcherStories.Default} />
 
+<Lang lang="pt-BR">
+
 ## Wide Threshold
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Wide Threshold
+
+</Lang>
 
 <Canvas of={SwitcherStories.WideThreshold} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={SwitcherStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -39,3 +71,30 @@ Intrinsic responsive layout using the Every Layout switcher pattern. Children sw
   <div>Panel C</div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-switcher threshold="320px" gap="md">
+  <div>Panel A</div>
+  <div>Panel B</div>
+  <div>Panel C</div>
+</lui-switcher>
+```
+
+### CSS class
+
+```html
+<div class="switcher switcher--gap-md">
+  <div>Panel A</div>
+  <div>Panel B</div>
+  <div>Panel C</div>
+</div>
+```
+
+</Lang>

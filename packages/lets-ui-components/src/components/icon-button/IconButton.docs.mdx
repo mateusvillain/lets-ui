@@ -1,15 +1,27 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as IconButtonStories from './IconButton.stories';
 
 <Meta of={IconButtonStories} />
 
+<Lang lang="pt-BR">
 # Icon Button
 
 Botão compacto que mostra só um ícone, sem texto visível. O nome da ação vem do `aria-label`.
 
+</Lang>
+
+<Lang lang="en-US">
+# Icon Button
+
+A compact button that shows only an icon, with no visible text. The action name comes from `aria-label`.
+
+</Lang>
+
 <Canvas of={IconButtonStories.IconButton} />
 <Controls of={IconButtonStories.IconButton} />
 
+<Lang lang="pt-BR">
 ## Quando usar
 
 Use o Icon Button quando o espaço é curto e o ícone é reconhecível sem texto: "mais opções" numa linha de tabela, "editar" num card, as ações de uma toolbar.
@@ -18,12 +30,38 @@ Use o Icon Button quando o espaço é curto e o ícone é reconhecível sem text
 - Para fechar um Alert, um Modal ou um Drawer, use o [Close Button](?path=/docs/actionable-close-button--docs), que já vem com o ícone e o nome acessível.
 - Para navegar para outra página, use o Button com `href` ou o [componente Link](?path=/docs/navigation-link--docs). O Icon Button é sempre um botão, e um controle que navega deve ser anunciado como link.
 
+</Lang>
+
+<Lang lang="en-US">
+## When to use
+
+Use Icon Button when space is short and the icon is recognizable without text: "more options" in a table row, "edit" in a card, the actions of a toolbar.
+
+- When there is room for text, or the icon alone is ambiguous, use [Button](?path=/docs/actionable-button--docs) with the icon in the `prefix` slot. Visible text is always clearer than an icon.
+- To close an Alert, a Modal or a Drawer, use [Close Button](?path=/docs/actionable-close-button--docs), which already comes with the icon and the accessible name.
+- To navigate to another page, use Button with `href` or the [Link component](?path=/docs/navigation-link--docs). Icon Button is always a button, and a control that navigates must be announced as a link.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Nome acessível
 
 **`aria-label` é obrigatório.** Sem texto visível, ele é o único nome que o leitor de tela anuncia. Sem ele, o botão é lido só como "botão". Descreva a ação, não o ícone: `aria-label="Excluir arquivo"`, não `aria-label="Lixeira"`. Quando houver vários Icon Buttons na mesma tela, torne cada nome distinto (`"Excluir arquivo"`, `"Excluir pasta"`).
 
 Marque o SVG do slot com `aria-hidden="true"`: ele é decorativo, já que o nome vem do `aria-label`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Accessible name
+
+**`aria-label` is required.** With no visible text, it is the only name the screen reader announces. Without it, the button is read only as "button". Describe the action, not the icon: `aria-label="Delete file"`, not `aria-label="Trash"`. When there are several Icon Buttons on the same screen, make each name distinct (`"Delete file"`, `"Delete folder"`).
+
+Mark the slot SVG with `aria-hidden="true"`: it is decorative, since the name comes from `aria-label`.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Com Tooltip
 
 Quem enxerga o ícone também precisa saber o que ele faz. Envolva o Icon Button num [Tooltip](?path=/docs/content-tooltip--docs) para mostrar o nome da ação no hover e no foco.
@@ -32,8 +70,22 @@ O texto do tooltip vira a descrição do botão (`aria-description`), não o nom
 
 Use no tooltip o mesmo texto do `aria-label`, para que quem enxerga veja o nome que o leitor de tela anuncia. Quando o texto repete o nome, o Tooltip não o define como descrição, e o leitor de tela anuncia "Excluir item, botão" uma vez só. Um tooltip com outro texto, como um complemento ("Remove o item da lista"), vira a descrição do botão.
 
+</Lang>
+
+<Lang lang="en-US">
+## With Tooltip
+
+People who see the icon also need to know what it does. Wrap the Icon Button in a [Tooltip](?path=/docs/content-tooltip--docs) to show the action name on hover and focus.
+
+The tooltip text becomes the button description (`aria-description`), not the name: `aria-label` is still required. The button remains the only tab stop.
+
+Use the same text as `aria-label` in the tooltip, so that sighted people see the name the screen reader announces. When the text repeats the name, Tooltip does not set it as a description, and the screen reader announces "Delete item, button" only once. A tooltip with different text, such as a complement ("Removes the item from the list"), becomes the button description.
+
+</Lang>
+
 <Canvas of={IconButtonStories.WithTooltip} />
 
+<Lang lang="pt-BR">
 ```html
 <lui-tooltip text="Excluir arquivo">
   <lui-icon-button aria-label="Excluir arquivo">
@@ -41,20 +93,52 @@ Use no tooltip o mesmo texto do `aria-label`, para que quem enxerga veja o nome 
   </lui-icon-button>
 </lui-tooltip>
 ```
+</Lang>
 
+<Lang lang="en-US">
+```html
+<lui-tooltip text="Delete file">
+  <lui-icon-button aria-label="Delete file">
+    <svg aria-hidden="true" ...>...</svg>
+  </lui-icon-button>
+</lui-tooltip>
+```
+</Lang>
+
+<Lang lang="pt-BR">
 ## Tamanhos
 
 `lg` (40px) para áreas com mais espaço e `md` (32px, padrão) para layouts compactos, como toolbars e tabelas. Os dois atendem à área mínima de 24px da WCAG 2.5.8. Qualquer outro valor de `size` usa `md`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Sizes
+
+`lg` (40px) for areas with more space and `md` (32px, default) for compact layouts, such as toolbars and tables. Both meet the 24px minimum target of WCAG 2.5.8. Any other `size` value uses `md`.
+
+</Lang>
+
 <Canvas of={IconButtonStories.SizeLg} />
 <Canvas of={IconButtonStories.SizeMd} />
 
+<Lang lang="pt-BR">
 ## Disabled
 
 `disabled` desabilita o botão: ele fica opaco, não responde a clique e sai da ordem de tabulação. Como não recebe foco, quem navega por teclado ou leitor de tela não chega até ele. Dentro de um Tooltip, o foco vai para o wrapper do tooltip, que mostra o texto mas é anunciado como grupo, sem o papel de botão nem o estado indisponível. Se a pessoa precisa saber por que a ação está indisponível, explique o motivo num texto visível.
 
+</Lang>
+
+<Lang lang="en-US">
+## Disabled
+
+`disabled` disables the button: it becomes opaque, does not respond to clicks and leaves the tab order. Because it cannot receive focus, people navigating with a keyboard or screen reader never reach it. Inside a Tooltip, focus goes to the tooltip wrapper, which shows the text but is announced as a group, without the button role or the unavailable state. If people need to know why the action is unavailable, explain the reason in visible text.
+
+</Lang>
+
 <Canvas of={IconButtonStories.Disabled} />
 
+<Lang lang="pt-BR">
 ## Estado de componentes acionados
 
 Icon Buttons costumam abrir menus e painéis ou alternar formatações, como o botão de "mais opções" ou o de negrito numa toolbar. Informe o estado com `aria-expanded`, `aria-haspopup` ou `aria-pressed` no próprio `<lui-icon-button>`. O componente leva esses atributos, e o `aria-label`, ao `<button>` interno, que é o que o leitor de tela anuncia, e os remove do elemento externo: lá eles criariam um segundo nó, sem papel, na árvore de acessibilidade.
@@ -63,10 +147,24 @@ Como o atributo sai do `<lui-icon-button>`, seletores como `lui-icon-button[aria
 
 Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão recebe esse estado do próprio componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` não é repassado: um ID não pode ser referenciado entre shadow roots diferentes.
 
+</Lang>
+
+<Lang lang="en-US">
+## State of triggered components
+
+Icon Buttons often open menus and panels or toggle formatting, such as the "more options" button or the bold button in a toolbar. Report the state with `aria-expanded`, `aria-haspopup` or `aria-pressed` on the `<lui-icon-button>` itself. The component moves those attributes, and `aria-label`, to the internal `<button>`, which is what the screen reader announces, and removes them from the outer element: there they would create a second, role-less node in the accessibility tree.
+
+Because the attribute leaves the `<lui-icon-button>`, selectors such as `lui-icon-button[aria-pressed="true"]` and `getAttribute('aria-pressed')` do not find it. Read the property (`button.ariaPressed`) instead. To clear a state, use an explicit value (`aria-pressed="false"`) or the property with `null`: removing an attribute the component has already consumed has no effect.
+
+As the `slot="trigger"` of a Modal, a Drawer or a Dropdown Menu, the button receives that state from the component itself and announces "collapsed" or "expanded" with no extra configuration. `aria-controls` is not forwarded: an ID cannot be referenced across different shadow roots.
+
+</Lang>
+
 <Canvas of={IconButtonStories.DropdownTrigger} />
 
 <Canvas of={IconButtonStories.ModalTrigger} />
 
+<Lang lang="pt-BR">
 ```html
 <lui-icon-button
   aria-label="Mais opções"
@@ -79,33 +177,92 @@ Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão
   <svg aria-hidden="true" ...>...</svg>
 </lui-icon-button>
 ```
+</Lang>
 
+<Lang lang="en-US">
+```html
+<lui-icon-button
+  aria-label="More options"
+  aria-expanded="false"
+  aria-haspopup="menu"
+>
+  <svg aria-hidden="true" ...>...</svg>
+</lui-icon-button>
+<lui-icon-button aria-label="Bold" aria-pressed="true">
+  <svg aria-hidden="true" ...>...</svg>
+</lui-icon-button>
+```
+</Lang>
+
+<Lang lang="pt-BR">
 ## Botão alternável
 
 Para ligar e desligar uma opção, como um filtro ou uma formatação, use `aria-pressed="true"` ou `"false"` e troque o valor a cada clique. Pressionado, o botão ganha o fundo de container neutro. Hover, foco e `disabled` continuam funcionando sobre o estado pressionado. Em modo de alto contraste (`forced-colors`), o botão pressionado usa as cores de destaque do sistema e ganha um anel interno.
 
 Mantenha o mesmo `aria-label` nos dois estados: o leitor de tela anuncia "pressionado" ou "não pressionado", e um nome que muda com o estado confunde. `aria-pressed="mixed"` não tem estilo próprio e aparece como não pressionado.
 
+</Lang>
+
+<Lang lang="en-US">
+## Toggle button
+
+To turn an option on and off, such as a filter or a formatting, use `aria-pressed="true"` or `"false"` and toggle the value on every click. When pressed, the button gets the neutral container background. Hover, focus and `disabled` keep working on top of the pressed state. In high contrast mode (`forced-colors`), the pressed button uses the system highlight colors and gains an inner ring.
+
+Keep the same `aria-label` in both states: the screen reader announces "pressed" or "not pressed", and a name that changes with the state is confusing. `aria-pressed="mixed"` has no style of its own and appears as not pressed.
+
+</Lang>
+
 <Canvas of={IconButtonStories.Toggle} />
 
+<Lang lang="pt-BR">
 ```html
 <lui-icon-button aria-label="Mostrar alertas" aria-pressed="true">
   <svg aria-hidden="true" ...>...</svg>
 </lui-icon-button>
 ```
+</Lang>
 
+<Lang lang="en-US">
+```html
+<lui-icon-button aria-label="Show alerts" aria-pressed="true">
+  <svg aria-hidden="true" ...>...</svg>
+</lui-icon-button>
+```
+</Lang>
+
+<Lang lang="pt-BR">
 ## Todos os ícones
 
 Catálogo de ícones SVG. O slot aceita qualquer SVG ou ícone de qualquer biblioteca. Aqui cada botão tem o nome do ícone como rótulo só por ser um catálogo. Em uso real, descreva a ação, como em [Nome acessível](#nome-acessível).
 
+</Lang>
+
+<Lang lang="en-US">
+## All icons
+
+SVG icon catalog. The slot accepts any SVG or icon from any library. Here each button has the icon name as its label only because it is a catalog. In real use, describe the action, as in [Accessible name](#accessible-name).
+
+</Lang>
+
 <Canvas of={IconButtonStories.AllIcons} />
 
+<Lang lang="pt-BR">
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, use `<button class="icon-button icon-button--{size}" type="button">`. O `aria-label` no `<button>` e o `aria-hidden="true"` no SVG continuam obrigatórios, e o `type="button"` evita que o botão envie o formulário em que estiver.
 
+</Lang>
+
+<Lang lang="en-US">
+## CSS class (without Web Component)
+
+Without the Web Component, use `<button class="icon-button icon-button--{size}" type="button">`. The `aria-label` on the `<button>` and the `aria-hidden="true"` on the SVG are still required, and `type="button"` prevents the button from submitting the form it is in.
+
+</Lang>
+
 <Canvas of={IconButtonStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Propriedades
 
 | Atributo        | Tipo           | Padrão  | Descrição                                                                       |
@@ -123,6 +280,29 @@ Sem o Web Component, use `<button class="icon-button icon-button--{size}" type="
 | -------- | ------------------------------------------------------------ |
 | (padrão) | O ícone. Um SVG ou ícone de fonte, com `aria-hidden="true"`. |
 
+</Lang>
+
+<Lang lang="en-US">
+## Properties
+
+| Attribute       | Type           | Default | Description                                                                          |
+| --------------- | -------------- | ------- | ------------------------------------------------------------------------------------ |
+| `aria-label`    | `string`       | —       | **Required.** Accessible name that describes the action.                             |
+| `size`          | `'lg' \| 'md'` | `md`    | Size: `lg` (40px) or `md` (32px). Other values use `md`.                             |
+| `disabled`      | `boolean`      | `false` | Disables the button and removes it from the tab order.                               |
+| `aria-expanded` | `string`       | —       | Open/closed state of what the button controls. Forwarded to the internal `<button>`. |
+| `aria-haspopup` | `string`       | —       | Type of popup the button opens. Forwarded to the internal `<button>`.                |
+| `aria-pressed`  | `string`       | —       | Toggle button state. Forwarded to the internal `<button>`.                           |
+
+### Slots
+
+| Slot      | Description                                                 |
+| --------- | ----------------------------------------------------------- |
+| (default) | The icon. An SVG or a font icon, with `aria-hidden="true"`. |
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 - Renderiza um `<button>` nativo: navegável com `Tab`, acionado com `Enter` ou `Espaço`.
@@ -139,6 +319,28 @@ Sem o Web Component, use `<button class="icon-button icon-button--{size}" type="
 - Mostre o nome da ação para quem enxerga, com um Tooltip, quando o ícone não for óbvio.
 - Para navegação, use um link, não o Icon Button.
 
+</Lang>
+
+<Lang lang="en-US">
+## Accessibility
+
+- Renders a native `<button>`: reachable with `Tab`, triggered with `Enter` or `Space`.
+- The accessible name comes only from `aria-label`. The icon is decorative and does not enter the name.
+- `aria-expanded`, `aria-haspopup` and `aria-pressed` set on the `<lui-icon-button>`, and the description of a Tooltip around it, are forwarded to the internal `<button>`. The outer element has no role and does not carry those attributes to the screen reader.
+- Both sizes meet the 24px minimum target of WCAG 2.5.8.
+- Focus stays visible in high contrast mode (`forced-colors`), with a system outline in place of the ring.
+- With `disabled`, the button leaves the tab order.
+
+### Consumer responsibilities
+
+- Set an `aria-label` that describes the action, distinct from the other Icon Buttons on the screen.
+- Mark the SVG with `aria-hidden="true"`.
+- Show the action name to sighted people, with a Tooltip, when the icon is not obvious.
+- For navigation, use a link, not Icon Button.
+
+</Lang>
+
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -156,3 +358,26 @@ Sem o Web Component, use `<button class="icon-button icon-button--{size}" type="
   <svg width="24" height="24" aria-hidden="true" ...>...</svg>
 </button>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-icon-button size="lg" aria-label="Close">
+  <svg width="24" height="24" aria-hidden="true" ...>...</svg>
+</lui-icon-button>
+```
+
+### CSS class
+
+```html
+<button class="icon-button icon-button--lg" type="button" aria-label="Close">
+  <svg width="24" height="24" aria-hidden="true" ...>...</svg>
+</button>
+```
+
+</Lang>

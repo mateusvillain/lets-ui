@@ -1,63 +1,171 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as SwitchStories from './Switch.stories';
 
 <Meta of={SwitchStories} />
 
+<Lang lang="pt-BR">
 # Switch
 
 Controle de alternância binária (ligado/desligado). O conteúdo da label é projetado via slot — o atributo `label` serve como fallback para texto simples.
 
+</Lang>
+
+<Lang lang="en-US">
+# Switch
+
+Binary toggle control (on/off). The label content is projected through a slot — the `label` attribute serves as a fallback for plain text.
+
+</Lang>
+
 <Canvas of={SwitchStories.Default} />
 <Controls of={SwitchStories.Default} />
 
+<Lang lang="pt-BR">
 ## Label (atributo)
 
 O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
 
+</Lang>
+
+<Lang lang="en-US">
+## Label (attribute)
+
+The `label` attribute renders the text as the default slot content. Useful for simple cases or programmatic HTML generation.
+
+</Lang>
+
 <Canvas of={SwitchStories.LabelAttribute} />
 
+<Lang lang="pt-BR">
 ## Estados
 
 ### Ativado
 
+</Lang>
+
+<Lang lang="en-US">
+## States
+
+### On
+
+</Lang>
+
 <Canvas of={SwitchStories.Checked} />
+
+<Lang lang="pt-BR">
 
 ### Tamanho médio
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Medium size
+
+</Lang>
+
 <Canvas of={SwitchStories.Small} />
+
+<Lang lang="pt-BR">
 
 ### Desabilitado
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Disabled
+
+</Lang>
+
 <Canvas of={SwitchStories.Disabled} />
+
+<Lang lang="pt-BR">
 
 ### Desabilitado e ativado
 
+</Lang>
+
+<Lang lang="en-US">
+
+### Disabled and on
+
+</Lang>
+
 <Canvas of={SwitchStories.DisabledChecked} />
+
+<Lang lang="pt-BR">
 
 ## Grupo
 
+</Lang>
+
+<Lang lang="en-US">
+
+## Group
+
+</Lang>
+
 <Canvas of={SwitchStories.Group} />
 
+<Lang lang="pt-BR">
 ## Integração com formulários
 
 O `lui-switch` é form-associated. Use `name` para identificar o campo no `FormData` e `value` para definir o que é submetido quando ativado (padrão `"on"`).
 
+</Lang>
+
+<Lang lang="en-US">
+## Form integration
+
+`lui-switch` is form-associated. Use `name` to identify the field in `FormData` and `value` to define what is submitted when on (default `"on"`).
+
+</Lang>
+
 <Canvas of={SwitchStories.FormIntegration} />
 
+<Lang lang="pt-BR">
 ## Atributos de formulário
 
-| Atributo   | Tipo      | Padrão | Descrição                                                                       |
-| ---------- | --------- | ------ | ------------------------------------------------------------------------------- |
-| `label`    | `string`  | `''`   | Conteúdo padrão do slot; ignorado quando o slot é projetado                     |
-| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos                                              |
-| `value`    | `string`  | `'on'` | Valor submetido quando ativado; omitido quando desativado                       |
-| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o switch fora do elemento form           |
-| `required` | `boolean` | `false`| Bloqueia a submissão quando o switch não está ativado                           |
+| Atributo   | Tipo      | Padrão  | Descrição                                                             |
+| ---------- | --------- | ------- | --------------------------------------------------------------------- |
+| `label`    | `string`  | `''`    | Conteúdo padrão do slot; ignorado quando o slot é projetado           |
+| `name`     | `string`  | `''`    | Nome do campo nos dados submetidos                                    |
+| `value`    | `string`  | `'on'`  | Valor submetido quando ativado; omitido quando desativado             |
+| `form`     | `string`  | `''`    | ID do `<form>` associado; permite usar o switch fora do elemento form |
+| `required` | `boolean` | `false` | Bloqueia a submissão quando o switch não está ativado                 |
+
+</Lang>
+
+<Lang lang="en-US">
+## Form attributes
+
+| Attribute  | Type      | Default | Description                                                                     |
+| ---------- | --------- | ------- | ------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`    | Default slot content; ignored when the slot is projected                        |
+| `name`     | `string`  | `''`    | Field name in the submitted data                                                |
+| `value`    | `string`  | `'on'`  | Value submitted when on; omitted when off                                       |
+| `form`     | `string`  | `''`    | ID of the associated `<form>`; lets you use the switch outside the form element |
+| `required` | `boolean` | `false` | Blocks submission when the switch is not on                                     |
+
+</Lang>
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={SwitchStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -70,7 +178,29 @@ O `lui-switch` é form-associated. Use `name` para identificar o campo no `FormD
 
 ```html
 <label class="switch switch--lg">
-  <input type="checkbox">
+  <input type="checkbox" />
   Notificações
 </label>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-switch size="lg">Notifications</lui-switch>
+```
+
+### CSS class
+
+```html
+<label class="switch switch--lg">
+  <input type="checkbox" />
+  Notifications
+</label>
+```
+
+</Lang>

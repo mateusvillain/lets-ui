@@ -334,12 +334,14 @@ describe('lui-code-block tooltip', () => {
 
     await userEvent.keyboard('{Escape}');
     await block.updateComplete;
-    expect(copy(block).classList).toContain('code-block__copy--dismissed');
+    expect(copy(block).classList).toContain('tooltip--dismissed');
     expect(visible(block)).toBe('hidden');
 
     button.blur();
+    button.focus();
     await block.updateComplete;
-    expect(copy(block).classList).not.toContain('code-block__copy--dismissed');
+    expect(copy(block).classList).not.toContain('tooltip--dismissed');
+    expect(visible(block)).toBe('visible');
   });
 
   it('puts away only the tooltip that is showing', async () => {
@@ -350,8 +352,8 @@ describe('lui-code-block tooltip', () => {
     await userEvent.keyboard('{Escape}');
     await Promise.all([first.updateComplete, second.updateComplete]);
 
-    expect(copy(first).classList).toContain('code-block__copy--dismissed');
-    expect(copy(second).classList).not.toContain('code-block__copy--dismissed');
+    expect(copy(first).classList).toContain('tooltip--dismissed');
+    expect(copy(second).classList).not.toContain('tooltip--dismissed');
   });
 
   it('keeps the tooltip inside the block', async () => {
@@ -369,7 +371,7 @@ describe('lui-code-block tooltip', () => {
     const block = await mount('<lui-code-block>x</lui-code-block>');
     await userEvent.keyboard('{Escape}');
     await block.updateComplete;
-    expect(copy(block).classList).not.toContain('code-block__copy--dismissed');
+    expect(copy(block).classList).not.toContain('tooltip--dismissed');
   });
 
   it('lets the pointer move onto the tooltip', async () => {

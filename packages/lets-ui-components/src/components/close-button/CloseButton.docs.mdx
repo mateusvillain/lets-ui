@@ -1,43 +1,105 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as CloseButtonStories from './CloseButton.stories';
 
 <Meta of={CloseButtonStories} />
 
+<Lang lang="pt-BR">
 # Close Button
 
 Botão compacto e autossuficiente para dispensar ou fechar elementos de UI como modais, drawers, alerts e tags. Ao contrário do Icon Button, o Close Button já inclui o ícone X embutido e um `aria-label` padrão acessível, eliminando a necessidade de configuração repetitiva em cada uso.
 
+</Lang>
+
+<Lang lang="en-US">
+# Close Button
+
+Compact, self-contained button to dismiss or close UI elements such as modals, drawers, alerts and tags. Unlike Icon Button, Close Button already includes the built-in X icon and a default accessible `aria-label`, removing the need for repetitive configuration on every use.
+
+</Lang>
+
 <Canvas of={CloseButtonStories.CloseButton} />
 <Controls of={CloseButtonStories.CloseButton} />
 
+<Lang lang="pt-BR">
 ## Tamanhos
 
 Três tamanhos disponíveis: `sm` (24px) para espaços compactos como tags e alerts, `md` (32px, padrão) para uso geral, e `lg` (40px) para cabeçalhos de modal e drawer.
 
+</Lang>
+
+<Lang lang="en-US">
+## Sizes
+
+Three sizes available: `sm` (24px) for compact spaces such as tags and alerts, `md` (32px, default) for general use, and `lg` (40px) for modal and drawer headers.
+
+</Lang>
+
 <Canvas of={CloseButtonStories.AllSizes} />
 
+<Lang lang="pt-BR">
 ## Disabled
 
 Use o estado desabilitado quando a ação de fechar não está disponível no contexto atual.
 
+</Lang>
+
+<Lang lang="en-US">
+## Disabled
+
+Use the disabled state when the close action is not available in the current context.
+
+</Lang>
+
 <Canvas of={CloseButtonStories.Disabled} />
 
+<Lang lang="pt-BR">
 ## Dentro do Alert
 
 O atributo `dismissible` no `<lui-alert>` adiciona automaticamente um Close Button. Ao clicar, o componente emite o evento `lui-dismiss` — cabe ao consumidor remover ou ocultar o alert.
 
+</Lang>
+
+<Lang lang="en-US">
+## Inside the Alert
+
+The `dismissible` attribute on `<lui-alert>` automatically adds a Close Button. On click, the component emits the `lui-dismiss` event — it is up to the consumer to remove or hide the alert.
+
+</Lang>
+
 <Canvas of={CloseButtonStories.InsideAlert} />
 
+<Lang lang="pt-BR">
 ## Dentro do Modal
 
 O cabeçalho do Modal usa o Close Button no tamanho `lg` para fechar o diálogo.
 
+</Lang>
+
+<Lang lang="en-US">
+## Inside the Modal
+
+The Modal header uses the `lg` Close Button to close the dialog.
+
+</Lang>
+
 <Canvas of={CloseButtonStories.InsideModal} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={CloseButtonStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -75,8 +137,66 @@ document.querySelector('lui-alert').addEventListener('lui-dismiss', () => {
 
 ```html
 <button class="close-button close-button--lg" aria-label="Close">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M17.4697 5.46973..."/>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M17.4697 5.46973..." />
   </svg>
 </button>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-close-button size="md" label="Close"></lui-close-button>
+```
+
+Customizing the label:
+
+```html
+<lui-close-button size="lg" label="Close modal"></lui-close-button>
+```
+
+### Dismissible alert
+
+```html
+<lui-alert
+  variant="info"
+  title="Title"
+  content="Content"
+  dismissible
+></lui-alert>
+```
+
+Listening to the dismiss event:
+
+```js
+document.querySelector('lui-alert').addEventListener('lui-dismiss', () => {
+  // remove or hide the alert
+});
+```
+
+### CSS class
+
+```html
+<button class="close-button close-button--lg" aria-label="Close">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M17.4697 5.46973..." />
+  </svg>
+</button>
+```
+
+</Lang>

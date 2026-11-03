@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 
 <Meta title="Utilities/Mixins" />
 
@@ -161,81 +162,273 @@ export const mixins = [
   },
 ];
 
+export const mixinsEn = [
+  {
+    name: 'flex',
+    signature: '@include flex($direction, $align, $justify, $gap, $wrap)',
+    desc: 'Shorthand to set up a flexbox container in a single line.',
+    params: [
+      { name: '$direction', default: 'row',      values: 'row | row-reverse | column | column-reverse' },
+      { name: '$align',     default: 'center',   values: 'flex-start | center | flex-end | stretch | baseline' },
+      { name: '$justify',   default: 'flex-start', values: 'flex-start | center | flex-end | space-between | space-around' },
+      { name: '$gap',       default: '0',        values: 'any spacing value' },
+      { name: '$wrap',      default: 'nowrap',   values: 'nowrap | wrap | wrap-reverse' },
+    ],
+    example: `@include flex(row, center, space-between, fluid(16));`,
+  },
+  {
+    name: 'center',
+    signature: '@include center($axis)',
+    desc: 'Centers the content with flexbox on the given axis.',
+    params: [
+      { name: '$axis', default: 'both', values: 'both | x | y' },
+    ],
+    example: `// Center on both axes
+@include center;
+
+// Horizontally only
+@include center(x);
+
+// Vertically only
+@include center(y);`,
+  },
+  {
+    name: 'center-absolute',
+    signature: '@include center-absolute',
+    desc: 'Absolutely centers an element relative to its parent with position: absolute.',
+    params: [],
+    example: `.overlay__spinner {
+  position: relative; // on the parent
+
+  .spinner {
+    @include center-absolute;
+  }
+}`,
+  },
+  {
+    name: 'media-up',
+    signature: '@include media-up($breakpoint)',
+    desc: 'Applies styles from a minimum breakpoint (mobile-first).',
+    params: [
+      { name: '$breakpoint', default: '—', values: 'sm | md | lg | 1xl' },
+    ],
+    example: `.sidebar {
+  display: none;
+
+  @include media-up(md) {
+    display: block;
+  }
+}`,
+  },
+  {
+    name: 'media-down',
+    signature: '@include media-down($breakpoint)',
+    desc: 'Applies styles below a maximum breakpoint.',
+    params: [
+      { name: '$breakpoint', default: '—', values: '1xs | sm | md | lg | 1xl' },
+    ],
+    example: `.nav__menu {
+  @include media-down(sm) {
+    display: none;
+  }
+}`,
+  },
+  {
+    name: 'states',
+    signature: '@include states($focus-visible, $focus?, $bg?, $tint?)',
+    desc: 'Applies complete interactive states: disabled, hover, active and focus-visible. Ideal for buttons and interactive controls. In a filled component (solid background with the label on top), pass the color opposite to the label in $tint: hover and pressed mix that color, the background moves away from the text and contrast increases in the states. Without $tint, the states mix the color of the content itself, as in a surface component. The same $tint exists in state-layer() and state-base().',
+    params: [
+      { name: '$focus-visible', default: '—', values: 'primary | secondary | danger | success | neutral' },
+      { name: '$focus',         default: 'null', values: 'primary | secondary | danger | success | neutral' },
+      { name: '$bg',            default: 'transparent', values: 'resting background color, e.g. bg(container, primary)' },
+      { name: '$tint',          default: 'null', values: 'tint(foreground) for light labels · tint(background) for dark labels' },
+    ],
+    example: `.menu-item {
+  // Surface: the states mix the color of the content itself.
+  @include states(primary);
+}
+
+.btn--primary {
+  color: text(inverse);
+
+  // Filled, light label: tint opposite to the label.
+  @include states(primary, primary, $bg: bg(container, primary), $tint: tint(foreground));
+}
+
+.btn--neutral {
+  color: text(body);
+
+  // Filled, dark label.
+  @include states(neutral, neutral, $bg: bg(container, neutral), $tint: tint(background));
+}`,
+  },
+  {
+    name: 'disabled',
+    signature: '@include disabled',
+    desc: 'Applies only the disabled state styles (cursor, opacity, text-decoration). Use it when you do not need the other states from the states() mixin.',
+    params: [],
+    example: `.link {
+  @include disabled;
+}`,
+  },
+  {
+    name: 'focus-ring',
+    signature: '@include focus-ring($variant)',
+    desc: 'Applies the visible focus box-shadow to the element :focus-visible.',
+    params: [
+      { name: '$variant', default: '—', values: 'primary | secondary | danger | success | neutral' },
+    ],
+    example: `.input {
+  @include focus-ring(primary);
+}`,
+  },
+  {
+    name: 'sr-only',
+    signature: '@include sr-only',
+    desc: 'Visually hides the element but keeps it accessible to screen readers. Equivalent to the Tailwind sr-only utility.',
+    params: [],
+    example: `.label--hidden {
+  @include sr-only;
+}`,
+  },
+  {
+    name: 'no-select',
+    signature: '@include no-select',
+    desc: 'Disables text selection with user-select: none.',
+    params: [],
+    example: `.btn {
+  @include no-select;
+}`,
+  },
+  {
+    name: 'font-scale',
+    signature: '@include font-scale($scale-name)',
+    desc: 'Applies a complete typographic scale (font, size, weight, line-height, case) in a single call.',
+    params: [
+      { name: '$scale-name', default: '—', values: 'display | title | headline | subtitle | block-title | subheadline | overtitle | body--lg | body--md | body--sm' },
+    ],
+    example: `.page-title {
+  @include font-scale(title);
+}
+
+.section-header {
+  @include font-scale(headline);
+}
+
+.caption {
+  @include font-scale(body--sm);
+}`,
+  },
+];
+
+export const MixinsList = ({ items, requiredLabel }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    {items.map(({ name, signature, desc, params, example }) => (
+      <div key={name} style={{
+        border: '1px solid var(--lui-color-neutral-border-subtle)',
+        borderRadius: '8px',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          padding: '14px 16px',
+          background: 'var(--lui-color-neutral-background-surface)',
+          borderBottom: params.length > 0 || example ? '1px solid var(--lui-color-neutral-border-subtle)' : 'none',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '4px' }}>
+            <code style={{ fontSize: '13px', fontWeight: '700' }}>@include {name}</code>
+          </div>
+          <p style={{ margin: '0', fontSize: '13px', color: 'var(--lui-color-neutral-text-body)' }}>{desc}</p>
+          {params.length > 0 && (
+            <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {params.map(p => (
+                <div key={p.name} style={{ display: 'grid', gridTemplateColumns: '140px 80px 1fr', gap: '8px', fontSize: '12px', alignItems: 'start' }}>
+                  <code style={{ color: 'var(--lui-color-neutral-text-body)' }}>{p.name}</code>
+                  <span style={{ color: 'var(--lui-color-neutral-text-caption)', fontVariantNumeric: 'tabular-nums' }}>
+                    {p.default !== '—' ? `default: ${p.default}` : requiredLabel}
+                  </span>
+                  <span style={{ color: 'var(--lui-color-neutral-text-caption)' }}>{p.values}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {example && (
+          <pre style={{
+            margin: 0,
+            padding: '14px 16px',
+            background: 'var(--lui-color-neutral-background-container)',
+            fontSize: '12px',
+            lineHeight: '1.6',
+            overflowX: 'auto',
+            color: 'var(--lui-color-neutral-text-body)',
+            fontFamily: 'monospace',
+          }}>{example}</pre>
+        )}
+      </div>
+    ))}
+  </div>
+);
+
+<Lang lang="pt-BR">
 # Mixins
 
 Mixins SCSS definidos em `packages/styles/src/utilities/_mixins.scss`. Encapsulam padrões recorrentes de CSS para reduzir repetição e garantir consistência entre componentes.
 
 ```scss
 // No arquivo de componente
-@use '../utilities/mixins' as *;
+@use "../utilities/mixins" as *;
 // ou junto com functions:
-@use '../utilities/functions' as *;
-@use '../utilities/mixins' as *;
+@use "../utilities/functions" as *;
+@use "../utilities/mixins" as *;
 ```
 
----
+</Lang>
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-  {mixins.map(({ name, signature, desc, params, example }) => (
-    <div key={name} style={{
-      border: '1px solid var(--lui-color-neutral-border-subtle)',
-      borderRadius: '8px',
-      overflow: 'hidden',
-    }}>
-      <div style={{
-        padding: '14px 16px',
-        background: 'var(--lui-color-neutral-background-surface)',
-        borderBottom: params.length > 0 || example ? '1px solid var(--lui-color-neutral-border-subtle)' : 'none',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '4px' }}>
-          <code style={{ fontSize: '13px', fontWeight: '700' }}>@include {name}</code>
-        </div>
-        <p style={{ margin: '0', fontSize: '13px', color: 'var(--lui-color-neutral-text-body)' }}>{desc}</p>
-        {params.length > 0 && (
-          <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            {params.map(p => (
-              <div key={p.name} style={{ display: 'grid', gridTemplateColumns: '140px 80px 1fr', gap: '8px', fontSize: '12px', alignItems: 'start' }}>
-                <code style={{ color: 'var(--lui-color-neutral-text-body)' }}>{p.name}</code>
-                <span style={{ color: 'var(--lui-color-neutral-text-caption)', fontVariantNumeric: 'tabular-nums' }}>
-                  {p.default !== '—' ? `default: ${p.default}` : '(obrigatório)'}
-                </span>
-                <span style={{ color: 'var(--lui-color-neutral-text-caption)' }}>{p.values}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      {example && (
-        <pre style={{
-          margin: 0,
-          padding: '14px 16px',
-          background: 'var(--lui-color-neutral-background-container)',
-          fontSize: '12px',
-          lineHeight: '1.6',
-          overflowX: 'auto',
-          color: 'var(--lui-color-neutral-text-body)',
-          fontFamily: 'monospace',
-        }}>{example}</pre>
-      )}
-    </div>
-  ))}
-</div>
+<Lang lang="en-US">
+# Mixins
+
+SCSS mixins defined in `packages/styles/src/utilities/_mixins.scss`. They encapsulate recurring CSS patterns to reduce repetition and ensure consistency across components.
+
+```scss
+// In the component file
+@use "../utilities/mixins" as *;
+// or together with functions:
+@use "../utilities/functions" as *;
+@use "../utilities/mixins" as *;
+```
+
+</Lang>
 
 ---
 
+<Lang lang="pt-BR">
+
+<MixinsList items={mixins} requiredLabel="(obrigatório)" />
+
+</Lang>
+
+<Lang lang="en-US">
+
+<MixinsList items={mixinsEn} requiredLabel="(required)" />
+
+</Lang>
+
+---
+
+<Lang lang="pt-BR">
 ## Breakpoints de referência
 
 Os mixins `media-up()` e `media-down()` usam internamente a função `breakpoint()`,
 que lê os tokens de marca `lui.brand.grid.breakpoint.*`. Os valores abaixo são os
 da marca `lets-ui` — uma marca que redefinir esses tokens muda a tabela inteira.
 
-| Nome  | Largura | Significado                                       |
-|-------|---------|---------------------------------------------------|
-| `1xs` | 767px   | Teto da faixa mobile — só existe em `media-down`  |
-| `sm`  | 768px   | Piso a partir do qual o step abre                 |
-| `md`  | 1024px  | Piso a partir do qual o step abre                 |
-| `lg`  | 1280px  | Piso a partir do qual o step abre                 |
-| `1xl` | 1440px  | Piso a partir do qual o step abre                 |
+| Nome  | Largura | Significado                                      |
+| ----- | ------- | ------------------------------------------------ |
+| `1xs` | 767px   | Teto da faixa mobile — só existe em `media-down` |
+| `sm`  | 768px   | Piso a partir do qual o step abre                |
+| `md`  | 1024px  | Piso a partir do qual o step abre                |
+| `lg`  | 1280px  | Piso a partir do qual o step abre                |
+| `1xl` | 1440px  | Piso a partir do qual o step abre                |
 
 `1xs` é o step base e corre no sentido oposto aos demais: é a largura máxima que
 o layout mobile sustenta, não um mínimo. Por isso `media-up(1xs)` é um erro de
@@ -254,19 +447,77 @@ step acima: `media-down(1xs)` gera `width < 768px`.
 > referência; nenhuma media query lê esse valor, justamente porque o limite
 > exato é o piso de `sm`.
 
+</Lang>
+
+<Lang lang="en-US">
+## Reference breakpoints
+
+The `media-up()` and `media-down()` mixins internally use the `breakpoint()`
+function, which reads the `lui.brand.grid.breakpoint.*` brand tokens. The values
+below are from the `lets-ui` brand — a brand that redefines those tokens changes
+the whole table.
+
+| Name  | Width  | Meaning                                            |
+| ----- | ------ | -------------------------------------------------- |
+| `1xs` | 767px  | Mobile range ceiling — only exists in `media-down` |
+| `sm`  | 768px  | Floor from which the step opens                    |
+| `md`  | 1024px | Floor from which the step opens                    |
+| `lg`  | 1280px | Floor from which the step opens                    |
+| `1xl` | 1440px | Floor from which the step opens                    |
+
+`1xs` is the base step and runs in the opposite direction from the others: it is
+the maximum width the mobile layout supports, not a minimum. That is why
+`media-up(1xs)` is a compilation error — below it there are only the base styles,
+which do not need a media query.
+
+`media-down()` targets strictly below the step floor, not one pixel below it:
+`media-down(lg)` generates `width < 1280px`, the exact complement of the
+`min-width: 1280px` that `media-up(lg)` generates. An inclusive ceiling
+(`<= 1279px`) would leave a gap — at a fractional width such as 1279.5px, which
+browser zoom and display scaling produce, neither query would match and the
+element would be left without a rule. Since `1xs` is not a floor, its limit is
+the floor of the step above: `media-down(1xs)` generates `width < 768px`.
+
+> The `1xs` width in the table is the conceptual ceiling of the mobile range and
+> serves as a reference; no media query reads that value, precisely because the
+> exact limit is the `sm` floor.
+
+</Lang>
+
 ---
 
+<Lang lang="pt-BR">
 ## Escalas tipográficas para `font-scale()`
 
-| Nome          | Família  | Tamanho | Peso      | Case      |
-|---------------|----------|---------|-----------|-----------|
-| `display`     | heading  | 3xl     | regular   | none      |
-| `title`       | heading  | 2xl     | bold      | none      |
-| `headline`    | heading  | 1xl     | semibold  | none      |
-| `subtitle`    | heading  | lg      | regular   | none      |
-| `block-title` | heading  | md      | medium    | none      |
-| `subheadline` | heading  | sm      | regular   | none      |
-| `overtitle`   | heading  | 3xs     | medium    | uppercase |
-| `body--lg`    | body     | 1xs     | regular   | none      |
-| `body--md`    | body     | 2xs     | regular   | none      |
-| `body--sm`    | body     | 3xs     | regular   | none      |
+| Nome          | Família | Tamanho | Peso     | Case      |
+| ------------- | ------- | ------- | -------- | --------- |
+| `display`     | heading | 3xl     | regular  | none      |
+| `title`       | heading | 2xl     | bold     | none      |
+| `headline`    | heading | 1xl     | semibold | none      |
+| `subtitle`    | heading | lg      | regular  | none      |
+| `block-title` | heading | md      | medium   | none      |
+| `subheadline` | heading | sm      | regular  | none      |
+| `overtitle`   | heading | 3xs     | medium   | uppercase |
+| `body--lg`    | body    | 1xs     | regular  | none      |
+| `body--md`    | body    | 2xs     | regular  | none      |
+| `body--sm`    | body    | 3xs     | regular  | none      |
+
+</Lang>
+
+<Lang lang="en-US">
+## Typographic scales for `font-scale()`
+
+| Name          | Family  | Size | Weight   | Case      |
+| ------------- | ------- | ---- | -------- | --------- |
+| `display`     | heading | 3xl  | regular  | none      |
+| `title`       | heading | 2xl  | bold     | none      |
+| `headline`    | heading | 1xl  | semibold | none      |
+| `subtitle`    | heading | lg   | regular  | none      |
+| `block-title` | heading | md   | medium   | none      |
+| `subheadline` | heading | sm   | regular  | none      |
+| `overtitle`   | heading | 3xs  | medium   | uppercase |
+| `body--lg`    | body    | 1xs  | regular  | none      |
+| `body--md`    | body    | 2xs  | regular  | none      |
+| `body--sm`    | body    | 3xs  | regular  | none      |
+
+</Lang>

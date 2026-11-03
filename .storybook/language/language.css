@@ -1,0 +1,18 @@
+/*
+ * Language switching for stories and docs that opt in.
+ *
+ * A block declares its language with `data-lang="pt-BR"` or `data-lang="en-US"`.
+ * Every `[data-lang]` block is hidden unless it matches the active language —
+ * set by the preview on `<html data-language>`. So a missing or unexpected
+ * language shows neither block rather than both. Unmarked blocks are
+ * language-agnostic and stay visible in both.
+ *
+ * The rule only ever sets `display: none`, so a visible block keeps its own
+ * `display`. In docs, `<Lang>` does not even mount the inactive block; this rule
+ * covers the first paint and plain `data-lang` markup in stories.
+ */
+
+[data-lang]:not(html[data-language='pt-BR'] [data-lang='pt-BR'], html[data-language='en-US'] [data-lang='en-US']
+  ) {
+  display: none;
+}

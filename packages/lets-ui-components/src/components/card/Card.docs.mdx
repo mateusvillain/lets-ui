@@ -1,29 +1,81 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as CardStories from './Card.stories';
 
 <Meta of={CardStories} />
 
+<Lang lang="pt-BR">
+
 # Card
+
+</Lang>
+
+<Lang lang="en-US">
+
+# Card
+
+</Lang>
 
 <Canvas of={CardStories.Card} />
 <Controls of={CardStories.Card} />
 
+<Lang lang="pt-BR">
+
 ## With Cover
+
+</Lang>
+
+<Lang lang="en-US">
+
+## With Cover
+
+</Lang>
 
 <Canvas of={CardStories.WithCover} />
 
+<Lang lang="pt-BR">
+
 ## With Actions
+
+</Lang>
+
+<Lang lang="en-US">
+
+## With Actions
+
+</Lang>
 
 <Canvas of={CardStories.WithActions} />
 
+<Lang lang="pt-BR">
+
 ## Full
+
+</Lang>
+
+<Lang lang="en-US">
+
+## Full
+
+</Lang>
 
 <Canvas of={CardStories.Full} />
 
+<Lang lang="pt-BR">
+
 ## Classe CSS (sem Web Component)
+
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
 
 <Canvas of={CardStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -47,3 +99,32 @@ import * as CardStories from './Card.stories';
   </div>
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-card>
+  <p>Card content</p>
+  <button slot="actions" class="btn btn--primary btn--lg">Action</button>
+</lui-card>
+```
+
+### CSS class
+
+```html
+<div class="card card--border">
+  <div class="card__body">
+    <p>Card content</p>
+  </div>
+  <div class="card__actions">
+    <button class="btn btn--primary btn--lg">Action</button>
+  </div>
+</div>
+```
+
+</Lang>

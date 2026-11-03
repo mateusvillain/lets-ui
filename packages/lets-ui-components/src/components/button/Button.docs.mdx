@@ -1,15 +1,25 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as ButtonStories from './Button.stories';
 
 <Meta of={ButtonStories} />
 
+<Lang lang="pt-BR">
 # Button
 
 Dispara uma ação: salvar um formulário, confirmar uma exclusão, abrir um diálogo. Mostra um texto que nomeia a ação e, opcionalmente, ícones antes ou depois dele. Com `href`, a mesma aparência vale para um link.
+</Lang>
+
+<Lang lang="en-US">
+# Button
+
+Triggers an action: save a form, confirm a deletion, open a dialog. Shows a text that names the action and, optionally, icons before or after it. With `href`, the same appearance is used for a link.
+</Lang>
 
 <Canvas of={ButtonStories.Button} />
 <Controls of={ButtonStories.Button} />
 
+<Lang lang="pt-BR">
 ## Quando usar
 
 Use o Button para ações que acontecem na página atual ou que enviam dados: salvar, enviar, excluir, abrir um Modal ou um Drawer.
@@ -18,127 +28,304 @@ Use o Button para ações que acontecem na página atual ou que enviam dados: sa
 - Para um link dentro de um texto ou numa lista de navegação, use o [componente Link](?path=/docs/navigation-link--docs).
 - Quando não há espaço para texto e o ícone basta para reconhecer a ação, use o [Icon Button](?path=/docs/actionable-icon-button--docs). Para fechar um painel, use o [Close Button](?path=/docs/actionable-close-button--docs).
 - Para um conjunto de ações a partir de um único botão, use o [Dropdown Menu](?path=/docs/actionable-dropdown-menu--docs) com um Button como gatilho.
+</Lang>
 
+<Lang lang="en-US">
+## When to use
+
+Use Button for actions that happen on the current page or that submit data: save, submit, delete, open a Modal or a Drawer.
+
+- To go to another page with the appearance of a button, such as a "View course" CTA, use Button itself with `href` (see [As a link](#as-a-link-href)). It renders an `<a>`.
+- For a link inside a text or in a navigation list, use the [Link component](?path=/docs/navigation-link--docs).
+- When there is no room for text and the icon alone is enough to recognize the action, use [Icon Button](?path=/docs/actionable-icon-button--docs). To close a panel, use [Close Button](?path=/docs/actionable-close-button--docs).
+- For a set of actions from a single button, use [Dropdown Menu](?path=/docs/actionable-dropdown-menu--docs) with a Button as the trigger.
+</Lang>
+
+<Lang lang="pt-BR">
 ## Variantes
 
 ### Primary
 
 A ação principal da tela, como "Salvar" ou "Continuar". Use só um por contexto: dois botões Primary lado a lado disputam a atenção.
+</Lang>
+
+<Lang lang="en-US">
+## Variants
+
+### Primary
+
+The main action of the screen, such as "Save" or "Continue". Use only one per context: two Primary buttons side by side compete for attention.
+</Lang>
 
 <Canvas of={ButtonStories.Primary} />
 
+<Lang lang="pt-BR">
 ### Secondary
 
 Uma ação alternativa à principal, como "Cancelar" ou "Salvar rascunho". Fica ao lado do Primary, com menos peso visual.
+</Lang>
+
+<Lang lang="en-US">
+### Secondary
+
+An alternative action to the main one, such as "Cancel" or "Save draft". It sits next to Primary, with less visual weight.
+</Lang>
 
 <Canvas of={ButtonStories.Secondary} />
 
+<Lang lang="pt-BR">
 ### Neutral
 
 Uma ação utilitária sem relação com o fluxo principal, como "Exportar" ou "Filtrar".
+</Lang>
+
+<Lang lang="en-US">
+### Neutral
+
+A utility action unrelated to the main flow, such as "Export" or "Filter".
+</Lang>
 
 <Canvas of={ButtonStories.Neutral} />
 
+<Lang lang="pt-BR">
 ### Danger
 
 Uma ação destrutiva ou irreversível, como "Excluir conta". Peça confirmação antes de executá-la, por exemplo num Modal.
+</Lang>
+
+<Lang lang="en-US">
+### Danger
+
+A destructive or irreversible action, such as "Delete account". Ask for confirmation before running it, for example in a Modal.
+</Lang>
 
 <Canvas of={ButtonStories.Danger} />
 
+<Lang lang="pt-BR">
 ### Success
 
 Uma ação que conclui um fluxo com resultado positivo, como "Aprovar" ou "Concluir pedido".
+</Lang>
+
+<Lang lang="en-US">
+### Success
+
+An action that concludes a flow with a positive result, such as "Approve" or "Complete order".
+</Lang>
 
 <Canvas of={ButtonStories.Success} />
 
+<Lang lang="pt-BR">
 A cor reforça o tipo de ação, mas não a comunica sozinha: o texto do botão precisa dizer o que ele faz.
+</Lang>
 
+<Lang lang="en-US">
+The color reinforces the type of action, but it does not communicate it on its own: the button text must say what it does.
+</Lang>
+
+<Lang lang="pt-BR">
 ## Tamanhos
 
 `lg` (padrão) para formulários e chamadas principais, `md` para áreas mais densas, como toolbars, tabelas e cards. Qualquer outro valor de `size` usa `lg`.
+</Lang>
+
+<Lang lang="en-US">
+## Sizes
+
+`lg` (default) for forms and primary calls to action, `md` for denser areas, such as toolbars, tables and cards. Any other `size` value uses `lg`.
+</Lang>
 
 <Canvas of={ButtonStories.Sizes} />
 
+<Lang lang="pt-BR">
 ## Ícones
 
 Coloque um SVG no slot `prefix` para um ícone antes do texto e no slot `suffix` para um ícone depois. Os ícones herdam `currentColor` e acompanham o tamanho da fonte do botão. Marque o SVG com `aria-hidden="true"`: o nome vem do texto.
+</Lang>
+
+<Lang lang="en-US">
+## Icons
+
+Put an SVG in the `prefix` slot for an icon before the text and in the `suffix` slot for an icon after it. Icons inherit `currentColor` and follow the button font size. Mark the SVG with `aria-hidden="true"`: the name comes from the text.
+</Lang>
 
 <Canvas of={ButtonStories.WithIcon} />
 
+<Lang lang="pt-BR">
 ## Texto do botão
 
 O texto vem do atributo `label` ou do conteúdo do slot padrão. Quando os dois existem, o conteúdo do slot é o que aparece. Esse texto também é o nome acessível do botão.
 
 Use `aria-label` só quando o texto visível não basta para descrever a ação. Nesse caso, comece o `aria-label` pelo texto visível ("Excluir" → "Excluir arquivo"), para que quem usa comando de voz possa dizer o que vê (WCAG 2.5.3).
+</Lang>
+
+<Lang lang="en-US">
+## Button text
+
+The text comes from the `label` attribute or from the default slot content. When both exist, the slot content is what shows. That text is also the button's accessible name.
+
+Use `aria-label` only when the visible text is not enough to describe the action. In that case, start the `aria-label` with the visible text ("Delete" → "Delete file"), so that people using voice commands can say what they see (WCAG 2.5.3).
+</Lang>
 
 <Canvas of={ButtonStories.Label} />
 
+<Lang lang="pt-BR">
 ## Block
 
 `block` faz o botão ocupar toda a largura do container. Use em layouts estreitos, como formulários no celular ou o rodapé de um card.
+</Lang>
+
+<Lang lang="en-US">
+## Block
+
+`block` makes the button take the full width of the container. Use it in narrow layouts, such as mobile forms or a card footer.
+</Lang>
 
 <Canvas of={ButtonStories.Block} />
 
+<Lang lang="pt-BR">
 ## Disabled
 
 `disabled` desabilita o botão: ele fica opaco, não responde a clique e sai da ordem de tabulação. Dentro de um `<fieldset disabled>`, o botão também fica desabilitado.
 
 Como o botão desabilitado não recebe foco, quem navega por teclado ou leitor de tela não chega até ele. Dentro de um Tooltip, o foco vai para o wrapper do tooltip, que mostra o texto mas é anunciado como grupo, sem o papel de botão nem o estado indisponível. Se a pessoa precisa saber por que a ação está indisponível, explique o motivo num texto visível perto do botão.
+</Lang>
+
+<Lang lang="en-US">
+## Disabled
+
+`disabled` disables the button: it becomes opaque, does not respond to clicks and leaves the tab order. Inside a `<fieldset disabled>`, the button is also disabled.
+
+Because a disabled button cannot receive focus, people navigating with a keyboard or screen reader never reach it. Inside a Tooltip, focus goes to the tooltip wrapper, which shows the text but is announced as a group, without the button role or the unavailable state. If people need to know why the action is unavailable, explain the reason in visible text near the button.
+</Lang>
 
 <Canvas of={ButtonStories.Disabled} />
 
+<Lang lang="pt-BR">
 ## Loading
 
 `loading` mostra um spinner e bloqueia a ação enquanto uma operação está em andamento. O botão não fica opaco nem perde o foco: ele continua com a aparência ativa, para mostrar que algo está acontecendo, e recebe `aria-busy="true"` e `aria-disabled="true"`.
 
 Os ícones `prefix` e `suffix` dão lugar ao spinner. O texto continua visível, seja ele passado por `label` ou pelo slot, e segue sendo o nome acessível do botão.
+</Lang>
+
+<Lang lang="en-US">
+## Loading
+
+`loading` shows a spinner and blocks the action while an operation is in progress. The button does not become opaque or lose focus: it keeps its active appearance, to show that something is happening, and receives `aria-busy="true"` and `aria-disabled="true"`.
+
+The `prefix` and `suffix` icons give way to the spinner. The text stays visible, whether it comes from `label` or from the slot, and remains the button's accessible name.
+</Lang>
 
 <Canvas of={ButtonStories.Loading} />
 
+<Lang lang="pt-BR">
 ### Loading com conteúdo
+</Lang>
+
+<Lang lang="en-US">
+### Loading with content
+</Lang>
 
 <Canvas of={ButtonStories.LoadingWithContent} />
 
+<Lang lang="pt-BR">
 ### Loading com texto alternativo
 
 `loading-text` troca o texto exibido enquanto `loading` estiver ativo, como "Salvando...". O nome acessível acompanha o texto na tela.
+</Lang>
+
+<Lang lang="en-US">
+### Loading with alternate text
+
+`loading-text` replaces the displayed text while `loading` is active, such as "Saving...". The accessible name follows the text on screen.
+</Lang>
 
 <Canvas of={ButtonStories.LoadingWithText} />
 
+<Lang lang="pt-BR">
 ### Loading em todas as variantes
+</Lang>
+
+<Lang lang="en-US">
+### Loading in every variant
+</Lang>
 
 <Canvas of={ButtonStories.AllVariantsLoading} />
 
+<Lang lang="pt-BR">
 ## Como link (`href`)
 
 Quando o controle **navega ou baixa** um arquivo em vez de executar uma ação, ele é um link. Com `href`, o componente renderiza `<a>` no lugar de `<button>`, com a mesma aparência e os mesmos atributos de estilo (`variant`, `size`, `block`).
 
 Assim o link mantém o que se perde ao navegar por JavaScript a partir de um botão: abrir em nova aba, menu do botão direito, clique do meio, Ctrl/Cmd + clique e `download`.
+</Lang>
+
+<Lang lang="en-US">
+## As a link (`href`)
+
+When the control **navigates or downloads** a file instead of running an action, it is a link. With `href`, the component renders `<a>` instead of `<button>`, with the same appearance and the same style attributes (`variant`, `size`, `block`).
+
+That way the link keeps what is lost when navigating through JavaScript from a button: opening in a new tab, the right-click menu, middle click, Ctrl/Cmd + click and `download`.
+</Lang>
 
 <Canvas of={ButtonStories.AsLink} />
 
+<Lang lang="pt-BR">
 ### Nova aba
 
 Com `target="_blank"`, o `rel="noopener noreferrer"` é aplicado automaticamente. Um `rel` informado se soma a essa proteção, sem substituí-la: `rel="nofollow"` com `target="_blank"` resulta em `nofollow noopener noreferrer`.
 
 Avise que o link abre uma nova aba, no próprio texto ("Assinar agora (abre em nova aba)") ou com um ícone acompanhado de texto para leitores de tela.
+</Lang>
+
+<Lang lang="en-US">
+### New tab
+
+With `target="_blank"`, `rel="noopener noreferrer"` is applied automatically. A provided `rel` adds to that protection, without replacing it: `rel="nofollow"` with `target="_blank"` results in `nofollow noopener noreferrer`.
+
+Warn that the link opens a new tab, in the text itself ("Subscribe now (opens in a new tab)") or with an icon accompanied by text for screen readers.
+</Lang>
 
 <Canvas of={ButtonStories.LinkNewTab} />
 
+<Lang lang="pt-BR">
 ### Download
+</Lang>
+
+<Lang lang="en-US">
+### Download
+</Lang>
 
 <Canvas of={ButtonStories.LinkDownload} />
 
+<Lang lang="pt-BR">
 ### Desabilitado e loading
 
 Links não têm `disabled` nativo. Com `disabled` ou `loading`, o `href` é omitido, então o elemento não navega por clique, clique do meio ou "abrir em nova aba". `aria-disabled="true"` e `role="link"` mantêm o anúncio correto em leitores de tela.
 
 Os dois estados diferem no foco. `disabled` recebe `tabindex="-1"` e sai da ordem de tabulação, como um botão nativo desabilitado. `loading` é transitório e recebe `tabindex="0"`, para manter o foco de quem já estava no elemento quando a operação começou: sem `href`, uma âncora não é focável nem por código.
+</Lang>
+
+<Lang lang="en-US">
+### Disabled and loading
+
+Links have no native `disabled`. With `disabled` or `loading`, `href` is omitted, so the element does not navigate through clicks, middle click or "open in a new tab". `aria-disabled="true"` and `role="link"` keep the announcement correct in screen readers.
+
+The two states differ in focus. `disabled` receives `tabindex="-1"` and leaves the tab order, like a native disabled button. `loading` is transient and receives `tabindex="0"`, to keep the focus of whoever was already on the element when the operation started: without `href`, an anchor is not focusable, not even by code.
+</Lang>
 
 <Canvas of={ButtonStories.LinkDisabled} />
 
+<Lang lang="pt-BR">
 Atributos de formulário (`type`, `name`, `value`, `form`) não se aplicam quando há `href`.
+</Lang>
 
+<Lang lang="en-US">
+Form attributes (`type`, `name`, `value`, `form`) do not apply when there is an `href`.
+</Lang>
+
+<Lang lang="pt-BR">
 ## Estado de componentes acionados
 
 Quando o botão abre ou alterna algo, como um menu, um painel ou um filtro, informe o estado com `aria-expanded`, `aria-haspopup` ou `aria-pressed` no próprio `<lui-button>`. O componente leva esses atributos ao controle interno, que é o que o leitor de tela anuncia, e os remove do elemento externo: lá eles criariam um segundo nó, sem papel, na árvore de acessibilidade. `aria-pressed` só se aplica sem `href`, já que links não têm estado pressionado.
@@ -146,9 +333,21 @@ Quando o botão abre ou alterna algo, como um menu, um painel ou um filtro, info
 Como o atributo sai do `<lui-button>`, seletores como `lui-button[aria-expanded="true"]` e `getAttribute('aria-expanded')` não o encontram. Leia a propriedade (`button.ariaExpanded`). Para limpar um estado, use um valor explícito (`aria-expanded="false"`) ou a propriedade com `null`: remover um atributo que o componente já consumiu não tem efeito.
 
 Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão recebe esse estado do próprio componente e anuncia "recolhido" ou "expandido" sem configuração adicional. O `aria-controls` não é repassado: um ID não pode ser referenciado entre shadow roots diferentes.
+</Lang>
+
+<Lang lang="en-US">
+## State of triggered components
+
+When the button opens or toggles something, such as a menu, a panel or a filter, report the state with `aria-expanded`, `aria-haspopup` or `aria-pressed` on the `<lui-button>` itself. The component moves those attributes to the internal control, which is what the screen reader announces, and removes them from the outer element: there they would create a second, role-less node in the accessibility tree. `aria-pressed` only applies without `href`, since links have no pressed state.
+
+Because the attribute leaves the `<lui-button>`, selectors such as `lui-button[aria-expanded="true"]` and `getAttribute('aria-expanded')` do not find it. Read the property (`button.ariaExpanded`) instead. To clear a state, use an explicit value (`aria-expanded="false"`) or the property with `null`: removing an attribute the component has already consumed has no effect.
+
+As the `slot="trigger"` of a Modal, a Drawer or a Dropdown Menu, the button receives that state from the component itself and announces "collapsed" or "expanded" with no extra configuration. `aria-controls` is not forwarded: an ID cannot be referenced across different shadow roots.
+</Lang>
 
 <Canvas of={ButtonStories.DropdownTrigger} />
 
+<Lang lang="pt-BR">
 ```html
 <lui-button
   label="Filtros"
@@ -159,29 +358,72 @@ Como `slot="trigger"` de um Modal, de um Drawer ou de um Dropdown Menu, o botão
 ```
 
 O Button ainda não tem estilo visual para `aria-pressed="true"`: o estado é anunciado pelo leitor de tela, mas não aparece na tela. Até que exista, mostre o estado alternado também de forma visível, por exemplo trocando o `label` ou o ícone.
+</Lang>
 
+<Lang lang="en-US">
+```html
+<lui-button
+  label="Filters"
+  aria-expanded="false"
+  aria-haspopup="true"
+></lui-button>
+<lui-button label="Bold" aria-pressed="true"></lui-button>
+```
+
+Button does not have a visual style for `aria-pressed="true"` yet: the state is announced by the screen reader, but it does not show on screen. Until it exists, also show the toggled state visibly, for example by changing the `label` or the icon.
+</Lang>
+
+<Lang lang="pt-BR">
 ## Com Tooltip
 
 Dentro de um [Tooltip](?path=/docs/content-tooltip--docs), o texto do tooltip vira a descrição do botão (`aria-description`): o leitor de tela anuncia primeiro o nome do botão e depois o texto do tooltip. O botão continua sendo a única parada de tabulação, e o tooltip abre no foco e no hover.
 
 Use o tooltip para informação complementar. Tudo que a pessoa precisa para entender a ação deve estar no texto do botão.
+</Lang>
+
+<Lang lang="en-US">
+## With Tooltip
+
+Inside a [Tooltip](?path=/docs/content-tooltip--docs), the tooltip text becomes the button description (`aria-description`): the screen reader announces the button name first and then the tooltip text. The button remains the only tab stop, and the tooltip opens on focus and hover.
+
+Use the tooltip for complementary information. Everything a person needs to understand the action must be in the button text.
+</Lang>
 
 <Canvas of={ButtonStories.WithTooltip} />
 
+<Lang lang="pt-BR">
 ## Integração com formulários
 
 `type="submit"` e `type="reset"` funcionam nativamente com o `<form>` pai. Dois botões de submit com `name` e `value` diferentes indicam, nos dados enviados, qual ação foi escolhida. O atributo `form` associa o botão a um formulário pelo ID, mesmo fora do elemento `<form>`.
+</Lang>
+
+<Lang lang="en-US">
+## Form integration
+
+`type="submit"` and `type="reset"` work natively with the parent `<form>`. Two submit buttons with different `name` and `value` indicate, in the submitted data, which action was chosen. The `form` attribute associates the button with a form by ID, even outside the `<form>` element.
+</Lang>
 
 <Canvas of={ButtonStories.FormIntegration} />
 
+<Lang lang="pt-BR">
 ## Autofocus
 
 `autofocus` move o foco para o botão quando o contexto aparece. O caso mais comum é a ação principal de um diálogo: ao abrir, o foco já está no botão certo, e a pessoa confirma com Enter sem precisar navegar.
 
 **Evite em páginas inteiras.** Receber o foco no meio do conteúdo desorienta quem usa leitor de tela ou teclado, que espera começar pelo topo da página. Reserve para contextos isolados e passageiros, como Modals, Drawers e confirmações.
+</Lang>
+
+<Lang lang="en-US">
+## Autofocus
+
+`autofocus` moves focus to the button when the context appears. The most common case is the main action of a dialog: on open, focus is already on the right button, and the person confirms with Enter without navigating.
+
+**Avoid it on whole pages.** Receiving focus in the middle of the content disorients people using a screen reader or keyboard, who expect to start at the top of the page. Reserve it for isolated, transient contexts, such as Modals, Drawers and confirmations.
+</Lang>
 
 <Canvas of={ButtonStories.Autofocus} />
 
+<Lang lang="pt-BR">
 ## Classe CSS (sem Web Component)
 
 Sem o Web Component, use `<button class="btn btn--{variant} btn--{size}">` ou `<a class="btn ...">` para links. Também ficam a cargo de quem usa:
@@ -190,9 +432,22 @@ Sem o Web Component, use `<button class="btn btn--{variant} btn--{size}">` ou `<
 - o spinner, o `aria-busy` e o bloqueio de clique do estado de loading;
 - o `aria-disabled` e a remoção do `href` num link desabilitado;
 - o `rel="noopener noreferrer"` com `target="_blank"`.
+</Lang>
+
+<Lang lang="en-US">
+## CSS class (without Web Component)
+
+Without the Web Component, use `<button class="btn btn--{variant} btn--{size}">` or `<a class="btn ...">` for links. These also become the responsibility of the consumer:
+
+- the button `type`, which is `submit` by default inside a `<form>`;
+- the spinner, the `aria-busy` and the click blocking of the loading state;
+- the `aria-disabled` and the removal of `href` in a disabled link;
+- the `rel="noopener noreferrer"` with `target="_blank"`.
+</Lang>
 
 <Canvas of={ButtonStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Propriedades
 
 | Atributo        | Tipo                                                             | Padrão    | Descrição                                                                       |
@@ -225,7 +480,44 @@ Sem o Web Component, use `<button class="btn btn--{variant} btn--{size}">` ou `<
 | (padrão) | Texto do botão. Tem precedência sobre `label`.                    |
 | `prefix` | Ícone antes do texto. Substituído pelo spinner durante `loading`. |
 | `suffix` | Ícone depois do texto. Some durante `loading`.                    |
+</Lang>
 
+<Lang lang="en-US">
+## Properties
+
+| Attribute       | Type                                                             | Default   | Description                                                                    |
+| --------------- | ---------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------ |
+| `label`         | `string`                                                         | `''`      | Button text. The default slot content takes precedence.                        |
+| `variant`       | `'primary' \| 'secondary' \| 'neutral' \| 'danger' \| 'success'` | `primary` | Visual style.                                                                  |
+| `size`          | `'lg' \| 'md'`                                                   | `lg`      | Size. Other values use `lg`.                                                   |
+| `type`          | `'button' \| 'submit' \| 'reset'`                                | `button`  | Behavior in the form.                                                          |
+| `name`          | `string`                                                         | `''`      | Name submitted with the form when using `type="submit"`.                       |
+| `value`         | `string`                                                         | `''`      | Value submitted with the `name`, only when this button triggers the submit.    |
+| `form`          | `string`                                                         | `''`      | ID of the associated `<form>`, to use the button outside it.                   |
+| `disabled`      | `boolean`                                                        | `false`   | Disables the button and removes it from the tab order.                         |
+| `loading`       | `boolean`                                                        | `false`   | Shows the spinner and blocks the action, without disabled opacity.             |
+| `loading-text`  | `string`                                                         | `''`      | Text shown while `loading` is active.                                          |
+| `block`         | `boolean`                                                        | `false`   | Takes the full width of the container.                                         |
+| `autofocus`     | `boolean`                                                        | `false`   | Moves focus to the button when the context appears.                            |
+| `href`          | `string`                                                         | `''`      | Renders `<a>` instead of `<button>`.                                           |
+| `target`        | `string`                                                         | `''`      | Navigation target. Only with `href`.                                           |
+| `rel`           | `string`                                                         | `''`      | Link relation. Added to `noopener noreferrer` with `target="_blank"`.          |
+| `download`      | `string`                                                         | —         | Downloads the resource instead of navigating. Accepted without a value. Only with `href`. |
+| `aria-label`    | `string`                                                         | `''`      | Replaces the visible text as the accessible name. Start with the visible text. |
+| `aria-expanded` | `string`                                                         | —         | Open/closed state of what the button controls. Forwarded to the internal control. |
+| `aria-haspopup` | `string`                                                         | —         | Type of popup the button opens. Forwarded to the internal control.             |
+| `aria-pressed`  | `string`                                                         | —         | Toggle button state. Forwarded to the internal control, ignored with `href`.   |
+
+### Slots
+
+| Slot      | Description                                                       |
+| --------- | ----------------------------------------------------------------- |
+| (default) | Button text. Takes precedence over `label`.                       |
+| `prefix`  | Icon before the text. Replaced by the spinner during `loading`.   |
+| `suffix`  | Icon after the text. Disappears during `loading`.                 |
+</Lang>
+
+<Lang lang="pt-BR">
 ## Acessibilidade
 
 - Renderiza um `<button>` nativo, ou um `<a>` com `href`: navegável com `Tab`. `Enter` e `Espaço` acionam o botão; `Enter` aciona o link.
@@ -240,7 +532,26 @@ Sem o Web Component, use `<button class="btn btn--{variant} btn--{size}">` ou `<
 - Escreva um texto que diga o que o botão faz ("Salvar alterações", não "OK"). Em listas, torne cada texto distinto ("Excluir arquivo", "Excluir pasta").
 - Use `href` sempre que o botão navegar. Um `<button>` que muda de página por JavaScript é anunciado como botão e perde os comportamentos de link.
 - Quando a ação é indisponível por um motivo que a pessoa precisa conhecer, mostre o motivo em texto visível.
+</Lang>
 
+<Lang lang="en-US">
+## Accessibility
+
+- Renders a native `<button>`, or an `<a>` with `href`: reachable with `Tab`. `Enter` and `Space` trigger the button; `Enter` triggers the link.
+- The accessible name is the text on screen (`label`, slot content or `loading-text`). Only an explicit `aria-label` replaces it.
+- With `disabled`, the button leaves the tab order. With `loading`, it stays focusable and receives `aria-busy="true"` and `aria-disabled="true"`, so whoever was on it does not lose focus.
+- `aria-expanded`, `aria-haspopup` and `aria-pressed` set on the `<lui-button>`, and the description of a Tooltip around it, are forwarded to the internal control. The outer element has no role and does not carry those attributes to the screen reader.
+- Focus is also visible in high contrast mode (`forced-colors`), and the button gains a border so it is not mistaken for text.
+- Slot icons are decorative: mark them with `aria-hidden="true"`.
+
+### Consumer responsibilities
+
+- Write text that says what the button does ("Save changes", not "OK"). In lists, make each text distinct ("Delete file", "Delete folder").
+- Use `href` whenever the button navigates. A `<button>` that changes pages through JavaScript is announced as a button and loses link behaviors.
+- When the action is unavailable for a reason the person needs to know, show the reason in visible text.
+</Lang>
+
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -258,3 +569,24 @@ Sem o Web Component, use `<button class="btn btn--{variant} btn--{size}">` ou `<
 <button class="btn btn--secondary btn--lg" type="button">Cancelar</button>
 <a class="btn btn--primary btn--lg" href="/cursos">Ver curso</a>
 ```
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-button variant="primary" size="lg">Confirm</lui-button>
+<lui-button variant="secondary" size="lg">Cancel</lui-button>
+<lui-button variant="primary" size="lg" href="/courses">View course</lui-button>
+```
+
+### CSS class
+
+```html
+<button class="btn btn--primary btn--lg" type="button">Confirm</button>
+<button class="btn btn--secondary btn--lg" type="button">Cancel</button>
+<a class="btn btn--primary btn--lg" href="/courses">View course</a>
+```
+</Lang>

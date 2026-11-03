@@ -1,61 +1,163 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Lang } from '@docs-lang/Lang.jsx';
 import * as ImageStories from './Image.stories';
 
 <Meta of={ImageStories} />
 
+<Lang lang="pt-BR">
+# Image
+
+O componente `<lui-image>` envolve um `<img>` nativo (ou `<picture>`) com carregamento lazy, um shimmer de skeleton durante o carregamento, um fallback de erro e controles opcionais de proporção de aspecto / ajuste do objeto — evitando deslocamento de layout e melhorando a performance percebida.
+
+</Lang>
+
+<Lang lang="en-US">
 # Image
 
 The `<lui-image>` component wraps a native `<img>` (or `<picture>`) with lazy loading, a skeleton shimmer while loading, an error fallback, and optional aspect-ratio / object-fit controls — preventing layout shift and improving perceived performance.
 
+</Lang>
+
 <Canvas of={ImageStories.Image} />
 <Controls of={ImageStories.Image} />
 
+<Lang lang="pt-BR">
+## Proporções de aspecto
+
+Use o atributo `aspect-ratio` para reservar o espaço antes de a imagem carregar e evitar CLS.
+
+</Lang>
+
+<Lang lang="en-US">
 ## Aspect Ratios
 
 Use the `aspect-ratio` attribute to lock the space before the image loads and prevent CLS.
 
+</Lang>
+
 <Canvas of={ImageStories.AspectRatios} />
+
+<Lang lang="pt-BR">
+
+## Raio da borda
+
+</Lang>
+
+<Lang lang="en-US">
 
 ## Border Radius
 
+</Lang>
+
 <Canvas of={ImageStories.BorderRadii} />
+
+<Lang lang="pt-BR">
+
+## Ajuste do objeto
+
+</Lang>
+
+<Lang lang="en-US">
 
 ## Object Fit
 
+</Lang>
+
 <Canvas of={ImageStories.ObjectFit} />
+
+<Lang lang="pt-BR">
+
+## Quadrado / Círculo
+
+</Lang>
+
+<Lang lang="en-US">
 
 ## Square / Circle
 
+</Lang>
+
 <Canvas of={ImageStories.Square} />
 
+<Lang lang="pt-BR">
+## Com legenda
+
+Quando `caption` é informado, o componente envolve tudo em um par semântico `<figure>` / `<figcaption>`.
+
+</Lang>
+
+<Lang lang="en-US">
 ## With Caption
 
 When `caption` is provided, the component wraps everything in a semantic `<figure>` / `<figcaption>` pair.
 
+</Lang>
+
 <Canvas of={ImageStories.WithCaption} />
 
+<Lang lang="pt-BR">
+## Cor de fallback
+
+Mostra um fundo de marca enquanto a imagem carrega ou quando ela falha.
+
+</Lang>
+
+<Lang lang="en-US">
 ## Fallback Color
 
 Show a branded background while the image loads or when it fails.
 
+</Lang>
+
 <Canvas of={ImageStories.FallbackColor} />
 
+<Lang lang="pt-BR">
+## Origem alternativa
+
+Forneça uma imagem alternativa para exibir quando o `src` principal falha ao carregar.
+
+</Lang>
+
+<Lang lang="en-US">
 ## Fallback Source
 
 Provide an alternative image to display when the primary `src` fails to load.
 
+</Lang>
+
 <Canvas of={ImageStories.FallbackSrc} />
 
+<Lang lang="pt-BR">
+## Como picture
+
+Use `as="picture"` para renderizar um wrapper `<picture>` (para art-direction com elementos `<source>`).
+
+</Lang>
+
+<Lang lang="en-US">
 ## As Picture
 
 Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<source>` elements).
 
+</Lang>
+
 <Canvas of={ImageStories.AsPicture} />
+
+<Lang lang="pt-BR">
 
 ## Classe CSS (sem Web Component)
 
+</Lang>
+
+<Lang lang="en-US">
+
+## CSS class (without Web Component)
+
+</Lang>
+
 <Canvas of={ImageStories.CSSClass} />
 
+<Lang lang="pt-BR">
 ## Uso
 
 ### Web Component
@@ -74,7 +176,41 @@ Use `as="picture"` to render a `<picture>` wrapper (for art-direction with `<sou
 ### Classe CSS
 
 ```html
-<div class="img" style="width: 400px; aspect-ratio: 16 / 9; border-radius: 8px;">
-  <img class="img__element" src="..." alt="Descrição">
+<div
+  class="img"
+  style="width: 400px; aspect-ratio: 16 / 9; border-radius: 8px;"
+>
+  <img class="img__element" src="..." alt="Descrição" />
 </div>
 ```
+
+</Lang>
+
+<Lang lang="en-US">
+## Usage
+
+### Web Component
+
+```html
+<lui-image
+  src="..."
+  alt="Description"
+  width="400px"
+  aspect-ratio="16 / 9"
+  radius="md"
+  fit="cover"
+></lui-image>
+```
+
+### CSS class
+
+```html
+<div
+  class="img"
+  style="width: 400px; aspect-ratio: 16 / 9; border-radius: 8px;"
+>
+  <img class="img__element" src="..." alt="Description" />
+</div>
+```
+
+</Lang>
