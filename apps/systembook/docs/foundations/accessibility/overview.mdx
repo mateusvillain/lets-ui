@@ -89,7 +89,7 @@ Tudo o que se faz com o mouse é possível **só com o teclado** (WCAG 2.1.1), s
 
 ### Movimento reduzido
 
-O sistema respeita a preferência **"reduzir movimento"** do sistema operacional (`prefers-reduced-motion`). Quando ela está ativa, transições de altura, rotações e entradas animadas são removidas ou trocadas por um esmaecer curto. Accordion, Toast e Scroll Area já seguem essa regra; a cobertura do resto está nos débitos.
+O sistema respeita a preferência **"reduzir movimento"** do sistema operacional (`prefers-reduced-motion`). Quando ela está ativa, transições de altura, rotações e entradas animadas são removidas ou trocadas por um esmaecer curto. Accordion, Toast, Tooltip e Scroll Area já seguem essa regra; a cobertura do resto está nos débitos.
 
 Nenhuma animação do sistema pisca mais de três vezes por segundo (WCAG 2.3.1).
 
@@ -196,9 +196,8 @@ O sistema registra o que ainda não cumpre o compromisso, em vez de esconder. Ca
 | --- | --- | --- | --- |
 | **Texto branco sobre `caution`** no tema claro (3,83 : 1). | 1.4.3 | Tags e alertas com cor cheia. | Só para texto grande; prefira a variante `surface`. |
 | **Borda dos campos em repouso** (`neutral.border.subtle`, 1,17 : 1). | 1.4.11 | Limite de Input, Select e Textarea. | Label sempre visível; campo sobre a superfície neutra. |
-| **Movimento reduzido** ainda não cobre o spinner do Button, as transições de estado e as entradas de Tooltip, Dropdown Menu e Modal. | 2.3.3 | Animações continuam com a preferência ativa. | Evite animações próprias sem `prefers-reduced-motion`. |
+| **Movimento reduzido** ainda não cobre o spinner do Button, as transições de estado e as entradas de Dropdown Menu e Modal. | 2.3.3 | Animações continuam com a preferência ativa. | Evite animações próprias sem `prefers-reduced-motion`. |
 | **Indicador de status do Avatar** abaixo de 3 : 1 contra o anel. | 1.4.11 | Status percebido só pela forma. | Veja [Avatar](../../components/content/avatar/accessibility.mdx). |
-| **Tooltip não fecha com `Esc`.** | 1.4.13 | Conteúdo por hover não pode ser dispensado. | Textos curtos, sem cobrir conteúdo. Veja [Tooltip](../../components/content/tooltip/accessibility.mdx). |
 | **Automação não bloqueia.** O addon A11y do Storybook roda em modo de aviso, não de erro. | — | Regressões podem passar sem quebrar o build. | Revise o painel A11y de cada história alterada. |
 
 <Callout variant="warning">

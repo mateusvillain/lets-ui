@@ -8,12 +8,17 @@ order: 3
 | Tecla | Ação |
 | --- | --- |
 | `Tab` | Foca o gatilho, e o Tooltip aparece. |
+| `Esc` | Fecha o Tooltip aberto, sem mover o ponteiro nem o foco. |
 
 O Tooltip aparece tanto no hover quanto no foco por teclado, e some quando o foco sai.
 
-### Limitação conhecida
+## Fechar, passar o ponteiro e movimento
 
-O Tooltip ainda **não fecha com `Esc`**, e o WCAG 1.4.13 pede que conteúdo exibido por hover ou foco possa ser dispensado sem mover o ponteiro ou o foco. Enquanto isso não é resolvido, mantenha os textos curtos e que não cubram conteúdo importante.
+- **`Esc` fecha o Tooltip** sem mover o ponteiro nem o foco (WCAG 1.4.13). Ele volta a aparecer na próxima vez que o ponteiro entrar no gatilho ou que o gatilho receber foco.
+- **Um `Esc` que fecha o Tooltip é consumido.** Se o Tooltip está dentro de um [Modal](../modal/index.mdx) ou [Drawer](../drawer/index.mdx), a janela só fecha no `Esc` seguinte.
+- Um `Esc` que faz parte de uma composição de texto (IME), ou uma tecla mantida pressionada, é ignorado: não fecha o Tooltip nem é consumido.
+- **O ponteiro pode passar do gatilho para o balão** sem que ele suma (WCAG 1.4.13), inclusive pelo espaço entre os dois, em qualquer posição.
+- **Com "reduzir movimento" ativo** (`prefers-reduced-motion: reduce`), o Tooltip aparece e some sem transição (WCAG 2.3.3).
 
 ## Leitor de tela
 
