@@ -1,0 +1,1060 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Localização e direção — Let's UI Playground</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      :root {
+        --page-bg: var(--lui-color-gray-2);
+        --card-bg: var(--lui-color-neutral-background-surface);
+        --line: var(--lui-color-neutral-border-default);
+        --line-soft: color-mix(in srgb, var(--line) 35%, transparent);
+        --muted: var(--lui-color-neutral-text-caption);
+        --accent: var(--lui-color-primary-background-container);
+        --accent-soft: var(--lui-color-primary-background-surface);
+        --content: 1180px;
+      }
+
+      body {
+        font-family: var(--lui-brand-typography-font-family-body);
+        background: var(--page-bg);
+        color: var(--lui-color-neutral-text-body);
+        margin: 0;
+        padding-block-end: 96px;
+      }
+
+      code {
+        font-family: var(--lui-brand-typography-font-family-code);
+        font-size: 0.85em;
+        padding: 1px 5px;
+        border-radius: 4px;
+        background: var(--page-bg);
+      }
+
+      /* ── Barra de controle ───────────────────────────────── */
+
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: color-mix(in srgb, var(--card-bg) 92%, transparent);
+        backdrop-filter: blur(8px);
+        border-block-end: 1px solid var(--line-soft);
+      }
+
+      .toolbar__inner {
+        max-width: var(--content);
+        margin-inline: auto;
+        padding: 12px 24px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .toolbar__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 20px;
+      }
+
+      .control {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .control__label {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-inline-end: 4px;
+      }
+
+      .control__divider {
+        inline-size: 1px;
+        block-size: 20px;
+        background: var(--line-soft);
+        margin-inline: 4px;
+      }
+
+      .chip {
+        font: inherit;
+        font-size: 0.8125rem;
+        line-height: 1;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line-soft);
+        background: var(--card-bg);
+        color: var(--lui-color-neutral-text-heading);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition:
+          background 120ms,
+          border-color 120ms;
+      }
+
+      .chip[hidden] {
+        display: none;
+      }
+
+      .chip:hover {
+        border-color: var(--line);
+      }
+
+      .chip:focus-visible,
+      .segmented button:focus-visible {
+        outline: 2px solid var(--lui-color-primary-focus-ring);
+        outline-offset: 2px;
+      }
+
+      .chip[aria-pressed='true'] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--lui-color-neutral-text-inverse);
+      }
+
+      .chip__tag {
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: var(--page-bg);
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      .chip[aria-pressed='true'] .chip__tag {
+        background: color-mix(in srgb, white 25%, transparent);
+        color: inherit;
+      }
+
+      .segmented {
+        display: inline-flex;
+        padding: 3px;
+        border-radius: 999px;
+        background: var(--page-bg);
+      }
+
+      .segmented button {
+        font: inherit;
+        font-size: 0.8125rem;
+        line-height: 1;
+        padding: 6px 12px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--lui-color-neutral-text-body);
+        cursor: pointer;
+      }
+
+      .segmented button[aria-pressed='true'] {
+        background: var(--card-bg);
+        color: var(--lui-color-neutral-text-heading);
+        font-weight: 600;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+      }
+
+      .status {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-inline-start: auto;
+      }
+
+      .status__item {
+        font-family: var(--lui-brand-typography-font-family-code);
+        font-size: 0.6875rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: var(--page-bg);
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      .toolbar__actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.8125rem;
+      }
+
+      .toolbar__warning {
+        margin: 0;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.8125rem;
+        background: var(--lui-color-caution-background-surface);
+        border: 1px solid var(--lui-color-caution-border-default);
+      }
+
+      /* ── Cabeçalho ────────────────────────────────────────── */
+
+      .page-header,
+      .layout {
+        max-width: var(--content);
+        margin-inline: auto;
+        padding-inline: 24px;
+      }
+
+      .page-header {
+        padding-block: 40px 8px;
+      }
+
+      .page-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--lui-color-neutral-text-heading);
+        margin: 0 0 8px;
+      }
+
+      .lead {
+        font-size: 1rem;
+        line-height: 1.5;
+        max-width: 72ch;
+        margin: 0 0 16px;
+      }
+
+      .jump {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-block-end: 16px;
+      }
+
+      .jump a {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-decoration: none;
+        color: var(--lui-color-primary-text-body);
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+      }
+
+      .notes {
+        background: var(--card-bg);
+        border: 1px solid var(--line-soft);
+        border-radius: 12px;
+        font-size: 0.875rem;
+        line-height: 1.55;
+      }
+
+      .notes summary {
+        cursor: pointer;
+        padding: 12px 16px;
+        font-weight: 600;
+        color: var(--lui-color-neutral-text-heading);
+      }
+
+      .notes__body {
+        padding: 0 16px 8px;
+        display: grid;
+        gap: 4px;
+      }
+
+      .notes__body p {
+        margin: 0 0 8px;
+      }
+
+      /* ── Seções e cards ───────────────────────────────────── */
+
+      .layout {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+        align-items: start;
+      }
+
+      @media (max-width: 860px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .section-title {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin: 40px 0 0;
+        padding-block-start: 24px;
+        border-block-start: 1px solid var(--line-soft);
+        scroll-margin-top: 140px;
+      }
+
+      .section-title h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--lui-color-neutral-text-heading);
+      }
+
+      .section-title p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--muted);
+      }
+
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--line-soft);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+      }
+
+      .card--wide {
+        grid-column: 1 / -1;
+      }
+
+      .card h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--lui-color-neutral-text-heading);
+        margin: 0 0 4px;
+      }
+
+      .card p.description {
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .form-body {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        padding-block-start: 4px;
+      }
+
+      .checklist {
+        list-style: none;
+        font-size: 0.8125rem;
+        margin: 0;
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: var(--page-bg);
+        display: grid;
+        gap: 6px;
+      }
+
+      .checklist li {
+        display: flex;
+        gap: 8px;
+      }
+
+      .checklist li::before {
+        content: '✓';
+        font-weight: 700;
+        color: var(--lui-color-primary-text-body);
+      }
+
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .inline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .label {
+        margin: 0 0 8px;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .chip-row {
+        display: flex;
+        gap: 12px;
+        padding: 4px 0;
+      }
+
+      .tile {
+        flex: none;
+        inline-size: 120px;
+        padding: 16px;
+        border-radius: 10px;
+        background: var(--page-bg);
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
+      .tooltip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 32px;
+        padding: 24px 56px;
+        justify-content: center;
+        border-radius: 10px;
+        background: var(--page-bg);
+      }
+
+      .avatar-box {
+        inline-size: 64px;
+        block-size: 64px;
+        border-radius: 14px;
+        background: var(--page-bg);
+      }
+
+      .dot {
+        display: block;
+        inline-size: 14px;
+        block-size: 14px;
+        border-radius: 50%;
+        background: #d92d20;
+        border: 2px solid var(--card-bg);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- The playground's own controls stay left to right: only the components
+         below are under test. -->
+    <div class="toolbar" dir="ltr">
+      <div class="toolbar__inner">
+        <div class="toolbar__row">
+          <div class="control" role="group" aria-labelledby="lang-label">
+            <span class="control__label" id="lang-label">Idioma</span>
+            <button class="chip" type="button" data-lang="pt-BR">pt-BR</button>
+            <button class="chip" type="button" data-lang="pt-PT">pt-PT</button>
+            <button class="chip" type="button" data-lang="en-US">en-US</button>
+            <button class="chip" type="button" data-lang="es">es</button>
+            <button class="chip" type="button" data-lang="fr">fr</button>
+            <button class="chip" type="button" data-lang="de">de</button>
+            <button class="chip" type="button" data-lang="it">it</button>
+            <button class="chip" type="button" data-lang="ja">ja</button>
+            <button class="chip" type="button" data-lang="zh-CN">zh-CN</button>
+            <button class="chip" type="button" data-lang="zh-TW">zh-TW</button>
+            <span class="control__divider" aria-hidden="true"></span>
+            <button class="chip" type="button" data-lang="es-MX">
+              es-MX <span class="chip__tag">parcial</span>
+            </button>
+            <button class="chip" type="button" data-lang="ar">
+              ar <span class="chip__tag">rtl</span>
+            </button>
+            <button class="chip" type="button" data-lang="he">
+              he <span class="chip__tag">rtl</span>
+            </button>
+            <button class="chip" type="button" data-lang="ko">
+              ko <span class="chip__tag">sem dicionário</span>
+            </button>
+            <button class="chip" type="button" data-lang="">sem lang</button>
+          </div>
+        </div>
+        <div class="toolbar__row">
+          <div class="control" role="group" aria-labelledby="dir-label">
+            <span class="control__label" id="dir-label">Direção</span>
+            <div class="segmented">
+              <button type="button" data-dir="auto">Auto</button>
+              <button type="button" data-dir="ltr">LTR</button>
+              <button type="button" data-dir="rtl">RTL</button>
+            </div>
+          </div>
+          <div class="toolbar__actions">
+            <button class="chip" type="button" id="register-ptbr" hidden>Registrar ptBR agora</button>
+            <lui-link id="toggle-late" href="?late" size="sm"
+              >Recarregar sem ptBR registrado</lui-link
+            >
+          </div>
+          <div class="status" id="status" aria-live="polite"></div>
+        </div>
+        <p class="toolbar__warning" id="late-warning" hidden>
+          Modo <code>?late</code>: <code>ptBR</code> e <code>ptPT</code> ainda
+          não foram registrados, então em português os componentes caem no
+          inglês — inclusive os nomes lidos pelo leitor de tela.
+        </p>
+      </div>
+    </div>
+
+    <header class="page-header">
+      <h1>Localização e direção</h1>
+      <p class="lead">
+        Troque o idioma e a direção na barra acima: a página não recarrega e só
+        muda o texto que os componentes escrevem sozinhos. Labels, placeholders
+        e textos passados por atributo são conteúdo da aplicação e ficam como
+        estão.
+      </p>
+      <nav class="jump" aria-label="Seções">
+        <a href="#i18n">Localização</a>
+        <a href="#rtl">Direção (RTL)</a>
+      </nav>
+      <details class="notes">
+        <summary>Como esta página está configurada</summary>
+        <div class="notes__body">
+          <p>
+            <strong>Dicionários:</strong> <code>ptBR</code>, <code>ptPT</code>,
+            <code>es</code>, <code>fr</code>, <code>de</code>, <code>it</code>,
+            <code>ja</code>, <code>zhCN</code> e <code>zhTW</code> completos.
+            <code>es-MX</code> é parcial: só troca o placeholder do select
+            (“Elige una opción”), o resto vem do <code>es</code>.
+          </p>
+          <p>
+            <strong>Sem dicionário:</strong> <code>ko</code> mostra os textos em
+            inglês, mas meses e dias em coreano, porque o
+            <code>lui-date-picker</code> formata datas pelo <code>lang</code>.
+            <code>ar</code> e <code>he</code> têm só nome e
+            <code>$dir: 'rtl'</code>.
+          </p>
+          <p>
+            <strong>Direção:</strong> “Auto” lê o <code>$dir</code> do
+            dicionário do idioma, como faria o seletor de uma aplicação. “LTR” e
+            “RTL” forçam a direção com qualquer idioma — por exemplo,
+            <code>pt-BR</code> em RTL para ler os textos enquanto confere o
+            espelhamento.
+          </p>
+        </div>
+      </details>
+    </header>
+
+    <main class="layout">
+      <div class="section-title" id="i18n">
+        <h2>Localização</h2>
+        <p>Textos, mensagens e nomes acessíveis no idioma da página.</p>
+      </div>
+      <!-- ── Cadastro ─────────────────────────────────────── -->
+      <section class="card">
+        <div>
+          <h2>Cadastro</h2>
+          <p class="description">
+            Envie vazio para ver as mensagens de erro no idioma da página.
+          </p>
+        </div>
+        <ul class="checklist">
+          <li><code>(opcional)</code> nos campos opcionais</li>
+          <li>Botão de mostrar senha (nome acessível)</li>
+          <li>Botões + e − do campo numérico (nome acessível)</li>
+          <li>Placeholder <code>dd / mm / aaaa</code> e ordem da máscara</li>
+          <li>Placeholder do select</li>
+        </ul>
+        <form class="form-body" id="form-signup">
+          <lui-input name="name" label="Nome" required></lui-input>
+          <lui-input
+            name="nickname"
+            label="Apelido"
+            optional
+            hint="Como prefere ser chamado"></lui-input>
+          <lui-input
+            name="password"
+            label="Senha"
+            type="password"
+            required></lui-input>
+          <div class="row">
+            <lui-date-picker
+              name="birth"
+              label="Data de nascimento"
+              editable
+              required></lui-date-picker>
+            <lui-input
+              name="dependents"
+              label="Dependentes"
+              type="number"
+              min="0"
+              max="10"
+              value="0"
+              optional></lui-input>
+          </div>
+          <lui-native-select
+            name="country"
+            label="País"
+            options="Brasil,Portugal,Estados Unidos,Espanha"
+            required></lui-native-select>
+          <lui-textarea name="bio" label="Sobre você" optional></lui-textarea>
+          <lui-checkbox
+            name="terms"
+            label="Li e aceito os termos de uso"
+            required></lui-checkbox>
+          <lui-link
+            href="https://lets-ui.com"
+            target="_blank"
+            external
+            size="sm">Termos de uso</lui-link
+          >
+          <div class="actions">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" size="md">Criar conta</lui-button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ── Reserva ──────────────────────────────────────── -->
+      <section class="card">
+        <div>
+          <h2>Reserva de hospedagem</h2>
+          <p class="description">
+            Abra os calendários: meses, dias da semana, botões de navegação e
+            nomes acessíveis dos dias seguem o idioma.
+          </p>
+        </div>
+        <ul class="checklist">
+          <li>Data formatada no botão (<code>16 de jan. de 2026</code>)</li>
+          <li>
+            Dois campos com <code>range-fields="two"</code>: “Data inicial” /
+            “Data final”
+          </li>
+          <li>Mensagem de ordem inválida (fim antes do início)</li>
+          <li>Mensagem de data fora do período (antes de hoje)</li>
+        </ul>
+        <form class="form-body" id="form-booking">
+          <lui-date-picker
+            name="stay"
+            label="Período"
+            range
+            value="2026-01-16/2026-01-21"></lui-date-picker>
+          <lui-date-picker
+            name="stay-typed"
+            label="Período (digitado)"
+            range
+            editable
+            range-fields="two"
+            min="2026-11-01"
+            required></lui-date-picker>
+          <lui-radio-group name="room" label="Quarto" required>
+            <lui-radio value="single" label="Individual"></lui-radio>
+            <lui-radio value="double" label="Duplo"></lui-radio>
+            <lui-radio value="suite" label="Suíte"></lui-radio>
+          </lui-radio-group>
+          <lui-switch
+            name="breakfast"
+            label="Incluir café da manhã"
+            required></lui-switch>
+          <div class="actions">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" size="md">Reservar</lui-button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ── Verificação ─────────────────────────────────── -->
+      <section class="card">
+        <div>
+          <h2>Verificação em duas etapas</h2>
+          <p class="description">
+            Os nomes acessíveis de cada caixa (“Caractere 1 de 6”) e do grupo
+            vêm do dicionário. Confira com o leitor de tela ou no inspetor de
+            acessibilidade.
+          </p>
+        </div>
+        <form class="form-body" id="form-otp">
+          <lui-otp-input name="code" length="6" required></lui-otp-input>
+          <div class="actions">
+            <lui-button type="submit" size="md">Verificar</lui-button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ── Precedência ─────────────────────────────────── -->
+      <section class="card">
+        <div>
+          <h2>Atributo e escopo local</h2>
+          <p class="description">
+            Um atributo no elemento sempre vence o dicionário, e um
+            <code>lang</code> num ancestral mais próximo vence o do
+            <code>&lt;html&gt;</code>.
+          </p>
+        </div>
+        <form class="form-body" id="form-precedence">
+          <lui-input
+            name="override"
+            label="Com optional-text próprio"
+            optional
+            optional-text="(se quiser)"></lui-input>
+          <lui-input
+            name="override-error"
+            label="Com error-text próprio"
+            required
+            error-text="Mensagem fixa, em qualquer idioma."></lui-input>
+          <div lang="en-US">
+            <lui-input
+              name="scoped"
+              label="Dentro de lang=&quot;en-US&quot; fixo"
+              optional
+              required></lui-input>
+          </div>
+          <div lang="en-US">
+            <lui-date-picker
+              name="scoped-date"
+              label="Date picker com lang=&quot;en-US&quot; local"
+              editable
+              value="2026-01-16"></lui-date-picker>
+          </div>
+          <lui-date-picker
+            name="fixed-locale"
+            label="Com locale=&quot;de-DE&quot; explícito"
+            locale="de-DE"
+            editable
+            value="2026-01-16"></lui-date-picker>
+          <div class="actions">
+            <lui-button type="submit" size="md">Validar</lui-button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ── Direção (RTL) ───────────────────────────────── -->
+      <div class="section-title" id="rtl">
+        <h2>Direção (RTL)</h2>
+        <p>Teclado, ícones e posições espelhados da direita para a esquerda.</p>
+      </div>
+
+      <section class="card">
+        <div>
+          <h2>Navegação</h2>
+          <p class="description">
+            Em RTL, a próxima aba fica à esquerda e <code>←</code> vai para ela;
+            as setas da paginação se espelham; o submenu abre à esquerda e
+            <code>←</code> entra nele; o ícone do link externo se espelha.
+          </p>
+        </div>
+        <lui-tabs variant="line">
+          <lui-tab label="Visão geral" active><p>Primeira aba.</p></lui-tab>
+          <lui-tab label="Configurações"><p>Segunda aba.</p></lui-tab>
+          <lui-tab label="Histórico"><p>Terceira aba.</p></lui-tab>
+        </lui-tabs>
+        <lui-pagination current-page="3" total-pages="7"></lui-pagination>
+        <lui-link href="https://lets-ui.com" target="_blank" external
+          >Link externo</lui-link
+        >
+        <div style="margin-block-end: 160px">
+          <lui-dropdown-menu>
+            <lui-button
+              slot="trigger"
+              variant="secondary"
+              size="md"
+              label="Ações"></lui-button>
+            <lui-menu-item slot="items" label="Editar"></lui-menu-item>
+            <lui-menu-item slot="items" label="Compartilhar">
+              <lui-menu-item label="Por e-mail"></lui-menu-item>
+              <lui-menu-item label="Copiar link"></lui-menu-item>
+            </lui-menu-item>
+            <lui-menu-item slot="items" label="Excluir" variant="danger"
+            ></lui-menu-item>
+          </lui-dropdown-menu>
+        </div>
+      </section>
+
+      <section class="card">
+        <div>
+          <h2>Controles</h2>
+          <p class="description">
+            O switch ligado leva o indicador para a esquerda; a barra de
+            progresso enche da direita; o select põe a seta à esquerda; com
+            três radios, <code>←</code> avança.
+          </p>
+        </div>
+        <div class="inline">
+          <lui-switch label="Notificações" checked></lui-switch>
+          <lui-switch label="Modo escuro"></lui-switch>
+        </div>
+        <lui-progress-bar value="40" label="Envio" caption="40%"
+        ></lui-progress-bar>
+        <lui-progress-bar label="Carregando"></lui-progress-bar>
+        <lui-native-select
+          name="rtl-select"
+          label="Cidade"
+          options="Cairo,Tel Aviv,Teerã"></lui-native-select>
+        <lui-radio-group name="rtl-size" label="Tamanho">
+          <lui-radio value="s" label="Pequeno"></lui-radio>
+          <lui-radio value="m" label="Médio"></lui-radio>
+          <lui-radio value="l" label="Grande"></lui-radio>
+        </lui-radio-group>
+      </section>
+
+      <section class="card">
+        <div>
+          <h2>Posicionamento</h2>
+          <p class="description">
+            <code>start</code>/<code>end</code> trocam de lado em RTL;
+            <code>left</code>/<code>right</code> ficam onde estão. O drawer entra
+            pela esquerda e o toast <code>--bottom-end</code> aparece à
+            esquerda.
+          </p>
+        </div>
+        <div>
+          <p class="label">lui-tooltip (passe o mouse)</p>
+          <div class="tooltip-row">
+            <lui-tooltip text="start" position="start" label="start"
+            ></lui-tooltip>
+            <lui-tooltip text="end" position="end" label="end"></lui-tooltip>
+            <lui-tooltip text="left" position="left" label="left"></lui-tooltip>
+            <lui-tooltip text="right" position="right" label="right"
+            ></lui-tooltip>
+          </div>
+        </div>
+        <div>
+          <p class="label">lui-float: top-end e bottom-start</p>
+          <div class="inline">
+            <lui-float placement="top-end">
+              <div class="avatar-box"></div>
+              <span slot="float" class="dot"></span>
+            </lui-float>
+            <lui-float placement="bottom-start" offset-x="4">
+              <div class="avatar-box"></div>
+              <span slot="float" class="dot"></span>
+            </lui-float>
+          </div>
+        </div>
+        <div class="inline">
+          <lui-drawer title="Detalhes" trigger-label="Abrir drawer">
+            <p>O drawer entra pelo fim da linha.</p>
+          </lui-drawer>
+          <lui-button variant="secondary" size="md" id="show-toast"
+            >Mostrar toast (bottom-end)</lui-button
+          >
+        </div>
+      </section>
+
+      <section class="card">
+        <div>
+          <h2>Rolagem e código</h2>
+          <p class="description">
+            Em RTL, a rolagem horizontal começa pela direita e a sombra aparece
+            à esquerda, onde há conteúdo escondido. O bloco de código continua
+            da esquerda para a direita.
+          </p>
+        </div>
+        <lui-scroll-area orientation="horizontal" scroll-shadow>
+          <div class="chip-row">
+            <div class="tile">1</div>
+            <div class="tile">2</div>
+            <div class="tile">3</div>
+            <div class="tile">4</div>
+            <div class="tile">5</div>
+            <div class="tile">6</div>
+            <div class="tile">7</div>
+          </div>
+        </lui-scroll-area>
+        <lui-code-block variant="snippet" label="html" show-line-numbers>
+          <script type="text/plain">
+<html lang="ar" dir="rtl">
+  <lui-tabs>…</lui-tabs>
+</html>
+          </script>
+        </lui-code-block>
+      </section>
+    </main>
+
+    <div
+      class="toast-region toast-region--bottom-end"
+      role="region"
+      aria-label="Notificações"
+      id="toast-region"></div>
+
+    <script>
+      import {
+        registerTranslation,
+        en,
+        ptBR,
+        ptPT,
+        es,
+        fr,
+        de,
+        ja,
+        it,
+        zhCN,
+        zhTW,
+      } from '@lets-ui/components';
+
+      const params = new URLSearchParams(location.search);
+      const late = params.has('late');
+      const html = document.documentElement;
+
+      // `es-MX` is partial on purpose: every term it leaves out comes from
+      // `es`, and only then from English.
+      // Arabic and Hebrew have no dictionary yet: these carry only the name and
+      // the direction, so their terms fall back to English.
+      const ar = { $code: 'ar', $name: 'العربية', $dir: 'rtl' };
+      const he = { $code: 'he', $name: 'עברית', $dir: 'rtl' };
+      registerTranslation(es, fr, de, ja, it, zhCN, zhTW, ar, he, {
+        $code: 'es-MX',
+        'select.placeholder': 'Elige una opción',
+      });
+
+      // What `auto` reads `$dir` from — the way an app's language switcher
+      // would. Lookup by code, then by base language.
+      const shipped = [en, ptBR, ptPT, es, fr, de, ja, it, zhCN, zhTW, ar, he];
+      function dirOf(lang) {
+        const code = lang.toLowerCase();
+        const base = code.split('-')[0];
+        const match =
+          shipped.find((d) => d.$code.toLowerCase() === code) ??
+          shipped.find((d) => d.$code.toLowerCase().split('-')[0] === base);
+        return match?.$dir ?? 'ltr';
+      }
+
+      const registerButton = document.getElementById('register-ptbr');
+      const toggleLate = document.getElementById('toggle-late');
+      let ptRegistered = !late;
+
+      if (late) {
+        registerButton.hidden = false;
+        toggleLate.textContent = 'Recarregar com ptBR registrado';
+      } else {
+        registerTranslation(ptBR, ptPT);
+      }
+
+      registerButton.addEventListener('click', () => {
+        registerTranslation(ptBR, ptPT);
+        ptRegistered = true;
+        registerButton.hidden = true;
+        render();
+      });
+
+      const langButtons = document.querySelectorAll('[data-lang]');
+      const dirButtons = document.querySelectorAll('[data-dir]');
+      let dirMode = params.get('dir') || 'auto';
+
+      // `auto` takes the `$dir` of the language's dictionary; `ltr` and `rtl`
+      // force a direction with any language.
+      function applyDir() {
+        html.dir =
+          dirMode === 'auto' ? dirOf(html.getAttribute('lang') ?? '') : dirMode;
+      }
+
+      function setDir(mode) {
+        dirMode = mode;
+        const url = new URL(location.href);
+        url.searchParams.set('dir', mode);
+        history.replaceState(null, '', url);
+        render();
+      }
+
+      function setLang(lang) {
+        if (lang) html.lang = lang;
+        else html.removeAttribute('lang');
+        const url = new URL(location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url);
+        render();
+      }
+
+      // The reload link flips `?late` and keeps the chosen language.
+      function updateReloadLink() {
+        const url = new URL(location.href);
+        if (late) url.searchParams.delete('late');
+        else url.searchParams.set('late', '');
+        toggleLate.setAttribute('href', url.pathname + url.search);
+      }
+
+      function render() {
+        applyDir();
+        dirButtons.forEach((button) => {
+          const active = button.dataset.dir === dirMode;
+          button.setAttribute('aria-pressed', String(active));
+        });
+        const current = html.getAttribute('lang') ?? '';
+        langButtons.forEach((button) => {
+          const active = button.dataset.lang === current;
+          button.setAttribute('aria-pressed', String(active));
+        });
+        const dictionaries = [
+          'en',
+          ptRegistered && 'pt-BR',
+          ptRegistered && 'pt-PT',
+          'es',
+          'es-MX',
+          'fr',
+          'de',
+          'ja',
+          'it',
+          'zh-CN',
+          'zh-TW',
+          'ar',
+          'he',
+        ]
+          .filter(Boolean)
+          .join(', ');
+        const status = document.getElementById('status');
+        status.replaceChildren(
+          ...[
+            [`lang="${current}"`, 'Idioma do <html>'],
+            [`dir="${html.dir}"`, 'Direção do <html>'],
+            [
+              `${dictionaries.split(', ').length} dicionários`,
+              `Registrados: ${dictionaries}`,
+            ],
+          ].map(([text, title]) => {
+            const item = document.createElement('span');
+            item.className = 'status__item';
+            item.textContent = text;
+            item.title = title;
+            return item;
+          })
+        );
+        document.getElementById('late-warning').hidden = ptRegistered;
+        updateReloadLink();
+      }
+
+      langButtons.forEach((button) =>
+        button.addEventListener('click', () => setLang(button.dataset.lang))
+      );
+      dirButtons.forEach((button) =>
+        button.addEventListener('click', () => setDir(button.dataset.dir))
+      );
+
+      document.getElementById('show-toast').addEventListener('click', () => {
+        const toast = document.createElement('lui-toast');
+        toast.setAttribute('title', 'Salvo');
+        toast.textContent = 'O toast segue o fim da linha.';
+        document.getElementById('toast-region').append(toast);
+      });
+
+      // Keep the chosen language across reloads, `?late` included.
+      if (params.has('lang')) setLang(params.get('lang'));
+      else render();
+
+      // Validation only: report what was sent instead of navigating away.
+      document.querySelectorAll('form').forEach((form) =>
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const entries = [...new FormData(form).entries()]
+            .map(([key, value]) => `${key}: ${value}`)
+            .join('\n');
+          alert(entries || '(nenhum campo enviado)');
+        })
+      );
+    </script>
+  </body>
+</html>
