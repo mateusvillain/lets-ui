@@ -4,8 +4,8 @@
   "type": "module",
   "description": "Let's UI documentation, written as MDX and built by SystemBook",
   "devDependencies": {
-    "@systembook/cli": "^0.5.0",
-    "@systembook/schema": "^0.5.0",
+    "@systembook/cli": "^0.6.0",
+    "@systembook/schema": "^0.6.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",

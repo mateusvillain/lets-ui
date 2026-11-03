@@ -9,11 +9,11 @@ importers:
   .:
     devDependencies:
       '@systembook/cli':
-        specifier: ^0.5.0
-        version: 0.5.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: ^0.6.0
+        version: 0.6.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@systembook/schema':
-        specifier: ^0.5.0
-        version: 0.5.0
+        specifier: ^0.6.0
+        version: 0.6.0
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.18
@@ -548,28 +548,28 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@systembook/cli@0.5.0':
-    resolution: {integrity: sha512-W7QMMWpXsO7gT8LHEQatml6jf8nsWl8repMBsDeCYEGSkP/eeUV9PNOC5I1YVQKkLWjK9NFRk6FsGB6JWS68rA==}
+  '@systembook/cli@0.6.0':
+    resolution: {integrity: sha512-1irR/omunl3kvXdmqMTpCvmtdd5v5LfpO12sIg0/mDdMQdxcPNSypk8j54PNHq+QYvIZlwyBm/imyw7cefKaYQ==}
     engines: {node: '>=22'}
     hasBin: true
     peerDependencies:
       react: ^19.0.0
       react-dom: ^19.0.0
 
-  '@systembook/connector@0.5.0':
-    resolution: {integrity: sha512-+NCYpb1KqOkVuEpLJQUrFSLv4tg25LV0Fe8XP1L3Tksh1y9nm9LldG1gZ+8hYvLV3ggIv96ziwegIgW62kS58A==}
+  '@systembook/connector@0.6.0':
+    resolution: {integrity: sha512-Ns/9jxczfZWh3rHmfSzya93EkGx7b9K9uD4k2lrL1ab/abgXZHHfzc2USrX4yMeB2v4aUPqqxDwekTrWELmf/A==}
     engines: {node: '>=22'}
     hasBin: true
     peerDependencies:
       react: ^19.0.0
       react-dom: ^19.0.0
 
-  '@systembook/content@0.5.0':
-    resolution: {integrity: sha512-pxL/CiI8FKvXogPB4K8FKJvt7BdrNPeHg0SX9zo9R6EnkbvHRB8osLJY2Zdxdi/ybXCzFVg3kLYnHupDNVnlLQ==}
+  '@systembook/content@0.6.0':
+    resolution: {integrity: sha512-UJJwWDZ0KoTiWdLPgJbvUksm69iGGJ21wyJeParS58OWaTyfHYgjw1ekehN41KvsjYKXCCcrbLlXIp+OiHYD/w==}
     engines: {node: '>=22'}
 
-  '@systembook/docs-site@0.5.0':
-    resolution: {integrity: sha512-Gy2LqFBKBI8XyD6VqC0g2CbKTl1698txsYkfAOpP4gJ+YC7pt4zCrzQuI7Fc7HCIGT6BnAmr8o5slCTYjWaFxg==}
+  '@systembook/docs-site@0.6.0':
+    resolution: {integrity: sha512-YOHPUj22R7rs7G2EQilIJ9IbbGe5JckXra/O6kKt4DfR3RHbV5AsaYqacBzrVe1rs6d3iwjK0XvkeZ5nPPExxw==}
     engines: {node: '>=22'}
     peerDependencies:
       '@tanstack/react-query': ^5.101.2
@@ -577,15 +577,15 @@ packages:
       react-dom: ^19.0.0
       react-router-dom: ^7.18.1
 
-  '@systembook/preview-kit@0.5.0':
-    resolution: {integrity: sha512-HrJd/Y9g78QvSB3nB3JX7lVsl3lbGhKHs7OiowCmRDQ4rwsuOCrmI7mryYSSCSnJjBJrreOk1dbF6RkgKoP6Lw==}
+  '@systembook/preview-kit@0.6.0':
+    resolution: {integrity: sha512-Q4NTLdvejku51bqt0zZd0ZqDBeb0bFiTGw2OAlmcx9ULGx2oHFsMnEFCtEFf5U28BepP128pp1MlkjTac5w0Dg==}
     engines: {node: '>=22'}
     peerDependencies:
       react: ^19.0.0
       react-dom: ^19.0.0
 
-  '@systembook/schema@0.5.0':
-    resolution: {integrity: sha512-SwBR7MO7u0ua/tGW0cFmH3SW4S0ymmBvlEvy/2rqF3bjEF+xaEgS6ZsPmSGaHuV/hlKd95NCEUP+pvGPVOIMsQ==}
+  '@systembook/schema@0.6.0':
+    resolution: {integrity: sha512-ns/7o8DvPCib4HdlR4tSSP9FXnYDbrmlRmVEsyWEB09nJxH90QDHuQxVUz6Ncoo3Tt5r/Ykn/5MSVv0LGHeORw==}
     engines: {node: '>=22'}
 
   '@tailwindcss/node@4.3.3':
@@ -1993,12 +1993,12 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.63.1':
     optional: true
 
-  '@systembook/cli@0.5.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@systembook/cli@0.6.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@systembook/connector': 0.5.0(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(yaml@2.9.1)
-      '@systembook/content': 0.5.0
-      '@systembook/docs-site': 0.5.0(@floating-ui/dom@1.8.0)(@tanstack/react-query@5.104.1(react@19.2.8))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react-router-dom@7.18.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
-      '@systembook/schema': 0.5.0
+      '@systembook/connector': 0.6.0(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(yaml@2.9.1)
+      '@systembook/content': 0.6.0
+      '@systembook/docs-site': 0.6.0(@floating-ui/dom@1.8.0)(@tanstack/react-query@5.104.1(react@19.2.8))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react-router-dom@7.18.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+      '@systembook/schema': 0.6.0
       '@tailwindcss/vite': 4.3.3(vite@6.4.3(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.1))
       '@tanstack/react-query': 5.104.1(react@19.2.8)
       '@vitejs/plugin-react': 4.7.0(vite@6.4.3(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.1))
@@ -2028,10 +2028,10 @@ snapshots:
       - terser
       - tsx
 
-  '@systembook/connector@0.5.0(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(yaml@2.9.1)':
+  '@systembook/connector@0.6.0(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(yaml@2.9.1)':
     dependencies:
-      '@systembook/preview-kit': 0.5.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@systembook/schema': 0.5.0
+      '@systembook/preview-kit': 0.6.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@systembook/schema': 0.6.0
       '@vitejs/plugin-react': 4.7.0(vite@6.4.3(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.1))
       commander: 14.0.3
       esbuild: 0.25.12
@@ -2054,9 +2054,9 @@ snapshots:
       - tsx
       - yaml
 
-  '@systembook/content@0.5.0':
+  '@systembook/content@0.6.0':
     dependencies:
-      '@systembook/schema': 0.5.0
+      '@systembook/schema': 0.6.0
       '@types/mdast': 4.0.4
       minisearch: 7.2.0
       remark-frontmatter: 5.0.0
@@ -2069,11 +2069,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@systembook/docs-site@0.5.0(@floating-ui/dom@1.8.0)(@tanstack/react-query@5.104.1(react@19.2.8))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react-router-dom@7.18.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
+  '@systembook/docs-site@0.6.0(@floating-ui/dom@1.8.0)(@tanstack/react-query@5.104.1(react@19.2.8))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react-router-dom@7.18.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@radix-ui/react-switch': 1.3.8(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@systembook/content': 0.5.0
-      '@systembook/schema': 0.5.0
+      '@systembook/content': 0.6.0
+      '@systembook/schema': 0.6.0
       '@tanstack/react-query': 5.104.1(react@19.2.8)
       '@tiptap/core': 3.28.0(@tiptap/pm@3.28.0)
       '@tiptap/extension-bold': 3.28.0(@tiptap/core@3.28.0(@tiptap/pm@3.28.0))
@@ -2105,13 +2105,13 @@ snapshots:
       - '@types/react-dom'
       - supports-color
 
-  '@systembook/preview-kit@0.5.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@systembook/preview-kit@0.6.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@systembook/schema': 0.5.0
+      '@systembook/schema': 0.6.0
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@systembook/schema@0.5.0': {}
+  '@systembook/schema@0.6.0': {}
 
   '@tailwindcss/node@4.3.3':
     dependencies:
