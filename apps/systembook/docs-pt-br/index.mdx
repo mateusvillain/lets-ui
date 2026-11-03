@@ -4,6 +4,53 @@ title: Let's UI
 
 # Let's UI
 
-Design system open source e agnóstico de framework, construído sobre tokens, CSS e Web Components nativos. Aqui estão os fundamentos, os componentes e as orientações de uso, escrita e acessibilidade.
+Let's UI é um design system open source e agnóstico de framework, construído sobre design tokens, CSS e Web Components nativos, para criar interfaces consistentes e acessíveis em qualquer tecnologia.
 
-Comece pela [introdução](get-started/overview/introduction.mdx), conheça os [princípios](get-started/overview/principles.mdx) ou vá direto às [foundations](foundations/properties/color.mdx).
+## Por que Let's UI
+
+- **Um sistema, várias marcas**: temas claro e escuro e várias marcas saem dos mesmos tokens, trocados com `data-theme` e `data-brand`, sem JavaScript.
+- **Qualquer framework**: os Web Components são feitos com [Lit](https://lit.dev/) e funcionam em React, Vue, Angular, Svelte ou HTML puro.
+- **Acessível desde o início**: todo componente é pensado para teclado, leitores de tela e contraste, com meta no nível AA da WCAG 2.2.
+- **CSS primeiro**: primitivos de layout como Stack, Inline e Sidebar funcionam como classes CSS simples, sem nenhum JavaScript.
+
+## Comece em minutos
+
+Instale os estilos e os componentes:
+
+```bash
+npm install @lets-ui/styles @lets-ui/components
+```
+
+Importe os dois no ponto de entrada da aplicação:
+
+```js
+import '@lets-ui/styles';
+import '@lets-ui/components';
+```
+
+E use os componentes no HTML:
+
+```html
+<lui-button variant="primary">Confirmar</lui-button>
+```
+
+Para testar sem instalar nada, pela CDN, ou para configurar temas e marcas, veja [Installation](get-started/developers/installation.mdx). Para React, Vue, Angular e renderização no servidor, veja [Frameworks](get-started/developers/frameworks.mdx).
+
+## O que você encontra aqui
+
+| Seção | O que tem | Por onde começar |
+| --- | --- | --- |
+| **Get started** | O que é o sistema, seus princípios, instalação, frameworks, versionamento e como contribuir. | [Introduction](get-started/overview/introduction.mdx) |
+| **Foundations** | Cor, espaçamento, tipografia, grid, elevação, borda, design tokens, temas, acessibilidade e escrita. | [Design tokens](foundations/tokens/design-tokens.mdx) |
+| **Components** | Todos os componentes, de ações e navegação a formulários, conteúdo, tipografia e layout, cada um com visão geral, uso, acessibilidade e código. | [Button](components/actionable/button/index.mdx) |
+| **Utilities** | Funções, mixins e helpers de flex em SCSS para construir com os tokens. | [Functions](utilities/scss/functions.mdx) |
+
+## Por onde começar
+
+- **Design**: leia os [princípios](get-started/overview/principles.mdx) e depois [cor](foundations/properties/color.mdx) e [tipografia](foundations/properties/typography.mdx).
+- **Desenvolvimento**: siga a [Installation](get-started/developers/installation.mdx), veja [Frameworks](get-started/developers/frameworks.mdx) e como funciona o [versionamento](get-started/developers/versioning.mdx).
+- **Conteúdo**: comece pelo [guia de escrita](foundations/content/writing.mdx).
+
+<Callout variant="info">
+  Let's UI segue o versionamento semântico: toda mudança fica registrada no [changelog](https://github.com/mateusvillain/lets-ui/blob/main/CHANGELOG.md). O código está no [GitHub](https://github.com/mateusvillain/lets-ui), e contribuições são bem-vindas. Veja [Contributing](get-started/developers/contributing.mdx).
+</Callout>
