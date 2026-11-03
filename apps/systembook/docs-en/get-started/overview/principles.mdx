@@ -1,0 +1,43 @@
+---
+title: "Principles"
+subtitle: "The ideas behind every decision in the system, from tokens to components."
+---
+
+## Decisions come from tokens
+
+Colors, spacing, radii and shadows **are not loose values**: they are tokens with a name and a role. When a brand or a theme changes, the tokens change, and every component follows without rework.
+
+What **never varies** (like the duration of a transition) stays in the code and does not become a token. A token exists for what **can change**.
+
+See how tokens are organized in [Design tokens](../../foundations/tokens/design-tokens.mdx) and how they change by theme and brand in [Themes](../../foundations/tokens/themes.mdx).
+
+## Accessible by default
+
+Accessibility is not a final step: it is part of the definition of done.
+
+- Every component aims at **WCAG 2.2 level AA**.
+- Everything interactive works **with the keyboard alone** and has visible focus.
+- Meaning **never depends on color alone**.
+- We respect the preference for **reduced motion**.
+
+See the details in [Accessibility](../../foundations/accessibility/overview.mdx).
+
+## Simple before complex
+
+Each component does **one thing well**. When the need is bigger, we combine components instead of inflating one: a [Card](../../components/content/card/index.mdx) with a [Stack](../../components/layout/stack/index.mdx) and two [Buttons](../../components/actionable/button/index.mdx).
+
+## Clear hierarchy
+
+The system helps make **what matters most** obvious on every screen: one primary action per context, a type scale that organizes the content and spacing that groups what belongs together. See [Typography](../../foundations/properties/typography.mdx) and [Spacing](../../foundations/properties/spacing.mdx).
+
+## Content is part of the design
+
+A button with the wrong label fails, even with perfect visuals. That is why every component comes with **writing** guidance, and there is a full guide in [Content](../../foundations/content/writing.mdx).
+
+## Works anywhere
+
+The components are native **Web Components**, and most of them also work with **CSS** alone. The system does not depend on a framework and fits into whatever your product already uses. See [Installation](../developers/installation.mdx) and the [Frameworks](../developers/frameworks.mdx) guide.
+
+## Evolves with use
+
+The system grows from real needs, and the pages record **known limitations** honestly, like the contrast of the [Avatar](../../components/content/avatar/accessibility.mdx) status indicator, so the next step is clear.

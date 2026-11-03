@@ -8,12 +8,18 @@ content is reviewed in the same pull request as the code.
 - **`docs/`** — the content. Folders are the hierarchy
   (`menu/section/page`), files are pages. Format reference:
   [static-format.md](https://github.com/mateusvillain/systembook/blob/main/docs/static-format.md).
+- **`docs-en/`** — the English translation. It mirrors `docs/`: a translated
+  file sits at the same path, carries only `title`/`subtitle`/`overviewTitle`
+  in its frontmatter (order and status come from `docs/`), and keeps the same
+  relative links. A page missing here is served in Portuguese with a notice, so
+  translate a page in the same pull request that changes it. `docs:check`
+  reports the progress (`traduções: en 64/64`).
 - **`previews/`** — one `*.preview.tsx` per component. The CLI builds each
   variant into an isolated iframe, and the docs embed it with
   `<ComponentEmbed component="Button" variant="primary" />`, so a page shows
   the component this repository actually builds.
-- **`systembook.config.ts`** — site name, the closed list of `status` tags, and
-  the `tokens` globs that feed the `/tokens` page and the `<TokenTable>` block.
+- **`systembook.config.ts`** — site name, the languages (`pt-BR` by default,
+  `en` under `/en/`), the closed list of `status` tags, and the `tokens` globs that feed the `/tokens` page and the `<TokenTable>` block.
 - **`scripts/sync-tokens.mjs`** — mirrors the design tokens from
   `packages/lets-ui-tokens/tokens/` into a git-ignored `tokens/` folder here.
   SystemBook reads token globs relative to this project and refuses `..`, so the
@@ -26,8 +32,8 @@ content is reviewed in the same pull request as the code.
 
 | Menu | Section | Source |
 | --- | --- | --- |
-| Get started | Overview, Developers | Introduction, Principles, Installation |
-| Foundations | Properties, Accessibility, Tokens, Content | Color, Spacing, Typography, Grid, Elevation, Border; the accessibility commitment and debts; Design tokens, Themes; the writing guide |
+| Get started | Overview, Developers | Introduction, Principles; Installation, Frameworks, Versioning, Contributing |
+| Foundations | Properties, Accessibility, Tokens, Content | Color, Spacing, Typography, Grid, Elevation, Border; the accessibility commitment and debts; Design tokens, Themes, Token list; the writing guide |
 | Components | Actionable, Navigation, Form and options, Content, Typography, Layout | one folder per component, with four tabs |
 | Utilities | SCSS | Functions, Mixins, Flex |
 

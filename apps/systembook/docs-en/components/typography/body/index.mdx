@@ -1,0 +1,50 @@
+---
+title: "Body"
+subtitle: "Content text: paragraphs, captions and notes."
+---
+
+<ComponentEmbed component="Body" variant="md" />
+
+## Best practices
+
+<DosDonts variant="do" title="Paragraphs and descriptions">
+  All running text that is not a heading.
+</DosDonts>
+
+<DosDonts variant="do" title="Captions and notes">
+  Text that supports the main content.
+</DosDonts>
+
+<DosDonts variant="dont" title="Headings">
+  Use the [Heading](../heading/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Keyboard shortcuts">
+  Use the [Shortcut](../shortcut/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Control labels">
+  They already come with the form components.
+</DosDonts>
+
+## Sizes
+
+| Size | Element | When to use |
+| --- | --- | --- |
+| `lg` | `p` | Introduction and highlighted text. |
+| `md` (default) | `p` | General content. |
+| `sm` | `p` | Captions, notes and helper text. |
+
+<ComponentEmbed component="Body" variant="lg" />
+
+<ComponentEmbed component="Body" variant="sm" />
+
+## Options
+
+The Body also accepts alignment (left, center, right or justified), color, style (such as italic) and text decoration.
+
+## Related
+
+- [Heading](../heading/index.mdx): headings.
+- [Link](../../navigation/link/index.mdx): links within text.
+- [Typography](../../../foundations/properties/typography.mdx): the scales and the tokens.

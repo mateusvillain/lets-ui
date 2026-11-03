@@ -1,0 +1,46 @@
+---
+title: "Center"
+subtitle: "Centers content on one or both axes."
+---
+
+<ComponentEmbed component="Center" variant="both" />
+
+## Best practices
+
+<DosDonts variant="do" title="Full-page states">
+  Empty state, loading and full-page message screens.
+</DosDonts>
+
+<DosDonts variant="do" title="Highlight sections">
+  A centered block within the available space.
+</DosDonts>
+
+<DosDonts variant="dont" title="Running text">
+  Centering long paragraphs hurts reading. Use left alignment.
+</DosDonts>
+
+<DosDonts variant="dont" title="Page width">
+  Use [Container](../container/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Distributing several items">
+  Use [Flex](../flex/index.mdx).
+</DosDonts>
+
+## Axes
+
+| Axis | Effect |
+| --- | --- |
+| `both` (default) | Centers horizontally and vertically. |
+| `horizontal` | Centers horizontally only. |
+| `vertical` | Centers vertically only. |
+
+<ComponentEmbed component="Center" variant="horizontal" />
+
+Use `min-height` to give the space a height and `max-width` to limit the content width.
+
+## Related
+
+- [Empty State](../../content/empty-state/index.mdx): comes already centered.
+- [Container](../container/index.mdx)
+- [Stack](../stack/index.mdx)

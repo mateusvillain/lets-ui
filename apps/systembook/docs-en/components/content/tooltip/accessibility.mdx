@@ -1,0 +1,34 @@
+---
+title: "Accessibility"
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Focuses the trigger, and the Tooltip appears. |
+| `Esc` | Closes the open Tooltip, without moving the pointer or the focus. |
+
+The Tooltip appears both on hover and on keyboard focus, and disappears when focus leaves.
+
+## Dismissing, hovering and motion
+
+- **`Esc` closes the Tooltip** without moving the pointer or the focus (WCAG 1.4.13). It appears again the next time the pointer enters the trigger or the trigger receives focus.
+- **An `Esc` that closes the Tooltip is consumed.** If the Tooltip is inside a [Modal](../modal/index.mdx) or [Drawer](../drawer/index.mdx), the window only closes on the following `Esc`.
+- An `Esc` that is part of a text composition (IME), or a key held down, is ignored: it does not close the Tooltip and is not consumed.
+- **The pointer can move from the trigger to the bubble** without it disappearing (WCAG 1.4.13), including across the gap between the two, in any position.
+- **With "reduce motion" on** (`prefers-reduced-motion: reduce`), the Tooltip appears and disappears without a transition (WCAG 2.3.3).
+
+## Screen reader
+
+- The bubble is announced as a **tooltip** (`tooltip`) and is linked to the trigger with `aria-describedby`, so the text is read as the element's **description**.
+- The trigger must be **focusable**. If the content you put in it is not, the Tooltip makes the container focusable.
+- The Tooltip does not replace the element's accessible name. An Icon Button still needs an `aria-label`.
+- **Text identical to the trigger's name does not become a description.** When the text repeats the control's name (ignoring case and spaces), the Tooltip does not link it as a description, and the screen reader announces "Delete item, button" only once. If the text or the name changes later, the description follows.
+- While the Tooltip describes the trigger, the bubble text is kept out of the accessibility tree, so it is not read again when browsing in reading mode.
+
+## For designers
+
+- Ensure a contrast of 4.5:1 between the bubble text and the background.
+- Do not use the Tooltip as the only way to convey information.
+- Think of the alternative for touch users: where does the text appear?

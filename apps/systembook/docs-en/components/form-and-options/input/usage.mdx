@@ -1,0 +1,59 @@
+---
+title: "Usage"
+---
+
+## Labels
+
+Every field needs a **visible label**. It says what to type and stays visible while the person writes.
+
+<DosDonts variant="do" title="Label above the field, always visible">
+  "Email" stays in place the whole time. The person never forgets what the field asks for.
+</DosDonts>
+
+<DosDonts variant="dont" title="Placeholder instead of a label">
+  The placeholder disappears when typing, has low contrast and is not a reliable name for screen readers. Use it, at most, as a format example.
+</DosDonts>
+
+- Write **short** labels, with nouns: "Full name", "ZIP code".
+- Sentence case and no colon at the end.
+
+## Hints
+
+Use the hint to say **what the person needs to know before making a mistake**: format, limits, why you ask for the data. Example: "Use 8 or more characters, with letters and numbers."
+
+Prefer the hint to instructions inside the placeholder.
+
+## Required or optional
+
+Mark what is **optional** with "(optional)", instead of marking what is required with an asterisk. In most forms, most fields are required, and the notice only needs to appear on the exception.
+
+## Error messages
+
+A good message says **what happened and how to fix it**, in a neutral tone and without blaming the person.
+
+<DosDonts variant="do" title="Specific and actionable">
+  "Enter a valid email, such as name@company.com."
+</DosDonts>
+
+<DosDonts variant="dont" title="Vague or accusatory">
+  "Invalid input." or "You got the email wrong." They do not explain what to fix.
+</DosDonts>
+
+- Show the error **next to the field**, after the person leaves it or tries to submit. Not before they finish typing.
+- Red must never be the only signal: the text message is essential.
+- If there are several errors, list a summary at the top of the form and keep each message on its field.
+
+## Field width
+
+Fit the width to the expected content. A ZIP code does not need the width of an address. This helps the person anticipate the length of the answer.
+
+## Prefix and suffix
+
+Use them for fixed units and symbols ("$", "kg", "@"). That way the person does not need to type them, and the value stays clean.
+
+## Best practices
+
+- Use the **right type** (`email`, `tel`, `number`): the mobile keyboard adapts and validation improves.
+- Do not block pasting into fields, especially passwords.
+- Accept varied formats (spaces, periods, hyphens) and normalize them afterwards, instead of rejecting them.
+- One form at a time: group related fields and keep a single column.

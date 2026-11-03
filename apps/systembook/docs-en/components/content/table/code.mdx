@@ -1,0 +1,187 @@
+---
+title: "Code"
+---
+
+## Bordered
+
+`bordered` draws the outer border with rounded corners.
+
+<ComponentEmbed component="Table" variant="bordered" />
+
+## Examples
+
+### Avatar, link and tag in cells
+
+Cells accept other components. Each one keeps its own accessible name, and the link text already says where it leads.
+
+### Selection
+
+One `lui-checkbox` per row, with an `aria-label` that mentions the row ("Select Customer base.csv"). The checkbox column needs a `<th scope="col">` with text, even if only for screen readers.
+
+### Values and status
+
+The status comes as text inside the tag, not only as color.
+
+### Text only, no border
+
+Without `bordered`, the table has no frame and uses only the row dividers.
+
+## Right alignment
+
+Action or value columns can be aligned to the end. Put `.table__cell--end` on the header and on every cell of the column, so the title follows the content. It is meant for actions and numeric values. Running text stays on the left.
+
+```html
+<th scope="col" class="table__cell--end">Actions</th>
+…
+<td class="table__cell--end">
+  <lui-icon-button aria-label="Actions for Ana Souza">…</lui-icon-button>
+</td>
+```
+
+The class uses `text-align: end`, so it follows the writing direction. In right-to-left languages, the end is the left side.
+
+## Content-sized column
+
+By default, columns share the table width. A column that does not need space, such as actions, ids, status tags or a checkbox, can use `.table__cell--fit`. It takes the width of its widest content, and the other columns share the rest. Since the measurement comes from the content, there is no value to update when the text changes.
+
+Put the class on the header and on every cell of the column. It also prevents line wrapping, so the content must be short. It can be combined with `.table__cell--end`.
+
+```html
+<th scope="col" class="table__cell--fit table__cell--end">Actions</th>
+…
+<td class="table__cell--fit table__cell--end">
+  <lui-icon-button aria-label="Actions for Ana Souza">…</lui-icon-button>
+</td>
+```
+
+Do not use the class on running-text columns, which need to wrap.
+
+## Sortable columns
+
+To make a column sortable, put a `<button class="table__sort">` inside the `<th>`. The button provides keyboard access and the column name. `lui-table` takes care of the rest: it switches the `aria-sort` of the `<th>`, shows the arrow and emits `lui-sort`.
+
+```html
+<lui-table>
+  <table aria-label="Team">
+    <thead>
+      <tr>
+        <th scope="col" data-column="name">
+          <button type="button" class="table__sort">Name</button>
+        </th>
+        <th scope="col">Role</th>
+      </tr>
+    </thead>
+    …
+  </table>
+</lui-table>
+```
+
+```js
+table.addEventListener('lui-sort', ({ detail }) => {
+  // detail.column: the data-column of the <th>, or the button text
+  // detail.direction: 'ascending', 'descending' or 'none'
+});
+```
+
+- Each click advances the column: ascending, descending and unsorted. With `none`, the author can go back to the original order.
+- Only one column is sorted at a time. When you sort one, the others go back to `none`.
+- The component **does not reorder the rows**. You decide how: in the browser, as in the story, or by requesting the data from the server.
+- `aria-sort` is set to `none` on every `<th>` that has the button, if the author has not set a value. An `aria-sort` already written is kept, so you can open the table already sorted.
+- The arrow comes from `aria-sort`: both arrows dimmed when unsorted, and one arrow in the title color when the column is sorted.
+- In pure CSS, `.table__sort` already has the look, but `aria-sort` and the event are up to you.
+
+## Sticky header
+
+`sticky-header` keeps the header visible while the rows scroll. It only works with `max-height`, which limits the height of the area. Without a limited height, the table does not scroll vertically. A number counts as pixels (`280`), and any CSS length also works (`20rem`).
+
+```html
+<lui-table sticky-header max-height="280">
+  <table>
+    …
+  </table>
+</lui-table>
+```
+
+- The area becomes a region with `role="region"`, `tabindex="0"` and a name, so the keyboard can scroll vertically.
+- When navigating by keyboard, the focused row does not end up behind the header. The component sets `scroll-padding-top` to the header's height.
+- The header uses the neutral, opaque `surface` background, so the rows do not show through. On a page with another background color, the header will stand out.
+- The `<caption>` scrolls with the rows; only the header stays.
+- In pure CSS, use `.table--sticky-header` on the table and set `max-height` on `.table-wrapper`.
+
+## Structure
+
+You write the `<table>` inside `<lui-table>`. The Web Component does not create rows or cells. It only adds the `.table` class to the table and handles the border and scrolling.
+
+- The table needs an accessible name. See [Table name](#table-name).
+- `<th scope="col">` on the header of each column.
+- `<th scope="row">` on the first cell of each row, when it identifies the row. Regular data goes in `<td>`.
+- Actions inside cells need their own name that says which row they belong to ("Actions for Ana Souza").
+
+## Table name
+
+Every data table needs a name, so the screen reader announces "table, Orders" and not just "table". The `<caption>` is optional. When used, it appears as in the design: title on the left, inside the border, above the header. How to name it:
+
+- With a visible title, as in the design: use `<caption>`. It is the title and also the name.
+- Without a visible title: use `aria-label` on the `<table>`.
+- With a title elsewhere on the page, such as a heading: use `aria-labelledby` on the `<table>`, pointing to it.
+- Do not use `aria-label` and `<caption>` together. The `aria-label` wins and the caption is repeated.
+
+## Horizontal scrolling
+
+When the table is wider than the available space, the area gets `role="region"`, `tabindex="0"` and a name, so the keyboard can scroll. The name comes from `label` or, without it, from the table's own name, in the order `aria-labelledby`, `aria-label` and `<caption>`. An empty `aria-label` is ignored. If these attributes or the caption text change, the name follows.
+
+## Usage
+
+### Web Component
+
+```html
+<lui-table bordered>
+  <table>
+    <caption>
+      Orders
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Ana Souza</th>
+        <td>Completed</td>
+      </tr>
+    </tbody>
+  </table>
+</lui-table>
+```
+
+### CSS class
+
+```html
+<div class="table-wrapper table-wrapper--bordered">
+  <table class="table">
+    <caption>
+      Orders
+    </caption>
+    …
+  </table>
+</div>
+```
+
+Without the Web Component, the scrollable region is up to you: if the table can overflow, add `role="region"`, `tabindex="0"` and `aria-label` to `.table-wrapper`.
+
+## Properties
+
+| Property       | Attribute       | Type      | Default | Description                                                        |
+| -------------- | --------------- | --------- | ------- | ------------------------------------------------------------------ |
+| `bordered`     | `bordered`      | `boolean` | `false` | Outer border with rounded corners.                                 |
+| `label`        | `label`         | `string`  | `''`    | Name of the scrollable region. Without it, uses the table's name.  |
+| `stickyHeader` | `sticky-header` | `boolean` | `false` | Keeps the header visible while scrolling. Requires `max-height`.   |
+| `maxHeight`    | `max-height`    | `string`  | `''`    | Maximum height of the area; beyond it, it scrolls vertically.      |
+
+## Events
+
+| Event      | `detail`                                                               | When                                 |
+| ---------- | ---------------------------------------------------------------------- | ------------------------------------ |
+| `lui-sort` | `{ column: string, direction: 'ascending' \| 'descending' \| 'none' }` | A `.table__sort` button is activated. |

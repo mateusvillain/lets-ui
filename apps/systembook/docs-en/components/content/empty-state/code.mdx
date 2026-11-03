@@ -1,0 +1,144 @@
+---
+title: "Code"
+---
+
+Use when: the user accesses a feature for the first time, a search or filter returned no results, the content was deleted/archived, a task was completed (empty queue), or the data cannot be shown because of permissions, pending configuration or an external failure.
+
+Do not use it for a loading state (that is a _skeleton_) or for server error pages (404/500).
+
+**Integration rule:** the Empty State must **fully** replace the empty component. No "ghost" table header, footer or pagination counter next to it. That is visually confusing and forces the screen reader to go through empty columns before reaching the message.
+
+## Tone is content, not a variant
+
+There is no "visual type" `variant` prop (`error`, `success`, `no-data`). The type of Empty State is a decision of **content** (what you write in `title`/`description`) and of **composition** (which cover and which actions you pass). This keeps the evolution of UX writing out of the code.
+
+| Situation             | Tone              | Recommended structure                                          |
+| --------------------- | ----------------- | -------------------------------------------------------------- |
+| First use             | Neutral/positive  | Cover + title + description + create action                    |
+| No results            | Neutral           | Title + description with an adjustment hint, no heavy cover    |
+| Confirmation/success  | Celebratory       | Title; optional action                                         |
+| Permission error      | Neutral/serious   | Title + description + "request access"                         |
+| System error          | Serious, no humor | Title + description + "try again"                              |
+| Pending configuration | Instructive       | Title + description + configuration action                     |
+
+## Alignment
+
+The whole block aligns to the center (default) or to the left. Center works well on full pages and large panels; left goes better with reading content already aligned to the left, such as the body of a table.
+
+### Left
+
+<ComponentEmbed component="EmptyState" variant="left" />
+
+## Optional cover
+
+The cover (`slot="cover"`) accepts an image, illustration or icon, and is always **decorative**, since the component applies `aria-hidden="true"`. Nothing it communicates can be exclusive to it; the title and description carry all the meaning, and the layout absorbs the absence of the cover without breaking.
+
+Omit the cover in small spaces or when several Empty States appear on the same screen (several widgets failing at the same time). Repeating the same illustration reduces the impact of all of them.
+
+## Optional actions
+
+Actions come in through `slot="actions"` as `<button class="btn">` or `<lui-button>`, not through configuration props, so you use the whole Button API without the Empty State having to reimplement it.
+
+A single primary action. If there is nothing the user can do (e.g. waiting for an external process), do not invent a button.
+
+### Minimal case
+
+The title alone is already a valid Empty State.
+
+## Announcing dynamic changes (`announce`)
+
+This is the least intuitive accessibility point of the pattern. When the Empty State appears **as the result of a user action in the same navigation** (search, filter, deleting the last item), the screen reader needs to be notified, otherwise the user does not find out that the result changed without manually navigating to the area.
+
+| `announce`      | Renders         | When to use                                                                                     |
+| --------------- | --------------- | ----------------------------------------------------------------------------------------------- |
+| `off` (default) | no role         | The Empty State is already present on the initial page load; announcing it would be redundant. |
+| `polite`        | `role="status"` | Search with no results, filter applied, last item deleted.                                      |
+| `assertive`     | `role="alert"`  | Only for an error that requires immediate attention, interrupting the ongoing reading.          |
+
+**Focus management:** when the Empty State replaces something that had focus (the item the user just deleted), move focus predictably, to the search field or to the next logical element. Never leave focus "lost" on `<body>`. The Empty State container is not focusable: it is not a widget, and `Tab` goes straight to the buttons.
+
+**Debounce:** do not switch to the Empty State on every keystroke in a search field. Wait for the query to "settle", otherwise the block flickers with each character.
+
+## Title hierarchy
+
+The title is a real native heading. Since the component does not know where it was inserted, the level is configurable through `title-level` (1–6, default `2`). Adjust it to the hierarchy of the surrounding document.
+
+## Responsiveness
+
+Mobile-first layout. Up to `md` (1024px) the actions stack at full width; from there on they go back to a single row. The block has `max-width: 560px` and the title never truncates. Long texts (and longer translations) simply take up more height.
+
+With `<lui-button>`, add the `block` attribute so the button fills the width in the mobile stack. Native buttons with the `.btn` class already stretch on their own.
+
+## Usage
+
+### Web Component
+
+```html
+<lui-empty-state
+  align="center"
+  title="No projects yet"
+  title-level="2"
+  description="Create your first project to start organizing your work."
+>
+  <img slot="cover" src="/empty-projects.svg" alt="" width="240" height="160" />
+  <button slot="actions" class="btn btn--secondary btn--lg">Learn more</button>
+  <button slot="actions" class="btn btn--primary btn--lg">
+    Create project
+  </button>
+</lui-empty-state>
+```
+
+### No results, announced
+
+```html
+<lui-empty-state
+  title="No results for “financial report”"
+  description="Try more general terms or remove the active filters."
+  announce="polite"
+>
+  <button slot="actions" class="btn btn--secondary btn--lg">
+    Clear filters
+  </button>
+</lui-empty-state>
+```
+
+### CSS class
+
+```html
+<div class="empty-state empty-state--align-center">
+  <div class="empty-state__cover" aria-hidden="true">
+    <img src="/empty-projects.svg" alt="" width="240" height="160" />
+  </div>
+  <div class="empty-state__text">
+    <h2 class="empty-state__title">No projects yet</h2>
+    <p class="empty-state__description">
+      Create your first project to start organizing your work.
+    </p>
+  </div>
+  <div
+    class="empty-state__actions"
+    role="group"
+    aria-label="Empty state actions"
+  >
+    <button class="btn btn--secondary btn--lg">Learn more</button>
+    <button class="btn btn--primary btn--lg">Create project</button>
+  </div>
+</div>
+```
+
+## API
+
+| Attribute       | Values                       | Default               | Description                                                   |
+| --------------- | ---------------------------- | --------------------- | ------------------------------------------------------------- |
+| `align`         | `center`, `left`             | `center`              | Alignment of the whole block.                                 |
+| `title`         | text                         | `''`                  | Title. The only required content.                             |
+| `title-level`   | `1`–`6`                      | `2`                   | Level of the rendered HTML heading.                           |
+| `description`   | text                         | `''`                  | Supporting text. Omitted when empty.                          |
+| `announce`      | `off`, `polite`, `assertive` | `off`                 | Announces the region when it appears after a user action.     |
+| `actions-label` | text                         | `Empty state actions` | Accessible label of the actions group.                        |
+
+| Slot      | Description                                                       |
+| --------- | ----------------------------------------------------------------- |
+| `cover`   | Image, illustration or icon. Always decorative (`aria-hidden`).   |
+| (default) | Extra content below the description. E.g. a list of suggestions.  |
+| `actions` | Action buttons or links.                                          |

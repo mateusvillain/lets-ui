@@ -1,0 +1,66 @@
+---
+title: "Alert"
+subtitle: "A highlighted message that informs about the state of a screen, a form or an action."
+---
+
+<ComponentEmbed component="Alert" variant="success" />
+
+## Best practices
+
+<DosDonts variant="do" title="Success after saving">
+  A confirmation that stays on the page, next to the context.
+</DosDonts>
+
+<DosDonts variant="do" title="Error in a form">
+  A summary of what needs to be fixed.
+</DosDonts>
+
+<DosDonts variant="do" title="Warnings and important information">
+  A limitation or information related to the context.
+</DosDonts>
+
+<DosDonts variant="dont" title="Transient feedback for an action">
+  For feedback that goes away on its own, use the [Toast](../toast/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Decisions that block the task">
+  Use a [Modal](../modal/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Supporting text for a field">
+  Use the field's hint.
+</DosDonts>
+
+<DosDonts variant="dont" title="Decorative or promotional messages">
+  The Alert is for relevant information.
+</DosDonts>
+
+## Anatomy
+
+![Alert anatomy: icon, title, content and close button](./anatomy.png)
+
+1. **Icon**: reinforces the variant. It is decorative.
+2. **Title**: sums up the message in a few words.
+3. **Content**: explains and guides what to do.
+4. **Close button** (optional): dismisses the alert.
+
+## Variants
+
+| Variant | Meaning | Example |
+| --- | --- | --- |
+| **Info** | Neutral, useful information. | "New features available." |
+| **Success** | Something went right. | "Changes saved." |
+| **Caution** | Attention: there may be a problem. | "Your plan ends in 3 days." |
+| **Danger** | Something went wrong or needs urgent action. | "We couldn't process the payment." |
+
+<ComponentEmbed component="Alert" variant="danger" />
+
+## Dismissible
+
+With `dismissible`, the Alert gets a close button. Use it when the message can be safely ignored. Error messages that block the task should not be closable until they are resolved.
+
+## Related
+
+- [Toast](../toast/index.mdx): temporary feedback.
+- [Modal](../modal/index.mdx): decisions that require full attention.
+- [Close Button](../../actionable/close-button/index.mdx): the close button.

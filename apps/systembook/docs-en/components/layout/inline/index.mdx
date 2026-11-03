@@ -1,0 +1,45 @@
+---
+title: "Inline"
+subtitle: "Lays out elements side by side and wraps to the next line when space runs out."
+---
+
+<ComponentEmbed component="Inline" variant="default" />
+
+## Best practices
+
+<DosDonts variant="do" title="Small elements in a row">
+  Groups of [Tags](../../content/tag/index.mdx), applied filters or icons.
+</DosDonts>
+
+<DosDonts variant="do" title="Action groups">
+  Buttons side by side that wrap when space runs out.
+</DosDonts>
+
+<DosDonts variant="dont" title="Elements that must always stay in a column">
+  Use [Stack](../stack/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Aligning content in fixed-width columns">
+  Use [Grid](../grid/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Switching between column and row depending on space">
+  Use [Switcher](../switcher/index.mdx).
+</DosDonts>
+
+## Options
+
+| Option | What it controls | Default |
+| --- | --- | --- |
+| `gap` (`gap-x`, `gap-y`) | Space between items. | 8 |
+| `align` | Vertical alignment. | Center |
+| `justify` | Horizontal distribution. | Start |
+| `wrap` | Whether items wrap to a new line. | Wrap |
+
+<ComponentEmbed component="Inline" variant="spread" />
+
+## Related
+
+- [Stack](../stack/index.mdx): vertically.
+- [Flex](../flex/index.mdx): full flexbox control.
+- [Button](../../actionable/button/index.mdx), [Tag](../../content/tag/index.mdx): what usually goes inside.

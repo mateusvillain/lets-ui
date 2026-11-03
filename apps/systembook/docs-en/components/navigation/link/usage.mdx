@@ -1,0 +1,41 @@
+---
+title: "Usage"
+---
+
+## Write text that describes the destination
+
+The link text should make sense **out of context**, because screen readers list every link on the page.
+
+<DosDonts variant="do" title="Descriptive text">
+  "Read the accessibility guidelines" or "Download the brand guide (PDF, 2 MB)". The person knows where they are going.
+</DosDonts>
+
+<DosDonts variant="dont" title="Generic text">
+  Repeated "Click here", "Learn more" and "Read more". They say nothing on their own. If it is unavoidable, complement them with `aria-label`.
+</DosDonts>
+
+## Links inside text
+
+- Keep the link recognizable: do not use color alone to tell it apart, which is why the underline appears on hover and focus.
+- Avoid paragraphs full of links. Many links compete with each other and tire the reader.
+- Put the link on the **part of the text that describes the destination**, not on the whole sentence.
+
+## External links and downloads
+
+- Use `external` when the link leaves the product. The icon warns the person before the click.
+- Open in a new tab only when there is a clear reason, such as not losing a filled-in form. By default, navigate in the same tab.
+- For downloads, state the format and size in the text: "Download report (PDF, 1.2 MB)".
+
+## Link or button?
+
+| If the click... | Use |
+| --- | --- |
+| takes you to another URL | Link |
+| runs an action or sends data | Button |
+| needs to draw attention as a CTA | Button with `href` |
+
+## Best practices
+
+- Do not disable links without explaining why. If the person cannot access it, say why.
+- Keep the same text for the same destination across the whole product.
+- Do not use "https://..." as the link text, unless the URL is the information.

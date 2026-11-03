@@ -1,0 +1,27 @@
+---
+title: "Accessibility"
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Enters the group, on the selected option or the first available one. A second press leaves it. |
+| `Down Arrow` or `Right Arrow` | Moves to the next option and selects it. |
+| `Up Arrow` or `Left Arrow` | Moves to the previous option and selects it. |
+| `Space` | Selects the focused option. |
+
+Disabled options are skipped.
+
+## Screen reader
+
+- The group is announced as a **radio group**, with the title as its name.
+- The hint and the error message are read along with the group.
+- On error, the group is announced as invalid. If required, that is announced too.
+- Disabling the group disables all options.
+
+## For designers
+
+- The group title is required. It is what gives the options meaning.
+- Translate the default error message (in English) into the product's language.
+- Do not communicate the error with color alone: the text message must appear.

@@ -1,0 +1,83 @@
+---
+title: "Code"
+---
+
+## Few pages
+
+When the total fits within the visible range, every page appears with no truncation.
+
+<ComponentEmbed component="Pagination" variant="few-pages" />
+
+## Truncation with ellipses
+
+The first and last pages are always visible; the current page keeps `sibling-count` neighbors on each side, and each gap becomes an ellipsis. Once truncated, the list always has the same number of items, so its width does not change during navigation.
+
+## `lui-page-change` event
+
+On navigation, the component updates `current-page` and emits `lui-page-change` with the new page in `event.detail.page`. The event bubbles and crosses the shadow DOM.
+
+## CSS class (without Web Component)
+
+Without the Web Component, the markup is up to you — for example, with links for server-side pagination.
+
+## Properties
+
+| Attribute               | Type     | Default                     | Description                                                                                                       |
+| ----------------------- | -------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `current-page`          | `number` | `1`                         | Current page. Reflected to the attribute on navigation.                                                           |
+| `total-pages`           | `number` | `1`                         | Total number of pages.                                                                                            |
+| `sibling-count`         | `number` | `1`                         | Neighbor pages shown on each side of the current one.                                                             |
+| `compact-sibling-count` | `number` | `0`                         | Neighbors on each side below 768px (capped at `sibling-count`). First, last and current stay visible.             |
+| `label`                 | `string` | `Pagination`                | Accessible name of the `<nav>` landmark.                                                                          |
+| `previous-label`        | `string` | `Previous page`             | Accessible name of the previous page button.                                                                      |
+| `next-label`            | `string` | `Next page`                 | Accessible name of the next page button.                                                                          |
+| `page-label`            | `string` | `Page`                      | Prefix of each page's accessible name ("Page 3").                                                                 |
+| `status-label`          | `string` | `Page {current} of {total}` | Text announced by screen readers after the page changes.                                                          |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-pagination current-page="1" total-pages="20"></lui-pagination>
+
+<script>
+  document
+    .querySelector('lui-pagination')
+    .addEventListener('lui-page-change', (event) => {
+      console.log(event.detail.page);
+    });
+</script>
+```
+
+### CSS class
+
+```html
+<nav class="pagination" aria-label="Pagination">
+  <ul class="pagination__list">
+    <li>
+      <a
+        class="pagination__item pagination__item--direction"
+        href="?page=1"
+        aria-label="Previous page"
+      >
+        <!-- icon -->
+      </a>
+    </li>
+    <li><a class="pagination__item" href="?page=1">1</a></li>
+    <li>
+      <a class="pagination__item" href="?page=2" aria-current="page">2</a>
+    </li>
+    <li><a class="pagination__item" href="?page=3">3</a></li>
+    <li>
+      <a
+        class="pagination__item pagination__item--direction"
+        href="?page=3"
+        aria-label="Next page"
+      >
+        <!-- icon -->
+      </a>
+    </li>
+  </ul>
+</nav>
+```

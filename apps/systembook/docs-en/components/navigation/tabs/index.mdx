@@ -1,0 +1,62 @@
+---
+title: "Tabs"
+subtitle: "Splits the content of a single page into panels, and shows one at a time."
+---
+
+<ComponentEmbed component="Tabs" variant="line" />
+
+## Best practices
+
+<DosDonts variant="do" title="One panel at a time">
+  Related content, on the same page, that the person views one part at a time.
+</DosDonts>
+
+<DosDonts variant="do" title="Views of the same object">
+  Profile settings or documentation sections.
+</DosDonts>
+
+<DosDonts variant="dont" title="Navigating between different pages">
+  Use links, menus or [Breadcrumb](../breadcrumb/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Sequential steps">
+  Use a step indicator.
+</DosDonts>
+
+<DosDonts variant="dont" title="Content the person needs to compare side by side">
+  Show everything on the page, or use a [Table](../../content/table/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="More than seven tabs">
+  Rethink the organization.
+</DosDonts>
+
+## Anatomy
+
+![Tabs anatomy: tab list, tab, indicator and panel](./anatomy.png)
+
+1. **Tab list**: the set of labels.
+2. **Tab**: a clickable label. The active one stands out.
+3. **Indicator**: marks the active tab (line or segment).
+4. **Panel**: the content of the active tab.
+
+## Styles
+
+| Style | Description | When to use |
+| --- | --- | --- |
+| **Line** | A line below the active tab. | Default for pages and content sections. |
+| **Card** | Tabs in a closed segment. | Switching views inside a card or smaller component. |
+
+With `expand`, the tabs take the full width of the container, good for small screens.
+
+<ComponentEmbed component="Tabs" variant="expand" />
+
+## States
+
+Each tab can be inactive, active, hovered, focused or disabled. Only **one** tab is active at a time, and one tab is always selected.
+
+## Related
+
+- [Accordion](../../content/accordion/index.mdx): sections that expand and allow several to be open.
+- [Breadcrumb](../breadcrumb/index.mdx): hierarchy between pages.
+- [Link](../link/index.mdx): navigation between pages.

@@ -1,0 +1,80 @@
+---
+title: "Avatar"
+subtitle: "Represents a person or an entity with a photo or with the initials of the name."
+---
+
+<ComponentEmbed component="Avatar" variant="initials" />
+
+## Best practices
+
+<DosDonts variant="do" title="Authorship">
+  Who wrote a comment or made a change.
+</DosDonts>
+
+<DosDonts variant="do" title="Owner of an item">
+  Who something belongs to, or who is a member of a team.
+</DosDonts>
+
+<DosDonts variant="do" title="The person's account">
+  In the user menu, to show who is signed in.
+</DosDonts>
+
+<DosDonts variant="dont" title="Icons and illustrations in general">
+  Use [Image](../image/index.mdx) or icons.
+</DosDonts>
+
+<DosDonts variant="dont" title="Opening a profile or menu">
+  The Avatar is not interactive. Wrap it in a button or link, or use a [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Showing the state of an item that is not a person">
+  Use a [Tag](../tag/index.mdx).
+</DosDonts>
+
+## Anatomy
+
+![Avatar anatomy: container, initials and status indicator](./anatomy.png)
+
+1. **Container**: sets the size and the shape.
+2. **Content**: the photo, the initials or the person icon.
+3. **Status indicator** (optional): a dot in the corner, with its own shape for each state.
+
+## Sizes
+
+| Size | Measurement |
+| --- | --- |
+| `lg` (default) | 40px |
+| `md` | 32px |
+| `sm` | 24px |
+
+## Shapes
+
+| Shape | When to use |
+| --- | --- |
+| **Circle** (default) | People. |
+| **Rounded** | Organizations, projects and teams. |
+| **Square** | Entities with a logo or brand. |
+
+## Content
+
+The Avatar picks the content in this order: **photo**, then **initials**, then the **person icon**. If the photo fails to load, the initials take its place.
+
+## Colors
+
+`gray` (default), `blue`, `green`, `orange`, `red` and `violet`. Color only tells one avatar from another. **It carries no meaning.**
+
+## Status
+
+`online`, `away`, `busy` and `offline`, each with its own color and shape, so that people who cannot tell colors apart can also tell the states apart.
+
+<ComponentEmbed component="Avatar" variant="status" />
+
+## Group
+
+The Avatar Group stacks several avatars with an overlap and a ring in the surface color. It is the way to show teams and participants without taking up much space.
+
+## Related
+
+- [Image](../image/index.mdx)
+- [Tag](../tag/index.mdx)
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx)

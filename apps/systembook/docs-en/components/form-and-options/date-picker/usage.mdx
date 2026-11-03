@@ -1,0 +1,46 @@
+---
+title: "Usage"
+---
+
+## Calendar or typing?
+
+| Situation | Use |
+| --- | --- |
+| Upcoming date, or the weekday matters | Calendar (default) |
+| Distant date the person already knows | `editable` |
+| Period, such as a stay | `range` |
+| Period the person already knows, such as contract dates | `editable range` |
+
+With `editable`, the person can still open the calendar. The reverse does not hold: without `editable`, typing is not possible, and getting to 1985 month by month is tiring, even with the month and year grids.
+
+## Limit the dates
+
+- Use `min` and `max` to cut off the ends: a booking that cannot be in the past, a deadline that cannot go past the end of the quarter.
+- For gaps in the middle, such as holidays or days already booked, mark the days as **unavailable**. They get a strikethrough, not just a fainter color, so they are not confused with days outside the limit.
+- In a period, only the ends need to be available: a stay can span an unavailable day.
+
+<DosDonts variant="do" title="Limits visible before the error">
+  A check-in that only accepts dates from today onward: past days cannot even be chosen.
+</DosDonts>
+
+<DosDonts variant="dont" title="Accept and reject later">
+  Letting people choose any date and only saying, on submit, that it cannot be in the past.
+</DosDonts>
+
+## Language and week
+
+- Set the product's `locale`. It changes the language of the month and the weekdays and the field's format, but not the submitted value, which is always in ISO 8601 (`2026-01-16`).
+- The field writes the month abbreviated: "Jan 16, 2026". `10/11/2026` is October in the United States and November in Brazil; the written month avoids the confusion.
+- Set the first day of the week according to the audience: Sunday in Brazil and the United States, Monday in most of Europe.
+
+## Label, hint and errors
+
+- The label says **which date**: "Due date", "Check-in". With `range`, name the period: "Stay".
+- With `editable`, the format appears below the field. If you use a hint, include the format in it.
+- Write a message for each error, saying what to do: "Choose a date from today onward", "The end date can't be before the start date".
+
+## Best practices
+
+- Do not use three Selects (day, month, year) when the Date Picker does the job.
+- Do not prefill with today's date if the person really needs to choose: many people submit without noticing.
+- For periods, show the total beside it when it matters, such as "5 nights".

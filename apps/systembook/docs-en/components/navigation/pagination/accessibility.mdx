@@ -1,0 +1,26 @@
+---
+title: "Accessibility"
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Moves through the pagination buttons. |
+| `Enter` or `Space` | Goes to the chosen page. |
+
+After navigating, focus stays on the control that was used. If it becomes disabled or disappears (like "Next" on the last page), focus moves to the current page.
+
+## Screen reader
+
+- The pagination is a navigation landmark with a name, set by `label`.
+- The current page is announced as current (`aria-current="page"`).
+- Each page has a name like "Page 3", and the previous and next buttons have their own names.
+- After each change, an invisible region announces "Page 3 of 20".
+- The ellipses are decorative and stay out of the accessibility tree.
+
+## For designers
+
+- Translate the accessible texts (`previous-label`, `next-label`, `page-label` and `status-label`) into the product's language.
+- Make sure the current page stands out through more than color.
+- Keep a comfortable touch target: the buttons are small and close together.

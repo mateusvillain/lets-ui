@@ -1,0 +1,34 @@
+---
+title: "Code"
+---
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `aria-label` | `string` | `Card` |
+| `actions-label` | `string` | `Card actions` |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-card>
+  <p>Card content</p>
+  <button slot="actions" class="btn btn--primary btn--lg">Action</button>
+</lui-card>
+```
+
+### CSS class
+
+```html
+<div class="card card--border">
+  <div class="card__body">
+    <p>Card content</p>
+  </div>
+  <div class="card__actions">
+    <button class="btn btn--primary btn--lg">Action</button>
+  </div>
+</div>
+```

@@ -1,0 +1,93 @@
+---
+title: "Writing"
+subtitle: "Words are part of the interface. These guidelines help you write clear, consistent and human copy."
+---
+
+## Voice and tone
+
+The product's **voice** is constant: clear, direct and respectful. The **tone** changes with the moment.
+
+| Moment | Tone | Example |
+| --- | --- | --- |
+| Common task | Neutral and objective | "Project created." |
+| First use | Welcoming | "Create your first project to get started." |
+| Success | Positive, without overdoing it | "Changes saved." |
+| Error | Serious, helpful, blame-free | "Couldn't save. Check your connection and try again." |
+| Destructive action | Clear and direct | "Delete 3 files? This can't be undone." |
+
+Avoid humor in errors and in data loss.
+
+## Principles
+
+- **Be clear**: use simple words and short sentences.
+- **Be specific**: say what happened and what to do.
+- **Be brief**: cut everything that does not help the person decide or act.
+- **Be consistent**: always use the same term for the same thing.
+- **Talk to the person**: use the second person ("you") and the active voice.
+- **Be inclusive**: use neutral language and avoid jargon, slang and metaphors that do not translate.
+
+## Capitalization and punctuation
+
+- **Sentence case** everywhere: headings, buttons, labels and menus ("Create account", not "Create Account").
+- **No period** in headings, labels, buttons and menu items.
+- **Period** in complete sentences and in descriptions of more than one sentence.
+- Avoid exclamation points. Save them for truly special moments.
+- Avoid all caps in sentences. The [Heading](../../components/typography/heading/index.mdx) `overtitle` is the design exception.
+
+## Buttons and actions
+
+The label is a **verb in the imperative** that says the result: "Save changes", "Delete project", "Send invite".
+
+- Use **up to three words**.
+- Name what will be affected in destructive actions ("Delete 3 files").
+- Avoid "OK", "Yes", "No" and "Click here".
+
+See [Button](../../components/actionable/button/usage.mdx).
+
+## Labels, hints and placeholders
+
+- **Label**: a short noun that names the field ("Full name"). Always visible.
+- **Hint**: guidance that prevents the error ("Use 8 or more characters").
+- **Placeholder**: at most a format example, never the label.
+
+See [Input](../../components/form-and-options/input/usage.mdx).
+
+## Error messages
+
+A good error message answers three questions: **what happened**, **why** and **how to fix it**.
+
+| Avoid | Prefer |
+| --- | --- |
+| "Invalid input." | "Enter a valid email, like name@company.com." |
+| "Error 500." | "Couldn't load the data. Try again in a moment." |
+| "You got the password wrong." | "The password is incorrect. Try again or reset your password." |
+
+Do not blame the person, and do not use technical terms as the only explanation.
+
+## Empty states
+
+Explain **why it is empty** and **what to do next**. See [Empty State](../../components/content/empty-state/usage.mdx).
+
+## Confirmations and notifications
+
+- State the **result** after the action: "Invite sent to ana@company.com".
+- Use the tense of the result: "File deleted", not "Deleting file".
+- Keep temporary messages short (see [Toast](../../components/content/toast/usage.mdx)).
+
+## Numbers, dates and units
+
+- Follow the format of the person's **language and region**.
+- Show **units** next to the value ("12 MB", "$29.90") or use prefixes and suffixes in the field.
+- Prefer spelled-out dates in contexts that can be confusing ("October 5, 2026").
+
+## Languages
+
+The texts components generate on their own, such as "Close", "Show password" or "Page 3 of 20", are **in English by default**. All of them can be replaced through an attribute. Set these texts in the product's language and check each one when you use the component.
+
+Leave room for longer text: translations often take up 30% to 50% more space.
+
+## Inclusive language
+
+- Use gender-neutral terms (such as "they" or "person") when the person's gender does not matter.
+- Avoid expressions that exclude or stereotype.
+- Describe what the image communicates in the alternative text, without assuming what people look like.

@@ -1,0 +1,90 @@
+---
+title: "Code"
+---
+
+## Updating the value
+
+The component updates the bar when the properties change, but it does not generate the `value-text`: the text depends on the unit and the language. Update `value` and `valueText` together.
+
+```js
+const bar = document.querySelector('lui-progress-bar');
+
+function updateStorage(usedGB, totalGB) {
+  bar.value = usedGB;
+  bar.max = totalGB;
+  bar.valueText = `${usedGB} GB of ${totalGB} GB`;
+}
+
+updateStorage(3.2, 10);
+```
+
+## Why not `<progress>`
+
+The native `<progress>` does not follow Let's UI themes and brands: its appearance changes from browser to browser and it barely accepts styling. It also does not offer the sizes, the variants or the indeterminate mode with reduced motion. That is why Progress Bar uses a `div` with `role="progressbar"` and the `aria-value*` attributes, which screen readers announce the same way. In your own HTML, without Let's UI styles, `<progress>` is still the first choice.
+
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | — | Current progress, clamped between `0` and `max`. Without it, the bar is indeterminate. |
+| `max` | `number` | `100` | Value that completes the bar. Zero, negative or invalid becomes `100`. |
+| `variant` | `string` | `primary` | `primary`, `success`, `caution` or `danger`. |
+| `size` | `string` | `md` | `sm` (4px), `md` (8px) or `lg` (12px). |
+| `label-placement` | `string` | `top` | `top` or `inline`. |
+| `label` | `string` | `Progress bar` | Visible label and accessible name. The default is only used as `aria-label` and does not appear on screen. |
+| `value-text` | `string` | `''` | Text in place of the percentage, also used as `aria-valuetext`. Ignored in indeterminate mode. |
+| `caption` | `string` | `''` | Caption below the track, announced when it changes. |
+| `hide-label` | `boolean` | `false` | Hides the visible label; `label` still names the bar. |
+| `hide-value` | `boolean` | `false` | Hides the value next to the label. |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-progress-bar
+  value="40"
+  label="Uploading files"
+  caption="8 of 20 files"
+></lui-progress-bar>
+
+<lui-progress-bar
+  value="3.2"
+  max="10"
+  value-text="3.2 GB of 10 GB"
+  label="Storage"
+></lui-progress-bar>
+
+<!-- Indeterminate -->
+<lui-progress-bar label="Loading"></lui-progress-bar>
+```
+
+### CSS class
+
+Without the Web Component, the fill width comes from `--lui-progress-bar-value`, always as a percentage of the track, and the ARIA attributes are up to you:
+
+- `role="progressbar"` on the track (`.progress-bar__track`), with `aria-valuemin`, `aria-valuemax` and `aria-valuenow`. In indeterminate mode, omit `aria-valuenow`.
+- A name: `aria-labelledby` pointing to the label, or `aria-label` when there is no label.
+- For other units, compute `value / max` for the variable and use `aria-valuetext` with the displayed text.
+- The caption with `aria-live="polite"` in the HTML from the start, even when empty, linked to the track through `aria-describedby` when it has text. When empty, write it with no space between the tags (`<span …></span>`), so it takes no space below the track.
+
+```html
+<div class="progress-bar progress-bar--md progress-bar--primary">
+  <span class="progress-bar__label" id="upload-label">Uploading files</span>
+  <span class="progress-bar__value" aria-hidden="true">40%</span>
+  <div
+    class="progress-bar__track"
+    role="progressbar"
+    aria-labelledby="upload-label"
+    aria-describedby="upload-caption"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="40"
+  >
+    <span class="progress-bar__indicator" style="--lui-progress-bar-value: 40%"></span>
+  </div>
+  <span class="progress-bar__caption" id="upload-caption" aria-live="polite">8 of 20 files</span>
+</div>
+```
+
+Modifiers: `progress-bar--{primary|success|caution|danger}`, `progress-bar--{sm|md|lg}`, `progress-bar--inline` and `progress-bar--indeterminate`.

@@ -1,0 +1,43 @@
+---
+title: "Usage"
+---
+
+## Organize the items
+
+- **Sort by frequency of use**, with the most common actions at the top.
+- **Group by purpose** and separate the groups with dividers.
+- **Place destructive actions last**, separated from the others and with the `danger` variant.
+- Limit the menu to about **seven items** per group. Beyond that, the person has to read everything to find what they want.
+
+<DosDonts variant="do" title="Grouped items and the dangerous action isolated">
+  "Edit", "Duplicate" and "Move", a divider, and then "Delete" in red. The separation prevents accidental clicks.
+</DosDonts>
+
+<DosDonts variant="dont" title="Long, unordered list">
+  Fifteen loose items, with "Delete" in the middle. It is hard to scan and easy to get wrong.
+</DosDonts>
+
+## Write the items
+
+- Use a **verb in the imperative** and, when it fits, the object: "Edit profile", "Copy link".
+- Sentence case and no final punctuation.
+- Be consistent: if one item is "Delete", do not use "Remove" in another menu for the same action.
+- Items that open a dialog can end with an ellipsis ("Rename…"), indicating there is one more step.
+
+## Shortcuts
+
+Show the keyboard shortcut when there is one, to teach the person how to go faster. Shortcuts appear aligned to the right and use the [Shortcut](../../typography/shortcut/index.mdx) component.
+
+## Submenus
+
+Use submenus sparingly and **never more than one level**. Submenus hide options and are hard to use with a mouse and on touch screens. If you need more levels, rethink the organization.
+
+## Disabled items
+
+Keep a disabled item visible when the person may expect the action to exist, but it is not available right now. If the action never applies to the context, remove the item.
+
+## Best practices
+
+- Use the menu for **actions**, not for navigation.
+- The trigger should indicate that it opens a menu. A "more options" Icon Button (three dots) or a button with an arrow is a good pattern.
+- Give the trigger a clear name, like "Options" or "More actions".

@@ -1,0 +1,45 @@
+---
+title: "Code"
+---
+
+## With label
+
+Use it when you need a text separator between sections — common in authentication flows (e.g. "or") or to name groups of content.
+
+## Vertical
+
+Use `orientation="vertical"` (web component) or the `.divider--vertical` class (HTML) to separate items in horizontal layouts such as toolbars and inline action groups.
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `label` | `string` | `''` |
+| `orientation` | `string` | `horizontal` |
+
+## Usage
+
+### Web Component
+
+```html
+<!-- Horizontal -->
+<lui-divider></lui-divider>
+
+<!-- Horizontal with label -->
+<lui-divider label="or"></lui-divider>
+
+<!-- Vertical -->
+<lui-divider orientation="vertical"></lui-divider>
+```
+
+### CSS class
+
+```html
+<hr class="divider">
+<!-- Vertical: -->
+<div class="divider divider--vertical"></div>
+<!-- With label: -->
+<div class="divider divider--labeled">
+  <span class="divider__label">or</span>
+</div>
+```

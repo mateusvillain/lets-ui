@@ -1,0 +1,314 @@
+---
+title: "Color"
+subtitle: "Color communicates hierarchy, state, action and identity. In Let's UI it always comes from a token with a defined role, so it follows the brand and the theme without rework."
+---
+
+## Purpose
+
+Color has four jobs in the interface, and each token exists for one of them:
+
+| Job | What color does | Example |
+| --- | --- | --- |
+| **Hierarchy** | Separates heading, body and supporting information. | `text.heading` stronger than `text.caption`. |
+| **State** | Shows whether something succeeded, needs attention or failed. | Success Alert, invalid field. |
+| **Action** | Indicates what is clickable and which is the main action. | Primary button, links, focus ring. |
+| **Identity** | Makes the product look like the brand. | The `primary` family, which changes with `data-brand`. |
+
+If a color is not doing one of these jobs, it probably does not need to be on the screen.
+
+## Principles
+
+- **Color communicates, it does not decorate.** Each family has a meaning, and that meaning is the same across the whole product.
+- **Role before hue.** Think "body text" or "error background", never "gray 7" or "red 4".
+- **Never color alone.** Every meaning conveyed by color also appears in text, an icon or a shape.
+- **Contrast first.** A combination that fails contrast does not go on the screen, however beautiful it is.
+- **Little accent color.** A screen with a single strong color guides the eye. Several strong colors compete with each other.
+
+## How color is organized
+
+Color goes through **four layers**. Each one only points to the layer below, and that is what lets you swap brand and theme without touching the components.
+
+| Layer | Tokens | Changes with | Used by |
+| --- | --- | --- | --- |
+| **Primitives** | `lui.color.{blue, gray, green, orange, red, violet}.1–8` and `lui.color.black.alpha.1–8` | Theme (`data-theme`) | Other tokens only. |
+| **Brand** | `lui.brand.color.{primary, secondary}.1–8` | Brand (`data-brand`) and theme | Other tokens only. |
+| **Semantic** | `lui.color.{family}.{property}.{variant}` | Nothing: they are aliases | Components and screens. |
+| **Component** | `lui.link.color.*`, `lui.divider.color.*` | Nothing: they are aliases | A single component. |
+
+A semantic token **has no value of its own**: it points to a primitive or to a brand color. `lui.color.neutral.text.body` points to `lui.color.gray.7`, and it is `gray.7` that changes when the dark theme comes in. That is why the semantic layer is identical in both themes, and a component written once works in all of them.
+
+<Callout variant="info">
+  Components consume the **semantic** layer. Primitives and brand colors are the raw material of the tokens, not an API for screens. See [Design tokens](../tokens/design-tokens.mdx) for the full architecture.
+</Callout>
+
+## Palettes
+
+| Palette | Families | Role |
+| --- | --- | --- |
+| **Brand** | `primary`, `secondary` | Identity and main action. The values come from each brand. |
+| **Neutral** | `neutral` (on top of `gray`) | Structure: text, backgrounds, borders and dividers. Most of the screen. |
+| **Semantic** | `success`, `caution`, `danger`, `info` | State and feedback. Each one has a fixed meaning. |
+| **Support** | `violet` and `black.alpha` | No semantic role. `violet` serves categorical data and illustrations; `black.alpha` serves translucent overlays. |
+
+### What each family means
+
+| Family | Meaning | Use for | Do not use for |
+| --- | --- | --- | --- |
+| **Primary** | Main action and identity. | Primary button, links, selected tab, focus. | Long text, large backgrounds. |
+| **Secondary** | Supports the primary, with less weight. | Secondary button, supporting actions. | Signaling state. |
+| **Neutral** | Content and structure, without carrying meaning. | Text, surfaces, borders, icons. | Drawing attention. |
+| **Success** | Something went well or is active. | Confirmations, positive statuses. | "Brand green" decoration. |
+| **Caution** | Attention: there may be a problem. | Warnings, upcoming deadlines, limits. | Errors that have already happened. |
+| **Danger** | Error or destructive action. | Failures, deletions, invalid fields. | Ordinary highlights, promotions. |
+| **Info** | Useful, neutral information. | Tips, what's new, context. | Actions. |
+
+## Scales
+
+Each primitive family is a ramp of **8 steps**. The step number is not "light to dark": it is the **distance from the surface**. Step `1` sits close to the page background and `8` has maximum contrast against it, **in both themes**.
+
+| Theme | `gray.1` | `gray.4` | `gray.8` |
+| --- | --- | --- | --- |
+| Light | `#ffffff` | `#6c7081` | `#131519` |
+| Dark | `#181a20` | `#7a8296` | `#f4f6fa` |
+
+In the dark theme the whole ramp is inverted. That is why `text.heading → gray.8` is dark in the light theme and light in the dark theme, without anyone having to write a rule for the dark theme.
+
+The `blue` and `green` ramps and the `lets-ui` brand's `primary` are defined in **OKLCH**, with a `hex` fallback. In OKLCH perceived lightness is an axis of its own, so step `4` can be pinned at the point where white text on top reaches 4.5 : 1 without touching the hue. `blue`, which feeds `info`, uses a cyan-blue so it is not confused with the primary.
+
+### The role of each step
+
+| Step | Typical role | Semantic tokens that point to it |
+| --- | --- | --- |
+| `1` | Surface and soft background tint. | `background.surface` of every family, `text.inverse` |
+| `2` | Subtle borders and dividers. | `neutral.border.subtle` |
+| `3` | Neutral container fills. | `neutral.background.container` |
+| `4` | The family's "full" color. | `background.container`, `border.default`, `icon.default` |
+| `5` | Border hover and focus ring. | `focus-ring`, `danger.border.hover`, `neutral.border.pressed` |
+| `6` | Border pressed and visited link. | `danger.border.pressed`, `link.visited` |
+| `7` | Body text. | `neutral.text.body` |
+| `8` | Headings, icons and the strongest surface. | `neutral.text.heading`, `neutral.icon.default`, `neutral.background.overlay` |
+
+## Primitives
+
+Use the SCSS function `color($family, $step)` only when there is no semantic role, as in charts.
+
+### Blue
+
+<TokenTable group="lui.color.blue" />
+
+### Gray
+
+<TokenTable group="lui.color.gray" />
+
+### Green
+
+<TokenTable group="lui.color.green" />
+
+### Orange
+
+<TokenTable group="lui.color.orange" />
+
+### Red
+
+<TokenTable group="lui.color.red" />
+
+### Violet
+
+<TokenTable group="lui.color.violet" />
+
+### Black Alpha
+
+Translucent overlays, from 2% to 28% opacity. They are black in the light theme and white in the dark theme, so they darken or lighten the surface in the right direction.
+
+<TokenTable group="lui.color.black.alpha" />
+
+## Brand colors
+
+`primary` and `secondary` are defined per brand, in one file per theme. In the default brand (`lets-ui`), the primary is blue and the secondary is gray.
+
+### Primary
+
+<TokenTable group="lui.brand.color.primary" />
+
+### Secondary
+
+<TokenTable group="lui.brand.color.secondary" />
+
+## Semantic tokens
+
+A semantic token's name says **what** it is for: `lui.color.{family}.{property}.{variant}`.
+
+| Property | Variants | SCSS function | CSS example |
+| --- | --- | --- | --- |
+| `background` | `surface` (soft tint), `container` (full color), `overlay` (`neutral` only) | `bg($category, $family)` | `var(--lui-color-danger-background-surface)` |
+| `border` | `default`, `subtle`, `hover`, `pressed` | `stroke($family, $category)` | `var(--lui-color-neutral-border-subtle)` |
+| `text` | `heading`, `body`, `caption`, `inverse`, `error` | `text($variant)` | `var(--lui-color-neutral-text-body)` |
+| `icon` | `default`, `inverse` | `icon($family)` | `var(--lui-color-success-icon-default)` |
+| `focus-ring` | one color per family | `focus-ring($family)` | `var(--lui-focus-ring-primary)` |
+
+Not every family has every property: the system only creates a token that some component uses. `danger` and `neutral` have `border.hover` and `border.pressed` because form fields react to interaction through the border; `caution` and `info` have no `focus-ring` because no interactive component uses those families.
+
+### Surface or container?
+
+| Variant | Appearance | Text on top | Example |
+| --- | --- | --- | --- |
+| `background.surface` | Soft tint, close to the page background. | `text.body` or `text.heading` | Alert, `surface` Tag. |
+| `background.container` | The family's full color. | `text.inverse` | Primary button, `container` Tag. |
+
+<DosDonts variant="do" title="Background and text pair of the same level">
+  `background.container` with `text.inverse`, or `background.surface` with `text.body`. The pairs were designed to go together.
+</DosDonts>
+
+<DosDonts variant="dont" title="Colored text on a background of the same family">
+  `primary.text.body` on `primary.background.surface`. Both come from the same ramp and fail contrast.
+</DosDonts>
+
+### Primary
+
+<TokenTable group="lui.color.primary" />
+
+### Secondary
+
+<TokenTable group="lui.color.secondary" />
+
+### Neutral
+
+<TokenTable group="lui.color.neutral" />
+
+### Success
+
+<TokenTable group="lui.color.success" />
+
+### Caution
+
+<TokenTable group="lui.color.caution" />
+
+### Danger
+
+<TokenTable group="lui.color.danger" />
+
+### Info
+
+<TokenTable group="lui.color.info" />
+
+### Link
+
+<TokenTable group="lui.color.link" />
+
+## States
+
+Interaction states **have no color of their own per variant**. The system resolves each one with a single mechanism that works in any family, brand or theme.
+
+| State | How it is resolved | Where |
+| --- | --- | --- |
+| **Hover** | An 8% tint layer mixed into the resting background. The tint depends on the type of component (see below). | `state(hover)`, `state-layer()` mixin |
+| **Pressed** | The same layer, at 16%. | `state(pressed)` |
+| **Focus** | A 3px ring in the family's `focus-ring` color. | `focus-ring($family)` on `:focus-visible` |
+| **Selected** | The component switches the resting background (`--lui-bg`) to `background.container` and the text to `text.inverse`. Hover and pressed keep working on top. | `card` Tabs |
+| **Disabled** | Brand opacity (`lui.opacity.disabled`, 40%) over the whole component, and a `not-allowed` cursor. | `opacity(disabled)` |
+| **Loading** | The variant's colors do not change: the content gives way to an indicator and interaction is blocked. | Button `loading` |
+| **Error** | The border switches to `danger.border.default` and the message uses `danger.text.error`. | Input, Select, Textarea |
+
+### The interaction layer
+
+The layer's color depends on the type of component:
+
+- **Surface components**, transparent or on the neutral background (a menu item, a tab, an Icon Button), mix in the **color of their own content** (`currentColor`). Since content and background already contrast with each other, the layer lightens what is dark and darkens what is light, without measuring anything and without knowing which surface the component sits on.
+- **Filled components**, with a solid background and a label on top (Button, the current Pagination page, the selected `card` tab, the Stepper circle, checked Checkbox, Radio and Switch), mix in the **color opposite to the label**, with the `tint()` function. A colored fill already starts close to the minimum contrast, and mixing the label color into it would bring the two closer: the text would lose contrast precisely on hover. With the opposite color, contrast **increases** on hover and pressed. In practice, a fill with a light label darkens in the light theme and lightens in the dark one; one with a dark label, like the neutral button, does the reverse.
+
+The amounts (8% and 16%) do not vary by theme or brand, so they **are not tokens**: they live as constants in `_functions.scss`, next to the logic that uses them.
+
+```scss
+.my-control {
+  color: text(inverse);
+  // Filled, light label: the tint is the opposite color.
+  @include states(primary, null, bg(container, primary), tint(foreground));
+}
+```
+
+<Callout variant="tip">
+  Set the resting background with the `state-layer($bg, $tint)` or `state-base($bg, $tint)` mixin, never with `background-color` directly. That way the hover and pressed rules keep applying. In surface components, omit `$tint`.
+</Callout>
+
+## Contrast
+
+The values below were calculated from the tokens, with the WCAG formula. **AA** requires 4.5 : 1 for text, 3 : 1 for large text and for interface elements. **AAA** requires 7 : 1 for text.
+
+### Text on neutral surfaces
+
+| Pair | Light | Dark | Level |
+| --- | --- | --- | --- |
+| `text.heading` on `neutral.background.surface` | 18.28 | 16.07 | AAA |
+| `text.body` on `neutral.background.surface` | 14.15 | 11.00 | AAA |
+| `text.caption` on `neutral.background.surface` | 4.92 | 4.52 | AA |
+| `text.error` on `neutral.background.surface` | 4.86 | 5.07 | AA |
+| `text.body` on `neutral.background.container` | 8.65 | 5.30 | AA (AAA in light) |
+| `text.inverse` on `neutral.background.overlay` | 18.28 | 16.07 | AAA |
+| `text.body` on `{success, caution, danger, info}.background.surface` | 11.06 to 12.84 | 9.43 to 10.85 | AAA |
+
+### Inverse text on containers
+
+| Pair | Light | Dark | Level |
+| --- | --- | --- | --- |
+| `text.inverse` on `secondary.background.container` | 4.92 | 4.52 | AA |
+| `text.inverse` on `danger.background.container` | 4.86 | 5.07 | AA |
+| `text.inverse` on `primary.background.container` | 4.53 | 5.35 | AA |
+| `text.inverse` on `info.background.container` | 4.56 | 5.56 | AA |
+| `text.inverse` on `success.background.container` | 4.53 | 5.80 | AA |
+| `text.inverse` on `caution.background.container` | 3.83 | 5.38 | Light: large text only |
+
+### Interface elements (minimum 3 : 1)
+
+| Pair | Light | Dark | Result |
+| --- | --- | --- | --- |
+| `neutral.border.default` on the surface | 4.92 | 4.52 | Pass |
+| `danger.border.default` on the surface | 4.86 | 5.07 | Pass |
+| `primary.border.default` on the surface | 4.53 | 5.35 | Pass |
+| `neutral.border.subtle` on the surface | 1.17 | 1.51 | Decorative only |
+| `primary` focus ring | 6.33 | 6.67 | Pass |
+| `neutral`, `danger`, `success` focus ring | 6.25 to 7.07 | 4.59 to 6.97 | Pass |
+| `success`, `caution`, `danger`, `info` icons on the surface | 3.83 to 4.86 | 5.07 to 5.80 | Pass |
+| Link (`link.default`) on the surface | 4.53 | 5.35 | Pass |
+
+<Callout variant="warning">
+  In the light theme, white text on `caution.background.container` sits at 3.83 : 1: it only works for large text. Prefer the `surface` variant for warnings with small text. The debt is recorded in [Accessibility](../accessibility/overview.mdx).
+</Callout>
+
+## Charts, tags, status and categorical data
+
+- **Status** uses the semantic families: `success`, `caution`, `danger` and `info`. Always with a label or icon next to it.
+- **Tags** have two intensities: `surface` (soft tint, `body` text) for most cases, and `container` (full color, `inverse` text) for the few and important.
+- **Categorical data** (chart series, legend categories) does not have its own tokens yet. Use the primitives at step `4` in the order `blue`, `orange`, `green`, `violet`, `red` and `gray`, and limit the chart to those six series.
+- **Sequential data** (from less to more) uses the steps of a **single** family, from `2` to `7`.
+- In charts, `red` and `green` side by side are indistinguishable for many people. Separate them by position, pattern or a direct label.
+- Do not reuse a semantic color as a category: a red series suggests an error.
+
+## Accessibility
+
+- **Meaning never depends on color alone** (WCAG 1.4.1). An invalid field has a red border **and** a text message. A status has color **and** a label or shape.
+- Text needs **4.5 : 1**; large text (from 24px, or 18.66px bold) and interface elements need **3 : 1** (WCAG 1.4.3 and 1.4.11).
+- Check every pair **in both themes**: what passes in dark can fail in light, as the tables above show.
+- In the operating system's high contrast mode (`forced-colors`), components fall back to system colors. Do not encode information in `background-image` or in shadows, which disappear in that mode.
+
+## Best practices
+
+- Choose the **role** first (background, text, border, icon) and then the **family** (primary, danger...).
+- Use `danger` only for errors and destruction. If everything is red, nothing draws attention.
+- Reserve `background.container` for small, important elements. For large areas, use `background.surface`.
+- In text, use `text.caption` only for secondary information: it is close to the 4.5 : 1 limit.
+- When creating a new token, check the contrast of **every** pair it will appear in.
+
+## Anti-patterns
+
+<DosDonts variant="do" title="Semantic token">
+  `background-color: bg(container, primary)` on a button. It changes with the brand and with the dark theme.
+</DosDonts>
+
+<DosDonts variant="dont" title="Hexadecimal or primitive in the component">
+  `background-color: #0a7ac8` or `color(blue, 4)`. It does not follow a brand change, and the next color revision does not reach it.
+</DosDonts>
+
+- **A dedicated hover color.** Creating `primary.background.hover` duplicates what the interaction layer already resolves for every family.
+- **Inverting colors by hand for the dark theme.** The ramp already inverts. A `[data-theme="dark"]` rule in a component is almost always a sign of the wrong token.
+- **Semantic color as decoration.** A green header "because it matches" teaches the person to ignore green when it means success.
+- **Color as the only signal.** Two table rows that differ only by text color.

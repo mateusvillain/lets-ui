@@ -1,0 +1,40 @@
+---
+title: "Accessibility"
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Esc` | Closes the Drawer and returns focus to the element that opened it. With stacked dialogs, closes only the top one. |
+| `Tab` / `Shift+Tab` | Moves through the panel's elements. Focus stays **trapped** inside it. |
+| `Enter` or `Space` | Activates the focused button. |
+
+## Screen reader
+
+- The panel is announced as a **modal dialog**, with the title as its name.
+- The page behind is inaccessible while the Drawer is open, and focus does not escape it.
+- The close button has an accessible name (`close-label`, default "Close drawer"). Translate it into the product's language.
+- When closed, the panel stays out of the accessibility tree.
+
+## Focus
+
+On opening, focus moves into the panel. On closing, it returns to the element that opened it, without losing the position.
+
+This applies to every way of closing: `Esc`, the close button, the backdrop, an element with `data-drawer-close`, `closeDrawer()` or removing `open`.
+
+## Stacked dialogs
+
+With one dialog open over another (a Modal opened from inside the Drawer, for example), `Esc` closes only the top one, and only that one traps focus. Focus returns to the trigger inside the dialog that remains open, and a second `Esc` closes the one below.
+
+A component inside the dialog that uses `Esc`, such as an open [Dropdown Menu](../../actionable/dropdown-menu/index.mdx) or a Toast, consumes the key: it closes that component, and the dialog stays open.
+
+## Trigger
+
+The Drawer tells the trigger whether it is open (`aria-expanded`) and that it opens a dialog (`aria-haspopup`). On a [Button](../../actionable/button/index.mdx), [Icon Button](../../actionable/icon-button/index.mdx) or [Link](../../navigation/link/index.mdx), the state goes through the ARIA property and reaches the inner control, without creating an extra node in the accessibility tree. The trigger does not get `aria-controls`: the dialog's ID lives inside the shadow root, and the reference does not cross that boundary.
+
+## For designers
+
+- Always give the Drawer a title: it is the name the screen reader announces.
+- Make sure the panel works with the keyboard alone, including forms and actions.
+- Do not rely on the backdrop alone for closing: always offer a close button.

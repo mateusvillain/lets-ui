@@ -1,0 +1,195 @@
+---
+title: "Design tokens"
+subtitle: "Tokens are the source of truth between design and code: every visual decision that can vary has a name, a role and a single place where it is defined."
+---
+
+## What a token is
+
+A token is a **named design decision**. Instead of `#282b33` scattered across fifty files, there is `lui.color.neutral.text.body`, defined once. Designers and developers talk about the same name, and changing the decision means changing a single place.
+
+In Let's UI, tokens are written in JSON in the **DTCG** format (W3C Design Tokens Community Group), in `packages/lets-ui-tokens/tokens/`, and compiled by [Terrazzo](https://terrazzo.app/) into CSS and SCSS. That JSON produces the product's custom properties, the components' SCSS functions, the tables in this documentation and the Brand Studio editor.
+
+To browse every token and its values, see the [Token list](./token-list.mdx).
+
+## When a value becomes a token
+
+**A token exists for what varies.** A value earns a token when it changes:
+
+- across **brands** (`data-brand`): the primary color, the corner radius, the type family;
+- across **themes** (`data-theme`): the whole color palette;
+- across **semantic roles**: body text and caption text are different grays for a reason.
+
+The inverse is just as important: **a constant is not a token**. The interaction layer amounts (8% and 16%), transition timings and the `z-index` ladder are the same in every brand, every theme and every context. They stay in code, next to the logic that uses them. Wrapping them in a token would cost a custom property on every page and a layer of indirection, with no flexibility in return.
+
+The question is not "is this a design value?", but "**will this ever resolve differently?**".
+
+## Layers
+
+Tokens are organized in layers, and each one only points to the one below.
+
+| Layer | Question it answers | Examples | Where it lives |
+| --- | --- | --- | --- |
+| **Primitive** | Which values exist? | `lui.color.blue.4`, `lui.spacing.fixed.16`, `lui.typography.weight.semibold` | `global/primitive.json`, `global/theme/colors.{light,dark}.json` |
+| **Brand** | Which values did this brand choose? | `lui.brand.color.primary.4`, `lui.brand.border.radius.md`, `lui.brand.grid.column.lg` | `brand/<brand>/foundation.json`, `brand/<brand>/colors.{light,dark}.json` |
+| **Semantic** | What is this value for? | `lui.color.danger.text.error`, `lui.border.radius.md`, `lui.elevation.floating` | `global/semantic.json` |
+| **Component** | Which value does this component use? | `lui.link.color.text.visited`, `lui.divider.color.border.default` | `global/component.json` |
+
+```text
+lui.brand.color.primary.4          →  lui.color.primary.background.container  →  Primary Button
+(brand: #0a7ac8 light, #2f91f3 dark)    (semantic: alias, no value of its own)       (component: bg(container, primary))
+```
+
+### Primitive
+
+The raw values: color scales, spacing, weights, line heights, widths. They say nothing about usage. Primitive color is the only one that changes with the theme.
+
+### Brand
+
+The decisions a brand can make: `primary` and `secondary` colors, font families and sizes, the weight of each heading scale, radii, disabled opacity and the entire grid. Switching brands means switching this file.
+
+### Semantic
+
+The **system's API**. The name states the role ("danger container background"), and the value is an alias for a primitive or a brand decision. It is the layer that components and screens consume.
+
+### Component
+
+A token that serves a single component, created only when the component needs a value that **other tokens do not describe** and that a brand might want to change on its own. Today there are two: the Link colors and the Divider color.
+
+<Callout variant="warning">
+  Components and screens consume the **semantic** layer (or the component one). A primitive used directly in a component does not follow a brand change, and the next revision of the role does not reach it. Primitives are raw material, not API.
+</Callout>
+
+## Categories
+
+| Category | Tokens | Primitive | Brand | Semantic | Page |
+| --- | --- | --- | --- | --- | --- |
+| **Color** | 8-step palettes, alpha, roles per family | `lui.color.*` | `lui.brand.color.*` | `lui.color.{family}.*` | [Color](../properties/color.mdx) |
+| **Spacing** | Fixed and fluid scale | `lui.spacing.*` | — | — | [Spacing](../properties/spacing.mdx) |
+| **Typography** | Family, size, weight, line height, tracking, case | `lui.typography.*` | `lui.brand.typography.*` | composite scales | [Typography](../properties/typography.mdx) |
+| **Border** | Width and radius | `lui.border.width.*` | `lui.brand.border.radius.*` | `lui.border.*` | [Border](../properties/border.mdx) |
+| **Elevation** | 4-level shadows and focus rings | — | — | `lui.elevation.*`, `lui.focus-ring.*` | [Elevation](../properties/elevation.mdx) |
+| **Opacity** | Visible, hidden, disabled | `lui.opacity.*` | `lui.brand.opacity.*` | `lui.opacity.*` | — |
+| **Grid and breakpoint** | Breakpoints, columns, gutter, margin, maximum width | — | `lui.brand.grid.*` | — | [Grid](../properties/grid.mdx) |
+| **Motion** | There are no tokens: durations and curves are constants. | — | — | — | — |
+
+### Opacity
+
+<TokenTable group="lui.opacity" />
+
+<TokenTable group="lui.brand.opacity" />
+
+### Component tokens
+
+<TokenTable group="lui.link" />
+
+<TokenTable group="lui.divider" />
+
+## Naming convention
+
+Every name follows the same pattern, from general to specific:
+
+```text
+lui . [brand] . category . family  . property . variant
+lui .           color    . danger  . border   . hover
+```
+
+| Part | Rule | Examples |
+| --- | --- | --- |
+| `lui` | System prefix, always. Avoids collisions with other libraries. | — |
+| `brand` | Present only in brand decisions. | `lui.brand.color.primary.4` |
+| Category | The type of value. | `color`, `spacing`, `border`, `elevation`, `typography` |
+| Family | The semantic group or the palette. | `primary`, `neutral`, `danger`, `blue` |
+| Property | Where the value is applied. | `background`, `border`, `text`, `icon`, `radius` |
+| Variant | The intent or the state. | `surface`, `container`, `subtle`, `hover`, `heading` |
+
+- **Semantic, not visual.** `text.caption`, not `text.light-gray`. The name survives a change in value.
+- **Predictable.** Anyone who knows `danger.border.hover` can guess `neutral.border.hover`.
+- **Scales with numbers or sizes.** Numbers when the scale is open and ordered (`blue.1`–`8`, `spacing.fixed.16`); sizes when it is short (`xs`–`xl`). In the size scale, `1xs` and `1xl` are the steps just beyond `sm` and `lg`.
+- **The platform derives from the name.** In CSS, the dots become hyphens with `--` in front: `lui.color.neutral.text.body` → `--lui-color-neutral-text-body`.
+
+## Formats and outputs
+
+The JSON is the source; everything else is generated.
+
+| Output | File | For | How to import |
+| --- | --- | --- | --- |
+| **CSS custom properties** | `dist/letsui.tokens.css` | Any web project. Includes the theme and brand selectors. | `@lets-ui/tokens` or `@lets-ui/tokens/css` |
+| **SCSS map** | `dist/letsui.tokens.scss` | Components. The `token()` function returns the token's `var()`. | `@lets-ui/tokens/scss` |
+| **Static values** | `dist/letsui.tokens.static.{scss,json}` | Media queries and Sass loops, which cannot read `var()`. Breakpoints and columns only. | `@lets-ui/tokens/scss-static`, `@lets-ui/tokens/static` |
+
+```css
+.notice {
+  color: var(--lui-color-neutral-text-body);
+  background-color: var(--lui-color-caution-background-surface);
+  border: var(--lui-border-width-1) solid var(--lui-color-caution-border-default);
+  border-radius: var(--lui-border-radius-md);
+}
+```
+
+Inside the styles package, components do not call `token()` directly: they use the semantic functions in `_functions.scss` (`bg()`, `text()`, `stroke()`, `radius()`, `fluid()`), which read a short, hand-written map, `_tokens.map.scss`. That map decides which roles exist; to change a **value**, edit the JSON.
+
+<Callout variant="info">
+  There are no outputs for TypeScript, Figma Variables or native platforms (iOS, Android) yet. Since the source is already DTCG, they can be added as new Terrazzo plugins without changing the tokens. To edit the brand visually, there is **Brand Studio** (`studio.lets-ui.com`), which reads and writes the same files.
+</Callout>
+
+## Governance
+
+### Ownership
+
+Tokens belong to the **design system maintainers**. Anyone can propose a change through an issue or pull request; the review checks the "value that varies" criterion, the name, the layer and the contrast of the affected pairs.
+
+### Versioning
+
+Tokens are published in the `@lets-ui/tokens` package, which follows **SemVer** and is released together with the other packages in the monorepo:
+
+| Change | Version | Example |
+| --- | --- | --- |
+| Fix a value without changing the role | Patch | Adjust the tone of `red.4` so it passes contrast. |
+| Add a token or a family | Minor | Create `info.focus-ring`. |
+| Rename or remove a token | Major | Replace `text.caption` with `text.muted`. |
+
+### Changelog
+
+Every change comes in through a Conventional Commits commit with the `tokens` scope (`fix(tokens): …`, `feat(tokens): …`), and the repository changelog is generated from those commits on every release.
+
+### Deprecation and migration
+
+A token does not disappear from one version to the next:
+
+1. **Deprecate.** Mark the token with `$deprecated` in the JSON (DTCG format), with a message pointing to the replacement, and turn it into an alias for the replacement.
+2. **Announce.** Record the deprecation in the changelog and on the foundation's page.
+3. **Remove.** Delete the token only in the next **major** version, with the migration instruction ("replace `--lui-x` with `--lui-y`") in the release notes.
+
+### Automated validation
+
+| Check | Where | What it catches |
+| --- | --- | --- |
+| Terrazzo build | `pnpm build` | Broken aliases, invalid types, cycles. |
+| SCSS functions | Styles compilation | A role or size that does not exist: `bg(container, purple)` fails with `@error`, instead of generating empty CSS. |
+| `static-token()` | Styles compilation | A breakpoint or column without a static value. |
+| `systembook check` | Documentation | `TokenTable` groups that do not exist and tokens redefined across files. |
+| Stylelint | `pnpm lint:css` | SCSS style and conventions. |
+
+## Best practices
+
+- Before creating a token, look for a semantic role that already describes the use.
+- Create the token in the highest layer that solves the problem: semantic before component.
+- Name it by role, never by value or appearance.
+- When changing a color value, measure the contrast of every pair it appears in, in both themes.
+- Keep the documentation in the same change: the tables in this section read the tokens straight from the JSON.
+
+## Anti-patterns
+
+<DosDonts variant="do" title="Semantic role">
+  A warning banner with `caution.background.surface` and `caution.border.default`. It changes with the brand and with the theme.
+</DosDonts>
+
+<DosDonts variant="dont" title="Primitive as API">
+  A component with `color(orange, 1)` as its background. It looks right today, and becomes wrong with the first brand that changes the caution color.
+</DosDonts>
+
+- **A token for a constant.** `lui.motion.hover-duration` with a single consumer and the same value in every brand.
+- **A token named after its value.** `lui.color.blue-button` stops making sense when the brand turns green.
+- **A component token for everything.** `lui.card.background` equal to `neutral.background.surface` is indirection without a decision.
+- **Editing the generated file.** `letsui.tokens.scss` and `letsui.tokens.css` are recreated on every build. Edit the JSON.
+- **A literal value next to a token.** `padding: 14px` in a component that already uses the scale.

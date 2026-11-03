@@ -1,0 +1,94 @@
+---
+title: "Date Picker"
+subtitle: "A field for choosing a date, or a period, on a calendar. It also accepts a typed date."
+---
+
+<ComponentEmbed component="DatePicker" variant="default" />
+
+## Best practices
+
+<DosDonts variant="do" title="Upcoming dates">
+  Appointments, bookings and deadlines, where seeing the calendar helps people choose.
+</DosDonts>
+
+<DosDonts variant="do" title="When the weekday matters">
+  "Every Monday", "avoid the weekend": the calendar shows the whole week.
+</DosDonts>
+
+<DosDonts variant="do" title="Periods">
+  A stay, a vacation or a report filter, with `range`.
+</DosDonts>
+
+<DosDonts variant="do" title="Dates the person already knows">
+  Date of birth or a document's issue date, with `editable`, to type instead of navigating month by month.
+</DosDonts>
+
+<DosDonts variant="dont" title="Only the month or only the year">
+  Use a [Select](../select/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Relative dates">
+  "Last 7 days", "This month": offer the options in a [Radio Group](../radio-group/index.mdx) or a Select.
+</DosDonts>
+
+<DosDonts variant="dont" title="Time of day">
+  The Date Picker only chooses the day.
+</DosDonts>
+
+## Anatomy
+
+![Date Picker anatomy: label, optional marker, field, hint, error message and open calendar](./anatomy.png)
+
+1. **Label**: names the field. With `range`, describes the period: "Stay", "Report period".
+2. **Optional marker** (optional).
+3. **Field**: shows the chosen date or period, with the calendar icon. With `editable`, it is a text box with the calendar button beside it.
+4. **Hint**: helper text. With `editable` and no hint, shows the expected format.
+5. **Error message**: replaces the hint.
+6. **Calendar**: the month with its days, the previous and next month buttons and the title, which opens the month and year grids.
+
+The field has the same anatomy, the same states and the same sizes as the [Input](../input/index.mdx).
+
+## Variants
+
+### Single date
+
+The default. A click on the field opens the calendar, and choosing a day closes it.
+
+### Period
+
+With `range`, the calendar shows two months side by side, so a period that crosses from one month to the next appears in full. The first click marks one end and the second marks the other, in any order. Both ends are part of the period. On narrow screens, the months stack one below the other.
+
+<ComponentEmbed component="DatePicker" variant="range" />
+
+### Editable
+
+With `editable`, the person types only the numbers, and the mask adds the separators in the language's order: `dd / mm / yyyy` in Portuguese, `mm / dd / yyyy` in US English. The calendar remains available through the button beside it.
+
+<ComponentEmbed component="DatePicker" variant="editable" />
+
+With `editable range`, both dates sit in the same field, or in two boxes with `range-fields="two"`.
+
+## States
+
+| State | Description |
+| --- | --- |
+| **Default** | With no date, shows the placeholder. |
+| **Filled** | Shows the date in the language's format, with the month abbreviated. |
+| **Focus** | Focus ring on the field. With `editable`, the calendar button has its own focus. |
+| **Open** | The calendar appears below the field. |
+| **Error** | Error border and message: date required, outside the period, unavailable, invalid or end before start. |
+| **Disabled** | It cannot be changed right now. |
+
+<ComponentEmbed component="DatePicker" variant="error" />
+
+In the calendar, **today** appears in bold, the **chosen day** is filled, days **outside the allowed period** are dimmed and **unavailable** days get a strikethrough.
+
+## Sizes
+
+`lg` (default) and `md`, as in the [Input](../input/index.mdx).
+
+## Related
+
+- [Input](../input/index.mdx): the same anatomy, for free text.
+- [Select](../select/index.mdx): choose only the month or the year.
+- [Radio Group](../radio-group/index.mdx): relative periods, such as "Last 7 days".

@@ -1,0 +1,8 @@
+---
+title: "Accessibility"
+---
+
+Flex is layout only and **adds no semantics**.
+
+- **Visual order and reading order**: the `row-reverse`, `column-reverse` and `order` options only change the visual order. Keyboard and screen readers keep following the source order. Avoid these options when they create a mismatch.
+- **Reflow**: at 200% zoom and on narrow screens, the content must wrap or stack, without horizontal scrolling.

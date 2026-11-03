@@ -1,0 +1,28 @@
+---
+title: "Accessibility"
+---
+
+## Keyboard
+
+The Select uses the browser's native element and inherits its keyboard behavior, on each system.
+
+| Key | Action |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Enters and leaves the field. |
+| `Space`, `Enter` or `Down Arrow` | Opens the list. |
+| `Arrows` | Move through the options. |
+| Letters | Jump to the option that starts with the typed letter. |
+| `Esc` | Closes the list without changing the value. |
+
+## Screen reader
+
+- The label is associated with the field and announced on entering it.
+- Hint and error are read along with the field. On error, the field is announced as invalid, and as required if it is.
+- The placeholder is not a valid option: it is hidden and disabled in the list.
+- The field's arrow is decorative.
+
+## For designers
+
+- Do not replace the native Select with a custom list without equivalent accessibility features.
+- Ensure 4.5:1 contrast on the text and 3:1 on the field border.
+- For errors, write the message saying what to choose.

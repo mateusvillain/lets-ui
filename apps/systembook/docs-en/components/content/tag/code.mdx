@@ -1,0 +1,31 @@
+---
+title: "Code"
+---
+
+## Styles
+
+`tag-style` chooses between `surface` (soft background, the default) and `container` (emphasis background).
+
+<ComponentEmbed component="Tag" variant="container" />
+
+## Circular shape
+
+With `circle`, the tag becomes fully rounded, in a pill shape.
+
+## Properties
+
+| Attribute   | Type      | Default   | Description                                                    |
+| ----------- | --------- | --------- | -------------------------------------------------------------- |
+| `label`     | `string`  | `Tag`     | Displayed text.                                                |
+| `tag-style` | `string`  | `surface` | `surface` or `container`.                                      |
+| `variant`   | `string`  | `primary` | `primary`, `caution`, `danger`, `success` or `neutral`.        |
+| `size`      | `string`  | `md`      | `sm`, `md`, `lg` or `xl`.                                      |
+| `circle`    | `boolean` | `false`   | Fully rounds the corners.                                      |
+
+## Usage
+
+```html
+<lui-tag label="Active" variant="success"></lui-tag>
+
+<lui-tag label="Beta" tag-style="container" variant="caution" size="sm"></lui-tag>
+```

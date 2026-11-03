@@ -1,0 +1,71 @@
+---
+title: "Code"
+---
+
+## No actions
+
+Omit `primary-button` and `secondary-button` when the drawer is only informative or when the actions are part of the inner content (slot).
+
+## close-on-backdrop: false
+
+By default the backdrop does not close the drawer. Turn on `close-on-backdrop` when the flow allows accidental dismissal. Turn it off in forms or flows where the user must make an explicit decision.
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `title` | `string` | `Drawer title` |
+| `size` | `string` | `md` |
+| `open` | `boolean` | `false` |
+| `trigger-label` | `string` | `Open drawer` |
+| `close-label` | `string` | `Close drawer` |
+| `hide-trigger` | `boolean` | `false` |
+| `close-on-backdrop` | `boolean` | `false` |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-drawer title="Title" size="md" trigger-label="Open drawer" close-on-backdrop>
+  <p>Drawer content</p>
+  <lui-button slot="actions" variant="secondary" label="Cancel" data-drawer-close></lui-button>
+  <lui-button slot="actions" label="Confirm"></lui-button>
+</lui-drawer>
+```
+
+### Closing from an action
+
+Mark the button that only closes the drawer, such as a "Cancel", with `data-drawer-close`. It works in the `actions` slot and in the content, on a native element or on a `lui-button`, and also when the click comes from something inside the marked element.
+
+- It closes the nearest `lui-drawer` above it: inside a nested `lui-drawer`, it closes only that one.
+- In the `trigger` slot, the attribute is ignored.
+- It does not close when the click goes through a control with `aria-disabled="true"` (a `lui-button` in `loading`) or when a handler calls `event.preventDefault()`.
+- Actions that do something before closing, such as "Confirm", call `closeDrawer()` in their own handler.
+
+Focus returns to the element that opened the drawer, as with any other way of closing.
+
+### Accessible texts
+
+The close button uses `close-label` as its `aria-label` (default: `"Close drawer"`). Change it to the project's language. For example, in Portuguese:
+
+```html
+<lui-drawer title="Título" close-label="Fechar drawer"></lui-drawer>
+```
+
+### CSS class
+
+```html
+<div class="drawer-backdrop is-open"></div>
+<div class="drawer drawer--md is-open" role="dialog" aria-modal="true">
+  <div class="drawer__header">
+    <span class="drawer__title">Title</span>
+    <button class="drawer__close" aria-label="Close">×</button>
+  </div>
+  <div class="drawer__body">Drawer content</div>
+  <div class="drawer__footer">
+    <button class="btn btn--secondary btn--lg">Cancel</button>
+    <button class="btn btn--primary btn--lg">Confirm</button>
+  </div>
+</div>
+```

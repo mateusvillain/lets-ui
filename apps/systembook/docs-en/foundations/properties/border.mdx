@@ -1,0 +1,143 @@
+---
+title: "Border"
+subtitle: "Border width, radius and color give elements their shape, delimit surfaces and signal state. Three short scales, and a focus ring that is a separate thing."
+---
+
+## Purpose
+
+The border does three jobs:
+
+- **Delimit.** Show where a field, a card or a table starts and ends.
+- **Signal state.** Change color when a field receives focus, has an error or is selected.
+- **Give shape.** Corner radius helps recognize component families and carries part of the brand's personality.
+
+## Principles
+
+- **The border delimits, it does not decorate.** If space and background already separate two elements, the border is redundant.
+- **A stronger border means something.** More width or more contrast is focus, selection or error.
+- **The radius follows the size.** Larger controls have larger corners; similar families use the same radius.
+- **The radius belongs to the brand.** Square corners feel serious; round corners, friendly. The brand decides the value of each step.
+- **Focus is not a border.** The focus ring is an indicator of its own, which neither replaces nor is replaced by the state border.
+
+## Width
+
+<TokenTable group="lui.border.width" />
+
+| Token | Usage |
+| --- | --- |
+| `0` | Removes the border on a variant that has one by default. |
+| `1` | The default: fields, cards, tables, menus, dividers. |
+| `2` | Emphasis: Alert border, selected tab line (reserved as transparent on the other tabs), ring around the Avatar, native Select focus. |
+| `4` | Strong indicators. It exists as a token and custom property, but is not in the `width()` function yet. |
+
+Apply it with the SCSS function `width($n)` or with the `.border-0`, `.border-1` and `.border-2` classes.
+
+## Radius
+
+<TokenTable group="lui.border.radius" />
+
+`none` and `circle` are global. `xs` to `xl` are defined by the brand, and in the `lets-ui` brand they follow a progression of 2, 4, 8, 12 and 16px.
+
+### Which radius to use
+
+The radius is chosen by the element's **type** and **size**. This is the rule the system's components follow:
+
+| Radius | For | Components |
+| --- | --- | --- |
+| `none` | Elements that touch others or the screen edge. | Full-screen Drawer, `square` Avatar. |
+| `xs` (2px) | Very small elements. | Checkbox, Table sort button. |
+| `sm` (4px) | Compact, informative elements. | Tooltip, Shortcut, Tag `sm`. |
+| `md` (8px) | Default-size controls. | Button `md`, Input `md`, Icon Button, Tabs, Pagination, Accordion, Table, menu items. |
+| `lg` (12px) | Large controls and floating surfaces. | Button `lg`, Input `lg`, Modal, Dropdown Menu, Alert. |
+| `xl` (16px) | Content surfaces. | Card, Toast, Drawer. |
+| `circle` | Circular and pill shapes. | Avatar, Radio, Switch, Tag `circle`. |
+
+<DosDonts variant="do" title="Radius consistent with type and size">
+  An `md` button and an `md` field side by side, both with `md`. A card with `xl`. The families recognize each other.
+</DosDonts>
+
+<DosDonts variant="dont" title="Different radii for the same family">
+  A button with square corners next to a pill-shaped one, in the same bar. The interface looks assembled from parts from different places.
+</DosDonts>
+
+### Nested radii
+
+When a rounded surface sits inside another, the inner radius should be **smaller**: the outer radius minus the space between them. An `xl` card (16px) with 8px of padding calls for an inner element with `md` (8px). Equal radii, nested, look misaligned at the corners.
+
+## Border color
+
+Colors come from the semantic layer, through the `stroke($family, $category)` function. See [Color](color.mdx).
+
+| Token | Function | Usage |
+| --- | --- | --- |
+| `neutral.border.subtle` | `stroke(neutral, subtle)` | Resting border of cards, fields, tables, toasts and dividers. |
+| `neutral.border.default` | `stroke(neutral)` | Field hover; border of unchecked Checkbox, Radio and Switch. |
+| `neutral.border.pressed` | `stroke(neutral, pressed)` | Pressed neutral border. |
+| `primary.border.default` | `stroke(primary)` | Focused field, selected tab. |
+| `danger.border.default` | `stroke(danger)` | Field with an error. |
+| `danger.border.hover` / `pressed` | `stroke(danger, hover)` | Interaction on error controls. |
+| `{success, caution, info}.border.default` | `stroke(success)` | Border of Alert and status messages. |
+| `lui.divider.color.border.default` | `var(--lui-divider-color-border-default)` | Component token of the [Divider](../../components/layout/divider/index.mdx), also used for Table and Accordion lines. |
+
+## States
+
+State borders change **color**, and the element must not move or change size when it changes state. When the width changes, as in the native Select focus (from `1` to `2`), the padding shrinks by the same amount. The `line` tab reserves the 2px line as transparent on every tab, and only the color changes on the selected one. The reference example is the form field:
+
+| State | Border | Focus ring | Other signals |
+| --- | --- | --- | --- |
+| **Default** | `neutral.border.subtle` | — | Visible label. |
+| **Hover** | `neutral.border.default` | — | Text cursor. |
+| **Focus** | `primary.border.default` | `focus-ring(primary)` | Cursor in the field. |
+| **Error** | `danger.border.default` | `focus-ring(danger)` on focus | Text error message and `aria-invalid`. |
+| **Selected** | `primary.border.default` (the tab's 2px line) | — | `aria-selected`, text in the primary color. |
+| **Disabled** | Keeps the resting border | — | 40% opacity over the component and a `not-allowed` cursor. |
+
+## Focus ring
+
+The focus ring is a **keyboard focus indicator**, separate from the state border. It appears on `:focus-visible` (keyboard navigation), and not on a mouse click.
+
+<TokenTable group="lui.focus-ring" />
+
+| Characteristic | Value |
+| --- | --- |
+| Shape | `box-shadow: 0 0 0 3px`, outside the element. It takes no space in the layout. |
+| Color | The `focus-ring` color of the component's family: `primary`, `secondary`, `danger`, `success` or `neutral`. |
+| Radius | Follows the element's `border-radius`. |
+| Contrast | Minimum 3 : 1 against the background. Every variant passes in both themes. |
+| Application | `focus-ring($family)` or the `focus-ring($family)` mixin; the `states()` mixin already includes it. |
+
+### State border × focus ring
+
+| | State border | Focus ring |
+| --- | --- | --- |
+| **Communicates** | How the component is: with an error, selected, active. | Where keyboard focus is right now. |
+| **Appears** | For as long as the state lasts, with mouse or keyboard. | Only during keyboard navigation. |
+| **Implementation** | `border-color` | `box-shadow` |
+| **Can they coexist?** | Yes. A field with an error and with focus shows the `danger` border **and** the `danger` ring. | |
+
+<Callout variant="warning">
+  Never remove the focus ring without putting an equivalent indicator in its place. An `outline: none` without a replacement leaves keyboard users not knowing where they are.
+</Callout>
+
+## Accessibility
+
+- **Control boundaries.** The border that identifies a field needs **3 : 1** against the background (WCAG 1.4.11). Today the resting field uses `neutral.border.subtle` (1.17 : 1 in the light theme), which is why this is a debt recorded in [Accessibility](../accessibility/overview.mdx). Until it is resolved, keep the label always visible and the field on the neutral surface.
+- **Visible focus.** The focus ring is 3px and passes 3 : 1 in every variant, in both themes (WCAG 2.4.7).
+- **State never by border alone.** An error has a message; a selection has `aria-selected` and a text change; nothing depends on border color alone.
+- **High contrast.** The system's forced colors mode removes `box-shadow`. Solid borders stay visible; shadows and rings made of shadow do not.
+
+## Best practices
+
+- Use width `1` as the default; `2` only for emphasis.
+- Choose the radius by the control size (`md` with `md`, `lg` with `lg`).
+- Reduce the radius of nested elements.
+- Change the border color in states. If you change the width, compensate in the padding.
+- Prefer space and background to borders to separate large areas.
+
+## Anti-patterns
+
+- **Arbitrary radii.** `border-radius: 6px` or `10px` mixed with the tokens. Use only the scale.
+- **A thick border to draw attention.** A 4px border around an "important" card competes with focus and error.
+- **Thickening the border without compensating.** The element grows and pushes its neighbors. Change the color, or subtract the difference from the padding.
+- **Borders on everything.** Bordered cards, inside bordered sections, inside bordered panels. Let space do the separating.
+- **A focus ring made with `border`.** It disappears when the state changes the border color, and the two pieces of information get mixed up.

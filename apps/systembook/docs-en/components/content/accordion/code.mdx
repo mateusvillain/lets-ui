@@ -1,0 +1,114 @@
+---
+title: "Code"
+---
+
+## One open at a time
+
+By default, opening an item closes the one that was open. If more than one item starts with `open`, only the first stays open.
+
+## Multiple open
+
+The `multiple` attribute lets several items stay open at the same time.
+
+<ComponentEmbed component="Accordion" variant="multiple" />
+
+## Disabled item
+
+An item with `disabled` does not toggle and leaves the focus order.
+
+## Slots
+
+The icon on the left is the `icon` slot, and the description area is the item's default slot. Both accept any content. Without an icon, its space goes away. With an icon, the description aligns on the left with the title text, not with the icon. With the CSS class, add `accordion__item--with-icon` to the item.
+
+## `lui-toggle` event
+
+Each item emits `lui-toggle` with `{ open }` in `event.detail` when it opens or closes, whether by click, because another item opened, or by script. The event bubbles and crosses the shadow DOM. The initial state coming from the `open` attribute does not emit the event.
+
+## CSS class (without Web Component)
+
+Without the Web Component, the markup and the state are up to you: toggle `aria-expanded` on the button and the `accordion__item--open` class on the item.
+
+## Properties
+
+### `lui-accordion`
+
+| Attribute       | Type      | Default   | Description                                                 |
+| --------------- | --------- | --------- | ----------------------------------------------------------- |
+| `variant`       | `string`  | `default` | `default`, `bordered` or `highlighted`.                     |
+| `multiple`      | `boolean` | `false`   | Allows several items to be open at the same time.           |
+| `heading-level` | `number`  | `3`       | Level of the heading that wraps each item's button (1 to 6). |
+
+### `lui-accordion-item`
+
+| Attribute       | Type      | Default | Description                                                                          |
+| --------------- | --------- | ------- | ------------------------------------------------------------------------------------ |
+| `label`         | `string`  | `''`    | Item title, inside the button.                                                       |
+| `subtitle`      | `string`  | `''`    | Secondary text below the title.                                                      |
+| `open`          | `boolean` | `false` | Item open.                                                                           |
+| `disabled`      | `boolean` | `false` | Prevents the item from toggling.                                                     |
+| `heading-level` | `number`  | —       | Heading level of this item. If omitted, the `heading-level` of `lui-accordion` applies. |
+
+| Slot      | Description                             |
+| --------- | --------------------------------------- |
+| (default) | Description: the panel content.         |
+| `icon`    | Icon to the left of the title. Decorative. |
+
+### Events
+
+| Event        | Detail              | Description                            |
+| ------------ | ------------------- | -------------------------------------- |
+| `lui-toggle` | `{ open: boolean }` | Emitted per item on opening and closing. |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-accordion variant="bordered" heading-level="3">
+  <lui-accordion-item label="Shipping" subtitle="Delivery times" open>
+    <svg slot="icon" aria-hidden="true"><!-- icon --></svg>
+    Orders ship in two business days.
+  </lui-accordion-item>
+  <lui-accordion-item label="Returns">
+    Returns are accepted within 30 days.
+  </lui-accordion-item>
+</lui-accordion>
+
+<script>
+  document
+    .querySelector('lui-accordion')
+    .addEventListener('lui-toggle', (event) => {
+      console.log(event.target, event.detail.open);
+    });
+</script>
+```
+
+### CSS class
+
+```html
+<div class="accordion accordion--bordered">
+  <div class="accordion__item accordion__item--open">
+    <div class="accordion__heading" role="heading" aria-level="3">
+      <button
+        id="a1-trigger"
+        class="accordion__trigger"
+        type="button"
+        aria-expanded="true"
+        aria-controls="a1-panel"
+      >
+        <span class="accordion__text">
+          <span class="accordion__title">Shipping</span>
+        </span>
+        <!-- svg.accordion__chevron -->
+      </button>
+    </div>
+    <div id="a1-panel" class="accordion__panel">
+      <div class="accordion__panel-inner">
+        <div class="accordion__description">
+          Orders ship in two business days.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+```

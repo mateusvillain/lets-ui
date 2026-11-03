@@ -1,0 +1,29 @@
+---
+title: "Usage"
+---
+
+## Items of equal weight
+
+Switcher distributes items in **equal parts**. Use it when all of them have the same importance and roughly the same width.
+
+<DosDonts variant="do" title="Equivalent cards">
+  Three pricing plans that share the width and stack together on small screens.
+</DosDonts>
+
+<DosDonts variant="dont" title="Items of different weights">
+  Main content with a smaller side area is not a case for Switcher. Use Sidebar.
+</DosDonts>
+
+## Set the switch point
+
+`threshold` is the width at which the change happens. Choose it based on the **minimum comfortable size** of each item: if each card needs about 240px, set `threshold` to around three times that when you want three columns.
+
+## Item limit
+
+With `limit`, items stack once they go past a certain number. This helps avoid too many cramped columns. With three items and `limit="3"`, a fourth item makes all of them stack.
+
+## Best practices
+
+- Keep the content of the items **similarly structured**.
+- Test Switcher in containers of varying widths, such as side areas and panels.
+- Combine it with a [Stack](../stack/index.mdx) inside each item to arrange the content.

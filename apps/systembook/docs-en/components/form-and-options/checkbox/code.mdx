@@ -1,0 +1,46 @@
+---
+title: "Code"
+---
+
+## Label (attribute)
+
+The `label` attribute renders the text as the slot's default content. Useful for simple cases or programmatic HTML generation.
+
+## Checked
+
+<ComponentEmbed component="Checkbox" variant="checked" />
+
+## Form integration
+
+`lui-checkbox` is form-associated. Use `name` to identify the field in the `FormData` and `value` to set what is submitted when checked (default `"on"`, same as native).
+
+### Required
+
+With `required`, the form does not submit while the checkbox is unchecked.
+
+## Form attributes
+
+| Attribute  | Type      | Default | Description                                                                     |
+| ---------- | --------- | ------ | ------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`   | Default slot content; ignored when the slot is projected                        |
+| `name`     | `string`  | `''`   | Field name in the submitted data                                                |
+| `value`    | `string`  | `'on'` | Value submitted when checked; omitted when unchecked                            |
+| `form`     | `string`  | `''`   | ID of the associated `<form>`; lets you use the checkbox outside the form element |
+| `required` | `boolean` | `false`| Blocks submission while the checkbox is unchecked                               |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-checkbox size="lg">I accept the terms</lui-checkbox>
+```
+
+### CSS class
+
+```html
+<label class="checkbox checkbox--lg">
+  <input type="checkbox">
+  I accept the terms
+</label>
+```

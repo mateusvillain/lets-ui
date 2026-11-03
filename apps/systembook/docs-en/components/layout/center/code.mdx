@@ -1,0 +1,34 @@
+---
+title: "Code"
+---
+
+## Horizontal Only
+
+<ComponentEmbed component="Center" variant="horizontal" />
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `axis` | `string` | `both` |
+| `min-height` | `string` | `''` |
+| `max-width` | `string` | `''` |
+| `as` | `string` | `div` |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-center axis="both" style="height: 300px;">
+  <div>Centered content</div>
+</lui-center>
+```
+
+### CSS class
+
+```html
+<div class="center center--horizontal">
+  <div class="center__inner" style="max-width: 400px;">Centered content</div>
+</div>
+```

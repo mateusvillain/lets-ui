@@ -1,0 +1,44 @@
+---
+title: "Usage"
+---
+
+## Label
+
+The label says **which task** is running: "Uploading files", "Importing contacts", "Storage". Write it in the page's language and keep the same text from start to finish.
+
+## Value in other units
+
+`value` and `max` can be in any unit. Without `value-text`, the value appears as a percentage. With `value-text`, exactly the text you write appears, such as "3.2 GB of 10 GB". Update `value-text` together with `value`.
+
+<ComponentEmbed component="ProgressBar" variant="custom-unit" />
+
+## Caption
+
+The caption is how the person learns about the progress and the result: it is read aloud when it changes.
+
+<DosDonts variant="do" title="Milestones and result">
+  "Half of the files uploaded", then "Upload complete". The person hears what matters, without interruptions.
+</DosDonts>
+
+<DosDonts variant="dont" title="Count at every step">
+  "1 of 200", "2 of 200", "3 of 200". Every change is announced, and the person is interrupted all the time.
+</DosDonts>
+
+- In `success`, `caution` and `danger`, the caption states the outcome: "Upload failed: connection lost".
+- In indeterminate mode, use the caption to say which stage the task is in.
+
+## Bar only
+
+With `hide-label` and `hide-value`, only the track remains. Use this combination only when the value or the state is in text nearby, such as "Your profile is 60% complete" right above. `label` is still the accessible name, so provide it anyway.
+
+## During the task
+
+- Disable the controls that depend on it, such as the submit button.
+- Keep the bar on screen until the result is announced. If it is removed along with the caption change, the text never gets read.
+- If the task can be interrupted, offer "Cancel" near the bar.
+
+## Best practices
+
+- Do not show a bar that goes backward. If the estimate changes, prefer indeterminate mode until you have a reliable measurement.
+- Do not use color as the only cue for the result: write it in the caption.
+- Avoid several bars at the same time. If there are many tasks, show the overall progress.
