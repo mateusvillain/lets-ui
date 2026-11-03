@@ -1,0 +1,168 @@
+---
+title: "Frameworks"
+subtitle: "Use os Web Components do Let's UI em React, Vue, Angular, Svelte e em aplicações com renderização no servidor."
+order: 2
+---
+
+Os componentes do Let's UI são custom elements nativos, então funcionam em qualquer framework que renderize HTML. Em todos os casos, a base é a mesma da [Instalação](./installation.mdx): carregar o `@lets-ui/styles` e registrar os componentes uma vez, no ponto de entrada da aplicação.
+
+```js
+import '@lets-ui/styles';
+import '@lets-ui/components';
+```
+
+O que muda de um framework para outro são três coisas:
+
+- **Reconhecer as tags `lui-*`**, para o framework não reclamar de um elemento desconhecido.
+- **Passar valores**: atributos de texto funcionam em todos. Booleanos e objetos dependem do framework.
+- **Ouvir eventos**: os componentes disparam eventos próprios, como `menu-select` no [Dropdown Menu](../../components/actionable/dropdown-menu/code.mdx). Os eventos de cada componente estão na aba Code dele.
+
+## React
+
+### React 19
+
+O React 19 suporta custom elements: passa props como propriedades e liga eventos próprios com `on` seguido do nome exato do evento.
+
+```jsx
+export function Acoes() {
+  return (
+    <lui-dropdown-menu onmenu-select={(event) => console.log(event.detail.label)}>
+      <lui-button slot="trigger" variant="secondary">Opções</lui-button>
+      <lui-menu-item slot="items" label="Editar"></lui-menu-item>
+      <lui-menu-item slot="items" label="Excluir" variant="danger"></lui-menu-item>
+    </lui-dropdown-menu>
+  );
+}
+```
+
+### React 18
+
+O React 18 passa tudo como atributo de texto e não liga eventos próprios. Ouça os eventos por uma `ref`:
+
+```jsx
+import { useEffect, useRef } from 'react';
+
+export function Acoes() {
+  const menu = useRef(null);
+
+  useEffect(() => {
+    const onSelect = (event) => console.log(event.detail.label);
+    const element = menu.current;
+    element.addEventListener('menu-select', onSelect);
+    return () => element.removeEventListener('menu-select', onSelect);
+  }, []);
+
+  return <lui-dropdown-menu ref={menu}>{/* ... */}</lui-dropdown-menu>;
+}
+```
+
+Em booleanos, passe `undefined` em vez de `false`: o React 18 escreve o atributo `disabled="false"`, e um atributo presente conta como verdadeiro. Use `disabled={desabilitado || undefined}`.
+
+### TypeScript
+
+O pacote ainda não publica tipos para o JSX. Para o TypeScript aceitar as tags `lui-*`, declare-as uma vez no projeto:
+
+```ts
+// lets-ui.d.ts
+import 'react';
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      [tag: `lui-${string}`]: any;
+    }
+  }
+}
+```
+
+## Vue
+
+Diga ao compilador do Vue que as tags `lui-*` são custom elements. Com Vite:
+
+```js
+// vite.config.js
+import vue from '@vitejs/plugin-vue';
+
+export default {
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('lui-'),
+        },
+      },
+    }),
+  ],
+};
+```
+
+Depois, use as tags e os eventos como em qualquer elemento:
+
+```vue
+<lui-dropdown-menu @menu-select="(event) => console.log(event.detail.label)">
+  <lui-button slot="trigger" variant="secondary">Opções</lui-button>
+  <lui-menu-item slot="items" label="Editar"></lui-menu-item>
+</lui-dropdown-menu>
+```
+
+## Angular
+
+Acrescente `CUSTOM_ELEMENTS_SCHEMA` aos componentes que usam as tags `lui-*`:
+
+```ts
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+@Component({
+  selector: 'app-acoes',
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    <lui-dropdown-menu (menu-select)="onSelect($event)">
+      <lui-button slot="trigger" variant="secondary">Opções</lui-button>
+      <lui-menu-item slot="items" label="Editar"></lui-menu-item>
+    </lui-dropdown-menu>
+  `,
+})
+export class AcoesComponent {
+  onSelect(event: Event) {
+    console.log((event as CustomEvent).detail.label);
+  }
+}
+```
+
+Registre os componentes no `main.ts` e importe o CSS no `styles.css` global (`@import '@lets-ui/styles';`) ou na lista `styles` do `angular.json`.
+
+## Svelte
+
+O Svelte reconhece custom elements sem configuração e passa os valores como propriedades. Basta registrar os componentes no ponto de entrada e usar as tags.
+
+## Renderização no servidor
+
+Os componentes se registram no navegador: no servidor, `customElements` não existe. Em Next.js, Nuxt, SvelteKit ou Astro, importe `@lets-ui/components` só no cliente. O HTML com as tags `lui-*` pode vir do servidor: o navegador ativa cada componente quando o registro carrega.
+
+```jsx
+// Next.js (App Router)
+'use client';
+
+import { useEffect } from 'react';
+
+export function LetsUI() {
+  useEffect(() => {
+    import('@lets-ui/components');
+  }, []);
+  return null;
+}
+```
+
+```ts
+// Nuxt: plugins/lets-ui.client.ts
+import '@lets-ui/components';
+
+export default defineNuxtPlugin(() => {});
+```
+
+O CSS (`@lets-ui/styles`) pode ser carregado normalmente no servidor, no layout raiz.
+
+## Formulários
+
+Input, Textarea, Select, Checkbox, Radio, Radio Group, Switch, OTP Input, Date Picker e Button participam de formulários nativos. Dentro de um `<form>`, os valores entram no envio e no `FormData` pelo `name`, e a validação do formulário (`required`, `form.checkValidity()`, o bloqueio do envio) leva os campos em conta. Você pode usar esses campos com o envio nativo ou ler os valores dos eventos de cada componente na sua biblioteca de formulários.

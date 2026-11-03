@@ -6,105 +6,145 @@ order: 1
 
 ## Pacotes
 
-O monorepo publica três pacotes independentes no npm. Use apenas o que precisar.
+O Let's UI publica três pacotes no npm. Use apenas o que precisar.
 
-| Pacote              | Descrição                                                                                                                  | Uso                     |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| @lets-ui/tokens     | Tokens de design em JSON compilados para CSS custom properties e SCSS. Base de toda a estilização do sistema.              | Tokens, temas, marcas   |
-| @lets-ui/styles     | CSS compilado com todos os estilos de componentes, foundations e reset. Use quando não precisar de JavaScript.             | Somente CSS             |
-| @lets-ui/components | Web Components em Vanilla JS (custom elements). Inclui o CSS compilado automaticamente e não tem dependência de framework. | Componentes interativos |
+| Pacote | O que tem | Quando usar |
+| --- | --- | --- |
+| `@lets-ui/styles` | CSS compilado com os tokens, o reset, as foundations e as classes de todos os componentes. | Sempre. É a base de tudo, inclusive dos Web Components. |
+| `@lets-ui/components` | Web Components feitos com [Lit](https://lit.dev/), a única dependência. Cada componente traz o CSS do próprio Shadow DOM, mas lê os tokens do `@lets-ui/styles`. | Componentes interativos: Modal, Dropdown Menu, Date Picker, campos de formulário. |
+| `@lets-ui/tokens` | Só os tokens, em CSS custom properties, SCSS e JSON. | Quando você quer construir seus próprios estilos sobre os tokens, sem os componentes. |
+
+## Começar rápido
+
+O jeito mais rápido de testar é pela CDN, sem instalar nada. Copie o HTML abaixo para um arquivo e abra no navegador:
+
+```html
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@lets-ui/styles@1/dist/letsui.min.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@lets-ui/components@1/+esm"
+    ></script>
+  </head>
+  <body>
+    <lui-card aria-label="Newsletter">
+      <h2>Receba as novidades</h2>
+      <lui-input label="E-mail" type="email" name="email" required></lui-input>
+      <lui-button slot="actions" variant="primary">Assinar</lui-button>
+    </lui-card>
+  </body>
+</html>
+```
+
+O `@1` fixa a versão maior: você recebe correções e novidades, mas não mudanças que quebram. Em produção, prefira instalar pelo npm e fixar a versão exata.
 
 ## Instalação
 
-Escolha a forma de instalação de acordo com o que o seu projeto precisa.
-
 ### Somente CSS
 
-A maneira mais simples de usar o Let's UI. Instale o pacote de estilos — ele inclui o CSS compilado com todos os componentes, foundations e reset.
+Para usar as classes CSS (`.btn`, `.card`, `.stack`...) sem JavaScript:
 
 ```bash
 npm install @lets-ui/styles
 ```
 
-Importe o CSS no ponto de entrada da sua aplicação:
+Importe o CSS no ponto de entrada da aplicação:
 
 ```js
 import '@lets-ui/styles';
 ```
 
-Ou via `<link>` no HTML:
+Ou, sem bundler, com um `<link>`:
 
 ```html
-<link
-  rel="stylesheet"
-  href="node_modules/@lets-ui/styles/dist/letsui.min.css"
-/>
+<link rel="stylesheet" href="node_modules/@lets-ui/styles/dist/letsui.min.css" />
 ```
 
 ### Com Web Components
 
-Para usar os componentes interativos (botões, inputs, modais, etc.), importe o pacote de componentes inteiro ou componentes individuais. Os estilos são injetados automaticamente — nenhum import de CSS adicional é necessário.
+Instale **os dois pacotes**. Os componentes usam os tokens (`var(--lui-...)`) definidos no `@lets-ui/styles`. Sem ele, aparecem sem cor, fonte nem espaçamento.
 
 ```bash
-npm install @lets-ui/components
+npm install @lets-ui/styles @lets-ui/components
 ```
 
 ```js
+import '@lets-ui/styles';
+
 // Registra todos os componentes
 import '@lets-ui/components';
-
-// Ou importe componentes individualmente
-import '@lets-ui/components/button';
-import '@lets-ui/components/modal';
 ```
 
-Os componentes se registram automaticamente como custom elements e ficam disponíveis no HTML:
+Os componentes se registram como custom elements e ficam disponíveis no HTML:
 
 ```html
 <lui-button variant="primary">Confirmar</lui-button>
 <lui-button variant="secondary">Cancelar</lui-button>
 ```
 
-## Temas e marcas
+Para usar React, Vue, Angular ou um framework com renderização no servidor, veja [Frameworks](./frameworks.mdx).
 
-O Let's UI suporta modo claro/escuro e múltiplas marcas via atributos HTML, sem JavaScript adicional.
+### Importar só alguns componentes
 
-### Modo claro / escuro
+Para carregar menos código, importe os componentes um a um:
 
-Aplique `data-theme` no elemento raiz. O valor padrão é `light`.
-
-```html
-<!-- Modo claro (padrão) -->
-<html data-theme="light">
-  <!-- Modo escuro -->
-  <html data-theme="dark"></html>
-</html>
+```js
+import '@lets-ui/styles';
+import '@lets-ui/components/button';
+import '@lets-ui/components/modal';
 ```
 
-Para alternar o tema via JavaScript:
+Hoje têm import individual: `alert`, `breadcrumb`, `breadcrumb-item`, `button`, `card`, `checkbox`, `divider`, `drawer`, `dropdown-menu`, `icon-button`, `input`, `link`, `modal`, `otp-input`, `pagination`, `radio`, `select`, `shortcut`, `switch`, `tabs`, `tag`, `textarea` e `tooltip`. Os demais vêm só no import completo (`@lets-ui/components`).
+
+## Temas e marcas
+
+O tema e a marca são escolhidos por atributos no elemento raiz, sem JavaScript.
+
+### Modo claro e escuro
+
+Aplique `data-theme` no `<html>`. Sem o atributo, vale `light`.
+
+```html
+<html data-theme="light">
+```
+
+```html
+<html data-theme="dark">
+```
+
+Para trocar o tema com JavaScript:
 
 ```js
 document.documentElement.setAttribute('data-theme', 'dark');
 ```
 
-### Multi-marca
+Para seguir a preferência do sistema operacional e lembrar a escolha da pessoa, veja [Themes](../../foundations/tokens/themes.mdx).
 
-O atributo `data-brand` define qual paleta de marca é usada. O tema padrão é `lets-ui`.
+### Marcas
+
+O atributo `data-brand` escolhe a marca: as cores `primary` e `secondary`, as fontes, os raios e a grade. A marca padrão, e hoje a única publicada, é `lets-ui`.
 
 ```html
-<html data-theme="light" data-brand="lets-ui"></html>
+<html data-theme="light" data-brand="lets-ui">
 ```
 
-Tokens de marca como `--lui-brand-color-primary-*` e `--lui-brand-border-radius-*` são sobrescritos automaticamente ao trocar o `data-brand`.
+Ao trocar o `data-brand`, os tokens de marca (`--lui-brand-color-primary-*`, `--lui-brand-border-radius-*`...) mudam, e todos os componentes acompanham. Para criar uma marca nova, use o [Brand Studio](https://studio.lets-ui.com), o editor visual dos tokens de marca, e siga o passo a passo em [Themes](../../foundations/tokens/themes.mdx).
 
 ## Requisitos
 
-| Requisito   | Versão mínima                                                    |
-| ----------- | ---------------------------------------------------------------- |
-| Node.js     | 18+                                                              |
-| Navegadores | Evergreen (suporte a CSS custom properties e Custom Elements v1) |
-| Gerenciador | npm, pnpm ou yarn                                                |
+| Requisito | Versão mínima |
+| --- | --- |
+| Navegadores | Versões atuais de Chrome, Edge, Firefox e Safari (CSS custom properties, Custom Elements v1 e Shadow DOM). |
+| Node.js | 20+, para o bundler do seu projeto. Pela CDN, não é necessário. |
+| Gerenciador | npm, pnpm ou yarn. |
 
 ## Licença
 
-Let's UI é distribuído sob a licença **MIT**. Veja o arquivo `LICENSE` no repositório para mais detalhes.
+O Let's UI é distribuído sob a licença **MIT**. Veja o arquivo [`LICENSE`](https://github.com/mateusvillain/lets-ui/blob/main/LICENSE) no repositório.
