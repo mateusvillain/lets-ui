@@ -100,15 +100,46 @@ export function resolveLang(element: Element): string {
   return '';
 }
 
+// Regions that write Chinese in Traditional characters.
+const TRADITIONAL_CHINESE_REGIONS = new Set(['tw', 'hk', 'mo']);
+
+/**
+ * The script a lowercased tag is written in: its script subtag (`hant` in
+ * `zh-hant-tw`), or for Chinese without one, the script its region uses —
+ * Traditional in Taiwan, Hong Kong and Macau, Simplified everywhere else.
+ * Empty for any other language, which has one script as far as these
+ * dictionaries go.
+ */
+function scriptOf(code: string): string {
+  const [base, ...subtags] = code.split('-');
+  const script = subtags.find((subtag) => subtag.length === 4);
+  if (script) return script;
+  if (base !== 'zh') return '';
+  return subtags.some((subtag) => TRADITIONAL_CHINESE_REGIONS.has(subtag))
+    ? 'hant'
+    : 'hans';
+}
+
 function lookup(lang: string, term: TermKey): string {
   const code = lang.toLowerCase();
   const base = code.split('-')[0];
-  // `pt-BR` first, then `pt`, then any regional variant of `pt` — so a page in
-  // `pt` still finds a dictionary registered as `pt-BR`.
-  const candidates = [translations.get(code), translations.get(base)];
-  for (const [key, translation] of translations) {
-    if (key.split('-')[0] === base) candidates.push(translation);
-  }
+  const script = scriptOf(code);
+  // The exact tag first. Then the other dictionaries of the same language —
+  // those in the same script ahead of the rest, so `zh-HK` reaches `zh-TW`
+  // and not `zh-CN` — and within each group the bare language (`pt`) before
+  // its regional variants (`pt-BR`), which keep the order they were
+  // registered in. A page in `pt` still finds a dictionary registered as
+  // `pt-BR`.
+  const related = [...translations].filter(
+    ([key]) => key !== code && key.split('-')[0] === base
+  );
+  const rank = ([key]: [string, PartialTranslation]) =>
+    (scriptOf(key) === script ? 0 : 2) + (key === base ? 0 : 1);
+  related.sort((a, b) => rank(a) - rank(b));
+  const candidates = [
+    translations.get(code),
+    ...related.map(([, translation]) => translation),
+  ];
   for (const translation of candidates) {
     const text = translation?.[term];
     if (text != null) return text;

@@ -164,6 +164,30 @@ describe('language matching', () => {
   });
 });
 
+describe('Chinese scripts', () => {
+  // Traditional registered first, so a Simplified page that found it would be
+  // following the registration order, not the script.
+  registerTranslation(zhTW, zhCN);
+
+  const errorText = async (lang) =>
+    (await mount(`<div lang="${lang}"><lui-checkbox></lui-checkbox></div>`))
+      .errorText;
+
+  it.each(['zh-TW', 'zh-HK', 'zh-MO', 'zh-Hant', 'zh-Hant-HK'])(
+    'gives %s Traditional Chinese',
+    async (lang) => {
+      expect(await errorText(lang)).toBe(zhTW['form.errorText']);
+    }
+  );
+
+  it.each(['zh-CN', 'zh-SG', 'zh', 'zh-Hans', 'zh-Hans-HK'])(
+    'gives %s Simplified Chinese',
+    async (lang) => {
+      expect(await errorText(lang)).toBe(zhCN['form.errorText']);
+    }
+  );
+});
+
 describe('partial translations', () => {
   it('overrides only the terms it names', async () => {
     registerTranslation({ $code: 'qaa', 'form.optionalText': '(opt)' });

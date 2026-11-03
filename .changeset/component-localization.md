@@ -7,3 +7,5 @@ Localize the text components write themselves. `registerTranslation()` registers
 `lui-link`'s `external-label` now defaults to English, `(opens in a new tab)`, like every other component's built-in text, instead of Portuguese. Register `ptBR` to keep `(abre em nova aba)` on Portuguese pages.
 
 `lui-date-picker`'s `locale` now defaults to empty, which follows the same `lang` that picks the translation, so `<html lang="pt-BR">` alone gives Portuguese texts, months and days. Without a `lang` anywhere it is still `en-US`, and an explicit `locale` still wins. A page that declares a `lang` but no `locale` now formats dates, and orders the typed mask, in that language instead of `en-US`; set `locale="en-US"` to keep the previous output. `value` stays ISO 8601 either way. The mark between the two dates of a typed range now comes from the locale too, like the field text's: `～` in Japanese rather than `–`.
+
+A language matches its exact tag first, then the other dictionaries of the same language. For Chinese, those in the same script come first: `zh-HK` and `zh-Hant` get `zhTW`, `zh` and `zh-SG` get `zhCN`, whatever the registration order.

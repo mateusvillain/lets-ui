@@ -43,6 +43,8 @@ Os componentes que já estão na página atualizam na hora — tanto ao registra
 
 O idioma é casado sem diferenciar maiúsculas: `pt-BR` primeiro, depois `pt`, depois qualquer variante regional de `pt` registrada. Um idioma sem tradução registrada cai no inglês.
 
+No chinês, a escrita vem antes da região: `zh-TW`, `zh-HK`, `zh-MO` e `zh-Hant` recebem o chinês tradicional (`zhTW`), e `zh-CN`, `zh-SG`, `zh` e `zh-Hans` recebem o simplificado (`zhCN`), em qualquer ordem de registro.
+
 ## Idiomas incluídos
 
 | Idioma                      | Export | Caminho                             | Atende                                           |
@@ -163,6 +165,8 @@ registerTranslation(ptBR);
 Components already on the page update at once — both when a translation is registered and when the `lang` of any ancestor changes. This Storybook's language switcher uses exactly that mechanism.
 
 The language is matched case-insensitively: `pt-BR` first, then `pt`, then any registered regional variant of `pt`. A language with no registered translation falls back to English.
+
+For Chinese, the script comes before the region: `zh-TW`, `zh-HK`, `zh-MO` and `zh-Hant` get Traditional Chinese (`zhTW`), and `zh-CN`, `zh-SG`, `zh` and `zh-Hans` get Simplified (`zhCN`), whatever order they were registered in.
 
 ## Included languages
 
