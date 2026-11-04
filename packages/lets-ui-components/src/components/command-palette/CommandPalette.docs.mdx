@@ -1,0 +1,399 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CommandPaletteStories from './CommandPalette.stories';
+
+<Meta of={CommandPaletteStories} />
+
+# Command Palette
+
+Busca guiada pelo teclado para ir a páginas, executar ações, encontrar conteúdo ou escolher pessoas. Abre sobre a página com ⌘K / Ctrl+K e reúne um campo de busca, tags de categoria opcionais, uma lista de resultados agrupada e uma legenda de teclado.
+
+<Canvas of={CommandPaletteStories.Default} />
+<Controls of={CommandPaletteStories.Default} />
+
+## Quando usar
+
+- Em aplicações com muitas páginas ou ações, como atalho para quem já sabe o que procura.
+- Como complemento da navegação, nunca como substituta: tudo o que o palette alcança precisa estar acessível também pelos menus da página.
+- Para buscar um conteúdo que muda (arquivos, pessoas), com os resultados vindos da aplicação (ver [Resultados assíncronos](#resultados-assíncronos)).
+
+## Navegação
+
+Ir a uma página. `keywords` ampliam a busca sem aparecer na tela: "agenda" encontra Calendar. A linha abaixo do trigger mostra o que `lui-select` envia.
+
+<Canvas of={CommandPaletteStories.Navigation} />
+
+## Ações rápidas
+
+Comandos executados pelo teclado, agrupados pelo que afetam, cada um com seu atalho.
+
+<Canvas of={CommandPaletteStories.QuickActions} />
+
+## Busca de arquivos
+
+Arquivos e pastas com o local em `caption` e a última alteração em `description`. As tags restringem a lista a um tipo de arquivo.
+
+<Canvas of={CommandPaletteStories.FileSearch} />
+
+## Resultados com pessoas
+
+Um item com `avatar` (o nome da pessoa) ou `avatar-src` (uma foto) mostra um Avatar no lugar do ícone. Alex e James têm foto; Maria só tem o nome e recebe iniciais; a foto de Emily falha ao carregar e ela volta às iniciais. Passe os dois atributos para que uma foto quebrada ainda deixe as iniciais. Pessoas e ações podem dividir a mesma lista.
+
+<Canvas of={CommandPaletteStories.UserResults} />
+
+## Resultados assíncronos
+
+Com `no-filter`, o palette mostra todos os itens que recebe e deixa a busca para a aplicação: ouça `lui-search`, busque e troque os itens. `empty-text` pode mudar conforme o estado da busca ("Buscando…", "Nenhum resultado").
+
+<Canvas of={CommandPaletteStories.AsyncResults} />
+
+```js
+palette.addEventListener('lui-search', async ({ detail: { query } }) => {
+  const results = await api.search(query);
+  // Troque só os resultados: `replaceChildren()` levaria junto o trigger.
+  palette
+    .querySelectorAll(':scope > :not([slot])')
+    .forEach((child) => child.remove());
+  palette.append(...results.map(toCommandItem));
+});
+```
+
+Cada abertura começa uma busca nova: o campo e a tag voltam ao vazio, e, se havia texto digitado, `lui-search` é emitido com `query: ''` para a aplicação limpar os resultados que mostrava.
+
+Itens e grupos adicionados, removidos ou alterados depois da renderização são lidos de novo automaticamente.
+
+## Grupos
+
+`lui-command-group` dá um cabeçalho de seção aos itens que contém. Um divisor separa os grupos, e um grupo sem resultados some. Itens fora de um grupo formam um grupo sem título, na ordem do documento.
+
+<Canvas of={CommandPaletteStories.GroupedResults} />
+
+## Anatomia do item
+
+Cada item tem um ícone à esquerda (qualquer elemento com `slot="icon"`) ou um avatar, um título (`label`), uma `caption`, uma `description` e um `shortcut` à direita. Só o título é obrigatório.
+
+<Canvas of={CommandPaletteStories.ItemAnatomy} />
+
+Os ícones dos exemplos são do [Let's UI Icons](https://icons.lets-ui.com/). Qualquer SVG serve no slot `icon`; use `fill="currentColor"` (ou `stroke`) para que ele siga a cor de ícone do item.
+
+## Tags
+
+Elementos `lui-command-tag` viram filtros acima dos resultados. Pressionar uma tag mostra só os itens cujo `tag` corresponde ao `value` dela; pressioná-la de novo mostra tudo.
+
+<Canvas of={CommandPaletteStories.Tags} />
+
+## Campo com limpar
+
+Com algo digitado, o campo mostra um botão que esvazia a busca e mantém o foco no campo.
+
+<Canvas of={CommandPaletteStories.FieldWithClear} />
+
+## Estado vazio
+
+Quando nada corresponde à busca, a lista dá lugar à mensagem de `empty-text`.
+
+<Canvas of={CommandPaletteStories.EmptyState} />
+
+## Trigger
+
+Um elemento em `slot="trigger"` abre o palette ao ser clicado. Ele recebe `aria-haspopup="dialog"` e `aria-expanded`, que acompanha o estado aberto/fechado, e o foco volta a ele ao fechar. Sem trigger, o palette abre pelo atalho ou por `show()`.
+
+```html
+<lui-command-palette>
+  <lui-button slot="trigger" label="Search"></lui-button>
+  <lui-command-item label="Calendar"></lui-command-item>
+</lui-command-palette>
+```
+
+## Eventos
+
+- **`lui-select`**: um item foi ativado (Enter ou clique). `detail`: `{ value, label, item }`, onde `item` é o `lui-command-item` de origem. O palette fecha em seguida; chame `preventDefault()` para mantê-lo aberto, por exemplo para uma segunda etapa. Nesse caso, chame `clearSearch()` antes de trocar os itens, para que a etapa seguinte não herde a busca anterior.
+- **`lui-search`**: a busca mudou, ao digitar ou ao limpar o campo. `detail`: `{ query }`. Com `no-filter`, use-o para trocar os itens conforme a busca.
+
+Os dois borbulham e atravessam o shadow DOM.
+
+```js
+palette.addEventListener('lui-select', (event) => {
+  router.navigate(event.detail.value);
+});
+```
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, o visual fica disponível, mas abrir e fechar, filtrar, mover o destaque, prender o foco e emitir a seleção ficam a cargo de quem usa.
+
+<Canvas of={CommandPaletteStories.CSSClass} />
+
+## Propriedades
+
+### `lui-command-palette`
+
+| Atributo         | Tipo      | Padrão  | Descrição                                                             |
+| ---------------- | --------- | ------- | --------------------------------------------------------------------- |
+| `open`           | `boolean` | `false` | Abre o palette. Também por `show()`, `hide()` e `toggle()`.           |
+| `clearSearch()`  | método    | —       | Esvazia a busca e solta a tag, como numa nova abertura.               |
+| `no-hotkey`      | `boolean` | `false` | Desliga o atalho ⌘K / Ctrl+K.                                         |
+| `no-filter`      | `boolean` | `false` | Desliga o filtro embutido, para resultados filtrados pela aplicação.  |
+| `slot="trigger"` | slot      | —       | Elemento que abre o palette ao ser clicado (ver [Trigger](#trigger)). |
+
+### `lui-command-item`
+
+| Atributo         | Tipo     | Padrão     | Descrição                                                                          |
+| ---------------- | -------- | ---------- | ---------------------------------------------------------------------------------- |
+| `label`          | `string` | conteúdo   | Título do item.                                                                    |
+| `value`          | `string` | `label`    | Valor enviado no `detail` de `lui-select`.                                         |
+| `caption`        | `string` | `''`       | Texto curto ao lado do título.                                                     |
+| `description`    | `string` | `''`       | Linha abaixo do título.                                                            |
+| `shortcut`       | `string` | `''`       | Teclas do atalho exibido à direita, separadas por vírgula, como em `lui-shortcut`. |
+| `shortcut-label` | `string` | `shortcut` | Atalho por extenso para leitores de tela, como `"Command 1"`.                      |
+| `avatar`         | `string` | `''`       | Nome da pessoa. Troca o ícone por um Avatar com as iniciais.                       |
+| `avatar-src`     | `string` | `''`       | Foto do Avatar.                                                                    |
+| `tag`            | `string` | `''`       | Valor da `lui-command-tag` que filtra este item.                                   |
+| `keywords`       | `string` | `''`       | Termos extras considerados pela busca, sem aparecer na tela.                       |
+| `slot="icon"`    | slot     | —          | Ícone à esquerda, num elemento filho. Ignorado quando há `avatar` ou `avatar-src`. |
+
+### `lui-command-group` e `lui-command-tag`
+
+| Elemento            | Atributo | Descrição                                      |
+| ------------------- | -------- | ---------------------------------------------- |
+| `lui-command-group` | `label`  | Cabeçalho da seção.                            |
+| `lui-command-tag`   | `value`  | Valor comparado ao `tag` dos itens.            |
+| `lui-command-tag`   | `label`  | Texto da tag (padrão: o conteúdo do elemento). |
+
+`lui-command-group`, `lui-command-item` e `lui-command-tag` são só dados: o `lui-command-palette` lê os atributos e renderiza o markup no próprio shadow root.
+
+## Textos padrão
+
+Os textos que o componente gera são em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
+
+| Atributo         | Tipo     | Padrão                      | Descrição                                                     |
+| ---------------- | -------- | --------------------------- | ------------------------------------------------------------- |
+| `label`          | `string` | `'Command palette'`         | Nome acessível do dialog.                                     |
+| `placeholder`    | `string` | `'Search actions or files'` | Texto do campo de busca e seu nome acessível.                 |
+| `list-label`     | `string` | `'Results'`                 | Nome acessível da lista de resultados.                        |
+| `tags-label`     | `string` | `'Filter results'`          | Nome acessível do grupo de tags.                              |
+| `clear-label`    | `string` | `'Clear search'`            | `aria-label` do botão de limpar.                              |
+| `empty-text`     | `string` | `'No results found'`        | Mensagem exibida e anunciada quando nada corresponde à busca. |
+| `result-label`   | `string` | `'1 result'`                | Anúncio com um resultado.                                     |
+| `results-label`  | `string` | `'{count} results'`         | Anúncio com vários resultados; `{count}` é substituído.       |
+| `navigate-label` | `string` | `'Navigate'`                | Legenda das setas no rodapé.                                  |
+| `select-label`   | `string` | `'Select'`                  | Legenda do Enter no rodapé.                                   |
+| `close-label`    | `string` | `'Close'`                   | Legenda do Esc no rodapé.                                     |
+
+<Canvas of={CommandPaletteStories.Localized} />
+
+## Acessibilidade
+
+- O painel é um `role="dialog"` com `aria-modal="true"`, nomeado por `label`.
+- Enquanto ele está aberto, o resto da página recebe `inert`: sai da árvore de acessibilidade, do `Tab` e do mouse. Isso cobre o caso em que o `aria-modal` sozinho não basta: num dialog dentro de shadow root, o Chrome mantém o fundo acessível ao cursor virtual do leitor de tela. Ao fechar, só o que o palette tornou inerte é restaurado. O trigger, que fica dentro do próprio palette, também fica inerte.
+- O campo é um `role="combobox"` que controla o `role="listbox"` dos resultados, nomeado por `list-label`. O foco fica sempre no campo; o item destacado é indicado por `aria-activedescendant` e `aria-selected`, então o leitor de tela o anuncia sem que o foco saia de onde se digita. `aria-expanded` fica `false` quando a lista está vazia.
+- Cada item é um `role="option"` nomeado pelo título e descrito pela caption, pela descrição e pelo atalho, por `aria-describedby`. Ícone e avatar são decorativos (`aria-hidden="true"`), já que o título diz o mesmo.
+- Cada grupo é um `role="group"` nomeado pelo cabeçalho. O divisor entre grupos é decorativo.
+- As tags são botões com `aria-pressed`, num grupo nomeado por `tags-label`.
+- A contagem de resultados, ou `empty-text`, é anunciada numa região `role="status"` quando a digitação pausa, e não a cada tecla.
+- A legenda de teclado do rodapé é decorativa (`aria-hidden="true"`): repete o que o combobox e o listbox já comunicam.
+- O foco vai para o campo ao abrir, fica preso no palette enquanto ele está aberto e volta ao elemento que o abriu ao fechar (ou ao trigger, se esse elemento não existir mais).
+- A busca ignora maiúsculas e acentos: "configuracoes" encontra "Configurações".
+- Em modo de alto contraste (cores forçadas), a opção ativa e a tag pressionada ganham um contorno na cor de seleção do sistema, já que o fundo que as marca deixa de ser pintado.
+- Em telas baixas (celular deitado, página com zoom de 400%), o espaçamento diminui e a legenda de teclado sai, deixando a altura para os resultados (WCAG 1.4.10, Reflow).
+
+### Teclado
+
+| Tecla           | Ação                                           |
+| --------------- | ---------------------------------------------- |
+| ⌘K / Ctrl+K     | Abre e fecha o palette, de qualquer ponto.     |
+| ↑ / ↓           | Move o destaque entre os resultados, em ciclo. |
+| Enter           | Ativa o item destacado.                        |
+| Esc             | Fecha o palette.                               |
+| Tab / Shift+Tab | Circula entre campo, botão de limpar e tags.   |
+
+Com vários palettes na página, só o primeiro responde ao atalho. Use `no-hotkey` nos demais ou abra-os com `show()`. Com um Modal ou Drawer aberto, o atalho não abre o palette; segurar as teclas também não o faz abrir e fechar em sequência.
+
+### Responsabilidades de quem usa
+
+- Mantenha um caminho visível até o palette, como um botão em `slot="trigger"`. O atalho sozinho não é descoberto por quem não o conhece.
+- Garanta que tudo o que o palette alcança também esteja na navegação da página.
+- Em atalhos com símbolos como `⌘`, que cada leitor de tela lê de um jeito, informe `shortcut-label` por extenso (`shortcut-label="Command 3"`).
+- Traduza os [textos padrão](#textos-padrão) para o idioma da página, inclusive os anunciados, que não aparecem na tela.
+- Com `no-filter`, use `empty-text` para dizer o estado da busca (carregando, erro, sem resultados), já que ele também é anunciado.
+- Ao tratar `lui-select` com uma navegação, leve o foco ao conteúdo novo; ao manter o palette aberto com `preventDefault()`, atualize os itens para a próxima etapa.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-command-palette placeholder="Search actions or files">
+  <lui-button slot="trigger" variant="secondary" label="Search"></lui-button>
+
+  <lui-command-tag value="pages">Pages</lui-command-tag>
+  <lui-command-tag value="users">Users</lui-command-tag>
+
+  <lui-command-group label="Recent">
+    <lui-command-item
+      value="calendar"
+      label="Calendar"
+      caption="Page"
+      shortcut="⌘K"
+      tag="pages"
+    >
+      <svg slot="icon" viewBox="0 0 24 24">…</svg>
+    </lui-command-item>
+  </lui-command-group>
+
+  <lui-command-group label="Users">
+    <lui-command-item
+      value="alex"
+      label="Alex Johnson"
+      avatar="Alex Johnson"
+      tag="users"
+    ></lui-command-item>
+  </lui-command-group>
+</lui-command-palette>
+```
+
+### Classe CSS
+
+O `letsui.css` traz as classes do palette, com o mesmo markup que o Web Component renderiza. Só o visual vem pronto: abrir e fechar, filtrar, mover o destaque (`is-active`, `aria-selected` e `aria-activedescendant`), prender o foco e emitir a seleção ficam por conta do seu JavaScript.
+
+```html
+<div class="command-palette__backdrop">
+  <div
+    class="command-palette__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Command palette"
+  >
+    <div class="command-palette__field">
+      <span class="command-palette__search-icon"
+        ><svg viewBox="0 0 24 24">…</svg></span
+      >
+      <input
+        class="command-palette__input"
+        type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="true"
+        aria-controls="results"
+        aria-activedescendant="option-calendar"
+        aria-label="Search actions or files"
+        placeholder="Search actions or files"
+      />
+      <!-- Só com texto digitado -->
+      <button
+        type="button"
+        class="command-palette__clear"
+        aria-label="Clear search"
+      >
+        <svg viewBox="0 0 24 24">…</svg>
+      </button>
+    </div>
+
+    <div class="command-palette__panel">
+      <div
+        class="command-palette__tags"
+        role="group"
+        aria-label="Filter results"
+      >
+        <button type="button" class="command-palette__tag" aria-pressed="true">
+          <span class="tag--md tag--container-primary">Pages</span>
+        </button>
+        <button type="button" class="command-palette__tag" aria-pressed="false">
+          <span class="tag--md tag--surface-neutral">Users</span>
+        </button>
+      </div>
+
+      <div
+        id="results"
+        class="command-palette__results"
+        role="listbox"
+        aria-label="Command palette"
+      >
+        <div role="group" aria-labelledby="group-recent">
+          <div id="group-recent" class="command-palette__group-label">
+            Recent
+          </div>
+          <div
+            id="option-calendar"
+            class="command-palette__item is-active"
+            role="option"
+            aria-selected="true"
+          >
+            <span class="command-palette__leading" aria-hidden="true"
+              ><svg viewBox="0 0 24 24">…</svg></span
+            >
+            <span class="command-palette__text">
+              <span class="command-palette__title-row">
+                <span class="command-palette__title">Calendar</span>
+                <span class="command-palette__caption">Page</span>
+              </span>
+              <span class="command-palette__description"
+                >Your events and meetings</span
+              >
+            </span>
+            <span class="shortcut command-palette__shortcut" aria-hidden="true">
+              <kbd class="shortcut__key">⌘1</kbd>
+            </span>
+          </div>
+        </div>
+
+        <div class="command-palette__separator" aria-hidden="true">
+          <div class="divider"></div>
+        </div>
+
+        <div role="group" aria-labelledby="group-users">
+          <div id="group-users" class="command-palette__group-label">Users</div>
+          <div
+            id="option-alex"
+            class="command-palette__item"
+            role="option"
+            aria-selected="false"
+          >
+            <span class="command-palette__leading" aria-hidden="true">
+              <span class="avatar avatar--sm avatar--circle avatar--gray">
+                <span class="avatar__initials">AJ</span>
+              </span>
+            </span>
+            <span class="command-palette__text">
+              <span class="command-palette__title-row">
+                <span class="command-palette__title">Alex Johnson</span>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sem resultados, no lugar da lista -->
+      <!-- <p class="command-palette__empty">No results found</p> -->
+
+      <div class="divider command-palette__rule"></div>
+      <div class="command-palette__footer" aria-hidden="true">
+        <span class="command-palette__legend">
+          <span class="command-palette__keys">
+            <kbd class="shortcut__key command-palette__key"
+              ><svg viewBox="0 0 24 24">…</svg></kbd
+            >
+            <kbd class="shortcut__key command-palette__key"
+              ><svg viewBox="0 0 24 24">…</svg></kbd
+            >
+          </span>
+          Navigate
+        </span>
+        <span class="command-palette__legend">
+          <kbd class="shortcut__key command-palette__key"
+            ><svg viewBox="0 0 24 24">…</svg></kbd
+          >
+          Select
+        </span>
+        <span class="command-palette__legend">
+          <kbd class="shortcut__key">Esc</kbd>
+          Close
+        </span>
+      </div>
+    </div>
+
+    <div class="command-palette__status" role="status">3 results</div>
+  </div>
+</div>
+```
+
+Os ícones de seta e de enter do rodapé são `arrow-up`, `arrow-down` e `arrow-elbow-down-left`, do [Let's UI Icons](https://icons.lets-ui.com/).

@@ -1,0 +1,567 @@
+import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
+import { afterEach, describe, expect, it } from 'vitest';
+import {
+  LuiCommandGroup,
+  LuiCommandItem,
+  LuiCommandPalette,
+  LuiCommandTag,
+} from './command-palette.ts';
+
+// Only the elements under test: the full index would pull in every
+// component and the Sass each one inlines.
+customElements.define('lui-command-palette', LuiCommandPalette);
+customElements.define('lui-command-group', LuiCommandGroup);
+customElements.define('lui-command-item', LuiCommandItem);
+customElements.define('lui-command-tag', LuiCommandTag);
+
+const mounted = [];
+
+afterEach(() => {
+  mounted.splice(0).forEach((host) => {
+    host.querySelectorAll('lui-command-palette').forEach((el) => {
+      el.open = false;
+    });
+    host.remove();
+  });
+  delete document.body.dataset.luiLockCount;
+  document.body.style.overflow = '';
+});
+
+const frame = () => new Promise((r) => requestAnimationFrame(r));
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const lockCount = () => document.body.dataset.luiLockCount ?? '0';
+
+const MARKUP = `
+  <button id="opener">Open</button>
+  <lui-command-palette>
+    <lui-command-tag value="pages">Pages</lui-command-tag>
+    <lui-command-tag value="users">Users</lui-command-tag>
+    <lui-command-group label="Recent">
+      <lui-command-item value="calendar" label="Calendar" caption="Page" shortcut="⌘,1" tag="pages"></lui-command-item>
+      <lui-command-item value="settings" label="Settings" description="Preferências" tag="pages"></lui-command-item>
+    </lui-command-group>
+    <lui-command-group label="Users">
+      <lui-command-item value="alex" label="Alex Johnson" avatar="Alex Johnson" tag="users"></lui-command-item>
+    </lui-command-group>
+  </lui-command-palette>
+`;
+
+async function mount(html = MARKUP) {
+  const host = document.createElement('div');
+  host.innerHTML = html;
+  document.body.append(host);
+  mounted.push(host);
+  const palette = host.querySelector('lui-command-palette');
+  await palette.updateComplete;
+  return { host, palette };
+}
+
+async function settle(palette) {
+  await palette.updateComplete;
+  await frame();
+  await palette.updateComplete;
+}
+
+const $ = (palette, selector) => palette.shadowRoot.querySelector(selector);
+const $$ = (palette, selector) =>
+  Array.from(palette.shadowRoot.querySelectorAll(selector));
+const input = (palette) => $(palette, 'input');
+const options = (palette) => $$(palette, '[role="option"]');
+const labels = (palette) =>
+  options(palette).map(
+    (o) => o.querySelector('.command-palette__title').textContent
+  );
+
+function press(target, key, init = {}) {
+  target.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key,
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+      ...init,
+    })
+  );
+}
+
+async function type(palette, text) {
+  const el = input(palette);
+  el.value = text;
+  el.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+  await palette.updateComplete;
+}
+
+describe('lui-command-palette', () => {
+  it('opens on Ctrl+K and focuses the search field', async () => {
+    const { palette } = await mount();
+    press(document.body, 'k', { ctrlKey: true });
+    await settle(palette);
+
+    expect(palette.open).toBe(true);
+    expect(palette.shadowRoot.activeElement).toBe(input(palette));
+  });
+
+  it('opens on ⌘K and closes on a second ⌘K', async () => {
+    const { palette } = await mount();
+    press(document.body, 'k', { metaKey: true });
+    await settle(palette);
+    expect(palette.open).toBe(true);
+
+    press(document.body, 'k', { metaKey: true });
+    await settle(palette);
+    expect(palette.open).toBe(false);
+  });
+
+  it('leaves the shortcut alone with no-hotkey', async () => {
+    const { palette } = await mount();
+    palette.noHotkey = true;
+    press(document.body, 'k', { ctrlKey: true });
+    await settle(palette);
+    expect(palette.open).toBe(false);
+  });
+
+  it('closes on Escape and returns focus to the opener', async () => {
+    const { host, palette } = await mount();
+    const opener = host.querySelector('#opener');
+    opener.focus();
+    palette.show();
+    await settle(palette);
+
+    press(input(palette), 'Escape');
+    await settle(palette);
+
+    expect(palette.open).toBe(false);
+    expect(document.activeElement).toBe(opener);
+  });
+
+  it('exposes dialog, combobox, listbox and option roles', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+
+    const dialog = $(palette, '[role="dialog"]');
+    expect(dialog.getAttribute('aria-modal')).toBe('true');
+    const listbox = $(palette, '[role="listbox"]');
+    expect(input(palette).getAttribute('aria-controls')).toBe(listbox.id);
+    expect(options(palette)).toHaveLength(3);
+    expect($$(palette, '[role="group"][aria-labelledby]')).toHaveLength(2);
+  });
+
+  it('filters as the user types, ignoring case and accents', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+
+    await type(palette, 'CAL');
+    expect(labels(palette)).toEqual(['Calendar']);
+
+    await type(palette, 'preferencias');
+    expect(labels(palette)).toEqual(['Settings']);
+  });
+
+  it('shows the empty state when nothing matches', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+
+    await type(palette, 'zzz');
+    expect(options(palette)).toHaveLength(0);
+    expect($(palette, '.command-palette__empty').textContent).toBe(
+      'No results found'
+    );
+    expect(input(palette).getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('announces the result count once typing pauses', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const status = () => $(palette, '[role="status"]').textContent.trim();
+
+    await type(palette, 'c');
+    await type(palette, 'ca');
+    await type(palette, 'cal');
+    expect(status()).toBe('');
+
+    await wait(450);
+    await palette.updateComplete;
+    expect(status()).toBe('1 result');
+
+    await type(palette, 'zzz');
+    await wait(450);
+    await palette.updateComplete;
+    expect(status()).toBe('No results found');
+  });
+
+  it('makes the rest of the page inert while open', async () => {
+    const { host, palette } = await mount();
+    const opener = host.querySelector('#opener');
+    opener.focus();
+    palette.show();
+    await settle(palette);
+
+    expect(opener.inert).toBe(true);
+    expect(palette.inert).toBe(false);
+
+    palette.hide();
+    await settle(palette);
+    expect(opener.inert).toBe(false);
+    expect(document.activeElement).toBe(opener);
+  });
+
+  it('leaves alone what was inert before it opened', async () => {
+    const { host, palette } = await mount();
+    const opener = host.querySelector('#opener');
+    opener.inert = true;
+    palette.show();
+    await settle(palette);
+    palette.hide();
+    await settle(palette);
+
+    expect(opener.inert).toBe(true);
+  });
+
+  it('names the listbox and describes items by their shortcut', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+
+    expect($(palette, '[role="listbox"]').getAttribute('aria-label')).toBe(
+      'Results'
+    );
+    const calendar = options(palette)[0];
+    const ids = calendar.getAttribute('aria-describedby').split(' ');
+    const shortcut = ids.find((id) => id.endsWith('-shortcut'));
+    expect(palette.shadowRoot.getElementById(shortcut).textContent).toBe('⌘,1');
+  });
+
+  it('clears the query from the clear control', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    expect($(palette, '.command-palette__clear')).toBeNull();
+
+    await type(palette, 'cal');
+    $(palette, '.command-palette__clear').click();
+    await palette.updateComplete;
+
+    expect(input(palette).value).toBe('');
+    expect(options(palette)).toHaveLength(3);
+    expect(palette.shadowRoot.activeElement).toBe(input(palette));
+  });
+
+  it('moves the highlight with the arrow keys and wraps', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const field = input(palette);
+    const activeLabel = () =>
+      palette.shadowRoot
+        .getElementById(field.getAttribute('aria-activedescendant'))
+        .querySelector('.command-palette__title').textContent;
+
+    expect(activeLabel()).toBe('Calendar');
+    press(field, 'ArrowDown');
+    await palette.updateComplete;
+    expect(activeLabel()).toBe('Settings');
+    press(field, 'ArrowUp');
+    press(field, 'ArrowUp');
+    await palette.updateComplete;
+    expect(activeLabel()).toBe('Alex Johnson');
+  });
+
+  it('emits lui-select on Enter and closes', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    let detail = null;
+    palette.addEventListener('lui-select', (e) => {
+      detail = e.detail;
+    });
+
+    press(input(palette), 'ArrowDown');
+    await palette.updateComplete;
+    press(input(palette), 'Enter');
+    await palette.updateComplete;
+
+    expect(detail.value).toBe('settings');
+    expect(detail.item.tagName).toBe('LUI-COMMAND-ITEM');
+    expect(palette.open).toBe(false);
+  });
+
+  it('stays open when lui-select is cancelled', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    palette.addEventListener('lui-select', (e) => e.preventDefault());
+
+    options(palette)[0].click();
+    await palette.updateComplete;
+    expect(palette.open).toBe(true);
+  });
+
+  it('filters by the pressed tag and releases it on a second press', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const [, users] = $$(palette, '.command-palette__tag');
+
+    users.click();
+    await palette.updateComplete;
+    expect(users.getAttribute('aria-pressed')).toBe('true');
+    expect(labels(palette)).toEqual(['Alex Johnson']);
+
+    users.click();
+    await palette.updateComplete;
+    expect(users.getAttribute('aria-pressed')).toBe('false');
+    expect(options(palette)).toHaveLength(3);
+  });
+
+  it('renders the avatar leading slot for user items', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const alex = options(palette)[2];
+    expect(alex.querySelector('lui-avatar')).not.toBeNull();
+    expect(
+      options(palette)[0].querySelector('lui-shortcut').getAttribute('keys')
+    ).toBe('⌘,1');
+  });
+
+  it('picks up items added after it rendered', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+
+    const item = document.createElement('lui-command-item');
+    item.setAttribute('label', 'Billing');
+    palette.querySelector('lui-command-group').append(item);
+    await new Promise((r) => setTimeout(r));
+    await palette.updateComplete;
+
+    expect(labels(palette)).toContain('Billing');
+  });
+
+  it('picks up items that replace its children', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+
+    const item = document.createElement('lui-command-item');
+    item.setAttribute('label', 'Billing');
+    palette.replaceChildren(item);
+    await new Promise((r) => setTimeout(r));
+    await palette.updateComplete;
+
+    expect(labels(palette)).toEqual(['Billing']);
+  });
+
+  it('keeps Tab inside the dialog', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const tags = $$(palette, '.command-palette__tag');
+
+    tags[tags.length - 1].focus();
+    press(tags[tags.length - 1], 'Tab');
+    expect(palette.shadowRoot.activeElement).toBe(input(palette));
+  });
+});
+
+describe('lui-command-palette trigger slot', () => {
+  const TRIGGERED = `
+    <lui-command-palette>
+      <button slot="trigger">Search</button>
+      <lui-command-item value="calendar" label="Calendar"></lui-command-item>
+    </lui-command-palette>
+  `;
+
+  it('opens on a click on the slotted trigger', async () => {
+    const { palette } = await mount(TRIGGERED);
+    palette.querySelector('[slot="trigger"]').click();
+    await settle(palette);
+    expect(palette.open).toBe(true);
+  });
+
+  it('gives the trigger the dialog-trigger ARIA and keeps it in sync', async () => {
+    const { palette } = await mount(TRIGGERED);
+    const trigger = palette.querySelector('[slot="trigger"]');
+    await settle(palette);
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+
+    palette.show();
+    await settle(palette);
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+    palette.hide();
+    await settle(palette);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('makes the trigger inert while open', async () => {
+    const { palette } = await mount(TRIGGERED);
+    palette.show();
+    await settle(palette);
+    expect($(palette, '.command-palette__trigger').inert).toBe(true);
+    // Inert through the flat tree: the slotted button cannot take focus.
+    const trigger = palette.querySelector('[slot="trigger"]');
+    trigger.focus();
+    expect(document.activeElement).not.toBe(trigger);
+
+    palette.hide();
+    await settle(palette);
+    expect($(palette, '.command-palette__trigger').inert).toBe(false);
+  });
+
+  it('returns focus to the trigger on close', async () => {
+    const { palette } = await mount(TRIGGERED);
+    const trigger = palette.querySelector('[slot="trigger"]');
+    trigger.focus();
+    trigger.click();
+    await settle(palette);
+    expect(palette.shadowRoot.activeElement).toBe(input(palette));
+
+    palette.hide();
+    await settle(palette);
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('drops the ARIA from a trigger taken out of the slot', async () => {
+    const { palette } = await mount(TRIGGERED);
+    const trigger = palette.querySelector('[slot="trigger"]');
+    await settle(palette);
+    trigger.removeAttribute('slot');
+    await settle(palette);
+    expect(trigger.hasAttribute('aria-haspopup')).toBe(false);
+    expect(trigger.hasAttribute('aria-expanded')).toBe(false);
+  });
+});
+
+describe('lui-command-palette review fixes', () => {
+  it('ignores a held ⌘K', async () => {
+    const { palette } = await mount();
+    press(document, 'k', { metaKey: true });
+    await palette.updateComplete;
+    press(document, 'k', { metaKey: true, repeat: true });
+    await palette.updateComplete;
+    expect(palette.open).toBe(true);
+  });
+
+  it('does not open over an open Modal', async () => {
+    if (!customElements.get('lui-modal')) {
+      const { LuiModal } = await import('../modal/modal.ts');
+      customElements.define('lui-modal', LuiModal);
+    }
+    const { host, palette } = await mount();
+    const modal = document.createElement('lui-modal');
+    modal.hideTrigger = true;
+    host.append(modal);
+    modal.openModal();
+    await modal.updateComplete;
+
+    press(document, 'k', { ctrlKey: true });
+    await palette.updateComplete;
+    expect(palette.open).toBe(false);
+    modal.closeModal();
+    await modal.updateComplete;
+  });
+
+  it('tells the application the query was dropped when it reopens', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    await type(palette, 'cal');
+    $$(palette, '.command-palette__tag')[0].click();
+    palette.hide();
+    await settle(palette);
+
+    const queries = [];
+    palette.addEventListener('lui-search', (e) => queries.push(e.detail.query));
+    palette.show();
+    await settle(palette);
+    expect(queries).toEqual(['']);
+    expect(input(palette).value).toBe('');
+    expect(
+      $$(palette, '.command-palette__tag').every(
+        (t) => t.getAttribute('aria-pressed') === 'false'
+      )
+    ).toBe(true);
+  });
+
+  it('clears the search for a next step with clearSearch()', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    await type(palette, 'set');
+    const queries = [];
+    palette.addEventListener('lui-search', (e) => queries.push(e.detail.query));
+
+    palette.clearSearch();
+    await palette.updateComplete;
+    expect(queries).toEqual(['']);
+    expect(input(palette).value).toBe('');
+    expect(labels(palette)).toHaveLength(3);
+  });
+
+  it('stays open after a drag that ends on the backdrop', async () => {
+    const { palette } = await mount();
+    palette.show();
+    await settle(palette);
+    const backdrop = $(palette, '[data-palette-backdrop]');
+    input(palette).dispatchEvent(
+      new PointerEvent('pointerdown', { bubbles: true, composed: true })
+    );
+    backdrop.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await palette.updateComplete;
+    expect(palette.open).toBe(true);
+
+    backdrop.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    backdrop.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await palette.updateComplete;
+    expect(palette.open).toBe(false);
+  });
+
+  it('leaves the icon text out of a title taken from the content', async () => {
+    const { palette } = await mount(`
+      <lui-command-palette>
+        <lui-command-item><span slot="icon">home</span>Dashboard</lui-command-item>
+      </lui-command-palette>
+    `);
+    palette.show();
+    await settle(palette);
+    expect(labels(palette)).toEqual(['Dashboard']);
+  });
+
+  it('does not re-read the items when it marks the trigger', async () => {
+    const { palette } = await mount(`
+      <lui-command-palette>
+        <button slot="trigger">Search</button>
+        <lui-command-item label="Calendar"><svg slot="icon"></svg></lui-command-item>
+      </lui-command-palette>
+    `);
+    await settle(palette);
+    const before = $(palette, '.command-palette__leading svg');
+    palette.show();
+    await settle(palette);
+    await frame();
+    expect($(palette, '.command-palette__leading svg')).toBe(before);
+  });
+
+  it('keeps the lock and the inert page when moved while open', async () => {
+    const { host, palette } = await mount();
+    palette.show();
+    await settle(palette);
+    expect(lockCount()).toBe('1');
+
+    host.append(palette);
+    await settle(palette);
+    expect(lockCount()).toBe('1');
+    expect(host.querySelector('#opener').inert).toBe(true);
+
+    palette.hide();
+    await settle(palette);
+    expect(lockCount()).toBe('0');
+    expect(host.querySelector('#opener').inert).toBe(false);
+  });
+});

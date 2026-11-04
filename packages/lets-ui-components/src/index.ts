@@ -35,6 +35,12 @@ import { LuiRadio } from './components/radio/radio.js';
 import { LuiRadioGroup } from './components/radio-group/radio-group.js';
 import { LuiSwitch } from './components/switch/switch.js';
 import { LuiCloseButton } from './components/close-button/close-button.js';
+import {
+  LuiCommandPalette,
+  LuiCommandGroup,
+  LuiCommandItem,
+  LuiCommandTag,
+} from './components/command-palette/command-palette.js';
 import { LuiCodeBlock } from './components/code-block/code-block.js';
 export type { CodeHighlighter } from './components/code-block/code-block.js';
 import { LuiIconButton } from './components/icon-button/icon-button.js';
@@ -102,6 +108,10 @@ define('lui-radio-group', LuiRadioGroup);
 define('lui-switch', LuiSwitch);
 define('lui-close-button', LuiCloseButton);
 define('lui-code-block', LuiCodeBlock);
+define('lui-command-palette', LuiCommandPalette);
+define('lui-command-group', LuiCommandGroup);
+define('lui-command-item', LuiCommandItem);
+define('lui-command-tag', LuiCommandTag);
 define('lui-icon-button', LuiIconButton);
 define('lui-input', LuiInput);
 define('lui-link', LuiLink);
@@ -163,6 +173,10 @@ export {
   LuiSwitch,
   LuiCloseButton,
   LuiCodeBlock,
+  LuiCommandPalette,
+  LuiCommandGroup,
+  LuiCommandItem,
+  LuiCommandTag,
   LuiIconButton,
   LuiInput,
   LuiLink,
