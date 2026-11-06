@@ -13,7 +13,7 @@ content is reviewed in the same pull request as the code.
   `title`/`subtitle`/`overviewTitle` in its frontmatter (order and status come
   from `docs/`), and keeps the same relative links. A page missing here is
   served in English with a notice, so translate a page in the same pull request
-  that changes it. `docs:check` reports the progress (`traduções: pt-BR 64/64`).
+  that changes it. `docs:check` reports the progress (`traduções: pt-BR 69/69`).
 - **`previews/`** — one `*.preview.tsx` per component. The CLI builds each
   variant into an isolated iframe, and the docs embed it with
   `<ComponentEmbed component="Button" variant="primary" />`, so a page shows

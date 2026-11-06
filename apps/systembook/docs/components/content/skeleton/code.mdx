@@ -1,0 +1,62 @@
+---
+title: "Code"
+order: 4
+---
+
+## Text
+
+The default shape. The height follows the font size of the context (`1em`) and the width fills the line. Shorten it with `width`.
+
+<ComponentEmbed component="Skeleton" variant="text" />
+
+## Circle
+
+Without a size, the circle is 40px. If only one side is set, the other follows and the circle stays round.
+
+<ComponentEmbed component="Skeleton" variant="circle" />
+
+## Rectangle
+
+Pass `height` when the final block is taller than the default.
+
+<ComponentEmbed component="Skeleton" variant="rectangle" />
+
+## Loading region
+
+Wrap the composition in the element that will receive the content, and announce the loading there.
+
+<ComponentEmbed component="Skeleton" variant="card" />
+
+## Properties
+
+| Attribute | Type     | Default | Description                                                                                  |
+| --------- | -------- | ------- | -------------------------------------------------------------------------------------------- |
+| `shape`   | `string` | `text`  | `text`, `circle` or `rectangle`. An unknown value falls back to `text`.                      |
+| `width`   | `string` | `''`    | Any CSS length (`64%`, `12rem`). Empty, the shape keeps its default width.                   |
+| `height`  | `string` | `''`    | Any CSS length. Empty, the shape keeps its default height.                                   |
+| `label`   | `string` | `''`    | Makes the Skeleton `role="status"` with this name. Empty, it is decorative (`aria-hidden`).  |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-skeleton></lui-skeleton>
+<lui-skeleton width="64%"></lui-skeleton>
+<lui-skeleton shape="circle"></lui-skeleton>
+<lui-skeleton shape="rectangle" height="10rem"></lui-skeleton>
+
+<div role="status" aria-busy="true" aria-label="Loading profile">
+  <lui-skeleton shape="circle"></lui-skeleton>
+  <lui-skeleton width="48%"></lui-skeleton>
+</div>
+```
+
+### CSS class
+
+```html
+<span class="skeleton"></span>
+<span class="skeleton" style="--lui-skeleton-width: 64%"></span>
+<span class="skeleton skeleton--circle"></span>
+<span class="skeleton skeleton--rectangle"></span>
+```

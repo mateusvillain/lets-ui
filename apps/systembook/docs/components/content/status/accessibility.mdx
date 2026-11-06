@@ -1,0 +1,28 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+Status is **not interactive**: it does not receive focus or respond to the keyboard.
+
+## Screen reader
+
+- The indicator (icon or dot) carries `aria-hidden="true"`. The state reaches the screen reader through the text: the `label`, or the variant name when there is no `label`.
+- With `hide-label`, the label leaves the screen and stays for the screen reader.
+- Status does not have `role="status"`. That role belongs to a live region, which announces every change, and a static indicator repeated in a table would announce noise.
+- To announce a change, wrap Status in a region with `aria-live="polite"`.
+
+## Visual
+
+- The state does not depend on color alone: the feedback icons have different shapes, and the social dots have a shape inside.
+- The feedback dots (`dot`) are distinguished only by color, so they need the visible label when they carry information.
+- In high contrast mode (`forced-colors`), the indicator keeps its colors, because the color is the information.
+- With `prefers-reduced-motion: reduce`, the pulse ring stays still, like a halo.
+
+## For designers
+
+- Write labels that make sense when read aloud, without the indicator.
+- Do not rely on the color of the dot to tell `success` from `danger`: show the text.
+- Avoid more than one pulsing indicator per screen.

@@ -1,0 +1,49 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Write a label that stands on its own
+
+- State the state, not the category: "Payment approved", "In a meeting".
+- Use sentence case and no final punctuation.
+- Keep it short. If the person needs to know what to do next, the message belongs in an [Alert](../alert/index.mdx).
+
+<DosDonts variant="do" title="The label says the state">
+  "Sync failed" with the `danger` variant. Read aloud, without the icon, it still makes sense.
+</DosDonts>
+
+<DosDonts variant="dont" title="Label that depends on the color">
+  "Status" or "Result" next to a red icon. The color carries the information and the text says nothing.
+</DosDonts>
+
+## Choose the variant by meaning
+
+- Use `success`, `caution`, `danger` and `info` for the state of systems and operations.
+- Use `online`, `away`, `busy` and `offline` only for the presence of people.
+- Keep the same meaning for the same variant across the whole product.
+
+## Icon or dot
+
+- The **icon** (default) has a different shape for each state and works well in isolation, in cards and headers.
+- The **dot** (`dot`) is quieter and fits tables and lists with many rows. It is distinguished only by color, so always keep the visible label when you use it.
+
+<DosDonts variant="do" title="Dot with a label in a dense table">
+  A status column with `dot` and short labels, aligned to the start.
+</DosDonts>
+
+<DosDonts variant="dont" title="Dots without text">
+  A column of colored dots with no label. People who do not distinguish colors cannot tell the states apart.
+</DosDonts>
+
+## Indicator only
+
+Without `label`, Status shows only the indicator and announces the variant name in English ("Success", "Online"). To announce a text of your own without showing it, pass `label` with `hide-label`. Use the indicator alone only when the surrounding content already explains what it refers to.
+
+## Use the pulse sparingly
+
+The pulse calls attention to something happening now. Several indicators pulsing on the same screen compete with each other and tire the eye: keep it for one live state at a time.
+
+## Changes on screen
+
+Status does not announce when it changes. If the state is updated while the person is on the page and the change matters, put Status inside a region with `aria-live="polite"`.

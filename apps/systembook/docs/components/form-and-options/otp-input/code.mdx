@@ -1,0 +1,116 @@
+---
+title: "Code"
+order: 4
+---
+
+## Visible label
+
+The label is hidden by default: `label` names the group only for assistive technologies. With `show-label`, the same text appears above the boxes, in the style of the `lui-input` label, and clicking it moves focus to the first empty box.
+
+## Numeric
+
+With `type="number"`, only digits are accepted and the numeric keyboard is suggested (`inputmode="numeric"`). The boxes remain `type="text"`, without the arrows of the native number field.
+
+## Separator
+
+`separator` receives the position of the box after which the separator appears: `separator="3"` splits six boxes into 3 + 3. For more than one, list the positions separated by commas (`separator="2,4"`). Positions outside the range are ignored.
+
+<ComponentEmbed component="OtpInput" variant="separator" />
+
+## Error
+
+`error` applies the error state to every box and shows `error-text` below them. The state is cleared as soon as the person types again.
+
+<ComponentEmbed component="OtpInput" variant="error" />
+
+## Disabled
+
+<ComponentEmbed component="OtpInput" variant="disabled" />
+
+## Event `lui-complete`
+
+When all boxes are filled, the component emits `lui-complete` with the code in `event.detail.value`. The event bubbles and crosses the shadow DOM. On every change, `input` is also emitted.
+
+## Pasting and autofill
+
+A complete code is pasted from the first box, whatever box has focus. A shorter excerpt is pasted from the focused box. Characters the `type` does not accept are discarded.
+
+## Form integration
+
+`lui-otp-input` is form-associated: the code is submitted in the `FormData` under `name`. With `required`, the form does not submit while the field is empty, and an incomplete code is also invalid. `focus()` on the element moves focus to the first empty box.
+
+## CSS class (without Web Component)
+
+Without the Web Component, the style is available, but advancing the focus, pasting and `Backspace` become the consumer's responsibility.
+
+## Properties
+
+| Attribute     | Type                 | Default  | Description                                                                                                   |
+| ------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `length`      | `number`             | `6`      | Number of boxes.                                                                                              |
+| `type`        | `'text' \| 'number'` | `'text'` | `number` accepts digits only and suggests the numeric keyboard.                                               |
+| `separator`   | `string`             | `''`     | Positions of the boxes after which a separator appears, separated by commas (`"3"`, `"2,4"`).                 |
+| `value`       | `string`             | `''`     | Current code.                                                                                                 |
+| `placeholder` | `string`             | `''`     | Character shown in each empty box.                                                                            |
+| `name`        | `string`             | `''`     | Field name in the `FormData`.                                                                                 |
+| `required`    | `boolean`            | `false`  | Blocks submission while the field is empty or incomplete.                                                     |
+| `show-label`  | `boolean`            | `false`  | Shows `label` above the boxes. Off, `label` only names the group for assistive technologies.                  |
+| `disabled`    | `boolean`            | `false`  | Disables all boxes.                                                                                           |
+| `error`       | `boolean`            | `false`  | Applies the error state and shows `error-text`.                                                               |
+| `hint`        | `string`             | `''`     | Help text below the boxes when there is no error.                                                             |
+
+## Default texts
+
+The texts the component generates are in English and can be changed by attribute, to follow the project language.
+
+| Attribute     | Type     | Default                           | Description                                                      |
+| ------------- | -------- | --------------------------------- | ---------------------------------------------------------------- |
+| `label`       | `string` | `'Verification code'`             | Name of the group of boxes.                                      |
+| `field-label` | `string` | `'Character {index} of {length}'` | `aria-label` of each box; `{index}` and `{length}` are replaced. |
+| `error-text`  | `string` | `'This field is required.'`       | Message shown when `error` is on.                                |
+
+### Events
+
+| Event          | `detail`            | When                         |
+| -------------- | ------------------- | ---------------------------- |
+| `lui-complete` | `{ value: string }` | All boxes are filled.        |
+| `input`        | —                   | The code changes.            |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-otp-input
+  type="number"
+  name="code"
+  separator="3"
+  hint="Enter the 6-digit code sent by SMS."
+  required
+></lui-otp-input>
+
+<script>
+  document
+    .querySelector('lui-otp-input')
+    .addEventListener('lui-complete', (event) => {
+      console.log(event.detail.value);
+    });
+</script>
+```
+
+### CSS class
+
+```html
+<div class="otp-input">
+  <span class="otp-input__label" id="otp-label">Verification code</span>
+  <div class="otp-input__group" role="group" aria-labelledby="otp-label">
+    <input class="otp-input__field" type="text" inputmode="numeric" autocomplete="one-time-code" aria-label="Character 1 of 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Character 2 of 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Character 3 of 6" />
+    <span class="otp-input__separator" aria-hidden="true"></span>
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Character 4 of 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Character 5 of 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Character 6 of 6" />
+  </div>
+</div>
+```

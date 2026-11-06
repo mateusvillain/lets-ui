@@ -1,0 +1,39 @@
+---
+title: "Accessibility"
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Vai para a região de código (quando ela rola) e para o botão de copiar. |
+| `Setas` | Com foco na região de código, rolam o código. |
+| `Enter` ou `Espaço` | Copiam o código, com foco no botão de copiar. |
+| `Esc` | Fecha a dica de cópia sem mover o ponteiro nem o foco. |
+
+A região de código entra na ordem de foco só quando as linhas não cabem. Sem rolagem, ela não ocupa uma parada de `Tab`.
+
+## Leitor de tela
+
+- O código fica em um `<pre>` com `role="region"`, nomeado a partir do `label` ("Code snippet: main.js"), para vários blocos da mesma página não terem o mesmo nome.
+- Sem `label`, todo bloco se chamaria "Code snippet". Nesse caso, ou quando dois blocos têm o mesmo `label`, dê a cada um seu próprio `aria-label`.
+- O nome do botão de copiar inclui o rótulo ("Copy code: main.js").
+- A confirmação ("Copied!") e o pedido para copiar à mão são anunciados por uma região `role="status"`, já que a dica visual não é lida.
+- Os números de linha têm `aria-hidden="true"`: só o código é lido.
+- O código tem `translate="no"`, para tradutores automáticos não trocarem palavras como `return` ou `class`.
+
+## Visual
+
+- Todas as cores, incluindo as do realce, têm contraste de pelo menos 4,5:1 sobre o fundo do bloco, nos dois temas. O realce é complementar: sem cor, o código é o mesmo.
+- O botão de copiar tem 40×40px, acima do mínimo de 24×24px do WCAG 2.5.8.
+- Linhas longas rolam em vez de quebrar: quebrar mudaria a indentação do código, o que o Reflow (1.4.10) admite como exceção.
+- A dica segue o WCAG 1.4.13: fecha com `Esc`, pode receber o ponteiro sem sumir e fica enquanto o botão tem foco.
+- O foco é visível na região de código e no botão, também no modo de cores forçadas.
+- Se o navegador recusar a cópia, o código fica selecionado e a dica mostra o atalho para copiar à mão.
+
+## Para designers
+
+- Dê a cada bloco um rótulo diferente.
+- Não conte com as cores do realce para explicar o código.
+- Deixe espaço para a rolagem horizontal em layouts estreitos, em vez de encurtar o código.
+- Traduza `copy-label`, `copied-label` e `copy-failed-label` para o idioma do produto.

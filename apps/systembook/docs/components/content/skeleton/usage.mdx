@@ -1,0 +1,40 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Follow the final layout
+
+The skeleton is a promise of what is coming. Keep the same positions, sizes and spacing as the real content, so nothing moves when it arrives.
+
+<DosDonts variant="do" title="Same shape as the content">
+  A card with a cover and three lines, where the real card has an image, a title and a two-line summary.
+</DosDonts>
+
+<DosDonts variant="dont" title="A generic block">
+  One big rectangle in place of a whole list. When the items arrive, the page jumps anyway.
+</DosDonts>
+
+## Suggest real text
+
+- Use one bone per line, not one tall block for a paragraph.
+- Vary the widths and shorten the last line (`width="56%"`), as real text does.
+- Give headings a shorter, isolated line.
+
+## Announce the loading once
+
+Each bone is decorative. The region that will be replaced by the content announces the loading, with `role="status"`, `aria-busy="true"` and an `aria-label` such as "Loading profile". When the content enters, remove `aria-busy`.
+
+Pass `label` to a Skeleton only when it stands for the whole region on its own.
+
+## How long to show it
+
+- Do not show a skeleton for very fast responses: a flash of placeholders is more distracting than a short wait.
+- Do not keep it forever. If the request fails, replace it with a message and a way to try again.
+- Load the sections independently when you can, so the content that is ready appears first.
+
+## Best practices
+
+- Do not mix a skeleton and a spinner for the same content.
+- Do not use skeletons for content that the person is not waiting for, such as a hidden menu.
+- Keep the composition simple: a few shapes are enough to suggest the layout.

@@ -1,0 +1,36 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Enters the field at the first empty box, or at the last one when the code is complete. From any box, leaves the field. |
+| `Arrow left` and `Arrow right` | Move between the boxes, following the reading direction. |
+| `Home` and `End` | Go to the first and the last box. |
+| `Backspace` | Clears the box; in an empty box, goes back and clears the previous one. |
+| `Delete` | Clears the box without moving focus. |
+| `Enter` | Submits the associated form. |
+
+The field is a single `Tab` stop. On receiving focus, a box selects its content, so the next key replaces it.
+
+## Screen reader
+
+- The boxes sit in a `role="group"` named by `label`: through `aria-label` when the label is hidden, and through `aria-labelledby` with `show-label`.
+- Each box is a native `<input>` named by its position ("Character 2 of 6").
+- With `error`, the boxes have `aria-invalid="true"`, and the error or hint message is linked to each one through `aria-describedby`.
+- The separator is decorative (`aria-hidden="true"`).
+
+## Accessible authentication
+
+- Pasting is never blocked, and the first box has `autocomplete="one-time-code"`, so the system or a password manager can fill in the code. Nobody has to transcribe it by hand (WCAG 3.3.8).
+- The code is shown in clear text, without a mask.
+
+## For designers
+
+- With the label hidden, make sure visible text on the screen explains the field (WCAG 3.3.2), or use `show-label`.
+- State the length and format of the code in the hint.
+- If the form submits on its own when the code is complete, keep a submit button too.
+- Translate `label`, `field-label` and `error-text` into the product language.

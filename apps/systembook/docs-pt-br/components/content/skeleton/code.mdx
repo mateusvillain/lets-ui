@@ -1,0 +1,61 @@
+---
+title: "Code"
+---
+
+## Text
+
+A forma padrão. A altura acompanha o tamanho da fonte do contexto (`1em`) e a largura preenche a linha. Encurte com `width`.
+
+<ComponentEmbed component="Skeleton" variant="text" />
+
+## Circle
+
+Sem tamanho, o círculo tem 40px. Se só um lado for informado, o outro acompanha e o círculo continua redondo.
+
+<ComponentEmbed component="Skeleton" variant="circle" />
+
+## Rectangle
+
+Passe `height` quando o bloco final for mais alto que o padrão.
+
+<ComponentEmbed component="Skeleton" variant="rectangle" />
+
+## Região de carregamento
+
+Envolva a composição no elemento que vai receber o conteúdo, e anuncie o carregamento nele.
+
+<ComponentEmbed component="Skeleton" variant="card" />
+
+## Propriedades
+
+| Atributo | Tipo     | Padrão | Descrição                                                                                     |
+| -------- | -------- | ------ | --------------------------------------------------------------------------------------------- |
+| `shape`  | `string` | `text` | `text`, `circle` ou `rectangle`. Um valor desconhecido volta para `text`.                     |
+| `width`  | `string` | `''`   | Qualquer medida CSS (`64%`, `12rem`). Vazio, a forma mantém a largura padrão.                 |
+| `height` | `string` | `''`   | Qualquer medida CSS. Vazio, a forma mantém a altura padrão.                                   |
+| `label`  | `string` | `''`   | Torna o Skeleton `role="status"` com esse nome. Vazio, ele é decorativo (`aria-hidden`).      |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-skeleton></lui-skeleton>
+<lui-skeleton width="64%"></lui-skeleton>
+<lui-skeleton shape="circle"></lui-skeleton>
+<lui-skeleton shape="rectangle" height="10rem"></lui-skeleton>
+
+<div role="status" aria-busy="true" aria-label="Carregando perfil">
+  <lui-skeleton shape="circle"></lui-skeleton>
+  <lui-skeleton width="48%"></lui-skeleton>
+</div>
+```
+
+### Classe CSS
+
+```html
+<span class="skeleton"></span>
+<span class="skeleton" style="--lui-skeleton-width: 64%"></span>
+<span class="skeleton skeleton--circle"></span>
+<span class="skeleton skeleton--rectangle"></span>
+```

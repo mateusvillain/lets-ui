@@ -1,0 +1,41 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Explain the code on the screen
+
+- Say where the code was sent: "Enter the 6-digit code sent to (11) 9••••-1234".
+- State the length and the format, in the hint or in the text above.
+- If the label stays hidden, the page title must explain the field. Otherwise, use `show-label`.
+
+<DosDonts variant="do" title="Context, length and destination">
+  A "Verify your phone" title, and a hint that says "Enter the 6-digit code sent by SMS."
+</DosDonts>
+
+<DosDonts variant="dont" title="Boxes with no explanation">
+  Six empty boxes under a generic title. The person does not know which code to type or where to find it.
+</DosDonts>
+
+## Match the code
+
+- Use the same `length` as the code you send.
+- Use `type="number"` when the code has digits only: the phone shows the numeric keyboard.
+- Use a separator when the message shows the code split the same way, such as "482 913".
+
+## Submitting
+
+- Keep a submit button, even if the form is submitted on `lui-complete`. The person may want to check the code first, and some assistive technologies type character by character.
+- Offer a way to resend the code, with the time left until it can be resent.
+
+## Errors
+
+- Write what happened and what to do: "The code is incorrect. Check the message and try again."
+- Do not clear the code after an error: the person can fix only the wrong character.
+- If the code expired, say so and offer to resend it.
+
+## Best practices
+
+- Never block pasting. Many people copy the code from another app.
+- Do not mask the code: it is temporary, and seeing it helps avoid mistakes.
+- Do not split the field across several screens or steps.

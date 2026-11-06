@@ -1,0 +1,40 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Moves to the code region (when it scrolls) and to the copy button. |
+| `Arrow keys` | With focus on the code region, scroll the code. |
+| `Enter` or `Space` | Copies the code, with focus on the copy button. |
+| `Esc` | Closes the copy tip without moving the pointer or the focus. |
+
+The code region enters the focus order only when the lines do not fit. Without scrolling, it does not take a `Tab` stop.
+
+## Screen reader
+
+- The code sits in a `<pre>` with `role="region"`, named after the `label` ("Code snippet: main.js"), so several blocks on the same page do not have the same name.
+- Without `label`, every block would be called "Code snippet". In that case, or when two blocks share a `label`, give each one its own `aria-label`.
+- The copy button's name includes the label ("Copy code: main.js").
+- The confirmation ("Copied!") and the request to copy by hand are announced by a `role="status"` region, since the visual tip is not read.
+- The line numbers have `aria-hidden="true"`: only the code is read.
+- The code has `translate="no"`, so automatic translators do not change words such as `return` or `class`.
+
+## Visual
+
+- All colors, including the highlighting ones, have a contrast of at least 4.5:1 over the block background, in both themes. Highlighting is complementary: without color, the code is the same.
+- The copy button is 40×40px, above the 24×24px minimum of WCAG 2.5.8.
+- Long lines scroll instead of wrapping: wrapping would change the indentation of the code, which Reflow (1.4.10) allows as an exception.
+- The tip follows WCAG 1.4.13: it can be dismissed with `Esc`, hovered without disappearing, and stays while the button has focus.
+- Focus is visible on the code region and on the button, also in forced colors mode.
+- If the browser refuses to copy, the code stays selected and the tip shows the shortcut to copy by hand.
+
+## For designers
+
+- Give every block a distinct label.
+- Do not rely on the highlighting colors to explain the code.
+- Leave room for the horizontal scroll in narrow layouts instead of shortening the code.
+- Translate `copy-label`, `copied-label` and `copy-failed-label` into the product language.

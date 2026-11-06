@@ -1,0 +1,72 @@
+---
+title: "Code"
+---
+
+## Ponto
+
+`dot` troca o ícone de feedback por um ponto de 8px. Os status sociais são sempre um ponto.
+
+<ComponentEmbed component="Status" variant="dot" />
+
+## Descrição
+
+`description` acrescenta uma segunda linha, na cor de legenda.
+
+<ComponentEmbed component="Status" variant="description" />
+
+## Rótulo oculto
+
+Sem `label`, o leitor de tela recebe o nome da variante em inglês. Para outro texto, passe `label` com `hide-label`: o texto fica para a tecnologia assistiva e sai da tela.
+
+## Pulso
+
+`pulse` anima um anel em volta do indicador. Fica parado com `prefers-reduced-motion`.
+
+<ComponentEmbed component="Status" variant="pulse" />
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a marcação fica por conta de quem consome. O indicador leva `aria-hidden="true"`. Os ícones de feedback não fazem parte da folha de estilo: use o ponto (`status__dot`) ou traga seu próprio SVG com a classe `status__icon`. Um status sem rótulo visível precisa de um `status__label status__label--hidden` com o texto.
+
+## Propriedades
+
+| Atributo      | Tipo      | Padrão    | Descrição                                                                                    |
+| ------------- | --------- | --------- | -------------------------------------------------------------------------------------------- |
+| `variant`     | `string`  | `success` | `success`, `caution`, `danger`, `info`, `online`, `away`, `busy` ou `offline`.               |
+| `label`       | `string`  | `''`      | Texto do status. Se omitido, o leitor de tela recebe o nome da variante e nada aparece na tela. |
+| `description` | `string`  | `''`      | Segunda linha, na cor de legenda.                                                            |
+| `size`        | `string`  | `md`      | Tamanho do rótulo: `md` ou `lg`. A descrição e o indicador não mudam.                        |
+| `dot`         | `boolean` | `false`   | Troca o ícone de feedback por um ponto de 8px. Os status sociais são sempre um ponto.        |
+| `pulse`       | `boolean` | `false`   | Anima um anel em volta do indicador. Parado com `prefers-reduced-motion`.                    |
+| `hide-label`  | `boolean` | `false`   | Tira o `label` da tela e o mantém para o leitor de tela.                                     |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-status variant="success" label="Pagamento aprovado"></lui-status>
+
+<lui-status
+  variant="danger"
+  dot
+  label="Falha na sincronização"
+  description="Há 5 minutos"
+></lui-status>
+
+<lui-status variant="online" pulse label="Ao vivo"></lui-status>
+```
+
+### Classe CSS
+
+```html
+<span class="status status--success status--lg">
+  <span class="status__indicator" aria-hidden="true">
+    <span class="status__dot"></span>
+  </span>
+  <span class="status__text">
+    <span class="status__label">Pagamento aprovado</span>
+    <span class="status__description">Há 2 minutos</span>
+  </span>
+</span>
+```

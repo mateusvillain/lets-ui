@@ -1,0 +1,67 @@
+---
+title: "OTP Input"
+subtitle: "Campo para senhas de uso único e códigos de verificação, com uma caixa por caractere."
+---
+
+<ComponentEmbed component="OtpInput" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Códigos de verificação">
+  O código enviado por SMS ou e-mail para confirmar um login, um cadastro ou um pagamento.
+</DosDonts>
+
+<DosDonts variant="do" title="Códigos curtos de tamanho fixo">
+  Um PIN de 4 dígitos ou um código de 6 caracteres, em que cada caixa mostra quanto falta.
+</DosDonts>
+
+<DosDonts variant="dont" title="Senhas">
+  O código aparece em texto claro. Para uma senha, use um [Input](../input/index.mdx) com `type="password"`.
+</DosDonts>
+
+<DosDonts variant="dont" title="Valores sem tamanho fixo">
+  Nomes, e-mails e números de qualquer tamanho. Use um [Input](../input/index.mdx).
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do OTP Input: rótulo, caixas, separador e dica](./anatomy.png)
+
+1. **Rótulo**: nomeia o campo. Oculto por padrão, quando o título da página já explica o código.
+2. **Caixas**: uma por caractere.
+3. **Separador**: divide as caixas em grupos. Opcional.
+4. **Dica ou mensagem de erro**: abaixo das caixas.
+
+## Comportamento
+
+- Digitar um caractere move o foco para a próxima caixa.
+- `Backspace` em uma caixa vazia volta para a anterior e a limpa.
+- Colar um código completo preenche todas as caixas, seja qual for a caixa com foco.
+- A primeira caixa sugere o código recebido por SMS (`autocomplete="one-time-code"`).
+- Quando todas as caixas estão preenchidas, o componente emite `lui-complete` com o código.
+
+## Tipos
+
+| Tipo | Aceita | Teclado |
+| --- | --- | --- |
+| **Text** (padrão) | Letras e dígitos. | O teclado padrão. |
+| **Number** | Só dígitos. | O teclado numérico, em dispositivos de toque. |
+
+## Tamanho e separador
+
+`length` define o número de caixas (6 por padrão). `separator` divide as caixas em grupos, como 3 + 3, o que facilita ler e copiar códigos longos.
+
+<ComponentEmbed component="OtpInput" variant="separator" />
+
+<ComponentEmbed component="OtpInput" variant="length" />
+
+## Estados
+
+Padrão, foco, preenchido, erro e desabilitado.
+
+<ComponentEmbed component="OtpInput" variant="error" />
+
+## Relacionados
+
+- [Input](../input/index.mdx): campos de texto de qualquer tamanho, incluindo senhas.
+- [Button](../../actionable/button/index.mdx): a ação que envia o código.
