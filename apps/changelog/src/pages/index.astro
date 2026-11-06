@@ -1,0 +1,77 @@
+---
+/**
+ * Changelog home: every release in `CHANGELOG.md` as a timeline card, newest
+ * first, with type filters and "Load earlier releases".
+ */
+import Base from '@/layouts/Base.astro';
+import ReleaseCard from '@/components/ReleaseCard.astro';
+import { loadReleases } from '@/lib/releases.js';
+
+/** Cards shown before "Load earlier releases"; also the size of each batch. */
+const PAGE_SIZE = 5;
+
+const releases = loadReleases();
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const years = releases.map((r) => r.date?.slice(0, 4)).filter(Boolean).sort();
+const since = years[0];
+---
+
+<Base
+  title="Changelog · What's new in Let's UI"
+  description="New components, improvements and fixes in Let's UI, release by release, from the repository's CHANGELOG.md."
+>
+  <header class="page-header container">
+    <h1 class="page-header__title">What's new in Let's UI</h1>
+    <p class="page-header__subtitle">
+      New components, improvements and fixes in every release of the design system, newest first.
+    </p>
+  </header>
+
+  <main id="content" tabindex="-1">
+    <div class="container">
+      <div class="filter-bar">
+        <div class="filters" role="group" aria-labelledby="filters-label" data-requires-js hidden>
+          <span id="filters-label" class="visually-hidden">Filter releases by type</span>
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="filter" data-filter="new" aria-pressed="false">New</button>
+          <button type="button" class="filter" data-filter="improvement" aria-pressed="false">Improvement</button>
+          <button type="button" class="filter" data-filter="fix" aria-pressed="false">Fix</button>
+        </div>
+        <p class="filter-bar__count">
+          <svg class="icon" width="14" height="14" aria-hidden="true" focusable="false"><use href="#icon-history" /></svg>
+          {releases.length} releases{since && ` since ${since}`}
+        </p>
+      </div>
+
+      <section class="history" aria-labelledby="history-title" data-page-size={PAGE_SIZE}>
+        <h2 id="history-title" class="visually-hidden">Release history</h2>
+
+        <!-- Announced by screen readers when filtering or loading more releases. -->
+        <p id="timeline-status" class="visually-hidden" role="status"></p>
+
+        <ol id="timeline" class="timeline" role="list">
+          {releases.map((release, index) => (
+            <ReleaseCard release={release} latest={index === 0} deferred={index >= PAGE_SIZE} />
+          ))}
+        </ol>
+
+        <p class="timeline__empty" tabindex="-1" hidden></p>
+
+        <div class="timeline__end">
+          <button type="button" class="load-more" aria-controls="timeline" data-requires-js hidden>
+            Load earlier releases
+            <svg class="icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="#icon-chevron-down" /></svg>
+          </button>
+          <p class="timeline__done" tabindex="-1" hidden>You've reached the beginning of the changelog.</p>
+          <a class="timeline__archive" href={`${base}releases/`}>All releases as a list</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import { initTimeline } from '@/scripts/timeline.js';
+
+  initTimeline(document);
+</script>

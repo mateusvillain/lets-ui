@@ -1,0 +1,64 @@
+---
+/**
+ * One release on the timeline: title, description, meta, type tag, the
+ * highlights as a checklist and a link to the full notes.
+ *
+ * Every card is in the HTML. With JavaScript, cards past the first page are
+ * `data-deferred` and appear with "Load earlier releases"; without it, the
+ * whole timeline reads top to bottom.
+ */
+import TypeTag from './TypeTag.astro';
+import { headingId, longDate, shortDate } from '@/lib/format.js';
+import { inline } from '@/lib/markdown.js';
+import type { Release } from '@/lib/types';
+
+interface Props {
+  release: Release;
+  latest?: boolean;
+  deferred?: boolean;
+}
+
+const { release, latest = false, deferred = false } = Astro.props;
+const id = headingId(release);
+const href = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}releases/${release.slug}/`;
+---
+
+<li class="timeline__item" data-type={release.type ?? undefined} data-deferred={deferred ? '' : undefined}>
+  <article class:list={['release', { 'release--latest': latest }]} aria-labelledby={id}>
+    <header class="release__header">
+      <h3 id={id} class="release__title" tabindex="-1" set:html={inline(release.title)} />
+      {release.description && <p class="release__description">{release.description}</p>}
+    </header>
+
+    <div class="release__meta">
+      {release.date && (
+        <time class="release__date" datetime={release.date}>
+          <span aria-hidden="true">{shortDate(release.date)}</span>
+          <span class="visually-hidden">{longDate(release.date)}</span>
+        </time>
+      )}
+      <span class="release__version"><span class="visually-hidden">Version </span>{release.tag}</span>
+      {latest && <span class="release__latest">Latest</span>}
+    </div>
+
+    <ul class="tags" role="list" aria-label="Categories">
+      <TypeTag type={release.type} />
+    </ul>
+
+    {release.highlights.length > 0 && (
+      <ul class="highlights" role="list" aria-label="Highlights">
+        {release.highlights.map((text) => (
+          <li class="highlights__item">
+            <svg class="icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="#icon-check" /></svg>
+            <span set:html={inline(text)} />
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <a class="release__link" href={href}>
+      Read full notes<span class="visually-hidden"> for {release.tag}</span>
+      <svg class="icon" width="14" height="14" aria-hidden="true" focusable="false"><use href="#icon-arrow-right" /></svg>
+    </a>
+  </article>
+</li>
