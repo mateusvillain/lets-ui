@@ -6,15 +6,17 @@ title: "Code"
 
 O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
 
-## Atributos
+## Propriedades
 
-| Atributo     | Tipo            | Padrão | Descrição                                                   |
-| ------------ | --------------- | ------ | ----------------------------------------------------------- |
-| `label`      | `string`        | `''`   | Conteúdo padrão do slot; ignorado quando o slot é projetado |
-| `value`      | `string`        | `''`   | Valor submetido pelo grupo quando este radio estiver marcado |
-| `checked`    | `boolean`       | `false`| Estado marcado                                              |
-| `disabled`   | `boolean`       | `false`| Desabilita o radio                                          |
-| `size`       | `'lg' \| 'md'` | `'lg'` | Controlado pelo `lui-radio-group`; raramente definido direto|
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Conteúdo padrão do slot; ignorado quando o slot é projetado. |
+| `value` | `string` | `''` | Valor enviado pelo grupo quando este radio está marcado. |
+| `checked` | `boolean` | `false` | Estado marcado. |
+| `disabled` | `boolean` | `false` | Desabilita o radio. |
+| `error` | `boolean` | `false` | Estado de erro. Normalmente definido pelo `lui-radio-group`. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` ou `sm`. Controlado pelo `lui-radio-group`; raramente definido diretamente. |
+| `aria-label` | `string` | `''` | Nome acessível quando não há texto visível. |
 
 ## Uso
 

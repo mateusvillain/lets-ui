@@ -15,6 +15,23 @@ order: 4
 
 With `required`, the form does not submit while the placeholder is active (no real option selected).
 
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Text of the label above the field. |
+| `options` | `string` | `Option 1,Option 2,Option 3` | Options separated by commas. Each one is also the submitted value. |
+| `selected` | `number` | `0` | Selected option, starting at 1. `0` shows the placeholder. |
+| `placeholder` | `string` | `Select an option` | Text shown while no option is selected. It is not a valid choice. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` or `sm`. |
+| `hint` | `string` | `''` | Help text below the field. Replaced by `error-text` when `error` is on. |
+| `optional` | `boolean` | `false` | Adds the `optional-text` marker next to the label. |
+| `optional-text` | `string` | `'(optional)'` | Marker shown when `optional` is on. |
+| `disabled` | `boolean` | `false` | Disables the field and excludes it from submission. |
+| `error` | `boolean` | `false` | Turns on the error state and shows `error-text`. |
+| `error-text` | `string` | `'This field is required.'` | Message shown when `error` is on. |
+| `aria-label` | `string` | `''` | Accessible name when there is no visible `label`. |
+
 ## Form attributes
 
 | Attribute  | Type      | Default | Description                                                                      |

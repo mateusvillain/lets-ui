@@ -29,6 +29,25 @@ Use `resize="none"` when the layout must not be disturbed by resizing — as in 
 
 With `required`, the field blocks submission when it is empty, via `ElementInternals.setValidity()`.
 
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Text of the label above the field. |
+| `value` | `string` | `''` | Current value. |
+| `placeholder` | `string` | `''` | Example shown while the field is empty. Never replaces the label. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` or `sm`. |
+| `rows` | `number` | `4` | Visible height, in lines. |
+| `resize` | `string` | `vertical` | `vertical`, `both` or `none`. |
+| `maxlength` | `number` | `''` | Maximum number of characters. Turns on the counter. |
+| `hint` | `string` | `''` | Help text below the field. Replaced by `error-text` when `error` is on. |
+| `optional` | `boolean` | `false` | Adds the `optional-text` marker next to the label. |
+| `optional-text` | `string` | `'(optional)'` | Marker shown when `optional` is on. |
+| `disabled` | `boolean` | `false` | Disables the field and excludes it from submission. |
+| `error` | `boolean` | `false` | Turns on the error state and shows `error-text`. |
+| `error-text` | `string` | `'This field is required.'` | Message shown when `error` is on. |
+| `aria-label` | `string` | `''` | Accessible name when there is no visible `label`. |
+
 ## Form attributes
 
 | Attribute  | Type      | Default | Description                                                                   |

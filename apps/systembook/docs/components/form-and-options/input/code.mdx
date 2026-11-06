@@ -40,6 +40,25 @@ shown on touch devices for the expected data type, without changing the field's 
 `pattern` and `inputmode` can be combined — the keyboard is optimized for data
 entry while the regex validates the final value, useful for fields such as CPF/CNPJ without a mask.
 
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Text of the label above the field. |
+| `type` | `string` | `text` | `text`, `password` (with a button to show the password) or `number` (with increment and decrement buttons). Other values behave as `text`. |
+| `value` | `string` | `''` | Current value. |
+| `placeholder` | `string` | `''` | Format example shown while the field is empty. Never replaces the label. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` or `sm`. |
+| `hint` | `string` | `''` | Help text below the field. Replaced by `error-text` when `error` is on. |
+| `optional` | `boolean` | `false` | Adds the `optional-text` marker next to the label. |
+| `disabled` | `boolean` | `false` | Disables the field and excludes it from submission. |
+| `error` | `boolean` | `false` | Turns on the error state and shows `error-text`. |
+| `prefix` | `string` | `''` | Text before the value, inside the field, such as `R$` or `@`. Not shown with `type="password"`. |
+| `suffix` | `string` | `''` | Text after the value, inside the field, such as `kg` or `.com`. Not shown with `type="password"`. |
+| `maxlength` | `number` | `''` | Maximum number of characters. Turns on the counter, except with `type="number"`. |
+| `min`, `max`, `step` | `number` | `''` | Limits and increment of `type="number"`. |
+| `aria-label` | `string` | `''` | Accessible name when there is no visible `label`. |
+
 ## Form attributes
 
 | Attribute   | Type      | Default | Description                                                                                 |

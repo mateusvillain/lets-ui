@@ -14,6 +14,23 @@ O `lui-native-select` é form-associated. O valor da opção selecionada é subm
 
 Com `required`, o form não submete enquanto o placeholder estiver ativo (nenhuma opção real selecionada).
 
+## Propriedades
+
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Texto do rótulo acima do campo. |
+| `options` | `string` | `Option 1,Option 2,Option 3` | Opções separadas por vírgula. Cada uma também é o valor enviado. |
+| `selected` | `number` | `0` | Opção selecionada, a partir de 1. `0` mostra o placeholder. |
+| `placeholder` | `string` | `Select an option` | Texto mostrado enquanto nenhuma opção está selecionada. Não é uma escolha válida. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` ou `sm`. |
+| `hint` | `string` | `''` | Texto de ajuda abaixo do campo. Substituído por `error-text` quando `error` está ligado. |
+| `optional` | `boolean` | `false` | Acrescenta o marcador `optional-text` ao lado do rótulo. |
+| `optional-text` | `string` | `'(optional)'` | Marcador mostrado quando `optional` está ligado. |
+| `disabled` | `boolean` | `false` | Desabilita o campo e o exclui do envio. |
+| `error` | `boolean` | `false` | Liga o estado de erro e mostra `error-text`. |
+| `error-text` | `string` | `'This field is required.'` | Mensagem mostrada quando `error` está ligado. |
+| `aria-label` | `string` | `''` | Nome acessível quando não há `label` visível. |
+
 ## Atributos de formulário
 
 | Atributo   | Tipo      | Padrão | Descrição                                                                        |
