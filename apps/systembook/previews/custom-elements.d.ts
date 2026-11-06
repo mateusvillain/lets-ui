@@ -64,6 +64,12 @@ declare module 'react' {
       'lui-pagination': LuiElement;
       'lui-progress-bar': LuiElement;
       'lui-table': LuiElement;
+      'lui-code-block': LuiElement;
+      'lui-otp-input': LuiElement;
+      'lui-skeleton': LuiElement;
+      'lui-status': LuiElement;
+      'lui-step': LuiElement;
+      'lui-stepper': LuiElement;
     }
   }
 }
