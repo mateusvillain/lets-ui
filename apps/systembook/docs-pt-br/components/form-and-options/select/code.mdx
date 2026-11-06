@@ -1,0 +1,72 @@
+---
+title: "Code"
+---
+
+## Error
+
+<ComponentEmbed component="Select" variant="error" />
+
+## Integração com formulários
+
+O `lui-native-select` é form-associated. O valor da opção selecionada é submetido via `FormData` com a chave `name`. Use `form` para associá-lo a um form por ID mesmo estando fora do `<form>`.
+
+### Required
+
+Com `required`, o form não submete enquanto o placeholder estiver ativo (nenhuma opção real selecionada).
+
+## Propriedades
+
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Texto do rótulo acima do campo. |
+| `options` | `string` | `Option 1,Option 2,Option 3` | Opções separadas por vírgula. Cada uma também é o valor enviado. |
+| `selected` | `number` | `0` | Opção selecionada, a partir de 1. `0` mostra o placeholder. |
+| `placeholder` | `string` | `Select an option` | Texto mostrado enquanto nenhuma opção está selecionada. Não é uma escolha válida. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` ou `sm`. |
+| `hint` | `string` | `''` | Texto de ajuda abaixo do campo. Substituído por `error-text` quando `error` está ligado. |
+| `optional` | `boolean` | `false` | Acrescenta o marcador `optional-text` ao lado do rótulo. |
+| `optional-text` | `string` | `'(optional)'` | Marcador mostrado quando `optional` está ligado. |
+| `disabled` | `boolean` | `false` | Desabilita o campo e o exclui do envio. |
+| `error` | `boolean` | `false` | Liga o estado de erro e mostra `error-text`. |
+| `error-text` | `string` | `'This field is required.'` | Mensagem mostrada quando `error` está ligado. |
+| `aria-label` | `string` | `''` | Nome acessível quando não há `label` visível. |
+
+## Atributos de formulário
+
+| Atributo   | Tipo      | Padrão | Descrição                                                                        |
+| ---------- | --------- | ------ | -------------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos; necessário para aparecer no `FormData`       |
+| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o select fora do elemento form            |
+| `required` | `boolean` | `false`| Bloqueia a submissão enquanto o placeholder estiver selecionado                  |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-native-select
+  label="País"
+  placeholder="Selecione..."
+  options="Brasil,Portugal"
+  size="lg"
+></lui-native-select>
+```
+
+### Classe CSS
+
+```html
+<div class="native-select native-select--lg">
+  <div class="native-select__head">
+    <label class="native-select__label">País</label>
+  </div>
+  <div class="native-select__control">
+    <select class="native-select__input">
+      <option value="">Selecione...</option>
+      <option value="br">Brasil</option>
+    </select>
+    <span class="native-select__arrow">
+      <svg ...>...</svg>
+    </span>
+  </div>
+</div>
+```

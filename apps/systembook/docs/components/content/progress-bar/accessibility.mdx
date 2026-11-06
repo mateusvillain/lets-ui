@@ -1,0 +1,30 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+The bar is not interactive and does not receive focus.
+
+## Screen reader
+
+- The track is announced as a **progress bar**, with the label as its name. With `hide-label`, the label is still the name, through `aria-label`.
+- The value goes in `aria-valuenow`, between `0` and `max`. With `value-text`, the screen reader announces that text ("3.2 GB of 10 GB") instead of a percentage.
+- The visible value repeats what the bar already announces, so it is kept out of the accessibility tree to avoid being read twice.
+- In indeterminate mode, there is no value: the screen reader announces only the bar.
+- The caption describes the bar and is a **polite live** region (`aria-live="polite"`). Screen readers do not reliably announce value changes, so the caption is how the person learns about the progress and the result.
+- Without `label`, the name is "Progress bar", in English. It is a safety net, not a usage pattern.
+
+## Visual
+
+- The fill has a contrast of at least 3:1 against the track and against the page in all four variants, in both themes, with the default brand. Another brand (`data-brand`) can change this ratio: check it when you create a brand.
+- With "reduce motion" on, the fill does not animate and the indeterminate mode stops running along the track: the whole bar only pulses, slowly.
+- In high contrast mode (`forced-colors`), the track gets an outline and the fill uses the system highlight color.
+
+## For designers
+
+- Define the label text, even when it will be hidden.
+- Specify the caption for each milestone and for the result, including failure.
+- Do not use `hide-value` without the progress in text nearby: people who cannot easily distinguish the fill are left without the information.
+- When the bar indicates that an area of the screen is loading, that area should be marked as busy (`aria-busy="true"`) until the end.

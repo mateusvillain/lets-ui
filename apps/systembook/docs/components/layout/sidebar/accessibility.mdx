@@ -1,0 +1,14 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+Sidebar is layout only and **adds no semantics**. Use semantic elements in the areas:
+
+- For navigation, place a named `nav` in the side area.
+- For complementary content, use `aside`.
+- For the main content, use `main`.
+
+**Reading order**: the side area comes in source order, before or after the content. If it is at the visual end (`side="end"`), check that the source order makes sense for screen readers.
+
+**Reflow**: when stacking on small screens, the areas follow the source order, without horizontal scrolling.

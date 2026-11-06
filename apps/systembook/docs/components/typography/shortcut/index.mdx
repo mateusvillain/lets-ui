@@ -1,0 +1,56 @@
+---
+title: "Shortcut"
+subtitle: "Shows keyboard shortcuts, a single key or a combination, in a clear and accessible way."
+order: 3
+---
+
+<ComponentEmbed component="Shortcut" variant="single" />
+
+## Best practices
+
+<DosDonts variant="do" title="Menu items and tooltips">
+  The action's keyboard shortcut, next to its name.
+</DosDonts>
+
+<DosDonts variant="do" title="Command lists and help screens">
+  The available shortcuts, gathered in one place.
+</DosDonts>
+
+<DosDonts variant="dont" title="Teaching a whole flow">
+  Write the step-by-step in text.
+</DosDonts>
+
+<DosDonts variant="dont" title="Keys the person does not have">
+  On touch screens, for example, the shortcut cannot be used.
+</DosDonts>
+
+<DosDonts variant="dont" title="As a button">
+  The Shortcut only displays, it does not trigger anything.
+</DosDonts>
+
+## Anatomy
+
+![Shortcut anatomy: key, combination and separator](./anatomy.png)
+
+1. **Key**: each key appears in its own piece.
+2. **Combination**: several keys side by side, in the order they are pressed.
+3. **Separator**: the "+" between the keys. It is decorative and hidden from screen readers.
+
+## Types
+
+| Type | When to use | Example |
+| --- | --- | --- |
+| **Single key** | Action keys. | `Enter`, `Esc`, `Tab` |
+| **Combination** | Shortcuts with modifiers. | `Ctrl` + `K` |
+
+<ComponentEmbed component="Shortcut" variant="combo" />
+
+## In context
+
+Combine it with action lists and menus, with the shortcut aligned to the end of the row. That is how the [Dropdown Menu](../../actionable/dropdown-menu/index.mdx) uses it.
+
+## Related
+
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx)
+- [Tooltip](../../content/tooltip/index.mdx)
+- [Body](../body/index.mdx)

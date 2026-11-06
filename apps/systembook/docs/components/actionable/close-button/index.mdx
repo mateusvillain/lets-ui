@@ -1,0 +1,55 @@
+---
+title: "Close Button"
+subtitle: "A button with an X, ready to dismiss or close elements such as modals, drawers, alerts and tags."
+order: 3
+---
+
+<ComponentEmbed component="CloseButton" variant="md" />
+
+## Best practices
+
+<DosDonts variant="do" title="Close something open">
+  A dialog or a side panel.
+</DosDonts>
+
+<DosDonts variant="do" title="Dismiss something shown">
+  A notification or an applied filter.
+</DosDonts>
+
+Unlike the [Icon Button](../icon-button/index.mdx), it already comes with the X icon and a default accessible name. This guarantees the same look and the same behavior across the whole system.
+
+<DosDonts variant="dont" title="Other icon actions">
+  Use the [Icon Button](../icon-button/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Cancel a flow with consequences">
+  To discard changes, for example, use a [Button](../button/index.mdx) with text, like "Discard".
+</DosDonts>
+
+## Anatomy
+
+![Close Button anatomy: container and X icon](./anatomy.png)
+
+1. **Container**: sets the touch target. It is transparent at rest and gains color in interaction states.
+2. **X icon**: fixed, inherits the text color.
+
+## Sizes
+
+| Size | Measure | Usage |
+| --- | --- | --- |
+| `sm` | 24px | Compact spaces: tags, alerts. |
+| `md` (default) | 32px | General use. |
+| `lg` | 40px | Modal and drawer headers. |
+
+## Where it appears
+
+- In the **Alert**, with the `dismissible` attribute, which adds the button and emits `lui-dismiss`.
+- In the header of the **Modal** and the **Drawer**, at size `lg`.
+- In removable **Tags** and other dismissible elements.
+
+## Related
+
+- [Icon Button](../icon-button/index.mdx)
+- [Modal](../../content/modal/index.mdx)
+- [Drawer](../../content/drawer/index.mdx)
+- [Alert](../../content/alert/index.mdx)

@@ -1,0 +1,59 @@
+---
+title: "Tooltip"
+subtitle: "Dica curta que aparece ao passar o mouse ou focar em um elemento, para explicá-lo."
+---
+
+<ComponentEmbed component="Tooltip" variant="top" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Nomear um ícone">
+  Dar nome a um [Icon Button](../../actionable/icon-button/index.mdx).
+</DosDonts>
+
+<DosDonts variant="do" title="Explicar uma abreviação">
+  Um esclarecimento rápido sobre um termo.
+</DosDonts>
+
+<DosDonts variant="do" title="Mostrar um atalho">
+  O atalho de teclado de uma ação.
+</DosDonts>
+
+<DosDonts variant="dont" title="Informação essencial">
+  Se a pessoa precisa dela para continuar, mostre na página.
+</DosDonts>
+
+<DosDonts variant="dont" title="Conteúdo longo, formatado ou com links">
+  Use um Modal, um Drawer ou texto na própria tela.
+</DosDonts>
+
+<DosDonts variant="dont" title="Telas de toque">
+  Não há hover, e o toque pode acionar o elemento em vez de mostrar a dica.
+</DosDonts>
+
+<DosDonts variant="dont" title="Mensagens de erro ou validação">
+  Mostre junto ao campo.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Tooltip: gatilho, balão e seta](./anatomy.png)
+
+1. **Gatilho**: o elemento que a dica explica.
+2. **Balão**: a caixa de texto.
+3. **Seta**: aponta para o gatilho.
+
+## Posição
+
+O balão aparece em `top` (padrão), `bottom`, `left` ou `right` do gatilho. Escolha a posição que **não cubra** informação importante.
+
+<ComponentEmbed component="Tooltip" variant="bottom" />
+
+## Gatilho
+
+O gatilho pode ser qualquer elemento focável. Se você não colocar nenhum, o Tooltip cria um botão com o texto de `label`.
+
+## Relacionados
+
+- [Icon Button](../../actionable/icon-button/index.mdx): o parceiro mais comum.
+- [Modal](../modal/index.mdx), [Drawer](../drawer/index.mdx): conteúdo mais longo.

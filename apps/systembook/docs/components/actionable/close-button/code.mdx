@@ -1,0 +1,67 @@
+---
+title: "Code"
+order: 4
+---
+
+## Disabled
+
+Use the disabled state when the close action is not available in the current context.
+
+## Inside the Alert
+
+The `dismissible` attribute on `<lui-alert>` adds a Close Button automatically. On click, the component emits the `lui-dismiss` event — it is up to the consumer to remove or hide the alert.
+
+## Inside the Modal
+
+The Modal header uses the Close Button at size `lg` to close the dialog.
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `size` | `string` | `md` |
+| `disabled` | `boolean` | `false` |
+| `label` | `string` | `Close` |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-close-button size="md" label="Close"></lui-close-button>
+```
+
+Customizing the label:
+
+```html
+<lui-close-button size="lg" label="Close modal"></lui-close-button>
+```
+
+### Dismissible alert
+
+```html
+<lui-alert
+  variant="info"
+  title="Title"
+  content="Content"
+  dismissible
+></lui-alert>
+```
+
+Listening to the dismiss event:
+
+```js
+document.querySelector('lui-alert').addEventListener('lui-dismiss', () => {
+  // remove or hide the alert
+});
+```
+
+### CSS class
+
+```html
+<button class="close-button close-button--lg" aria-label="Close">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.4697 5.46973..."/>
+  </svg>
+</button>
+```

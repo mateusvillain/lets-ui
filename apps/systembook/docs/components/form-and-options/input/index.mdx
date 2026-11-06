@@ -1,0 +1,74 @@
+---
+title: "Input"
+subtitle: "A single-line text field for typing and editing short information: name, email, password, number."
+order: 3
+---
+
+<ComponentEmbed component="Input" variant="default" />
+
+## Best practices
+
+<DosDonts variant="do" title="Personal and contact details">
+  Name, email, phone and address.
+</DosDonts>
+
+<DosDonts variant="do" title="Short, open answers">
+  Search, password, quantity: any single-line answer.
+</DosDonts>
+
+<DosDonts variant="dont" title="Long or multi-line text">
+  Use the [Textarea](../textarea/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Choosing among known options">
+  Use a [Select](../select/index.mdx), [Radio Group](../radio-group/index.mdx) or [Checkbox](../checkbox/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Turning something on or off">
+  Use the [Switch](../switch/index.mdx).
+</DosDonts>
+
+## Anatomy
+
+![Input anatomy: label, optional marker, field, prefix, hint, error message and counter](./anatomy.png)
+
+1. **Label**: names the field. It is always visible, above the field.
+2. **Optional marker** (optional): "(optional)" next to the label.
+3. **Field**: where the person types.
+4. **Prefix and suffix** (optional): fixed text before or after the value, such as "$" or "kg".
+5. **Hint**: helper text below the field.
+6. **Error message**: replaces the hint when the value is invalid.
+7. **Counter** (optional): characters used, with `maxlength`. It sits above the field, on the right.
+
+## Types
+
+| Type | When to use |
+| --- | --- |
+| `text` | General text. |
+| `email`, `tel`, `url` | Specific formats. They open the right keyboard on mobile. |
+| `password` | Passwords, with a button to show and hide. |
+| `number` | Quantities, with increase and decrease buttons. |
+
+## Sizes
+
+`lg` (default) for regular forms and `md` for dense layouts. Use the same size for every field in a form.
+
+## States
+
+| State | When it happens |
+| --- | --- |
+| **Default** | Empty or filled field, at rest. |
+| **Hover** | The pointer is over the field. |
+| **Focus** | The field is receiving input. |
+| **Error** | The value is not valid. Shows the error message. |
+| **Disabled** | The field cannot be edited right now. |
+
+<ComponentEmbed component="Input" variant="hint" />
+
+<ComponentEmbed component="Input" variant="error" />
+
+## Related
+
+- [Textarea](../textarea/index.mdx): long text.
+- [Select](../select/index.mdx): choose one option from a list.
+- [Checkbox](../checkbox/index.mdx), [Radio Group](../radio-group/index.mdx) and [Switch](../switch/index.mdx): other form controls.

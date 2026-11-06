@@ -1,0 +1,36 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Size and height
+
+- Set the initial height by the expected length: **2 to 3 lines** for a short comment, **5 or more** for a long text.
+- Keep `resize` vertical (default), so the person can enlarge it without breaking the layout width.
+- Use `resize="none"` only when the container requires a fixed size.
+
+## Character counter
+
+Turn on `maxlength` only when there is a **real** storage or display **limit**. The counter shows how much is left and avoids surprises.
+
+<DosDonts variant="do" title="Clear, visible limit">
+  The "42/160" counter appears while the person types. They know how much more they can write.
+</DosDonts>
+
+<DosDonts variant="dont" title="Silently cutting the text">
+  Blocking typing without warning, or truncating the text after submission, makes the person lose what they wrote.
+</DosDonts>
+
+## Label, hint and errors
+
+The rules are the same as the [Input](../input/index.mdx): label always visible, hint for format and limits, and a specific error message that says how to fix it.
+
+- In long fields, use the hint to suggest **what to write**: "Describe the problem and what you expected to happen."
+- Avoid long placeholders. They disappear when the person starts typing.
+
+## Best practices
+
+- Do not limit the length without need. Short limits frustrate.
+- Keep what the person typed if submission fails.
+- Do not validate on every keystroke. Validate on leaving the field or on submit.
+- For very long text, consider saving drafts automatically.

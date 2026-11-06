@@ -1,0 +1,28 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Enters the tab list, on the active tab. A second press moves to the panel. |
+| `Right Arrow` | Activates the next enabled tab. |
+| `Left Arrow` | Activates the previous enabled tab. |
+| `Home` | Activates the first enabled tab. |
+| `End` | Activates the last enabled tab. |
+
+Disabled tabs are skipped.
+
+## Screen reader
+
+- The list is announced as `tablist`, each tab as `tab` with its selected state, and the content as `tabpanel`, linked to its tab.
+- Only the active tab is in the tab order. The arrows move between the others.
+- The inactive panel is hidden from assistive technology.
+
+## For designers
+
+- Do not indicate the active tab with color alone: also use the indicator (line or segment).
+- Ensure a contrast of 3:1 on the indicator and 4.5:1 on the text.
+- Keep labels short so they do not wrap onto two lines.

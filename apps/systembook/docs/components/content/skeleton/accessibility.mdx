@@ -1,0 +1,24 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+Skeleton is **not interactive**: it does not receive focus or respond to the keyboard.
+
+## Screen reader
+
+- Without `label`, the Skeleton leaves the accessibility tree (`aria-hidden="true"`). Several bones inside a layout are not read one by one.
+- With `label`, it becomes `role="status"` and the accessible name is read once.
+- The region that will receive the real content has `aria-busy="true"` while the skeletons are visible, and loses it when the content enters. That is the consumer's responsibility.
+
+## Visual
+
+- With `prefers-reduced-motion: reduce`, the shimmer stops and only the static shape remains.
+- In `forced-colors`, the shape gains a system outline to stay visible.
+
+## For designers
+
+- Name each loading region ("Loading profile", "Loading comments"): that is what the screen reader hears.
+- Do not rely on the skeleton to explain a delay. If loading takes long or fails, show a message.

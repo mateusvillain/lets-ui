@@ -1,0 +1,48 @@
+---
+title: "Divider"
+subtitle: "Linha que separa seções de conteúdo, na horizontal ou na vertical, com ou sem texto."
+---
+
+<ComponentEmbed component="Divider" variant="plain" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Seções de um menu">
+  Grupos de itens de assuntos diferentes.
+</DosDonts>
+
+<DosDonts variant="do" title="Grupos de ações e trechos de formulário">
+  Blocos que pertencem a assuntos diferentes.
+</DosDonts>
+
+<DosDonts variant="do" title="Alternativas de login">
+  O "ou" entre duas opções de entrada.
+</DosDonts>
+
+<DosDonts variant="dont" title="Criar espaço">
+  Use o espaçamento de [Stack](../stack/index.mdx) ou [Box](../box/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Separar cada item de uma lista">
+  Linhas demais poluem. Use espaço, ou os divisores da [Table](../../content/table/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Separar títulos de conteúdo">
+  A tipografia já cria a hierarquia.
+</DosDonts>
+
+## Variações
+
+| Variação | Quando usar |
+| --- | --- |
+| **Horizontal** (padrão) | Separa blocos empilhados: menus, seções, formulários. |
+| **Vertical** | Separa itens lado a lado, como em barras de ferramentas. |
+| **Com texto** (`label`) | Separador com palavra, como "ou". |
+
+<ComponentEmbed component="Divider" variant="labelled" />
+
+## Relacionados
+
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx): usa divisores entre grupos.
+- [Stack](../stack/index.mdx): espaço entre blocos.
+- [Table](../../content/table/index.mdx).

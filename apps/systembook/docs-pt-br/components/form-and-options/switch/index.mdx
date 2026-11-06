@@ -1,0 +1,57 @@
+---
+title: "Switch"
+subtitle: "Liga ou desliga uma configuração, com efeito imediato."
+---
+
+<ComponentEmbed component="Switch" variant="off" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Efeito imediato">
+  A mudança passa a valer na hora, sem um botão "Salvar".
+</DosDonts>
+
+<DosDonts variant="do" title="Preferências de ligar e desligar">
+  Notificações, modo escuro ou recursos opcionais.
+</DosDonts>
+
+<DosDonts variant="dont" title="Escolhas que só valem ao enviar um formulário">
+  Use o [Checkbox](../checkbox/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Duas opções com nomes diferentes">
+  Para escolher entre "Mensal" ou "Anual", por exemplo, use o [Radio Group](../radio-group/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Selecionar vários itens de uma lista">
+  Use Checkboxes.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Switch: trilho, marcador e label](./anatomy.png)
+
+1. **Trilho**: a base do controle.
+2. **Marcador**: o círculo que desliza. Sua posição mostra o estado.
+3. **Label**: descreve o que o Switch controla.
+
+## Estados
+
+| Estado | Descrição |
+| --- | --- |
+| **Desligado** | O recurso está desativado. |
+| **Ligado** | O recurso está ativo. |
+| **Foco** | Anel de foco ao navegar por teclado. |
+| **Erro** | O estado ligado é obrigatório e não foi ativado. |
+| **Desabilitado** | O controle não pode ser alterado agora. |
+
+<ComponentEmbed component="Switch" variant="on" />
+
+## Tamanhos
+
+`lg` (padrão) e `md`.
+
+## Relacionados
+
+- [Checkbox](../checkbox/index.mdx): opção que só vale ao enviar o formulário.
+- [Radio Group](../radio-group/index.mdx): escolher entre opções nomeadas.

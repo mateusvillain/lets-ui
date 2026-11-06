@@ -1,0 +1,42 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Write short labels
+
+- Use **one or two words**: "Active", "In review".
+- Sentence case and no punctuation.
+- Use **nouns or adjectives** that describe the state, not action verbs.
+
+<DosDonts variant="do" title="Clear, short statuses">
+  "Paid", "Pending" and "Declined" in an orders table. The person scans the column and understands.
+</DosDonts>
+
+<DosDonts variant="dont" title="Color without text or long sentences">
+  A Tag with color only, or "Awaiting approval from the responsible manager". Long text breaks the layout and loses its purpose.
+</DosDonts>
+
+## Choose the variant by meaning
+
+- Use `success`, `caution` and `danger` for **statuses with a shared meaning**.
+- Use `neutral` when the label is only a classification.
+- Use `primary` sparingly, for emphasis.
+
+Keep the same meaning for the same color across the whole product.
+
+## Color is never the only information
+
+The Tag text must always state the status. People who cannot distinguish colors, or who use a screen reader, rely on the text.
+
+## Placement
+
+- In tables, put the Tags in a status column, aligned to the start.
+- In cards, put them next to the title or in the top corner.
+- Keep the same size within the same set.
+
+## Best practices
+
+- Do not use many Tags per item. Two or three already compete with the content.
+- Do not use Tag as a button. If it needs to be clickable or removable, use a component made for that.
+- Use the `sm` size in tables and dense lists, and `md` in cards and forms.

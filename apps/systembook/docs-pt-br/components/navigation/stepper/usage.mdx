@@ -1,0 +1,41 @@
+---
+title: "Usage"
+---
+
+## Nomeie as etapas
+
+- Use **substantivos curtos** que digam o que acontece na etapa: "Conta", "Endereço", "Pagamento".
+- Use a descrição para um detalhe que ajude a decidir, como "Cartão ou PIX", não para repetir o rótulo.
+- Mantenha os rótulos paralelos: todos substantivos, mais ou menos do mesmo tamanho.
+
+<DosDonts variant="do" title="Rótulos curtos e paralelos">
+  "Conta", "Endereço", "Pagamento", "Revisão".
+</DosDonts>
+
+<DosDonts variant="dont" title="Instruções como rótulos">
+  "Preencha seus dados pessoais", "Agora diga onde você mora". Rótulos longos quebram a linha e repetem o que a página já diz.
+</DosDonts>
+
+## Quantidade de etapas
+
+- Mantenha entre **três e seis** etapas. Menos de três não precisa de stepper; mais de seis deixa o fluxo com cara de longo e a linha apertada.
+- Junte etapas pequenas em uma. Uma etapa com um único campo raramente compensa.
+- Não acrescente nem remova etapas no meio do fluxo: o total que a pessoa viu no início precisa se manter.
+
+## Livre ou linear
+
+- Por padrão, a pessoa pode pular para qualquer etapa. Use quando as etapas são independentes, como as seções de um perfil.
+- Use `linear` quando cada etapa depende da anterior, como em um checkout. A pessoa volta para corrigir algo e avança pelo botão da etapa.
+
+## Movendo-se entre etapas
+
+- Mantenha um botão "Continuar" ou "Próximo" no conteúdo da etapa. O stepper indica o progresso; a ação principal fica no formulário.
+- Valide a etapa antes de avançar. Se estiver inválida, cancele a troca e mostre os erros.
+- Não perca o que foi digitado quando a pessoa volta.
+- Quando a etapa muda o conteúdo da página, atualize o título da página e mova o foco para o título da nova etapa.
+
+## Posicionamento
+
+- Coloque o stepper horizontal no topo do fluxo, acima do conteúdo da etapa.
+- Coloque o stepper vertical ao lado do conteúdo, em telas largas, ou quando os rótulos forem longos.
+- Use um stepper por fluxo.

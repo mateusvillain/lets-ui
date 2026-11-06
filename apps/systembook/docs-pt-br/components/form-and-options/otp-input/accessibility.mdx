@@ -1,0 +1,35 @@
+---
+title: "Accessibility"
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Entra no campo pela primeira caixa vazia, ou pela última quando o código está completo. De qualquer caixa, sai do campo. |
+| `Seta para a esquerda` e `Seta para a direita` | Movem entre as caixas, seguindo a direção de leitura. |
+| `Home` e `End` | Vão para a primeira e a última caixa. |
+| `Backspace` | Limpa a caixa; em uma caixa vazia, volta e limpa a anterior. |
+| `Delete` | Limpa a caixa sem mover o foco. |
+| `Enter` | Envia o formulário associado. |
+
+O campo é uma única parada de `Tab`. Ao receber foco, a caixa seleciona o conteúdo, então a próxima tecla o substitui.
+
+## Leitor de tela
+
+- As caixas ficam em um `role="group"` nomeado por `label`: por `aria-label` quando o rótulo está oculto, e por `aria-labelledby` com `show-label`.
+- Cada caixa é um `<input>` nativo nomeado pela posição ("Character 2 of 6").
+- Com `error`, as caixas têm `aria-invalid="true"`, e a mensagem de erro ou a dica fica ligada a cada uma por `aria-describedby`.
+- O separador é decorativo (`aria-hidden="true"`).
+
+## Autenticação acessível
+
+- Colar nunca é bloqueado, e a primeira caixa tem `autocomplete="one-time-code"`, para o sistema ou um gerenciador de senhas preencher o código. Ninguém precisa transcrevê-lo à mão (WCAG 3.3.8).
+- O código aparece em texto claro, sem máscara.
+
+## Para designers
+
+- Com o rótulo oculto, garanta que um texto visível na tela explique o campo (WCAG 3.3.2), ou use `show-label`.
+- Informe o tamanho e o formato do código na dica.
+- Se o formulário for enviado sozinho quando o código estiver completo, mantenha também um botão de envio.
+- Traduza `label`, `field-label` e `error-text` para o idioma do produto.

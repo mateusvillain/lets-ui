@@ -1,0 +1,46 @@
+---
+title: "Stack"
+subtitle: "Empilha elementos na vertical, com espaçamento consistente entre eles."
+---
+
+<ComponentEmbed component="Stack" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Elementos em coluna">
+  Campos de um formulário, blocos de uma página, itens de um card ou parágrafos.
+</DosDonts>
+
+<DosDonts variant="do" title="Espaço uniforme">
+  Em vez de dar margem a cada elemento, você define o espaço **uma vez**, no Stack. É o primitivo de layout mais usado.
+</DosDonts>
+
+<DosDonts variant="dont" title="Elementos lado a lado">
+  Use [Inline](../inline/index.mdx) ou [Flex](../flex/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Colunas de uma grade de página">
+  Use [Grid](../grid/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Alternar entre coluna e linha conforme o espaço">
+  Use [Switcher](../switcher/index.mdx).
+</DosDonts>
+
+## Opções
+
+| Opção | O que controla | Padrão |
+| --- | --- | --- |
+| `gap` | Espaço entre os itens. | 16 |
+| `align` | Alinhamento horizontal dos itens. | Esticar |
+| `justify` | Distribuição vertical dentro do espaço. | Início |
+
+<ComponentEmbed component="Stack" variant="tight" />
+
+<ComponentEmbed component="Stack" variant="centered" />
+
+## Relacionados
+
+- [Inline](../inline/index.mdx): na horizontal.
+- [Box](../box/index.mdx): superfície com espaçamento.
+- [Spacing](../../../foundations/properties/spacing.mdx): a escala de espaços.

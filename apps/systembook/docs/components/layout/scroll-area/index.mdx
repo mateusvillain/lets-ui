@@ -1,0 +1,59 @@
+---
+title: "Scroll Area"
+subtitle: "Scrollable region with indicators for hidden content, accessible by keyboard."
+order: 10
+---
+
+<ComponentEmbed component="ScrollArea" variant="vertical" />
+
+## Best practices
+
+<DosDonts variant="do" title="Long lists in panels">
+  Items that do not fit in the height of a panel or a side area.
+</DosDonts>
+
+<DosDonts variant="do" title="Code snippets">
+  Long lines that scroll without breaking the layout.
+</DosDonts>
+
+<DosDonts variant="do" title="Carousels">
+  Content that scrolls within a fixed space.
+</DosDonts>
+
+<DosDonts variant="dont" title="The whole page">
+  Let the browser's scrolling handle it.
+</DosDonts>
+
+<DosDonts variant="dont" title="Avoiding horizontal scrolling in tables">
+  [Table](../../content/table/index.mdx) already handles its own scrolling.
+</DosDonts>
+
+<DosDonts variant="dont" title="Hiding important content">
+  Content that requires scrolling can go unnoticed.
+</DosDonts>
+
+## Options
+
+| Option | What it controls |
+| --- | --- |
+| `orientation` | Scroll axis: vertical (default) or horizontal. |
+| `scrollbar-visibility` | When the scrollbar appears: `auto`, `always`, `hover` or `hidden`. |
+| `fade` | Gradient at the edges, in the background color, that signals hidden content. |
+| `scroll-shadow` | Shadow at the edges, which works on any background. |
+| `snap` | Scrolling "snaps" to the items, good for carousels. |
+| `overscroll` | Prevents scrolling from passing to the page when it reaches the limit. |
+| `height`, `max-height`, `max-width` | The size of the region. |
+
+## Scroll indicators
+
+The indicators show that there is **more content** past the visible edge. They appear and disappear on their own as you scroll.
+
+<ComponentEmbed component="ScrollArea" variant="faded" />
+
+<ComponentEmbed component="ScrollArea" variant="shadow" />
+
+## Related
+
+- [Table](../../content/table/index.mdx): table scrolling.
+- [Sidebar](../sidebar/index.mdx): side panels with scrolling.
+- [Drawer](../../content/drawer/index.mdx).

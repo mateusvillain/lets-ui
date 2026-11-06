@@ -1,0 +1,168 @@
+---
+title: "Code"
+order: 4
+---
+
+## Content
+
+The code comes from the element content. The component removes blank lines at the start and end and the indentation common to all lines, so the code can follow the indentation of the surrounding HTML.
+
+Plain text is parsed as HTML by the browser: `<` would open a tag. To show markup, wrap the code in a `<script type="text/plain">`. The browser does not parse or run that content, and the component reads it exactly as written.
+
+```html
+<lui-code-block label="Component.html">
+  <script type="text/plain">
+    <lui-button variant="primary" disabled>Save</lui-button>
+  </script>
+</lui-code-block>
+```
+
+For code that contains a `</script>`, use a `<template>`. It is also read as text, but the browser rewrites the markup: line breaks inside a tag disappear and boolean attributes become `disabled=""`.
+
+The component follows content changes made by script.
+
+## Line numbers
+
+`show-line-numbers` numbers each line on the left.
+
+<ComponentEmbed component="CodeBlock" variant="line-numbers" />
+
+## Copy button
+
+The button copies the code exactly as it appears, and the tip shows "Copied!" for two seconds. `copy="false"` removes the button.
+
+The clipboard only works in a secure context (HTTPS or `localhost`). If the browser refuses, the component selects the code, the tip shows `copy-failed-label` for five seconds and `lui-copy-error` is emitted instead of `lui-copy`.
+
+## Custom icon
+
+The file icon is the default content of the `icon` slot. Pass another SVG in that slot to replace it, with `aria-hidden="true"`, or use `show-icon="false"` to hide it.
+
+## Syntax highlighting
+
+The package does not ship a highlighter: each language has a cost, and pages that do not need highlighting should not load a parser. Instead, `LuiCodeBlock.highlighter` is a hook where you connect a library once for the whole page.
+
+We recommend [highlight.js](https://highlightjs.org/). It generates the `hljs-*` classes that Code Block already paints with the Let's UI tokens, in both themes.
+
+### 1. Install
+
+```bash
+npm install highlight.js
+```
+
+### 2. Connect it to Code Block
+
+In the entry file of the application, where you import `@lets-ui/components`:
+
+```js
+import '@lets-ui/components';
+import { LuiCodeBlock } from '@lets-ui/components';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import xml from 'highlight.js/lib/languages/xml';
+import bash from 'highlight.js/lib/languages/bash';
+
+// Register only the languages the application shows.
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('bash', bash);
+
+LuiCodeBlock.highlighter = (code, language) =>
+  hljs.getLanguage(language) ? hljs.highlight(code, { language }).value : null;
+```
+
+- `highlight.js/lib/core` loads only the engine; each `registerLanguage` adds one language.
+- `hljs.getLanguage(language)` returns `null` for languages that were not registered, and the block appears without color instead of logging an error.
+- The order does not matter: blocks already on the page are recolored when the highlighter is set.
+
+### 3. Set the language of each block
+
+```html
+<lui-code-block label="main.js" language="javascript">
+  const retries = 3;
+</lui-code-block>
+```
+
+`language` accepts any name or alias highlight.js knows: `html` and `svg` come from the `xml` module, `ts` and `tsx` from `typescript`, `sh` and `zsh` from `bash`.
+
+### Behavior
+
+- Without a highlighter, without `language`, or when the highlighter returns `null` or fails, the code appears without color.
+- The copy button and the `code` property always use the plain text.
+- The component renders the highlighter's HTML as is. highlight.js escapes the code; a custom highlighter must escape `<` and `&` itself.
+- Do not import highlight.js themes: the code is inside the shadow DOM, where page CSS does not reach, and the colors already come from the tokens.
+- Other libraries work through the same hook, but only the `hljs-*` classes are colored. Prism and starry-night appear without color, and Shiki ignores the tokens and the theme.
+
+Without the Web Component, run highlight.js yourself, put the output inside `<code>` and add `code-block--highlighted` to the block.
+
+## CSS class (without Web Component)
+
+The CSS class reproduces the look, but the content is the consumer's responsibility: escape `<` and `&`, write the line numbers by hand and keep the code flush with the margin inside the `<pre>`. Copying depends on JavaScript, so there is no button in this version. If you build one, add `code-block--copy` to the block and, for a single line of code, `code-block--single-line`.
+
+## Properties
+
+| Attribute           | Type      | Default                      | Description                                                                                         |
+| ------------------- | --------- | ---------------------------- | --------------------------------------------------------------------------------------------------- |
+| `variant`           | `string`  | `default`                    | `default` or `snippet`.                                                                             |
+| `label`             | `string`  | `''`                         | Header text: file name, language or shell.                                                          |
+| `language`          | `string`  | `''`                         | Language passed to the highlighter. Without it, there is no highlighting.                           |
+| `show-line-numbers` | `boolean` | `false`                      | Numbers the lines.                                                                                  |
+| `show-icon`         | `boolean` | `true`                       | Header icon in the `default` variant. `"false"` hides it.                                           |
+| `copy`              | `boolean` | `true`                       | Copy button. `"false"` removes it.                                                                  |
+| `copy-label`        | `string`  | `Copy code`                  | Tip of the copy button. With `label`, the accessible name becomes `Copy code: <label>`.             |
+| `copied-label`      | `string`  | `Copied!`                    | Confirmation shown in the tip and announced after copying.                                          |
+| `copy-failed-label` | `string`  | `Press Ctrl+C or ⌘C to copy` | Message shown and announced when the browser refuses to copy.                                       |
+| `aria-label`        | `string`  | `Code snippet`               | Name of the code region. Without it, `Code snippet: <label>`, or `Code snippet` without `label`.    |
+
+### Slots
+
+| Slot      | Description                                                   |
+| --------- | ------------------------------------------------------------- |
+| (default) | The code: text, `<script type="text/plain">` or `<template>`. |
+| `icon`    | Header icon in the `default` variant. Decorative.             |
+
+### JavaScript properties
+
+| Property                   | Type                                                 | Description                                                                              |
+| -------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `code`                     | `string`                                             | Read-only. The code as shown and copied.                                                 |
+| `LuiCodeBlock.highlighter` | `(code: string, language: string) => string \| null` | Static. Highlighting function for the whole page. Assigning `null` turns highlighting off. |
+
+### Events
+
+| Event            | `detail`             | When                                 |
+| ---------------- | -------------------- | ------------------------------------ |
+| `lui-copy`       | `{ code: string }`   | After the code is copied.            |
+| `lui-copy-error` | `{ error: unknown }` | When the browser refuses to copy.    |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-code-block label="Component.html" show-line-numbers>
+  <script type="text/plain">
+    <lui-button variant="primary" size="lg">Save</lui-button>
+  </script>
+</lui-code-block>
+
+<lui-code-block variant="snippet" label="bash">
+  npm install @lets-ui/styles @lets-ui/components
+</lui-code-block>
+```
+
+### CSS class
+
+```html
+<div class="code-block code-block--snippet">
+  <div class="code-block__header">
+    <p class="code-block__label">bash</p>
+  </div>
+  <div class="code-block__body">
+    <pre
+      class="code-block__pre"
+      role="region"
+      aria-label="Code snippet"
+    ><code>npm install @lets-ui/styles</code></pre>
+  </div>
+</div>
+```

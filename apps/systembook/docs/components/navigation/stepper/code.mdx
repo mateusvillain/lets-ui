@@ -1,0 +1,121 @@
+---
+title: "Code"
+order: 4
+---
+
+## Vertical
+
+With `orientation="vertical"`, the steps stack and the connector goes down from the center of the indicator. When the stepper has a height, the connectors stretch to fill it.
+
+<ComponentEmbed component="Stepper" variant="vertical" />
+
+## Narrow containers
+
+The switch from horizontal to vertical depends on the width of the container, not of the viewport, so it also works in a narrow column. The `orientation` attribute does not change.
+
+## Loading
+
+`loading` on a `lui-step` replaces its number with a progress indicator. The position stays in the accessible name.
+
+<ComponentEmbed component="Stepper" variant="loading" />
+
+## Linear
+
+With `linear`, only completed steps can be clicked. Advance through code, by changing `current-step`.
+
+```js
+const stepper = document.querySelector('lui-stepper');
+stepper.currentStep = stepper.currentStep + 1;
+```
+
+## Event `lui-step-change`
+
+When a step is clicked, the stepper emits `lui-step-change` with the chosen step and the previous one. The event bubbles, crosses the shadow DOM and is cancelable: `event.preventDefault()` keeps the current step.
+
+```js
+stepper.addEventListener('lui-step-change', (event) => {
+  if (event.detail.step > event.detail.previous && !form.checkValidity()) {
+    event.preventDefault();
+  }
+});
+```
+
+## CSS class (without Web Component)
+
+Without the Web Component, the markup is the consumer's responsibility: move `stepper__item--completed`, `stepper__item--active` and `aria-current="step"` by hand, and leave the connector out of the last item. Use `stepper--vertical` and `stepper--labels-bottom` on the `<ol>` for the other layouts.
+
+These also become the consumer's responsibility:
+
+- the visually hidden position text (`stepper__position`);
+- the `aria-hidden="true"` on the indicator;
+- switching to `stepper--vertical` when the row does not fit.
+
+## Properties
+
+### `lui-stepper`
+
+| Attribute         | Type                         | Default                  | Description                                                              |
+| ----------------- | ---------------------------- | ------------------------ | ------------------------------------------------------------------------ |
+| `current-step`    | `number`                     | `1`                      | Current step, starting at 1. Reflected in the attribute on navigation.   |
+| `orientation`     | `'horizontal' \| 'vertical'` | `horizontal`             | Layout of the steps.                                                     |
+| `label-placement` | `'end' \| 'bottom'`          | `end`                    | Label beside or below the indicator. `bottom` only applies horizontally. |
+| `linear`          | `boolean`                    | `false`                  | Prevents jumping to steps ahead of the current one.                      |
+| `label`           | `string`                     | `Progress`               | Accessible name of the step list.                                        |
+| `completed-label` | `string`                     | `Completed`              | Text announced on completed steps.                                       |
+| `loading-label`   | `string`                     | `Loading`                | Text announced on steps with `loading`.                                  |
+| `step-label`      | `string`                     | `Step {step} of {total}` | Position announced on each step and on step change.                      |
+
+### `lui-step`
+
+| Attribute     | Type      | Default | Description                                   |
+| ------------- | --------- | ------- | --------------------------------------------- |
+| `label`       | `string`  | `''`    | Step title.                                   |
+| `description` | `string`  | `''`    | Supporting text below the title.              |
+| `loading`     | `boolean` | `false` | Replaces the number with a loading indicator. |
+| `disabled`    | `boolean` | `false` | Disables the step.                            |
+
+### Events
+
+| Event             | `detail`                             | When                                                |
+| ----------------- | ------------------------------------ | --------------------------------------------------- |
+| `lui-step-change` | `{ step: number, previous: number }` | A step is clicked, before the change. Cancelable.   |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-stepper current-step="1" label="Checkout">
+  <lui-step label="Account" description="Your details"></lui-step>
+  <lui-step label="Address" description="Shipping"></lui-step>
+  <lui-step label="Payment" description="Card or PIX"></lui-step>
+</lui-stepper>
+```
+
+### CSS class
+
+```html
+<ol class="stepper" aria-label="Checkout">
+  <li class="stepper__item stepper__item--completed">
+    <button class="stepper__trigger" type="button">
+      <span class="stepper__position">Step 1 of 3</span>
+      <span class="stepper__indicator" aria-hidden="true">
+        <span class="stepper__circle">
+          <span class="stepper__number">1</span>
+        </span>
+      </span>
+      <span class="stepper__text">
+        <span class="stepper__label">Account</span>
+        <span class="stepper__description">Your details</span>
+      </span>
+      <span class="stepper__status">Completed</span>
+    </button>
+    <span class="stepper__connector" aria-hidden="true"></span>
+  </li>
+  <li class="stepper__item stepper__item--active">
+    <button class="stepper__trigger" type="button" aria-current="step">
+      <!-- indicator and text -->
+    </button>
+  </li>
+</ol>
+```

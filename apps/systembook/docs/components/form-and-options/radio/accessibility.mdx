@@ -1,0 +1,27 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Enters the group, on the selected option or the first available one. |
+| `Down Arrow` or `Right Arrow` | Moves to the next option and selects it. |
+| `Up Arrow` or `Left Arrow` | Moves to the previous option and selects it. |
+| `Space` | Selects the focused option. |
+
+The group takes up **a single** Tab stop. The arrows navigate within it.
+
+## Screen reader
+
+- Each option is announced as a radio button, with the label's name and its state.
+- The reader announces the position ("2 of 4") and the group's title.
+- Disabled options are announced as unavailable.
+
+## For designers
+
+- Always define a title for the group (the question the options answer).
+- The selected state must be distinguished by more than color: the circle fills in.
+- Ensure 3:1 contrast on the circle and 4.5:1 on the label.

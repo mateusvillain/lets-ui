@@ -1,0 +1,43 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Drawer or Modal?
+
+| If... | Use |
+| --- | --- |
+| the person needs to **check the page** while working | Drawer |
+| the content is **longer** (form, details) | Drawer |
+| it is a **short confirmation or decision** | Modal |
+| the task **blocks** everything else | Modal |
+
+## Title and actions
+
+- The title describes **the content or the task**: "Order details", "Edit profile".
+- Place the main action in the **footer**, on the right, and the secondary one ("Cancel") next to it.
+- Use verbs in button labels: "Save changes", instead of "OK".
+
+<DosDonts variant="do" title="Context preserved">
+  Open the Drawer from a table row. The person edits without losing their place in the list.
+</DosDonts>
+
+<DosDonts variant="dont" title="Drawer inside a Drawer">
+  Opening a panel over another panel is disorienting. Reorganize the flow or use a page of its own.
+</DosDonts>
+
+## Closing from the backdrop
+
+By default, clicking outside the panel **does not close it**. Enable `close-on-backdrop` only when accidental dismissal has no cost, such as in a read-only panel. In forms, keep closing explicit, so the person does not lose what they typed.
+
+## Content
+
+- Keep the content **focused on one task**.
+- Let the body scroll, and keep the header and footer fixed.
+- If there are unsaved changes, confirm before closing.
+
+## Best practices
+
+- Do not open the Drawer automatically when the page loads.
+- Use the same size for similar Drawers.
+- On small screens, the Drawer takes the full width: think about the mobile version.

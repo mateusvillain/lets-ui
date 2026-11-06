@@ -1,0 +1,63 @@
+---
+title: "Image"
+subtitle: "Exibe imagens com carregamento preguiçoso, espaço reservado e fallback, sem deslocar o layout."
+---
+
+<ComponentEmbed component="Image" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Imagens de conteúdo">
+  Fotos, capas, ilustrações e capturas de tela.
+</DosDonts>
+
+<DosDonts variant="do" title="Carregamento sem saltos">
+  O Image reserva o espaço antes do carregamento e mostra um indicador enquanto carrega.
+</DosDonts>
+
+<DosDonts variant="do" title="Falha no carregamento">
+  Ele oferece uma alternativa se a imagem não carregar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Ícones">
+  Use o conjunto de ícones do sistema.
+</DosDonts>
+
+<DosDonts variant="dont" title="Fotos de pessoas ou marcas pequenas">
+  Use o [Avatar](../avatar/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Fundos decorativos">
+  Aplique por CSS.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Image: imagem carregada com legenda, espaço reservado durante o carregamento e fallback após falha](./anatomy.png)
+
+1. **Imagem**: o conteúdo principal.
+2. **Espaço reservado**: ocupa a área antes do carregamento, evitando saltos no layout.
+3. **Fallback**: cor ou imagem alternativa quando a principal falha.
+4. **Legenda** (opcional): descreve a imagem abaixo dela.
+
+## Proporção
+
+Defina `aspect-ratio` (como `16/9`, `4/3` ou `1/1`) para reservar o espaço. Isso evita que o conteúdo da página pule quando a imagem aparece. O ajuste `fit` (`cover` por padrão) define como a imagem preenche a área.
+
+## Formato
+
+Com `radius`, a imagem ganha cantos arredondados, ou círculo completo para imagens redondas.
+
+<ComponentEmbed component="Image" variant="circle" />
+
+## Legenda
+
+Com `caption`, a imagem vira uma figura com legenda. Use quando o texto agrega contexto, como fonte, data ou descrição.
+
+<ComponentEmbed component="Image" variant="caption" />
+
+## Relacionados
+
+- [Avatar](../avatar/index.mdx): fotos de pessoas.
+- [Card](../card/index.mdx): imagens dentro de cards.
+- [Grid](../../layout/grid/index.mdx): galerias.

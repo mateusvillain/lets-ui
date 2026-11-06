@@ -31,7 +31,10 @@
     "release": "changeset publish",
     "playground": "pnpm --prefix playground dev",
     "state-calculator": "pnpm --prefix apps/state-calculator dev",
-    "brand-studio": "pnpm --prefix apps/brand-studio dev"
+    "brand-studio": "pnpm --prefix apps/brand-studio dev",
+    "systembook": "pnpm --prefix apps/systembook docs:dev",
+    "systembook:check": "pnpm --prefix apps/systembook docs:check",
+    "systembook:build": "pnpm --prefix apps/systembook docs:build"
   },
   "lint-staged": {
     "*.{js,ts,css,scss,json,md}": [

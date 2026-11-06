@@ -1,0 +1,50 @@
+---
+title: "Body"
+subtitle: "Texto de conteúdo: parágrafos, legendas e notas."
+---
+
+<ComponentEmbed component="Body" variant="md" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Parágrafos e descrições">
+  Todo texto corrido que não é título.
+</DosDonts>
+
+<DosDonts variant="do" title="Legendas e notas">
+  Textos de apoio ao conteúdo principal.
+</DosDonts>
+
+<DosDonts variant="dont" title="Títulos">
+  Use o [Heading](../heading/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Atalhos de teclado">
+  Use o [Shortcut](../shortcut/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Rótulos de controles">
+  Eles já vêm nos componentes de formulário.
+</DosDonts>
+
+## Tamanhos
+
+| Tamanho | Elemento | Quando usar |
+| --- | --- | --- |
+| `lg` | `p` | Introdução e texto de destaque. |
+| `md` (padrão) | `p` | Conteúdo geral. |
+| `sm` | `p` | Legendas, notas e texto auxiliar. |
+
+<ComponentEmbed component="Body" variant="lg" />
+
+<ComponentEmbed component="Body" variant="sm" />
+
+## Opções
+
+O Body também aceita alinhamento (esquerda, centro, direita ou justificado), cor, estilo (como itálico) e decoração do texto.
+
+## Relacionados
+
+- [Heading](../heading/index.mdx): títulos.
+- [Link](../../navigation/link/index.mdx): links dentro do texto.
+- [Typography](../../../foundations/properties/typography.mdx): as escalas e os tokens.

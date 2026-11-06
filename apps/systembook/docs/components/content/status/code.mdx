@@ -1,0 +1,73 @@
+---
+title: "Code"
+order: 4
+---
+
+## Dot
+
+`dot` replaces the feedback icon with an 8px dot. The social statuses are always a dot.
+
+<ComponentEmbed component="Status" variant="dot" />
+
+## Description
+
+`description` adds a second line, in caption color.
+
+<ComponentEmbed component="Status" variant="description" />
+
+## Hidden label
+
+Without `label`, the screen reader gets the variant name in English. For another text, pass `label` with `hide-label`: the text stays for assistive technology and leaves the screen.
+
+## Pulse
+
+`pulse` animates a ring around the indicator. It stays still under `prefers-reduced-motion`.
+
+<ComponentEmbed component="Status" variant="pulse" />
+
+## CSS class (without Web Component)
+
+Without the Web Component, the markup is the consumer's responsibility. The indicator carries `aria-hidden="true"`. The feedback icons are not part of the stylesheet: use the dot (`status__dot`), or bring your own SVG with the `status__icon` class. A status without a visible label needs a `status__label status__label--hidden` with the text.
+
+## Properties
+
+| Attribute     | Type      | Default   | Description                                                                                     |
+| ------------- | --------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `variant`     | `string`  | `success` | `success`, `caution`, `danger`, `info`, `online`, `away`, `busy` or `offline`.                  |
+| `label`       | `string`  | `''`      | Status text. If omitted, the screen reader gets the variant name and nothing appears on screen. |
+| `description` | `string`  | `''`      | Second line, in caption color.                                                                  |
+| `size`        | `string`  | `md`      | Label size: `md` or `lg`. The description and the indicator do not change.                      |
+| `dot`         | `boolean` | `false`   | Replaces the feedback icon with an 8px dot. Social statuses are always a dot.                   |
+| `pulse`       | `boolean` | `false`   | Animates a ring around the indicator. Still with `prefers-reduced-motion`.                      |
+| `hide-label`  | `boolean` | `false`   | Removes the `label` from the screen and keeps it for the screen reader.                         |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-status variant="success" label="Payment approved"></lui-status>
+
+<lui-status
+  variant="danger"
+  dot
+  label="Sync failed"
+  description="5 minutes ago"
+></lui-status>
+
+<lui-status variant="online" pulse label="Live"></lui-status>
+```
+
+### CSS class
+
+```html
+<span class="status status--success status--lg">
+  <span class="status__indicator" aria-hidden="true">
+    <span class="status__dot"></span>
+  </span>
+  <span class="status__text">
+    <span class="status__label">Payment approved</span>
+    <span class="status__description">2 minutes ago</span>
+  </span>
+</span>
+```

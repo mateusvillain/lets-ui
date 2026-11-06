@@ -1,0 +1,29 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+The Empty State itself is not interactive. The actions inside it follow the [Button](../../actionable/button/index.mdx) keyboard: `Tab` to reach them and `Enter` or `Space` to activate.
+
+## Screen reader
+
+- The title is a **real heading** (`h1` to `h6`). Adjust the level with `title-level` (default 2) to respect the page hierarchy.
+- The cover is **decorative** and stays hidden from the screen reader. Nothing can depend on it alone.
+- When the Empty State appears after an action, the screen reader needs to be notified:
+
+| `announce` | Effect | When to use |
+| --- | --- | --- |
+| `off` (default) | No announcement. | It was already on the page at load. |
+| `polite` | Announces at the end of the current reading. | Search with no results, filter applied, last item deleted. |
+| `assertive` | Interrupts reading. | Only for errors that require immediate attention. |
+
+## Focus
+
+If the Empty State replaced the element that had focus (such as the item just deleted), move focus to a predictable place. Never leave focus "lost" in the document.
+
+## For designers
+
+- Write the text so it works on its own, without the illustration.
+- Define when the Empty State should be announced, and where focus goes next.

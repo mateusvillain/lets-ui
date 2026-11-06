@@ -1,0 +1,203 @@
+---
+title: "Themes"
+subtitle: "Themes and brands change token values, never the intent of components. A primary button is still the main action in the dark theme and in any brand."
+order: 2
+---
+
+## Principle
+
+Let's UI has two axes of variation, controlled by two attributes on the `<html>` element:
+
+| Axis | Attribute | Values | What changes |
+| --- | --- | --- | --- |
+| **Theme** | `data-theme` | `light`, `dark` or absent (follows the system) | The color palettes. |
+| **Brand** | `data-brand` | `lets-ui` (and the brands you create) | Brand color, typography, radii, opacity, grid. |
+
+```html
+<html data-brand="lets-ui" data-theme="dark">
+```
+
+The same rule applies on both axes: **the theme changes values, not intentions**. The semantic layer is identical in every theme and brand. `lui.color.danger.text.error` always means "error text"; what changes is the tone it takes on.
+
+## How it works
+
+Semantic tokens **have no value of their own**: they are aliases (`var()`) for primitives and brand decisions. A theme swaps only the layer below, and everything else follows.
+
+| Layer | Light theme | Dark theme |
+| --- | --- | --- |
+| Semantic: `lui.color.neutral.text.body` | `var(--lui-color-gray-7)` | `var(--lui-color-gray-7)` |
+| Primitive: `lui.color.gray.7` | `#282b33` | `#c8ced9` |
+
+The dark theme's color ramps are **inverted**: step `1` is always the closest to the surface, and `8` the one with the highest contrast against it. That is why no component needs its own rules for the dark theme. See [Color](../properties/color.mdx).
+
+### Resolution order
+
+The generated CSS applies the layers in this order, from weakest to strongest:
+
+1. `:root` — every token, with the values of the light theme and the default brand. It is the **fallback**.
+2. `@media (prefers-color-scheme: dark)` — swaps the primitives for the dark theme ones when the operating system is in dark mode.
+3. `[data-brand="…"]` — applies the brand's decisions. The brand colors also follow the system preference.
+4. `[data-theme="light"]` / `[data-theme="dark"]` — forces the theme, ignoring the system preference.
+5. `[data-brand="…"][data-theme="…"]` — forces the theme on the brand colors too.
+
+In the source code, this order is `letsui.resolver.json`: the global set, then the theme modifier (`mode`), then the brand foundation (`brandFoundation`) and finally the brand colors (`brandColor`).
+
+## Light and dark
+
+### Pairs by role
+
+Each role has a light/dark pair designed to keep the same contrast relationship:
+
+| Role | Token | Light | Dark |
+| --- | --- | --- | --- |
+| Surface | `neutral.background.surface` | `#ffffff` | `#181a20` |
+| Neutral container | `neutral.background.container` | `#c7cad4` | `#464e5d` |
+| Overlay | `neutral.background.overlay` | `#131519` | `#f4f6fa` |
+| Heading | `neutral.text.heading` | `#131519` | `#f4f6fa` |
+| Body | `neutral.text.body` | `#282b33` | `#c8ced9` |
+| Caption | `neutral.text.caption` | `#6c7081` | `#7a8296` |
+| Subtle border | `neutral.border.subtle` | `#eeecf1` | `#353946` |
+| Border | `neutral.border.default` | `#6c7081` | `#7a8296` |
+| Primary focus | `primary.focus-ring` | `#1262a5` | `#51a5f5` |
+
+### Contrast per theme
+
+Contrast is measured **separately in each theme**, because a pair that passes in dark can fail in light. Currently, the dark theme passes AA on every text pair; in light, only white text on `caution` falls short, at 3.83 : 1. The full tables are in [Color](../properties/color.mdx).
+
+### System preference and persistent choice
+
+- **Without `data-theme`**, the theme follows the operating system preference (`prefers-color-scheme`), and changes on its own if the person changes the preference.
+- **With `data-theme`**, the theme stays fixed at the chosen value.
+- The person's choice should be **saved** and applied **before the first paint**, so the screen does not flash in the wrong theme.
+
+```html
+<head>
+  <script>
+    const theme = localStorage.getItem('theme');
+    if (theme) document.documentElement.dataset.theme = theme;
+  </script>
+  <link rel="stylesheet" href="letsui.min.css" />
+</head>
+```
+
+```js
+function chooseTheme(theme) {
+  if (theme === 'system') {
+    localStorage.removeItem('theme');
+    delete document.documentElement.dataset.theme;
+  } else {
+    localStorage.setItem('theme', theme);
+    document.documentElement.dataset.theme = theme;
+  }
+}
+```
+
+Offer three options: **Light**, **Dark** and **System**, with System as the default.
+
+### What the dark theme does not do
+
+- **It does not invert colors automatically.** Each dark value was chosen, not calculated. Filters like `invert()` break images, logos and contrast.
+- **It does not reduce shadows on its own.** Shadows are the same in both themes and almost disappear on dark. The separation between layers comes from surface and border. See [Elevation](../properties/elevation.mdx).
+- **It does not swap images.** Illustrations and logos that do not work on a dark background need their own version, chosen with `prefers-color-scheme` or with the theme attribute.
+
+## Multi-brand
+
+### What is shared and what belongs to the brand
+
+| Shared by every brand (core) | Defined by each brand |
+| --- | --- |
+| Neutral and semantic palettes (`gray`, `green`, `orange`, `red`, `blue`, `violet`) | `primary` and `secondary` colors, with 8 steps per theme |
+| Fixed and fluid spacing scales | Heading and body type families |
+| Weights, primitive line heights, tracking | Font sizes and the weight of each heading scale |
+| Border widths, `none` and `circle` | Radii `xs` to `xl` |
+| Elevation and focus rings (the shape; the color comes from the family) | Disabled opacity |
+| Component behavior, accessibility and anatomy | Grid breakpoints, columns, gutter, margin and maximum width |
+
+Illustration and tone of voice also belong to the brand, but they stay outside the tokens: they are content decisions.
+
+### Components do not know about brands
+
+A component uses `bg(container, primary)`, never "Let's UI's blue". No component selector mentions `data-brand`. That is what makes it possible to add a brand without touching any component.
+
+<DosDonts variant="do" title="Semantic token">
+  `background-color: bg(container, primary)`. In brand A it is blue, in brand B it is green, and the component does not know it.
+</DosDonts>
+
+<DosDonts variant="dont" title="Per-brand rule in the component">
+  `[data-brand="b"] .btn { background: green }`. Every new brand becomes one more rule in every component.
+</DosDonts>
+
+### Create a brand
+
+1. Create `tokens/brand/<brand>/` with three files: `foundation.json` (typography, radii, opacity, grid) and `colors.light.json` and `colors.dark.json` (`primary` and `secondary` ramps).
+2. Register the brand in `letsui.resolver.json`, as new `brandFoundation` and `brandColor` contexts.
+3. Add to `terrazzo.config.mjs` the permutations with the `[data-brand="<brand>"]` selector, following those of `lets-ui`.
+4. Check the contrast of every pair that uses `primary` and `secondary`, in both themes.
+5. If the brand changes breakpoints or the number of columns, compile the CSS from source: those two values are fixed at compile time. See [Grid](../properties/grid.mdx).
+
+**Brand Studio** (`studio.lets-ui.com`) is the visual editor for these files, with a preview of the components.
+
+## Recommended architecture
+
+```text
+Primitives / brand  →  Semantic                       →  Component        →  Theme / brand
+brand.color.primary.4  primary.background.container      link.color.text     data-theme, data-brand
+```
+
+- **Primitives** hold the raw values and are the only ones the **theme** swaps.
+- **Brand** is a layer parallel to the primitives: decisions each brand makes, also swapped by the theme in the case of colors.
+- **Semantic** tokens give values a role and are the API for components and screens.
+- **Component tokens** exist only when a component needs a value that no semantic role describes.
+- **Theme and brand** are selectors that swap the lower layers. They never redefine semantic tokens.
+
+See the full architecture in [Design tokens](design-tokens.mdx).
+
+## Coverage matrix
+
+Every combination of **theme × brand × component × state** needs to be checked. The current matrix:
+
+| Brand | Theme | Components | States | How it is checked |
+| --- | --- | --- | --- | --- |
+| `lets-ui` | Light | All | Rest, hover, pressed, focus, disabled, error, selected | Storybook (theme and brand switcher) and the previews in this documentation |
+| `lets-ui` | Dark | All | The same | Storybook, with the dark theme selected |
+
+When you create a brand, add one row per theme and go through every component. The states are the same for every brand, because hover and pressed are calculated from each component's colors, and focus and disabled use tokens that every brand defines.
+
+## Fallback
+
+| Situation | What happens |
+| --- | --- |
+| No `data-theme` | The theme follows the operating system. If the browser does not report the preference, light applies. |
+| No `data-brand` | Foundation decisions use the `lets-ui` values, which are in `:root`. The **brand colors**, however, stay in the light theme even with the system in dark mode. |
+| Unknown brand in `data-brand` | No brand rule applies; the result is the same as without `data-brand`. |
+| Token missing in a new brand | The `:root` value (from `lets-ui`) still applies. |
+
+<Callout variant="warning">
+  **Always** declare `data-brand` on `<html>`. Without it, the foundation works, but the `primary` and `secondary` colors do not follow the system's dark theme.
+</Callout>
+
+### Where to declare the attributes
+
+Declare `data-theme` and `data-brand` **on the `<html>` element**. Semantic tokens are resolved at `:root`; a theme attribute on a `<section>` swaps the primitives of that section, but not the semantic tokens the components use. Per-region page themes are not supported.
+
+## Theme preview in the documentation
+
+- In **Storybook**, the toolbar has **theme** and **brand** switchers, which apply `data-theme` and `data-brand` to each story's document.
+- In this documentation, the token tables show each token's value **in both themes**, side by side.
+- The component previews run with the same CSS published in the package, so they reflect exactly what the product gets.
+
+## Best practices
+
+- Use only semantic tokens in components and screens. The theme comes for free.
+- Test every screen in both themes before considering it done.
+- Save the person's theme choice and apply it before the first paint.
+- Offer "System" as the default option.
+- When creating a brand, start with contrast: a beautiful primary color that does not pass 4.5 : 1 with white text does not work for buttons.
+
+## Anti-patterns
+
+- **Theme rules in components.** `[data-theme="dark"] .card { … }` is a sign of a wrong or missing token.
+- **`filter: invert()` as a dark theme.** It inverts photos, logos and contrast.
+- **Hardcoded hexadecimal.** A literal color changes with neither the theme nor the brand.
+- **Brand name in the component.** `.btn--lets-ui` ties the component to a brand.
+- **Per-section theme.** `data-theme="dark"` on a block of the page, expecting the components inside it to change.

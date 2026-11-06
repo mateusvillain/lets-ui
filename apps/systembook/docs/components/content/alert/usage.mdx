@@ -1,0 +1,41 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Choose the variant by meaning
+
+Color follows meaning, not taste. The person learns the code and quickly recognizes how serious the message is.
+
+<DosDonts variant="do" title="Variant consistent with the message">
+  Use `danger` for failures, `caution` for risks, `success` for confirmations and `info` for everything else.
+</DosDonts>
+
+<DosDonts variant="dont" title="Variant for looks only">
+  Using `success` for a neutral message, or `danger` to draw attention to a promotion. This weakens the meaning of the colors.
+</DosDonts>
+
+## Write the message
+
+- **Short, direct title**, up to about six words: "Payment declined".
+- **Content** that explains the reason and **what to do**: "Check your card details or use another payment method."
+- Use a human, neutral tone. Do not blame the person.
+- Avoid technical jargon and error codes as the only information.
+
+## Position
+
+Place the Alert **close to the context it describes**: at the top of the form with the error, above the affected table, at the start of the page for global warnings. Never cover the content.
+
+## Actions
+
+If the person can solve the problem now, include a clear action ("Update payment"). Keep it to one or two actions.
+
+## Quantity
+
+Avoid showing several Alerts at the same time. They compete with each other and lose their effect. Prioritize the most important one, or group the messages into one.
+
+## Best practices
+
+- Do not use the Alert for messages that last only a moment: use the Toast.
+- Do not hide an important Alert after a while. It must stay until it is resolved or dismissed.
+- Make sure the alert is in the DOM when the problem happens, so screen readers announce it.

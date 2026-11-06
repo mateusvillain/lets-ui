@@ -1,0 +1,42 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Name the steps
+
+- Use **short nouns** that say what happens in the step: "Account", "Address", "Payment".
+- Use the description for a detail that helps decide, such as "Card or PIX", not to repeat the label.
+- Keep the labels parallel: all nouns, all the same length, more or less.
+
+<DosDonts variant="do" title="Short, parallel labels">
+  "Account", "Address", "Payment", "Review".
+</DosDonts>
+
+<DosDonts variant="dont" title="Instructions as labels">
+  "Fill in your personal data", "Now tell us where you live". Long labels break the row and repeat what the page already says.
+</DosDonts>
+
+## Number of steps
+
+- Keep between **three and six** steps. Fewer than three does not need a stepper; more than six makes the flow look long and the row tight.
+- Group small steps into one. A step with a single field is rarely worth it.
+- Do not add or remove steps in the middle of the flow: the total the person saw at the start must hold.
+
+## Free or linear
+
+- By default, the person can jump to any step. Use it when the steps are independent, such as the sections of a profile.
+- Use `linear` when each step depends on the previous one, such as a checkout. The person goes back to fix something, and moves forward through the button of the step.
+
+## Moving between steps
+
+- Keep a "Continue" or "Next" button in the content of the step. The stepper indicates progress; the main action stays in the form.
+- Validate the step before advancing. If it is invalid, cancel the change and show the errors.
+- Do not lose what was typed when the person goes back.
+- When the step changes the content of the page, update the page title and move focus to the heading of the new step.
+
+## Placement
+
+- Put the horizontal stepper at the top of the flow, above the content of the step.
+- Put the vertical stepper beside the content, on wide screens, or when the labels are long.
+- Use one stepper per flow.

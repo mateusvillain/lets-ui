@@ -1,0 +1,40 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Show code that works
+
+- Show complete, copyable examples. A person who copies the block should be able to paste and run it.
+- Do not put a shell prompt (`$`) in the code: the copy button copies it too.
+- Keep one command or one file per block. Several steps become several blocks, each with its own text.
+
+<DosDonts variant="do" title="One command per block">
+  `npm install @lets-ui/styles @lets-ui/components` in a `snippet` labelled "bash".
+</DosDonts>
+
+<DosDonts variant="dont" title="Prompt and output mixed in">
+  `$ npm install` followed by the terminal output. The person copies everything and the command fails.
+</DosDonts>
+
+## Label
+
+- In `default`, use the file name: `main.js`, `vite.config.ts`.
+- In `snippet`, use the language or the shell: `bash`, `html`.
+- Give two blocks on the same page different labels. The label also names the code region and the copy button for screen readers.
+
+## Keep it short
+
+- Show only the part that matters. Long files hide the line the text is talking about.
+- Turn on line numbers when the text refers to lines ("on line 4, change the import").
+- Avoid lines so long that the important part is hidden by the horizontal scroll.
+
+## Copy
+
+The copy button is on by default. Remove it (`copy="false"`) only when copying makes no sense, such as an excerpt that is incomplete on purpose.
+
+## Best practices
+
+- Write the explanation in the text around the block, not in long comments inside the code.
+- Use syntax highlighting on documentation sites where code is frequent. It helps reading, but the code must make sense without color.
+- Do not use Code Block to show program output that people do not need to copy, such as long logs.

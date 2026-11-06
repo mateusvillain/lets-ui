@@ -1,0 +1,65 @@
+---
+title: "Code Block"
+subtitle: "Mostra um trecho de código em fonte monoespaçada, com botão de copiar, rótulo opcional e numeração de linhas."
+---
+
+<ComponentEmbed component="CodeBlock" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Código que as pessoas leem ou copiam">
+  Comandos de instalação, exemplos de uso e arquivos de configuração em páginas de documentação.
+</DosDonts>
+
+<DosDonts variant="do" title="Um rótulo quando o contexto não é óbvio">
+  O nome do arquivo na variante `default`, a linguagem ou o shell em `snippet`.
+</DosDonts>
+
+<DosDonts variant="dont" title="Um termo no meio de uma frase">
+  Para um trecho em linha, use `<code>` direto no texto. O Code Block é um bloco.
+</DosDonts>
+
+<DosDonts variant="dont" title="Atalhos de teclado">
+  Para mostrar uma combinação de teclas, use [Shortcut](../../typography/shortcut/index.mdx).
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Code Block: cabeçalho, botão de copiar, números de linha e código](./anatomy.png)
+
+1. **Cabeçalho**: o ícone de arquivo e o rótulo. Só aparece com `label`.
+2. **Botão de copiar**: copia o código para a área de transferência, com uma dica que confirma.
+3. **Números de linha**: opcionais, alinhados à direita.
+4. **Código**: o trecho, na fonte de código da marca.
+
+## Variantes
+
+| Variante | Descrição | Quando usar |
+| --- | --- | --- |
+| **Default** | Cabeçalho com ícone de arquivo e rótulo, separado do código por um divisor. | Arquivos e exemplos mais longos. |
+| **Snippet** | Um rótulo curto em fonte monoespaçada logo acima do código, sem divisor nem ícone. | Comandos de terminal e trechos de uma linha. |
+
+Sem `label`, o cabeçalho desaparece nas duas variantes.
+
+<ComponentEmbed component="CodeBlock" variant="snippet" />
+
+## Números de linha
+
+Ligue quando o texto em volta cita linhas específicas. Em comandos de uma linha, só ocupam espaço.
+
+<ComponentEmbed component="CodeBlock" variant="line-numbers" />
+
+## Linhas longas
+
+Linhas que não cabem rolam na horizontal em vez de quebrar, para manter a indentação do código. Os números de linha ficam fixos enquanto o código rola.
+
+<ComponentEmbed component="CodeBlock" variant="long-lines" />
+
+## Realce de sintaxe
+
+O Code Block colore o código quando a página conecta uma biblioteca de realce, como o highlight.js. As cores vêm dos tokens do Let's UI e acompanham os temas claro e escuro. Sem biblioteca, o código aparece em uma cor só. Veja a aba Code.
+
+## Relacionados
+
+- [Shortcut](../../typography/shortcut/index.mdx): teclas e combinações de teclado.
+- [Body](../../typography/body/index.mdx): o texto em volta do código.

@@ -1,0 +1,28 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+Scroll Area receives **focus** and can be scrolled with the keyboard:
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Moves focus to the region. |
+| `Arrow keys` | Scroll the content. |
+| `Page Up` / `Page Down` | Scroll one screen. |
+| `Home` / `End` | Go to the start and the end. |
+
+Without this, people who do not use a mouse could not see the content outside the visible area (WCAG 2.1.1).
+
+## Screen reader
+
+- The region is announced as a **region** with a name. Set a name that describes the content (for example, "File list").
+- The visual indicators (fade and shadow) are decorative.
+
+## For designers
+
+- Do not rely on the visual indicators alone: other ways to reach the content help.
+- Avoid hiding the scrollbar in regions with important content.
+- Make sure the region's focus has a visible focus ring.

@@ -1,0 +1,31 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Moves focus to the close button or to the action. |
+| `Enter` or `Space` | Activates the focused button. |
+
+Moving focus into the Toast **pauses the countdown**, which resumes when focus leaves.
+
+## Screen reader
+
+- The Toast is announced when it appears, without taking focus away from the person.
+- Informative and success Toasts are announced politely (`status`). The error Toast (`danger`) is announced assertively (`alert`).
+- The icon is decorative.
+- The close button has an accessible name (`close-label`). Translate it into the product's language.
+
+## Timing
+
+- Hovering or focusing pauses the countdown.
+- The `danger` Toast **never disappears on its own**: people who read slowly or use assistive technology need time to understand the error.
+
+## For designers
+
+- Never use a Toast as the only channel for essential information.
+- Give enough time to read: about one word every 200 ms plus some extra time.
+- Avoid placing it over important elements on the screen.

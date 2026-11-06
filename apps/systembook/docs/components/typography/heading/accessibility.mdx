@@ -1,0 +1,21 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Screen reader
+
+- Screen readers let people **navigate by headings**, jumping from one to the next. That is why the hierarchy must be correct.
+- Each Heading renders the semantic element (`h1` to `h6`). Change the element with `as` when the page hierarchy calls for it.
+- An empty or purely decorative heading gets in the way of navigation.
+
+## Visual
+
+- The text must have a minimum contrast of 4.5:1 against the background. Large text accepts 3:1.
+- Do not use color or size alone to suggest hierarchy: the HTML element must reflect it too.
+
+## For designers
+
+- Specify the **level** of each heading in the design, in addition to the style.
+- Do not create "fake headings" with bold text. Use the Heading.
+- When truncating with `line-clamp`, make sure the full text is accessible somewhere else.

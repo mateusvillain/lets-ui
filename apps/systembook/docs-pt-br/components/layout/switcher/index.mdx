@@ -1,0 +1,48 @@
+---
+title: "Switcher"
+subtitle: "Alterna entre colunas e linha única, conforme o espaço do contêiner, sem breakpoints."
+---
+
+<ComponentEmbed component="Switcher" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Elementos de mesmo peso">
+  Cards de recursos, métricas, planos de preços ou passos de um processo.
+</DosDonts>
+
+<DosDonts variant="do" title="Lado a lado ou empilhados">
+  Os itens ficam em linha quando há espaço e empilham quando não há.
+</DosDonts>
+
+<DosDonts variant="do" title="Responder ao contêiner">
+  O Switcher reage ao **espaço do contêiner**, não ao tamanho da tela: funciona em uma coluna estreita ou em uma página larga.
+</DosDonts>
+
+<DosDonts variant="dont" title="Uma lateral fixa e um conteúdo flexível">
+  Use [Sidebar](../sidebar/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Estrutura de página em colunas">
+  Use [Grid](../grid/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Itens que devem ficar sempre em coluna">
+  Use [Stack](../stack/index.mdx).
+</DosDonts>
+
+## Opções
+
+| Opção | O que controla | Padrão |
+| --- | --- | --- |
+| `threshold` | Largura do contêiner abaixo da qual os itens empilham. | 320px |
+| `gap` | Espaço entre os itens. | 16 |
+| `limit` | Quantidade máxima de itens lado a lado. Acima disso, empilha. | Sem limite |
+
+<ComponentEmbed component="Switcher" variant="limited" />
+
+## Relacionados
+
+- [Sidebar](../sidebar/index.mdx): duas áreas, uma fixa.
+- [Grid](../grid/index.mdx): grade de página.
+- [Stack](../stack/index.mdx), [Inline](../inline/index.mdx).

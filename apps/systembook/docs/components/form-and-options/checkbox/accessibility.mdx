@@ -1,0 +1,29 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Moves focus between the boxes. |
+| `Space` | Checks or unchecks the focused box. |
+
+## Screen reader
+
+- The box is announced as a **checkbox**, with the label's name and its checked or unchecked state.
+- On error, it is announced as invalid, and the message is read along with it. If it is required, it is also announced as such.
+- When disabled, it is announced as unavailable.
+
+## Visual
+
+- The checked state is distinguished by more than color: a check mark appears.
+- The box has a contrast of at least 3:1 against the background.
+- The focus ring is visible when navigating by keyboard.
+
+## For designers
+
+- Always show a visible label. Only use `aria-label` when there is no room for text.
+- In groups, give a title that explains the question.
+- The clickable area includes the label, which helps people who have trouble with touch precision.

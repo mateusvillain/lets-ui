@@ -1,0 +1,50 @@
+---
+title: "Code"
+order: 4
+---
+
+## Label (attribute)
+
+The `label` attribute renders the text as the slot's default content. Useful for simple cases or programmatic HTML generation.
+
+## Form integration
+
+`lui-switch` is form-associated. Use `name` to identify the field in the `FormData` and `value` to set what is submitted when on (default `"on"`).
+
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | `false` | On state. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` or `sm`. |
+| `disabled` | `boolean` | `false` | Disables the control and excludes it from submission. |
+| `error` | `boolean` | `false` | Turns on the error state and shows `error-text`. |
+| `error-text` | `string` | `'This field is required.'` | Message shown when `error` is on. |
+| `aria-label` | `string` | `''` | Accessible name when there is no visible text. |
+
+## Form attributes
+
+| Attribute  | Type      | Default | Description                                                                     |
+| ---------- | --------- | ------ | ------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`   | Default slot content; ignored when the slot is projected                        |
+| `name`     | `string`  | `''`   | Field name in the submitted data                                                |
+| `value`    | `string`  | `'on'` | Value submitted when on; omitted when off                                       |
+| `form`     | `string`  | `''`   | ID of the associated `<form>`; lets you use the switch outside the form element |
+| `required` | `boolean` | `false`| Blocks submission when the switch is not on                                     |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-switch size="lg">Notifications</lui-switch>
+```
+
+### CSS class
+
+```html
+<label class="switch switch--lg">
+  <input type="checkbox">
+  Notifications
+</label>
+```

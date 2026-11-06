@@ -1,0 +1,117 @@
+---
+title: "Code"
+---
+
+## Rótulo visível
+
+O rótulo fica oculto por padrão: `label` nomeia o grupo só para tecnologias assistivas. Com `show-label`, o mesmo texto aparece acima das caixas, no estilo do rótulo do `lui-input`, e clicar nele move o foco para a primeira caixa vazia.
+
+## Numérico
+
+Com `type="number"`, só dígitos são aceitos e o teclado numérico é sugerido (`inputmode="numeric"`). As caixas continuam `type="text"`, sem as setas do campo numérico nativo.
+
+## Separador
+
+`separator` recebe a posição da caixa depois da qual o separador aparece: `separator="3"` divide seis caixas em 3 + 3. Para mais de um, liste as posições separadas por vírgula (`separator="2,4"`). Posições fora do intervalo são ignoradas.
+
+<ComponentEmbed component="OtpInput" variant="separator" />
+
+## Erro
+
+`error` aplica o estado de erro a todas as caixas e mostra `error-text` abaixo delas. O estado é limpo assim que a pessoa digita de novo.
+
+<ComponentEmbed component="OtpInput" variant="error" />
+
+## Desabilitado
+
+<ComponentEmbed component="OtpInput" variant="disabled" />
+
+## Evento `lui-complete`
+
+Quando todas as caixas estão preenchidas, o componente emite `lui-complete` com o código em `event.detail.value`. O evento borbulha e atravessa o shadow DOM. A cada mudança, `input` também é emitido.
+
+## Colar e preenchimento automático
+
+Um código completo é colado a partir da primeira caixa, seja qual for a caixa com foco. Um trecho menor é colado a partir da caixa com foco. Caracteres que o `type` não aceita são descartados.
+
+## Integração com formulários
+
+`lui-otp-input` é associado a formulários: o código é enviado no `FormData` sob `name`. Com `required`, o formulário não é enviado enquanto o campo está vazio, e um código incompleto também é inválido. `focus()` no elemento move o foco para a primeira caixa vazia.
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, o estilo está disponível, mas o avanço do foco, o colar e o `Backspace` ficam por conta de quem consome.
+
+## Propriedades
+
+| Atributo      | Tipo                 | Padrão   | Descrição                                                                                              |
+| ------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `length`      | `number`             | `6`      | Número de caixas.                                                                                      |
+| `type`        | `'text' \| 'number'` | `'text'` | `number` aceita só dígitos e sugere o teclado numérico.                                                |
+| `separator`   | `string`             | `''`     | Posições das caixas depois das quais aparece um separador, separadas por vírgula (`"3"`, `"2,4"`).     |
+| `value`       | `string`             | `''`     | Código atual.                                                                                          |
+| `placeholder` | `string`             | `''`     | Caractere mostrado em cada caixa vazia.                                                                |
+| `name`        | `string`             | `''`     | Nome do campo no `FormData`.                                                                           |
+| `required`    | `boolean`            | `false`  | Bloqueia o envio enquanto o campo está vazio ou incompleto.                                            |
+| `show-label`  | `boolean`            | `false`  | Mostra `label` acima das caixas. Desligado, `label` só nomeia o grupo para tecnologias assistivas.     |
+| `disabled`    | `boolean`            | `false`  | Desabilita todas as caixas.                                                                            |
+| `error`       | `boolean`            | `false`  | Aplica o estado de erro e mostra `error-text`.                                                         |
+| `hint`        | `string`             | `''`     | Texto de ajuda abaixo das caixas quando não há erro.                                                   |
+
+## Textos padrão
+
+Os textos que o componente gera estão em inglês e podem ser trocados por atributo, para seguir o idioma do projeto.
+
+| Atributo      | Tipo     | Padrão                            | Descrição                                                          |
+| ------------- | -------- | --------------------------------- | ------------------------------------------------------------------ |
+| `label`       | `string` | `'Verification code'`             | Nome do grupo de caixas.                                           |
+| `field-label` | `string` | `'Character {index} of {length}'` | `aria-label` de cada caixa; `{index}` e `{length}` são substituídos. |
+| `error-text`  | `string` | `'This field is required.'`       | Mensagem mostrada quando `error` está ligado.                      |
+
+### Eventos
+
+| Evento         | `detail`            | Quando                              |
+| -------------- | ------------------- | ----------------------------------- |
+| `lui-complete` | `{ value: string }` | Todas as caixas estão preenchidas.  |
+| `input`        | —                   | O código muda.                      |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-otp-input
+  type="number"
+  name="code"
+  separator="3"
+  label="Código de verificação"
+  field-label="Caractere {index} de {length}"
+  hint="Digite o código de 6 dígitos enviado por SMS."
+  required
+></lui-otp-input>
+
+<script>
+  document
+    .querySelector('lui-otp-input')
+    .addEventListener('lui-complete', (event) => {
+      console.log(event.detail.value);
+    });
+</script>
+```
+
+### Classe CSS
+
+```html
+<div class="otp-input">
+  <span class="otp-input__label" id="otp-label">Código de verificação</span>
+  <div class="otp-input__group" role="group" aria-labelledby="otp-label">
+    <input class="otp-input__field" type="text" inputmode="numeric" autocomplete="one-time-code" aria-label="Caractere 1 de 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Caractere 2 de 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Caractere 3 de 6" />
+    <span class="otp-input__separator" aria-hidden="true"></span>
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Caractere 4 de 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Caractere 5 de 6" />
+    <input class="otp-input__field" type="text" inputmode="numeric" aria-label="Caractere 6 de 6" />
+  </div>
+</div>
+```

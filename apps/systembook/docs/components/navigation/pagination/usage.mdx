@@ -1,0 +1,38 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Position
+
+Place the Pagination **below** the list or table, aligned with the content. In very long lists, repeat it above as well to avoid unnecessary scrolling.
+
+## Give context
+
+The person needs to know **how many items there are**. Pair the pagination with text like "Showing 21 to 40 of 312 results" and, when it makes sense, with an items-per-page control.
+
+<DosDonts variant="do" title="Total and position visible">
+  "21–40 of 312 results" next to the pagination. The person understands the size of the set and where they are.
+</DosDonts>
+
+<DosDonts variant="dont" title="Paginating without context">
+  Only the numbers, with no total and no sign of what changed when switching pages. The person feels lost.
+</DosDonts>
+
+## Behavior when changing pages
+
+- **Go back to the top of the list** when changing pages.
+- Keep **filters and sorting** when moving between pages.
+- Update the URL with the current page, so it can be shared and reached again with the browser's back button.
+- If the list becomes empty after a deletion, go to the previous page.
+
+## Number of items
+
+- Choose a page size that balances performance and readability, usually between 10 and 50 items.
+- Avoid fewer than 10 items per page, as it forces the person to click too much.
+
+## Best practices
+
+- Do not show the pagination when there is only one page.
+- Keep the previous and next buttons in the same place at all times.
+- Customize the accessible texts in the product's language ("Previous page", "Next page").

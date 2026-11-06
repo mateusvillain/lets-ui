@@ -1,0 +1,32 @@
+---
+title: "Accessibility"
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Percorre as etapas. |
+| `Enter` ou `Espaço` | Vai para a etapa com foco. |
+
+Em um stepper `linear`, as etapas à frente da atual continuam na ordem de foco, com `aria-disabled="true"`, e não respondem.
+
+## Leitor de tela
+
+- As etapas formam uma lista (`role="list"` e `role="listitem"`), nomeada por `label`, como "Checkout".
+- Cada etapa é um botão nativo. A atual tem `aria-current="step"`.
+- O nome de cada etapa começa pela posição e pelo total ("Step 2 of 4, Endereço, Entrega"). O número visível tem `aria-hidden="true"`, para não ser lido duas vezes.
+- Etapas concluídas levam o texto de `completed-label`, e etapas carregando o de `loading-label` e `aria-busy="true"`.
+- Depois de cada troca, por clique ou por código, uma região `role="status"` anuncia a nova etapa ("Step 3 of 4, Pagamento"). Uma troca cancelada não é anunciada.
+- Os conectores são decorativos (`aria-hidden="true"`).
+
+## Visual
+
+- Um stepper horizontal que não cabe no contêiner passa para a vertical em vez de rolar para o lado (WCAG 1.4.10, Reflow).
+- O estado mostrado pela cor do indicador também está no nome acessível, por `completed-label` e `loading-label`.
+
+## Para designers
+
+- Traduza os textos acessíveis (`label`, `completed-label`, `loading-label` e `step-label`) para o idioma do produto. Por exemplo, `step-label="Etapa {step} de {total}"`.
+- Quando a etapa muda o conteúdo da página, planeje o novo título da página (por exemplo "Pagamento, etapa 3 de 4, Checkout") e para onde vai o foco.
+- Em um stepper só com números, dê a ele um `label` descritivo.

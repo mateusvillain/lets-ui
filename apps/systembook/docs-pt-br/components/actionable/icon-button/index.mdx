@@ -1,0 +1,58 @@
+---
+title: "Icon Button"
+subtitle: "Botão compacto que mostra só um ícone. Economiza espaço quando a ação é reconhecível sem texto."
+---
+
+<ComponentEmbed component="IconButton" variant="md" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Ações universalmente reconhecíveis">
+  Fechar, editar, excluir, copiar, mais opções, buscar, voltar.
+</DosDonts>
+
+<DosDonts variant="do" title="Pouco espaço">
+  Barras de ferramentas, linhas de tabela, cabeçalhos de cards e controles de mídia.
+</DosDonts>
+
+<DosDonts variant="dont" title="Ações que o ícone não explica sozinho">
+  Se a pessoa precisa adivinhar o que o ícone faz, use um [Button](../button/index.mdx) com texto.
+</DosDonts>
+
+<DosDonts variant="dont" title="A ação principal da tela">
+  Ações importantes merecem rótulo visível.
+</DosDonts>
+
+<DosDonts variant="dont" title="Fechar um modal, drawer ou alert">
+  O [Close Button](../close-button/index.mdx) já traz o ícone e o nome acessível prontos.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Icon Button: container e ícone](./anatomy.png)
+
+1. **Container**: define a área de toque e o estado visual. Fica transparente em repouso e ganha cor nos estados de interação.
+2. **Ícone**: SVG de 24px, que herda a cor do texto.
+
+## Tamanhos
+
+| Tamanho | Medida | Uso |
+| --- | --- | --- |
+| `lg` | 40px | Áreas com espaço, cabeçalhos, controles principais. |
+| `md` (padrão) | 32px | Toolbars, tabelas e layouts compactos. |
+
+## Estados
+
+Padrão, hover, foco, pressed e disabled, com o mesmo comportamento do [Button](../button/index.mdx). O estado desabilitado indica que a ação não está disponível agora.
+
+### Alternável
+
+Um Icon Button pode ligar e desligar uma opção, como um filtro ou uma formatação. **Ligado**, ele ganha o fundo de contêiner neutro. Hover, foco e desabilitado continuam funcionando por cima desse estado.
+
+<ComponentEmbed component="IconButton" variant="pressed" />
+
+## Relacionados
+
+- [Button](../button/index.mdx): ação com rótulo.
+- [Close Button](../close-button/index.mdx): fechar e dispensar.
+- [Tooltip](../../content/tooltip/index.mdx): explica o ícone ao passar o mouse ou focar.

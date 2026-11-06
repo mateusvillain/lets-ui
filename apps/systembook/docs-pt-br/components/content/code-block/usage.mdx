@@ -1,0 +1,39 @@
+---
+title: "Usage"
+---
+
+## Mostre código que funciona
+
+- Mostre exemplos completos e copiáveis. Quem copia o bloco deve conseguir colar e rodar.
+- Não coloque o prompt do shell (`$`) no código: o botão de copiar copia ele junto.
+- Mantenha um comando ou um arquivo por bloco. Vários passos viram vários blocos, cada um com seu texto.
+
+<DosDonts variant="do" title="Um comando por bloco">
+  `npm install @lets-ui/styles @lets-ui/components` em um `snippet` com o rótulo "bash".
+</DosDonts>
+
+<DosDonts variant="dont" title="Prompt e saída misturados">
+  `$ npm install` seguido da saída do terminal. A pessoa copia tudo e o comando falha.
+</DosDonts>
+
+## Rótulo
+
+- Em `default`, use o nome do arquivo: `main.js`, `vite.config.ts`.
+- Em `snippet`, use a linguagem ou o shell: `bash`, `html`.
+- Dê rótulos diferentes a dois blocos da mesma página. O rótulo também nomeia a região de código e o botão de copiar para leitores de tela.
+
+## Seja breve
+
+- Mostre só a parte que importa. Arquivos longos escondem a linha de que o texto está falando.
+- Ligue os números de linha quando o texto se refere a linhas ("na linha 4, troque o import").
+- Evite linhas tão longas que a parte importante fique escondida pela rolagem horizontal.
+
+## Copiar
+
+O botão de copiar vem ligado. Remova (`copy="false"`) só quando copiar não fizer sentido, como em um trecho incompleto de propósito.
+
+## Boas práticas
+
+- Escreva a explicação no texto em volta do bloco, não em comentários longos dentro do código.
+- Use realce de sintaxe em sites de documentação onde código é frequente. Ajuda a leitura, mas o código precisa fazer sentido sem cor.
+- Não use o Code Block para mostrar saída de programa que ninguém precisa copiar, como logs longos.

@@ -1,0 +1,51 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Columns
+
+- Show **only the essential columns**. Many columns require scrolling and make reading hard.
+- Order the columns by **importance**, with the identifier (name, title) first.
+- Write **short**, specific headers: "Amount" instead of "Total purchase amount in reais".
+
+## Alignment
+
+- Text and dates on the **left**.
+- Numbers and amounts on the **right**, to make comparison easier.
+- Actions at the end, aligned to the right and with a fit width.
+
+<DosDonts variant="do" title="Numbers aligned to the end">
+  Values with the same number of decimal places, aligned to the right, can be compared at a glance.
+</DosDonts>
+
+<DosDonts variant="dont" title="Numbers aligned to the start">
+  Misaligned hundreds and thousands make the magnitude hard to read.
+</DosDonts>
+
+## Status and actions
+
+- Show the status with a [Tag](../tag/index.mdx) **with text**, not only with color.
+- For row actions, use an [Icon Button](../../actionable/icon-button/index.mdx) or a [Dropdown Menu](../../actionable/dropdown-menu/index.mdx). Give it a name that mentions the row: "Actions for Ana Souza".
+
+## Sorting
+
+- Make sortable **only what makes sense** (name, date, amount).
+- Clearly show which column is sorted and in which direction.
+- The table does not reorder on its own: decide whether sorting happens in the browser or on the server.
+
+## Lots of data
+
+- Use [Pagination](../../navigation/pagination/index.mdx) or scrolling with a **sticky header** for long lists.
+- Choose a reasonable page size, such as 10 to 50 rows.
+- When the table is empty, replace it entirely with an [Empty State](../empty-state/index.mdx).
+
+## Selection
+
+For bulk actions, put a [Checkbox](../../form-and-options/checkbox/index.mdx) on each row and another in the header, to "select all". Show an action bar when items are selected.
+
+## Best practices
+
+- Keep row height consistent.
+- Give the table a name, either through a visible caption or an `aria-label`.
+- Avoid wrapping lines inside cells, except in running-text columns.
