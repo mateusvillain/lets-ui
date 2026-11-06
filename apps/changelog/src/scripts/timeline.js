@@ -5,12 +5,11 @@
  * Progressive enhancement: the server renders every release. Without
  * JavaScript the whole timeline is visible and the filters stay hidden. With
  * it, cards marked `data-deferred` stay out of view (see `changelog.css`)
- * until loaded, a page at a time.
+ * until loaded, a page at a time. Paging counts only the releases that match
+ * the active filter, so a type whose releases are all old still shows them.
  */
 
-const TYPE_LABELS = { new: 'New', improvement: 'Improvement', fix: 'Fix' };
-
-const plural = (count, one, many) => `${count} ${count === 1 ? one : many}`;
+import { STRINGS } from '@/lib/i18n.js';
 
 /** @param {Document} doc */
 export function initTimeline(doc) {
@@ -18,6 +17,10 @@ export function initTimeline(doc) {
   const status = doc.getElementById('timeline-status');
   const history = doc.querySelector('.history');
   if (!timeline || !status || !history) return;
+
+  const strings = STRINGS[doc.documentElement.dataset.locale] ?? STRINGS.en;
+  const t = strings.timeline;
+  const typeLabel = (filter) => (filter === 'all' ? '' : strings.types[filter]);
 
   const pageSize = Number(history.dataset.pageSize) || 5;
   const filterButtons = [...doc.querySelectorAll('[data-filter]')];
@@ -29,12 +32,13 @@ export function initTimeline(doc) {
   const deferred = () =>
     items().filter((item) => item.hasAttribute('data-deferred'));
   let activeFilter = 'all';
+  let limit = pageSize;
 
   // Controls that need JavaScript appear only when it runs.
   doc.querySelectorAll('[data-requires-js]').forEach((el) => {
     el.hidden = false;
   });
-  if (!deferred().length) showDone();
+  updateEnd();
 
   // When the entrance animation ends, the first release goes back to the
   // scroll animation and does not replay the entrance after a filter.
@@ -55,20 +59,21 @@ export function initTimeline(doc) {
 
   /* Filters --------------------------------------------------------------- */
 
+  /* Shows the first `limit` releases that match the filter and defers the rest. */
   function applyFilter() {
     let visible = 0;
     for (const item of items()) {
-      const show = activeFilter === 'all' || item.dataset.type === activeFilter;
-      item.hidden = !show;
-      if (show && !item.hasAttribute('data-deferred')) visible += 1;
+      const match =
+        activeFilter === 'all' || item.dataset.type === activeFilter;
+      item.hidden = !match;
+      const shown = match && visible < limit;
+      item.toggleAttribute('data-deferred', match && !shown);
+      if (shown) visible += 1;
     }
 
     emptyMessage.hidden = visible > 0;
-    if (!visible) {
-      emptyMessage.textContent = deferred().length
-        ? `No ${TYPE_LABELS[activeFilter]} releases among the ones shown. Load earlier releases to see more.`
-        : 'No releases of this type.';
-    }
+    if (!visible) emptyMessage.textContent = t.empty;
+    updateEnd();
     return visible;
   }
 
@@ -116,12 +121,7 @@ export function initTimeline(doc) {
     withViewTransition(() => {
       visible = applyFilter();
     }).then(() => {
-      const releases = plural(visible, 'release', 'releases');
-      announce(
-        filter === 'all'
-          ? `Showing ${releases}.`
-          : `Showing ${releases} of type ${TYPE_LABELS[filter]}.`
-      );
+      announce(t.showing(visible, typeLabel(filter)));
     });
   }
 
@@ -153,38 +153,27 @@ export function initTimeline(doc) {
     });
   }
 
-  function showDone() {
-    loadMoreButton.hidden = true;
-    doneMessage.hidden = false;
+  function updateEnd() {
+    const finished = deferred().length === 0;
+    loadMoreButton.hidden = finished;
+    doneMessage.hidden = !finished;
   }
 
   function loadMore() {
     const batch = deferred().slice(0, pageSize);
     if (!batch.length) return;
 
-    batch.forEach((item) => item.removeAttribute('data-deferred'));
+    limit += pageSize;
     applyFilter();
 
-    const shown = batch.filter((item) => !item.hidden);
-    if (!reducedMotion.matches) animateEntry(shown);
+    if (!reducedMotion.matches) animateEntry(batch);
     const finished = deferred().length === 0;
 
-    let message =
-      activeFilter === 'all'
-        ? `${plural(batch.length, 'earlier release', 'earlier releases')} loaded.`
-        : `${plural(batch.length, 'release', 'releases')} loaded, ${shown.length} of type ${TYPE_LABELS[activeFilter]}.`;
-    if (finished) message += ' No more releases.';
+    const message = t.loaded(batch.length, typeLabel(activeFilter), finished);
 
     // Focus the first new release, so keyboard and screen reader users carry
     // on reading where the new content appeared.
-    shown[0]?.querySelector('.release__title').focus();
-
-    if (finished) {
-      showDone();
-      // The button is gone: with no new release to focus, focus what is left.
-      if (!shown.length)
-        (emptyMessage.hidden ? doneMessage : emptyMessage).focus();
-    }
+    batch[0].querySelector('.release__title').focus();
 
     announce(message);
   }

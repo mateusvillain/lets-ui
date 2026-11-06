@@ -12,9 +12,16 @@ import {
   parseChangelog,
   parseTagDates,
   promoteHeadings,
+  translate,
   truncate,
   withTagDates,
 } from './changelog.js';
+
+const readRoot = (name) =>
+  readFileSync(
+    fileURLToPath(new URL(`../../../../${name}`, import.meta.url)),
+    'utf8'
+  );
 
 const SAMPLE = `# Changelog
 
@@ -85,8 +92,26 @@ group('parseChangelog', () => {
     expect(fixed.items).toEqual(['Something broke. It works now.']);
   });
 
-  it('maps sections to a card type as the issue describes', () => {
+  it('gives a release the type of its section with the most items', () => {
     expect(releases.map((r) => r.type)).toEqual(['new', 'fix', 'improvement']);
+  });
+
+  it('favours fixes over a minor addition or change when they have more items', () => {
+    const patch = parseChangelog(`# Changelog
+
+## v1.13.1
+
+### Added
+
+- One minor addition.
+
+### Fixed
+
+- First fix.
+- Second fix.
+- Third fix.
+`);
+    expect(patch[0].type).toBe('fix');
   });
 
   it('takes a date from the heading when the notes have one, never inventing it', () => {
@@ -121,10 +146,7 @@ group('parseChangelog', () => {
 });
 
 group('the repository CHANGELOG.md', () => {
-  const source = readFileSync(
-    fileURLToPath(new URL('../../../../CHANGELOG.md', import.meta.url)),
-    'utf8'
-  );
+  const source = readRoot('CHANGELOG.md');
   const releases = parseChangelog(source);
   const headings = source.match(/^## v?\d+\.\d+\.\d+/gm);
 
@@ -152,6 +174,99 @@ group('the repository CHANGELOG.md', () => {
   });
 });
 
+const SAMPLE_PT = `# Changelog
+
+## v2.1.0
+
+### Adicionado
+
+- Novo Web Component \`lui-thing\` e estilos CSS-only \`.thing\` para mostrar coisas, com uma explicação longa. Uma segunda frase.
+- Segunda adição.
+
+### Corrigido
+
+- Algo quebrou. Agora funciona.
+
+## 1.0.0 - 2024-05-01
+
+### Alterado
+
+- Token renomeado por @someone em [PR #12](https://github.com/x/y/pull/12)
+
+### Removido
+
+- Um mixin antigo.
+`;
+
+group('a translated changelog', () => {
+  const releases = parseChangelog(SAMPLE_PT, { locale: 'pt' });
+
+  it('reads Portuguese section headings as the same kinds', () => {
+    expect(releases[0].sections.map((s) => s.kind)).toEqual(['added', 'fixed']);
+    expect(releases.map((r) => r.type)).toEqual(['new', 'improvement']);
+  });
+
+  it('derives the title, highlights and description in Portuguese', () => {
+    expect(releases[0].title).toBe(
+      'Novo Web Component `lui-thing` e estilos CSS-only `.thing`'
+    );
+    expect(releases[0].highlights).toContain('Algo quebrou');
+    expect(releases[1].title).toBe('Token renomeado');
+    expect(releases[0].description).toBe(
+      'Esta versão traz 2 adições e 1 correção.'
+    );
+    expect(describe({ added: 0, changed: 1, fixed: 0, removed: 1 }, 'pt')).toBe(
+      'Esta versão traz 1 alteração e 1 remoção.'
+    );
+  });
+
+  it('keeps every release of the original, marking the untranslated ones', () => {
+    const merged = translate(parseChangelog(SAMPLE), releases);
+    expect(merged.map((r) => r.version)).toEqual(['2.1.0', '2.0.1', '1.0.0']);
+    expect(merged.map((r) => Boolean(r.fallback))).toEqual([
+      false,
+      true,
+      false,
+    ]);
+    expect(merged[0].title).toMatch(/^Novo/);
+    expect(merged[1].title).toBe('Fix a crash');
+  });
+});
+
+group('the repository CHANGELOG.pt-BR.md', () => {
+  const original = parseChangelog(readRoot('CHANGELOG.md'));
+  const translation = parseChangelog(readRoot('CHANGELOG.pt-BR.md'), {
+    locale: 'pt',
+  });
+  const byVersion = new Map(original.map((r) => [r.version, r]));
+
+  it('translates only versions the original has, in the same order', () => {
+    const versions = original.map((r) => r.version);
+    const order = translation.map((r) => versions.indexOf(r.version));
+    expect(order).not.toContain(-1);
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+  });
+
+  it('keeps the sections and item counts of every release it translates', () => {
+    for (const release of translation) {
+      const source = byVersion.get(release.version);
+      expect(
+        release.sections.map((s) => s.kind),
+        release.tag
+      ).toEqual(source.sections.map((s) => s.kind));
+      expect(release.counts, release.tag).toEqual(source.counts);
+      expect(release.type, release.tag).toBe(source.type);
+    }
+  });
+
+  it('gives every release a title and highlights', () => {
+    for (const release of translation) {
+      expect(release.title.length, release.tag).toBeGreaterThan(0);
+      expect(release.highlights.length, release.tag).toBeGreaterThan(0);
+    }
+  });
+});
+
 group('text helpers', () => {
   it('cuts the first sentence outside code spans', () => {
     expect(firstSentence('Use `a.b` here. Then more.')).toBe('Use `a.b` here');
@@ -163,6 +278,9 @@ group('text helpers', () => {
     );
     expect(firstSentence('Fix a thing in [PR #3](https://x)')).toBe(
       'Fix a thing'
+    );
+    expect(firstSentence('Corrige algo por @me em [PR #3](https://x)')).toBe(
+      'Corrige algo'
     );
   });
 

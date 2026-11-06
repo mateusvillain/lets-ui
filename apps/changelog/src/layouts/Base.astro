@@ -1,27 +1,52 @@
 ---
 /**
- * Page shell: theme before first paint, skip link, the icon sprite and the
- * site header. Pages fill the `<main>`.
+ * Page shell: language and SEO metadata, theme before first paint, skip
+ * link, the icon sprite and the site header. Pages fill the `<main>`.
+ *
+ * `path` is the page's path without the locale prefix. When the page has no
+ * translation of its own (`translated` false), every locale points its
+ * canonical at the English page and no `hreflang` alternates are declared.
  */
 import '@lets-ui/tokens';
 import '@/styles/changelog.css';
+import { DEFAULT_LOCALE, LOCALES, STRINGS, localePath } from '@/lib/i18n.js';
+import type { Locale } from '@/lib/types';
 
 interface Props {
   title: string;
   description: string;
+  locale: Locale;
+  path: string;
+  translated?: boolean;
 }
 
-const { title, description } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const { title, description, locale, path, translated = true } = Astro.props;
+const t = STRINGS[locale];
+const absolute = (l: Locale) => new URL(localePath(l, path), Astro.site).href;
+const canonical = absolute(translated ? locale : DEFAULT_LOCALE);
+const others = (Object.keys(LOCALES) as Locale[]).filter((l) => l !== locale);
 ---
 
 <!doctype html>
-<html lang="en" data-brand="lets-ui" data-theme="light">
+<html lang={LOCALES[locale].lang} data-locale={locale} data-brand="lets-ui" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {translated && (Object.keys(LOCALES) as Locale[]).map((l) => (
+      <link rel="alternate" hreflang={LOCALES[l].lang} href={absolute(l)} />
+    ))}
+    {translated && <link rel="alternate" hreflang="x-default" href={absolute(DEFAULT_LOCALE)} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Let's UI" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={LOCALES[locale].ogLocale} />
+    {translated && others.map((l) => <meta property="og:locale:alternate" content={LOCALES[l].ogLocale} />)}
+    <meta name="twitter:card" content="summary" />
     <script is:inline>
       // Theme from the OS before the first paint, and a hook for styles that
       // only apply once the page's script runs (progressive enhancement).
@@ -36,18 +61,19 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#content">Skip to content</a>
+    <a class="skip-link" href="#content">{t.skip}</a>
 
     <!-- Icon sprite (Lucide). Referenced with <use>; always decorative. -->
     <svg xmlns="http://www.w3.org/2000/svg" hidden>
       <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 6 9 17l-5-5"></path>
       </symbol>
-      <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+      <!-- Arrows from lets-ui-icons (https://icons.lets-ui.com/). -->
+      <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M13.3447 5.09473C13.6376 4.80184 14.1124 4.80184 14.4053 5.09473L20.7803 11.4697C21.0731 11.7626 21.0732 12.2374 20.7803 12.5303L14.4053 18.9053C14.1124 19.1982 13.6376 19.1982 13.3447 18.9053C13.0518 18.6124 13.0519 18.1376 13.3447 17.8448L18.4395 12.75H3.75C3.3358 12.75 3.00003 12.4142 3 12C3 11.5858 3.33579 11.25 3.75 11.25H18.4395L13.3447 6.15528C13.0518 5.86239 13.0519 5.38763 13.3447 5.09473Z"></path>
       </symbol>
-      <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path>
+      <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M9.59467 5.09473C9.88756 4.80184 10.3623 4.80184 10.6552 5.09473C10.9481 5.38763 10.9481 5.8624 10.6552 6.15528L5.56049 11.25H20.2499C20.6641 11.25 20.9999 11.5858 20.9999 12C20.9999 12.4142 20.6641 12.75 20.2499 12.75H5.56049L10.6552 17.8448C10.9481 18.1377 10.9481 18.6124 10.6552 18.9053C10.3623 19.1982 9.88757 19.1981 9.59467 18.9053L3.21967 12.5303C2.92678 12.2374 2.92678 11.7626 3.21967 11.4697L9.59467 5.09473Z"></path>
       </symbol>
       <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="m6 9 6 6 6-6"></path>
@@ -58,8 +84,19 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     </svg>
 
     <div class="site-bar container">
-      <a class="site-bar__brand" href={base}>Let's UI <span class="site-bar__section">Changelog</span></a>
-      <a class="site-bar__link" href="https://github.com/mateusvillain/lets-ui/blob/main/CHANGELOG.md">CHANGELOG.md</a>
+      <a class="site-bar__brand" href={localePath(locale)}>Let's UI <span class="site-bar__section">Changelog</span></a>
+      <div class="site-bar__links">
+        <nav aria-label={t.languages}>
+          <ul class="site-bar__languages" role="list">
+            {others.map((l) => (
+              <li>
+                <a class="site-bar__language" href={localePath(l, path)} hreflang={LOCALES[l].lang} lang={LOCALES[l].lang}>{LOCALES[l].name}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <a class="site-bar__link" href={`https://github.com/mateusvillain/lets-ui/blob/main/${LOCALES[locale].source}`}>{LOCALES[locale].source}</a>
+      </div>
     </div>
 
     <slot />

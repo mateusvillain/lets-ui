@@ -167,6 +167,25 @@ main:focus {
   text-underline-offset: 3px;
 }
 
+.site-bar__links,
+.site-bar__languages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.site-bar__languages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-bar__language {
+  color: var(--cl-text-body);
+  text-underline-offset: 3px;
+}
+
 /* Page header ------------------------------------------------------------ */
 
 .page-header {
@@ -569,6 +588,11 @@ main:focus {
   border-bottom: var(--lui-border-width-1) solid var(--cl-border);
 }
 
+.notes__untranslated {
+  color: var(--cl-text-muted);
+  font-size: 0.875rem;
+}
+
 .notes__title {
   font-family: var(--cl-font-heading);
   font-size: 2.25rem;
@@ -623,39 +647,39 @@ main:focus {
 .pager {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 1rem;
   max-width: 46rem;
   margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: var(--lui-border-width-1) solid var(--cl-border);
 }
 
 .pager__link {
-  display: flex;
-  flex: 1 1 12rem;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 1rem 1.25rem;
-  border: var(--lui-border-width-1) solid var(--cl-border-strong);
-  border-radius: var(--lui-border-radius-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+  color: var(--cl-text);
+  font-size: 0.9375rem;
+  font-weight: var(--lui-typography-font-weight-medium);
   text-decoration: none;
 }
 
 .pager__link--older {
-  align-items: flex-end;
-  text-align: right;
+  margin-left: auto;
 }
 
-.pager__link:hover {
-  border-color: var(--cl-text-muted);
-}
-
-.pager__label {
-  color: var(--cl-text-muted);
-  font-size: 0.8125rem;
+.pager__link:hover .pager__label {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .pager__version {
+  color: var(--cl-text-muted);
   font-family: var(--cl-font-code);
-  font-weight: var(--lui-typography-font-weight-medium);
+  font-size: 0.8125rem;
+  font-weight: var(--lui-typography-font-weight-regular);
 }
 
 .archive {

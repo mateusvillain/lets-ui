@@ -2,7 +2,7 @@
 
 The public changelog of Let's UI: every release in the repository's
 [`CHANGELOG.md`](../../CHANGELOG.md) as a timeline, with a page of full notes
-per version.
+per version, in English and Brazilian Portuguese.
 
 The interaction and layout follow the craft reference
 [mateusvillain/changelog](https://github.com/mateusvillain/changelog), rebuilt
@@ -31,19 +31,21 @@ pnpm --filter @lets-ui/tokens build
 
 ## Where the content comes from
 
-Everything on the site is read from the root `CHANGELOG.md` at build time.
-Nothing is kept in a second file: edit the Markdown, rebuild, and the site
-follows.
+Everything on the site is read from the root `CHANGELOG.md`, and its
+translation [`CHANGELOG.pt-BR.md`](../../CHANGELOG.pt-BR.md), at build time.
+Edit the Markdown, rebuild, and the site follows.
 
 `src/lib/changelog.js` parses the file into releases. Each `## vX.Y.Z` (or
 `## X.Y.Z`) heading is a release, and each `###` heading inside it a section.
 A heading that is not a version, such as `## Unreleased`, is skipped.
+Section headings are read in either language: Added / Adicionado, Changed /
+Alterado, Fixed / Corrigido, Removed / Removido.
 
 Each card on the timeline is derived from its release:
 
 | Field       | Source                                                                                                                  |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Type tag    | **New** if the release has an Added section, else **Improvement** if it has Changed or Removed, else **Fix**            |
+| Type tag    | **New** if Added has the most items, **Improvement** if Changed and Removed together do, else **Fix** — ties go to New then Improvement |
 | Title       | The first sentence of the lead item (the first Added item for New), cut at its first clause when it is long             |
 | Description | The number of additions, changes, fixes and removals                                                                    |
 | Highlights  | The first sentence of up to four items, additions first, then fixes, changes and removals, without the "by @user" credit |
@@ -58,13 +60,43 @@ written, every subsection and nested bullet, with its `###` headings as `<h2>`.
 `/releases/` lists every release, for reaching the full history without
 JavaScript.
 
+## Languages
+
+English is the default and lives at the root; Portuguese lives under
+`/pt/`, with the same paths below it:
+
+| English              | Portuguese              |
+| -------------------- | ----------------------- |
+| `/`                  | `/pt/`                  |
+| `/releases/`         | `/pt/releases/`         |
+| `/releases/v1.13.0/` | `/pt/releases/v1.13.0/` |
+
+The interface strings are in `src/lib/i18n.js`. The notes come from
+`CHANGELOG.pt-BR.md`, which follows the original release by release: when a
+release is added to `CHANGELOG.md`, add its translation there too. A release
+missing from the translation still gets a Portuguese page, with the English
+notes marked `lang="en"` and a line saying they are not translated yet, and
+the root `pnpm test` checks that every translated release keeps the sections
+and item counts of the original.
+
+For search engines, each page declares `<html lang>`, a canonical URL and
+`hreflang` alternates for both languages plus `x-default` (English).
+`/sitemap.xml` lists every page with the same alternates, and `/robots.txt`
+points to it. A page whose release is not translated yet points its canonical
+at the English page and declares no alternates, so the two are not indexed as
+duplicates. The absolute URLs come from `site` in `astro.config.mjs`
+(`https://changelog.lets-ui.com`). There is no redirect by browser language:
+the header links to the same page in the other language.
+
 ## Behaviour and accessibility
 
 - The server renders every release. With JavaScript, the first five show, and
   **Load earlier releases** adds five at a time. It moves focus to the first new
   release and announces how many were loaded.
-- The **All / New / Improvement / Fix** filters are toggle buttons with
-  `aria-pressed`. A `role="status"` region announces how many releases are
+- The filters are toggle buttons with `aria-pressed`, one per release type
+  that appears in the changelog, labelled as on the cards. Paging counts only
+  the releases of the active type, so every type shows its first five even
+  when they are old. A `role="status"` region announces how many releases are
   shown. The filters need JavaScript, so they stay hidden without it, and the
   whole timeline shows instead.
 - A skip link, a visible focus ring, one `<h3>` per release with its meta after
@@ -100,13 +132,15 @@ every pull request.
 | File                                | Role                                                       |
 | ----------------------------------- | ---------------------------------------------------------- |
 | `src/lib/changelog.js`              | Parsing `CHANGELOG.md` and deriving each card (pure)       |
-| `src/lib/releases.js`               | Reading the file and the git tag dates at build time       |
+| `src/lib/releases.js`               | Reading the files and the git tag dates at build time      |
+| `src/lib/i18n.js`                   | Locales, localized paths and the interface strings         |
 | `src/lib/markdown.js`               | Rendering titles, highlights and notes with `marked`       |
 | `src/scripts/timeline.js`           | Filters, "Load earlier releases" and the announcements     |
 | `src/components/ReleaseCard.astro`  | One release on the timeline                                |
-| `src/pages/index.astro`             | The timeline                                               |
-| `src/pages/releases/[version].astro` | Full notes for one release                                |
-| `src/pages/releases/index.astro`    | Every release as a list                                    |
+| `src/views/Timeline.astro`          | The timeline                                               |
+| `src/views/Release.astro`           | Full notes for one release                                 |
+| `src/views/Archive.astro`           | Every release as a list                                    |
+| `src/pages/`                        | One route per view and locale, plus the sitemap and robots |
 | `src/styles/changelog.css`          | Layout, motion and the token mapping                       |
 
 `src/lib/changelog.test.js` runs in the root `pnpm test`, against a fixture and

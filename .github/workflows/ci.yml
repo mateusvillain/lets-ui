@@ -116,7 +116,10 @@ jobs:
         working-directory: apps/changelog
 
       - name: Assert the build emitted a site
-        run: test -f apps/changelog/dist/index.html
+        run: |
+          test -f apps/changelog/dist/index.html
+          test -f apps/changelog/dist/pt/index.html
+          test -f apps/changelog/dist/sitemap.xml
 
   systembook:
     name: SystemBook docs

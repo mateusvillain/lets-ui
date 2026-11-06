@@ -9,23 +9,28 @@
  */
 import TypeTag from './TypeTag.astro';
 import { headingId, longDate, shortDate } from '@/lib/format.js';
+import { STRINGS, localePath } from '@/lib/i18n.js';
 import { inline } from '@/lib/markdown.js';
-import type { Release } from '@/lib/types';
+import type { Locale, Release } from '@/lib/types';
 
 interface Props {
   release: Release;
+  locale: Locale;
   latest?: boolean;
   deferred?: boolean;
 }
 
-const { release, latest = false, deferred = false } = Astro.props;
+const { release, locale, latest = false, deferred = false } = Astro.props;
+const t = STRINGS[locale];
 const id = headingId(release);
-const href = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}releases/${release.slug}/`;
+const href = localePath(locale, `/releases/${release.slug}/`);
+// Notes not translated yet are in English; say so to assistive technology.
+const notesLang = release.fallback ? 'en' : undefined;
 ---
 
 <li class="timeline__item" data-type={release.type ?? undefined} data-deferred={deferred ? '' : undefined}>
   <article class:list={['release', { 'release--latest': latest }]} aria-labelledby={id}>
-    <header class="release__header">
+    <header class="release__header" lang={notesLang}>
       <h3 id={id} class="release__title" tabindex="-1" set:html={inline(release.title)} />
       {release.description && <p class="release__description">{release.description}</p>}
     </header>
@@ -33,20 +38,20 @@ const href = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}releases/${release
     <div class="release__meta">
       {release.date && (
         <time class="release__date" datetime={release.date}>
-          <span aria-hidden="true">{shortDate(release.date)}</span>
-          <span class="visually-hidden">{longDate(release.date)}</span>
+          <span aria-hidden="true">{shortDate(release.date, locale)}</span>
+          <span class="visually-hidden">{longDate(release.date, locale)}</span>
         </time>
       )}
-      <span class="release__version"><span class="visually-hidden">Version </span>{release.tag}</span>
-      {latest && <span class="release__latest">Latest</span>}
+      <span class="release__version"><span class="visually-hidden">{t.card.version}</span>{release.tag}</span>
+      {latest && <span class="release__latest">{t.card.latest}</span>}
     </div>
 
-    <ul class="tags" role="list" aria-label="Categories">
-      <TypeTag type={release.type} />
+    <ul class="tags" role="list" aria-label={t.card.categories}>
+      <TypeTag type={release.type} locale={locale} />
     </ul>
 
     {release.highlights.length > 0 && (
-      <ul class="highlights" role="list" aria-label="Highlights">
+      <ul class="highlights" role="list" aria-label={t.card.highlights} lang={notesLang}>
         {release.highlights.map((text) => (
           <li class="highlights__item">
             <svg class="icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="#icon-check" /></svg>
@@ -57,7 +62,7 @@ const href = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}releases/${release
     )}
 
     <a class="release__link" href={href}>
-      Read full notes<span class="visually-hidden"> for {release.tag}</span>
+      {t.card.readNotes}<span class="visually-hidden">{t.card.readNotesFor(release.tag)}</span>
       <svg class="icon" width="14" height="14" aria-hidden="true" focusable="false"><use href="#icon-arrow-right" /></svg>
     </a>
   </article>

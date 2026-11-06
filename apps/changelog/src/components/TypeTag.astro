@@ -1,16 +1,19 @@
 ---
 /** The release type as a tag. The label is text, so colour is never alone. */
-import { TYPE_LABELS } from '@/lib/changelog.js';
+import { STRINGS } from '@/lib/i18n.js';
+import type { Locale, ReleaseType } from '@/lib/types';
 
 interface Props {
-  type: 'new' | 'improvement' | 'fix' | null;
+  type: ReleaseType | null;
+  locale: Locale;
 }
 
-const { type } = Astro.props;
+const { type, locale } = Astro.props;
+const t = STRINGS[locale];
 ---
 
 {type && (
   <li class={`tag tag--${type}`}>
-    <span class="visually-hidden">Type: </span>{TYPE_LABELS[type]}
+    <span class="visually-hidden">{t.card.type}</span>{t.types[type]}
   </li>
 )}

@@ -10,7 +10,7 @@
  * editing `CHANGELOG.md` and rebuilding is the only way to change the site.
  */
 
-/** Section headings, normalised to the kinds the site knows. */
+/** Section headings, in English and Portuguese, normalised to the kinds the site knows. */
 const KINDS = {
   added: 'added',
   changed: 'changed',
@@ -18,13 +18,42 @@ const KINDS = {
   removed: 'removed',
   fixed: 'fixed',
   security: 'fixed',
+  adicionado: 'added',
+  alterado: 'changed',
+  obsoleto: 'changed',
+  removido: 'removed',
+  corrigido: 'fixed',
+  segurança: 'fixed',
 };
 
-/** Card type tags, as in the issue's content mapping. */
-export const TYPE_LABELS = {
-  new: 'New',
-  improvement: 'Improvement',
-  fix: 'Fix',
+/** The card types, in the order the filters list them. */
+export const TYPES = ['new', 'improvement', 'fix'];
+
+/** Words the derived text is written with, per locale. */
+const LANGUAGE = {
+  en: {
+    counts: {
+      added: ['addition', 'additions'],
+      changed: ['change', 'changes'],
+      fixed: ['fix', 'fixes'],
+      removed: ['removal', 'removals'],
+    },
+    and: 'and',
+    sentence: (list) => `This release has ${list}.`,
+    clause:
+      /(?:: | [—–] |, | for | so | because | when | which | that | instead of | with )/g,
+  },
+  pt: {
+    counts: {
+      added: ['adição', 'adições'],
+      changed: ['alteração', 'alterações'],
+      fixed: ['correção', 'correções'],
+      removed: ['remoção', 'remoções'],
+    },
+    and: 'e',
+    sentence: (list) => `Esta versão traz ${list}.`,
+    clause: /(?:: | [—–] |, | para | porque | quando | em vez de | com )/g,
+  },
 };
 
 /** Which section a card leads with, per type. */
@@ -46,7 +75,9 @@ const RELEASE_HEADING =
   /^##\s+\[?v?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\]?(?:\s+[-–—]\s+(\d{4}-\d{2}-\d{2}))?\s*$/;
 const SECTION_HEADING = /^###\s+(.+?)\s*$/;
 const ITEM = /^[-*+]\s+(.*)$/;
-const ATTRIBUTION = /\s+(?:by @[\w-]+\s+)?in \[PR #\d+\]\([^)]*\)\.?\s*$/;
+const ATTRIBUTION =
+  /\s+(?:(?:by|por) @[\w-]+\s+)?(?:in|em) \[PR #\d+\]\([^)]*\)\.?\s*$/;
+const SENTENCE_END = /[.!?](?=\s+[A-ZÀ-Ý`*"(_[])/g;
 
 /**
  * @typedef {{ heading: string, kind: string | null, items: string[] }} Section
@@ -62,14 +93,16 @@ const ATTRIBUTION = /\s+(?:by @[\w-]+\s+)?in \[PR #\d+\]\([^)]*\)\.?\s*$/;
  *   title: string,
  *   description: string,
  *   highlights: string[],
+ *   fallback?: boolean,
  * }} Release
  */
 
 /**
- * @param {string} source The full `CHANGELOG.md`.
+ * @param {string} source The full `CHANGELOG.md`, or a translation of it.
+ * @param {{ locale?: 'en' | 'pt' }} [options] The language it is written in.
  * @returns {Release[]} Newest first, in the file's order.
  */
-export function parseChangelog(source) {
+export function parseChangelog(source, { locale = 'en' } = {}) {
   const lines = source.replace(/<!--[\s\S]*?-->/g, '').split(/\r?\n/);
   const releases = [];
   let current = null;
@@ -91,14 +124,36 @@ export function parseChangelog(source) {
   return releases.map(({ version, date, body }) => {
     const markdown = trimBody(body);
     const sections = parseSections(markdown);
-    return summarise({
-      version,
-      tag: `v${version}`,
-      slug: `v${version}`,
-      date,
-      markdown,
-      sections,
-    });
+    return summarise(
+      {
+        version,
+        tag: `v${version}`,
+        slug: `v${version}`,
+        date,
+        markdown,
+        sections,
+      },
+      locale
+    );
+  });
+}
+
+/**
+ * The releases of `base` in its order, each replaced by its translation when
+ * there is one. A release not translated yet keeps the original, marked
+ * `fallback`, so no version goes missing from the translated site.
+ *
+ * @param {Release[]} base
+ * @param {Release[]} translated
+ * @returns {Release[]}
+ */
+export function translate(base, translated) {
+  const byVersion = new Map(translated.map((r) => [r.version, r]));
+  return base.map((release) => {
+    const translation = byVersion.get(release.version);
+    return translation
+      ? { ...translation, date: translation.date ?? release.date }
+      : { ...release, fallback: true };
   });
 }
 
@@ -154,19 +209,23 @@ export function parseSections(markdown) {
   }));
 }
 
-function summarise(release) {
+function summarise(release, locale) {
   const counts = { added: 0, changed: 0, removed: 0, fixed: 0 };
   for (const section of release.sections) {
     if (section.kind) counts[section.kind] += section.items.length;
   }
 
-  const type = counts.added
-    ? 'new'
-    : counts.changed || counts.removed
-      ? 'improvement'
-      : counts.fixed
-        ? 'fix'
-        : null;
+  const improvementCount = counts.changed + counts.removed;
+  const type =
+    counts.added &&
+    counts.added >= improvementCount &&
+    counts.added >= counts.fixed
+      ? 'new'
+      : improvementCount && improvementCount >= counts.fixed
+        ? 'improvement'
+        : counts.fixed
+          ? 'fix'
+          : null;
 
   const itemsOf = (kinds) =>
     kinds.flatMap((kind) =>
@@ -182,26 +241,24 @@ function summarise(release) {
     ...release,
     counts,
     type,
-    title: lead ? headline(lead) : release.tag,
-    description: describe(counts),
+    title: lead ? headline(lead, locale) : release.tag,
+    description: describe(counts, locale),
     highlights,
   };
 }
 
-/** "This release has 1 addition, 2 changes and 4 fixes." */
-export function describe(counts) {
-  const parts = [
-    plural(counts.added, 'addition', 'additions'),
-    plural(counts.changed, 'change', 'changes'),
-    plural(counts.fixed, 'fix', 'fixes'),
-    plural(counts.removed, 'removal', 'removals'),
-  ].filter(Boolean);
+/** "This release has 1 addition, 2 changes and 4 fixes.", in `locale`. */
+export function describe(counts, locale = 'en') {
+  const words = LANGUAGE[locale];
+  const parts = ['added', 'changed', 'fixed', 'removed']
+    .map((kind) => plural(counts[kind], ...words.counts[kind]))
+    .filter(Boolean);
   if (!parts.length) return '';
   const list =
     parts.length === 1
       ? parts[0]
-      : `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}`;
-  return `This release has ${list}.`;
+      : `${parts.slice(0, -1).join(', ')} ${words.and} ${parts.at(-1)}`;
+  return words.sentence(list);
 }
 
 function plural(count, one, many) {
@@ -211,7 +268,7 @@ function plural(count, one, many) {
 /** The item's first sentence, without the "by @user in PR #n" or "in PR #n" credit. */
 export function firstSentence(text) {
   const clean = text.replace(ATTRIBUTION, '').trim();
-  const end = boundaries(clean, /[.!?](?=\s+[A-Z`*"(_[])/g)[0];
+  const end = boundaries(clean, SENTENCE_END)[0];
   const sentence = end === undefined ? clean : clean.slice(0, end + 1);
   return sentence.replace(/[.!?:]$/, '').trim();
 }
@@ -227,14 +284,13 @@ export function highlight(text) {
  * styles for showing how much of a task is done" becomes "New
  * `lui-progress-bar` Web Component and CSS-only `.progress-bar` styles".
  */
-export function headline(text) {
+export function headline(text, locale = 'en') {
   const sentence = firstSentence(text);
   if (visibleLength(sentence) <= TITLE_SOFT_LIMIT) return sentence;
 
-  const cut = boundaries(
-    sentence,
-    /(?:: | [—–] |, | for | so | because | when | which | that | instead of | with )/g
-  ).find((index) => visibleLength(sentence.slice(0, index)) >= 24);
+  const cut = boundaries(sentence, LANGUAGE[locale].clause).find(
+    (index) => visibleLength(sentence.slice(0, index)) >= 24
+  );
   const clause = cut === undefined ? sentence : sentence.slice(0, cut).trim();
   return truncate(clause, TITLE_HARD_LIMIT);
 }

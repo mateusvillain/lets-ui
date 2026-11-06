@@ -1,0 +1,51 @@
+---
+/**
+ * Every release as a plain list: the no-JavaScript route to the full
+ * history, and a compact index for anyone looking for one version.
+ */
+import Base from '@/layouts/Base.astro';
+import { loadReleases } from '@/lib/releases.js';
+import { longDate, shortDate } from '@/lib/format.js';
+import { STRINGS, localePath } from '@/lib/i18n.js';
+import { inlineText } from '@/lib/markdown.js';
+import type { Locale } from '@/lib/types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = STRINGS[locale];
+const releases = loadReleases(locale);
+---
+
+<Base title={t.archive.title} description={t.archive.description} locale={locale} path="/releases/">
+  <main id="content" tabindex="-1" class="container notes-page">
+    <a class="back-link" href={localePath(locale)}>
+      <svg class="icon" width="14" height="14" aria-hidden="true" focusable="false"><use href="#icon-arrow-left" /></svg>
+      {t.archive.back}
+    </a>
+
+    <h1 class="notes__title">{t.archive.heading}</h1>
+
+    <ol class="archive" role="list">
+      {releases.map((release) => (
+        <li class="archive__item">
+          <a class="archive__link" href={localePath(locale, `/releases/${release.slug}/`)}>
+            <span class="archive__version">{release.tag}</span>
+            <span class="archive__title" lang={release.fallback ? 'en' : undefined} set:html={inlineText(release.title)} />
+          </a>
+          <span class="archive__meta">
+            {release.type && <span class={`tag tag--${release.type}`}>{t.types[release.type]}</span>}
+            {release.date && (
+              <time datetime={release.date}>
+                <span aria-hidden="true">{shortDate(release.date, locale)}</span>
+                <span class="visually-hidden">{longDate(release.date, locale)}</span>
+              </time>
+            )}
+          </span>
+        </li>
+      ))}
+    </ol>
+  </main>
+</Base>

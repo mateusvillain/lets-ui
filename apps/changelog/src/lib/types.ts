@@ -18,4 +18,7 @@ export interface Release {
   title: string;
   description: string;
   highlights: string[];
+  fallback?: boolean;
 }
+
+export type Locale = 'en' | 'pt';

@@ -1,0 +1,81 @@
+---
+/**
+ * Full notes for one release: its whole section of the changelog, every
+ * subsection and nested bullet, rendered as written.
+ */
+import Base from '@/layouts/Base.astro';
+import TypeTag from '@/components/TypeTag.astro';
+import { longDate, shortDate } from '@/lib/format.js';
+import { STRINGS, localePath } from '@/lib/i18n.js';
+import { notes } from '@/lib/markdown.js';
+import type { Locale, Release } from '@/lib/types';
+
+interface Props {
+  locale: Locale;
+  release: Release;
+  latest: boolean;
+  newer: Release | null;
+  older: Release | null;
+  /** Whether every locale has its own notes for this release. */
+  translated: boolean;
+}
+
+const { locale, release, latest, newer, older, translated } = Astro.props;
+const t = STRINGS[locale];
+const href = (r: Release) => localePath(locale, `/releases/${r.slug}/`);
+const notesLang = release.fallback ? 'en' : undefined;
+---
+
+<Base
+  title={t.release.title(release.tag)}
+  description={release.description || t.release.description(release.tag)}
+  locale={locale}
+  path={`/releases/${release.slug}/`}
+  translated={translated}
+>
+  <main id="content" tabindex="-1" class="container notes-page">
+    <a class="back-link" href={localePath(locale)}>
+      <svg class="icon" width="14" height="14" aria-hidden="true" focusable="false"><use href="#icon-arrow-left" /></svg>
+      {t.release.back}
+    </a>
+
+    <article class="notes" aria-labelledby="notes-title">
+      <header class="notes__header">
+        <h1 id="notes-title" class="notes__title">Let's UI {release.tag}</h1>
+        <div class="release__meta">
+          {release.date && (
+            <time class="release__date" datetime={release.date}>
+              <span aria-hidden="true">{shortDate(release.date, locale)}</span>
+              <span class="visually-hidden">{t.release.released(longDate(release.date, locale))}</span>
+            </time>
+          )}
+          {latest && <span class="release__latest">{t.card.latest}</span>}
+        </div>
+        {release.description && <p class="release__description" lang={notesLang}>{release.description}</p>}
+        <ul class="tags" role="list" aria-label={t.card.categories}>
+          <TypeTag type={release.type} locale={locale} />
+        </ul>
+        {release.fallback && <p class="notes__untranslated">{t.release.untranslated}</p>}
+      </header>
+
+      <div class="notes__body" lang={notesLang} set:html={notes(release.markdown)} />
+    </article>
+
+    <nav class="pager" aria-label={t.release.pager}>
+      {newer && (
+        <a class="pager__link pager__link--newer" href={href(newer)} rel="prev">
+          <svg class="icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="#icon-arrow-left" /></svg>
+          <span class="pager__label">{t.release.newer}</span>
+          <span class="pager__version">{newer.tag}</span>
+        </a>
+      )}
+      {older && (
+        <a class="pager__link pager__link--older" href={href(older)} rel="next">
+          <span class="pager__label">{t.release.older}</span>
+          <span class="pager__version">{older.tag}</span>
+          <svg class="icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="#icon-arrow-right" /></svg>
+        </a>
+      )}
+    </nav>
+  </main>
+</Base>

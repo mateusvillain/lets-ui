@@ -1,76 +1,10 @@
 ---
-/**
- * Full notes for one release: its whole `CHANGELOG.md` section, every
- * subsection and nested bullet, rendered as written.
- */
-import Base from '@/layouts/Base.astro';
-import TypeTag from '@/components/TypeTag.astro';
-import { loadReleases } from '@/lib/releases.js';
-import { longDate, shortDate } from '@/lib/format.js';
-import { notes } from '@/lib/markdown.js';
+import Release from '@/views/Release.astro';
+import { releasePaths } from '@/lib/releases.js';
 
 export function getStaticPaths() {
-  const releases = loadReleases();
-  return releases.map((release, index) => ({
-    params: { version: release.slug },
-    props: {
-      release,
-      latest: index === 0,
-      newer: releases[index - 1] ?? null,
-      older: releases[index + 1] ?? null,
-    },
-  }));
+  return releasePaths('en');
 }
-
-const { release, latest, newer, older } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const href = (r) => `${base}releases/${r.slug}/`;
 ---
 
-<Base
-  title={`${release.tag} · Let's UI changelog`}
-  description={release.description || `Release notes for Let's UI ${release.tag}.`}
->
-  <main id="content" tabindex="-1" class="container notes-page">
-    <a class="back-link" href={base}>
-      <svg class="icon" width="14" height="14" aria-hidden="true" focusable="false"><use href="#icon-arrow-left" /></svg>
-      All releases
-    </a>
-
-    <article class="notes" aria-labelledby="notes-title">
-      <header class="notes__header">
-        <h1 id="notes-title" class="notes__title">Let's UI {release.tag}</h1>
-        <div class="release__meta">
-          {release.date && (
-            <time class="release__date" datetime={release.date}>
-              <span aria-hidden="true">{shortDate(release.date)}</span>
-              <span class="visually-hidden">Released {longDate(release.date)}</span>
-            </time>
-          )}
-          {latest && <span class="release__latest">Latest</span>}
-        </div>
-        {release.description && <p class="release__description">{release.description}</p>}
-        <ul class="tags" role="list" aria-label="Categories">
-          <TypeTag type={release.type} />
-        </ul>
-      </header>
-
-      <div class="notes__body" set:html={notes(release.markdown)} />
-    </article>
-
-    <nav class="pager" aria-label="Other releases">
-      {newer && (
-        <a class="pager__link pager__link--newer" href={href(newer)} rel="prev">
-          <span class="pager__label">Newer</span>
-          <span class="pager__version">{newer.tag}</span>
-        </a>
-      )}
-      {older && (
-        <a class="pager__link pager__link--older" href={href(older)} rel="next">
-          <span class="pager__label">Older</span>
-          <span class="pager__version">{older.tag}</span>
-        </a>
-      )}
-    </nav>
-  </main>
-</Base>
+<Release {...Astro.props} />
