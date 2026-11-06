@@ -1,0 +1,16 @@
+---
+/** The release type as a tag. The label is text, so colour is never alone. */
+import { TYPE_LABELS } from '@/lib/changelog.js';
+
+interface Props {
+  type: 'new' | 'improvement' | 'fix' | null;
+}
+
+const { type } = Astro.props;
+---
+
+{type && (
+  <li class={`tag tag--${type}`}>
+    <span class="visually-hidden">Type: </span>{TYPE_LABELS[type]}
+  </li>
+)}

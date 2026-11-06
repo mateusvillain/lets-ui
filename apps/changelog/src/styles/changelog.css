@@ -1,0 +1,1005 @@
+/*
+ * Let's UI changelog. Layout and motion follow the reference changelog
+ * (mateusvillain/changelog); colours, type, spacing and radii come from the
+ * Let's UI tokens, so the page follows `data-theme` and `data-brand`.
+ */
+
+:root {
+  --cl-bg: var(--lui-color-neutral-background-surface);
+  --cl-surface: var(--lui-color-neutral-background-surface);
+  --cl-text: var(--lui-color-neutral-text-heading);
+  --cl-text-body: var(--lui-color-neutral-text-body);
+  --cl-text-muted: var(--lui-color-neutral-text-caption);
+  --cl-border: var(--lui-color-neutral-border-subtle);
+  --cl-border-strong: var(--lui-color-neutral-border-default);
+  --cl-accent: var(--lui-color-primary-icon-default);
+
+  /* `primary-text-body` is 4.04:1 on the primary surface in light mode; step 5
+     clears 4.5:1 on that surface and on the page in both themes. */
+  --cl-accent-text: var(--lui-brand-color-primary-5);
+  --cl-accent-soft: var(--lui-color-primary-background-surface);
+  --cl-font-body:
+    var(--lui-brand-typography-font-family-body), system-ui, sans-serif;
+  --cl-font-heading:
+    var(--lui-brand-typography-font-family-heading), system-ui, sans-serif;
+  --cl-font-code:
+    var(--lui-brand-typography-font-family-code), ui-monospace, monospace;
+  --cl-radius-pill: var(--lui-border-radius-circle);
+  --cl-gutter: 1.25rem;
+  --cl-container: 64rem;
+}
+
+/* Base ------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--cl-bg);
+  color: var(--cl-text);
+  font-family: var(--cl-font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+code {
+  font-family: var(--cl-font-code);
+  font-size: 0.9em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lui-color-primary-focus-ring);
+  outline-offset: 2px;
+}
+
+main:focus {
+  outline: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10;
+  padding: 0.625rem 1rem;
+  border-radius: var(--lui-border-radius-sm);
+  background: var(--cl-text);
+  color: var(--cl-bg);
+  font-size: 0.875rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.container {
+  width: min(var(--cl-container), 100% - 2 * var(--cl-gutter));
+  margin-inline: auto;
+}
+
+/* Site bar --------------------------------------------------------------- */
+
+.site-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.site-bar__brand {
+  font-family: var(--cl-font-heading);
+  font-weight: var(--lui-typography-font-weight-semibold);
+  text-decoration: none;
+}
+
+.site-bar__section {
+  color: var(--cl-text-muted);
+  font-weight: var(--lui-typography-font-weight-regular);
+}
+
+.site-bar__link {
+  color: var(--cl-text-body);
+  font-family: var(--cl-font-code);
+  font-size: 0.8125rem;
+  text-underline-offset: 3px;
+}
+
+/* Page header ------------------------------------------------------------ */
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding-block: 2rem;
+}
+
+.page-header__title {
+  font-family: var(--cl-font-heading);
+  font-size: 2rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.page-header__subtitle {
+  max-width: 38.75rem;
+  color: var(--cl-text-body);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* Filter bar ------------------------------------------------------------- */
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding-block: 0.875rem;
+  border-bottom: var(--lui-border-width-1) solid var(--cl-border);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+/* 24px tall at least: WCAG 2.5.8 target size. */
+.filter {
+  min-height: 2rem;
+  padding: 0.375rem 0.875rem;
+  border: var(--lui-border-width-1) solid var(--cl-border-strong);
+  border-radius: var(--cl-radius-pill);
+  background: transparent;
+  color: var(--cl-text-body);
+  font-size: 0.8125rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.filter:hover {
+  border-color: var(--cl-text-muted);
+  color: var(--cl-text);
+}
+
+.filter[aria-pressed='true'] {
+  border-color: var(--cl-text);
+  background: var(--cl-text);
+  color: var(--cl-bg);
+}
+
+.filter-bar__count {
+  display: none;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--cl-text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+/* Timeline --------------------------------------------------------------- */
+
+/* Each item draws its own rail: ::before is the dot, ::after the line. */
+.history {
+  --rail: 1.5rem;
+  --meta-col: 0rem;
+  --dot: 0.75rem;
+  --dot-left: 0rem;
+  --dot-top: 0.1875rem;
+  --ring: 3px;
+  --item-gap: 0.875rem;
+  --item-space: 3.5rem;
+  --line-gap: 0.5rem;
+}
+
+.timeline {
+  padding-top: 2rem;
+}
+
+/* Cards past the first page wait for "Load earlier releases". Only with
+   JavaScript: without it, every release stays in view. */
+.js .timeline__item[data-deferred] {
+  display: none;
+}
+
+.timeline__item {
+  position: relative;
+  padding-bottom: var(--item-space);
+  padding-left: calc(var(--meta-col) + var(--rail));
+}
+
+.timeline__item::before,
+.timeline__item::after {
+  content: '';
+  position: absolute;
+}
+
+.timeline__item::before {
+  top: var(--dot-top);
+  left: var(--dot-left);
+  width: var(--dot);
+  height: var(--dot);
+  border: 2px solid var(--cl-text-muted);
+  border-radius: 50%;
+  background: var(--cl-bg);
+}
+
+.timeline__item::after {
+  top: calc(var(--dot-top) + var(--dot) + var(--line-gap));
+  bottom: 0;
+  left: calc(var(--dot-left) + var(--dot) / 2 - 0.5px);
+  width: 1px;
+  background: var(--cl-border);
+}
+
+.timeline__item:has(.release--latest)::before {
+  border-color: var(--cl-accent);
+  background: var(--cl-accent);
+  box-shadow: 0 0 0 var(--ring) var(--cl-accent-soft);
+}
+
+.timeline__end {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding-bottom: 4rem;
+  padding-left: calc(var(--meta-col) + var(--rail));
+}
+
+.timeline__end::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  left: calc(var(--dot-left) + (var(--dot) - 0.5rem) / 2);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--cl-border-strong);
+}
+
+.timeline__empty,
+.timeline__done {
+  color: var(--cl-text-body);
+  font-size: 0.9375rem;
+}
+
+.timeline__empty {
+  padding-bottom: 2rem;
+  padding-left: calc(var(--meta-col) + var(--rail));
+}
+
+.timeline__done {
+  padding-block: 0.625rem;
+}
+
+.timeline__archive {
+  color: var(--cl-text-body);
+  font-size: 0.875rem;
+  text-underline-offset: 3px;
+}
+
+.load-more {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.6875rem 1.125rem;
+  border: var(--lui-border-width-1) solid var(--cl-border-strong);
+  border-radius: var(--lui-border-radius-sm);
+  background: var(--cl-surface);
+  color: var(--cl-text);
+  font-size: 0.875rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.load-more:hover {
+  border-color: var(--cl-text-muted);
+}
+
+/* Release card ----------------------------------------------------------- */
+
+.release {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--item-gap);
+}
+
+.release > * {
+  max-width: 100%;
+}
+
+.release__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.release__title {
+  font-family: var(--cl-font-heading);
+  font-size: 1.375rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  scroll-margin-top: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+.release__title:focus {
+  outline: none;
+}
+
+.release__title:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--lui-color-primary-focus-ring);
+  outline-offset: 4px;
+}
+
+.release__description {
+  color: var(--cl-text-body);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+/* Meta sits above the title visually but after it in the DOM, so heading
+   navigation lands right on the release name. */
+.release__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.625rem;
+  order: -1;
+}
+
+.release__date {
+  color: var(--cl-text-body);
+  font-size: 0.8125rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+}
+
+.release__version {
+  padding: 0.125rem 0.4375rem;
+  border: var(--lui-border-width-1) solid var(--cl-border);
+  border-radius: var(--lui-border-radius-xs);
+  color: var(--cl-text-body);
+  font-family: var(--cl-font-code);
+  font-size: 0.75rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  line-height: 1.33;
+}
+
+.release--latest .release__version {
+  border-color: var(--cl-accent-soft);
+  background: var(--cl-accent-soft);
+  color: var(--cl-accent-text);
+}
+
+.release__latest {
+  color: var(--cl-accent-text);
+  font-size: 0.75rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.tag {
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--cl-radius-pill);
+  background: var(--lui-color-neutral-border-subtle);
+  color: var(--cl-text-body);
+  font-size: 0.75rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  line-height: 1.25;
+}
+
+/* The label carries the type; colour only reinforces it. */
+.tag--new {
+  background: var(--lui-color-success-background-surface);
+  color: var(--lui-color-green-5);
+}
+
+.tag--improvement {
+  background: var(--lui-color-primary-background-surface);
+  color: var(--cl-accent-text);
+}
+
+.tag--fix {
+  background: var(--lui-color-caution-background-surface);
+  color: var(--lui-color-orange-5);
+}
+
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.highlights__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  color: var(--cl-text);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.highlights__item .icon {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.1875rem;
+  color: var(--cl-accent);
+}
+
+.release__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 1.5rem;
+  color: var(--cl-accent-text);
+  font-size: 0.875rem;
+  font-weight: var(--lui-typography-font-weight-medium);
+  text-decoration: none;
+}
+
+.release__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.release__link .icon {
+  transition: transform 0.15s;
+}
+
+.release__link:hover .icon {
+  transform: translateX(2px);
+}
+
+/* Release page and list ------------------------------------------------- */
+
+.notes-page {
+  padding-block: 2rem 5rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--cl-text-body);
+  font-size: 0.875rem;
+  text-underline-offset: 3px;
+}
+
+.notes {
+  max-width: 46rem;
+}
+
+.notes__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding-bottom: 2rem;
+  border-bottom: var(--lui-border-width-1) solid var(--cl-border);
+}
+
+.notes__title {
+  font-family: var(--cl-font-heading);
+  font-size: 2.25rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.notes__body {
+  color: var(--cl-text-body);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.notes__body h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--cl-text);
+  font-family: var(--cl-font-heading);
+  font-size: 1.375rem;
+  font-weight: var(--lui-typography-font-weight-semibold);
+}
+
+.notes__body ul {
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.notes__body ul ul {
+  margin-top: 0.5rem;
+  list-style: circle;
+}
+
+.notes__body li + li {
+  margin-top: 0.625rem;
+}
+
+.notes__body p + p,
+.notes__body p + ul {
+  margin-top: 0.75rem;
+}
+
+.notes__body a {
+  color: var(--lui-color-link-default);
+  text-underline-offset: 3px;
+}
+
+.notes__body strong {
+  color: var(--cl-text);
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 46rem;
+  margin-top: 3rem;
+}
+
+.pager__link {
+  display: flex;
+  flex: 1 1 12rem;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  border: var(--lui-border-width-1) solid var(--cl-border-strong);
+  border-radius: var(--lui-border-radius-md);
+  text-decoration: none;
+}
+
+.pager__link--older {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.pager__link:hover {
+  border-color: var(--cl-text-muted);
+}
+
+.pager__label {
+  color: var(--cl-text-muted);
+  font-size: 0.8125rem;
+}
+
+.pager__version {
+  font-family: var(--cl-font-code);
+  font-weight: var(--lui-typography-font-weight-medium);
+}
+
+.archive {
+  max-width: 46rem;
+  margin-top: 2rem;
+  border-top: var(--lui-border-width-1) solid var(--cl-border);
+}
+
+.archive__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-block: 0.875rem;
+  border-bottom: var(--lui-border-width-1) solid var(--cl-border);
+}
+
+.archive__link {
+  display: flex;
+  flex: 1 1 20rem;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.archive__link:hover .archive__title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.archive__version {
+  flex: none;
+  min-width: 4.5rem;
+  color: var(--cl-text-body);
+  font-family: var(--cl-font-code);
+  font-size: 0.875rem;
+}
+
+.archive__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--cl-text-body);
+  font-size: 0.8125rem;
+}
+
+/* Tablet: 600px and up --------------------------------------------------- */
+
+@media (width >= 37.5em) {
+  :root {
+    --cl-gutter: 3rem;
+  }
+
+  .page-header {
+    gap: 1.125rem;
+    padding-block: 4rem 2.5rem;
+  }
+
+  .page-header__title {
+    font-size: 2.75rem;
+  }
+
+  .page-header__subtitle {
+    font-size: 1.0625rem;
+  }
+
+  .filter-bar__count {
+    display: flex;
+  }
+
+  .history {
+    --rail: 2.25rem;
+    --item-gap: 1.125rem;
+    --item-space: 4.5rem;
+  }
+
+  .timeline {
+    padding-top: 3rem;
+  }
+
+  .timeline__end {
+    padding-bottom: 6rem;
+  }
+
+  .load-more {
+    flex: none;
+  }
+
+  .release__title {
+    font-size: 1.625rem;
+  }
+
+  .notes__title {
+    font-size: 2.75rem;
+  }
+}
+
+/* Desktop: 1024px and up. Meta moves to a column left of the rail. ------- */
+
+@media (width >= 64em) {
+  .page-header {
+    gap: 1.25rem;
+    padding-block: 5rem 3.5rem;
+  }
+
+  .page-header__title {
+    font-size: 4rem;
+    line-height: 1.05;
+  }
+
+  .page-header__subtitle {
+    font-size: 1.125rem;
+  }
+
+  .history {
+    --meta-col: 12.5rem;
+    --rail: 4rem;
+    --dot: 0.875rem;
+    --dot-left: calc(var(--meta-col) + (var(--rail) - var(--dot)) / 2);
+    --dot-top: 0.375rem;
+    --ring: 4px;
+    --item-gap: 1.25rem;
+    --item-space: 5.5rem;
+  }
+
+  .timeline {
+    padding-top: 4rem;
+  }
+
+  .timeline__end {
+    padding-bottom: 7.5rem;
+  }
+
+  .timeline__end::before {
+    top: 0.75rem;
+  }
+
+  .release {
+    position: static;
+  }
+
+  .release .release__meta {
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    gap: 0.625rem;
+    width: var(--meta-col);
+    padding-top: 0.25rem;
+    padding-right: 1rem;
+  }
+
+  .release__date {
+    font-size: 0.875rem;
+  }
+
+  .release__title {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .release__description {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .highlights {
+    gap: 0.625rem;
+  }
+
+  .highlights__item {
+    gap: 0.75rem;
+    font-size: 1rem;
+  }
+}
+
+/* Motion: progressive enhancement ---------------------------------------- */
+
+/* Everything sits behind prefers-reduced-motion and @supports: without
+   support, or with reduced motion, content shows at once and nothing stays
+   hidden. Screen only, so printing never outputs transparent items. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
+@keyframes rail-fill {
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+@keyframes dot-reach {
+  to {
+    border-color: var(--cl-accent);
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  /* Scroll-driven animations (Chrome/Edge 115+, Safari 26+). */
+  @supports (animation-timeline: view()) {
+    /* Children animate, not the <article>: a transform on the article would
+       become the containing block of the absolute meta on desktop. */
+    .release > * {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    .timeline__item {
+      view-timeline: --release block;
+      view-timeline-inset: 50% 50%;
+    }
+
+    /* The rail fills with the accent as reading progresses. */
+    .timeline__item::after {
+      background: linear-gradient(var(--cl-accent), var(--cl-accent)) top / 100%
+        0% no-repeat var(--cl-border);
+      animation: rail-fill linear both;
+      animation-timeline: --release;
+      animation-range: cover calc(var(--dot-top) + var(--dot) + var(--line-gap))
+        cover 100%;
+    }
+
+    /* The dot lights up when reading reaches it. */
+    .timeline__item:not(:has(.release--latest))::before {
+      animation: dot-reach linear both;
+      animation-timeline: --release;
+      animation-range: cover calc(var(--dot-top) + var(--dot) / 2 - 1px) cover
+        calc(var(--dot-top) + var(--dot) / 2);
+    }
+  }
+
+  /* Page entrance: title, subtitle, filters, first release, 60ms apart. */
+  .page-header__title,
+  .page-header__subtitle,
+  .filter-bar,
+  html:not([data-entered]) .timeline__item:first-child::before,
+  html:not([data-entered]) .timeline__item:first-child .release > * {
+    animation: enter 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(var(--enter-step) * 60ms);
+  }
+
+  /* The first release is already on screen: the entrance replaces its scroll
+     animation until the script sets html[data-entered]. */
+  html:not([data-entered]) .timeline__item:first-child .release > * {
+    animation-timeline: auto;
+  }
+
+  .page-header__title {
+    --enter-step: 0;
+  }
+
+  .page-header__subtitle {
+    --enter-step: 1;
+  }
+
+  .filter-bar {
+    --enter-step: 2;
+  }
+
+  .timeline__item:first-child {
+    --enter-step: 3;
+  }
+
+  /* Releases added by "Load earlier releases". */
+  .timeline__item[data-entering] {
+    transition:
+      opacity 0.4s ease-out,
+      translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: calc(var(--stagger, 0) * 70ms);
+  }
+
+  @starting-style {
+    .timeline__item[data-entering] {
+      opacity: 0;
+      translate: 0 1rem;
+    }
+  }
+
+  .timeline__end {
+    view-transition-name: timeline-end;
+  }
+
+  .timeline__empty {
+    view-transition-name: timeline-empty;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: 0.35s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Forced colours: keep the pressed state, the rail and the tags visible. */
+@media (forced-colors: active) {
+  .filter[aria-pressed='true'] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  .timeline__item::before,
+  .timeline__item::after,
+  .timeline__end::before {
+    border-color: CanvasText;
+    background: CanvasText;
+    animation: none;
+    forced-color-adjust: none;
+  }
+
+  .timeline__item::before {
+    background: Canvas;
+  }
+
+  .timeline__item:has(.release--latest)::before {
+    border-color: Highlight;
+    background: Highlight;
+    box-shadow: none;
+  }
+
+  .tag,
+  .release__version {
+    border: 1px solid CanvasText;
+  }
+}

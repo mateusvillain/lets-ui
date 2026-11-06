@@ -1,0 +1,67 @@
+---
+/**
+ * Page shell: theme before first paint, skip link, the icon sprite and the
+ * site header. Pages fill the `<main>`.
+ */
+import '@lets-ui/tokens';
+import '@/styles/changelog.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<!doctype html>
+<html lang="en" data-brand="lets-ui" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <script is:inline>
+      // Theme from the OS before the first paint, and a hook for styles that
+      // only apply once the page's script runs (progressive enhancement).
+      (() => {
+        const root = document.documentElement;
+        const dark = matchMedia('(prefers-color-scheme: dark)');
+        const apply = () => (root.dataset.theme = dark.matches ? 'dark' : 'light');
+        apply();
+        dark.addEventListener('change', apply);
+        root.classList.add('js');
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <!-- Icon sprite (Lucide). Referenced with <use>; always decorative. -->
+    <svg xmlns="http://www.w3.org/2000/svg" hidden>
+      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6 9 17l-5-5"></path>
+      </symbol>
+      <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+      </symbol>
+      <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path>
+      </symbol>
+      <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m6 9 6 6 6-6"></path>
+      </symbol>
+      <symbol id="icon-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path>
+      </symbol>
+    </svg>
+
+    <div class="site-bar container">
+      <a class="site-bar__brand" href={base}>Let's UI <span class="site-bar__section">Changelog</span></a>
+      <a class="site-bar__link" href="https://github.com/mateusvillain/lets-ui/blob/main/CHANGELOG.md">CHANGELOG.md</a>
+    </div>
+
+    <slot />
+  </body>
+</html>
