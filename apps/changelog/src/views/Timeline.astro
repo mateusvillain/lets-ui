@@ -1,0 +1,83 @@
+---
+/**
+ * Changelog home: every release as a timeline card, newest first, with type
+ * filters and "Load earlier releases".
+ */
+import Base from '@/layouts/Base.astro';
+import ReleaseCard from '@/components/ReleaseCard.astro';
+import { loadReleases } from '@/lib/releases.js';
+import { TYPES } from '@/lib/changelog.js';
+import { STRINGS, localePath } from '@/lib/i18n.js';
+import type { Locale } from '@/lib/types';
+
+interface Props {
+  locale: Locale;
+}
+
+/** Cards shown before "Load earlier releases"; also the size of each batch. */
+const PAGE_SIZE = 5;
+
+const { locale } = Astro.props;
+const t = STRINGS[locale];
+const releases = loadReleases(locale);
+const years = releases.map((r) => r.date?.slice(0, 4)).filter(Boolean).sort();
+const since = years[0];
+const types = TYPES.filter((type) =>
+  releases.some((release) => release.type === type)
+);
+---
+
+<Base title={t.home.title} description={t.home.description} locale={locale} path="/">
+  <header class="page-header container">
+    <h1 class="page-header__title">{t.home.heading}</h1>
+    <p class="page-header__subtitle">{t.home.subtitle}</p>
+  </header>
+
+  <main id="content" tabindex="-1">
+    <div class="container">
+      <div class="filter-bar">
+        <div class="filters" role="group" aria-labelledby="filters-label" data-requires-js hidden>
+          <span id="filters-label" class="visually-hidden">{t.home.filters}</span>
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">{t.home.all}</button>
+          {types.map((type) => (
+            <button type="button" class="filter" data-filter={type} aria-pressed="false">{t.types[type]}</button>
+          ))}
+        </div>
+        <p class="filter-bar__count">
+          <svg class="icon" width="14" height="14" aria-hidden="true" focusable="false"><use href="#icon-history" /></svg>
+          {t.home.total(releases.length, since)}
+        </p>
+      </div>
+
+      <section class="history" aria-labelledby="history-title" data-page-size={PAGE_SIZE}>
+        <h2 id="history-title" class="visually-hidden">{t.home.history}</h2>
+
+        <!-- Announced by screen readers when filtering or loading more releases. -->
+        <p id="timeline-status" class="visually-hidden" role="status"></p>
+
+        <ol id="timeline" class="timeline" role="list">
+          {releases.map((release, index) => (
+            <ReleaseCard release={release} locale={locale} latest={index === 0} deferred={index >= PAGE_SIZE} />
+          ))}
+        </ol>
+
+        <p class="timeline__empty" tabindex="-1" hidden></p>
+
+        <div class="timeline__end">
+          <button type="button" class="load-more" aria-controls="timeline" data-requires-js hidden>
+            {t.home.loadMore}
+            <svg class="icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="#icon-chevron-down" /></svg>
+          </button>
+          <p class="timeline__done" tabindex="-1" hidden>{t.home.done}</p>
+          <a class="timeline__archive" href={localePath(locale, '/releases/')}>{t.home.archive}</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import { initTimeline } from '@/scripts/timeline.js';
+
+  initTimeline(document);
+</script>

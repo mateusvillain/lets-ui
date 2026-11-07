@@ -19,7 +19,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "lint": "pnpm run lint:css && pnpm run lint:md",
-    "test": "vitest run --project brand-studio --project state-calculator --project storybook-language --project components",
+    "test": "vitest run --project brand-studio --project state-calculator --project changelog --project storybook-language --project components",
     "lint:css": "stylelint \"**/*.{css,scss}\"",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" \"!storybook-static/**\"",
     "storybook": "storybook dev -p 6006",
@@ -32,6 +32,7 @@
     "playground": "pnpm --prefix playground dev",
     "state-calculator": "pnpm --prefix apps/state-calculator dev",
     "brand-studio": "pnpm --prefix apps/brand-studio dev",
+    "changelog": "pnpm --prefix apps/changelog dev",
     "systembook": "pnpm --prefix apps/systembook docs:dev",
     "systembook:check": "pnpm --prefix apps/systembook docs:check",
     "systembook:build": "pnpm --prefix apps/systembook docs:build"

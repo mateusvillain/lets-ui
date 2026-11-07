@@ -1,0 +1,16 @@
+{
+  "name": "changelog",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The Let's UI changelog, built from the repository's CHANGELOG.md",
+  "scripts": {
+    "dev": "astro dev --port 4325",
+    "build": "astro build",
+    "preview": "astro preview --port 4325"
+  },
+  "devDependencies": {
+    "astro": "^5.0.0",
+    "marked": "^18.0.0"
+  }
+}

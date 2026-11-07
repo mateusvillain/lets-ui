@@ -35,6 +35,15 @@ export default defineConfig({
         },
       },
       {
+        // The changelog's parser: pure, so it runs in Node like the other apps'
+        // libraries, against both a fixture and the real CHANGELOG.md.
+        test: {
+          name: 'changelog',
+          environment: 'node',
+          include: ['apps/changelog/src/lib/**/*.test.js'],
+        },
+      },
+      {
         // Storybook's language support: the sidebar name maps against the
         // story files, and the per-language heading ids for docs pages.
         test: {

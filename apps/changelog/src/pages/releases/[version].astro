@@ -1,0 +1,10 @@
+---
+import Release from '@/views/Release.astro';
+import { releasePaths } from '@/lib/releases.js';
+
+export function getStaticPaths() {
+  return releasePaths('en');
+}
+---
+
+<Release {...Astro.props} />

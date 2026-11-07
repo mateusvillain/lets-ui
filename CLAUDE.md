@@ -40,6 +40,7 @@ Three apps live outside the pnpm workspace, each with its own lockfile, so a bro
 
 - **`apps/brand-studio`** — visual editor for the brand tokens, deployed to `studio.lets-ui.com` from Vercel (`vercel.json` at the root). It reaches the packages by relative path, so their `dist/` must be built before it.
 - **`apps/systembook`** — the documentation site, written as `.md`/`.mdx` under `docs/` and built into a static site by [SystemBook](https://github.com/mateusvillain/systembook)'s CLI (`systembook.config.ts`). It also holds one `*.preview.tsx` per component, which the docs embed with `<ComponentEmbed>`. Reaches the packages by relative path, so their `dist/` must be built first. See its `README.md`.
+- **`apps/changelog`** — the public changelog, an Astro site generated at build time from the root `CHANGELOG.md`, in English (default, at `/`) and Portuguese (`/pt/`, from `CHANGELOG.pt-BR.md`). A new release entry goes in both files. It reaches the tokens' `dist/` by relative path, so build `@lets-ui/tokens` first. See its `README.md`.
 - **`playground/`** — raw pages for manual testing. No CI; it is a test surface, not a deliverable.
 
 ### SCSS split rule

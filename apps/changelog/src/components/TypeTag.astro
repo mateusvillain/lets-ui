@@ -1,0 +1,19 @@
+---
+/** The release type as a tag. The label is text, so colour is never alone. */
+import { STRINGS } from '@/lib/i18n.js';
+import type { Locale, ReleaseType } from '@/lib/types';
+
+interface Props {
+  type: ReleaseType | null;
+  locale: Locale;
+}
+
+const { type, locale } = Astro.props;
+const t = STRINGS[locale];
+---
+
+{type && (
+  <li class={`tag tag--${type}`}>
+    <span class="visually-hidden">{t.card.type}</span>{t.types[type]}
+  </li>
+)}

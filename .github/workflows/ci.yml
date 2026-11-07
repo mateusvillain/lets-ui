@@ -81,6 +81,46 @@ jobs:
       - name: Assert the build emitted a site
         run: test -f apps/brand-studio/dist/index.html
 
+  changelog:
+    name: Changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # The site styles itself with the tokens' `dist/` CSS, aliased by
+      # relative path (see `astro.config.mjs`), so only the tokens package has
+      # to be built first. Its content is the root `CHANGELOG.md`, read at
+      # build time.
+      - name: Build the tokens the site consumes
+        run: |
+          pnpm install
+          pnpm --filter @lets-ui/tokens build
+
+      # Outside the pnpm workspace, like the Brand Studio: a browser app must
+      # never enter the dependency graph of the published packages.
+      - name: Install dependencies
+        run: pnpm install --ignore-workspace
+        working-directory: apps/changelog
+
+      - name: Build
+        run: pnpm build
+        working-directory: apps/changelog
+
+      - name: Assert the build emitted a site
+        run: |
+          test -f apps/changelog/dist/index.html
+          test -f apps/changelog/dist/pt/index.html
+          test -f apps/changelog/dist/sitemap.xml
+
   systembook:
     name: SystemBook docs
     runs-on: ubuntu-latest
