@@ -97,7 +97,7 @@ export const defaultFileUploadMessages: FileUploadMessages = {
     `${quote(file)} is ${size}, over the ${maxSize} limit. Choose a smaller file.`,
   count: (file, maxFiles) =>
     maxFiles === 1
-      ? `${quote(file)} was not added: only one file is allowed. Remove the current file to choose another.`
+      ? `${quote(file)} was not added: this field takes only one file. Choose a single file.`
       : `${quote(file)} was not added: the limit is ${maxFiles} files. Remove a file to add another.`,
   limitReached: (maxFiles) =>
     `Limit of ${plural(maxFiles, 'file', 'files')} reached. Remove a file to add another.`,
@@ -162,15 +162,52 @@ export function matchesAccept(file: File, accept: string): boolean {
   });
 }
 
-/** `.pdf, image/png, image/*` → `PDF, PNG, image/*`. */
-function formatAccept(accept: string): string {
-  return acceptTokens(accept)
-    .map((t) => {
-      if (t.startsWith('.')) return t.slice(1).toUpperCase();
-      if (t.endsWith('/*')) return t;
-      return (t.split('/')[1] ?? t).toUpperCase();
-    })
-    .join(', ');
+/** Short names for MIME types whose subtype is not a readable format name. */
+const MIME_NAMES: Record<string, string> = {
+  'image/jpeg': 'JPG',
+  'image/svg+xml': 'SVG',
+  'text/plain': 'TXT',
+  'application/msword': 'DOC',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+    'DOCX',
+  'application/vnd.ms-excel': 'XLS',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX',
+  'application/vnd.ms-powerpoint': 'PPT',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+    'PPTX',
+  'application/vnd.oasis.opendocument.text': 'ODT',
+  'application/vnd.oasis.opendocument.spreadsheet': 'ODS',
+};
+
+/**
+ * `.pdf, image/png, image/*` → `PDF, PNG, image/*`. Common MIME types get their
+ * usual short name, so `.jpg,image/jpeg` reads `JPG` once; an unknown vendor
+ * type stays as written instead of being shouted in capitals.
+ */
+export function formatAccept(accept: string): string {
+  const names = acceptTokens(accept).map((t) => {
+    if (t.startsWith('.')) return t.slice(1).toUpperCase();
+    if (t.endsWith('/*')) return t;
+    if (MIME_NAMES[t]) return MIME_NAMES[t];
+    const sub = (t.split('/')[1] ?? t).replace(/^x-/, '').replace(/\+\w+$/, '');
+    return sub.startsWith('vnd.') ? t : sub.toUpperCase();
+  });
+  return [...new Set(names)].join(', ');
+}
+
+const numberFormats = new Map<string, Intl.NumberFormat>();
+
+/** One formatter per locale and precision, shared by every instance. */
+function numberFormat(locale: string, digits: number): Intl.NumberFormat {
+  const key = `${locale}|${digits}`;
+  let format = numberFormats.get(key);
+  if (!format) {
+    format = new Intl.NumberFormat(locale || undefined, {
+      maximumFractionDigits: digits,
+    });
+    numberFormats.set(key, format);
+  }
+  return format;
 }
 
 const fileIcon = svg`<path d="M14.25,1.5C14.44921875,1.5,14.6396484375,1.5791015625,14.7802734375,1.7197265625L19.2802734375,6.2197265625C19.4208984375,6.3603515625,19.5,6.551025390625,19.5,6.75L19.5,21C19.5,21.3978271484375,19.341796875,21.7791748046875,19.060546875,22.060546875C18.779296875,22.3419189453125,18.3974609375,22.5,18,22.5L6,22.5C5.6025390625,22.5,5.220703125,22.3419189453125,4.939453125,22.060546875C4.658203125,21.7791748046875,4.5,21.3978271484375,4.5,21L4.5,3C4.5,2.6021728515625,4.658203125,2.2208251953125,4.939453125,1.939453125C5.220703125,1.6580810546875,5.6025390625,1.5,6,1.5L14.25,1.5ZM6,21L18,21L18,7.5L15,7.5C14.6025390625,7.5,14.220703125,7.3419189453125,13.939453125,7.060546875C13.658203125,6.7791748046875,13.5,6.3978271484375,13.5,6L13.5,3L6,3L6,21ZM15,6L16.939453125,6L15,4.060546875L15,6Z" />`;
@@ -206,7 +243,10 @@ export class LuiFileUpload extends LitElement {
   /** Maximum number of files when `multiple`. `0` = no limit. */
   @property({ type: Number, attribute: 'max-files' }) maxFiles = 0;
   @property(nameProperty) name = '';
-  @property({ type: Boolean, reflect: true }) disabled = false;
+  // Not reflected: `formDisabledCallback` writes it when a parent fieldset is
+  // disabled, and a reflected attribute would keep the field disabled after
+  // the fieldset is enabled again.
+  @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) optional = false;
   @property({ attribute: 'optional-text' }) optionalText = '(optional)';
@@ -234,6 +274,10 @@ export class LuiFileUpload extends LitElement {
   @query('.file-upload__zone') private _zone!: HTMLButtonElement;
 
   private _baseId = `lui-file-upload-${Math.random().toString(36).slice(2, 9)}`;
+  /** Locale for sizes, read once per update rather than once per item. */
+  private _lang = '';
+  private _messagesSource?: Partial<FileUploadMessages>;
+  private _messagesMerged: FileUploadMessages = defaultFileUploadMessages;
   private _dragDepth = 0;
 
   constructor() {
@@ -243,6 +287,7 @@ export class LuiFileUpload extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this._lang = this._findLang();
     this.addEventListener('invalid', this._onInvalid);
   }
 
@@ -255,8 +300,22 @@ export class LuiFileUpload extends LitElement {
     this._syncFormValue();
   }
 
+  protected willUpdate() {
+    this._lang = this._findLang();
+    // Retry hands focus to the item's Remove button once it disappears, but
+    // only if the person is still there: if they have moved on while the app
+    // was retrying, focus stays where they put it.
+    if (this._retryFocus !== null && this._focusLeftRetry()) {
+      this._retryFocus = null;
+    }
+  }
+
   protected updated(changed: PropertyValues) {
-    if (changed.has('required') || changed.has('name')) {
+    if (
+      changed.has('required') ||
+      changed.has('name') ||
+      changed.has('errorText')
+    ) {
       this._syncFormValue();
     }
     this._restoreRetryFocus();
@@ -293,16 +352,16 @@ export class LuiFileUpload extends LitElement {
     const entry = this._entries.find((e) => e.file === file);
     if (!entry) return;
     const changed = entry.status !== status;
+    // A new failure reason for a file already failed is news too.
+    const newReason = status === 'error' && entry.message !== options.message;
     const progress =
       options.progress === undefined || !Number.isFinite(options.progress)
         ? undefined
         : Math.min(Math.max(options.progress, 0), 100);
     this._entries = this._entries.map((e) =>
-      e === entry
-        ? { ...e, status, progress, message: options.message ?? undefined }
-        : e
+      e === entry ? { ...e, status, progress, message: options.message } : e
     );
-    if (!changed) return;
+    if (!changed && !newReason) return;
     const m = this._messages;
     if (status === 'uploading') this._announce(m.uploading(file));
     else if (status === 'complete') this._announce(m.complete(file));
@@ -329,7 +388,40 @@ export class LuiFileUpload extends LitElement {
   // ------------------------------------------------------------------ internals
 
   private get _messages(): FileUploadMessages {
-    return { ...defaultFileUploadMessages, ...this.messages };
+    if (this._messagesSource !== this.messages) {
+      this._messagesSource = this.messages;
+      this._messagesMerged = { ...defaultFileUploadMessages, ...this.messages };
+    }
+    return this._messagesMerged;
+  }
+
+  /** The nearest `lang`, looking through shadow roots up to the document. */
+  private _findLang(): string {
+    let node: Element | null = this;
+    while (node) {
+      const lang = node.getAttribute('lang');
+      if (lang) return lang;
+      node =
+        node.parentElement ??
+        ((node.getRootNode() as ShadowRoot).host as Element | undefined) ??
+        null;
+    }
+    return '';
+  }
+
+  /** Focus is somewhere other than the Retry button that was pressed. */
+  private _focusLeftRetry(): boolean {
+    const outer = (this.getRootNode() as Document | ShadowRoot).activeElement;
+    if (outer === this) {
+      const inner = this.shadowRoot?.activeElement as HTMLElement | null;
+      return !(
+        inner?.classList.contains('file-upload__action--retry') &&
+        inner.dataset.id === String(this._retryFocus)
+      );
+    }
+    // Nothing focused (a mouse click in Safari does not focus the button):
+    // keep the hand-off, so focus does not fall back to the page.
+    return !!outer && outer !== document.body;
   }
 
   private get _maxFiles(): number {
@@ -347,7 +439,11 @@ export class LuiFileUpload extends LitElement {
     return max > 0 && this._entries.length >= max;
   }
 
-  private _formatBytes(bytes: number): string {
+  /**
+   * `digits` is the precision past the decimal point; `up` rounds up instead
+   * of to the nearest, so a file just over a limit never prints as the limit.
+   */
+  private _formatBytes(bytes: number, digits = 1, up = false): string {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let value = bytes;
     let unit = 0;
@@ -355,13 +451,21 @@ export class LuiFileUpload extends LitElement {
       value /= 1024;
       unit += 1;
     }
-    const number = new Intl.NumberFormat(
-      this.closest('[lang]')?.getAttribute('lang') || undefined,
-      {
-        maximumFractionDigits: unit === 0 ? 0 : 1,
-      }
-    ).format(value);
-    return `${number} ${units[unit]}`;
+    const places = unit === 0 ? 0 : digits;
+    if (up) value = Math.ceil(value * 10 ** places) / 10 ** places;
+    return `${numberFormat(this._lang, places).format(value)} ${units[unit]}`;
+  }
+
+  /** File size and limit for the size message, never printed as equal. */
+  private _sizePair(size: number, max: number): [string, string] {
+    for (let digits = 1; digits <= 3; digits += 1) {
+      const pair: [string, string] = [
+        this._formatBytes(size, digits, true),
+        this._formatBytes(max, digits),
+      ];
+      if (pair[0] !== pair[1]) return pair;
+    }
+    return [`${size} B`, `${max} B`];
   }
 
   private _constraintsText(): string {
@@ -459,11 +563,7 @@ export class LuiFileUpload extends LitElement {
       reason === 'type'
         ? m.type(file, formatAccept(this.accept))
         : reason === 'size'
-          ? m.size(
-              file,
-              this._formatBytes(file.size),
-              this._formatBytes(this.maxSize)
-            )
+          ? m.size(file, ...this._sizePair(file.size, this.maxSize))
           : m.count(file, this._maxFiles);
     return {
       id: nextId++,
@@ -748,6 +848,7 @@ export class LuiFileUpload extends LitElement {
     const items = [...this._entries, ...this._rejected];
     const ids = {
       label: `${this._baseId}-label`,
+      optional: `${this._baseId}-optional`,
       zone: `${this._baseId}-zone`,
       title: `${this._baseId}-title`,
       description: `${this._baseId}-description`,
@@ -766,8 +867,20 @@ export class LuiFileUpload extends LitElement {
     const dragActive = this._dragActive || this.forceState === 'drag-active';
     const limitReached = this._limitReached;
     const optional = this.optional
-      ? html`<span class="file-upload__optional">${this.optionalText}</span>`
+      ? html`<span class="file-upload__optional" id=${ids.optional}
+          >${this.optionalText}</span
+        >`
       : nothing;
+    // The zone is named by the label, the optional marker beside it and the
+    // zone title, in reading order. Without a label the marker sits inside
+    // the title and is read with it.
+    const labelledBy = [
+      this.label ? ids.label : '',
+      this.label && this.optional ? ids.optional : '',
+      ids.title,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return html`
       <div
@@ -781,8 +894,6 @@ export class LuiFileUpload extends LitElement {
         <input
           class="file-upload__input"
           type="file"
-          tabindex="-1"
-          aria-hidden="true"
           hidden
           accept=${this.accept || nothing}
           ?multiple=${this.multiple}
@@ -801,9 +912,7 @@ export class LuiFileUpload extends LitElement {
           type="button"
           id=${ids.zone}
           class="file-upload__zone"
-          aria-labelledby=${this.label
-            ? `${ids.label} ${ids.title}`
-            : ids.title}
+          aria-labelledby=${labelledBy}
           aria-describedby=${describedBy}
           aria-disabled=${limitReached ? 'true' : nothing}
           ?disabled=${this.disabled}

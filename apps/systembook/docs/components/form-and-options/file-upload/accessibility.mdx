@@ -16,7 +16,7 @@ After removing a file, focus moves to the Remove button of the file that took it
 
 ## Screen reader
 
-- The label names the field. The zone is named by the label and the zone title, such as "Receipt Upload file".
+- The label names the field. The zone is named by the label, the optional marker (with `optional`) and the zone title, such as "Receipt (optional) Upload file".
 - The description, the constraints, "Required." (with `required`) and the error message are read with the zone (`aria-describedby`).
 - When the limit is reached, the zone is announced as unavailable (`aria-disabled`) and the limit message is read with it, so the person learns why.
 - The file list is a labeled list ("Selected files"). Each item exposes the name, the size and, when present, the error message or the progress bar.

@@ -1,7 +1,7 @@
 import '../../../../lets-ui-tokens/dist/letsui.tokens.css';
 import { afterEach, describe, expect, it } from 'vitest';
 import { userEvent } from 'vitest/browser';
-import { LuiFileUpload, matchesAccept } from './file-upload.ts';
+import { LuiFileUpload, formatAccept, matchesAccept } from './file-upload.ts';
 
 customElements.define('lui-file-upload', LuiFileUpload);
 
@@ -195,6 +195,112 @@ describe('validation', () => {
   });
 });
 
+describe('review fixes', () => {
+  const frame = (el) =>
+    new Promise((r) => requestAnimationFrame(() => r(el.updateComplete)));
+  const live = (el) => $(el, '[role="status"]').textContent.trim();
+
+  it('is enabled again when its disabled fieldset is enabled', async () => {
+    const host = document.createElement('div');
+    host.innerHTML =
+      '<form><fieldset disabled><lui-file-upload name="f"></lui-file-upload></fieldset></form>';
+    document.body.append(host);
+    mounted.push(host);
+    const el = host.querySelector('lui-file-upload');
+    await el.updateComplete;
+    expect(zone(el).disabled).toBe(true);
+    expect(el.hasAttribute('disabled')).toBe(false);
+
+    host.querySelector('fieldset').disabled = false;
+    await el.updateComplete;
+    expect(zone(el).disabled).toBe(false);
+  });
+
+  it('does not take focus back after Retry once the person has moved on', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+    const other = document.createElement('input');
+    mounted[mounted.length - 1].append(other);
+    await pick(el, [file('a.pdf')]);
+    const [a] = el.files;
+    el.setFileStatus(a, 'error', { message: 'Network error.' });
+    await el.updateComplete;
+
+    $(el, '.file-upload__action--retry').focus();
+    $(el, '.file-upload__action--retry').click();
+    other.focus();
+    el.setFileStatus(a, 'uploading');
+    await el.updateComplete;
+
+    expect(document.activeElement).toBe(other);
+  });
+
+  it('keeps the validation message in sync with error-text', async () => {
+    const el = await mount('<lui-file-upload required></lui-file-upload>');
+    el.errorText = 'Anexe um arquivo.';
+    await el.updateComplete;
+    expect(el._internals.validationMessage).toBe('Anexe um arquivo.');
+  });
+
+  it('never prints a file just over the limit as the limit', async () => {
+    const el = await mount(
+      '<lui-file-upload max-size="5242880"></lui-file-upload>'
+    );
+    const errors = [];
+    el.addEventListener('lui-error', (e) => errors.push(e.detail));
+    await pick(el, [file('a.pdf', 5242900)]);
+    expect(errors[0].message).toBe(
+      '“a.pdf” is 5.1 MB, over the 5 MB limit. Choose a smaller file.'
+    );
+  });
+
+  it('tells a single-file field to choose one file, not to remove the current', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+    const errors = [];
+    el.addEventListener('lui-error', (e) => errors.push(e.detail));
+    await drop(el, [file('a'), file('b')]);
+    expect(errors[0].message).toBe(
+      '“b” was not added: this field takes only one file. Choose a single file.'
+    );
+  });
+
+  it('writes accept tokens as readable format names', () => {
+    expect(formatAccept('.jpg,image/jpeg')).toBe('JPG');
+    expect(formatAccept('image/svg+xml')).toBe('SVG');
+    expect(
+      formatAccept(
+        '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      )
+    ).toBe('DOCX');
+    expect(formatAccept('application/vnd.acme.thing')).toBe(
+      'application/vnd.acme.thing'
+    );
+  });
+
+  it('announces a new failure reason for a file that already failed', async () => {
+    const el = await mount('<lui-file-upload></lui-file-upload>');
+    await pick(el, [file('a.pdf')]);
+    const [a] = el.files;
+    el.setFileStatus(a, 'error', { message: 'Network error.' });
+    await frame(el);
+    el.setFileStatus(a, 'error', { message: 'Rejected by the server.' });
+    await frame(el);
+    expect(live(el)).toBe('“a.pdf” failed. Rejected by the server.');
+  });
+
+  it('reads sizes in the lang of a host across shadow roots', async () => {
+    const outer = document.createElement('div');
+    outer.setAttribute('lang', 'pt-BR');
+    const shadow = outer.attachShadow({ mode: 'open' });
+    shadow.innerHTML = '<lui-file-upload></lui-file-upload>';
+    document.body.append(outer);
+    mounted.push(outer);
+    const el = shadow.querySelector('lui-file-upload');
+    await el.updateComplete;
+    await pick(el, [file('a.pdf', 1.5 * 1024 * 1024)]);
+    expect($(el, '.file-upload__size').textContent.trim()).toBe('1,5 MB');
+  });
+});
+
 describe('label', () => {
   it('shows the field label above the zone and names the zone with it and the zone title', async () => {
     const el = await mount(
@@ -214,7 +320,7 @@ describe('label', () => {
       .getAttribute('aria-labelledby')
       .split(' ')
       .map((id) => el.shadowRoot.getElementById(id).textContent.trim());
-    expect(name).toEqual(['Resume', 'Upload files']);
+    expect(name).toEqual(['Resume', '(optional)', 'Upload files']);
   });
 
   it('keeps optional inside the zone title when there is no label', async () => {

@@ -22,7 +22,7 @@ const ptBR = {
     \`\${quote(file)} tem \${size}, acima do limite de \${maxSize}. Escolha um arquivo menor.\`,
   count: (file, maxFiles) =>
     maxFiles === 1
-      ? \`\${quote(file)} não foi adicionado: só é permitido um arquivo. Remova o atual para escolher outro.\`
+      ? \`\${quote(file)} não foi adicionado: este campo aceita só um arquivo. Escolha um único arquivo.\`
       : \`\${quote(file)} não foi adicionado: o limite é de \${maxFiles} arquivos. Remova um arquivo para adicionar outro.\`,
   added: (added, rejected, duplicates) =>
     [
@@ -487,7 +487,7 @@ const scenarios = [
           `${quote(file)} tem ${size}, acima do limite de ${maxSize}. Escolha um arquivo menor.`,
         count: (file: File, maxFiles: number) =>
           maxFiles === 1
-            ? `${quote(file)} não foi adicionado: só é permitido um arquivo. Remova o atual para escolher outro.`
+            ? `${quote(file)} não foi adicionado: este campo aceita só um arquivo. Escolha um único arquivo.`
             : `${quote(file)} não foi adicionado: o limite é de ${maxFiles} arquivos. Remova um arquivo para adicionar outro.`,
         added: (added: File[], rejected: File[], duplicates: File[]) =>
           [

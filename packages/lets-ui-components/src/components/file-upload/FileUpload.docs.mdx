@@ -410,7 +410,7 @@ document.querySelector('lui-file-upload').messages = {
 <Lang lang="pt-BR">
 ## Acessibilidade
 
-- A área inteira é um `<button>` nativo nomeado pelo título (`label`): `Tab` chega nela e `Enter`, `Espaço` ou toque abrem o seletor. Descrição, restrições, “Required.” (com `required`) e a mensagem de erro ficam ligados a ela por `aria-describedby`.
+- A área inteira é um `<button>` nativo nomeado pelo rótulo (`label`), pelo marcador `optional-text` e pelo título da área (`zone-title`): `Tab` chega nela e `Enter`, `Espaço` ou toque abrem o seletor. Descrição, restrições, “Required.” (com `required`) e a mensagem de erro ficam ligados a ela por `aria-describedby`.
 - A lista é um `<ul>` rotulado (“Selected files”); cada item expõe nome, tamanho e, quando houver, a mensagem de erro ou a barra de progresso.
 - `Tab` e `Shift+Tab` percorrem a área e os botões de **cada** arquivo. Remover e Retry são botões distintos, com o nome do arquivo no nome acessível (“Remove comprovante.pdf”, “Retry comprovante.pdf”).
 - Depois de remover, o foco vai para o Remover do arquivo que tomou o lugar, senão o anterior, senão a área. Depois de Retry, quando a aplicação volta o arquivo para `uploading`, o foco vai para o Remover do mesmo arquivo, nunca para um elemento que sumiu.
@@ -432,7 +432,7 @@ document.querySelector('lui-file-upload').messages = {
 <Lang lang="en-US">
 ## Accessibility
 
-- The whole zone is a native `<button>` named by the label (`label`) and the zone title (`zone-title`): `Tab` reaches it and `Enter`, `Space` or touch open the picker. Description, constraints, “Required.” (with `required`) and the error message are tied to it through `aria-describedby`.
+- The whole zone is a native `<button>` named by the label (`label`), the `optional-text` marker and the zone title (`zone-title`): `Tab` reaches it and `Enter`, `Space` or touch open the picker. Description, constraints, “Required.” (with `required`) and the error message are tied to it through `aria-describedby`.
 - The list is a labelled `<ul>` (“Selected files”); each item exposes name, size and, when present, the error message or the progress bar.
 - `Tab` and `Shift+Tab` move through the zone and the buttons of **each** file. Remove and Retry are distinct buttons, carrying the file name in their accessible name (“Remove receipt.pdf”, “Retry receipt.pdf”).
 - After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone. After Retry, when the app sets the file back to `uploading`, focus goes to the same file's Remove, never to an element that is gone.
