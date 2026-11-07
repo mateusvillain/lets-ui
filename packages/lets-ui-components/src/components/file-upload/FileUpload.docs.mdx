@@ -366,7 +366,7 @@ Os textos que o componente gera são em inglês e podem ser trocados para seguir
 | `remove-label`  | `string` | `'Remove'`                             | Prefixo do nome acessível de cada botão Remover: “Remove recibo.pdf”.          |
 | `retry-label`   | `string` | `'Retry'`                              | Prefixo do nome acessível de cada botão de nova tentativa: “Retry recibo.pdf”. |
 
-Chaves de `messages` (cada uma substitui só o texto correspondente): `constraints`, `type`, `size`, `count`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` e `required`. As que recebem dados são funções:
+Chaves de `messages` (cada uma substitui só o texto correspondente): `constraints`, `type`, `size`, `count`, `limitReached`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` e `required`. As que recebem dados são funções:
 
 ```js
 document.querySelector('lui-file-upload').messages = {
@@ -394,7 +394,7 @@ The texts the component generates are in English and can be replaced to follow t
 | `remove-label`  | `string` | `'Remove'`                             | Prefix of each Remove button's accessible name: “Remove receipt.pdf”. |
 | `retry-label`   | `string` | `'Retry'`                              | Prefix of each Retry button's accessible name: “Retry receipt.pdf”.   |
 
-`messages` keys (each replaces only its own text): `constraints`, `type`, `size`, `count`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` and `required`. The ones that receive data are functions:
+`messages` keys (each replaces only its own text): `constraints`, `type`, `size`, `count`, `limitReached`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` and `required`. The ones that receive data are functions:
 
 ```js
 document.querySelector('lui-file-upload').messages = {

@@ -1,0 +1,40 @@
+---
+title: "Accessibility"
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Percorre a área e os botões de **cada** arquivo. |
+| `Enter` / `Espaço` | Na área, abre o seletor de arquivos. Numa ação de arquivo, a ativa. |
+
+A área é um `<button>` nativo, então funciona por teclado, toque e clique sem código extra. Quando o limite é atingido, a área continua na ordem de tabulação, mas não faz nada.
+
+Depois de remover um arquivo, o foco vai para o botão Remover do arquivo que tomou o lugar, senão o anterior, senão a área. Depois de **Retry**, quando a aplicação volta o arquivo para `uploading`, o foco vai para o botão Remover do mesmo arquivo.
+
+## Leitor de tela
+
+- A label nomeia o campo. A área é nomeada pela label e pelo título da área, como "Comprovante Enviar arquivo".
+- A descrição, as restrições, "Required." (com `required`) e a mensagem de erro são lidas com a área (`aria-describedby`).
+- Quando o limite é atingido, a área é anunciada como indisponível (`aria-disabled`) e a mensagem do limite é lida com ela, para a pessoa saber o motivo.
+- A lista de arquivos é uma lista rotulada ("Selected files"). Cada item expõe nome, tamanho e, quando houver, a mensagem de erro ou a barra de progresso.
+- Remover e Retry são botões separados, com o nome do arquivo no nome acessível, como "Remove comprovante.pdf".
+- Cada barra de progresso é um `progressbar` nomeado com o arquivo, como "Uploading comprovante.pdf".
+- Arquivos adicionados, recusados e removidos, e mudanças de estado (início, envio concluído, falha), são anunciados numa região viva educada, sem mover o foco. Os passos do progresso **não** são anunciados, para não inundar o leitor.
+- Quando a seleção enche o campo, a mensagem do limite é anunciada junto com o resultado.
+- Troque os textos padrão, em inglês, para o idioma do produto pela propriedade `messages` e pelos atributos de texto.
+
+## Requisitos visuais
+
+- Garanta contraste de 4,5:1 nos textos e de 3:1 na borda da área e no anel de foco.
+- O anel de foco também aparece no modo de alto contraste (`forced-colors`).
+- O ícone de erro é decorativo. A mensagem é sempre texto.
+
+## Para designers
+
+- Não dependa só da cor para mostrar um arquivo com falha ou recusado: mantenha o ícone e a mensagem.
+- Faça toda mensagem de falha dizer o arquivo, o problema e a correção.
+- Mostre os limites antes de a pessoa escolher, não só no erro.
+- Mantenha as áreas de toque de Remover e Retry grandes o bastante em telas sensíveis ao toque.
+- Arrastar e soltar nunca pode ser o único jeito de adicionar um arquivo.

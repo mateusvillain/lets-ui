@@ -1,0 +1,102 @@
+---
+title: "Usage"
+---
+
+## Restrições à vista
+
+Formatos, tamanho máximo e quantidade máxima aparecem na área **antes** de abrir o seletor, para a pessoa não descobrir o limite só depois de escolher um arquivo.
+
+- Sem `hint`, a linha é montada a partir de `accept`, `max-size` e `max-files`: "PDF, PNG · Max. 3 files · Up to 5 MB".
+- Use `hint` só quando precisar de outras palavras. Ele substitui a linha gerada.
+
+<DosDonts variant="do" title="Limites visíveis antes de escolher">
+  "PDF, PNG · Up to 5 MB" fica na área, e a pessoa escolhe um arquivo válido de primeira.
+</DosDonts>
+
+<DosDonts variant="dont" title="Limites só no erro">
+  Deixar a pessoa escolher um arquivo de 20 MB e só então avisar que o limite é 5 MB.
+</DosDonts>
+
+## Label, título e descrição
+
+O campo tem três textos, cada um com uma função.
+
+| Texto | Função | Exemplo |
+| --- | --- | --- |
+| **Label** (`label`) | Nomeia o campo, como a label de qualquer outro campo. | "Comprovante" |
+| **Título da área** (`zone-title`) | A chamada para a ação dentro da área. | "Enviar arquivo" |
+| **Descrição** (`description`) | Como adicionar arquivos. | "Arraste o arquivo para cá ou clique para escolher" |
+
+Escreva a label como um substantivo curto e mantenha-a sempre visível. Veja [Writing](../../../foundations/content/writing.mdx).
+
+## Um arquivo ou vários
+
+- **Arquivo único:** um novo arquivo válido **substitui** o atual. Use quando o formulário precisa de exatamente um documento.
+- **Vários arquivos** (`multiple`): cada seleção **soma** à lista, até `max-files`. Um arquivo idêntico a outro já na lista é ignorado.
+
+Defina `max-files` sempre que o back end tiver um limite. Sem ele, a lista cresce sem teto.
+
+## Quando o limite é atingido
+
+Quando a lista chega a `max-files`, a área para de aceitar arquivos e fica esmaecida. A linha de restrições passa a dizer "Limit of 3 files reached. Remove a file to add another." e a mesma frase é anunciada a leitores de tela.
+
+- Remover um arquivo libera a área, e a linha volta ao normal.
+- A lista de arquivos continua totalmente utilizável, para a pessoa poder remover.
+- Arquivos recusados pela validação não contam para o limite.
+
+<DosDonts variant="do" title="Explicar a parada">
+  A área diz por que parou e o que fazer em seguida.
+</DosDonts>
+
+<DosDonts variant="dont" title="Parar sem motivo">
+  Uma área esmaecida sem mensagem deixa a pessoa sem saber o que houve.
+</DosDonts>
+
+## Validação e mensagens
+
+Cada arquivo é validado sozinho contra `accept`, `max-size` e `max-files`. Um arquivo inválido **não derruba os válidos**: ele fica na lista com um erro e uma mensagem, e não entra nos dados enviados. Sai com o botão **Remover** ou na próxima seleção.
+
+Uma boa mensagem diz **qual arquivo**, **o que está errado** e **como resolver**.
+
+| Evite | Prefira |
+| --- | --- |
+| "Arquivo inválido." | "“plano.xlsx” não é um tipo aceito. Escolha um arquivo PDF ou PNG." |
+| "Arquivo grande demais." | "“scan.png” tem 8 MB, acima do limite de 5 MB. Escolha um arquivo menor." |
+| "Erro." | "“c.pdf” não foi adicionado: o limite é de 3 arquivos. Remova um arquivo para adicionar outro." |
+
+O componente escreve esses textos em inglês. Troque-os para o idioma do produto pela propriedade `messages`, seguindo o guia [Writing](../../../foundations/content/writing.mdx).
+
+<Callout variant="warning">
+  **Valide também no servidor.** O `accept` filtra o seletor do sistema, mas não substitui a validação no servidor. Verifique de novo tipo (pelo conteúdo, não só pela extensão), tamanho, quantidade e conteúdo no back end, porque o navegador aceita o que a pessoa renomear.
+</Callout>
+
+## Envio
+
+O componente **não envia** arquivos. A aplicação faz a requisição e informa o estado de cada arquivo com `setFileStatus()`, e o campo o mostra na mesma lista.
+
+- Mostre o **progresso** quando tiver. Sem ele, a barra é indeterminada.
+- Mantenha a mensagem de falha específica: diga o que deu errado e como resolver.
+- Deixe a pessoa **tentar de novo** um arquivo que falhou, sem precisar escolhê-lo outra vez.
+- Não bloqueie o formulário inteiro porque um arquivo falhou: diga qual precisa de atenção.
+
+<DosDonts variant="do" title="Enviar e mostrar o progresso">
+  Cada arquivo mostra a própria barra, e a pessoa pode continuar trabalhando.
+</DosDonts>
+
+<DosDonts variant="dont" title="Enviar o formulário com arquivos ainda em envio">
+  Bloqueie ou avise antes, para a pessoa não perder um arquivo que não terminou.
+</DosDonts>
+
+## Em um formulário
+
+- Com `required`, o formulário não é submetido enquanto não houver arquivo. Use `error-text` para dizer o que falta.
+- Marque como `optional` o arquivo que não é necessário, em vez de deixá-lo sem marcação.
+- Cada arquivo aceito vai no `FormData` sob o `name` do campo.
+- Preserve os arquivos que a pessoa escolheu se houver erro no envio.
+
+## Boas práticas
+
+- Diga na label para que serve o arquivo ("Comprovante", "Currículo"), não "Arquivo".
+- Ofereça arrastar e soltar, mas nunca como único caminho: a área também abre o seletor por clique, toque e teclado.
+- Mantenha os nomes dos arquivos visíveis por inteiro. Nomes longos quebram linha em vez de serem cortados.
+- Nunca dependa só da cor para distinguir um arquivo com falha de um arquivo bom.

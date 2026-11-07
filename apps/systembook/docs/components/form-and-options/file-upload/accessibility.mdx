@@ -1,0 +1,41 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Moves through the zone and the buttons of **each** file. |
+| `Enter` / `Space` | On the zone, opens the file picker. On a file action, activates it. |
+
+The zone is a native `<button>`, so it works by keyboard, touch and click without extra code. When the limit is reached, the zone stays in the tab order, but it does nothing.
+
+After removing a file, focus moves to the Remove button of the file that took its place, else the previous one, else the zone. After **Retry**, when the app sets the file back to uploading, focus moves to the Remove button of the same file.
+
+## Screen reader
+
+- The label names the field. The zone is named by the label and the zone title, such as "Receipt Upload file".
+- The description, the constraints, "Required." (with `required`) and the error message are read with the zone (`aria-describedby`).
+- When the limit is reached, the zone is announced as unavailable (`aria-disabled`) and the limit message is read with it, so the person learns why.
+- The file list is a labeled list ("Selected files"). Each item exposes the name, the size and, when present, the error message or the progress bar.
+- Remove and Retry are separate buttons with the file name in their names, such as "Remove receipt.pdf".
+- Each progress bar is a `progressbar` named after its file, such as "Uploading receipt.pdf".
+- Added, rejected and removed files, and changes of state (started, sent, failed), are announced in a polite live region without moving focus. Progress steps are **not** announced, so the reader is not flooded.
+- When the selection fills the field, the limit message is announced with the result.
+- Change the default texts, in English, to the product's language through `messages` and the text attributes.
+
+## Visual requirements
+
+- Ensure 4.5:1 contrast on the texts and 3:1 on the zone border and focus ring.
+- The focus ring also shows in high contrast mode (`forced-colors`).
+- The error icon is decorative. The message is always text.
+
+## For designers
+
+- Do not rely on color alone to show a failed or rejected file: keep the icon and the message.
+- Make every failure message say the file, the problem and the fix.
+- Show limits before the person chooses, not only in the error.
+- Keep touch targets of Remove and Retry large enough on touch screens.
+- Drag and drop must never be the only way to add a file.

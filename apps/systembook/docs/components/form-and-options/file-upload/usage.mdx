@@ -1,0 +1,103 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Constraints up front
+
+Formats, maximum size and maximum count appear in the zone **before** the picker opens, so the person does not find out about a limit only after choosing a file.
+
+- Without `hint`, the line is built from `accept`, `max-size` and `max-files`: "PDF, PNG · Max. 3 files · Up to 5 MB".
+- Use `hint` only when you need other words. It replaces the generated line.
+
+<DosDonts variant="do" title="Limits visible before choosing">
+  "PDF, PNG · Up to 5 MB" sits in the zone, so the person picks a valid file the first time.
+</DosDonts>
+
+<DosDonts variant="dont" title="Limits only in the error">
+  Letting the person choose a 20 MB file and then telling them the limit is 5 MB.
+</DosDonts>
+
+## Label, title and description
+
+The field has three texts, each with one job.
+
+| Text | Job | Example |
+| --- | --- | --- |
+| **Label** (`label`) | Names the field, like the label of any other field. | "Receipt" |
+| **Zone title** (`zone-title`) | The call to action inside the zone. | "Upload file" |
+| **Description** (`description`) | How to add files. | "Drop the file here or click to browse" |
+
+Write the label as a short noun and keep it always visible. See [Writing](../../../foundations/content/writing.mdx).
+
+## One file or several
+
+- **Single file:** a valid new file **replaces** the current one. Use it when the form needs exactly one document.
+- **Multiple files** (`multiple`): each selection **adds** to the list, up to `max-files`. A file identical to one already in the list is skipped.
+
+Set `max-files` whenever the back end has a limit. Without it, the list grows without a ceiling.
+
+## When the limit is reached
+
+When the list reaches `max-files`, the zone stops accepting files and is dimmed. The constraints line becomes "Limit of 3 files reached. Remove a file to add another." and the same sentence is announced to screen readers.
+
+- Removing a file frees the zone and the line goes back to normal.
+- The file list stays fully usable, so the person can remove files.
+- Files rejected by validation do not count toward the limit.
+
+<DosDonts variant="do" title="Explain the stop">
+  The zone says why it stopped and what to do next.
+</DosDonts>
+
+<DosDonts variant="dont" title="Stop without a reason">
+  A dimmed zone with no message leaves the person guessing.
+</DosDonts>
+
+## Validation and messages
+
+Each file is checked on its own against `accept`, `max-size` and `max-files`. An invalid file **does not drop the valid ones**: it stays in the list with an error and a message, and it is not part of the submitted data. It leaves with its **Remove** button or on the next selection.
+
+A good message names **which file**, **what is wrong** and **how to fix it**.
+
+| Avoid | Prefer |
+| --- | --- |
+| "Invalid file." | "“plan.xlsx” is not an accepted file type. Choose a PDF or PNG file." |
+| "File too large." | "“scan.png” is 8 MB, over the 5 MB limit. Choose a smaller file." |
+| "Error." | "“c.pdf” was not added: the limit is 3 files. Remove a file to add another." |
+
+The component writes these in English. Replace them with the product's language through `messages`, following the [Writing](../../../foundations/content/writing.mdx) guide.
+
+<Callout variant="warning">
+  **Validate on the server too.** `accept` also filters the system picker, but it does not replace validation on the server. Check type (by content, not only by extension), size, count and content again on the back end, because the browser accepts whatever the person renames.
+</Callout>
+
+## Sending
+
+The component **does not send** files. Your app makes the request and reports each file's state with `setFileStatus()`, and the field shows it in the same list.
+
+- Show **progress** when you have it. Without it, the bar is indeterminate.
+- Keep the failure message specific: say what went wrong and how to fix it.
+- Let the person **retry** a failed file without choosing it again.
+- Do not block the whole form because one file failed: say which one needs attention.
+
+<DosDonts variant="do" title="Send and show progress">
+  Each file shows its own bar, and the person can keep working.
+</DosDonts>
+
+<DosDonts variant="dont" title="Submit with files still sending">
+  Block or warn first, so the person does not lose a file that had not finished.
+</DosDonts>
+
+## In a form
+
+- With `required`, the form is not submitted while there is no file. Use `error-text` to say what is missing.
+- Mark an unneeded file as `optional` instead of leaving it unmarked.
+- Each accepted file is submitted in the `FormData` under the field's `name`.
+- Keep the files the person chose if submission fails.
+
+## Best practices
+
+- Say what the file is for in the label ("Receipt", "Résumé"), not "File".
+- Offer drag and drop, but never as the only way: the zone also opens the picker by click, touch and keyboard.
+- Keep file names visible in full. Long names wrap instead of being cut.
+- Never rely on color alone to tell a failed file from a good one.
