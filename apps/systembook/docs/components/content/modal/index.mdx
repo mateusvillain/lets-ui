@@ -1,0 +1,74 @@
+---
+title: "Modal"
+subtitle: "A window that opens over the page and focuses attention on a single task or piece of information."
+order: 9
+---
+
+<ComponentEmbed component="Modal" variant="closed" />
+
+## Best practices
+
+<DosDonts variant="do" title="Important or destructive action">
+  The person confirms before continuing.
+</DosDonts>
+
+<DosDonts variant="do" title="Short, focused task">
+  Renaming an item or inviting someone.
+</DosDonts>
+
+<DosDonts variant="do" title="Information that blocks the flow">
+  Something the person needs to read before moving on.
+</DosDonts>
+
+<DosDonts variant="dont" title="Messages that do not require a decision">
+  Use [Alert](../alert/index.mdx) or [Toast](../toast/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Long content or multi-step flows">
+  Use a dedicated page or a [Drawer](../drawer/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Referring to the page while working">
+  Use a Drawer.
+</DosDonts>
+
+<DosDonts variant="dont" title="Tips and contextual help">
+  Use a [Tooltip](../tooltip/index.mdx).
+</DosDonts>
+
+## Anatomy
+
+![Anatomy of the open Modal: backdrop, window, header, body and footer](./anatomy.png)
+
+1. **Backdrop**: dims the page behind.
+2. **Window**: the centered surface.
+3. **Header**: title and close button.
+4. **Body**: the content.
+5. **Footer** (optional): action buttons.
+
+## Sizes
+
+| Size | When to use |
+| --- | --- |
+| `sm` | Short confirmations. |
+| `md` (default) | Most cases. |
+| `lg` | Content with more information, such as small forms. |
+
+## Behavior
+
+- Opens in the center of the screen, with a backdrop.
+- Focus moves into the window, and the page behind becomes inaccessible.
+- Closes with the close button, with `Esc` and with the action buttons.
+- On close, focus returns to the element that opened the Modal.
+
+## Without actions
+
+If the Modal is only informative, omit the footer. The close button is enough.
+
+<ComponentEmbed component="Modal" variant="open" />
+
+## Related
+
+- [Drawer](../drawer/index.mdx): side panel for longer tasks.
+- [Alert](../alert/index.mdx), [Toast](../toast/index.mdx): non-blocking messages.
+- [Button](../../actionable/button/index.mdx): footer actions.

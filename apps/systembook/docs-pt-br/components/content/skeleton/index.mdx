@@ -1,0 +1,60 @@
+---
+title: "Skeleton"
+subtitle: "Ocupa o lugar do conteúdo enquanto ele carrega, na forma do que vai chegar, para a página não saltar quando os dados aparecem."
+---
+
+<ComponentEmbed component="Skeleton" variant="card" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Conteúdo com forma conhecida">
+  Uma linha de texto, um avatar, uma capa, um item de lista: o layout do que vai aparecer já é conhecido.
+</DosDonts>
+
+<DosDonts variant="do" title="Primeiro carregamento de uma página ou seção">
+  Um feed, o cabeçalho de um perfil ou uma tabela que se preenche depois da requisição.
+</DosDonts>
+
+<DosDonts variant="dont" title="Sem dados para mostrar">
+  Quando a requisição não traz nada, use um [Empty State](../empty-state/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Erros">
+  Uma falha no carregamento precisa de uma mensagem. Use um [Alert](../alert/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Progresso mensurável">
+  Para uploads e importações, em que a pessoa quer saber quanto falta, use uma [Progress Bar](../progress-bar/index.mdx).
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Skeleton: osso, brilho e região de carregamento](./anatomy.png)
+
+1. **Osso**: a forma que ocupa o lugar de um pedaço de conteúdo. Cada um é decorativo.
+2. **Brilho**: a luz que atravessa o osso enquanto o conteúdo carrega. Para com `prefers-reduced-motion`.
+3. **Região de carregamento**: o contêiner que vai receber o conteúdo real. É ela que anuncia o carregamento, uma vez.
+
+## Formas
+
+| Forma | Ocupa o lugar de | Tamanho padrão |
+| --- | --- | --- |
+| **Text** (padrão) | Parágrafos, títulos e metadados. | Altura da fonte do contexto (`1em`), largura total. |
+| **Circle** | Avatares e marcas redondas. | 40px, o tamanho do avatar grande. |
+| **Rectangle** | Capas, mapas, gráficos e blocos. | Largura total, o maior passo fluido na altura. |
+
+<ComponentEmbed component="Skeleton" variant="circle" />
+
+<ComponentEmbed component="Skeleton" variant="rectangle" />
+
+## Composições
+
+Combine formas para antecipar o layout final: uma capa e três linhas para um card, um círculo e duas linhas para um item de lista. Encurte a última linha de um bloco com `width` para parecer texto.
+
+<ComponentEmbed component="Skeleton" variant="list" />
+
+## Relacionados
+
+- [Progress Bar](../progress-bar/index.mdx): progresso de uma tarefa que pode ser medido.
+- [Empty State](../empty-state/index.mdx): quando não há nada para mostrar.
+- [Avatar](../avatar/index.mdx) e [Image](../image/index.mdx): o que o círculo e o retângulo costumam substituir.

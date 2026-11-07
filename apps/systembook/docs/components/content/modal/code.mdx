@@ -1,0 +1,70 @@
+---
+title: "Code"
+order: 4
+---
+
+## Without Actions
+
+Omit the `actions` slot to render a modal with no footer.
+
+## Custom Trigger
+
+Slot any element with `slot="trigger"` to replace the default trigger button.
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `title` | `string` | `Modal title` |
+| `size` | `string` | `md` |
+| `open` | `boolean` | `false` |
+| `trigger-label` | `string` | `Open modal` |
+| `close-label` | `string` | `Close modal` |
+| `hide-trigger` | `boolean` | `false` |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-modal title="Title" size="md" trigger-label="Open modal">
+  <p>Modal content</p>
+  <lui-button slot="actions" variant="secondary" label="Cancel" data-modal-close></lui-button>
+  <lui-button slot="actions" label="Confirm"></lui-button>
+</lui-modal>
+```
+
+### Close from an action
+
+Mark with `data-modal-close` the button that only closes the modal, such as a "Cancel". It works in the `actions` slot and in the content, on a native element or on a `lui-button`, and also when the click comes from something inside the marked element.
+
+- It closes the nearest `lui-modal` above it: inside a nested `lui-modal`, it closes only that one.
+- In the `trigger` slot, the attribute is ignored.
+- It does not close when the click passes through a control with `aria-disabled="true"` (a `lui-button` in `loading`) or when a handler calls `event.preventDefault()`.
+- Actions that do something before closing, such as "Confirm", call `closeModal()` in their own handler.
+
+Focus returns to whatever opened the modal, as with any other way of closing.
+
+### Accessible text
+
+The close button uses `close-label` as its `aria-label` (default: `"Close modal"`). Change it to the project's language. For example, in Portuguese:
+
+```html
+<lui-modal title="Título" close-label="Fechar modal"></lui-modal>
+```
+
+### CSS class
+
+```html
+<div class="modal modal--md" role="dialog" aria-modal="true">
+  <div class="modal__header">
+    <span class="modal__title">Title</span>
+    <button class="modal__close" aria-label="Close">×</button>
+  </div>
+  <div class="modal__body">Modal content</div>
+  <div class="modal__footer">
+    <button class="btn btn--secondary btn--lg">Cancel</button>
+    <button class="btn btn--primary btn--lg">Confirm</button>
+  </div>
+</div>
+```

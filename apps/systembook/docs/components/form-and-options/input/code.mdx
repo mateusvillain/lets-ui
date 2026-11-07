@@ -1,0 +1,111 @@
+---
+title: "Code"
+order: 4
+---
+
+## Error
+
+<ComponentEmbed component="Input" variant="error" />
+
+## Form integration
+
+`lui-input` is a form-associated custom element — its values are captured automatically
+by the parent form's `FormData` through the `name` attribute.
+
+Use `form` to associate the input with a form by ID, even if it sits outside the `<form>` element in the DOM.
+
+### Required
+
+The `required` attribute blocks form submission when the field is empty.
+Validation is implemented via `ElementInternals.setValidity()`, keeping the behavior
+consistent with native elements. The reported message is controlled by the `error-text` attribute.
+
+### Pattern
+
+The `pattern` attribute accepts a regular expression to validate the field's final value,
+via the Constraint Validation API. When the value does not match the pattern, the field reports
+`patternMismatch` through `ElementInternals.setValidity()`, showing the
+`error-text` message. Useful to indicate the expected format declaratively, such as a ZIP code or
+CPF/CNPJ without a mask.
+
+### Input Mode
+
+The `inputmode` attribute is reflected on the native `<input>` and optimizes the virtual keyboard
+shown on touch devices for the expected data type, without changing the field's native type
+(`type`). It accepts the standard values: `text`, `numeric`, `decimal`, `tel`,
+`email`, `url`, `search` and `none`.
+
+### Pattern + Input Mode
+
+`pattern` and `inputmode` can be combined — the keyboard is optimized for data
+entry while the regex validates the final value, useful for fields such as CPF/CNPJ without a mask.
+
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Text of the label above the field. |
+| `type` | `string` | `text` | `text`, `password` (with a button to show the password) or `number` (with increment and decrement buttons). Other values behave as `text`. |
+| `value` | `string` | `''` | Current value. |
+| `placeholder` | `string` | `''` | Format example shown while the field is empty. Never replaces the label. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` or `sm`. |
+| `hint` | `string` | `''` | Help text below the field. Replaced by `error-text` when `error` is on. |
+| `optional` | `boolean` | `false` | Adds the `optional-text` marker next to the label. |
+| `disabled` | `boolean` | `false` | Disables the field and excludes it from submission. |
+| `error` | `boolean` | `false` | Turns on the error state and shows `error-text`. |
+| `prefix` | `string` | `''` | Text before the value, inside the field, such as `R$` or `@`. Not shown with `type="password"`. |
+| `suffix` | `string` | `''` | Text after the value, inside the field, such as `kg` or `.com`. Not shown with `type="password"`. |
+| `maxlength` | `number` | `''` | Maximum number of characters. Turns on the counter, except with `type="number"`. |
+| `min`, `max`, `step` | `number` | `''` | Limits and increment of `type="number"`. |
+| `aria-label` | `string` | `''` | Accessible name when there is no visible `label`. |
+
+## Form attributes
+
+| Attribute   | Type      | Default | Description                                                                                 |
+| ----------- | --------- | ------ | ------------------------------------------------------------------------------------------- |
+| `name`      | `string`  | `''`   | Field name in the submitted data; required to appear in the `FormData`                      |
+| `form`      | `string`  | `''`   | ID of the associated `<form>`; lets you use the input outside the form element              |
+| `required`  | `boolean` | `false`| Blocks submission when the field is empty; validates via `ElementInternals`                 |
+| `pattern`   | `string`  | `''`   | Regex to validate the final value; reports `patternMismatch` via `ElementInternals`         |
+| `inputmode` | `string`  | `''`   | Virtual keyboard hint on touch devices (`text`, `numeric`, `decimal`, `tel`, `email`, `url`, `search`, `none`) |
+
+## Default texts
+
+The texts the component generates are in English and can be changed by attribute, to follow the project's language.
+
+| Attribute             | Type     | Default                     | Description                                        |
+| --------------------- | -------- | --------------------------- | -------------------------------------------------- |
+| `optional-text`       | `string` | `'(optional)'`              | Marker shown when `optional` is on                 |
+| `error-text`          | `string` | `'This field is required.'` | Message shown when `error` is on                   |
+| `show-password-label` | `string` | `'Show password'`           | `aria-label` of the button that reveals the password |
+| `hide-password-label` | `string` | `'Hide password'`           | `aria-label` of the button that hides the password |
+| `increment-label`     | `string` | `'Increase value'`          | `aria-label` of the increment button (`type=number`) |
+| `decrement-label`     | `string` | `'Decrease value'`          | `aria-label` of the decrement button (`type=number`) |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-input
+  type="email"
+  label="Email"
+  placeholder="you@email.com"
+  size="lg"
+></lui-input>
+```
+
+### CSS class
+
+```html
+<div class="input-field input-field--lg">
+  <div class="input-field__head">
+    <div class="input-field__label-wrap">
+      <label class="input-field__label">Email</label>
+    </div>
+  </div>
+  <div class="input-field__control">
+    <input type="email" class="input-field__input" placeholder="you@email.com">
+  </div>
+</div>
+```

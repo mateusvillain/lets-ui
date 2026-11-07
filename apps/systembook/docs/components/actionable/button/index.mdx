@@ -1,0 +1,88 @@
+---
+title: "Button"
+subtitle: "Triggers an action in the interface: save, send, confirm, delete. It is the main decision point on a screen."
+order: 1
+---
+
+<ComponentEmbed component="Button" variant="primary" />
+
+## Best practices
+
+<DosDonts variant="do" title="Submit and confirm">
+  Submit a form or confirm a decision.
+</DosDonts>
+
+<DosDonts variant="do" title="Start or undo">
+  Start a flow, open a dialog or undo an operation.
+</DosDonts>
+
+If the control only takes you to another page, it is a link, not an action. Button accepts `href` for that case and keeps the button appearance, but first ask whether a text [Link](../../navigation/link/index.mdx) would communicate better.
+
+<DosDonts variant="dont" title="Navigation between pages or sections">
+  Use [Link](../../navigation/link/index.mdx) or [Tabs](../../navigation/tabs/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Action recognizable only by its icon">
+  In tight spaces (close, edit, more options), use the [Icon Button](../icon-button/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Choosing between options">
+  Use [Checkbox](../../form-and-options/checkbox/index.mdx), [Radio](../../form-and-options/radio/index.mdx) or [Switch](../../form-and-options/switch/index.mdx).
+</DosDonts>
+
+## Anatomy
+
+![Button anatomy: container, icon and label in the default state, and spinner in the loading state](./anatomy.png)
+
+1. **Container**: sets the color, the radius and the touch target.
+2. **Icon** (optional): before the label (`slot="prefix"`) or after it (`slot="suffix"`). Inherits the label color.
+3. **Label**: the verb that describes the result of the action.
+4. **Spinner** (optional): appears in the loading state, next to the label.
+
+## Variants
+
+The variant communicates the **weight and meaning** of the action. Choose it by the hierarchy of the screen, not by the color that matches the layout.
+
+| Variant | Weight | When to use |
+| --- | --- | --- |
+| **Primary** | High | The most important action in the context. There should be **only one** per screen or dialog. |
+| **Secondary** | Medium | An alternative to the main action, like "Cancel" next to "Save". |
+| **Neutral** | Low | Utility actions with no semantic load: filter, export, view details. |
+| **Danger** | High | Destructive or irreversible actions: delete, remove, close account. |
+| **Success** | High | Positive completion of a flow: finish, publish, approve. |
+
+<ComponentEmbed component="Button" variant="secondary" />
+
+<ComponentEmbed component="Button" variant="danger" />
+
+## Sizes
+
+| Size | Height | Usage |
+| --- | --- | --- |
+| `lg` (default) | 40px | Forms, dialogs and pages, where the button is the focus. |
+| `md` | 32px | Dense interfaces: tables, toolbars, compact cards. |
+
+Within the same group of actions, always use the same size.
+
+## States
+
+| State | How it behaves |
+| --- | --- |
+| **Default** | Ready to use. |
+| **Hover** | A translucent layer darkens or lightens the background. |
+| **Focus** | Visible focus ring, only when navigating by keyboard. |
+| **Pressed** | The layer gets stronger during the click. |
+| **Disabled** | Unavailable: does not respond to clicks or receive focus. |
+| **Loading** | Shows a spinner and ignores new clicks, but stays visually active. |
+
+<ComponentEmbed component="Button" variant="loading" />
+
+## Full width
+
+With `block`, the button takes the full width of the container. It works well on small screens and in single-column forms. On wide screens, prefer a button as wide as its content.
+
+## Related
+
+- [Icon Button](../icon-button/index.mdx): icon-only action.
+- [Dropdown Menu](../dropdown-menu/index.mdx): several actions grouped under a single trigger.
+- [Link](../../navigation/link/index.mdx): text navigation.

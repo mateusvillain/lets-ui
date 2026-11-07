@@ -1,0 +1,40 @@
+---
+title: "Usage"
+---
+
+## Explique o código na tela
+
+- Diga para onde o código foi enviado: "Digite o código de 6 dígitos enviado para (11) 9••••-1234".
+- Informe o tamanho e o formato, na dica ou no texto acima.
+- Se o rótulo ficar oculto, o título da página precisa explicar o campo. Caso contrário, use `show-label`.
+
+<DosDonts variant="do" title="Contexto, tamanho e destino">
+  Um título "Confirme seu celular" e uma dica que diz "Digite o código de 6 dígitos enviado por SMS."
+</DosDonts>
+
+<DosDonts variant="dont" title="Caixas sem explicação">
+  Seis caixas vazias sob um título genérico. A pessoa não sabe qual código digitar nem onde encontrá-lo.
+</DosDonts>
+
+## Combine com o código
+
+- Use o mesmo `length` do código que você envia.
+- Use `type="number"` quando o código só tem dígitos: o celular mostra o teclado numérico.
+- Use um separador quando a mensagem mostra o código dividido do mesmo jeito, como "482 913".
+
+## Envio
+
+- Mantenha um botão de envio, mesmo que o formulário seja enviado em `lui-complete`. A pessoa pode querer conferir o código antes, e algumas tecnologias assistivas digitam caractere por caractere.
+- Ofereça uma forma de reenviar o código, com o tempo que falta até poder reenviar.
+
+## Erros
+
+- Escreva o que aconteceu e o que fazer: "O código está incorreto. Confira a mensagem e tente de novo."
+- Não limpe o código depois de um erro: a pessoa pode corrigir só o caractere errado.
+- Se o código expirou, diga isso e ofereça reenviar.
+
+## Boas práticas
+
+- Nunca bloqueie o colar. Muita gente copia o código de outro app.
+- Não mascare o código: ele é temporário, e vê-lo ajuda a evitar erros.
+- Não divida o campo em várias telas ou etapas.

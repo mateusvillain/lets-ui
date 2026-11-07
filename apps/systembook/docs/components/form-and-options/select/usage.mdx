@@ -1,0 +1,43 @@
+---
+title: "Usage"
+order: 2
+---
+
+## How many options?
+
+| Quantity | Use |
+| --- | --- |
+| 2 to 7 | [Radio Group](../radio-group/index.mdx) |
+| 8 or more | Select |
+| Hundreds, with search | A search field with suggestions |
+
+## Organize the options
+
+- Order them predictably: **alphabetically** for long, familiar lists, or by **frequency of use**.
+- When some options are very common (such as your country), you can place them at the top.
+- Keep the labels short and in the same style.
+
+<DosDonts variant="do" title="Placeholder as an invitation">
+  "Select a state" signals that there is a choice to make, and the field is only valid after it.
+</DosDonts>
+
+<DosDonts variant="dont" title="Initial option that becomes the answer">
+  Starting with "Brazil" selected in an international sign-up form. Many people submit without noticing.
+</DosDonts>
+
+## Label and hint
+
+- The label describes **what to choose**: "State", "Time zone".
+- Use the hint to explain the impact of the choice or to limit the format.
+- Mark the field as **(optional)** when that is the case, instead of using an asterisk.
+
+## Errors
+
+If the choice is required, show "Select a state." near the field. Combine it with the visual error state.
+
+## Best practices
+
+- Do not use the Select for navigation or actions.
+- Avoid lists with very similar or very long options, which make reading harder.
+- Do not use a Select with a single option. If there is only one, show it as text.
+- To choose a date, use the [Date Picker](../date-picker/index.mdx), not a huge Select.

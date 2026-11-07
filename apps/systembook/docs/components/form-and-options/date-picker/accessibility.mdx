@@ -1,0 +1,68 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+The calendar follows the WAI-ARIA APG [Date Picker Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/) pattern: a **non-modal** dialog with the days in a grid.
+
+## Keyboard in the field
+
+| Key | Action |
+| --- | --- |
+| `Enter` or `Space` | Opens or closes the calendar. |
+| `Down Arrow` or `Up Arrow` | Opens the calendar on the chosen day or on today. |
+| `Alt` + `Down Arrow` | With `editable`, opens the calendar from the text box. |
+| `0` to `9` | With `editable`, types the date. The mask adds the separators. |
+| `Esc` | With the calendar open, closes it without changes. |
+
+## Keyboard in the calendar
+
+| Key | Action |
+| --- | --- |
+| `Arrows` | Previous or next day; same column in the previous or next week. |
+| `Home` / `End` | Start or end of the week. |
+| `Page Up` / `Page Down` | Previous or next month. |
+| `Shift` + `Page Up` / `Page Down` | Previous or next year. |
+| `Enter` or `Space` | Chooses the day and closes. With `range`, the first marks one end and the second, the other. |
+| `Tab` | Moves through the header buttons and the grid. Leaving closes it. |
+| `Esc` | Closes without changes. With `range`, discards the incomplete selection. |
+
+In the month and year grids, the arrows, `Home`, `End` and `Page Up` / `Page Down` work the same way. `Enter` chooses and returns to the days, and `Esc` returns to the days without changes.
+
+## Focus
+
+- On opening, focus goes to the chosen day or, with no value, to today.
+- The grid has a single tab stop, even with two months side by side.
+- On choosing or closing with `Esc`, focus returns to whatever opened the calendar.
+- The calendar does not trap focus: it closes with `Tab` out or with a click outside.
+- Inside a [Modal](../../content/modal/index.mdx), `Esc` closes only the calendar.
+
+## Screen reader
+
+- The field is named by the label and the displayed date, and announces whether the calendar is open. With `editable`, the text box is described by the format, the hint or the error. The calendar button states the chosen date: "Choose date, Jan 16, 2026".
+- Each day is read in full: "Friday, January 16, 2026". Today is marked as the current date.
+- The day's state is part of its name: "selected", "start of period", "in period", "end of period" or "unavailable". That way it is announced even in VoiceOver, which does not read the selection in a grid cell.
+- Changing the month is announced. With `range`, after the first choice, a notice asks for the end date.
+- The weekdays have their full name, even when the screen shows only the initial.
+- On error, the field is announced as invalid, with the message for the case.
+
+## Visual
+
+- Today is bold, the selection is filled and an unavailable day has a strikethrough: none of these states depends on color alone.
+- Days are 32px, and the header buttons and the month and year cells are 40px, above the WCAG 2.2 minimum of 24px.
+- With `range`, the two months stack one below the other on narrow screens.
+
+## For designers
+
+- Define the label of every Date Picker. With no visible label, specify the `aria-label`.
+- Translate all of the component's texts into the product's language: the default is English.
+- Specify a message for each error.
+- Do not rely on the calendar alone for distant dates: offer typing.
+
+## Tests
+
+| Area | Status |
+| --- | --- |
+| Keyboard, focus and ARIA attributes | Automated tests, in Chromium. |
+| VoiceOver, in Safari | Tested manually. |
+| NVDA | Not yet tested manually. |

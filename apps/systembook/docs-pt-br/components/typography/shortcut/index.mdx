@@ -1,0 +1,55 @@
+---
+title: "Shortcut"
+subtitle: "Mostra atalhos de teclado, uma tecla ou uma combinação, de forma clara e acessível."
+---
+
+<ComponentEmbed component="Shortcut" variant="single" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Itens de menu e tooltips">
+  O atalho de teclado da ação, ao lado do nome.
+</DosDonts>
+
+<DosDonts variant="do" title="Listas de comandos e telas de ajuda">
+  Os atalhos disponíveis, reunidos em um só lugar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Ensinar um fluxo inteiro">
+  Escreva o passo a passo em texto.
+</DosDonts>
+
+<DosDonts variant="dont" title="Teclas que a pessoa não tem">
+  Em telas de toque, por exemplo, o atalho não tem como ser usado.
+</DosDonts>
+
+<DosDonts variant="dont" title="Como botão">
+  O Shortcut só exibe, não aciona nada.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Shortcut: tecla, combinação e separador](./anatomy.png)
+
+1. **Tecla**: cada tecla aparece em uma peça própria.
+2. **Combinação**: várias teclas lado a lado, na ordem em que são pressionadas.
+3. **Separador**: o "+" entre as teclas. É decorativo e fica oculto para leitores de tela.
+
+## Tipos
+
+| Tipo | Quando usar | Exemplo |
+| --- | --- | --- |
+| **Tecla única** | Teclas de ação. | `Enter`, `Esc`, `Tab` |
+| **Combinação** | Atalhos com modificadores. | `Ctrl` + `K` |
+
+<ComponentEmbed component="Shortcut" variant="combo" />
+
+## Em contexto
+
+Combine com listas de ações e menus, com o atalho alinhado ao fim da linha. É o uso do [Dropdown Menu](../../actionable/dropdown-menu/index.mdx).
+
+## Relacionados
+
+- [Dropdown Menu](../../actionable/dropdown-menu/index.mdx)
+- [Tooltip](../../content/tooltip/index.mdx)
+- [Body](../body/index.mdx)

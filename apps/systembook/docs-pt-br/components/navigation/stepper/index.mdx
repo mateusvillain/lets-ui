@@ -1,0 +1,84 @@
+---
+title: "Stepper"
+subtitle: "Mostra o progresso em um fluxo dividido em etapas, como um checkout, um cadastro ou um assistente de configuração."
+---
+
+<ComponentEmbed component="Stepper" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Fluxos com número conhecido de etapas">
+  De três a seis etapas, quando saber onde se está e quanto falta ajuda a terminar a tarefa.
+</DosDonts>
+
+<DosDonts variant="do" title="Formulários longos divididos em partes">
+  Um cadastro dividido em conta, endereço e pagamento, cada parte validada antes de seguir.
+</DosDonts>
+
+<DosDonts variant="dont" title="Seções independentes, sem ordem">
+  Para alternar entre visões do mesmo conteúdo, use [Tabs](../tabs/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Conteúdo paginado">
+  Para percorrer as páginas de uma lista, use [Pagination](../pagination/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Progresso de uma única tarefa">
+  Para um upload ou uma importação, use uma [Progress Bar](../../content/progress-bar/index.mdx).
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Stepper: indicador, rótulo, descrição e conector](./anatomy.png)
+
+1. **Indicador**: um círculo com o número da etapa. A cor mostra se a etapa está concluída, atual ou por vir.
+2. **Rótulo**: o nome da etapa. Opcional.
+3. **Descrição**: texto de apoio abaixo do rótulo. Opcional.
+4. **Conector**: a linha entre duas etapas, preenchida até a atual.
+
+## Estados
+
+| Estado | Descrição |
+| --- | --- |
+| **Concluída** | Etapas antes da atual, com o conector preenchido. |
+| **Atual** | A etapa em que a pessoa está. Em destaque, com `aria-current="step"`. |
+| **Por vir** | Etapas depois da atual. |
+| **Carregando** | O número vira um indicador de progresso enquanto a etapa é salva ou validada. |
+| **Desabilitada** | Uma etapa que não pode ser alcançada. |
+
+<ComponentEmbed component="Stepper" variant="loading" />
+
+## Orientação
+
+| Orientação | Quando usar |
+| --- | --- |
+| **Horizontal** (padrão) | Acima do conteúdo do fluxo, com poucos rótulos curtos. |
+| **Vertical** | Ao lado do conteúdo, ou com rótulos e descrições longos. |
+
+<ComponentEmbed component="Stepper" variant="vertical" />
+
+Um stepper horizontal que não cabe no contêiner é exibido na vertical em vez de rolar para o lado, e volta para a horizontal quando há espaço.
+
+## Posição do rótulo
+
+Com `label-placement="bottom"`, o rótulo e a descrição ficam centralizados abaixo do número. Só vale na orientação horizontal.
+
+<ComponentEmbed component="Stepper" variant="labels-bottom" />
+
+## Só números
+
+Sem rótulos, cada etapa mostra só o indicador. Use quando o espaço é curto e o conteúdo da página já nomeia a etapa.
+
+<ComponentEmbed component="Stepper" variant="numbers" />
+
+## Comportamento
+
+- Clicar em uma etapa leva até ela. A aplicação pode cancelar a troca, por exemplo enquanto um formulário está inválido.
+- Com `linear`, a pessoa só volta para etapas concluídas: as que estão à frente não respondem ao clique, mas mantêm a cor normal.
+- Toda troca de etapa é anunciada aos leitores de tela com a posição e o nome da nova etapa.
+
+## Relacionados
+
+- [Tabs](../tabs/index.mdx): seções sem ordem.
+- [Pagination](../pagination/index.mdx): páginas de uma lista.
+- [Progress Bar](../../content/progress-bar/index.mdx): progresso de uma única tarefa.

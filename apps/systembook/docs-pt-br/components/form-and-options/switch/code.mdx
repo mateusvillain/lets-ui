@@ -1,0 +1,49 @@
+---
+title: "Code"
+---
+
+## Label (atributo)
+
+O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
+
+## Integração com formulários
+
+O `lui-switch` é form-associated. Use `name` para identificar o campo no `FormData` e `value` para definir o que é submetido quando ativado (padrão `"on"`).
+
+## Propriedades
+
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | `false` | Estado ligado. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` ou `sm`. |
+| `disabled` | `boolean` | `false` | Desabilita o controle e o exclui do envio. |
+| `error` | `boolean` | `false` | Liga o estado de erro e mostra `error-text`. |
+| `error-text` | `string` | `'This field is required.'` | Mensagem mostrada quando `error` está ligado. |
+| `aria-label` | `string` | `''` | Nome acessível quando não há texto visível. |
+
+## Atributos de formulário
+
+| Atributo   | Tipo      | Padrão | Descrição                                                                       |
+| ---------- | --------- | ------ | ------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`   | Conteúdo padrão do slot; ignorado quando o slot é projetado                     |
+| `name`     | `string`  | `''`   | Nome do campo nos dados submetidos                                              |
+| `value`    | `string`  | `'on'` | Valor submetido quando ativado; omitido quando desativado                       |
+| `form`     | `string`  | `''`   | ID do `<form>` associado; permite usar o switch fora do elemento form           |
+| `required` | `boolean` | `false`| Bloqueia a submissão quando o switch não está ativado                           |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-switch size="lg">Notificações</lui-switch>
+```
+
+### Classe CSS
+
+```html
+<label class="switch switch--lg">
+  <input type="checkbox">
+  Notificações
+</label>
+```

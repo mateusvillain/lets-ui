@@ -1,0 +1,33 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Common cases
+
+| Case | Suggested placement |
+| --- | --- |
+| Notification dot on an icon | `top-end` |
+| Counter over an icon | `top-end`, with offset |
+| Status on an avatar | `bottom-end` |
+| "New" label on an image | `top-start` |
+
+<DosDonts variant="do" title="Small elements in the corners">
+  A dot or a short counter in the corner of an icon. It draws attention without hiding the content.
+</DosDonts>
+
+<DosDonts variant="dont" title="Covering important content">
+  A large label in the middle of an image, hiding the subject. Float should accompany, not compete.
+</DosDonts>
+
+## Size of the floating element
+
+- Keep it **small** relative to the target.
+- Make sure it is not clipped by the container's edges.
+- Give it enough contrast with what is underneath; a ring in the background color usually helps.
+
+## Best practices
+
+- Do not use Float for information that only it conveys. Add text.
+- Avoid several Floats on the same element.
+- Test with different text and sizes: the position must hold.

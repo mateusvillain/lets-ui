@@ -1,0 +1,34 @@
+---
+title: "Accessibility"
+---
+
+## Teclado
+
+| Tecla | Ação |
+| --- | --- |
+| `Tab` | Foca o gatilho, e o Tooltip aparece. |
+| `Esc` | Fecha o Tooltip aberto, sem mover o ponteiro nem o foco. |
+
+O Tooltip aparece tanto no hover quanto no foco por teclado, e some quando o foco sai.
+
+## Fechar, passar o ponteiro e movimento
+
+- **`Esc` fecha o Tooltip** sem mover o ponteiro nem o foco (WCAG 1.4.13). Ele volta a aparecer na próxima vez que o ponteiro entrar no gatilho ou que o gatilho receber foco.
+- **Um `Esc` que fecha o Tooltip é consumido.** Se o Tooltip está dentro de um [Modal](../modal/index.mdx) ou [Drawer](../drawer/index.mdx), a janela só fecha no `Esc` seguinte.
+- Um `Esc` que faz parte de uma composição de texto (IME), ou uma tecla mantida pressionada, é ignorado: não fecha o Tooltip nem é consumido.
+- **O ponteiro pode passar do gatilho para o balão** sem que ele suma (WCAG 1.4.13), inclusive pelo espaço entre os dois, em qualquer posição.
+- **Com "reduzir movimento" ativo** (`prefers-reduced-motion: reduce`), o Tooltip aparece e some sem transição (WCAG 2.3.3).
+
+## Leitor de tela
+
+- O balão é anunciado como **dica** (`tooltip`) e está ligado ao gatilho com `aria-describedby`, então o texto é lido como **descrição** do elemento.
+- O gatilho precisa ser **focável**. Se o conteúdo que você colocar não for, o Tooltip torna o contêiner focável.
+- O Tooltip não substitui o nome acessível do elemento. Um Icon Button continua precisando de `aria-label`.
+- **Um texto igual ao nome do gatilho não vira descrição.** Quando o texto repete o nome do controle (ignorando maiúsculas e espaços), o Tooltip não o liga como descrição, e o leitor de tela anuncia "Excluir item, botão" uma vez só. Se o texto ou o nome mudar depois, a descrição acompanha.
+- Enquanto o Tooltip descreve o gatilho, o texto do balão fica fora da árvore de acessibilidade, para não ser lido de novo na navegação por leitura.
+
+## Para designers
+
+- Garanta contraste de 4,5:1 entre o texto do balão e o fundo.
+- Não use o Tooltip como único meio de transmitir informação.
+- Pense na alternativa para quem usa toque: onde o texto aparece?

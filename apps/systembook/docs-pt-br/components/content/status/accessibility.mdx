@@ -1,0 +1,27 @@
+---
+title: "Accessibility"
+---
+
+## Teclado
+
+O Status **não é interativo**: não recebe foco nem responde ao teclado.
+
+## Leitor de tela
+
+- O indicador (ícone ou ponto) tem `aria-hidden="true"`. O estado chega ao leitor de tela pelo texto: o `label`, ou o nome da variante quando não há `label`.
+- Com `hide-label`, o rótulo sai da tela e fica para o leitor de tela.
+- O Status não tem `role="status"`. Esse papel é de uma região viva, que anuncia cada mudança, e um indicador estático repetido em uma tabela anunciaria ruído.
+- Para anunciar uma mudança, envolva o Status em uma região com `aria-live="polite"`.
+
+## Visual
+
+- O estado não depende só da cor: os ícones de feedback têm formas diferentes, e os pontos sociais têm uma forma dentro.
+- Os pontos de feedback (`dot`) se diferenciam só pela cor, então precisam do rótulo visível quando carregam informação.
+- No modo de alto contraste (`forced-colors`), o indicador mantém as cores, porque a cor é a informação.
+- Com `prefers-reduced-motion: reduce`, o anel do pulso fica parado, como um halo.
+
+## Para designers
+
+- Escreva rótulos que façam sentido lidos em voz alta, sem o indicador.
+- Não dependa da cor do ponto para diferenciar `success` de `danger`: mostre o texto.
+- Evite mais de um indicador pulsando por tela.

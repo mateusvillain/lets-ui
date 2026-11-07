@@ -1,0 +1,36 @@
+---
+title: "Code"
+---
+
+## Label (atributo)
+
+O atributo `label` renderiza o texto como conteúdo padrão do slot. Útil para casos simples ou geração programática de HTML.
+
+## Propriedades
+
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Conteúdo padrão do slot; ignorado quando o slot é projetado. |
+| `value` | `string` | `''` | Valor enviado pelo grupo quando este radio está marcado. |
+| `checked` | `boolean` | `false` | Estado marcado. |
+| `disabled` | `boolean` | `false` | Desabilita o radio. |
+| `error` | `boolean` | `false` | Estado de erro. Normalmente definido pelo `lui-radio-group`. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` ou `sm`. Controlado pelo `lui-radio-group`; raramente definido diretamente. |
+| `aria-label` | `string` | `''` | Nome acessível quando não há texto visível. |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-radio value="a" size="lg">Opção A</lui-radio>
+```
+
+### Classe CSS
+
+```html
+<label class="radio radio--lg">
+  <input type="radio" name="opcao" value="a">
+  Opção A
+</label>
+```

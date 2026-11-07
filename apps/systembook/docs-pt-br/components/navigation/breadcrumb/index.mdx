@@ -1,0 +1,48 @@
+---
+title: "Breadcrumb"
+subtitle: "Mostra onde a pessoa está na hierarquia do site e permite voltar a qualquer nível acima."
+---
+
+<ComponentEmbed component="Breadcrumb" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Hierarquia em vários níveis">
+  Documentação, catálogos, painéis administrativos e lojas com categorias.
+</DosDonts>
+
+<DosDonts variant="do" title="Mostrar onde a pessoa está">
+  Ele responde à pergunta "onde estou?" e oferece um atalho para voltar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Fluxos lineares">
+  Em cadastro ou checkout, use um [Stepper](../stepper/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Sites com dois níveis ou menos">
+  Um link "Voltar" basta.
+</DosDonts>
+
+<DosDonts variant="dont" title="Como navegação principal">
+  O Breadcrumb complementa o menu, não o substitui.
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Breadcrumb: item de nível superior, separador e item atual](./anatomy.png)
+
+1. **Itens de nível superior**: links para cada página ancestral, da mais ampla à mais próxima.
+2. **Separador**: marca a relação entre os níveis.
+3. **Item atual**: a página onde a pessoa está, sem link e identificado como atual.
+
+## Comportamento
+
+- Os itens ancestrais são links e levam ao nível correspondente.
+- O último item representa a página atual e **não é clicável**.
+- A ordem segue a hierarquia do site, não o histórico de navegação da pessoa.
+
+## Relacionados
+
+- [Tabs](../tabs/index.mdx): alternar entre visões de uma mesma página.
+- [Link](../link/index.mdx): cada item é um link.
+- [Pagination](../pagination/index.mdx): navegar entre páginas de uma lista.

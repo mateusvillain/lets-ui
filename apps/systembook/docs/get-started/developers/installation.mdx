@@ -1,0 +1,138 @@
+---
+title: "Installation"
+subtitle: "Install the packages, turn on themes and brands, and start using the components."
+order: 1
+---
+
+## Packages
+
+Let's UI publishes three packages on npm. Use only what you need.
+
+| Package | What it has | When to use it |
+| --- | --- | --- |
+| `@lets-ui/styles` | Compiled CSS with the tokens, the reset, the foundations and the classes of every component. | Always. It is the base of everything, including the Web Components. |
+| `@lets-ui/components` | Web Components built with [Lit](https://lit.dev/), their only dependency. Each component brings the CSS of its own Shadow DOM, but reads the tokens from `@lets-ui/styles`. | Interactive components: Modal, Dropdown Menu, Date Picker, form fields. |
+| `@lets-ui/tokens` | Just the tokens, as CSS custom properties, SCSS and JSON. | When you want to build your own styles on top of the tokens, without the components. |
+
+## Quick start
+
+The fastest way to try it is through the CDN, with nothing to install. Copy the HTML below into a file and open it in the browser:
+
+```html
+<!doctype html>
+<html lang="en" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@lets-ui/styles@1/dist/letsui.min.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@lets-ui/components@1/+esm"
+    ></script>
+  </head>
+  <body>
+    <lui-card aria-label="Newsletter">
+      <h2>Get the latest news</h2>
+      <lui-input label="Email" type="email" name="email" required></lui-input>
+      <lui-button slot="actions" variant="primary">Subscribe</lui-button>
+    </lui-card>
+  </body>
+</html>
+```
+
+The `@1` pins the major version: you get fixes and new features, but no breaking changes. In production, prefer installing from npm and pinning the exact version.
+
+## Installation
+
+### CSS only
+
+To use the CSS classes (`.btn`, `.card`, `.stack`...) without JavaScript:
+
+```bash
+npm install @lets-ui/styles
+```
+
+Import the CSS in the entry point of your application:
+
+```js
+import '@lets-ui/styles';
+```
+
+Or, without a bundler, with a `<link>`:
+
+```html
+<link rel="stylesheet" href="node_modules/@lets-ui/styles/dist/letsui.min.css" />
+```
+
+### With Web Components
+
+Install **both packages**. The components use the tokens (`var(--lui-...)`) defined in `@lets-ui/styles`. Without it, they show up with no color, font or spacing.
+
+```bash
+npm install @lets-ui/styles @lets-ui/components
+```
+
+```js
+import '@lets-ui/styles';
+
+// Registers every component
+import '@lets-ui/components';
+```
+
+The components register themselves as custom elements and become available in the HTML:
+
+```html
+<lui-button variant="primary">Confirm</lui-button>
+<lui-button variant="secondary">Cancel</lui-button>
+```
+
+To use React, Vue, Angular or a framework with server rendering, see [Frameworks](./frameworks.mdx).
+
+## Themes and brands
+
+The theme and the brand are chosen with attributes on the root element, without JavaScript.
+
+### Light and dark mode
+
+Set `data-theme` on `<html>`. Without the attribute, `light` applies.
+
+```html
+<html data-theme="light">
+```
+
+```html
+<html data-theme="dark">
+```
+
+To switch the theme with JavaScript:
+
+```js
+document.documentElement.setAttribute('data-theme', 'dark');
+```
+
+To follow the operating system preference and remember the person's choice, see [Themes](../../foundations/tokens/themes.mdx).
+
+### Brands
+
+The `data-brand` attribute picks the brand: the `primary` and `secondary` colors, the fonts, the radii and the grid. The default brand, and the only one published today, is `lets-ui`.
+
+```html
+<html data-theme="light" data-brand="lets-ui">
+```
+
+When `data-brand` changes, the brand tokens (`--lui-brand-color-primary-*`, `--lui-brand-border-radius-*`...) change, and every component follows. To create a new brand, use [Brand Studio](https://studio.lets-ui.com), the visual editor for the brand tokens, and follow the steps in [Themes](../../foundations/tokens/themes.mdx).
+
+## Requirements
+
+| Requirement | Minimum version |
+| --- | --- |
+| Browsers | Current versions of Chrome, Edge, Firefox and Safari (CSS custom properties, Custom Elements v1 and Shadow DOM). |
+| Node.js | 20+, for your project's bundler. Not needed through the CDN. |
+| Package manager | npm, pnpm or yarn. |
+
+## License
+
+Let's UI is distributed under the **MIT** license. See the [`LICENSE`](https://github.com/mateusvillain/lets-ui/blob/main/LICENSE) file in the repository.

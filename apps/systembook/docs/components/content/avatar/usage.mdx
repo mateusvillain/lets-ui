@@ -1,0 +1,44 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Photo, initials or icon?
+
+- **Photo** when it exists and the person chose it.
+- **Initials** as an alternative. Use two letters at most.
+- **Person icon** when there is neither a photo nor a name.
+
+<DosDonts variant="do" title="Same shape for the same entity">
+  People in a circle, projects in a rounded square. The shape helps recognize the type of entity.
+</DosDonts>
+
+<DosDonts variant="dont" title="Colors with meaning">
+  Using green for "active" or red for "problem" on the avatar background. Color is only for telling avatars apart, and meaning comes from the status and the text.
+</DosDonts>
+
+## Colors
+
+Assign the color in a **stable** way, for example computed from the name. The same person should always have the same color, on every screen.
+
+## Status
+
+- Use the status when **presence** matters: chats, teams, contact lists.
+- Avoid the status in contexts where it does not help, such as an old comment.
+- At `sm` (24px) the dot is very small and the shapes barely show. Prefer `md` or `lg` when the status difference matters.
+
+## Groups
+
+- Show **three to five** avatars and summarize the rest in a counter ("+8").
+- Keep the same size within the group.
+- Give the group a name, such as "Project members".
+
+## When the name is already next to it
+
+If the person's name appears as text next to it, the Avatar is **decorative**. Use the initials without `name`, and the name is not read twice.
+
+## Best practices
+
+- Crop photos to cover the shape, without stretching.
+- Do not use the Avatar as a button without wrapping it in a control with an accessible name.
+- Use images with good contrast and enough size: the photo appears at 24 to 40px.

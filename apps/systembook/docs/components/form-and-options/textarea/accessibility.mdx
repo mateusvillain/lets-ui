@@ -1,0 +1,27 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Enters and leaves the field. |
+| `Enter` | Inserts a new line. |
+
+`Tab` leaves the field and does not insert a tab character, so keyboard users are not trapped.
+
+## Screen reader
+
+- The label is associated with the field, and the reader announces the name on entering it.
+- The hint and the error message are read with the field (`aria-describedby`).
+- On error, the field is announced as invalid. If required, that is announced too.
+- Change the default error text, in English, to the product's language.
+
+## For designers
+
+- Do not use the placeholder alone as the label.
+- If there is a character limit, signal it in a way that does not rely on color alone.
+- Ensure 4.5:1 contrast on the text and 3:1 on the field border.
+- Give the resize handle a large enough touch area on touch screens.

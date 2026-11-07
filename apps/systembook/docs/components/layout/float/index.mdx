@@ -1,0 +1,49 @@
+---
+title: "Float"
+subtitle: "Positions one element over another, at a corner or edge, such as a badge or an indicator."
+order: 9
+---
+
+<ComponentEmbed component="Float" variant="top-end" />
+
+## Best practices
+
+<DosDonts variant="do" title="Notification dot">
+  Over an icon, to signal something new.
+</DosDonts>
+
+<DosDonts variant="do" title="Count over an avatar">
+  A badge with the number of items.
+</DosDonts>
+
+<DosDonts variant="do" title="Seal over an image">
+  A small element in the corner of a photo or cover.
+</DosDonts>
+
+<DosDonts variant="dont" title="Arranging content in the flow">
+  Use [Stack](../stack/index.mdx), [Inline](../inline/index.mdx) or [Flex](../flex/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Floating windows and panels">
+  Use [Modal](../../content/modal/index.mdx), [Drawer](../../content/drawer/index.mdx) or [Tooltip](../../content/tooltip/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Important content that must not be covered">
+  Float overlaps, so it can hide what is underneath.
+</DosDonts>
+
+## Placements
+
+Nine positions, combining **top, middle and bottom** with **start, center and end** (`placement`). The default is `bottom-end`.
+
+<ComponentEmbed component="Float" variant="bottom-end" />
+
+## Offset
+
+`offset-x` and `offset-y` move the element from the chosen position, in pixels. Use negative values to make it "stick out" of the corner, like a badge that extends past the icon.
+
+## Related
+
+- [Avatar](../../content/avatar/index.mdx): status indicator.
+- [Tag](../../content/tag/index.mdx): labels.
+- [Icon Button](../../actionable/icon-button/index.mdx): count badges.

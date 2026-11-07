@@ -1,0 +1,33 @@
+---
+title: "Accessibility"
+order: 3
+---
+
+## Keyboard
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Moves through the steps. |
+| `Enter` or `Space` | Goes to the focused step. |
+
+In a `linear` stepper, the steps ahead of the current one stay in the focus order, with `aria-disabled="true"`, and do not respond.
+
+## Screen reader
+
+- The steps form a list (`role="list"` and `role="listitem"`), named by `label`, such as "Checkout".
+- Each step is a native button. The current one has `aria-current="step"`.
+- The name of each step starts with the position and the total ("Step 2 of 4, Address, Shipping"). The visible number has `aria-hidden="true"`, so it is not read twice.
+- Completed steps carry the `completed-label` text, and loading steps the `loading-label` text and `aria-busy="true"`: the state is not conveyed by color alone.
+- After every change, by click or by code, a `role="status"` region announces the new step ("Step 3 of 4, Payment"). A canceled change is not announced.
+- The connectors are decorative (`aria-hidden="true"`).
+
+## Visual
+
+- A horizontal stepper that does not fit its container switches to vertical instead of scrolling sideways (WCAG 1.4.10, Reflow).
+- The state shown by the color of the indicator is also in the accessible name, through `completed-label` and `loading-label`.
+
+## For designers
+
+- Translate the accessible texts (`label`, `completed-label`, `loading-label` and `step-label`) into the product language.
+- When the step changes the page content, plan the new page title (for example "Payment, step 3 of 4, Checkout") and where the focus goes.
+- In a stepper with numbers only, give it a descriptive `label`.

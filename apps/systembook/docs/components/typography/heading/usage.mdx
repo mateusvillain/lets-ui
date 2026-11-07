@@ -1,0 +1,41 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Hierarchy
+
+Headings form the **skeleton** of the page. The person and the screen reader navigate through them.
+
+- Use **one `title` (h1)** per page.
+- **Do not skip levels**: after an h2 comes an h3, not an h5.
+- Choose the level by **structure**, and the appearance by scale. If the visual size does not match the level, adjust the element (`as`), not the hierarchy.
+
+<DosDonts variant="do" title="Levels in order">
+  h1 for the page, h2 for the sections, h3 for the subsections. The structure is clear visually and for screen readers.
+</DosDonts>
+
+<DosDonts variant="dont" title="Choosing the level by size">
+  Using an h4 just because the font is smaller, or an h1 in several places to make it big. This scrambles navigation by headings.
+</DosDonts>
+
+## Write headings
+
+- **Descriptive and short**: the person understands the section's subject from the heading alone.
+- Sentence case.
+- No final period.
+- Avoid identical headings in different sections.
+
+## Display
+
+`display` is for highlight moments, such as the first fold of a product page. Since it is not a semantic heading, it does not replace `title`.
+
+## Truncation
+
+Use `line-clamp` in cards and lists, where space is fixed. In page titles, avoid truncating.
+
+## Best practices
+
+- Keep the same heading style for the same type of content.
+- Use `overtitle` above a heading, for a category or context, in a few words.
+- Ensure a contrast of 4.5:1 (3:1 for large text).

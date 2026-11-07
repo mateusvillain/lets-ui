@@ -1,0 +1,51 @@
+---
+title: "Code"
+order: 4
+---
+
+## Shortcut
+
+Use it when the actions have keyboard shortcuts users know. The shortcut is rendered with the keys aligned to the right of the item.
+
+## Submenu
+
+Use it to group related actions in a second level of navigation. The submenu opens on hover or when the parent item gets focus — avoid more than one level of nesting.
+
+## Divider
+
+Use dividers to visually separate groups of actions with different purposes within the same menu.
+
+## Disabled item
+
+Use it to indicate temporarily unavailable actions without removing the option from the interface.
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `open` | `boolean` | `false` |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-dropdown-menu>
+  <lui-button slot="trigger" variant="secondary" size="md" label="Options"></lui-button>
+  <lui-menu-item slot="items" label="Edit" shortcut="⌘,E"></lui-menu-item>
+  <lui-menu-divider slot="items"></lui-menu-divider>
+  <lui-menu-item slot="items" label="Delete" variant="danger"></lui-menu-item>
+</lui-dropdown-menu>
+```
+
+### CSS class
+
+```html
+<div class="dropdown-menu">
+  <button class="btn btn--secondary btn--md" aria-expanded="false">Options</button>
+  <div class="dropdown-menu__panel is-open">
+    <button class="menu-item"><span class="menu-item__label">Edit</span></button>
+    <button class="menu-item menu-item--danger"><span class="menu-item__label">Delete</span></button>
+  </div>
+</div>
+```

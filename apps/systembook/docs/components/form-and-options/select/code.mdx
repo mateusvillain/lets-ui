@@ -1,0 +1,73 @@
+---
+title: "Code"
+order: 4
+---
+
+## Error
+
+<ComponentEmbed component="Select" variant="error" />
+
+## Form integration
+
+`lui-native-select` is form-associated. The selected option's value is submitted via `FormData` under the `name` key. Use `form` to associate it with a form by ID even when it sits outside the `<form>`.
+
+### Required
+
+With `required`, the form does not submit while the placeholder is active (no real option selected).
+
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Text of the label above the field. |
+| `options` | `string` | `Option 1,Option 2,Option 3` | Options separated by commas. Each one is also the submitted value. |
+| `selected` | `number` | `0` | Selected option, starting at 1. `0` shows the placeholder. |
+| `placeholder` | `string` | `Select an option` | Text shown while no option is selected. It is not a valid choice. |
+| `size` | `string` | `lg` | `xl`, `lg`, `md` or `sm`. |
+| `hint` | `string` | `''` | Help text below the field. Replaced by `error-text` when `error` is on. |
+| `optional` | `boolean` | `false` | Adds the `optional-text` marker next to the label. |
+| `optional-text` | `string` | `'(optional)'` | Marker shown when `optional` is on. |
+| `disabled` | `boolean` | `false` | Disables the field and excludes it from submission. |
+| `error` | `boolean` | `false` | Turns on the error state and shows `error-text`. |
+| `error-text` | `string` | `'This field is required.'` | Message shown when `error` is on. |
+| `aria-label` | `string` | `''` | Accessible name when there is no visible `label`. |
+
+## Form attributes
+
+| Attribute  | Type      | Default | Description                                                                      |
+| ---------- | --------- | ------ | -------------------------------------------------------------------------------- |
+| `name`     | `string`  | `''`   | Field name in the submitted data; required to appear in the `FormData`           |
+| `form`     | `string`  | `''`   | ID of the associated `<form>`; lets you use the select outside the form element  |
+| `required` | `boolean` | `false`| Blocks submission while the placeholder is selected                              |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-native-select
+  label="Country"
+  placeholder="Select..."
+  options="Brazil,Portugal"
+  size="lg"
+></lui-native-select>
+```
+
+### CSS class
+
+```html
+<div class="native-select native-select--lg">
+  <div class="native-select__head">
+    <label class="native-select__label">Country</label>
+  </div>
+  <div class="native-select__control">
+    <select class="native-select__input">
+      <option value="">Select...</option>
+      <option value="br">Brazil</option>
+    </select>
+    <span class="native-select__arrow">
+      <svg ...>...</svg>
+    </span>
+  </div>
+</div>
+```

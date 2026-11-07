@@ -1,0 +1,23 @@
+---
+title: "Accessibility"
+---
+
+## Teclado
+
+O Skeleton **não é interativo**: não recebe foco nem responde ao teclado.
+
+## Leitor de tela
+
+- Sem `label`, o Skeleton sai da árvore de acessibilidade (`aria-hidden="true"`). Vários ossos dentro de um layout não são lidos um a um.
+- Com `label`, ele vira `role="status"` e o nome acessível é lido uma vez.
+- A região que vai receber o conteúdo real tem `aria-busy="true"` enquanto os skeletons estão visíveis, e perde o atributo quando o conteúdo entra. Isso fica por conta de quem consome.
+
+## Visual
+
+- Com `prefers-reduced-motion: reduce`, o brilho para e resta só a forma estática.
+- Em `forced-colors`, a forma ganha um contorno do sistema para continuar visível.
+
+## Para designers
+
+- Dê nome a cada região de carregamento ("Carregando perfil", "Carregando comentários"): é o que o leitor de tela ouve.
+- Não conte com o skeleton para explicar uma demora. Se o carregamento demorar ou falhar, mostre uma mensagem.

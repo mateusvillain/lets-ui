@@ -1,0 +1,40 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Signal that there is more content
+
+A scrollable region needs to **look scrollable**. Use `fade` or `scroll-shadow`, or keep the scrollbar visible (`scrollbar-visibility="always"`).
+
+<DosDonts variant="do" title="Signal hidden content">
+  A gradient at the end of the list shows that there are more items below.
+</DosDonts>
+
+<DosDonts variant="dont" title="Hiding the scrollbar with no cues">
+  Hidden scrollbar and no indicators: the person does not notice they can scroll and misses content.
+</DosDonts>
+
+## Fade or shadow?
+
+- Use `fade` when the background is the system surface color.
+- Use `scroll-shadow` on other backgrounds, because it works on any color.
+- If you need to change the fade color, use the component's own color property.
+
+## Snap
+
+In carousels, use `snap` so scrolling stops at the start of each item. Set the alignment (`snap-align`): start, center or end.
+
+## Scroll chaining
+
+In panels and floating menus, use `overscroll="contain"` so scrolling **does not pass** to the page when it reaches the limit.
+
+## Height
+
+Set the height (`height` or `max-height`) for the region to scroll. Prefer `max-height` when the content may be short, so the space adjusts.
+
+## Best practices
+
+- Avoid nested scrolling (scrolling inside scrolling).
+- Do not use horizontal scrolling for essential content, such as primary buttons.
+- Name the region for screen readers when it has a meaning of its own.

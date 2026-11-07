@@ -1,0 +1,48 @@
+---
+title: "Usage"
+---
+
+## Escreva um rótulo que se sustente sozinho
+
+- Diga o estado, não a categoria: "Pagamento aprovado", "Em reunião".
+- Use só a primeira letra maiúscula e nenhuma pontuação final.
+- Seja breve. Se a pessoa precisa saber o que fazer em seguida, a mensagem pertence a um [Alert](../alert/index.mdx).
+
+<DosDonts variant="do" title="O rótulo diz o estado">
+  "Falha na sincronização" com a variante `danger`. Lido em voz alta, sem o ícone, ainda faz sentido.
+</DosDonts>
+
+<DosDonts variant="dont" title="Rótulo que depende da cor">
+  "Status" ou "Resultado" ao lado de um ícone vermelho. A cor carrega a informação e o texto não diz nada.
+</DosDonts>
+
+## Escolha a variante pelo significado
+
+- Use `success`, `caution`, `danger` e `info` para o estado de sistemas e operações.
+- Use `online`, `away`, `busy` e `offline` só para a presença de pessoas.
+- Mantenha o mesmo significado para a mesma variante em todo o produto.
+
+## Ícone ou ponto
+
+- O **ícone** (padrão) tem uma forma diferente para cada estado e funciona bem isolado, em cards e cabeçalhos.
+- O **ponto** (`dot`) é mais discreto e combina com tabelas e listas com muitas linhas. Ele se diferencia só pela cor, então mantenha sempre o rótulo visível ao usá-lo.
+
+<DosDonts variant="do" title="Ponto com rótulo em uma tabela densa">
+  Uma coluna de status com `dot` e rótulos curtos, alinhados ao início.
+</DosDonts>
+
+<DosDonts variant="dont" title="Pontos sem texto">
+  Uma coluna de pontos coloridos sem rótulo. Quem não distingue cores não diferencia os estados.
+</DosDonts>
+
+## Só o indicador
+
+Sem `label`, o Status mostra só o indicador e anuncia o nome da variante em inglês ("Success", "Online"). Para anunciar um texto próprio sem mostrá-lo, passe `label` com `hide-label`. Use o indicador sozinho só quando o conteúdo em volta já explica a que ele se refere.
+
+## Use o pulso com moderação
+
+O pulso chama atenção para algo acontecendo agora. Vários indicadores pulsando na mesma tela competem entre si e cansam a vista: reserve para um estado ao vivo por vez.
+
+## Mudanças na tela
+
+O Status não anuncia quando muda. Se o estado é atualizado enquanto a pessoa está na página e a mudança importa, coloque o Status dentro de uma região com `aria-live="polite"`.

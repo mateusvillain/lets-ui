@@ -1,0 +1,46 @@
+---
+title: "Code"
+order: 4
+---
+
+## Column Direction
+
+<ComponentEmbed component="Flex" variant="column" />
+
+## Properties
+
+| Attribute | Type | Default |
+| --- | --- | --- |
+| `direction` | `string` | `row` |
+| `wrap` | `string` | `nowrap` |
+| `gap` | `string` | `''` |
+| `gap-x` | `string` | `''` |
+| `gap-y` | `string` | `''` |
+| `align` | `string` | `stretch` |
+| `justify` | `string` | `start` |
+| `inline` | `boolean` | `false` |
+| `grow` | `string` | `''` |
+| `shrink` | `string` | `''` |
+| `basis` | `string` | `''` |
+| `align` | `string` | `''` |
+| `order` | `string` | `''` |
+
+## Usage
+
+### Web Component
+
+```html
+<lui-flex gap="md" align="stretch" justify="start">
+  <lui-flex-item grow="1">Grows</lui-flex-item>
+  <lui-flex-item>Fixed</lui-flex-item>
+</lui-flex>
+```
+
+### CSS class
+
+```html
+<div class="flex flex--gap-md flex--align-center">
+  <div class="flex-item--grow">Grows</div>
+  <div class="flex-item--shrink-0">Fixed</div>
+</div>
+```

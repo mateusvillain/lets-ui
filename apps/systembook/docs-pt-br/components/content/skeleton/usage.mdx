@@ -1,0 +1,39 @@
+---
+title: "Usage"
+---
+
+## Siga o layout final
+
+O skeleton é uma promessa do que vem. Mantenha as mesmas posições, tamanhos e espaçamentos do conteúdo real, para nada se mexer quando ele chegar.
+
+<DosDonts variant="do" title="Mesma forma do conteúdo">
+  Um card com capa e três linhas, onde o card real tem imagem, título e um resumo de duas linhas.
+</DosDonts>
+
+<DosDonts variant="dont" title="Um bloco genérico">
+  Um retângulo grande no lugar de uma lista inteira. Quando os itens chegam, a página salta do mesmo jeito.
+</DosDonts>
+
+## Sugira texto de verdade
+
+- Use um osso por linha, não um bloco alto para um parágrafo.
+- Varie as larguras e encurte a última linha (`width="56%"`), como o texto real faz.
+- Dê aos títulos uma linha mais curta e isolada.
+
+## Anuncie o carregamento uma vez
+
+Cada osso é decorativo. A região que será trocada pelo conteúdo anuncia o carregamento, com `role="status"`, `aria-busy="true"` e um `aria-label` como "Carregando perfil". Quando o conteúdo entrar, remova o `aria-busy`.
+
+Passe `label` a um Skeleton só quando ele representa a região inteira sozinho.
+
+## Quanto tempo mostrar
+
+- Não mostre skeleton para respostas muito rápidas: um lampejo de placeholders distrai mais do que uma espera curta.
+- Não deixe para sempre. Se a requisição falhar, troque por uma mensagem e uma forma de tentar de novo.
+- Carregue as seções de forma independente quando puder, para o conteúdo pronto aparecer primeiro.
+
+## Boas práticas
+
+- Não misture skeleton e spinner para o mesmo conteúdo.
+- Não use skeleton para conteúdo que a pessoa não está esperando, como um menu escondido.
+- Mantenha a composição simples: poucas formas bastam para sugerir o layout.

@@ -1,0 +1,87 @@
+---
+title: "Progress Bar"
+subtitle: "A bar that shows how much of a task is done, such as a file upload or an import."
+order: 10
+---
+
+<ComponentEmbed component="ProgressBar" variant="default" />
+
+## Best practices
+
+<DosDonts variant="do" title="Long waits">
+  When the task takes long enough that the person wants to know how much is left, such as uploading files or importing data.
+</DosDonts>
+
+<DosDonts variant="do" title="Progress measured in any unit">
+  Percentage, GB, steps: the bar fills in proportion to the value over the maximum.
+</DosDonts>
+
+<DosDonts variant="do" title="Quota usage">
+  Storage or a plan limit, with `caution` when it is close to the end.
+</DosDonts>
+
+<DosDonts variant="dont" title="Area that loads with a known shape">
+  Use a [Skeleton](../skeleton/index.mdx), which shows the shape of the content that is coming.
+</DosDonts>
+
+<DosDonts variant="dont" title="Named steps">
+  For the steps of a flow, such as sign-up or checkout, use a [Stepper](../../navigation/stepper/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Short waits">
+  A bar that appears and disappears in less than a second just flickers on the screen.
+</DosDonts>
+
+## Anatomy
+
+![Progress Bar anatomy: label, value, track, fill and caption](./anatomy.png)
+
+1. **Label**: names the task.
+2. **Value**: the progress as a percentage, or in the `value-text` text.
+3. **Track**: the whole task.
+4. **Fill**: the part already done.
+5. **Caption** (optional): the progress and the result, such as "8 of 20 files" or "Upload complete".
+
+## Determinate and indeterminate
+
+With `value`, the bar fills in proportion to `value` over `max`. Without `value`, it is **indeterminate**: a segment runs along the track while there is no way to measure progress. As soon as the measurement exists, the bar switches to determinate mode.
+
+<ComponentEmbed component="ProgressBar" variant="indeterminate" />
+
+## Variants
+
+| Variant | When to use |
+| --- | --- |
+| `primary` (default) | The task is in progress. |
+| `success` | The task finished well. |
+| `caution` | The task continues, but needs attention, such as an almost full quota. |
+| `danger` | The task failed or went over the limit. |
+
+<ComponentEmbed component="ProgressBar" variant="success" />
+
+<ComponentEmbed component="ProgressBar" variant="danger" />
+
+Every `success`, `caution` or `danger` bar carries the outcome in the caption. Color alone does not convey the state to people who cannot distinguish it, nor to the screen reader.
+
+## Label placement
+
+In `top` (default), the label and the value sit above the track. In `inline`, the label, track and value sit on the same line, which saves height in lists and tables. The caption is always below.
+
+<ComponentEmbed component="ProgressBar" variant="inline" />
+
+## Sizes
+
+| Size | Track thickness |
+| --- | --- |
+| `sm` | 4px |
+| `md` (default) | 8px |
+| `lg` | 12px |
+
+Only the track changes: the text stays the same.
+
+## Related
+
+- [Toast](../toast/index.mdx): announce that a background task has finished.
+- [Alert](../alert/index.mdx): explain a failure that needs action.
+- [Empty State](../empty-state/index.mdx): what to show when the task ends with no result.
+- [Skeleton](../skeleton/index.mdx): loading content whose shape is known.

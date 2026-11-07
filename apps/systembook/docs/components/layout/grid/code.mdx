@@ -1,0 +1,89 @@
+---
+title: "Code"
+order: 4
+---
+
+| Breakpoint | Viewport | Columns | Gap  | Side margin                  |
+| ---------- | -------- | ------- | ---- | ---------------------------- |
+| base       | ≤ 767px  | 4       | 16px | 16px                         |
+| `sm`       | ≥ 768px  | 8       | 16px | 32px                         |
+| `md`       | ≥ 1024px | 8       | 16px | 40px                         |
+| `lg`       | ≥ 1280px | 12      | 24px | 40px                         |
+| `1xl`      | ≥ 1440px | 12      | 24px | `max-width` 1360px, centered |
+
+The whole table comes from the `lui.brand.grid.*` brand tokens — `breakpoint`,
+`column`, `gap`, `margin` and `container` — so a brand redefines the entire
+grid by redefining those tokens. Gap and margin point to `spacing.fixed`: the
+grid's responsiveness comes from the breakpoints, which already move the margin
+from 16 to 32 and 40, not from a ramp inside each step.
+
+Gap, margin and the `1xl` `max-width` resolve to custom properties and change
+with `data-brand` at runtime. Breakpoints and column count are fixed at
+compile time — a media query prelude and the `@for` that generates the
+`.col-*` classes cannot read a `var()` — so a brand that changes those two
+needs to compile the CSS from source.
+
+## Responsive columns
+
+Columns are **mobile-first**: a value declared at `sm` applies from `sm`
+upward until another breakpoint overrides it. The base step has no prefix.
+
+Watch out for the jump from 8 to 12 columns at `lg`: a `col-sm-4` that was half
+the row at `sm` becomes a third at `lg` if it is not redeclared.
+
+## Nested grid
+
+An `lui-grid` inside an `lui-grid-item` gets `flush` automatically — it
+splits the width of the parent's track instead of reapplying the page margin.
+
+## CSS class (without Web Component)
+
+Every direct child of `.grid` is already a one-column cell, so a block that
+spans a single column needs no class at all.
+
+## Usage
+
+### Web Component
+
+```html
+<lui-grid>
+  <lui-grid-item col="full">Header</lui-grid-item>
+  <lui-grid-item col="2" col-sm="4" col-lg="6">Column A</lui-grid-item>
+  <lui-grid-item col="2" col-sm="4" col-lg="6">Column B</lui-grid-item>
+</lui-grid>
+```
+
+### CSS class
+
+```html
+<div class="grid">
+  <div class="col-full">Header</div>
+  <div class="col-2 col-sm-4 col-lg-6">Column A</div>
+  <div class="col-2 col-sm-4 col-lg-6">Column B</div>
+</div>
+```
+
+## API
+
+### `lui-grid` / `.grid`
+
+| Attribute | Class              | Values                              | Default   |
+| --------- | ------------------ | ----------------------------------- | --------- |
+| `align`   | `.grid--align-{v}` | `stretch`, `start`, `center`, `end` | `stretch` |
+| `flush`   | `.grid--flush`     | boolean                             | `false`   |
+
+`flush` removes the side margin and the `max-width`, keeping the breakpoint's
+columns and gap. Use it in full-bleed sections.
+
+### `lui-grid-item` / children of `.grid`
+
+| Attribute  | Class             | Values           |
+| ---------- | ----------------- | ---------------- |
+| `col`      | `.col-{n}`        | `1`–`4`, `full`  |
+| `col-sm`   | `.col-sm-{n}`     | `1`–`8`, `full`  |
+| `col-md`   | `.col-md-{n}`     | `1`–`8`, `full`  |
+| `col-lg`   | `.col-lg-{n}`     | `1`–`12`, `full` |
+| `col-1xl`  | `.col-1xl-{n}`    | `1`–`12`, `full` |
+
+In the Web Component the value is capped at the breakpoint's column count, so
+`col="8"` at the base step becomes `span 4`.

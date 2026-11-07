@@ -1,0 +1,84 @@
+---
+title: "Status"
+subtitle: "Indicador pequeno do estado de um sistema, de uma pessoa ou de um item: um ícone ou um ponto colorido, com rótulo e descrição opcionais."
+---
+
+<ComponentEmbed component="Status" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Resultado de uma operação">
+  "Pagamento aprovado" ou "Falha na sincronização" em uma lista de transações ou tarefas.
+</DosDonts>
+
+<DosDonts variant="do" title="Saúde de um serviço">
+  O estado de cada serviço em uma tabela de monitoramento, conferido de relance.
+</DosDonts>
+
+<DosDonts variant="do" title="Disponibilidade de uma pessoa">
+  Online, ausente, ocupada ou offline, ao lado de um nome.
+</DosDonts>
+
+<DosDonts variant="dont" title="Mensagens que pedem leitura ou ação">
+  O Status só nomeia o estado. Use um [Alert](../alert/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Classificar um item">
+  Para uma categoria ou uma etiqueta, use uma [Tag](../tag/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Ações clicáveis">
+  O Status não é interativo. Use [Button](../../actionable/button/index.mdx).
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do Status: indicador, rótulo e descrição](./anatomy.png)
+
+1. **Indicador**: um ícone ou um ponto, na cor do estado. Decorativo.
+2. **Rótulo**: o texto que diz o estado. Opcional, mas é o que o leitor de tela anuncia.
+3. **Descrição**: uma segunda linha, na cor de legenda. Opcional.
+
+## Variantes
+
+### Feedback
+
+| Variante | Significado | Exemplo |
+| --- | --- | --- |
+| **Success** | Algo concluído ou saudável. | "Pagamento aprovado", "Operacional" |
+| **Caution** | Atenção ou algo pendente. | "Revisão pendente", "Degradado" |
+| **Danger** | Uma falha ou algo bloqueado. | "Falha na sincronização", "Fora do ar" |
+| **Info** | Um fato neutro. | "Agendado", "Em manutenção" |
+
+Por padrão, os status de feedback mostram um ícone de 20px. Com `dot`, mostram um ponto de 8px, mais discreto, para listas e tabelas com muitas linhas.
+
+<ComponentEmbed component="Status" variant="dot" />
+
+### Social
+
+`online`, `away`, `busy` e `offline` são os status de presença de uma pessoa, os mesmos que o [Avatar](../avatar/index.mdx) desenha no canto. O ponto mede 16px e tem uma forma própria além da cor: `online` é preenchido, `away` mostra ponteiros de relógio, `busy` uma barra e `offline` o centro vazio.
+
+<ComponentEmbed component="Status" variant="social" />
+
+## Rótulo e descrição
+
+`label` é o texto do status e `description` uma segunda linha. O indicador fica alinhado à primeira linha do rótulo, mesmo quando ele quebra.
+
+<ComponentEmbed component="Status" variant="description" />
+
+## Tamanhos
+
+`md` (padrão) e `lg`. O tamanho muda só o rótulo: a descrição e o indicador mantêm os seus.
+
+## Pulso
+
+`pulse` faz um anel na cor do status crescer e sumir em volta do indicador. Use para um estado ao vivo: uma gravação, uma chamada, um serviço voltando.
+
+<ComponentEmbed component="Status" variant="pulse" />
+
+## Relacionados
+
+- [Tag](../tag/index.mdx): classifica um item com um rótulo curto.
+- [Alert](../alert/index.mdx): uma mensagem com contexto e, às vezes, uma ação.
+- [Avatar](../avatar/index.mdx): usa os status sociais no canto.
+- [Table](../table/index.mdx): onde o Status mostra o estado de cada linha.

@@ -1,0 +1,120 @@
+---
+title: "Code"
+---
+
+## Vertical
+
+Com `orientation="vertical"`, as etapas se empilham e o conector desce do centro do indicador. Quando o stepper tem altura, os conectores se esticam para preenchê-la.
+
+<ComponentEmbed component="Stepper" variant="vertical" />
+
+## Contêineres estreitos
+
+A troca de horizontal para vertical depende da largura do contêiner, não da viewport, então funciona também em uma coluna estreita. O atributo `orientation` não muda.
+
+## Carregando
+
+`loading` em um `lui-step` troca o número por um indicador de progresso. A posição continua no nome acessível.
+
+<ComponentEmbed component="Stepper" variant="loading" />
+
+## Linear
+
+Com `linear`, só as etapas concluídas podem ser clicadas. Avance por código, mudando `current-step`.
+
+```js
+const stepper = document.querySelector('lui-stepper');
+stepper.currentStep = stepper.currentStep + 1;
+```
+
+## Evento `lui-step-change`
+
+Quando uma etapa é clicada, o stepper emite `lui-step-change` com a etapa escolhida e a anterior. O evento borbulha, atravessa o shadow DOM e é cancelável: `event.preventDefault()` mantém a etapa atual.
+
+```js
+stepper.addEventListener('lui-step-change', (event) => {
+  if (event.detail.step > event.detail.previous && !form.checkValidity()) {
+    event.preventDefault();
+  }
+});
+```
+
+## Classe CSS (sem Web Component)
+
+Sem o Web Component, a marcação fica por conta de quem consome: mova `stepper__item--completed`, `stepper__item--active` e `aria-current="step"` à mão, e deixe o conector fora do último item. Use `stepper--vertical` e `stepper--labels-bottom` no `<ol>` para os outros layouts.
+
+Também ficam por conta de quem consome:
+
+- o texto de posição visualmente oculto (`stepper__position`);
+- o `aria-hidden="true"` no indicador;
+- a troca para `stepper--vertical` quando a linha não couber.
+
+## Propriedades
+
+### `lui-stepper`
+
+| Atributo          | Tipo                         | Padrão                   | Descrição                                                                    |
+| ----------------- | ---------------------------- | ------------------------ | ---------------------------------------------------------------------------- |
+| `current-step`    | `number`                     | `1`                      | Etapa atual, a partir de 1. Refletida no atributo ao navegar.                |
+| `orientation`     | `'horizontal' \| 'vertical'` | `horizontal`             | Disposição das etapas.                                                       |
+| `label-placement` | `'end' \| 'bottom'`          | `end`                    | Rótulo ao lado ou abaixo do indicador. `bottom` só vale na horizontal.       |
+| `linear`          | `boolean`                    | `false`                  | Impede pular para etapas à frente da atual.                                  |
+| `label`           | `string`                     | `Progress`               | Nome acessível da lista de etapas.                                           |
+| `completed-label` | `string`                     | `Completed`              | Texto anunciado nas etapas concluídas.                                       |
+| `loading-label`   | `string`                     | `Loading`                | Texto anunciado nas etapas com `loading`.                                    |
+| `step-label`      | `string`                     | `Step {step} of {total}` | Posição anunciada em cada etapa e na troca de etapa.                         |
+
+### `lui-step`
+
+| Atributo      | Tipo      | Padrão  | Descrição                                        |
+| ------------- | --------- | ------- | ------------------------------------------------ |
+| `label`       | `string`  | `''`    | Título da etapa.                                 |
+| `description` | `string`  | `''`    | Texto de apoio abaixo do título.                 |
+| `loading`     | `boolean` | `false` | Troca o número por um indicador de carregamento. |
+| `disabled`    | `boolean` | `false` | Desabilita a etapa.                              |
+
+### Eventos
+
+| Evento            | `detail`                             | Quando                                                     |
+| ----------------- | ------------------------------------ | ---------------------------------------------------------- |
+| `lui-step-change` | `{ step: number, previous: number }` | Uma etapa é clicada, antes da troca. Cancelável.           |
+
+## Uso
+
+### Web Component
+
+```html
+<lui-stepper current-step="1" label="Checkout" step-label="Etapa {step} de {total}">
+  <lui-step label="Conta" description="Seus dados"></lui-step>
+  <lui-step label="Endereço" description="Entrega"></lui-step>
+  <lui-step label="Pagamento" description="Cartão ou PIX"></lui-step>
+</lui-stepper>
+```
+
+### Classe CSS
+
+```html
+<ol class="stepper" aria-label="Checkout">
+  <li class="stepper__item stepper__item--completed">
+    <button class="stepper__trigger" type="button">
+      <span class="stepper__position">Etapa 1 de 3</span>
+      <span class="stepper__indicator" aria-hidden="true">
+        <span class="stepper__circle">
+          <span class="stepper__number">1</span>
+        </span>
+      </span>
+      <span class="stepper__text">
+        <span class="stepper__label">Conta</span>
+        <span class="stepper__description">Seus dados</span>
+      </span>
+      <span class="stepper__status">Concluída</span>
+    </button>
+    <span class="stepper__connector" aria-hidden="true"></span>
+  </li>
+  <li class="stepper__item stepper__item--active">
+    <button class="stepper__trigger" type="button" aria-current="step">
+      <!-- indicador e texto -->
+    </button>
+  </li>
+</ol>
+```

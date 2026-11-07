@@ -1,0 +1,71 @@
+---
+title: "Dropdown Menu"
+subtitle: "A floating menu that gathers related actions behind a single trigger."
+order: 4
+---
+
+<ComponentEmbed component="DropdownMenu" variant="closed" />
+
+## Best practices
+
+<DosDonts variant="do" title="Several related actions">
+  Actions that would take up too much space if they were all visible.
+</DosDonts>
+
+<DosDonts variant="do" title="Account menu">
+  The account options grouped behind a single trigger.
+</DosDonts>
+
+<DosDonts variant="do" title="More options for an item">
+  The "More options" of a table row or the actions of a document.
+</DosDonts>
+
+The trigger is up to you: it can be a [Button](../button/index.mdx), an [Icon Button](../icon-button/index.mdx) or a link.
+
+<DosDonts variant="dont" title="Two actions or fewer">
+  Show the buttons directly.
+</DosDonts>
+
+<DosDonts variant="dont" title="Main site navigation">
+  Use a navigation bar or [Tabs](../../navigation/tabs/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Choosing a value in a form">
+  Use the [Select](../../form-and-options/select/index.mdx).
+</DosDonts>
+
+<DosDonts variant="dont" title="Rich content or forms">
+  Menus are for short actions; for more, use a Modal or Drawer.
+</DosDonts>
+
+## Anatomy
+
+![Dropdown Menu anatomy: trigger, panel, item, divider, shortcut and submenu indicator](./anatomy.png)
+
+1. **Trigger**: the element that opens and closes the menu.
+2. **Panel**: the floating surface with elevation.
+3. **Item**: an action, with a label.
+4. **Divider**: separates groups of actions.
+5. **Shortcut** (optional): the keyboard shortcut for the action.
+6. **Submenu** (optional): a second level, indicated by an arrow.
+
+## Elements
+
+| Element | Description |
+| --- | --- |
+| **Item** | Runs an action and closes the menu. |
+| **Item with shortcut** | Shows the keyboard shortcut aligned to the right. |
+| **Dangerous item** | Destructive action, highlighted in red. |
+| **Disabled item** | An action unavailable right now, but still visible. |
+| **Divider** | Separates groups with different purposes. |
+| **Submenu** | Groups related actions in a second level. |
+
+## Menu states
+
+Closed and open. When it opens, focus goes to the first available item. When it closes with `Esc`, focus returns to the trigger.
+
+## Related
+
+- [Button](../button/index.mdx) and [Icon Button](../icon-button/index.mdx): common triggers.
+- [Select](../../form-and-options/select/index.mdx): choosing a value.
+- [Shortcut](../../typography/shortcut/index.mdx): displays shortcut keys.

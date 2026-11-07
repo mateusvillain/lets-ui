@@ -1,0 +1,30 @@
+---
+title: "Usage"
+order: 2
+---
+
+## Space between elements
+
+Use the system's **spacing scale**. Space communicates relationship: items that are **close** belong together, items that are **far apart** are different groups.
+
+<DosDonts variant="do" title="Space proportional to the relationship">
+  A small gap between a label and its field, a medium gap between fields, a large gap between sections.
+</DosDonts>
+
+<DosDonts variant="dont" title="The same space for everything">
+  The same gap between all elements makes everything look like a single block, and the hierarchy disappears.
+</DosDonts>
+
+## Nest Stacks
+
+Combine Stacks for different spacing: an **outer** Stack with a large gap separates sections, and **inner** Stacks with a small gap group the content of each section.
+
+## Alignment
+
+By default, items **stretch** to the width of the Stack. Use `align="center"` to center elements with their own width, such as buttons or images.
+
+## Best practices
+
+- Prefer the Stack's `gap` over individual margins on the children.
+- Use values from the scale (8, 16, 24, 32...), not one-off values.
+- On small screens, the same Stack works well without changes.
