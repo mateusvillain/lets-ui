@@ -9,7 +9,7 @@ import * as FileUploadStories from './FileUpload.stories';
 
 Campo para anexar arquivos a um formulário. Combina uma área de soltar (drag-and-drop) com um botão que abre o seletor nativo, lista os arquivos escolhidos com nome e tamanho, valida tipo, tamanho e quantidade localmente e permite remover cada arquivo.
 
-O componente **não envia** arquivos: a aplicação faz a requisição e informa o andamento de cada um com `setFileStatus()`. O campo mostra progresso, falha e o botão de nova tentativa na mesma lista — veja [Envio](#envio-progresso-falha-e-nova-tentativa).
+O componente **não envia** arquivos: a aplicação faz a requisição e informa o andamento de cada um com `setFileStatus()`. O campo mostra progresso, falha e o botão de nova tentativa na mesma lista. Veja [Envio](#envio-progresso-falha-e-nova-tentativa).
 
 </Lang>
 
@@ -18,7 +18,7 @@ O componente **não envia** arquivos: a aplicação faz a requisição e informa
 
 Field for attaching files to a form. It combines a drop zone (drag-and-drop) with a button that opens the native picker, lists the chosen files with name and size, validates type, size and count locally, and lets each file be removed.
 
-The component **does not send** files: the app makes the request and reports each one's progress with `setFileStatus()`. The field shows progress, failure and the retry button in the same list — see [Sending](#sending-progress-failure-and-retry).
+The component **does not send** files: the app makes the request and reports each one's progress with `setFileStatus()`. The field shows progress, failure and the retry button in the same list. See [Sending](#sending-progress-failure-and-retry).
 
 </Lang>
 
@@ -30,7 +30,7 @@ The component **does not send** files: the app makes the request and reports eac
 
 Use o File Upload quando a pessoa precisa anexar um ou mais arquivos do próprio dispositivo: um comprovante, um currículo, as imagens de um anúncio.
 
-- Para um único arquivo num formulário curto, sem lista nem arrastar e soltar, um `<input type="file">` nativo pode bastar — veja [Classe CSS](#classe-css-sem-web-component) para estilizá-lo.
+- Para um único arquivo num formulário curto, sem lista nem arrastar e soltar, um `<input type="file">` nativo pode bastar (veja [Classe CSS](#classe-css-sem-web-component) para estilizá-lo).
 - Para escolher entre arquivos que já estão no sistema (uma biblioteca de mídia, documentos já enviados), use uma lista ou um [Native Select](?path=/docs/form-and-options-native-select--docs), não o seletor do dispositivo.
 - Para texto colado ou digitado, use o [Textarea](?path=/docs/form-and-options-textarea--docs).
 
@@ -41,7 +41,7 @@ Use o File Upload quando a pessoa precisa anexar um ou mais arquivos do próprio
 
 Use File Upload when the person needs to attach one or more files from their own device: a receipt, a résumé, the pictures of a listing.
 
-- For a single file in a short form, with no list and no drag-and-drop, a native `<input type="file">` may be enough — see [CSS class](#css-class-without-web-component) to style it.
+- For a single file in a short form, with no list and no drag-and-drop, a native `<input type="file">` may be enough (see [CSS class](#css-class-without-web-component) to style it).
 - To choose among files already in the system (a media library, documents already sent), use a list or a [Native Select](?path=/docs/form-and-options-native-select--docs), not the device picker.
 - For pasted or typed text, use [Textarea](?path=/docs/form-and-options-textarea--docs).
 
@@ -90,7 +90,7 @@ With `multiple`, each new selection is **added** to the files already there, up 
 
 Cada arquivo é validado sozinho contra `accept`, `max-size` (bytes, por arquivo) e `max-files`. Um arquivo inválido **não derruba os válidos**: ele aparece na lista com borda de erro e uma mensagem que diz **qual arquivo**, **o problema** e **como resolver**, e não entra no `FormData` nem em `files`. Sai com o botão Remover ou na próxima seleção. Para cada recusa o componente emite `lui-error`.
 
-`accept` também filtra o seletor do sistema, mas **não substitui a validação no servidor**: tipo (pelo conteúdo, não só pela extensão), tamanho, quantidade e conteúdo precisam ser verificados de novo no backend — o navegador aceita o que a pessoa renomear.
+`accept` também filtra o seletor do sistema, mas **não substitui a validação no servidor**: tipo (pelo conteúdo, não só pela extensão), tamanho, quantidade e conteúdo precisam ser verificados de novo no backend, pois o navegador aceita o que a pessoa renomear.
 
 </Lang>
 
@@ -99,7 +99,7 @@ Cada arquivo é validado sozinho contra `accept`, `max-size` (bytes, por arquivo
 
 Each file is validated on its own against `accept`, `max-size` (bytes, per file) and `max-files`. An invalid file **does not drop the valid ones**: it appears in the list with an error border and a message that names **the file**, **the problem** and **how to fix it**, and it is not in `FormData` or `files`. It leaves with its Remove button or on the next selection. For each rejection the component emits `lui-error`.
 
-`accept` also filters the system picker, but it **does not replace server-side validation**: type (by content, not just extension), size, count and content must be checked again on the backend — the browser accepts whatever the person renames.
+`accept` also filters the system picker, but it **does not replace server-side validation**: type (by content, not just extension), size, count and content must be checked again on the backend, since the browser accepts whatever the person renames.
 
 </Lang>
 
@@ -409,7 +409,7 @@ document.querySelector('lui-file-upload').messages = {
 - A área inteira é um `<button>` nativo nomeado pelo título (`label`): `Tab` chega nela e `Enter`, `Espaço` ou toque abrem o seletor. Descrição, restrições, “Required.” (com `required`) e a mensagem de erro ficam ligados a ela por `aria-describedby`.
 - A lista é um `<ul>` rotulado (“Selected files”); cada item expõe nome, tamanho e, quando houver, a mensagem de erro ou a barra de progresso.
 - `Tab` e `Shift+Tab` percorrem a área e os botões de **cada** arquivo. Remover e Retry são botões distintos, com o nome do arquivo no nome acessível (“Remove comprovante.pdf”, “Retry comprovante.pdf”).
-- Depois de remover, o foco vai para o Remover do arquivo que tomou o lugar, senão o anterior, senão a área. Depois de Retry, quando a aplicação volta o arquivo para `uploading`, o foco vai para o Remover do mesmo arquivo — nunca para um elemento que sumiu.
+- Depois de remover, o foco vai para o Remover do arquivo que tomou o lugar, senão o anterior, senão a área. Depois de Retry, quando a aplicação volta o arquivo para `uploading`, o foco vai para o Remover do mesmo arquivo, nunca para um elemento que sumiu.
 - Cada barra de progresso é um `role="progressbar"` com o nome do arquivo (“Uploading comprovante.pdf”).
 - Adições, recusas, remoções e mudanças de status (início, envio concluído, falha) são anunciadas numa região `role="status"` educada, sem mover o foco. Os passos do progresso **não** são anunciados.
 - O ícone de erro é decorativo; a mensagem é texto. O foco da área aparece também em modo de alto contraste (`forced-colors`).
@@ -431,7 +431,7 @@ document.querySelector('lui-file-upload').messages = {
 - The whole zone is a native `<button>` named by the title (`label`): `Tab` reaches it and `Enter`, `Space` or touch open the picker. Description, constraints, “Required.” (with `required`) and the error message are tied to it through `aria-describedby`.
 - The list is a labelled `<ul>` (“Selected files”); each item exposes name, size and, when present, the error message or the progress bar.
 - `Tab` and `Shift+Tab` move through the zone and the buttons of **each** file. Remove and Retry are distinct buttons, carrying the file name in their accessible name (“Remove receipt.pdf”, “Retry receipt.pdf”).
-- After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone. After Retry, when the app sets the file back to `uploading`, focus goes to the same file's Remove — never to an element that is gone.
+- After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone. After Retry, when the app sets the file back to `uploading`, focus goes to the same file's Remove, never to an element that is gone.
 - Each progress bar is a `role="progressbar"` named after the file (“Uploading receipt.pdf”).
 - Additions, rejections, removals and status changes (start, sent, failed) are announced in a polite `role="status"` region, without moving focus. Progress ticks are **not** announced.
 - The error icon is decorative; the message is text. The zone's focus also shows in high contrast mode (`forced-colors`).
