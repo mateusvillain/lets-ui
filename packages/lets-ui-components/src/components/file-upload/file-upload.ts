@@ -38,7 +38,7 @@ export interface FileUploadChangeDetail {
 /**
  * Every string the component builds at runtime. Override any of them through
  * the `messages` property to translate or reword the field — the static text
- * (label, description, hint, error text) goes through attributes instead.
+ * (label, zone title, description, hint, error text) goes through attributes instead.
  */
 export interface FileUploadMessages {
   /** Visible constraints line when `hint` is empty. */
@@ -53,6 +53,11 @@ export interface FileUploadMessages {
   size(file: File, size: string, maxSize: string): string;
   /** A file over the `max-files` limit (or a second file in single mode). */
   count(file: File, maxFiles: number): string;
+  /**
+   * Shown in place of the constraints line, and announced, once `multiple`
+   * holds `max-files` files and the zone stops accepting more.
+   */
+  limitReached(maxFiles: number): string;
   /** Live-region summary after a selection. */
   added(added: File[], rejected: File[], duplicates: File[]): string;
   /** Live-region summary after a removal. */
@@ -94,6 +99,8 @@ export const defaultFileUploadMessages: FileUploadMessages = {
     maxFiles === 1
       ? `${quote(file)} was not added: only one file is allowed. Remove the current file to choose another.`
       : `${quote(file)} was not added: the limit is ${maxFiles} files. Remove a file to add another.`,
+  limitReached: (maxFiles) =>
+    `Limit of ${plural(maxFiles, 'file', 'files')} reached. Remove a file to add another.`,
   added: (added, rejected, duplicates) =>
     [
       added.length ? `${plural(added.length, 'file', 'files')} added.` : '',
@@ -182,7 +189,13 @@ export class LuiFileUpload extends LitElement {
 
   private _internals: ElementInternals;
 
-  @property() label = 'Upload files';
+  /**
+   * The field's label, above the zone like the other form fields. Empty = no
+   * outer label; the zone title and the optional text then stand alone.
+   */
+  @property() label = '';
+  /** Title inside the zone, the call to action. */
+  @property({ attribute: 'zone-title' }) zoneTitle = 'Upload files';
   @property() description = 'Drop files here or click to browse';
   /** Constraints line. When empty, it is built from `accept`, `max-size` and `max-files`. */
   @property() hint = '';
@@ -324,6 +337,16 @@ export class LuiFileUpload extends LitElement {
     return this.maxFiles > 0 ? Math.floor(this.maxFiles) : 0;
   }
 
+  /**
+   * `multiple` with `max-files` and as many accepted files as it allows. Files
+   * rejected by validation do not count. Single mode never reaches it: a new
+   * file replaces the current one.
+   */
+  private get _limitReached(): boolean {
+    const max = this.multiple ? this._maxFiles : 0;
+    return max > 0 && this._entries.length >= max;
+  }
+
   private _formatBytes(bytes: number): string {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let value = bytes;
@@ -342,6 +365,9 @@ export class LuiFileUpload extends LitElement {
   }
 
   private _constraintsText(): string {
+    // At the limit this line is what the zone is described by, so it says why
+    // the zone stopped: sighted and screen reader users get the same words.
+    if (this._limitReached) return this._messages.limitReached(this._maxFiles);
     if (this.hint) return this.hint;
     return this._messages.constraints({
       formats: formatAccept(this.accept),
@@ -458,6 +484,7 @@ export class LuiFileUpload extends LitElement {
     if (this.disabled || !incoming.length) return;
 
     const maxFiles = this._maxFiles;
+    const wasAtLimit = this._limitReached;
     const added: File[] = [];
     const rejected: Entry[] = [];
     const duplicates: File[] = [];
@@ -507,12 +534,17 @@ export class LuiFileUpload extends LitElement {
       )
     );
 
+    const summary = this._messages.added(
+      added,
+      rejected.map((e) => e.file),
+      duplicates
+    );
+    // Said once, when this selection is the one that fills the field.
+    const reachedNow = !wasAtLimit && this._limitReached;
     this._announce(
-      this._messages.added(
-        added,
-        rejected.map((e) => e.file),
-        duplicates
-      )
+      reachedNow
+        ? `${summary} ${this._messages.limitReached(maxFiles)}`.trim()
+        : summary
     );
   }
 
@@ -549,7 +581,7 @@ export class LuiFileUpload extends LitElement {
   // -------------------------------------------------------------------- events
 
   private _openPicker = () => {
-    if (this.disabled) return;
+    if (this.disabled || this._limitReached) return;
     this._input.click();
   };
 
@@ -566,7 +598,7 @@ export class LuiFileUpload extends LitElement {
   }
 
   private _onDragEnter = (e: DragEvent) => {
-    if (this.disabled || !this._hasFiles(e)) return;
+    if (this.disabled || this._limitReached || !this._hasFiles(e)) return;
     e.preventDefault();
     this._dragDepth += 1;
     this._dragActive = true;
@@ -576,7 +608,8 @@ export class LuiFileUpload extends LitElement {
     if (!this._hasFiles(e)) return;
     e.preventDefault();
     if (e.dataTransfer)
-      e.dataTransfer.dropEffect = this.disabled ? 'none' : 'copy';
+      e.dataTransfer.dropEffect =
+        this.disabled || this._limitReached ? 'none' : 'copy';
   };
 
   private _onDragLeave = () => {
@@ -589,7 +622,7 @@ export class LuiFileUpload extends LitElement {
     e.preventDefault();
     this._dragDepth = 0;
     this._dragActive = false;
-    if (this.disabled) return;
+    if (this.disabled || this._limitReached) return;
     this._addFiles(Array.from(e.dataTransfer?.files ?? []));
   };
 
@@ -714,6 +747,8 @@ export class LuiFileUpload extends LitElement {
     const constraints = this._constraintsText();
     const items = [...this._entries, ...this._rejected];
     const ids = {
+      label: `${this._baseId}-label`,
+      zone: `${this._baseId}-zone`,
       title: `${this._baseId}-title`,
       description: `${this._baseId}-description`,
       constraints: `${this._baseId}-constraints`,
@@ -729,13 +764,19 @@ export class LuiFileUpload extends LitElement {
       .filter(Boolean)
       .join(' ');
     const dragActive = this._dragActive || this.forceState === 'drag-active';
+    const limitReached = this._limitReached;
+    const optional = this.optional
+      ? html`<span class="file-upload__optional">${this.optionalText}</span>`
+      : nothing;
 
     return html`
       <div
         class="file-upload${dragActive ? ' file-upload--drag-active' : ''}${this
           .error
           ? ' file-upload--error'
-          : ''}${this.disabled ? ' file-upload--disabled' : ''}"
+          : ''}${this.disabled ? ' file-upload--disabled' : ''}${limitReached
+          ? ' file-upload--limit'
+          : ''}"
       >
         <input
           class="file-upload__input"
@@ -748,11 +789,23 @@ export class LuiFileUpload extends LitElement {
           ?disabled=${this.disabled}
           @change=${this._onInputChange}
         />
+        ${this.label
+          ? html`<div class="file-upload__label-wrap">
+              <label class="file-upload__label" id=${ids.label} for=${ids.zone}
+                >${this.label}</label
+              >
+              ${optional}
+            </div>`
+          : nothing}
         <button
           type="button"
+          id=${ids.zone}
           class="file-upload__zone"
-          aria-labelledby=${ids.title}
+          aria-labelledby=${this.label
+            ? `${ids.label} ${ids.title}`
+            : ids.title}
           aria-describedby=${describedBy}
+          aria-disabled=${limitReached ? 'true' : nothing}
           ?disabled=${this.disabled}
           @click=${this._openPicker}
           @dragenter=${this._onDragEnter}
@@ -765,11 +818,9 @@ export class LuiFileUpload extends LitElement {
           </span>
           <span class="file-upload__instructions">
             <span class="file-upload__title" id=${ids.title}
-              >${this.label}${this.optional
-                ? html` <span class="file-upload__optional"
-                    >${this.optionalText}</span
-                  >`
-                : nothing}</span
+              >${this.zoneTitle}${this.label
+                ? nothing
+                : html` ${optional}`}</span
             >
             <span class="file-upload__description" id=${ids.description}
               >${this.description}</span

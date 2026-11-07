@@ -38,6 +38,8 @@ const ptBR = {
     ]
       .filter(Boolean)
       .join(' '),
+  limitReached: (maxFiles) =>
+    \`Limite de \${plural(maxFiles, 'arquivo', 'arquivos')} atingido. Remova um arquivo para adicionar outro.\`,
   removed: (file) => \`\${quote(file)} removido.\`,
   uploading: (file) => \`Enviando \${quote(file)}.\`,
   complete: (file) => \`\${quote(file)} enviado.\`,

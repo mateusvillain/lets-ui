@@ -6,6 +6,7 @@ export default {
   title: 'Form and options/File Upload',
   argTypes: {
     label: { control: 'text' },
+    zoneTitle: { control: 'text', name: 'zone-title' },
     description: { control: 'text' },
     hint: { control: 'text' },
     accept: { control: 'text' },
@@ -38,6 +39,7 @@ export default {
 
 const Template = ({
   label,
+  zoneTitle,
   description,
   hint,
   accept,
@@ -53,6 +55,7 @@ const Template = ({
 }) => {
   const attrs = [
     label ? `label="${label}"` : '',
+    zoneTitle ? `zone-title="${zoneTitle}"` : '',
     description ? `description="${description}"` : '',
     hint ? `hint="${hint}"` : '',
     accept ? `accept="${accept}"` : '',
@@ -74,7 +77,8 @@ const Template = ({
 
 export const FileUpload = Template.bind({});
 FileUpload.args = {
-  label: 'Upload files',
+  label: 'Attachments',
+  zoneTitle: 'Upload files',
   description: 'Drop files here or click to browse',
   hint: '',
   accept: '',
@@ -331,8 +335,12 @@ const cssUploadIcon = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden=
 export const CSSClass = () => `
   <div style="width: 400px; max-width: 100%;">
     <div class="file-upload">
+      <div class="file-upload__label-wrap">
+        <label class="file-upload__label" for="attachments">Attachments</label>
+      </div>
       <label class="file-upload__zone">
         <input
+          id="attachments"
           class="file-upload__input"
           type="file"
           name="attachments"

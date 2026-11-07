@@ -67,6 +67,7 @@ Formats, maximum size and count appear in the zone **before** the picker opens, 
 Com `multiple`, cada nova seleção **soma** aos arquivos já presentes, até `max-files`. Sem `multiple`, um arquivo válido **substitui** o atual.
 
 - **Duplicatas:** um arquivo idêntico a um da lista (nome, tamanho, tipo e data de modificação) é ignorado e anunciado como “already in the list”.
+- **Limite atingido:** quando a lista chega a `max-files`, a área para de aceitar arquivos (clique, teclado e soltar) e fica esmaecida, mas continua focável: ela recebe `aria-disabled`, não `disabled`, para o leitor de tela ainda poder ler o motivo. A linha de restrições passa a dizer “Limit of 3 files reached. Remove a file to add another.” e a mesma frase é anunciada na hora em que a seleção enche o campo. Remover um arquivo libera a área e a linha volta ao normal. Arquivos recusados pela validação não contam para o limite. A frase vem de `messages.limitReached`.
 - **Seletor cancelado:** fechar o seletor do sistema sem escolher nada não altera a lista.
 - **Nomes longos** quebram linha em qualquer ponto em vez de serem truncados, para continuarem identificáveis em telas pequenas e com zoom.
 
@@ -78,6 +79,7 @@ Com `multiple`, cada nova seleção **soma** aos arquivos já presentes, até `m
 With `multiple`, each new selection is **added** to the files already there, up to `max-files`. Without `multiple`, a valid file **replaces** the current one.
 
 - **Duplicates:** a file identical to one in the list (name, size, type and last-modified date) is skipped and announced as “already in the list”.
+- **Limit reached:** when the list reaches `max-files`, the zone stops accepting files (click, keyboard and drop) and is dimmed, but stays focusable: it gets `aria-disabled`, not `disabled`, so a screen reader can still read why. The constraints line becomes “Limit of 3 files reached. Remove a file to add another.” and the same sentence is announced the moment a selection fills the field. Removing a file frees the zone and the line goes back to normal. Files rejected by validation do not count toward the limit. The sentence comes from `messages.limitReached`.
 - **Cancelled picker:** closing the system picker without choosing leaves the list unchanged.
 - **Long names** wrap at any point instead of being truncated, so they stay identifiable on small screens and under zoom.
 
@@ -356,7 +358,8 @@ Os textos que o componente gera são em inglês e podem ser trocados para seguir
 
 | Atributo        | Tipo     | Padrão                                 | Descrição                                                                      |
 | --------------- | -------- | -------------------------------------- | ------------------------------------------------------------------------------ |
-| `label`         | `string` | `'Upload files'`                       | Título da área; é o nome acessível do campo.                                   |
+| `label`         | `string` | `''`                                   | Rótulo do campo, acima da área, como nos outros campos. Vazio = sem rótulo.    |
+| `zone-title`    | `string` | `'Upload files'`                       | Título dentro da área, a chamada para a ação.                                  |
 | `description`   | `string` | `'Drop files here or click to browse'` | Instrução abaixo do título.                                                    |
 | `optional-text` | `string` | `'(optional)'`                         | Texto exibido com `optional`.                                                  |
 | `error-text`    | `string` | `'Select at least one file.'`          | Mensagem exibida quando `error` está ativo.                                    |
@@ -383,7 +386,8 @@ The texts the component generates are in English and can be replaced to follow t
 
 | Attribute       | Type     | Default                                | Description                                                           |
 | --------------- | -------- | -------------------------------------- | --------------------------------------------------------------------- |
-| `label`         | `string` | `'Upload files'`                       | Zone title; it is the field's accessible name.                        |
+| `label`         | `string` | `''`                                   | The field label, above the zone, like the other fields. Empty = no label. |
+| `zone-title`    | `string` | `'Upload files'`                       | Title inside the zone, the call to action.                            |
 | `description`   | `string` | `'Drop files here or click to browse'` | Instruction below the title.                                          |
 | `optional-text` | `string` | `'(optional)'`                         | Text shown with `optional`.                                           |
 | `error-text`    | `string` | `'Select at least one file.'`          | Message shown when `error` is active.                                 |
@@ -428,7 +432,7 @@ document.querySelector('lui-file-upload').messages = {
 <Lang lang="en-US">
 ## Accessibility
 
-- The whole zone is a native `<button>` named by the title (`label`): `Tab` reaches it and `Enter`, `Space` or touch open the picker. Description, constraints, “Required.” (with `required`) and the error message are tied to it through `aria-describedby`.
+- The whole zone is a native `<button>` named by the label (`label`) and the zone title (`zone-title`): `Tab` reaches it and `Enter`, `Space` or touch open the picker. Description, constraints, “Required.” (with `required`) and the error message are tied to it through `aria-describedby`.
 - The list is a labelled `<ul>` (“Selected files”); each item exposes name, size and, when present, the error message or the progress bar.
 - `Tab` and `Shift+Tab` move through the zone and the buttons of **each** file. Remove and Retry are distinct buttons, carrying the file name in their accessible name (“Remove receipt.pdf”, “Retry receipt.pdf”).
 - After a removal, focus goes to the Remove button of the file that took its place, else the previous one, else the zone. After Retry, when the app sets the file back to `uploading`, focus goes to the same file's Remove, never to an element that is gone.
@@ -476,8 +480,12 @@ document.querySelector('lui-file-upload').messages = {
 
 ```html
 <div class="file-upload">
+  <div class="file-upload__label-wrap">
+    <label class="file-upload__label" for="attachments">Attachments</label>
+  </div>
   <label class="file-upload__zone">
     <input
+      id="attachments"
       class="file-upload__input"
       type="file"
       name="attachments"
@@ -525,8 +533,12 @@ document.querySelector('lui-file-upload').messages = {
 
 ```html
 <div class="file-upload">
+  <div class="file-upload__label-wrap">
+    <label class="file-upload__label" for="attachments">Attachments</label>
+  </div>
   <label class="file-upload__zone">
     <input
+      id="attachments"
       class="file-upload__input"
       type="file"
       name="attachments"

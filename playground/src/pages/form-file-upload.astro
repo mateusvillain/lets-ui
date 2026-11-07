@@ -1,0 +1,357 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+
+const MB = 1024 * 1024;
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form com File Upload — Let's UI Playground</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--lui-brand-typography-font-family-body);
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+        margin: 0;
+        padding: 40px 24px 80px;
+      }
+
+      .page-header {
+        margin-bottom: 40px;
+        max-width: 720px;
+      }
+
+      .page-header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+
+      .page-header p {
+        font-size: 0.875rem;
+        color: var(--lui-color-neutral-text-subtle);
+        margin: 0;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 640px) minmax(0, 360px);
+        gap: 40px;
+        align-items: start;
+      }
+
+      @media (max-width: 960px) {
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .card {
+        background: var(--lui-color-neutral-background-default);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .form-body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        min-width: 0;
+      }
+
+      .form-section legend {
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0;
+        margin-bottom: 16px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      @media (max-width: 560px) {
+        .form-row {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid var(--lui-color-neutral-border-subtle);
+        margin: 0;
+      }
+
+      .output {
+        background: var(--lui-color-neutral-background-subtle);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.8125rem;
+        font-family: monospace;
+        min-height: 48px;
+        white-space: pre-wrap;
+        color: var(--lui-color-neutral-text-body);
+      }
+
+      .output.success {
+        border-color: var(--lui-color-success-border-default);
+        color: var(--lui-color-success-text-body);
+      }
+
+      .output.warning {
+        border-color: var(--lui-color-danger-border-default);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>Form com File Upload</h1>
+      <p>
+        Candidatura a uma vaga: campos de texto, select, radio, checkbox e dois
+        File Uploads (currículo único obrigatório e portfólio com vários
+        arquivos). O envio dos arquivos é simulado; ao submeter, o
+        <code>FormData</code> mostra o que o formulário levaria. Um arquivo com
+        “falha” no nome falha na primeira tentativa e passa no Retry.
+      </p>
+    </div>
+
+    <div class="layout">
+      <div class="card">
+        <form class="form-body" id="form-application">
+          <fieldset class="form-section">
+            <legend>Dados pessoais</legend>
+            <div class="form-row">
+              <lui-input
+                name="name"
+                label="Nome"
+                placeholder="Digite seu nome"
+                size="lg"
+                required
+                error-text="Nome é obrigatório."></lui-input>
+              <lui-input
+                name="email"
+                label="E-mail"
+                placeholder="seu@email.com"
+                size="lg"
+                required
+                error-text="E-mail é obrigatório."></lui-input>
+            </div>
+            <lui-native-select
+              name="role"
+              label="Vaga"
+              placeholder="Selecione a vaga"
+              options="Designer de produto,Engenheiro de front-end,Product manager"
+              size="lg"
+              required
+              error-text="Selecione uma vaga."></lui-native-select>
+            <lui-radio-group
+              name="regime"
+              label="Regime de trabalho"
+              required
+              error-text="Selecione um regime.">
+              <lui-radio value="remote" label="Remoto" size="lg"></lui-radio>
+              <lui-radio value="hybrid" label="Híbrido" size="lg"></lui-radio>
+              <lui-radio value="onsite" label="Presencial" size="lg"
+              ></lui-radio>
+            </lui-radio-group>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Arquivos</legend>
+            <lui-file-upload
+              id="resume"
+              name="resume"
+              label="Currículo"
+              zone-title="Enviar arquivo"
+              description="Arraste o arquivo para cá ou clique para escolher"
+              accept=".pdf"
+              max-size={5 * MB}
+              required
+              error-text="Envie seu currículo em PDF."
+              remove-label="Remover"
+              retry-label="Tentar de novo"></lui-file-upload>
+            <lui-file-upload
+              id="portfolio"
+              name="portfolio"
+              label="Portfólio"
+              optional
+              optional-text="(opcional)"
+              zone-title="Enviar arquivos"
+              description="Arraste os arquivos para cá ou clique para escolher"
+              accept=".pdf,.png,.jpg"
+              max-size={10 * MB}
+              max-files="3"
+              multiple
+              remove-label="Remover"
+              retry-label="Tentar de novo"></lui-file-upload>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Conte mais</legend>
+            <lui-textarea
+              name="message"
+              label="Mensagem"
+              placeholder="Por que você quer essa vaga?"
+              size="lg"
+              maxlength="300"></lui-textarea>
+            <lui-checkbox
+              name="terms"
+              value="accepted"
+              label="Autorizo o uso dos meus dados e arquivos no processo seletivo"
+              required
+              size="lg"></lui-checkbox>
+          </fieldset>
+
+          <div class="form-actions">
+            <lui-button type="reset" variant="secondary" size="md"
+              >Limpar</lui-button
+            >
+            <lui-button type="submit" variant="primary" size="md"
+              >Enviar candidatura</lui-button
+            >
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>FormData</h2>
+        <hr class="divider" />
+        <div class="output" id="output">Aguardando submissão...</div>
+      </div>
+    </div>
+
+    <script>
+      import '@lets-ui/components';
+    </script>
+
+    <script type="module">
+      const form = document.getElementById('form-application');
+      const output = document.getElementById('output');
+
+      const kb = (bytes) =>
+        bytes >= 1048576
+          ? `${(bytes / 1048576).toFixed(1)} MB`
+          : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+
+      // Simulated send: ~2s of progress per file. A file with "falha" in the
+      // name fails once, then succeeds when the person retries.
+      const failedOnce = new WeakSet();
+
+      function send(field, file) {
+        if (file.name.includes('falha') && !failedOnce.has(file)) {
+          failedOnce.add(file);
+          field.setFileStatus(file, 'uploading', { progress: 0 });
+          setTimeout(
+            () =>
+              field.setFileStatus(file, 'error', {
+                message: 'A conexão caiu. Tente de novo.',
+              }),
+            800
+          );
+          return;
+        }
+        let progress = 0;
+        field.setFileStatus(file, 'uploading', { progress });
+        const timer = setInterval(() => {
+          // The file may have been removed meanwhile.
+          if (field.getFileStatus(file) === undefined) {
+            clearInterval(timer);
+            return;
+          }
+          progress += 20;
+          if (progress >= 100) {
+            clearInterval(timer);
+            field.setFileStatus(file, 'complete');
+          } else {
+            field.setFileStatus(file, 'uploading', { progress });
+          }
+        }, 400);
+      }
+
+      for (const field of document.querySelectorAll('lui-file-upload')) {
+        field.messages = {
+          limitReached: (max) =>
+            `Limite de ${max} ${max === 1 ? 'arquivo' : 'arquivos'} atingido. Remova um arquivo para adicionar outro.`,
+        };
+        field.addEventListener('lui-change', (e) => {
+          for (const file of e.detail.added) send(field, file);
+        });
+        field.addEventListener('lui-retry', (e) => send(field, e.detail.file));
+      }
+
+      const fields = [...document.querySelectorAll('lui-file-upload')];
+      const pending = () =>
+        fields.flatMap((field) =>
+          [...field.files].filter((file) => {
+            const status = field.getFileStatus(file);
+            return status === 'uploading' || status === 'error';
+          })
+        );
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const blocked = pending();
+        if (blocked.length) {
+          output.className = 'output warning';
+          output.textContent =
+            'Há arquivos enviando ou com falha:\n' +
+            blocked.map((f) => `- ${f.name}`).join('\n');
+          return;
+        }
+
+        const lines = [...new FormData(form).entries()].map(([key, value]) =>
+          value instanceof File
+            ? `${key}: ${value.name} (${kb(value.size)})`
+            : `${key}: "${value}"`
+        );
+        output.className = 'output success';
+        output.textContent = '✓ Submetido:\n' + lines.join('\n');
+      });
+
+      form.addEventListener('reset', () => {
+        output.className = 'output';
+        output.textContent = 'Aguardando submissão...';
+      });
+    </script>
+  </body>
+</html>

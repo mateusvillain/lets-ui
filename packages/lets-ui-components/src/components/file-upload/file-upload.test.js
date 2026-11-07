@@ -195,6 +195,114 @@ describe('validation', () => {
   });
 });
 
+describe('label', () => {
+  it('shows the field label above the zone and names the zone with it and the zone title', async () => {
+    const el = await mount(
+      '<lui-file-upload label="Resume" optional></lui-file-upload>'
+    );
+
+    const label = $(el, '.file-upload__label');
+    expect(label.textContent.trim()).toBe('Resume');
+    expect(label.getAttribute('for')).toBe(zone(el).id);
+    expect(
+      $(el, '.file-upload__label-wrap .file-upload__optional').textContent
+    ).toBe('(optional)');
+    // Optional sits beside the label, not inside the zone.
+    expect($(el, '.file-upload__zone .file-upload__optional')).toBeNull();
+
+    const name = zone(el)
+      .getAttribute('aria-labelledby')
+      .split(' ')
+      .map((id) => el.shadowRoot.getElementById(id).textContent.trim());
+    expect(name).toEqual(['Resume', 'Upload files']);
+  });
+
+  it('keeps optional inside the zone title when there is no label', async () => {
+    const el = await mount('<lui-file-upload optional></lui-file-upload>');
+
+    expect($(el, '.file-upload__label')).toBeNull();
+    expect($(el, '.file-upload__zone .file-upload__optional')).not.toBeNull();
+  });
+
+  it('takes the zone title from zone-title', async () => {
+    const el = await mount(
+      '<lui-file-upload zone-title="Send file"></lui-file-upload>'
+    );
+    expect($(el, '.file-upload__title').textContent.trim()).toBe('Send file');
+  });
+});
+
+describe('limit reached', () => {
+  const frame = (el) =>
+    new Promise((r) => requestAnimationFrame(() => r(el.updateComplete)));
+  const live = (el) => $(el, '[role="status"]').textContent.trim();
+
+  it('stops the zone, says why on screen and in its description, and announces it', async () => {
+    const el = await mount(
+      '<lui-file-upload multiple max-files="2"></lui-file-upload>'
+    );
+    const opened = [];
+    $(el, 'input[type="file"]').addEventListener('click', () => opened.push(1));
+
+    await pick(el, [file('a'), file('b')]);
+    await frame(el);
+
+    expect(zone(el).getAttribute('aria-disabled')).toBe('true');
+    expect(zone(el).disabled).toBe(false);
+    const constraints = $(el, '.file-upload__constraints');
+    expect(constraints.textContent.trim()).toBe(
+      'Limit of 2 files reached. Remove a file to add another.'
+    );
+    expect(zone(el).getAttribute('aria-describedby')).toContain(constraints.id);
+    expect(live(el)).toBe(
+      '2 files added. Limit of 2 files reached. Remove a file to add another.'
+    );
+
+    zone(el).click();
+    await drop(el, [file('c')]);
+    expect(opened).toEqual([]);
+    expect(names(el)).toEqual(['a', 'b']);
+  });
+
+  it('stays focusable so the message can be read', async () => {
+    const el = await mount(
+      '<lui-file-upload multiple max-files="1"></lui-file-upload>'
+    );
+    await pick(el, [file('a')]);
+    zone(el).focus();
+    expect(el.shadowRoot.activeElement).toBe(zone(el));
+  });
+
+  it('accepts files again after one is removed', async () => {
+    const el = await mount(
+      '<lui-file-upload multiple max-files="2" accept=".pdf"></lui-file-upload>'
+    );
+    await pick(el, [file('a.pdf'), file('b.pdf')]);
+
+    $(el, '.file-upload__action--remove').click();
+    await el.updateComplete;
+
+    expect(zone(el).hasAttribute('aria-disabled')).toBe(false);
+    expect($(el, '.file-upload__constraints').textContent.trim()).toBe(
+      'PDF · Max. 2 files'
+    );
+    await drop(el, [file('c.pdf')]);
+    expect(names(el)).toEqual(['b.pdf', 'c.pdf']);
+  });
+
+  it('does not count rejected files and never applies to single mode', async () => {
+    const el = await mount(
+      '<lui-file-upload multiple max-files="2" accept=".pdf"></lui-file-upload>'
+    );
+    await pick(el, [file('a.pdf'), file('b.png')]);
+    expect(zone(el).hasAttribute('aria-disabled')).toBe(false);
+
+    const single = await mount('<lui-file-upload></lui-file-upload>');
+    await pick(single, [file('a')]);
+    expect(zone(single).hasAttribute('aria-disabled')).toBe(false);
+  });
+});
+
 describe('removal and focus', () => {
   it('names each Remove button after its file', async () => {
     const el = await mount('<lui-file-upload multiple></lui-file-upload>');

@@ -1,5 +1,6 @@
 @use '../utilities/functions' as *;
 @use '../utilities/mixins' as *;
+@use 'field';
 
 // File Upload — a drop zone that opens the file picker, followed by the list
 // of files the field holds. Each item shows its sending state as reported by
@@ -11,6 +12,17 @@
   width: 100%;
   box-sizing: border-box;
   color: text(body);
+
+  // Field label -------------------------------------------------------------
+  // Above the zone, like the other form fields. Optional: without it the zone
+  // title stands alone.
+  &__label-wrap {
+    @include field.label-wrap;
+  }
+
+  &__label {
+    @include font-scale(body--lg);
+  }
 
   // Drop zone ---------------------------------------------------------------
   &__zone {
@@ -31,7 +43,8 @@
     cursor: pointer;
 
     &:disabled,
-    .file-upload--disabled & {
+    .file-upload--disabled &,
+    .file-upload--limit & {
       cursor: not-allowed;
     }
 
@@ -132,6 +145,16 @@
 
   &--error &__message {
     color: text(error);
+  }
+
+  // State: limit -----------------------------------------------------------
+  // `multiple` is full. The zone is `aria-disabled`, not `disabled`, so it
+  // keeps focus and a screen reader can still read why it stopped; only the
+  // zone dims, the list below stays fully usable to remove files. The
+  // constraints line keeps full strength: it carries the reason.
+  &--limit &__zone &__icon,
+  &--limit &__zone &__instructions {
+    opacity: opacity(disabled);
   }
 
   // State: disabled ---------------------------------------------------------
@@ -262,7 +285,8 @@
 
 // Hover and press come last: they mix into whatever resting border the state
 // modifiers above set through `--lui-border`.
-.file-upload:not(.file-upload--disabled) .file-upload__zone:not(:disabled) {
+.file-upload:not(.file-upload--disabled, .file-upload--limit)
+  .file-upload__zone:not(:disabled) {
   &:hover {
     border-color: state-border(hover);
 
