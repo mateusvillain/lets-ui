@@ -1,0 +1,301 @@
+@use '../utilities/functions' as *;
+@use '../utilities/mixins' as *;
+@use 'field';
+
+// File Upload — a drop zone that opens the file picker, followed by the list
+// of files the field holds. Each item shows its sending state as reported by
+// the app: selected, uploading (with a Progress Bar), complete or failed.
+
+.file-upload {
+  @include flex(column, stretch, flex-start, fluid(8), nowrap);
+
+  width: 100%;
+  box-sizing: border-box;
+  color: text(body);
+
+  // Field label -------------------------------------------------------------
+  // Above the zone, like the other form fields. Optional: without it the zone
+  // title stands alone.
+  &__label-wrap {
+    @include field.label-wrap;
+  }
+
+  &__label {
+    @include font-scale(body--lg);
+  }
+
+  // Drop zone ---------------------------------------------------------------
+  &__zone {
+    @include flex(column, center, flex-start, fluid(16), nowrap);
+    @include state-border-layer(stroke(neutral, subtle), box-shadow 0.2s ease);
+
+    width: 100%;
+    box-sizing: border-box;
+    padding: fluid(24);
+    margin: 0;
+    border-width: width(1);
+    border-style: dashed;
+    border-radius: radius(md);
+    background-color: transparent;
+    color: text(body);
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+
+    &:disabled,
+    .file-upload--disabled &,
+    .file-upload--limit & {
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    // Without the Web Component the zone is a <label> around the native
+    // input, which is what takes focus — so the ring follows it.
+    &:focus-visible,
+    &:has(.file-upload__input:focus-visible) {
+      border-color: stroke(primary);
+      box-shadow: focus-ring(primary);
+    }
+
+    @media (forced-colors: active) {
+      &:focus-visible,
+      &:has(.file-upload__input:focus-visible) {
+        outline: width(2) solid CanvasText;
+        outline-offset: width(2);
+      }
+    }
+  }
+
+  &__icon {
+    @include center;
+
+    flex: none;
+    padding: fixed(8);
+    border: width(1) solid stroke(neutral, subtle);
+    border-radius: radius(circle);
+    background-color: bg(surface, secondary);
+    color: icon(neutral);
+
+    svg {
+      display: block;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  &__instructions {
+    @include flex(column, center, flex-start, 0, nowrap);
+
+    max-width: 100%;
+  }
+
+  &__title {
+    @include font-scale(body--lg);
+
+    color: text(heading);
+    font-weight: weight(bold);
+  }
+
+  &__description {
+    @include font-scale(body--lg);
+
+    color: text(body);
+  }
+
+  &__optional {
+    @include font-scale(body--md);
+
+    color: text(caption);
+    font-weight: weight(regular);
+  }
+
+  &__constraints {
+    @include font-scale(body--sm);
+
+    color: text(caption);
+  }
+
+  &__message {
+    @include font-scale(body--md);
+
+    margin: 0;
+    color: text(caption);
+  }
+
+  // State: drag-active ------------------------------------------------------
+  // Through `--lui-border`, like the error state, so the hover rule at the
+  // end of the file still has something to mix into.
+  &--drag-active &__zone {
+    @include state-border-base(stroke(primary));
+  }
+
+  // State: error ------------------------------------------------------------
+  &--error &__zone {
+    @include state-border-base(stroke(danger));
+  }
+
+  &--error &__zone:focus-visible,
+  &--error &__zone:has(.file-upload__input:focus-visible) {
+    border-color: stroke(danger);
+    box-shadow: focus-ring(danger);
+  }
+
+  &--error &__message {
+    color: text(error);
+  }
+
+  // State: limit -----------------------------------------------------------
+  // `multiple` is full. The zone is `aria-disabled`, not `disabled`, so it
+  // keeps focus and a screen reader can still read why it stopped; only the
+  // zone dims, the list below stays fully usable to remove files. The
+  // constraints line keeps full strength: it carries the reason.
+  &--limit &__zone &__icon,
+  &--limit &__zone &__instructions {
+    opacity: opacity(disabled);
+  }
+
+  // State: disabled ---------------------------------------------------------
+  &--disabled {
+    opacity: opacity(disabled);
+  }
+
+  // Kept for keyboard and screen reader users, out of sight. The Web
+  // Component hides its own input entirely and opens it from the zone.
+  &__input {
+    @include sr-only;
+
+    // The zone draws the ring; the 1px input would add a stray dot.
+    &:focus {
+      outline: none;
+    }
+  }
+
+  // File list ---------------------------------------------------------------
+  &__list {
+    @include flex(column, stretch, flex-start, fluid(16), nowrap);
+
+    padding: 0;
+    margin: fluid(8) 0 0;
+    list-style: none;
+  }
+
+  &__item {
+    @include flex(column, stretch, flex-start, fluid(12), nowrap);
+
+    min-width: 0;
+    padding: fluid(12);
+    border: width(1) solid stroke(neutral, subtle);
+    border-radius: radius(md);
+    background-color: bg(surface, neutral);
+
+    &--error {
+      border-color: stroke(danger);
+    }
+  }
+
+  &__row {
+    @include flex(row, center, flex-start, fluid(12), nowrap);
+
+    min-width: 0;
+  }
+
+  &__file-icon {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: icon(neutral);
+  }
+
+  &__details {
+    @include flex(column, flex-start, flex-start, 0, nowrap);
+
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // Long names wrap at any point instead of truncating, so the whole name
+  // stays readable on a narrow screen and under zoom.
+  &__name {
+    @include font-scale(body--lg);
+
+    max-width: 100%;
+    color: text(body);
+    overflow-wrap: anywhere;
+  }
+
+  &__size {
+    @include font-scale(body--md);
+
+    color: text(caption);
+  }
+
+  &__actions {
+    @include flex(row, center, flex-end, fluid(12), nowrap);
+
+    flex: none;
+  }
+
+  &__action {
+    @include center;
+    @include states(primary, null, $bg: bg(surface, neutral));
+
+    flex: none;
+    padding: fixed(8);
+    margin: 0;
+    border: none;
+    border-radius: radius(md);
+    color: icon(neutral);
+    cursor: pointer;
+
+    svg {
+      display: block;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  // Status line under the name: a local validation error or a failed send.
+  // The text stays in the body colour, as in the prototype; the red icon and
+  // the item border carry the error. Indented to line up with the name.
+  &__status {
+    @include flex(row, flex-start, flex-start, fluid(8), nowrap);
+    @include font-scale(body--md);
+
+    padding-inline-start: calc(1.5rem + #{fluid(12)});
+    color: text(body);
+
+    svg {
+      flex: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: icon(danger);
+    }
+  }
+
+  // Sending progress, drawn with the Progress Bar's own classes so the bar
+  // looks and behaves the same everywhere. Indented to line up with the name.
+  &__progress {
+    box-sizing: border-box;
+    padding-inline-start: calc(1.5rem + #{fluid(12)});
+  }
+}
+
+// Hover and press come last: they mix into whatever resting border the state
+// modifiers above set through `--lui-border`.
+.file-upload:not(.file-upload--disabled, .file-upload--limit)
+  .file-upload__zone:not(:disabled) {
+  &:hover {
+    border-color: state-border(hover);
+
+    @include state-timing(hover);
+  }
+
+  &:active {
+    border-color: state-border(pressed);
+
+    @include state-timing(pressed);
+  }
+}

@@ -1,0 +1,84 @@
+---
+title: "File Upload"
+subtitle: "Campo para anexar arquivos a um formulário: uma área de soltar que abre o seletor nativo, mais a lista dos arquivos escolhidos."
+---
+
+<ComponentEmbed component="FileUpload" variant="default" />
+
+## Boas práticas
+
+<DosDonts variant="do" title="Anexar arquivos do próprio dispositivo">
+  Um comprovante, um currículo, as imagens de um anúncio.
+</DosDonts>
+
+<DosDonts variant="do" title="Um ou vários arquivos">
+  O mesmo campo atende um arquivo só e uma lista, com limite de quantidade, tamanho e tipo.
+</DosDonts>
+
+<DosDonts variant="dont" title="Um único arquivo num formulário curto">
+  Quando não há lista nem arrastar e soltar, um `<input type="file">` nativo pode bastar.
+</DosDonts>
+
+<DosDonts variant="dont" title="Escolher entre arquivos que já estão no sistema">
+  Use uma lista ou um [Select](../select/index.mdx), não o seletor do dispositivo.
+</DosDonts>
+
+<DosDonts variant="dont" title="Texto colado ou digitado">
+  Use o [Textarea](../textarea/index.mdx).
+</DosDonts>
+
+## Anatomia
+
+![Anatomia do File Upload: label, área, ícone, título da área, descrição, restrições, mensagem de erro, lista de arquivos e ações do arquivo](./anatomy.png)
+
+1. **Label**: nomeia o campo, acima da área. Opcional.
+2. **Área**: a região que recebe o arquivo solto e abre o seletor por clique, toque e teclado.
+3. **Ícone**: marca a área como destino de envio.
+4. **Título da área**: a chamada para a ação, como "Upload files".
+5. **Descrição**: explica como adicionar arquivos, como "Drop files here or click to browse".
+6. **Restrições**: formatos aceitos, tamanho máximo e quantidade máxima.
+7. **Mensagem de erro**: aparece abaixo da área quando o campo é inválido.
+8. **Lista de arquivos**: um item por arquivo, com nome, tamanho, estado e ações.
+9. **Ações do arquivo**: Remover em todos os itens, e Retry quando o envio falhou.
+
+## Variações
+
+| Variação | Quando usar |
+| --- | --- |
+| **Arquivo único** | Um documento só, como um contrato. Um novo arquivo válido substitui o atual. |
+| **Vários arquivos** (`multiple`) | Vários anexos. Cada seleção soma à lista. |
+| **Com limite** (`max-files`) | O produto aceita só uma quantidade definida de arquivos. |
+| **Opcional** (`optional`) | O arquivo não é necessário para enviar o formulário. |
+
+## Estados
+
+| Estado | O que a pessoa vê |
+| --- | --- |
+| **Default** | Borda tracejada, ícone, título, descrição e restrições. |
+| **Hover e foco** | Borda e anel de foco na cor primária, como nos outros campos. |
+| **Arrastando arquivos** | Borda primária enquanto há arquivos sobre a área. |
+| **Error** | Borda de perigo e a mensagem de erro abaixo da área. |
+| **Limite atingido** | A área fica esmaecida e para de aceitar arquivos. A linha de restrições diz que o limite foi atingido. |
+| **Disabled** | A área e as ações dos arquivos ficam bloqueadas. |
+
+<ComponentEmbed component="FileUpload" variant="drag-active" />
+
+<ComponentEmbed component="FileUpload" variant="error" />
+
+### Estados do arquivo
+
+Cada arquivo da lista mostra em que ponto está o envio, como informado pela aplicação.
+
+| Estado | O que a pessoa vê |
+| --- | --- |
+| **Selected** | Nome e tamanho. |
+| **Uploading** | Barra de progresso com a porcentagem, ou barra indeterminada quando a aplicação não tem o progresso. |
+| **Complete** | Nome e tamanho, como num arquivo selecionado. O estado é lido por leitores de tela. |
+| **Failed** | Borda de perigo, ícone, mensagem e um botão **Retry**. |
+| **Recusado** | Borda de perigo e uma mensagem que diz o arquivo, o problema e como resolver. O arquivo não faz parte do campo. |
+
+## Relacionados
+
+- [Textarea](../textarea/index.mdx): texto digitado em vez de arquivos.
+- [Select](../select/index.mdx): escolha entre opções existentes.
+- [Button](../../actionable/button/index.mdx): o mesmo padrão de ação das ações dos arquivos.

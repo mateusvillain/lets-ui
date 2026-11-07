@@ -28,6 +28,7 @@ declare module 'react' {
       'lui-drawer': LuiElement;
       'lui-dropdown-menu': LuiElement;
       'lui-empty-state': LuiElement;
+      'lui-file-upload': LuiElement;
       'lui-flex': LuiElement;
       'lui-flex-item': LuiElement;
       'lui-float': LuiElement;

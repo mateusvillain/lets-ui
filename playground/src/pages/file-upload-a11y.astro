@@ -1,0 +1,695 @@
+---
+import '@lets-ui/tokens';
+import '@lets-ui/styles';
+
+// One string feeds both the header code block and the script below, so the
+// preview never drifts from what runs.
+const MESSAGES = `const quote = (file) => \`“\${file.name}”\`;
+const plural = (n, one, many) => \`\${n} \${n === 1 ? one : many}\`;
+
+const ptBR = {
+  constraints: ({ formats, maxSize, maxFiles }) =>
+    [
+      formats,
+      maxFiles ? \`Máx. \${plural(maxFiles, 'arquivo', 'arquivos')}\` : '',
+      maxSize ? \`Até \${maxSize}\` : '',
+    ]
+      .filter(Boolean)
+      .join(' · '),
+  type: (file, formats) =>
+    \`\${quote(file)} não é um tipo aceito. Escolha um arquivo \${formats}.\`,
+  size: (file, size, maxSize) =>
+    \`\${quote(file)} tem \${size}, acima do limite de \${maxSize}. Escolha um arquivo menor.\`,
+  count: (file, maxFiles) =>
+    maxFiles === 1
+      ? \`\${quote(file)} não foi adicionado: este campo aceita só um arquivo. Escolha um único arquivo.\`
+      : \`\${quote(file)} não foi adicionado: o limite é de \${maxFiles} arquivos. Remova um arquivo para adicionar outro.\`,
+  added: (added, rejected, duplicates) =>
+    [
+      added.length
+        ? \`\${plural(added.length, 'arquivo adicionado', 'arquivos adicionados')}.\`
+        : '',
+      rejected.length
+        ? \`\${plural(rejected.length, 'arquivo não adicionado', 'arquivos não adicionados')}.\`
+        : '',
+      duplicates.length
+        ? \`\${duplicates.map(quote).join(', ')} já está na lista.\`
+        : '',
+    ]
+      .filter(Boolean)
+      .join(' '),
+  limitReached: (maxFiles) =>
+    \`Limite de \${plural(maxFiles, 'arquivo', 'arquivos')} atingido. Remova um arquivo para adicionar outro.\`,
+  removed: (file) => \`\${quote(file)} removido.\`,
+  uploading: (file) => \`Enviando \${quote(file)}.\`,
+  complete: (file) => \`\${quote(file)} enviado.\`,
+  failed: (file, message) => \`Falha ao enviar \${quote(file)}. \${message}\`,
+  failedStatus: 'Falhou',
+  progressLabel: (file) => \`Enviando \${file.name}\`,
+  listLabel: 'Arquivos selecionados',
+  required: 'Obrigatório.',
+};
+
+document.querySelectorAll('lui-file-upload').forEach((field) => {
+  if (!field.closest('[lang="en"]')) field.messages = ptBR;
+});`;
+
+const KB = 1024;
+const MB = 1024 * KB;
+
+// `seeds` become buttons that put files in the field as if picked, so each
+// test can be repeated without the system file dialog. `upload` turns on a
+// simulated send: `auto` sends on selection, `send` waits for the Enviar
+// button, `indeterminate` sends without reporting progress. A file with
+// "falha" in the name fails on its first attempt and succeeds on retry.
+const scenarios = [
+  {
+    title: '1. Arquivo único obrigatório',
+    description:
+      'Submeter vazio: o foco vai para a zona e o erro é lido com ela (<code>aria-describedby</code>), junto de “Obrigatório.”. Escolher um PDF limpa o erro; escolher outro <strong>substitui</strong> o primeiro, e o anúncio diz “1 arquivo adicionado.”. Uma imagem é recusada e o PDF já escolhido fica.',
+    reset: true,
+    seeds: [
+      { label: 'Inserir PDF', files: [['contrato.pdf', 240 * KB, 'application/pdf']] },
+      { label: 'Inserir outro PDF', files: [['contrato-assinado.pdf', 310 * KB, 'application/pdf']] },
+      { label: 'Inserir imagem', files: [['foto.png', 900 * KB, 'image/png']] },
+    ],
+    code: `<lui-file-upload
+  required
+  name="contrato"
+  accept=".pdf"
+  max-size="${5 * MB}"
+  label="Contrato"
+  description="Arraste o arquivo para cá ou clique para escolher"
+  error-text="Envie o contrato em PDF."
+  remove-label="Remover"
+></lui-file-upload>`,
+  },
+  {
+    title: '2. Validação: tipo, tamanho, quantidade e duplicata',
+    description:
+      '“Inserir 6 arquivos” manda, de uma vez, 3 válidos, um <code>.xlsx</code> (tipo), um PNG de 5 MB (tamanho) e um 4º PDF (quantidade). Ouvir o resumo “3 arquivos adicionados. 3 arquivos não adicionados.” e navegar pela lista: cada recusado tem a mensagem dele. Depois, “Inserir duplicata” anuncia ““relatorio.pdf” já está na lista.”.',
+    reset: true,
+    seeds: [
+      {
+        label: 'Inserir 6 arquivos',
+        files: [
+          ['relatorio.pdf', 320 * KB, 'application/pdf'],
+          ['grafico.png', 780 * KB, 'image/png'],
+          ['planilha.xlsx', 45 * KB, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+          ['video-frame.png', 5 * MB, 'image/png'],
+          ['capa.jpg', 410 * KB, 'image/jpeg'],
+          ['anexo.pdf', 120 * KB, 'application/pdf'],
+        ],
+      },
+      { label: 'Inserir duplicata', files: [['relatorio.pdf', 320 * KB, 'application/pdf']] },
+    ],
+    code: `<lui-file-upload
+  multiple
+  name="anexos"
+  accept=".pdf,.png,.jpg"
+  max-size="${2 * MB}"
+  max-files="3"
+  label="Anexos"
+  description="Arraste os arquivos para cá ou clique para escolher"
+  remove-label="Remover"
+></lui-file-upload>`,
+  },
+  {
+    title: '3. Envio automático com progresso',
+    description:
+      'Os arquivos são enviados assim que escolhidos. Com dois de uma vez, os anúncios saem juntos: “Enviando “a”. Enviando “b”.”. Os ticks de progresso <strong>não</strong> são anunciados; navegar até a barra lê o nome e a porcentagem. Ao terminar: ““a” enviado.”, e o item continua dizendo isso quando lido.',
+    upload: 'auto',
+    seeds: [
+      {
+        label: 'Inserir 2 arquivos',
+        files: [
+          ['proposta.pdf', 1.4 * MB, 'application/pdf'],
+          ['orcamento.pdf', 860 * KB, 'application/pdf'],
+        ],
+      },
+    ],
+    code: `<lui-file-upload
+  multiple
+  name="documentos"
+  max-files="5"
+  max-size="${10 * MB}"
+  label="Documentos"
+  description="Arraste os arquivos para cá ou clique para escolher. O envio começa na hora."
+  remove-label="Remover"
+></lui-file-upload>`,
+  },
+  {
+    title: '4. Falha e nova tentativa',
+    description:
+      '<code>comprovante-falha.pdf</code> falha na metade: anúncio “Falha ao enviar … Verifique sua conexão e tente de novo.” e um botão “Tentar de novo comprovante-falha.pdf”. Ativá-lo: o botão some e o foco vai para “Remover” do mesmo item, não para o topo da página. A segunda tentativa conclui. Remover um arquivo durante o envio cancela o envio.',
+    upload: 'auto',
+    seeds: [
+      {
+        label: 'Inserir 2 arquivos',
+        files: [
+          ['comprovante-falha.pdf', 1.1 * MB, 'application/pdf'],
+          ['identidade.pdf', 640 * KB, 'application/pdf'],
+        ],
+      },
+    ],
+    code: `<lui-file-upload
+  multiple
+  name="comprovantes"
+  max-files="5"
+  label="Comprovantes"
+  description="Arraste os arquivos para cá ou clique para escolher. O envio começa na hora."
+  remove-label="Remover"
+  retry-label="Tentar de novo"
+></lui-file-upload>`,
+  },
+  {
+    title: '5. Progresso indeterminado',
+    description:
+      'Sem <code>progress</code>: a barra não tem <code>aria-valuenow</code>, e o leitor de tela deve ler só o nome (“Enviando foto.jpg”), sem porcentagem. Conclui após ~3 s.',
+    upload: 'indeterminate',
+    seeds: [{ label: 'Inserir imagem', files: [['foto.jpg', 2.3 * MB, 'image/jpeg']] }],
+    code: `<lui-file-upload
+  name="foto"
+  accept="image/*"
+  label="Foto de perfil"
+  description="Arraste a imagem para cá ou clique para escolher"
+  remove-label="Remover"
+></lui-file-upload>`,
+  },
+  {
+    title: '6. Envio com botão',
+    description:
+      'Escolher arquivos não envia nada: os itens ficam só com nome e tamanho, e o botão “Enviar” habilita. Ativar “Enviar” começa o envio de todos. Conferir que o leitor diz “escurecido/indisponível” no botão antes de haver arquivos.',
+    upload: 'send',
+    seeds: [
+      {
+        label: 'Inserir 3 arquivos',
+        files: [
+          ['ata-reuniao.pdf', 210 * KB, 'application/pdf'],
+          ['apresentacao-falha.pdf', 3.2 * MB, 'application/pdf'],
+          ['lista-presenca.pdf', 95 * KB, 'application/pdf'],
+        ],
+      },
+    ],
+    code: `<lui-file-upload
+  multiple
+  name="atas"
+  max-files="10"
+  label="Atas"
+  description="Arraste os arquivos para cá ou clique para escolher. Eles são enviados quando você ativar Enviar."
+  remove-label="Remover"
+  retry-label="Tentar de novo"
+></lui-file-upload>`,
+  },
+  {
+    title: '7. Opcional com dica personalizada',
+    description:
+      'O nome acessível deve ser “Currículo (opcional)”. A dica (<code>hint</code>) substitui a linha de restrições gerada e é lida como descrição. Submeter vazio não dá erro.',
+    reset: true,
+    seeds: [{ label: 'Inserir currículo', files: [['curriculo.docx', 180 * KB, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']] }],
+    code: `<lui-file-upload
+  optional
+  optional-text="(opcional)"
+  name="curriculo"
+  accept=".pdf,.docx"
+  max-size="${10 * MB}"
+  hint="PDF ou Word, até 10 MB"
+  label="Currículo"
+  description="Arraste o arquivo para cá ou clique para escolher"
+  remove-label="Remover"
+></lui-file-upload>`,
+  },
+  {
+    title: '8. Desabilitado',
+    description:
+      'A zona é um <code>&lt;button disabled&gt;</code>: deve sair da ordem de Tab mas ser encontrada pela navegação do leitor, lida como indisponível. “Alternar desabilitado” troca o estado em tempo real; os botões Remover também desabilitam.',
+    toggle: true,
+    seeds: [{ label: 'Inserir PDF', files: [['termo.pdf', 150 * KB, 'application/pdf']] }],
+    code: `<lui-file-upload
+  disabled
+  name="termo"
+  accept=".pdf"
+  label="Termo de adesão"
+  description="Arraste o arquivo para cá ou clique para escolher"
+  remove-label="Remover"
+></lui-file-upload>`,
+  },
+  {
+    title: '9. Em inglês (padrões)',
+    description:
+      'Sem <code>messages</code> nem textos: tudo vem dos padrões em inglês, e o card tem <code>lang="en"</code> para o leitor trocar de voz. Mesmo cenário de falha do 4: <code>invoice-fail.pdf</code> falha na primeira tentativa.',
+    lang: 'en',
+    upload: 'auto',
+    reset: true,
+    seeds: [
+      {
+        label: 'Insert 2 files',
+        files: [
+          ['invoice-fail.pdf', 1.1 * MB, 'application/pdf'],
+          ['receipt.pdf', 640 * KB, 'application/pdf'],
+        ],
+      },
+      { label: 'Insert image', files: [['photo.png', 900 * KB, 'image/png']] },
+    ],
+    code: `<lui-file-upload
+  required
+  multiple
+  name="invoices"
+  accept=".pdf"
+  max-files="3"
+  max-size="${5 * MB}"
+></lui-file-upload>`,
+  },
+];
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme="light" data-brand="lets-ui">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Upload — leitor de tela — Let's UI Playground</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--lui-brand-typography-font-family-body);
+        background: var(--lui-color-neutral-background-surface);
+        color: var(--lui-color-neutral-text-body);
+        margin: 0;
+        padding: 40px 24px 80px;
+      }
+
+      .page-header {
+        margin-bottom: 40px;
+        max-width: 720px;
+      }
+
+      .page-header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+
+      .page-header p,
+      .page-header li,
+      .card p.description {
+        font-size: 0.875rem;
+        color: var(--lui-color-neutral-text-subtle);
+        margin: 0 0 8px;
+      }
+
+      .page-header ul {
+        margin: 0 0 8px;
+        padding-left: 20px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 24px;
+        align-items: start;
+      }
+
+      .card {
+        background: var(--lui-color-neutral-background-default);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 12px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .card h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .card form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .seeds,
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .actions {
+        justify-content: flex-end;
+      }
+
+      .output {
+        background: var(--lui-color-neutral-background-subtle);
+        border: 1px solid var(--lui-color-neutral-border-subtle);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.8125rem;
+        font-family: monospace;
+        min-height: 48px;
+        max-height: 200px;
+        overflow: auto;
+        white-space: pre-wrap;
+        margin: 0;
+      }
+
+      code {
+        font-size: 0.8125rem;
+      }
+
+      .page-header lui-code-block {
+        margin: 16px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>File Upload — testes com leitor de tela</h1>
+      <p>
+        Cada card é um cenário. Os botões “Inserir …” colocam arquivos de
+        exemplo no campo como se tivessem sido escolhidos, para repetir o teste
+        sem passar pela janela de arquivos do sistema. O seletor real e o
+        arrastar-e-soltar também funcionam.
+      </p>
+      <ul>
+        <li>
+          O envio é simulado. Arquivos com <code>falha</code> (ou
+          <code>fail</code>) no nome falham na primeira tentativa e concluem na
+          segunda.
+        </li>
+        <li>
+          O registro abaixo de cada campo <strong>não</strong> é uma região
+          viva: ele só serve para conferir, depois, o que o componente
+          disparou. O que o leitor deve falar vem da região
+          <code>role="status"</code> do próprio componente.
+        </li>
+        <li>
+          Testar com VoiceOver (Safari, macOS e iOS), NVDA (Firefox e Chrome) e
+          TalkBack (Chrome). Anotar o que foi ouvido, não o que se esperava.
+        </li>
+      </ul>
+      <p>Mensagens em pt-BR aplicadas a todos os campos fora do card 9:</p>
+      <lui-code-block label="mensagens.js" language="javascript" set:text={MESSAGES} />
+    </header>
+
+    <div class="grid">
+      {
+        scenarios.map((scenario) => (
+          <section class="card" lang={scenario.lang}>
+            <h2>{scenario.title}</h2>
+            <p class="description" set:html={scenario.description} />
+            <form data-demo data-upload={scenario.upload}>
+              <Fragment set:html={scenario.code} />
+              {scenario.seeds && (
+                <div class="seeds">
+                  {scenario.seeds.map((seed) => (
+                    <lui-button
+                      type="button"
+                      variant="secondary"
+                      size="md"
+                      data-seed={JSON.stringify(seed.files)}
+                    >
+                      {seed.label}
+                    </lui-button>
+                  ))}
+                  {scenario.toggle && (
+                    <lui-button type="button" variant="secondary" size="md" data-toggle>
+                      Alternar desabilitado
+                    </lui-button>
+                  )}
+                </div>
+              )}
+              <div class="actions">
+                {scenario.reset && (
+                  <lui-button type="reset" variant="secondary" size="md">
+                    {scenario.lang === 'en' ? 'Reset' : 'Limpar'}
+                  </lui-button>
+                )}
+                {scenario.upload === 'send' && (
+                  <lui-button type="button" variant="primary" size="md" data-send disabled>
+                    Enviar
+                  </lui-button>
+                )}
+                {scenario.upload !== 'send' && (
+                  <lui-button type="submit" variant="primary" size="md">
+                    {scenario.lang === 'en' ? 'Submit' : 'Submeter'}
+                  </lui-button>
+                )}
+              </div>
+            </form>
+            <pre class="output" />
+            <lui-code-block label="index.html" language="html" set:text={scenario.code} />
+          </section>
+        ))
+      }
+    </div>
+
+    <script>
+      import '@lets-ui/components';
+      import { LuiCodeBlock } from '@lets-ui/components';
+      import hljs from 'highlight.js/lib/core';
+      import javascript from 'highlight.js/lib/languages/javascript';
+      import xml from 'highlight.js/lib/languages/xml';
+
+      hljs.registerLanguage('javascript', javascript);
+      hljs.registerLanguage('xml', xml);
+      LuiCodeBlock.highlighter = (code: string, language: string) =>
+        hljs.getLanguage(language)
+          ? hljs.highlight(code, { language }).value
+          : null;
+
+      // ------------------------------------------------- the header's messages
+      const quote = (file: File) => `“${file.name}”`;
+      const plural = (n: number, one: string, many: string) =>
+        `${n} ${n === 1 ? one : many}`;
+
+      const ptBR = {
+        constraints: ({ formats, maxSize, maxFiles }: any) =>
+          [
+            formats,
+            maxFiles ? `Máx. ${plural(maxFiles, 'arquivo', 'arquivos')}` : '',
+            maxSize ? `Até ${maxSize}` : '',
+          ]
+            .filter(Boolean)
+            .join(' · '),
+        type: (file: File, formats: string) =>
+          `${quote(file)} não é um tipo aceito. Escolha um arquivo ${formats}.`,
+        size: (file: File, size: string, maxSize: string) =>
+          `${quote(file)} tem ${size}, acima do limite de ${maxSize}. Escolha um arquivo menor.`,
+        count: (file: File, maxFiles: number) =>
+          maxFiles === 1
+            ? `${quote(file)} não foi adicionado: este campo aceita só um arquivo. Escolha um único arquivo.`
+            : `${quote(file)} não foi adicionado: o limite é de ${maxFiles} arquivos. Remova um arquivo para adicionar outro.`,
+        added: (added: File[], rejected: File[], duplicates: File[]) =>
+          [
+            added.length
+              ? `${plural(added.length, 'arquivo adicionado', 'arquivos adicionados')}.`
+              : '',
+            rejected.length
+              ? `${plural(rejected.length, 'arquivo não adicionado', 'arquivos não adicionados')}.`
+              : '',
+            duplicates.length
+              ? `${duplicates.map(quote).join(', ')} já está na lista.`
+              : '',
+          ]
+            .filter(Boolean)
+            .join(' '),
+        removed: (file: File) => `${quote(file)} removido.`,
+        uploading: (file: File) => `Enviando ${quote(file)}.`,
+        complete: (file: File) => `${quote(file)} enviado.`,
+        failed: (file: File, message: string) =>
+          `Falha ao enviar ${quote(file)}. ${message}`,
+        failedStatus: 'Falhou',
+        progressLabel: (file: File) => `Enviando ${file.name}`,
+        listLabel: 'Arquivos selecionados',
+        required: 'Obrigatório.',
+      };
+
+      document.querySelectorAll<any>('lui-file-upload').forEach((field) => {
+        if (!field.closest('[lang="en"]')) field.messages = ptBR;
+      });
+
+      // --------------------------------------------------------------- helpers
+      type Seed = [name: string, size: number, type: string];
+
+      // A fixed `lastModified` makes the same seed identical to the copy
+      // already in the list, so "Inserir duplicata" is caught as one.
+      const makeFile = ([name, size, type]: Seed) =>
+        new File([new Uint8Array(Math.round(size))], name, {
+          type,
+          lastModified: 1,
+        });
+
+      // Same path as the system picker: files on the hidden input + `change`.
+      function seed(field: any, files: File[]) {
+        const transfer = new DataTransfer();
+        files.forEach((f) => transfer.items.add(f));
+        const input = field.shadowRoot.querySelector('input[type="file"]');
+        input.files = transfer.files;
+        input.dispatchEvent(new Event('change'));
+      }
+
+      function fakeUpload(
+        file: File,
+        fail: boolean,
+        onProgress: ((value: number) => void) | null,
+        signal: AbortSignal
+      ) {
+        return new Promise<void>((resolve, reject) => {
+          let value = 0;
+          const timer = setInterval(
+            () => {
+              value = onProgress
+                ? Math.min(100, value + 10 + Math.random() * 15)
+                : 100;
+              if (fail && value >= 50) {
+                clearInterval(timer);
+                reject(new Error('Network error'));
+                return;
+              }
+              onProgress?.(Math.round(value));
+              if (value >= 100) {
+                clearInterval(timer);
+                resolve();
+              }
+            },
+            onProgress ? 400 : 3000
+          );
+          signal.addEventListener('abort', () => {
+            clearInterval(timer);
+            reject(new Error('Aborted'));
+          });
+        });
+      }
+
+      // ------------------------------------------------------------- scenarios
+      document
+        .querySelectorAll<HTMLFormElement>('form[data-demo]')
+        .forEach((form) => {
+          const output = form.nextElementSibling as HTMLElement;
+          const field = form.querySelector<any>('lui-file-upload')!;
+          const mode = form.dataset.upload;
+          const english = !!form.closest('[lang="en"]');
+          const send = form.querySelector<any>('[data-send]');
+          const inFlight = new Map<File, AbortController>();
+          const attempts = new WeakMap<File, number>();
+
+          const log = (line: string) => {
+            const time = new Date().toLocaleTimeString('pt-BR');
+            output.textContent += `${output.textContent ? '\n' : ''}${time}  ${line}`;
+            output.scrollTop = output.scrollHeight;
+          };
+
+          async function upload(file: File) {
+            const attempt = (attempts.get(file) ?? 0) + 1;
+            attempts.set(file, attempt);
+            const fail = attempt === 1 && /falha|fail/i.test(file.name);
+            const controller = new AbortController();
+            inFlight.set(file, controller);
+
+            const indeterminate = mode === 'indeterminate';
+            field.setFileStatus(
+              file,
+              'uploading',
+              indeterminate ? {} : { progress: 0 }
+            );
+            log(`status: ${file.name} → uploading (tentativa ${attempt})`);
+            try {
+              await fakeUpload(
+                file,
+                fail,
+                indeterminate
+                  ? null
+                  : (progress) =>
+                      field.setFileStatus(file, 'uploading', { progress }),
+                controller.signal
+              );
+              field.setFileStatus(file, 'complete');
+              log(`status: ${file.name} → complete`);
+            } catch {
+              if (controller.signal.aborted) {
+                log(`envio de ${file.name} cancelado`);
+              } else {
+                field.setFileStatus(file, 'error', {
+                  message: english
+                    ? 'Check your connection and retry.'
+                    : 'Verifique sua conexão e tente de novo.',
+                });
+                log(`status: ${file.name} → error`);
+              }
+            } finally {
+              inFlight.delete(file);
+            }
+          }
+
+          const pending = () =>
+            Array.from(field.files as FileList).filter(
+              (f) => (field.getFileStatus(f) ?? 'selected') === 'selected'
+            );
+
+          field.addEventListener('lui-change', (e: CustomEvent) => {
+            const { files, added, removed } = e.detail;
+            log(
+              `lui-change: ${files.length} arquivo(s) · +[${added.map((f: File) => f.name).join(', ')}] · −[${removed.map((f: File) => f.name).join(', ')}]`
+            );
+            // Removing a file while it is sending cancels the request.
+            removed.forEach((f: File) => inFlight.get(f)?.abort());
+            if (mode === 'auto' || mode === 'indeterminate') added.forEach(upload);
+            if (send) send.disabled = pending().length === 0;
+          });
+          field.addEventListener('lui-error', (e: CustomEvent) =>
+            log(`lui-error (${e.detail.reason}): ${e.detail.message}`)
+          );
+          field.addEventListener('lui-retry', (e: CustomEvent) => {
+            log(`lui-retry: ${e.detail.file.name}`);
+            upload(e.detail.file);
+          });
+          // Submit does not fire on an invalid form; the `invalid` event does.
+          field.addEventListener('invalid', () =>
+            log('invalid: formulário bloqueado (valueMissing)')
+          );
+
+          send?.addEventListener('click', () => {
+            pending().forEach(upload);
+            send.disabled = true;
+          });
+
+          form.querySelectorAll<HTMLElement>('[data-seed]').forEach((button) =>
+            button.addEventListener('click', () =>
+              seed(field, JSON.parse(button.dataset.seed!).map(makeFile))
+            )
+          );
+
+          form
+            .querySelector('[data-toggle]')
+            ?.addEventListener('click', () => {
+              field.disabled = !field.disabled;
+              log(`disabled: ${field.disabled}`);
+            });
+
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const entries = Array.from(new FormData(form).entries()).map(
+              ([key, value]) =>
+                `${key}=${value instanceof File ? value.name : value}`
+            );
+            log(`submit: ${entries.length ? entries.join(', ') : '(vazio)'}`);
+          });
+          form.addEventListener('reset', () => {
+            inFlight.forEach((c) => c.abort());
+            output.textContent = '';
+            if (send) send.disabled = true;
+          });
+        });
+    </script>
+  </body>
+</html>

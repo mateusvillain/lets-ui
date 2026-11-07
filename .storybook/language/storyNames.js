@@ -13,6 +13,7 @@
  * Keys are the exact `storyName` strings from the `*.stories.*` files.
  */
 export const storyNamesEn = {
+  'Arrastando arquivos': 'Dragging files',
   'Ação destrutiva': 'Destructive action',
   'Botão alternável (aria-pressed)': 'Toggle button (aria-pressed)',
   Carregando: 'Loading',
@@ -39,10 +40,13 @@ export const storyNamesEn = {
   Divisor: 'Divider',
   'Em parágrafo': 'In a paragraph',
   'Em tabela': 'In a table',
+  'Envio com botão Send': 'Sending with a Send button',
   Erro: 'Error',
   'Erro de sistema (announce="assertive")':
     'System error (announce="assertive")',
+  'Estados de envio': 'Upload states',
   'Evento lui-complete': 'lui-complete event',
+  'Eventos lui-change e lui-error': 'lui-change and lui-error events',
   'Evento lui-page-change': 'lui-page-change event',
   'Evento lui-step-change': 'lui-step-change event',
   'Evento lui-toggle': 'lui-toggle event',
@@ -96,6 +100,7 @@ export const storyNamesEn = {
   'Status em cada tamanho': 'Status in every size',
   Tamanhos: 'Sizes',
   'Texto do status': 'Status text',
+  'Tipos restritos': 'Restricted types',
   'Todos os tamanhos': 'All sizes',
   'Trigger customizado (slot)': 'Custom trigger (slot)',
   'Trigger de Dropdown Menu': 'Dropdown Menu trigger',
@@ -105,6 +110,7 @@ export const storyNamesEn = {
   'Valores e situação': 'Values and status',
   'Variante bordered': 'bordered variant',
   'Variante highlighted': 'highlighted variant',
+  'Vários arquivos': 'Multiple files',
 };
 
 /**
@@ -270,6 +276,7 @@ export const untranslatedStoryNames = new Set([
   'Divider',
   'Drawer',
   'Empty State',
+  'File Upload',
   'Icon Button',
   'Input',
   'Native Select',

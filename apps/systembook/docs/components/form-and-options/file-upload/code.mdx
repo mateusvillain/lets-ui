@@ -1,0 +1,202 @@
+---
+title: "Code"
+order: 4
+---
+
+## Label and zone title
+
+`label` is the field label above the zone, like the other fields. `zone-title` is the call to action inside the zone, and `description` tells how to add files. Without `label`, only the zone title and the description show.
+
+## Constraints
+
+`accept`, `max-size` (bytes, per file) and `max-files` (with `multiple`) validate each file locally and build the constraints line. Use `hint` to write the line yourself.
+
+<ComponentEmbed component="FileUpload" variant="multiple" />
+
+## Multiple files and limit
+
+With `multiple`, each selection adds to the files already in the list, up to `max-files`. Without `multiple`, a valid file replaces the current one.
+
+When the list reaches `max-files`, the zone gets `aria-disabled`, stops accepting files, and the constraints line shows the limit message. The text comes from `messages.limitReached`.
+
+## Validation and `lui-error`
+
+An invalid file stays in the list with its error and is left out of `files` and the `FormData`. For each rejected file the component emits `lui-error`, with `reason` set to `'type'`, `'size'` or `'count'`.
+
+```js
+const field = document.querySelector('lui-file-upload');
+
+field.addEventListener('lui-error', (e) => {
+  const { file, reason, message } = e.detail;
+  console.warn(`${file.name} was rejected (${reason}): ${message}`);
+});
+```
+
+## Error
+
+`error` applies the error state to the zone and shows `error-text` below it, read by screen readers through `aria-describedby`. With `required`, the state also turns on when the form is submitted without a file, and turns off when a valid file comes in.
+
+<ComponentEmbed component="FileUpload" variant="error" />
+
+## Dragging files
+
+While files are dragged over the zone, the border takes the primary color. Use `force-state="drag-active"` to display that state without dragging.
+
+<ComponentEmbed component="FileUpload" variant="drag-active" />
+
+## Disabled
+
+Blocks click, keyboard, drop and removal. The zone leaves the tab order.
+
+<ComponentEmbed component="FileUpload" variant="disabled" />
+
+## Sending
+
+The component never sends anything. Your app takes the files from `files` or from `lui-change`, makes the request and calls `setFileStatus()` on every change.
+
+| Status | Options | On screen |
+| --- | --- | --- |
+| `selected` | none | The initial state of an accepted file. |
+| `uploading` | `{ progress }` | A progress bar with the percentage. Without `progress`, an indeterminate bar. |
+| `complete` | none | Same as `selected`. The state goes in hidden text for screen readers. |
+| `error` | `{ message }` | Error border, icon, message and a **Retry** button that emits `lui-retry`. |
+
+```js
+const field = document.querySelector('lui-file-upload');
+
+async function upload(file) {
+  field.setFileStatus(file, 'uploading', { progress: 0 });
+  try {
+    await send(file, (progress) =>
+      field.setFileStatus(file, 'uploading', { progress })
+    );
+    field.setFileStatus(file, 'complete');
+  } catch {
+    field.setFileStatus(file, 'error', {
+      message: 'Failed. Check your connection and retry.',
+    });
+  }
+}
+
+field.addEventListener('lui-change', (e) => e.detail.added.forEach(upload));
+field.addEventListener('lui-retry', (e) => upload(e.detail.file));
+```
+
+Each change of state is announced to screen readers. Progress steps are not.
+
+## Form integration
+
+`lui-file-upload` is form-associated: each accepted file is submitted in the form's `FormData` under the `name` attribute, and rejected files are left out. `form.reset()` empties the field.
+
+### Required
+
+With `required`, the form is not submitted while there is no file, via `ElementInternals.setValidity()`.
+
+## Translating the texts
+
+The texts the component generates are in English. Replace the fixed ones through attributes, and the ones built at runtime through the `messages` property. Each key replaces only its own text, and the ones that receive data are functions.
+
+```js
+document.querySelector('lui-file-upload').messages = {
+  type: (file, formats) =>
+    `“${file.name}” is not accepted. Choose a ${formats} file.`,
+  limitReached: (max) => `Limit of ${max} files reached. Remove one to add another.`,
+  removed: (file) => `“${file.name}” removed.`,
+  listLabel: 'Attached files',
+};
+```
+
+The keys are `constraints`, `type`, `size`, `count`, `limitReached`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` and `required`.
+
+## Properties
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Field label, above the zone. Empty means no label. |
+| `zone-title` | `string` | `'Upload files'` | Title inside the zone, the call to action. |
+| `description` | `string` | `'Drop files here or click to browse'` | Instruction below the zone title. |
+| `accept` | `string` | `''` | Accepted types, as on `<input type="file">` (`.pdf`, `image/*`, `image/png`). |
+| `multiple` | `boolean` | `false` | Allows more than one file. Each selection adds to the list. |
+| `max-size` | `number` | `0` | Maximum size **per file**, in bytes. `0` means no limit. |
+| `max-files` | `number` | `0` | Maximum count with `multiple`. `0` means no limit. |
+| `hint` | `string` | `''` | Constraints line. Empty means it is built from `accept`, `max-size` and `max-files`. |
+| `optional` | `boolean` | `false` | Adds the `optional-text` marker next to the label. |
+| `optional-text` | `string` | `'(optional)'` | Marker shown when `optional` is on. |
+| `disabled` | `boolean` | `false` | Blocks click, keyboard, drop and removal. |
+| `error` | `boolean` | `false` | Turns on the error state and shows `error-text`. |
+| `error-text` | `string` | `'Select at least one file.'` | Message shown when `error` is on. |
+| `remove-label` | `string` | `'Remove'` | Prefix of each Remove button's accessible name: "Remove receipt.pdf". |
+| `retry-label` | `string` | `'Retry'` | Prefix of each Retry button's accessible name: "Retry receipt.pdf". |
+| `force-state` | `string` | `''` | `drag-active` displays the dragging state without dragging. |
+| `messages` | `object` | `{}` | JavaScript property only. Replaces the texts built at runtime. |
+
+## Form attributes
+
+| Attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | `''` | Field name in the submitted data. Each file is submitted under it. |
+| `required` | `boolean` | `false` | Blocks submission while there is no file. |
+
+## Methods
+
+| Member | Description |
+| --- | --- |
+| `files` | Getter. The accepted files, as a `FileList`. They are the same `File` objects as in `lui-change`. |
+| `setFileStatus(file, status, options?)` | Reports sending progress: `'selected'`, `'uploading'` (`{ progress }`, 0 to 100), `'complete'` or `'error'` (`{ message }`). |
+| `getFileStatus(file)` | The last status reported for the file. |
+| `clear()` | Empties the field and emits `lui-change`. |
+
+## Events
+
+| Event | `detail` | When |
+| --- | --- | --- |
+| `lui-change` | `{ files: FileList, added: File[], removed: File[] }` | Accepted files were added or removed. |
+| `lui-error` | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | A file was rejected. One event per file. |
+| `lui-retry` | `{ file: File }` | The person asked to retry a failed send. |
+
+The events bubble and cross the shadow DOM.
+
+## Usage
+
+### Web Component
+
+```html
+<lui-file-upload
+  name="attachments"
+  label="Attachments"
+  zone-title="Upload files"
+  description="Drop files here or click to browse"
+  accept=".pdf,.png"
+  max-size="5242880"
+  max-files="3"
+  multiple
+></lui-file-upload>
+```
+
+### CSS class
+
+Without the Web Component, use a `<label class="file-upload__zone">` around an `<input type="file" class="file-upload__input">`. The input stays out of sight but takes focus and opens the native picker, and the focus ring shows on the zone. Drag and drop, the file list, validation, messages, announcements, focus after removal and the limit state (`file-upload--limit`) are up to you.
+
+```html
+<div class="file-upload">
+  <div class="file-upload__label-wrap">
+    <label class="file-upload__label" for="attachments">Attachments</label>
+  </div>
+  <label class="file-upload__zone">
+    <input
+      id="attachments"
+      class="file-upload__input"
+      type="file"
+      name="attachments"
+      multiple
+      accept=".pdf,.png"
+    />
+    <span class="file-upload__icon" aria-hidden="true"><!-- icon --></span>
+    <span class="file-upload__instructions">
+      <span class="file-upload__title">Upload files</span>
+      <span class="file-upload__description">Click to browse</span>
+    </span>
+    <span class="file-upload__constraints">PDF, PNG · Up to 5 MB</span>
+  </label>
+</div>
+```

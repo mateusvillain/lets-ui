@@ -1,0 +1,202 @@
+---
+title: "Code"
+---
+
+## Label e título da área
+
+`label` é a label do campo, acima da área, como nos outros campos. `zone-title` é a chamada para a ação dentro da área, e `description` explica como adicionar arquivos. Sem `label`, só o título da área e a descrição aparecem.
+
+## Restrições
+
+`accept`, `max-size` (em bytes, por arquivo) e `max-files` (com `multiple`) validam cada arquivo localmente e montam a linha de restrições. Use `hint` para escrever a linha você mesmo.
+
+<ComponentEmbed component="FileUpload" variant="multiple" />
+
+## Vários arquivos e limite
+
+Com `multiple`, cada seleção soma aos arquivos que já estão na lista, até `max-files`. Sem `multiple`, um arquivo válido substitui o atual.
+
+Quando a lista chega a `max-files`, a área recebe `aria-disabled`, para de aceitar arquivos, e a linha de restrições mostra a mensagem do limite. O texto vem de `messages.limitReached`.
+
+## Validação e `lui-error`
+
+Um arquivo inválido fica na lista com o erro e fica de fora de `files` e do `FormData`. Para cada arquivo recusado o componente emite `lui-error`, com `reason` igual a `'type'`, `'size'` ou `'count'`.
+
+```js
+const field = document.querySelector('lui-file-upload');
+
+field.addEventListener('lui-error', (e) => {
+  const { file, reason, message } = e.detail;
+  console.warn(`${file.name} foi recusado (${reason}): ${message}`);
+});
+```
+
+## Error
+
+`error` aplica o estado de erro à área e mostra `error-text` abaixo dela, lido por leitores de tela via `aria-describedby`. Com `required`, o estado também liga quando o formulário é enviado sem arquivo, e desliga quando um arquivo válido entra.
+
+<ComponentEmbed component="FileUpload" variant="error" />
+
+## Arrastando arquivos
+
+Enquanto arquivos são arrastados sobre a área, a borda fica na cor primária. Use `force-state="drag-active"` para exibir esse estado sem arrastar.
+
+<ComponentEmbed component="FileUpload" variant="drag-active" />
+
+## Disabled
+
+Bloqueia clique, teclado, soltar e remoção. A área sai da ordem de tabulação.
+
+<ComponentEmbed component="FileUpload" variant="disabled" />
+
+## Envio
+
+O componente nunca envia nada. A aplicação pega os arquivos em `files` ou em `lui-change`, faz a requisição e chama `setFileStatus()` a cada mudança.
+
+| Status | Opções | Na tela |
+| --- | --- | --- |
+| `selected` | nenhuma | O estado inicial de um arquivo aceito. |
+| `uploading` | `{ progress }` | Barra de progresso com a porcentagem. Sem `progress`, barra indeterminada. |
+| `complete` | nenhuma | Igual a `selected`. O estado vai em texto oculto para leitores de tela. |
+| `error` | `{ message }` | Borda de erro, ícone, mensagem e um botão **Retry** que emite `lui-retry`. |
+
+```js
+const field = document.querySelector('lui-file-upload');
+
+async function upload(file) {
+  field.setFileStatus(file, 'uploading', { progress: 0 });
+  try {
+    await send(file, (progress) =>
+      field.setFileStatus(file, 'uploading', { progress })
+    );
+    field.setFileStatus(file, 'complete');
+  } catch {
+    field.setFileStatus(file, 'error', {
+      message: 'Falhou. Verifique a conexão e tente de novo.',
+    });
+  }
+}
+
+field.addEventListener('lui-change', (e) => e.detail.added.forEach(upload));
+field.addEventListener('lui-retry', (e) => upload(e.detail.file));
+```
+
+Cada mudança de estado é anunciada a leitores de tela. Os passos do progresso não são.
+
+## Integração com formulários
+
+O `lui-file-upload` é form-associated: cada arquivo aceito vai no `FormData` do formulário sob o atributo `name`, e arquivos recusados ficam de fora. `form.reset()` esvazia o campo.
+
+### Required
+
+Com `required`, o formulário não é submetido enquanto não houver arquivo, via `ElementInternals.setValidity()`.
+
+## Traduzindo os textos
+
+Os textos que o componente gera são em inglês. Troque os fixos por atributo e os montados em tempo de execução pela propriedade `messages`. Cada chave substitui só o texto correspondente, e as que recebem dados são funções.
+
+```js
+document.querySelector('lui-file-upload').messages = {
+  type: (file, formats) =>
+    `“${file.name}” não é um tipo aceito. Escolha um arquivo ${formats}.`,
+  limitReached: (max) =>
+    `Limite de ${max} arquivos atingido. Remova um para adicionar outro.`,
+  removed: (file) => `“${file.name}” removido.`,
+  listLabel: 'Arquivos anexados',
+};
+```
+
+As chaves são `constraints`, `type`, `size`, `count`, `limitReached`, `added`, `removed`, `uploading`, `complete`, `failed`, `failedStatus`, `progressLabel`, `listLabel` e `required`.
+
+## Propriedades
+
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `label` | `string` | `''` | Label do campo, acima da área. Vazio significa sem label. |
+| `zone-title` | `string` | `'Upload files'` | Título dentro da área, a chamada para a ação. |
+| `description` | `string` | `'Drop files here or click to browse'` | Instrução abaixo do título da área. |
+| `accept` | `string` | `''` | Tipos aceitos, como no `<input type="file">` (`.pdf`, `image/*`, `image/png`). |
+| `multiple` | `boolean` | `false` | Permite mais de um arquivo. Cada seleção soma à lista. |
+| `max-size` | `number` | `0` | Tamanho máximo **por arquivo**, em bytes. `0` significa sem limite. |
+| `max-files` | `number` | `0` | Quantidade máxima com `multiple`. `0` significa sem limite. |
+| `hint` | `string` | `''` | Linha de restrições. Vazio significa que ela é montada a partir de `accept`, `max-size` e `max-files`. |
+| `optional` | `boolean` | `false` | Adiciona o marcador `optional-text` ao lado da label. |
+| `optional-text` | `string` | `'(optional)'` | Marcador exibido com `optional`. |
+| `disabled` | `boolean` | `false` | Bloqueia clique, teclado, soltar e remoção. |
+| `error` | `boolean` | `false` | Liga o estado de erro e exibe `error-text`. |
+| `error-text` | `string` | `'Select at least one file.'` | Mensagem exibida quando `error` está ligado. |
+| `remove-label` | `string` | `'Remove'` | Prefixo do nome acessível de cada botão Remover: "Remove comprovante.pdf". |
+| `retry-label` | `string` | `'Retry'` | Prefixo do nome acessível de cada botão de nova tentativa: "Retry comprovante.pdf". |
+| `force-state` | `string` | `''` | `drag-active` exibe o estado de arrasto sem arrastar. |
+| `messages` | `object` | `{}` | Só por propriedade JavaScript. Substitui os textos montados em tempo de execução. |
+
+## Atributos de formulário
+
+| Atributo | Tipo | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `name` | `string` | `''` | Nome do campo nos dados enviados. Cada arquivo vai sob esse nome. |
+| `required` | `boolean` | `false` | Bloqueia a submissão enquanto não houver arquivo. |
+
+## Métodos
+
+| Membro | Descrição |
+| --- | --- |
+| `files` | Getter. Os arquivos aceitos, como `FileList`. São os mesmos objetos `File` de `lui-change`. |
+| `setFileStatus(file, status, options?)` | Informa o andamento do envio: `'selected'`, `'uploading'` (`{ progress }`, de 0 a 100), `'complete'` ou `'error'` (`{ message }`). |
+| `getFileStatus(file)` | O último status informado para o arquivo. |
+| `clear()` | Esvazia o campo e emite `lui-change`. |
+
+## Eventos
+
+| Evento | `detail` | Quando |
+| --- | --- | --- |
+| `lui-change` | `{ files: FileList, added: File[], removed: File[] }` | Arquivos aceitos foram adicionados ou removidos. |
+| `lui-error` | `{ file: File, reason: 'type' \| 'size' \| 'count', message: string }` | Um arquivo foi recusado. Um evento por arquivo. |
+| `lui-retry` | `{ file: File }` | A pessoa pediu nova tentativa de um envio que falhou. |
+
+Os eventos borbulham e atravessam o shadow DOM.
+
+## Uso
+
+### Web Component
+
+```html
+<lui-file-upload
+  name="attachments"
+  label="Anexos"
+  zone-title="Enviar arquivos"
+  description="Arraste os arquivos para cá ou clique para escolher"
+  accept=".pdf,.png"
+  max-size="5242880"
+  max-files="3"
+  multiple
+></lui-file-upload>
+```
+
+### Classe CSS
+
+Sem o Web Component, use um `<label class="file-upload__zone">` em volta de um `<input type="file" class="file-upload__input">`. O input fica fora da vista, mas recebe o foco e abre o seletor nativo, e o anel de foco aparece na área. Arrastar e soltar, a lista de arquivos, a validação, as mensagens, os anúncios, o foco depois de remover e o estado de limite (`file-upload--limit`) ficam a cargo de quem usa.
+
+```html
+<div class="file-upload">
+  <div class="file-upload__label-wrap">
+    <label class="file-upload__label" for="attachments">Anexos</label>
+  </div>
+  <label class="file-upload__zone">
+    <input
+      id="attachments"
+      class="file-upload__input"
+      type="file"
+      name="attachments"
+      multiple
+      accept=".pdf,.png"
+    />
+    <span class="file-upload__icon" aria-hidden="true"><!-- ícone --></span>
+    <span class="file-upload__instructions">
+      <span class="file-upload__title">Enviar arquivos</span>
+      <span class="file-upload__description">Clique para escolher</span>
+    </span>
+    <span class="file-upload__constraints">PDF, PNG · Até 5 MB</span>
+  </label>
+</div>
+```
